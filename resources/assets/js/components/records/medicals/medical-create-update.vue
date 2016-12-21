@@ -208,7 +208,22 @@
                     <h5 class="panel-header">Doctor's Permission</h5>
                 </div>
                 <div class="panel-body">
-                    <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>Start Here</h5>
+                            <p>You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong> as certain conditions may be treated by different doctors.</p>
+                            <p>
+                                <button class="btn btn-primary btn-md">
+                                    <i class="fa fa-file-pdf-o icon-left"></i> Download Permission Form
+                                </button>
+                            </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h5>Completed Forms</h5>
+                            <p>Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>
+                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -462,13 +477,12 @@
             }
         },
         ready(){
-            // this.$refs.spinner.show();
-            let fetchURL = this.isUpdate ? 'medical/releases/' + this.id + '?include=conditions,allergies' : 'users/me';
-            this.$http(fetchURL).then(function (response) {
-                // this.user = response.data.data;
-                this.user_id = response.data.data.id;
-
-                if (this.isUpdate) {
+            // set user data
+            this.user_id = this.$root.user.id;
+            if (this.isUpdate) {
+                this.$http.get('medical/releases/' + this.id, { include: 'conditions,allergies'}).then(function (response) {
+                    // this.user = response.data.data;
+                    this.user_id = response.data.data.id;
                     let medical_release = response.data.data;
                     $.extend(this, medical_release);
 
@@ -492,38 +506,37 @@
                         this.additionalConditionsList = med_conditions;
                     });
                     this.$http('medical/allergies').then(function (response) {
-                        // prepare conditions for UI
-                        let med_allergies = medical_release.allergies.data;
-                        _.each(response.data.data, function (allergy) {
-                            let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
-                            let match = _.find(med_allergies, function (a, i) {
-                                med_allergies[i].selected = true;
-                                return a.name === allergy;
+                    // prepare conditions for UI
+                    let med_allergies = medical_release.allergies.data;
+                    _.each(response.data.data, function (allergy) {
+                        let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
+                        let match = _.find(med_allergies, function (a, i) {
+                            med_allergies[i].selected = true;
+                            return a.name === allergy;
+                        });
+                        if (match) {
+                            med_allergies = _.reject(med_allergies, function (ma) {
+                                return ma.name === match.name;
                             });
-                            if (match) {
-                                med_allergies = _.reject(med_allergies, function (ma) {
-                                    return ma.name === match.name;
-                                });
-                                _.extend(obj, match, { selected: true });
-                            }
-                            this.allergiesList.push(obj);
-                        }.bind(this));
-                        this.additionalAllergiesList = med_allergies;
-                    });
-                } else {
-                    this.$http('medical/conditions').then(function (response) {
-                        _.each(response.data.data, function (condition) {
-                            this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
-                        }.bind(this));
-                    })
-                    this.$http('medical/allergies').then(function (response) {
-                        _.each(response.data.data, function (allergy) {
-                            this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
-                        }.bind(this));
-                    });
-                }
-            });
+                            _.extend(obj, match, { selected: true });
+                        }
+                        this.allergiesList.push(obj);
+                    }.bind(this));
+                    this.additionalAllergiesList = med_allergies;
+                });
+                });
+            } else {
+                this.$http('medical/conditions').then(function (response) {
+                    _.each(response.data.data, function (condition) {
+                        this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
+                    }.bind(this));
+                });
+                this.$http('medical/allergies').then(function (response) {
+                    _.each(response.data.data, function (allergy) {
+                        this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
+                    }.bind(this));
+                });
+            }
         }
-
     }
 </script>

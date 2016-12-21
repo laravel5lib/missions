@@ -74523,6 +74523,7 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 console.log(val);
+                this.pagination.current_page = 1;
                 this.searchDonors();
             },
             deep: true
@@ -74577,6 +74578,7 @@ exports.default = {
         },
         'search': function search(val, oldVal) {
             this.page = 1;
+            this.pagination.current_page = 1;
             this.searchDonors();
         },
         'per_page': function per_page(val, oldVal) {
@@ -75036,6 +75038,7 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 console.log(val);
+                this.pagination.current_page = 1;
                 this.searchFunds();
             },
             deep: true
@@ -75058,6 +75061,7 @@ exports.default = {
         },
         'search': function search(val, oldVal) {
             this.page = 1;
+            this.pagination.current_page = 1;
             this.searchFunds();
         },
         'per_page': function per_page(val, oldVal) {
@@ -75432,6 +75436,7 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 console.log(val);
+                this.pagination.current_page = 1;
                 this.searchTransactions();
             },
             deep: true
@@ -75457,6 +75462,7 @@ exports.default = {
             this.updateConfig();
         },
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.page = 1;
             this.searchTransactions();
         },
@@ -76926,6 +76932,7 @@ exports.default = {
     watch: {
         'search': function search(val, oldVal) {
             this.page = 1;
+            this.pagination.current_page = 1;
             this.searchGroups();
         },
         'per_page': function per_page(val, oldVal) {
@@ -77957,6 +77964,7 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 // console.log(val);
+                this.pagination.current_page = 1;
                 this.searchInterests();
             },
             deep: true
@@ -77971,6 +77979,7 @@ exports.default = {
             this.filters.campaign = val ? val.id : '';
         },
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.page = 1;
             this.searchInterests();
         },
@@ -78104,6 +78113,7 @@ exports.default = {
 
     watch: {
         'search': function search(val) {
+            this.pagination.current_page = 1;
             this.searchInterests();
         }
     },
@@ -78866,6 +78876,7 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 // console.log(val);
+                this.pagination.current_page = 1;
                 this.getProjects();
             },
             deep: true
@@ -78877,9 +78888,11 @@ exports.default = {
             this.filters.cause = val ? val.id : '';
         },
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.getProjects();
         },
         'includeManaging': function includeManaging(val, oldVal) {
+            this.pagination.current_page = 1;
             this.getProjects();
         }
     },
@@ -79149,7 +79162,7 @@ exports.default = {
             //logic vars
             includeManaging: false,
             search: '',
-            per_page: 3,
+            per_page: 15,
             pagination: {
                 current_page: 1
             },
@@ -79160,9 +79173,11 @@ exports.default = {
 
     watch: {
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchEssays();
         },
         'includeManaging': function includeManaging(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchEssays();
         }
     },
@@ -79400,75 +79415,70 @@ exports.default = {
         }
     },
     ready: function ready() {
-        // this.$refs.spinner.show();
-        var fetchURL = this.isUpdate ? 'medical/releases/' + this.id + '?include=conditions,allergies' : 'users/me';
-        this.$http(fetchURL).then(function (response) {
-            var _this = this;
+        // set user data
+        this.user_id = this.$root.user.id;
+        if (this.isUpdate) {
+            this.$http.get('medical/releases/' + this.id, { include: 'conditions,allergies' }).then(function (response) {
+                // this.user = response.data.data;
+                this.user_id = response.data.data.id;
+                var medical_release = response.data.data;
+                $.extend(this, medical_release);
 
-            // this.user = response.data.data;
-            this.user_id = response.data.data.id;
-
-            if (this.isUpdate) {
-                (function () {
-                    var medical_release = response.data.data;
-                    $.extend(_this, medical_release);
-
-                    _this.$http('medical/conditions').then(function (response) {
-                        // prepare conditions for UI
-                        var med_conditions = medical_release.conditions.data;
-                        _.each(response.data.data, function (condition) {
-                            var obj = { name: condition, medication: false, diagnosed: false, selected: false };
-                            var match = _.find(med_conditions, function (c, i) {
-                                med_conditions[i].selected = true;
-                                return c.name === condition;
-                            });
-                            if (match) {
-                                med_conditions = _.reject(med_conditions, function (mc) {
-                                    return mc.name === match.name;
-                                });
-                                _.extend(obj, match, { selected: true });
-                            }
-                            this.conditionsList.push(obj);
-                        }.bind(this));
-                        this.additionalConditionsList = med_conditions;
-                    });
-                    _this.$http('medical/allergies').then(function (response) {
-                        // prepare conditions for UI
-                        var med_allergies = medical_release.allergies.data;
-                        _.each(response.data.data, function (allergy) {
-                            var obj = { name: allergy, medication: false, diagnosed: false, selected: false };
-                            var match = _.find(med_allergies, function (a, i) {
-                                med_allergies[i].selected = true;
-                                return a.name === allergy;
-                            });
-                            if (match) {
-                                med_allergies = _.reject(med_allergies, function (ma) {
-                                    return ma.name === match.name;
-                                });
-                                _.extend(obj, match, { selected: true });
-                            }
-                            this.allergiesList.push(obj);
-                        }.bind(this));
-                        this.additionalAllergiesList = med_allergies;
-                    });
-                })();
-            } else {
                 this.$http('medical/conditions').then(function (response) {
+                    // prepare conditions for UI
+                    var med_conditions = medical_release.conditions.data;
                     _.each(response.data.data, function (condition) {
-                        this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
+                        var obj = { name: condition, medication: false, diagnosed: false, selected: false };
+                        var match = _.find(med_conditions, function (c, i) {
+                            med_conditions[i].selected = true;
+                            return c.name === condition;
+                        });
+                        if (match) {
+                            med_conditions = _.reject(med_conditions, function (mc) {
+                                return mc.name === match.name;
+                            });
+                            _.extend(obj, match, { selected: true });
+                        }
+                        this.conditionsList.push(obj);
                     }.bind(this));
+                    this.additionalConditionsList = med_conditions;
                 });
                 this.$http('medical/allergies').then(function (response) {
+                    // prepare conditions for UI
+                    var med_allergies = medical_release.allergies.data;
                     _.each(response.data.data, function (allergy) {
-                        this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
+                        var obj = { name: allergy, medication: false, diagnosed: false, selected: false };
+                        var match = _.find(med_allergies, function (a, i) {
+                            med_allergies[i].selected = true;
+                            return a.name === allergy;
+                        });
+                        if (match) {
+                            med_allergies = _.reject(med_allergies, function (ma) {
+                                return ma.name === match.name;
+                            });
+                            _.extend(obj, match, { selected: true });
+                        }
+                        this.allergiesList.push(obj);
                     }.bind(this));
+                    this.additionalAllergiesList = med_allergies;
                 });
-            }
-        });
+            });
+        } else {
+            this.$http('medical/conditions').then(function (response) {
+                _.each(response.data.data, function (condition) {
+                    this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
+                }.bind(this));
+            });
+            this.$http('medical/allergies').then(function (response) {
+                _.each(response.data.data, function (allergy) {
+                    this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
+                }.bind(this));
+            });
+        }
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateMedicalRelease\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateMedicalRelease\" class=\"form-horizontal\" novalidate=\"\">\n        <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <div class=\"row\">\n                    <div class=\"col-xs-8\">\n                        <h5 class=\"panel-header\">Basic Information</h5>\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('name') }\">\n                            <label for=\"name\" class=\"control-label\">Name</label>\n                            <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1 }\" minlength=\"1\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('provider') }\">\n                            <label for=\"ins_provider\" class=\"control-label\">Insurance Provider</label>\n                            <input type=\"text\" class=\"form-control\" name=\"ins_provider\" id=\"ins_provider\" v-model=\"ins_provider\" placeholder=\"Insurance Provider\" v-validate:provider=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('policy') }\">\n                            <label for=\"ins_policy_no\" class=\"control-label&quot;\">Insurance Policy Number</label>\n                            <input type=\"text\" class=\"form-control\" name=\"ins_policy_no\" id=\"ins_policy_no\" v-model=\"ins_policy_no\" placeholder=\"Insurance Policy Number\" v-validate:policy=\"{ required: true, minlength:1 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-8\">\n                                <h5 class=\"panel-header\">Conditions</h5>\n                            </div>\n                            <div class=\"col-xs-4 text-right\">\n\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"list-group\">\n                        <div class=\"list-group-item\" v-for=\"condition in conditionsList|orderBy 'name'\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"condition.selected\"> {{condition.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"condition.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item\" v-for=\"condition in additionalConditionsList\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"condition.selected\"> {{condition.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"condition.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item text-center\">\n                            <button class=\"btn btn-xs btn-default-hollow\" type=\"button\" data-toggle=\"collapse\" data-target=\"#newCondition\" aria-expanded=\"false\" aria-controls=\"newCondition\">\n                                <i class=\"icon-left fa fa-plus\"></i> Add Unlisted Condition\n                            </button>\n                        </div>\n                        <div class=\"collapse\" id=\"newCondition\">\n                            <div class=\"list-group-item\">\n                                <validator name=\"NewCondition\">\n                                    <form name=\"NewCondition\">\n                                        <label>Name</label>\n                                        <input type=\"text\" class=\"form-control\" v-model=\"newCondition.name\" required=\"\">\n                                        <hr class=\"divider inv sm\">\n                                        <button class=\"btn btn-sm btn-success\" type=\"button\" @click=\"addCondition(newCondition)\">Add Condition</button>\n                                    </form>\n                                </validator>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-8\">\n                                <h5 class=\"panel-header\">Allergies</h5>\n                            </div>\n                            <div class=\"col-xs-4 text-right\">\n\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"list-group\">\n                        <div class=\"list-group-item\" v-for=\"allergy in allergiesList|orderBy 'name'\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"allergy.selected\"> {{allergy.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"allergy.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item\" v-for=\"allergy in additionalAllergiesList\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"allergy.selected\"> {{allergy.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"allergy.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item text-center\">\n                            <button class=\"btn btn-xs btn-default-hollow\" type=\"button\" data-toggle=\"collapse\" data-target=\"#newAllergy\" aria-expanded=\"false\" aria-controls=\"newAllergy\">\n                                <i class=\"icon-left fa fa-plus\"></i> Add Unlisted Allergy\n                            </button>\n                        </div>\n                        <div class=\"collapse\" id=\"newAllergy\">\n                            <div class=\"list-group-item\">\n                                <validator name=\"newAllergy\">\n                                    <form name=\"newAllergy\">\n                                        <label>Name</label>\n                                        <input type=\"text\" class=\"form-control\" v-model=\"newAllergy.name\">\n                                        <hr class=\"divider inv sm\">\n                                        <button class=\"btn btn-sm btn-success\" type=\"button\" @click=\"addAllergy(newAllergy)\">Add Allergy</button>\n                                    </form>\n                                </validator>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h5 class=\"panel-header\">Doctor's Permission</h5>\n            </div>\n            <div class=\"panel-body\">\n                <upload-create-update type=\"file\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'medical-release-'+today\"></upload-create-update>\n            </div>\n        </div>\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h5 class=\"panel-header\">Emergency Contact</h5>\n            </div>\n            <div class=\"panel-body\">\n                <form name=\"newContact\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <label>Name</label>\n                            <input type=\"text\" class=\"form-control\" v-model=\"emergency_contact.name\">\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <label>Email</label>\n                            <input type=\"email\" class=\"form-control\" v-model=\"emergency_contact.email\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <label>Phone</label>\n                            <input type=\"tel\" class=\"form-control\" v-model=\"emergency_contact.phone|phone\">\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <label>Relationship</label>\n                            <select type=\"tel\" class=\"form-control\" v-model=\"emergency_contact.relationship\">\n                                <option value=\"friend\">Friend</option>\n                                <option value=\"spouse\">Spouse</option>\n                                <option value=\"family\">Family</option>\n                                <option value=\"guardian\">Guardian</option>\n                                <option value=\"other\">Other</option>\n                            </select>\n                        </div>\n                    </div>\n                </form>\n            </div>\n        </div>\n\n        <div class=\"form-group text-center\">\n            <div class=\"col-xs-12\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/records/medical-releases\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Cost\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedItem\">Are you sure you want to delete {{ selectedItem.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedCost)\">Confirm</button>\n        </div>\n    </modal>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Medical Release updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateMedicalRelease\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateMedicalRelease\" class=\"form-horizontal\" novalidate=\"\">\n        <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <div class=\"row\">\n                    <div class=\"col-xs-8\">\n                        <h5 class=\"panel-header\">Basic Information</h5>\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('name') }\">\n                            <label for=\"name\" class=\"control-label\">Name</label>\n                            <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1 }\" minlength=\"1\" required=\"\">\n                        </div>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('provider') }\">\n                            <label for=\"ins_provider\" class=\"control-label\">Insurance Provider</label>\n                            <input type=\"text\" class=\"form-control\" name=\"ins_provider\" id=\"ins_provider\" v-model=\"ins_provider\" placeholder=\"Insurance Provider\" v-validate:provider=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <div :class=\"{ 'has-error': checkForError('policy') }\">\n                            <label for=\"ins_policy_no\" class=\"control-label&quot;\">Insurance Policy Number</label>\n                            <input type=\"text\" class=\"form-control\" name=\"ins_policy_no\" id=\"ins_policy_no\" v-model=\"ins_policy_no\" placeholder=\"Insurance Policy Number\" v-validate:policy=\"{ required: true, minlength:1 }\" maxlength=\"100\" minlength=\"1\" required=\"\">\n                        </div>\n                    </div>\n                </div>\n            </div><!-- end panel-body -->\n        </div><!-- end panel -->\n        <div class=\"row\">\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-8\">\n                                <h5 class=\"panel-header\">Conditions</h5>\n                            </div>\n                            <div class=\"col-xs-4 text-right\">\n\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"list-group\">\n                        <div class=\"list-group-item\" v-for=\"condition in conditionsList|orderBy 'name'\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"condition.selected\"> {{condition.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"condition.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item\" v-for=\"condition in additionalConditionsList\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"condition.selected\"> {{condition.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"condition.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"condition.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item text-center\">\n                            <button class=\"btn btn-xs btn-default-hollow\" type=\"button\" data-toggle=\"collapse\" data-target=\"#newCondition\" aria-expanded=\"false\" aria-controls=\"newCondition\">\n                                <i class=\"icon-left fa fa-plus\"></i> Add Unlisted Condition\n                            </button>\n                        </div>\n                        <div class=\"collapse\" id=\"newCondition\">\n                            <div class=\"list-group-item\">\n                                <validator name=\"NewCondition\">\n                                    <form name=\"NewCondition\">\n                                        <label>Name</label>\n                                        <input type=\"text\" class=\"form-control\" v-model=\"newCondition.name\" required=\"\">\n                                        <hr class=\"divider inv sm\">\n                                        <button class=\"btn btn-sm btn-success\" type=\"button\" @click=\"addCondition(newCondition)\">Add Condition</button>\n                                    </form>\n                                </validator>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"col-sm-6\">\n                <div class=\"panel panel-default\">\n                    <div class=\"panel-heading\">\n                        <div class=\"row\">\n                            <div class=\"col-xs-8\">\n                                <h5 class=\"panel-header\">Allergies</h5>\n                            </div>\n                            <div class=\"col-xs-4 text-right\">\n\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"list-group\">\n                        <div class=\"list-group-item\" v-for=\"allergy in allergiesList|orderBy 'name'\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"allergy.selected\"> {{allergy.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"allergy.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item\" v-for=\"allergy in additionalAllergiesList\">\n                            <div class=\"checkbox\">\n                                <label>\n                                    <input type=\"checkbox\" v-model=\"allergy.selected\"> {{allergy.name}}\n                                </label>\n                            </div>\n                            <div class=\"row\" v-if=\"allergy.selected\">\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.medication\"> Have Medication?\n                                        </label>\n                                    </div>\n                                </div>\n                                <div class=\"col-sm-6\">\n                                    <div class=\"checkbox\">\n                                        <label>\n                                            <input type=\"checkbox\" v-model=\"allergy.diagnosed\"> Medically Diagnosed?\n                                        </label>\n                                    </div>\n                                </div>\n                            </div>\n                        </div>\n                        <div class=\"list-group-item text-center\">\n                            <button class=\"btn btn-xs btn-default-hollow\" type=\"button\" data-toggle=\"collapse\" data-target=\"#newAllergy\" aria-expanded=\"false\" aria-controls=\"newAllergy\">\n                                <i class=\"icon-left fa fa-plus\"></i> Add Unlisted Allergy\n                            </button>\n                        </div>\n                        <div class=\"collapse\" id=\"newAllergy\">\n                            <div class=\"list-group-item\">\n                                <validator name=\"newAllergy\">\n                                    <form name=\"newAllergy\">\n                                        <label>Name</label>\n                                        <input type=\"text\" class=\"form-control\" v-model=\"newAllergy.name\">\n                                        <hr class=\"divider inv sm\">\n                                        <button class=\"btn btn-sm btn-success\" type=\"button\" @click=\"addAllergy(newAllergy)\">Add Allergy</button>\n                                    </form>\n                                </validator>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h5 class=\"panel-header\">Doctor's Permission</h5>\n            </div>\n            <div class=\"panel-body\">\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <h5>Start Here</h5>\n                        <p>You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong> as certain conditions may be treated by different doctors.</p>\n                        <p>\n                            <button class=\"btn btn-primary btn-md\">\n                                <i class=\"fa fa-file-pdf-o icon-left\"></i> Download Permission Form\n                            </button>\n                        </p>\n                    </div>\n                    <div class=\"col-sm-6\">\n                        <h5>Completed Forms</h5>\n                        <p>Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>\n                        <upload-create-update type=\"file\" :lock-type=\"true\" :ui-selector=\"2\" :ui-locked=\"true\" :is-child=\"true\" :tags=\"['User']\" :name=\"'medical-release-'+today\"></upload-create-update>\n                    </div>\n                </div>\n            </div>\n        </div>\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h5 class=\"panel-header\">Emergency Contact</h5>\n            </div>\n            <div class=\"panel-body\">\n                <form name=\"newContact\">\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <label>Name</label>\n                            <input type=\"text\" class=\"form-control\" v-model=\"emergency_contact.name\">\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <label>Email</label>\n                            <input type=\"email\" class=\"form-control\" v-model=\"emergency_contact.email\">\n                        </div>\n                    </div>\n                    <div class=\"row\">\n                        <div class=\"col-sm-6\">\n                            <label>Phone</label>\n                            <input type=\"tel\" class=\"form-control\" v-model=\"emergency_contact.phone|phone\">\n                        </div>\n                        <div class=\"col-sm-6\">\n                            <label>Relationship</label>\n                            <select type=\"tel\" class=\"form-control\" v-model=\"emergency_contact.relationship\">\n                                <option value=\"friend\">Friend</option>\n                                <option value=\"spouse\">Spouse</option>\n                                <option value=\"family\">Family</option>\n                                <option value=\"guardian\">Guardian</option>\n                                <option value=\"other\">Other</option>\n                            </select>\n                        </div>\n                    </div>\n                </form>\n            </div>\n        </div>\n\n        <div class=\"form-group text-center\">\n            <div class=\"col-xs-12\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/records/medical-releases\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n\n    <modal class=\"text-center\" :show.sync=\"deleteModal\" title=\"Delete Cost\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\" v-if=\"selectedItem\">Are you sure you want to delete {{ selectedItem.name }}?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Cancel</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,remove(selectedCost)\">Confirm</button>\n        </div>\n    </modal>\n\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Medical Release updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -79505,7 +79515,7 @@ exports.default = {
 			showFilters: false,
 			includeManaging: false,
 			search: '',
-			per_page: 3,
+			per_page: 15,
 			pagination: {
 				current_page: 1
 			},
@@ -79517,14 +79527,17 @@ exports.default = {
 	watch: {
 		'filters': {
 			handler: function handler(val) {
+				this.pagination.current_page = 1;
 				this.searchMedicals();
 			},
 			deep: true
 		},
 		'search': function search(val, oldVal) {
+			this.pagination.current_page = 1;
 			this.searchMedicals();
 		},
 		'includeManaging': function includeManaging(val, oldVal) {
+			this.pagination.current_page = 1;
 			this.searchMedicals();
 		}
 
@@ -79784,7 +79797,7 @@ exports.default = {
             showFilters: false,
             includeManaging: false,
             search: '',
-            per_page: 3,
+            per_page: 9,
             pagination: {
                 current_page: 1
             },
@@ -79796,14 +79809,17 @@ exports.default = {
     watch: {
         'filters': {
             handler: function handler(val) {
+                this.pagination.current_page = 1;
                 this.searchPassports();
             },
             deep: true
         },
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchPassports();
         },
         'includeManaging': function includeManaging(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchPassports();
         }
 
@@ -79835,7 +79851,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n\n            <div class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"filters.expired\"> Expired\n                </label>\n            </div>\n\n            <div class=\"form-group\">\n                <label>Sort By</label>\n                <select class=\"form-control input-sm\" v-model=\"filters.sort\">\n                    <option value=\"given_names\">Given Names</option>\n                    <option value=\"surname\">Surname</option>\n                    <option value=\"number\">Passport Number</option>\n                </select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n    <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n    <div class=\"col-xs-12 text-right\">\n        <form class=\"form-inline\">\n            <div style=\"margin-right:5px;\" class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"includeManaging\"> Include my group's passports\n                </label>\n            </div>\n            <div class=\"input-group input-group-sm\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search\">\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n            <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                Filters\n                <i class=\"fa fa-filter\"></i>\n            </button>\n        </form>\n        <hr class=\"divider sm inv\">\n    </div>\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n        <p class=\"text-center text-muted\" role=\"alert\"><em>No records found</em></p>\n    </div>\n\n    <div class=\"col-sm-6 col-md-4\" v-for=\"passport in passports\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-body\">\n                <a role=\"button\" :href=\"'/dashboard' + passport.links[0].uri\">\n                    <h5 class=\"text-primary text-capitalize\" style=\"margin-top:0px;margin-bottom:5px;\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <div style=\"position:absolute;right:25px;top:12px;\">\n                    <a style=\"margin-right:3px;\" :href=\"'/dashboard' + passport.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a @click=\"selectedPassport = passport,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n                <hr class=\"divider\">\n                <label>ID</label>\n                <p class=\"small\">{{passport.number}}</p>\n                <label>BIRTH COUNTRY</label>\n                <p class=\"small\">{{passport.citizenship_name}}</p>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <label>ISSUED ON</label>\n                        <p class=\"small\">{{passport.issued_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                    <div class=\"col-sm-6\">\n                        <label>EXPIRES ON</label>\n                        <p class=\"small\">{{passport.expires_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                </div><!-- end row -->\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchPassports\"></pagination>\n\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Passport?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removePassport(selectedPassport)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n\n            <div class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"filters.expired\"> Expired\n                </label>\n            </div>\n\n            <div class=\"form-group\">\n                <label>Sort By</label>\n                <select class=\"form-control input-sm\" v-model=\"filters.sort\">\n                    <option value=\"given_names\">Given Names</option>\n                    <option value=\"surname\">Surname</option>\n                    <option value=\"number\">Passport Number</option>\n                </select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n    <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n    <div class=\"col-xs-12 text-right\">\n        <form class=\"form-inline\">\n            <div style=\"margin-right:5px;\" class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"includeManaging\"> Include my group's passports\n                </label>\n            </div>\n            <div class=\"input-group input-group-sm\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search\">\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n            <button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                Filters\n                <i class=\"fa fa-filter\"></i>\n            </button>\n        </form>\n        <hr class=\"divider sm inv\">\n    </div>\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !passports.length\">\n        <p class=\"text-center text-muted\" role=\"alert\"><em>No records found</em></p>\n    </div>\n\n    <div class=\"col-sm-12\" style=\"display:flex; flex-wrap: wrap;\">\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"passport in passports\" style=\"display:flex; flex-direction:column;\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-body\">\n                <a role=\"button\" :href=\"'/dashboard/records/passports/' + passport.id\">\n                    <h5 class=\"text-primary text-capitalize\" style=\"margin-top:0px;margin-bottom:5px;\">\n                        {{passport.given_names}} {{passport.surname}}\n                    </h5>\n                </a>\n                <div style=\"position:absolute;right:25px;top:12px;\">\n                    <a style=\"margin-right:3px;\" :href=\"'/dashboard/records/passports/' + passport.id + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a @click=\"selectedPassport = passport,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n                <hr class=\"divider\">\n                <div class=\"row\">\n                    <div class=\"col-xs-6\">\n                        <label>ID</label>\n                        <p class=\"small\">{{passport.number}}</p>\n                    </div>\n                    <div class=\"col-xs-6 text-right\">\n                        <span class=\"label label-primary\" v-if=\"passport.expired\">\n                            <i class=\"fa fa-exclamation-triangle\"></i> Expired\n                        </span>\n                    </div>\n                </div>\n                <label>BIRTH COUNTRY</label>\n                <p class=\"small\">{{passport.citizenship_name}}</p>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <label>ISSUED ON</label>\n                        <p class=\"small\">{{passport.issued_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                    <div class=\"col-sm-6\">\n                        <label>EXPIRES ON</label>\n                        <p class=\"small\">{{passport.expires_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                </div><!-- end row -->\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n    </div>\n\n    <div class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchPassports\"></pagination>\n\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Passport\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body text-center\">Are you sure you want to delete this Passport?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removePassport(selectedPassport)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -79998,7 +80014,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateReferral\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateReferral\" class=\"form-horizontal\" novalidate=\"\" style=\"postition:relative;\">\n        <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n        <div class=\"row\">\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('name') }\">\n                <label for=\"author\" class=\"control-label\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('referralemail') }\">\n                <label for=\"author\" class=\"control-label\">Referral Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"referral_email\" id=\"referral_email\" v-model=\"referral_email\" placeholder=\"Referral Email\" v-validate:referralemail=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('referralname') }\">\n                <label for=\"author\" class=\"control-label\">Referral Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"referral_name\" id=\"referral_name\" v-model=\"referral_name\" placeholder=\"Referral Name\" v-validate:referralname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('referralphone') }\">\n                <label for=\"author\" class=\"control-label\">Referral Phone</label>\n                <input type=\"text\" class=\"form-control\" name=\"referral_phone\" id=\"referral_phone\" v-model=\"referral_phone|phone\" placeholder=\"Referral Phone\" v-validate:referralphone=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"row\" v-for=\"QA in response\">\n            <div class=\"col-sm-12\">\n            <label class=\"control-label\" v-text=\"QA.q\"></label>\n            <textarea class=\"form-control\" v-model=\"QA.a\"></textarea>\n            </div>\n        </div>\n        <hr class=\"divider inv\">\n        <div class=\"row\">\n            <div class=\"col-sm-12 text-center\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/records/referrals\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Referral updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<validator name=\"CreateUpdateReferral\" @touched=\"onTouched\">\n    <form id=\"CreateUpdateReferral\" class=\"form-horizontal\" novalidate=\"\" style=\"postition:relative;\">\n        <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n        <div class=\"row\">\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('name') }\">\n                <label for=\"author\" class=\"control-label\">Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"name\" id=\"name\" v-model=\"name\" placeholder=\"Name\" v-validate:name=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('referralemail') }\">\n                <label for=\"author\" class=\"control-label\">Referral Email</label>\n                <input type=\"text\" class=\"form-control\" name=\"referral_email\" id=\"referral_email\" v-model=\"referral_email\" placeholder=\"Referral Email\" v-validate:referralemail=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('referralname') }\">\n                <label for=\"author\" class=\"control-label\">Referral Name</label>\n                <input type=\"text\" class=\"form-control\" name=\"referral_name\" id=\"referral_name\" v-model=\"referral_name\" placeholder=\"Referral Name\" v-validate:referralname=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n            <div class=\"col-sm-6\" :class=\"{ 'has-error': checkForError('referralphone') }\">\n                <label for=\"author\" class=\"control-label\">Referral Phone</label>\n                <input type=\"text\" class=\"form-control\" name=\"referral_phone\" id=\"referral_phone\" v-model=\"referral_phone|phone\" placeholder=\"Referral Phone\" v-validate:referralphone=\"{ required: true, minlength:1, maxlength:100 }\" maxlength=\"150\" minlength=\"1\" required=\"\">\n            </div>\n        </div>\n\n        <hr class=\"divider inv\">\n        <div class=\"row\">\n            <div class=\"col-sm-12 text-center\">\n                <a v-if=\"!isUpdate\" href=\"/dashboard/records/referrals\" class=\"btn btn-default\">Cancel</a>\n                <a v-if=\"!isUpdate\" @click=\"submit()\" class=\"btn btn-primary\">Create</a>\n                <a v-if=\"isUpdate\" @click=\"update()\" class=\"btn btn-primary\">Update</a>\n                <a v-if=\"isUpdate\" @click=\"back()\" class=\"btn btn-success\">Done</a>\n            </div>\n        </div>\n    </form>\n    <alert :show.sync=\"showSuccess\" placement=\"top-right\" :duration=\"3000\" type=\"success\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-ok-circled alert-icon-float-left\"></span>\n        <strong>Well Done!</strong>\n        <p>Referral updated!</p>\n    </alert>\n    <alert :show.sync=\"showError\" placement=\"top-right\" :duration=\"6000\" type=\"danger\" width=\"400px\" dismissable=\"\">\n        <span class=\"icon-info-circled alert-icon-float-left\"></span>\n        <strong>Oh No!</strong>\n        <p>There are errors on the form.</p>\n    </alert>\n    <modal title=\"Save Changes\" :show.sync=\"showSaveAlert\" ok-text=\"Continue\" cancel-text=\"Cancel\" :callback=\"forceBack\">\n        <div slot=\"modal-body\" class=\"modal-body\">You have unsaved changes, continue anyway?</div>\n    </modal>\n\n</validator>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -80030,7 +80046,7 @@ exports.default = {
             //logic vars
             includeManaging: false,
             search: '',
-            per_page: 3,
+            per_page: 15,
             pagination: {
                 current_page: 1
             },
@@ -80041,9 +80057,11 @@ exports.default = {
 
     watch: {
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchReferrals();
         },
         'includeManaging': function includeManaging(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchReferrals();
         }
     },
@@ -80283,7 +80301,7 @@ exports.default = {
             showFilters: false,
             includeManaging: false,
             search: '',
-            per_page: 3,
+            per_page: 9,
             pagination: {
                 current_page: 1
             },
@@ -80295,14 +80313,17 @@ exports.default = {
     watch: {
         'filters': {
             handler: function handler(val) {
+                this.pagination.current_page = 1;
                 this.searchVisas();
             },
             deep: true
         },
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchVisas();
         },
         'includeManaging': function includeManaging(val, oldVal) {
+            this.pagination.current_page = 1;
             this.searchVisas();
         }
     },
@@ -80337,7 +80358,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n\n            <div class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"filters.expired\"> Expired\n                </label>\n            </div>\n\n            <div class=\"form-group\">\n                <label>Sort By</label>\n                <select class=\"form-control input-sm\" v-model=\"filters.sort\">\n                    <option value=\"given_names\">Given Names</option>\n                    <option value=\"surname\">Surname</option>\n                    <option value=\"number\">Passport Number</option>\n                </select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n    <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n\n    <div class=\"col-xs-12 text-right\">\n        <form class=\"form-inline\">\n            <div style=\"margin-right:5px;\" class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"includeManaging\"> Include my group's visas\n                </label>\n            </div>\n            <div class=\"input-group input-group-sm\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search\">\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n            <!--<button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                Filters\n                <i class=\"fa fa-filter\"></i>\n            </button>-->\n        </form>\n        <hr class=\"divider sm inv\">\n    </div>\n\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n        <div role=\"alert\"><p class=\"text-center text-muted\"><em>No records found</em></p></div>\n    </div>\n\n    <div class=\"col-sm-6 col-md-4\" v-for=\"visa in visas\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <a role=\"button\" :href=\"'/dashboard' + visa.links[0].uri\">\n                    <h5 class=\"text-primary text-capitalize\" style=\"margin-top:0px;margin-bottom:5px;\">\n                        {{visa.given_names}} {{visa.surname}}\n                    </h5>\n                </a>\n                <div style=\"position:absolute;right:25px;top:12px;\">\n                    <a style=\"margin-right:3px;\" :href=\"'/dashboard' + visa.links[0].uri + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a @click=\"selectedVisa = visa,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n                <hr class=\"divider\">\n                <label>ID</label>\n                <p class=\"small\">{{visa.number}}</p>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <label>ISSUED ON</label>\n                        <p class=\"small\">{{visa.issued_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                    <div class=\"col-sm-6\">\n                        <label>EXPIRES ON</label>\n                        <p class=\"small\">{{visa.expires_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                </div><!-- end row -->\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchVisas\"></pagination>\n\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Visa\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Visa?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeVisa(selectedVisa)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"row\">\n    <aside :show.sync=\"showFilters\" placement=\"left\" header=\"Filters\" :width=\"375\">\n        <hr class=\"divider inv sm\">\n        <form class=\"col-sm-12\">\n\n            <div class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"filters.expired\"> Expired\n                </label>\n            </div>\n\n            <div class=\"form-group\">\n                <label>Sort By</label>\n                <select class=\"form-control input-sm\" v-model=\"filters.sort\">\n                    <option value=\"given_names\">Given Names</option>\n                    <option value=\"surname\">Surname</option>\n                    <option value=\"number\">Passport Number</option>\n                </select>\n            </div>\n\n            <hr class=\"divider inv sm\">\n            <button class=\"btn btn-default btn-sm btn-block\" type=\"button\" @click=\"resetFilter()\"><i class=\"fa fa-times\"></i> Reset Filters</button>\n        </form>\n    </aside>\n    <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\"></spinner>\n\n    <div class=\"col-xs-12 text-right\">\n        <form class=\"form-inline\">\n            <div style=\"margin-right:5px;\" class=\"checkbox\">\n                <label>\n                    <input type=\"checkbox\" v-model=\"includeManaging\"> Include my group's visas\n                </label>\n            </div>\n            <div class=\"input-group input-group-sm\">\n                <input type=\"text\" class=\"form-control\" v-model=\"search\" debounce=\"250\" placeholder=\"Search\">\n                <span class=\"input-group-addon\"><i class=\"fa fa-search\"></i></span>\n            </div>\n            <!--<button class=\"btn btn-default btn-sm\" type=\"button\" @click=\"showFilters=!showFilters\">\n                Filters\n                <i class=\"fa fa-filter\"></i>\n            </button>-->\n        </form>\n        <hr class=\"divider sm inv\">\n    </div>\n\n    <div class=\"col-sm-12\" v-if=\"loaded &amp;&amp; !visas.length\">\n        <div role=\"alert\"><p class=\"text-center text-muted\"><em>No records found</em></p></div>\n    </div>\n\n    <div class=\"col-sm-12\" style=\"display:flex; flex-wrap: wrap;\">\n    <div class=\"col-xs-12 col-sm-6 col-md-4\" v-for=\"visa in visas\" style=\"display:flex; flex-direction:column;\">\n        <div class=\"panel panel-default\">\n            <div style=\"min-height:220px;\" class=\"panel-body\">\n                <a role=\"button\" :href=\"'/dashboard/records/visas/' + visa.id\">\n                    <h5 class=\"text-primary text-capitalize\" style=\"margin-top:0px;margin-bottom:5px;\">\n                        {{visa.given_names}} {{visa.surname}}\n                    </h5>\n                </a>\n                <div style=\"position:absolute;right:25px;top:12px;\">\n                    <a style=\"margin-right:3px;\" :href=\"'/dashboard/records/visas/' + visa.id + '/edit'\"><i class=\"fa fa-pencil\"></i></a>\n                    <a @click=\"selectedVisa = visa,deleteModal = true\"><i class=\"fa fa-times\"></i></a>\n                </div>\n                <hr class=\"divider\">\n                <div class=\"row\">\n                    <div class=\"col-xs-6\">\n                        <label>ID</label>\n                        <p class=\"small\">{{visa.number}}</p>\n                    </div>\n                    <div class=\"col-xs-6 text-right\">\n                        <span class=\"label label-primary\" v-if=\"visa.expired\">\n                            <i class=\"fa fa-exclamation-triangle\"></i> Expired\n                        </span>\n                    </div>\n                </div>\n                <div class=\"row\">\n                    <div class=\"col-sm-6\">\n                        <label>ISSUED ON</label>\n                        <p class=\"small\">{{visa.issued_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                    <div class=\"col-sm-6\">\n                        <label>EXPIRES ON</label>\n                        <p class=\"small\">{{visa.expires_at|moment 'll'}}</p>\n                    </div><!-- end col -->\n                </div><!-- end row -->\n            </div><!-- end panel-body -->\n        </div>\n    </div>\n    </div>\n    <div class=\"col-sm-12 text-center\">\n        <pagination :pagination.sync=\"pagination\" :callback=\"searchVisas\"></pagination>\n\n    </div>\n    <modal :show.sync=\"deleteModal\" title=\"Remove Visa\" small=\"true\">\n        <div slot=\"modal-body\" class=\"modal-body\">Are you sure you want to delete this Visa?</div>\n        <div slot=\"modal-footer\" class=\"modal-footer\">\n            <button type=\"button\" class=\"btn btn-default btn-sm\" @click=\"deleteModal = false\">Exit</button>\n            <button type=\"button\" class=\"btn btn-primary btn-sm\" @click=\"deleteModal = false,removeVisa(selectedVisa)\">Confirm</button>\n        </div>\n    </modal>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -81601,6 +81622,7 @@ exports.default = {
 		'filters': {
 			handler: function handler(val) {
 				// console.log(val);
+				this.pagination.current_page = 1;
 				this.searchReservations();
 			},
 			deep: true
@@ -81643,6 +81665,7 @@ exports.default = {
 		},
 		'search': function search(val, oldVal) {
 			this.page = 1;
+			this.pagination.current_page = 1;
 			this.searchReservations();
 		},
 		'page': function page(val, oldVal) {
@@ -82964,6 +82987,7 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 // console.log(val);
+                this.pagination.current_page = 1;
                 this.getReservations();
             },
             deep: true
@@ -82975,9 +82999,11 @@ exports.default = {
             this.filters.campaign = val ? val.id : '';
         },
         'search': function search(val, oldVal) {
+            this.pagination.current_page = 1;
             this.getReservations();
         },
         'includeManaging': function includeManaging(val, oldVal) {
+            this.pagination.current_page = 1;
             this.getReservations();
         }
     },
@@ -84618,12 +84644,14 @@ exports.default = {
         'filters': {
             handler: function handler(val) {
                 // console.log(val);
+                this.pagination.current_page = 1;
                 this.searchTrips();
             },
             deep: true
         },
         'search': function search(val, oldVal) {
             this.page = 1;
+            this.pagination.current_page = 1;
             this.searchTrips();
         },
         'page': function page(val, oldVal) {
@@ -86551,12 +86579,13 @@ exports.default = {
 		'filters': {
 			handler: function handler(val) {
 				// console.log(val);
+				this.pagination.current_page = 1;
 				this.searchUploads();
 			},
 			deep: true
 		},
 		'search': function search(val, oldVal) {
-			this.page = 1;
+			this.pagination.current_page = 1;
 			this.searchUploads();
 		},
 		'orderByField': function orderByField(val, oldVal) {
@@ -87043,6 +87072,7 @@ exports.default = {
 		'filters': {
 			handler: function handler(val) {
 				// console.log(val);
+				this.pagination.current_page = 1;
 				this.searchUsers();
 			},
 			deep: true
@@ -87061,6 +87091,7 @@ exports.default = {
 		},
 		'search': function search(val, oldVal) {
 			this.updateConfig();
+			this.pagination.current_page = 1;
 			this.page = 1;
 			this.searchUsers();
 		},

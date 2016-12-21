@@ -67,7 +67,7 @@
                 //logic vars
                 includeManaging: false,
                 search: '',
-                per_page: 3,
+                per_page: 15,
                 pagination: {
                     current_page:1,
                 },
@@ -77,9 +77,11 @@
         },
         watch:{
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchReferrals();
             },
             'includeManaging': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchReferrals();
             }
         },

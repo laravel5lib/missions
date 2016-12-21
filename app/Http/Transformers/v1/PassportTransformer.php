@@ -38,6 +38,7 @@ class PassportTransformer extends TransformerAbstract
             'expires_at' => $passport->expires_at->format('Y-m-d'),
             'created_at' => $passport->created_at->toDateTimeString(),
             'updated_at' => $passport->updated_at->toDateTimeString(),
+            'expired' => $passport->expires_at->isPast() ? true : false,
             'links'        => [
                 [
                     'rel' => 'self',

@@ -401,6 +401,7 @@
             'filters': {
                 handler: function (val) {
                     console.log(val);
+                    this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
                 deep: true
@@ -426,6 +427,7 @@
                 this.updateConfig();
             },
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchTransactions();
             },

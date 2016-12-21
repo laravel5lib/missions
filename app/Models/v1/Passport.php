@@ -33,4 +33,9 @@ class Passport extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function upload()
+    {
+        return $this->belongsTo(Upload::class);
+    }
 }

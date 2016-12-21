@@ -49,6 +49,20 @@ return [
                 'label' => 'Essays',
                 'url' => 'essays'
             ]
+        ],
+        'project' => [
+            [
+                'label' => 'Details',
+                'url' => 'details'
+            ],
+            [
+                'label' => 'Costs',
+                'url' => 'costs'
+            ],
+            [
+                'label' => 'Funds',
+                'url' => 'funds'
+            ],
         ]
     ],
     'admin' => [

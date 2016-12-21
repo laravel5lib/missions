@@ -107,7 +107,7 @@
 				showFilters: false,
 				includeManaging: false,
 				search: '',
-				per_page: 3,
+				per_page: 15,
 				pagination: {
 					current_page: 1
 				},
@@ -118,14 +118,17 @@
 		watch: {
             'filters': {
                 handler: function (val) {
-                    this.searchMedicals();
+					this.pagination.current_page = 1;
+					this.searchMedicals();
                 },
                 deep: true
             },
 			'search': function (val, oldVal) {
+				this.pagination.current_page = 1;
 				this.searchMedicals();
 			},
 			'includeManaging': function (val, oldVal) {
+				this.pagination.current_page = 1;
 				this.searchMedicals();
 			}
 

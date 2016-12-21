@@ -208,7 +208,22 @@
                     <h5 class="panel-header">Doctor's Permission</h5>
                 </div>
                 <div class="panel-body">
-                    <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>Start Here</h5>
+                            <p>You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong> as certain conditions may be treated by different doctors.</p>
+                            <p>
+                                <button class="btn btn-primary btn-md">
+                                    <i class="fa fa-file-pdf-o icon-left"></i> Download Permission Form
+                                </button>
+                            </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h5>Completed Forms</h5>
+                            <p>Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>
+                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default">

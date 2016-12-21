@@ -42,6 +42,7 @@ import reservationDues from './components/reservations/reservation-dues.vue';
 import reservationFunding from './components/reservations/reservation-funding.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
+import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
@@ -505,6 +506,7 @@ new Vue({
         reservationFunding,
         userSettings,
         userProfileCountries,
+        userProfileTripHistory,
         userProfileStories,
         userProfileFundraisers,
         userProfileFundraisersDonors,

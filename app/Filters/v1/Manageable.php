@@ -30,6 +30,10 @@ trait Manageable {
 
         $users = $facilitated_users->merge($managed_users)->unique()->all();
 
-        return $this->whereIn('user_id', $users)->orWhere('user_id', $user_id);
+        if ( key_exists('user', $this->input)) {
+            $users = array_prepend($users, $this->input['user']);
+        }
+
+        return $this->whereIn('user_id', $users);
     }
 }

@@ -52,8 +52,9 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.passports.create');
     });
 
-    Route::get('records/passports/{id}', function ($id) {
-        return view('dashboard.passports.index', compact('id'));
+    Route::get('records/passports/{id}', function ($id) use ($dispatcher) {
+        $passport = $dispatcher->get('passports/' . $id);
+        return view('dashboard.passports.show', compact('passport'));
     });
 
     Route::get('records/passports/{id}/edit', function ($id) {

@@ -2,9 +2,9 @@
 
 @section('content')
 
-    <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">New Contact</h3>
+    <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">New Speaker Request</h3>
 
-    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">Missions.Me has received a new online contact. Please review the contact's information below and follow up.</p>
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">Missions.Me has received a new speaker request. Please review the contact's information below and follow up.</p>
 
     <table style="border-collapse: collapse;font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;border: 2px solid #e6e6e6;">
         <tbody>

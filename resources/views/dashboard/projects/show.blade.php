@@ -32,8 +32,8 @@
         <div class="row">
             <div class="col-sm-4">
 
-                @include('admin.causes.projects._menu', [
-                'links' => config('navigation.admin.project')
+                @include('dashboard.projects._menu', [
+                'links' => config('navigation.dashboard.project')
                 ])
             </div>
             <div class="col-sm-8">

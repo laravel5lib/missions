@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="/dashboard/records/essays" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
+                    <a href="/dashboard/records/visas" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
                 </div>
             </div>
         </div>

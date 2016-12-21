@@ -19,6 +19,11 @@ class Filter extends ModelFilter
     public $searchable = [];
 
     /**
+     * @var
+     */
+    public $input;
+
+    /**
      * By all tags.
      *
      * @param $tags

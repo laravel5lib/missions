@@ -211,7 +211,7 @@
         </validator>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     export default{
         name: 'donate',
@@ -462,6 +462,9 @@
                     comment: null,
                     fund_id: this.fundId,
                     token: this.token,
+                    details: {
+                        type: 'card'
+                    },
                     payment: {
                         type: 'card',
                         brand: this.detectCardType(this.cardNumber),

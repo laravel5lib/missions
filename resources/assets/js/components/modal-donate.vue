@@ -24,7 +24,7 @@
         </div><!-- end panel -->
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     import donateComponent from './donate.vue';
     export default{
@@ -136,15 +136,17 @@
                 this.donateModalOpen = false;
                 this.showModal = false;
                 this.showRight = false;
+                $('#collapseDonate').collapse('hide');
+                let t = setTimeout(this.resetState, 1000);
             }
         },
         ready: function () {
             // media query event handler
-            if (matchMedia) {
+            /*if (matchMedia) {
                 this.mediaQuery = window.matchMedia("(max-width: 767px)");
                 this.mediaQuery.addListener(this.widthChange);
                 this.widthChange(this.mediaQuery);
-            }
+            }*/
         },
     }
 </script>

@@ -82,6 +82,7 @@
                 city: '',
                 state: '',
                 zip: '',
+                comments: '',
                 attemptSubmit:false,
             }
         },
@@ -101,6 +102,7 @@
                     city: '',
                     state: '',
                     zip: '',
+                    comments: '',
                     attemptSubmit:false,
                 });
                 this.attemptSubmit = false;

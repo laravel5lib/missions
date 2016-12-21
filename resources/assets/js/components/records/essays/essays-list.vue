@@ -26,7 +26,7 @@
         </div>
         <modal :show.sync="deleteModal" title="Remove Essay" small="true">
             <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Essay?</div>
-            <div slot="modal-footer" class="modal-footer">
+            <div slot="modal-footer" claass="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeEssay(selectedEssay)'>Confirm</button>
             </div>

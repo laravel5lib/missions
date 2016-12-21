@@ -1,7 +1,7 @@
 <template>
     <validator name="CreateGroup">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <form class="form-horizontal" novalidate>
+        <form class="form-horizontal" novalidate style="position:relative;">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="form-group">
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
                     <label for="name">Name</label>
@@ -42,11 +42,6 @@
         </form>
     </validator>
 </template>
-<style scoped>
-    body{
-        background-color:#ff0000;
-    }
-</style>
 <script type="text/javascript">
     export default{
         name: 'contact-form',

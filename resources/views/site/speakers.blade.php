@@ -59,73 +59,7 @@
 				<p class="text-center"><a class="btn btn-primary btn-lg" role="button" data-toggle="collapse" href="#collapseContact" aria-expanded="false" aria-controls="collapseContact">Request A Speaker</a></p>
 				<div class="collapse" id="collapseContact">
 					<hr class="divider inv xlg">
-					<validator name="CreateGroup">
-		              <form class="form-horizontal" novalidate>
-		                  <div class="form-group">
-		                      <div class="col-sm-6">
-		                          <label for="name">Name</label>
-		                          <input type="text" class="form-control" name="name" id="name" v-model="name"
-		                                 placeholder="John Smith" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-		                                 maxlength="100" minlength="1" required>
-		                      </div>
-		                      <div class="col-sm-6">
-		                          <label for="name">Your Church/Organization</label>
-		                          <input type="text" class="form-control" name="name" id="name" v-model="name"
-		                                 placeholder="Church Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-		                                 maxlength="100" minlength="1" required>
-		                      </div>
-		                  </div>
-
-						  <div class="form-group">
-		                      <div class="col-sm-6">
-		                          <label for="infoPhone">Phone 1</label>
-		                          <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
-		                      </div>
-		                      <div class="col-sm-6">
-		                          <label for="name">Email</label>
-		                          <input type="text" class="form-control" name="email" id="email" v-model="email">
-		                      </div>
-		                  </div>
-
-		                  <div class="form-group">
-		                      <div class="col-sm-6">
-		                          <label for="infoAddress">Address 1</label>
-		                          <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-		                      </div>
-		                      <div class="col-sm-6">
-		                          <label for="infoAddress2">Address 2</label>
-		                          <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
-		                      </div>
-		                  </div>
-
-		                  <div class="row form-group col-sm-offset-2">
-		                      <div class="col-sm-4">
-		                              <label for="infoCity">City</label>
-		                              <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
-		                      </div>
-		                      <div class="col-sm-4">
-		                              <label for="infoState">State/Prov.</label>
-		                              <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
-		                      </div>
-		                      <div class="col-sm-4">
-		                              <label for="infoZip">ZIP/Postal Code</label>
-		                              <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
-		                      </div>
-		                  </div>
-
-		                  <div class="form-group">
-		                      <div class="col-sm-12">
-		                      	<label for="name">Questions, Comments, or Ideas</label>
-		                      	<textarea type="text" class="form-control" name="comments" id="comments" v-model="comments"></textarea>
-		                      </div>
-		                  </div>
-		                  <div class="form-group">
-		                      <div class="col-sm-12 text-center">
-		                          <a @click="submit()" class="btn btn-primary">Send Request</a>
-		                      </div>
-		                  </div>
-		              </form>
-		          </validator>
+					<speaker-form></speaker-form>
 				</div>
 			</div><!-- end col -->
 		</div><!-- end row -->

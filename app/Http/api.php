@@ -104,6 +104,7 @@ $api->version('v1', [
     });
 
     $api->post('contact', 'UtilitiesController@sendContactEmail');
+    $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
 
     /*
     |--------------------------------------------------------------------------

@@ -53,6 +53,27 @@ class UtilitiesController extends Controller
 
     }
 
+    public function  sendSpeakerRequestEmail(Request $request)
+    {
+        $data = [
+            'email' => $request->get('email'),
+            'name' => $request->get('name'),
+            'organization' => $request->get('organization'),
+            'phone_one' => $request->get('phone_one'),
+            'address_one' => $request->get('address_one'),
+            'address_two' => $request->get('address_two'),
+            'city' => $request->get('city'),
+            'state' => $request->get('state'),
+            'zip' => $request->get('zip'),
+            'comments' => $request->get('comments'),
+        ];
+
+        Mail::queue('emails.speaker', ['data' => $data], function ($m) use ($data) {
+            $m->to('go@missions.me', 'Missions.me')->subject('Speaker Request from Missions.Me Visitor!');
+        });
+
+    }
+
     public function getPastTrips()
     {
        return config('accolades.trips');

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import contactForm from './components/contact-form.vue';
+import speakerForm from './components/speaker-form.vue';
 import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
@@ -452,6 +453,7 @@ new Vue({
     components: {
         login,
         contactForm,
+        speakerForm,
         fundraisers,
         campaigns,
         groups,

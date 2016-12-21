@@ -326,6 +326,7 @@
 			'filters': {
 				handler: function (val) {
 					// console.log(val);
+					this.pagination.current_page = 1;
 					this.searchUsers();
 				},
 				deep: true
@@ -344,6 +345,7 @@
 			},
             'search': function (val, oldVal) {
 				this.updateConfig();
+				this.pagination.current_page = 1;
 				this.page = 1;
                 this.searchUsers();
             },

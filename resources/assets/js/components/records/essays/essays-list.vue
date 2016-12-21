@@ -78,9 +78,11 @@
         },
         watch:{
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchEssays();
             },
             'includeManaging': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchEssays();
             }
         },

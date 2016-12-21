@@ -32,12 +32,6 @@
                 </div>
             </div>
 
-            <div class="row" v-for="QA in response">
-                <div class="col-sm-12">
-                <label class="control-label" v-text="QA.q"></label>
-                <textarea class="form-control" v-model="QA.a"></textarea>
-                </div>
-            </div>
             <hr class="divider inv">
             <div class="row">
                 <div class="col-sm-12 text-center">

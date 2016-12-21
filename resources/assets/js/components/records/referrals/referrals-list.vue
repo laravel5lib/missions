@@ -77,9 +77,11 @@
         },
         watch:{
             'search': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchReferrals();
             },
             'includeManaging': function (val, oldVal) {
+                this.pagination.current_page = 1;
                 this.searchReferrals();
             }
         },

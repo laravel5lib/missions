@@ -477,13 +477,12 @@
             }
         },
         ready(){
-            // this.$refs.spinner.show();
-            let fetchURL = this.isUpdate ? 'medical/releases/' + this.id + '?include=conditions,allergies' : 'users/me';
-            this.$http(fetchURL).then(function (response) {
-                // this.user = response.data.data;
-                this.user_id = response.data.data.id;
-
-                if (this.isUpdate) {
+            // set user data
+            this.user_id = this.$root.user.id;
+            if (this.isUpdate) {
+                this.$http.get('medical/releases/' + this.id, { include: 'conditions,allergies'}).then(function (response) {
+                    // this.user = response.data.data;
+                    this.user_id = response.data.data.id;
                     let medical_release = response.data.data;
                     $.extend(this, medical_release);
 
@@ -507,38 +506,37 @@
                         this.additionalConditionsList = med_conditions;
                     });
                     this.$http('medical/allergies').then(function (response) {
-                        // prepare conditions for UI
-                        let med_allergies = medical_release.allergies.data;
-                        _.each(response.data.data, function (allergy) {
-                            let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
-                            let match = _.find(med_allergies, function (a, i) {
-                                med_allergies[i].selected = true;
-                                return a.name === allergy;
+                    // prepare conditions for UI
+                    let med_allergies = medical_release.allergies.data;
+                    _.each(response.data.data, function (allergy) {
+                        let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
+                        let match = _.find(med_allergies, function (a, i) {
+                            med_allergies[i].selected = true;
+                            return a.name === allergy;
+                        });
+                        if (match) {
+                            med_allergies = _.reject(med_allergies, function (ma) {
+                                return ma.name === match.name;
                             });
-                            if (match) {
-                                med_allergies = _.reject(med_allergies, function (ma) {
-                                    return ma.name === match.name;
-                                });
-                                _.extend(obj, match, { selected: true });
-                            }
-                            this.allergiesList.push(obj);
-                        }.bind(this));
-                        this.additionalAllergiesList = med_allergies;
-                    });
-                } else {
-                    this.$http('medical/conditions').then(function (response) {
-                        _.each(response.data.data, function (condition) {
-                            this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
-                        }.bind(this));
-                    })
-                    this.$http('medical/allergies').then(function (response) {
-                        _.each(response.data.data, function (allergy) {
-                            this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
-                        }.bind(this));
-                    });
-                }
-            });
+                            _.extend(obj, match, { selected: true });
+                        }
+                        this.allergiesList.push(obj);
+                    }.bind(this));
+                    this.additionalAllergiesList = med_allergies;
+                });
+                });
+            } else {
+                this.$http('medical/conditions').then(function (response) {
+                    _.each(response.data.data, function (condition) {
+                        this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
+                    }.bind(this));
+                });
+                this.$http('medical/allergies').then(function (response) {
+                    _.each(response.data.data, function (allergy) {
+                        this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
+                    }.bind(this));
+                });
+            }
         }
-
     }
 </script>

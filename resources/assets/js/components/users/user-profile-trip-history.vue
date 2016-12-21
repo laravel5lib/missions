@@ -115,7 +115,6 @@
             getAccolades(){
                 this.resource.get({id: this.id}).then(function (response) {
                     this.accolades = response.data.data[1];
-
 					if (this.isUser()) {
    						this.filterAccolades();
 					}

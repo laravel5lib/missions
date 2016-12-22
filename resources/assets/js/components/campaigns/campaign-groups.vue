@@ -19,25 +19,29 @@
 			</div>
 		</div>
 		<hr class="divider inv xlg">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
-		<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="groups.length > 0">
-			<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex"
-				 v-if="groups.length > 0">
-				<div class="panel panel-default">
-					<a role="button" @click="selectGroup(group)">
-						<img :src="group.avatar" :alt="group.name" class="img-responsive">
-						<div class="panel-body">
-							<h5 class="text-center">{{group.name}}</h5>
-						</div>
-					</a>
+		<template v-if="groups.length > 0">
+			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+				<!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
+				<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex">
+					<div class="panel panel-default">
+						<a role="button" @click="selectGroup(group)">
+							<img :src="group.avatar" :alt="group.name" class="img-responsive">
+							<div class="panel-body">
+								<h5 class="text-center">{{group.name}}</h5>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="container text-center" v-else>
-			<p class="lead">Sorry, we couldn't find any participating groups.</p>
-			<p><a href="#">Don't see your group?</a></p>
-		</div>
+		</template>
+		<template v-else>
+			<div class="container text-center">
+				<p class="lead">Sorry, we couldn't find any participating groups.</p>
+				<p><a href="#">Don't see your group?</a></p>
+			</div>
+		</template>
+
 		<div class="container">
 			<div class="col-sm-12 text-center">
 				<pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
@@ -59,6 +63,7 @@
 		},
 		watch: {
 			'searchText': function (val, oldVal) {
+				this.pagination.current_page = 1;
 				this.page = 1;
 				this.searchGroups();
 			},
@@ -77,7 +82,6 @@
 					page: this.pagination.current_page
 				});
 
-				// this.$refs.spinner.show();
 				resource.query().then(function (trips) {
 					this.pagination = trips.data.meta.pagination;
 					let arr = [];
@@ -85,9 +89,7 @@
 						arr.push(trips.data.data[i].group.data)
 					}
 					this.groups = arr;
-					// this.$refs.spinner.hide();
 				}, function (error) {
-					// this.$refs.spinner.hide();
 					//TODO error alert message
 				});
 			},

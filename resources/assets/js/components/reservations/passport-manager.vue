@@ -142,11 +142,11 @@
                 var params = {
                     user: this.$root.user.id,
                     manager: this.$root.user.id,
-                    include: 'document'
                 };
                 this.requirementResource.get({
                     reservationId: this.reservationId,
-                    requirementId: this.requirementId
+                    requirementId: this.requirementId,
+                    include: 'document'
                 }).then(function (response) {
                     this.requirement = response.data.data;
                 });

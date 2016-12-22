@@ -8,6 +8,13 @@ use League\Fractal\TransformerAbstract;
 class ReservationRequirementTransformer extends TransformerAbstract
 {
     /**
+     * List of resources available to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = ['document'];
+
+    /**
      * Transform the object into a basic array
      *
      * @param ReservationRequirement $r
@@ -39,5 +46,26 @@ class ReservationRequirementTransformer extends TransformerAbstract
         ];
 
         return $array;
+    }
+
+    public function includeDocument(ReservationRequirement $requirement)
+    {
+        $document = $requirement->document;
+
+        if( ! $document) return null;
+
+        switch ($requirement->document_type) {
+            case 'passports':
+                return $this->item($document, new PassportTransformer);
+                break;
+            case 'visas':
+                return $this->item($document, new VisaTransformer);
+                break;
+            case 'essays':
+                return $this->item($document, new EssayTransformer);
+                break;
+            default:
+                return null;
+        }
     }
 }

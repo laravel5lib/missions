@@ -33,7 +33,10 @@ class AppServiceProvider extends ServiceProvider
             'App\Models\v1\Transaction',
             'App\Models\v1\Fund',
             'App\Models\v1\Donor',
-            'App\Models\v1\TripInterest'
+            'App\Models\v1\TripInterest',
+            'App\Models\v1\Passport',
+            'App\Models\v1\Visa',
+            'App\Models\v1\Essay'
         ]);
     }
 

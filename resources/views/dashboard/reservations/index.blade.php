@@ -5,7 +5,8 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>My Reservations</h3>
+                <h3 class="hidden-xs">My Reservations</h3>
+                <h3 class="text-center visible-xs">My Reservations</h3>
             </div>
         </div>
     </div>

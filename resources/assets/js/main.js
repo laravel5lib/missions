@@ -39,7 +39,7 @@ import referralCreateUpdate from './components/records/referrals/referral-create
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
 import reservationCosts from './components/reservations/reservation-costs.vue';
 import reservationDues from './components/reservations/reservation-dues.vue';
-import reservationFunding from './components/reservations/reservation-funding.vue';
+import funding from './components/funding.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
@@ -503,7 +503,7 @@ new Vue({
         reservationAvatar,
         reservationCosts,
         reservationDues,
-        reservationFunding,
+        funding,
         userSettings,
         userProfileCountries,
         userProfileTripHistory,

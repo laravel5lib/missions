@@ -65,8 +65,9 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.visas.create');
     });
 
-    Route::get('records/visas/{id}', function ($id) {
-        return view('dashboard.visas.index', compact('id'));
+    Route::get('records/visas/{id}', function ($id) use($dispatcher) {
+        $visa = $dispatcher->get('visas/' . $id);
+        return view('dashboard.visas.show', compact('visa'));
     });
 
     Route::get('records/visas/{id}/edit', function ($id) {
@@ -77,8 +78,9 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.medical-releases.create');
     });
 
-    Route::get('records/medical-releases/{id}', function ($id) {
-        return view('dashboard.medical-releases.index', compact('id'));
+    Route::get('records/medical-releases/{id}', function ($id) use($dispatcher) {
+        $release = $dispatcher->get('medical/releases/' . $id);
+        return view('dashboard.medical-releases.show', compact('release'));
     });
 
     Route::get('records/medical-releases/{id}/edit', function ($id) {
@@ -93,8 +95,9 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.essays.create');
     });
 
-    Route::get('records/essays/{id}', function ($id) {
-        return view('dashboard.essays.index', compact('id'));
+    Route::get('records/essays/{id}', function ($id) use($dispatcher) {
+        $essay = $dispatcher->get('essays/' . $id);
+        return view('dashboard.essays.show', compact('essay'));
     });
 
     Route::get('records/essays/{id}/edit', function ($id) {
@@ -105,8 +108,9 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.referrals.create');
     });
 
-    Route::get('records/referrals/{id}', function ($id) {
-        return view('dashboard.referrals.index', compact('id'));
+    Route::get('records/referrals/{id}', function ($id) use($dispatcher) {
+        $referral = $dispatcher->get('referrals/' . $id);
+        return view('dashboard.referrals.show', compact('referral'));
     });
 
     Route::get('records/referrals/{id}/edit', function ($id) {

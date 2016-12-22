@@ -36,7 +36,7 @@ class Project extends Model
      *
      * @var array
      */
-    protected $appends = ['percent_raised', 'amount_raised', 'goal'];
+    protected $appends = ['percent_raised', 'amount_raised', 'goal', 'amount_outstanding'];
 
     /**
      * Get the project's sponsor.
@@ -153,6 +153,20 @@ class Project extends Model
         }
 
         return round(($this->amount_raised/$this->goal) * 100);
+    }
+
+    /**
+     * Get the amount still outstanding.
+     *
+     * @return int|mixed
+     */
+    public function getAmountOutstandingAttribute()
+    {
+        $difference = $this->goal - $this->amount_raised;
+
+        if ($difference < 0) return 0;
+
+        return $difference;
     }
 
     /**

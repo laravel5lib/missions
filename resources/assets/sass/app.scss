@@ -610,6 +610,9 @@ li.av-nav > a {
     left: 55px !important;
   }
 }
+.navbar-header-mobile {
+  height: 30px;
+}
 
 // -- Section Backgrounds -- //
 .content-section {
@@ -1001,7 +1004,7 @@ h1.home-college-header {
 
 /* Fundraiser Carousel */
 #carousel-fundraising-platform {
-  background-color: #fff;
+  background-color: #f7f7f7;
   min-height: 500px;
   .carousel-caption {
     color: $text-color;

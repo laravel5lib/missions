@@ -53,20 +53,24 @@
                 <div class="col-xs-12 col-sm-6 col-md-4" v-for="project in projects">
                     <div class="panel panel-default">
                         <div class="panel-heading text-center">
-                            <h5 class="text-uppercase">{{ project.initiative.data.type }}<br />
-                            <small>{{ project.initiative.data.cause.data.name }}</small></h5>
+                            <h5 class="text-capitalize" style="margin-bottom:0;">{{ project.initiative.data.type }}</h5>
+                            <label>{{ project.initiative.data.cause.data.name }}</label>
                         </div>
                         <div class="panel-body text-center" :class="'panel-' + project.initiative.data.type">
-                            <h4>{{ project.name }}</h4>
+                            <h5>{{ project.name }}</h5>
                             <hr class="divider inv sm">
                             <!--<img :src="project.sponsor.data.avatar" class="img-circle img-md">-->
                             <!--<hr class="divider inv sm">-->
-                            <label style="margin-bottom:2px;">Sponsor</label>
-                            <p class="text-capitalize small">{{ project.sponsor.data.name }}</p>
-                            <label style="margin-bottom:2px;font-size:10px;">Country</label>
-                            <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
+                            <div class="col-sm-6">
+                                <label style="margin-bottom:2px;">Sponsor</label>
+                                <p class="text-capitalize small">{{ project.sponsor.data.name }}</p>
+                            </div><!-- end col -->
+                            <div class="col-sm-6">
+                                <label style="margin-bottom:2px;font-size:10px;">Country</label>
+                                <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
+                            </div><!-- end col -->
                             <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize small" style="margin-top:2px;">{{ project.goal|currency}}</p>
+                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.goal|currency}}</p>
                             <hr class="divider inv sm">
                             <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
                         </div>
@@ -78,7 +82,7 @@
             </template>
             </div>
             <div class="col-xs-12" v-if="projects.length < 1">
-                <div class="alert alert-info">No projects found</div>
+                <p class="text-muted text-center"><em>No projects found</em></p>
             </div>
         </div>
     </div>

@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-
 		<div class="dark-bg-primary">
 			<div class="container">
 				<hr class="divider inv xlg">

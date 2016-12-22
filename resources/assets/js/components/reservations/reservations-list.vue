@@ -57,27 +57,31 @@
             <div class="col-xs-12" style="position:relative">
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
-                    <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
-                        <div class="panel panel-default">
-                            <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
-                                <h5 class="text-uppercase">{{ reservation.trip.data.type }}</h5>
-                            </div>
-                            <div class="panel-body text-center">
-                                <img :src="reservation.avatar" class="img-circle img-md">
-                                <hr class="divider inv sm">
-                                <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>
-                                <p class="text-capitalize small">{{ reservation.trip.data.group.data.name }}</p>
-                                <label style="margin-bottom:2px;">Campaign</label>
-                                <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</p>
-                                <label style="margin-bottom:2px;font-size:10px;">Country</label>
-                                <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.country_name }}</p>
-                                <hr class="divider inv sm">
-                                <a class="btn btn-sm btn-primary" href="/dashboard/reservations/{{ reservation.id }}">View Reservation</a>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
+                            <div class="panel panel-default">
+                                <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
+                                    <h5 class="text-uppercase">{{ reservation.trip.data.type }}</h5>
+                                </div>
+                                <div class="panel-body text-center">
+                                    <img :src="reservation.avatar" class="img-circle img-md">
+                                    <hr class="divider inv sm">
+                                    <h4>{{ reservation.surname }}, {{ reservation.given_names }}</h4>
+                                    <p class="text-capitalize small">{{ reservation.trip.data.group.data.name }}</p>
+                                    <label style="margin-bottom:2px;">Campaign</label>
+                                    <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</p>
+                                    <label style="margin-bottom:2px;font-size:10px;">Country</label>
+                                    <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.country_name }}</p>
+                                    <hr class="divider inv sm">
+                                    <a class="btn btn-sm btn-primary" :href="'/dashboard/reservations/' + reservation.id">View Reservation</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="getReservations"></pagination>
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <pagination :pagination.sync="pagination" :callback="getReservations"></pagination>
+                        </div>
                     </div>
                 </template>
             </div>

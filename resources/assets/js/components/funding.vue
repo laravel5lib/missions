@@ -18,8 +18,7 @@
                             <select class="form-control input-sm" v-model="type">
                                 <option value=''>All</option>
                                 <option value='donation'>Donation</option>
-                                <option value='fee'>Fee</option>
-                                <option value='payment'>Payment</option>
+                                <option value='credit'>Credit</option>
                                 <option value='refund'>Refund</option>
                                 <option value='transfer'>Transfer</option>
                             </select>
@@ -32,8 +31,7 @@
         <div class="btn-group btn-group-sm btn-group-justified hidden-xs" role="group" aria-label="...">
             <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>
             <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'fee'}" @click="toggleView('fee')">Fees</a>
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'payment'}" @click="toggleView('payment')">Payment</a>
+            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'credit'}" @click="toggleView('credit')">Credits</a>
             <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'refund'}" @click="toggleView('refund')">Refunds</a>
             <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'transfer'}" @click="toggleView('transfer')">Transfers</a>
         </div>
@@ -76,10 +74,11 @@
             </template>
             <template v-if="activeView !== 'donor'">
                 <div class="list-group">
-                    <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions|filterBy type">
+                    <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
                         <h5>
                             <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
-                            <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name || 'Anonymous' }}</a> on {{ transaction.created_at|moment 'll'}}</small>
+                            <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name }}</a> on
+                                {{ transaction.created_at|moment 'll'}}</small>
                             <br />
                             <small v-if="transaction.details">{{ transaction.details.comment }}</small>
                         </h5>
@@ -115,8 +114,8 @@
 <script type="text/javascript">
     var marked = require('marked');
     export default{
-        name: 'reservation-funding',
-        props: ['reservationId', 'fundId'],
+        name: 'funding',
+        props: ['fundId'],
         data(){
             return {
                 fund: null,
@@ -144,10 +143,8 @@
                         return 'donated';
                     case 'transfer':
                         return 'transferred';
-                    case 'payment':
-                        return 'paid';
-                    case 'fee':
-                        return 'charged';
+                    case 'credit':
+                        return 'recieved';
                     case 'refund':
                         return 'refunded';
                 }
@@ -158,7 +155,7 @@
                 this.searchDonors();
             },
             'pagination.current_page': function (val, oldVal) {
-                this.searchTransactions();
+                this.searchTransactions(this.type);
             },
         },
         methods: {
@@ -167,18 +164,22 @@
             },
             toggleView(view){
                 this.activeView = this.type = view;
+                if (view != 'donor') {
+                    this.type = view;
+                    this.searchTransactions(view);
+                }
             },
             searchDonors(){
                 // this.$refs.spinner.show();
-                this.$http.get('donors', {reservation: this.reservationId, page: this.donorPagination.current_page}).then(function (response) {
+                this.$http.get('funds/'+ this.fundId +'/donors', {page: this.donorPagination.current_page}).then(function (response) {
                     this.donors = response.data.data;
                     this.donorPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
-            searchTransactions(){
+            searchTransactions(type){
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', {include: 'donor', fund: this.fundId, page: this.pagination.current_page}).then(function (response) {
+                this.$http.get('transactions', {include: 'donor', type: type, fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page}).then(function (response) {
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
@@ -192,7 +193,6 @@
 
 
             if (this.display) {
-                this.searchTransactions();
                 this.searchDonors();
             }
         }

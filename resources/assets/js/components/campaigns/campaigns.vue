@@ -62,8 +62,10 @@
 					<a :href="'/campaigns/' + campaign.page_url" role="button">
 						<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
 					</a>
-					<h6 style="font-size:12px;">{{campaign.started_at | moment 'll'}} - {{campaign.ended_at | moment
-						'll'}}</h6>
+					<h6 style="font-size:12px;">
+						{{campaign.started_at | moment 'll'}} -
+						{{campaign.ended_at | moment 'll'}}
+					</h6>
 					<hr class="divider lg"/>
 					<p style="font-size:12px;" class="small">{{campaign.description}}</p>
 				</div><!-- end panel-body -->

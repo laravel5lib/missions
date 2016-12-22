@@ -880,7 +880,7 @@ table {
 				}
 				this.showInfo.check = false;
 				this.$emit('change', this.time);
-				console.log(this.time);
+				// console.log(this.time);
 				$('.input-group .form-control').removeClass('date-picker-active').css('z-index', 2);
 			},
 			dismiss: function dismiss(evt) {

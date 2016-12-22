@@ -37,7 +37,8 @@
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
-                                <input type="date" class="form-control" v-model="issued_at" id="issued_at" :max="today"
+                                <date-picker class="form-control input-sms" :time.sync="issued_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
                                        v-validate:issued="{ required: true }" required>
                             </div>
                             <br>
@@ -46,7 +47,8 @@
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
                                 <span class="input-group-addon">Exp</span>
-                                <input type="date" class="form-control" v-model="expires_at" id="expires_at" :min="tomorrow"
+                                <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
                             </div>
                         </div>

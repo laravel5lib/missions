@@ -21,14 +21,16 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('closed') }">
 						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control input-sm" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
+							<date-picker class="form-control input-sm" :time.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label for="published_at" class="col-sm-2 control-label">Publish</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control input-sm" v-model="published_at" id="published_at">
+							<date-picker class="form-control input-sm" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<input type="datetime" class="form-control input-sm hidden" v-model="published_at" id="published_at">
 						</div>
 					</div>
 

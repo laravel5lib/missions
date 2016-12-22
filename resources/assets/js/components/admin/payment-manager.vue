@@ -58,7 +58,8 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="dueAt">Due</label>
-                                <input id="dueAt" class="form-control input-sm" type="date" v-model="newPayment.due_at" required>
+                                <date-picker class="form-control input-sm" :time.sync="newPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -116,7 +117,8 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="dueAt">Due</label>
-                                    <input id="dueAt" class="form-control input-sm" type="date" v-model="selectedPayment.due_at" required>
+                                    <date-picker class="form-control input-sm" :time.sync="selectedPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                    <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">

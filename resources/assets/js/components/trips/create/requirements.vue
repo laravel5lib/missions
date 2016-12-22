@@ -58,7 +58,8 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': checkForError('due')}">
 																<label for="due_at">Due</label>
-																<input type="date" id="due_at" class="form-control input-sm"
+																<date-picker class="form-control input-sm" :time.sync="newReq.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+																<input type="datetime" id="due_at" class="form-control input-sm hidden"
 																	   v-model="newReq.due_at" v-validate:due="{required: true}">
 															</div>
 

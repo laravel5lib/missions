@@ -66,8 +66,8 @@
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
 					<date-picker class="form-control" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-					<input type="datetime" class="form-control"
-						   v-model="published_at" id="published_at">
+					<input type="datetime" class="form-control hidden"
+						   v-model="published_at|moment 'YYYY-MM-DD HH:mm:ss'" id="published_at">
 				</div>
 			</div>
 

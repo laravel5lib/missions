@@ -104,7 +104,8 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
-										<input type="date" class="form-control" v-model="started_at" id="started_at"
+										<date-picker class="form-control input-sms" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 											   v-validate:start="{ required: true }" required>
 									</div>
 								</div>
@@ -112,7 +113,8 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('end') }">
 										<span class="input-group-addon">End</span>
-										<input type="date" class="form-control" v-model="ended_at" id="ended_at"
+										<date-picker class="form-control input-sms" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 											   v-validate:end="{ required: true }" required>
 									</div>
 								</div>

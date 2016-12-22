@@ -46,26 +46,25 @@
 		</div><!-- end col -->
 		<div v-if="oldFundraisers.length > 0">
 			<div class="col-xs-12">
-				<hr/>
-				<h5 class="text-muted text-center">Previous Fundraisers</h5>
-				<hr/>
+				<hr class="divider xlg inv">
+				<h5 class="text-muted">Past Fundraisers</h5>
+				<hr class="divider lg">
 			</div>
 		</div>
 		<div v-if="oldFundraisers.length > 0">
-			<div class="col-md-6 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12"
-				 v-for="fundraiser in oldFundraisers">
+			<div class="col-xs-6 col-sm-4" v-for="fundraiser in oldFundraisers">
 				<div class="panel panel-default">
-					<div class="panel-heading">
+					<div class="panel-heading text-center">
 						<h6>{{ fundraiser.name }}</h6>
 					</div>
-					<div class="panel-body">
-						<label>Closed</label>
-						<p class="small">{{ fundraiser.ended_at | moment 'll' }}</p>
-						<label><span class="text-success">{{ fundraiser.raised_amount | currency }}</span>
-							<small>Raised / {{ fundraiser.donors_count }} Donors</small>
-						</label>
-						<p class="small text-center text-info" v-if="!fundraiser.public">Private</p>
-						<p><a class="btn btn-default btn-block" :href="pathName + '/' + fundraiser.url">Details</a></p>
+					<div class="panel-body text-center">
+							<label>Closed</label>
+							<p class="small">{{ fundraiser.ended_at | moment 'll' }}</p>
+							<label><span class="text-success">{{ fundraiser.raised_amount | currency }}</span>
+								<small>Raised / {{ fundraiser.donors_count }} Donors</small>
+							</label>
+						<p class="smalltext-info" v-if="!fundraiser.public">Private</p>
+						<p><a class="btn btn-default btn-sm" :href="pathName + '/' + fundraiser.url">Details</a></p>
 					</div><!-- end panel-body -->
 				</div><!-- end panel -->
 			</div><!-- end col -->

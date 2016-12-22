@@ -157,36 +157,39 @@
     </div><!-- end white-bg -->
     <hr class="divider inv xlg">
     <div class="container">
-        <div class="col-xs-12">
-            <h4>Groups Partnered With Us</h4>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+            <h4 class="hidden-xs">Groups Partnered With Us</h4>
+            <h4 class="visible-xs text-center">Groups Partnered With Us</h4>
         </div>
-    </div>
-    <div class="container">
-        <div class="col-md-6 col-sm-12 col-xs-12">
-            <div class="form-group form-group-md">
-                <input type="text" class="form-control" placeholder="Start typing a group name or category..." v-model="search" debounce="250">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search a group name or category..." v-model="search" debounce="250">
+                <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>
             </div><!-- /input-group -->
         </div>
+      </div>
+        <hr class="divider">
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <div class="col-sm-6 col-md-3" v-for="group in groups|limitBy groupsLimit" v-if="groups.length" style="display:flex">
+        <div class="col-xs-6 col-sm-3 col-md-2" v-for="group in groups|limitBy groupsLimit" v-if="groups.length" style="display:flex">
             <div class="panel panel-default">
                 <a :href="'/groups/' + group.url" role="button">
                     <img :src="group.avatar" :alt="group.name" class="img-responsive">
                 </a>
-                    <div style="min-height:120px;" class="panel-body">
+                    <div class="panel-body text-center">
                         <!--<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
                         <a :href="'/groups/' + group.url" role="button">
-                            <h5 style="text-transform:capitalize;" class="text-primary">{{group.name}}</h5>
+                            <h5 style="margin-bottom:0;" class="text-primary text-capitalize">{{group.name}}</h5>
                         </a>
-                        <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">{{group.type}} Group</h6>
+                        <label>{{group.type}} Group</label>
                     </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
-        <div class="col-sm-12" v-if=" ! groups.length">
+        <div class="col-xs-12" v-if=" ! groups.length">
             <hr class="divider inv">
-            <p class="text-muted lead text-center">Hmmmm. We couldn't find any groups matching your search.</p>
+            <p class="text-muted text-center"><em>Hmmm...We couldn't find any groups matching your search.</em></p>
             <hr class="divider inv">
         </div>
         <div class="col-xs-12 text-center" v-if="groups.length">
@@ -197,18 +200,20 @@
       <div class="container">
       <div class="content-section">
         <div class="row">
-            <div class="col-xs-12">
-                <h1 class="dash-trailing-light">Group Leader Or Youth Pastor</h1>
-            </div>
-          <div class="col-sm-6">
+          <div class="col-xs-12 text-center">
+                <h1>Group Leader Or Youth Pastor</h1>
+          </div><!-- end col -->
+        </div><!-- end row -->
+        <div class="row">
+          <div class="col-md-6">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
-                  <h6 class="panel-title">
+                  <h5>
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                       Is this going to be a logistical nightmare?
                     </a>
-                  </h6>
+                  </h5>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                   <div class="panel-body">
@@ -218,11 +223,11 @@
               </div>
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingTwo">
-                  <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <h5>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                       International travel with teens?!
                     </a>
-                  </h4>
+                  </h5>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
@@ -233,11 +238,11 @@
               </div>
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingThree">
-                  <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  <h5>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                       Will my team be eating bugs and sleeping in the jungle?
                     </a>
-                  </h4>
+                  </h5>
                 </div>
                 <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                   <div class="panel-body">
@@ -251,11 +256,11 @@
               </div>
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingFour">
-                  <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <h5>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                       How will my leadership fit with Missions.Me?
                     </a>
-                  </h4>
+                  </h5>
                 </div>
                 <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
                   <div class="panel-body">
@@ -269,11 +274,11 @@
               </div><!-- end panel -->
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingFive">
-                  <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  <h5>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                       How will I recruit?
                     </a>
-                  </h4>
+                  </h5>
                 </div>
                 <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
                   <div class="panel-body">
@@ -283,11 +288,11 @@
               </div><!-- end panel -->
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingSix">
-                  <h4 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                  <h5>
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
                       How will I train my group?
                     </a>
-                  </h4>
+                  </h5>
                 </div>
                 <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
                   <div class="panel-body">
@@ -297,7 +302,7 @@
               </div><!-- end panel -->
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-md-6">
             <div class="video-outer">
               <div class="video-inner">
                 <iframe src="https://player.vimeo.com/video/109034302" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
@@ -352,7 +357,7 @@
 
                 // pagination vars
                 search: '',
-                per_page: 8,
+                per_page: 12,
                 pagination: { current_page: 1 },
             }
         },

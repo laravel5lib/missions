@@ -454,7 +454,8 @@ body:not(.modal-open) {
     .navbar-toggle {
       display: inline;
       padding: 10px 10px;
-      margin: 15.5px 15px;
+      padding-left: 0px;
+      margin: 14.5px 15px 15.5px 0px;
     }
 }
 @media screen and (max-width: 767px) { 
@@ -487,7 +488,7 @@ li.av-nav > a {
     li > a {
       font-size: .8em;
       color: #e6e6e6;
-      padding: 4px 20px !important;
+      padding: 4px 20px;
       text-transform: uppercase;
       letter-spacing: 2px;
       &:hover, &:focus {
@@ -612,6 +613,18 @@ li.av-nav > a {
 }
 .navbar-header-mobile {
   height: 30px;
+}
+.offcanvas-dropdown {
+  position: relative;
+  top:0;
+  background-color:transparent;
+  min-width: 275px;
+  border:none;
+  border-bottom:1px solid #3e3e3e;
+  border-radius:0;
+  box-shadow:none;
+  margin-bottom: 4px;
+  text-align: center;
 }
 
 // -- Section Backgrounds -- //

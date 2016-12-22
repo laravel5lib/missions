@@ -19,11 +19,11 @@
           <li><a href="/admin">Admin</a></li>
         @endcan
         <li role="separator" class="divider"></li>
-        <li><a href="/logout">Sign Out</a></li>
+        <li><a href="/logout">Sign Out <i style="margin-top:6px;" class="fa fa-chevron-right pull-right"></i></a></li>
       </ul>
       @else
       <li>
-        <div class="btn-group hidden-xs">
+        <div class="btn-group hidden-xs" style="margin-right:20px;">
           <a class="btn btn-link" href="/login">Login</a>
           <a class="btn btn-primary" href="/login?action=signup">Sign Up</a>
         </div>

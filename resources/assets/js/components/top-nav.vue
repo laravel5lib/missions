@@ -12,21 +12,22 @@
 			<ul class="nav navmenu-nav">
 				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>
-				<li v-if="auth" id="userMenu" class="dropdown-toggle visible-xs text-center" data-toggle="dropdown"
-					aria-haspopup="true" aria-expanded="false">
+				<li class="navlabel">Account</li>
+				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
 					<a href="#">
-						<img class="img-xs img-circle av-left" :src="avatar" :alt="name"> {{ name }}
-					</a>
+						<img class="img-xs img-circle av-left" :src="avatar" :alt="name"> {{ name }} <i class="fa fa-angle-down"></i>
+						</a>
 				</li>
-				<template v-if="auth" class="dropdown-menu" aria-labelledby="userMenu">
-					<li class="navlabel">Account</li>
-					<li class=""><a :href="url">My Profile</a></li>
-					<li class=""><a href="/dashboard">Dashboard</a></li>
-					<li v-if="admin" class=""><a href="/admin">Admin</a></li>
-					<li class=""><a href="/logout">Sign Out</a></li>
-				</template>
-				<li v-if="!auth"><a href="/login">Login</a></li>
-				<li v-if="!auth"><a href="/login">Sign Up</a></li>
+				<ul class="dropdown-menu offcanvas-dropdown">
+					<template v-if="auth" aria-labelledby="userMenu">
+						<li class=""><a :href="url">My Profile</a></li>
+						<li class=""><a href="/dashboard">Dashboard</a></li>
+						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
+						<li class=""><a href="/logout">Sign Out</a></li>
+					</template>
+				</ul>
+				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
+				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding: 10px 34px;border-left: 1px solid #242424;" href="/login">Sign Up</a></li>
 
 				<template v-if="isDashboard()">
 					<li class="navlabel">User</li>

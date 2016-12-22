@@ -41,8 +41,9 @@
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
 	<div class="container">
-		<div class="col-xs-6">
+		<div class="col-xs-12">
 			<h4>Current Campaigns</h4>
+			<hr class="divider">
 		</div>
 		<div class="col-xs-6 text-right">
 			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
@@ -50,10 +51,9 @@
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-
-		<div class="col-sm-6 col-md-3" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
+		<div class="col-xs-12 col-sm-6 col-md-3" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
-				<a :href="'/campaigns/' + campaign.page_url" role="button">
+				<a class="hidden-xs hidden-sm" :href="'/campaigns/' + campaign.page_url" role="button">
 					<img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
 				</a>
 				<div style="min-height:220px;" class="panel-body">

@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-sm-4 text-right">
                     <hr class="divider inv sm">
-                    <a href="/admin/causes/{{ $project->initiative->project_cause_id }}/current-projects" class="btn btn-default">
+                    <a href="/dashboard/projects" class="btn btn-default">
                         <i class="fa fa-chevron-left icon-left"></i> Projects
                     </a>
                 </div>

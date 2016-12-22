@@ -16130,6 +16130,9 @@ li.av-nav > a {
   .aside.left {
     left: 55px !important; } }
 
+.navbar-header-mobile {
+  height: 30px; }
+
 .content-section {
   padding: 80px 0; }
   .content-section a {

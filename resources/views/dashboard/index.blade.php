@@ -5,7 +5,8 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <h3>Dashboard</h3>
+          <h3 class="hidden-xs">Dashboard</h3>
+          <h3 class="visible-xs text-center">Dashboard</h3>
         </div>
       </div>
     </div>

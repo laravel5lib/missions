@@ -1,14 +1,12 @@
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="visible-xs">
-      <a class="navbar-brand visible-xs" href="#"><img class="db-brand-xs" src="/images/mm-icon-red.png" alt="MM"></a>
-    </div>
+    <a href="/" class="navbar-brand visible-xs"><img class="db-brand-xs" src="/images/mm-icon-red.png" alt="MM"></a>
     <div class="navbar-header hidden-xs">
       <a class="navbar-brand" href="/"><img src="/images/mm-logo-horiz.png" alt="Missions.Me"></a>
     </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="nav navbar-nav navbar-right dropdown">
+    <div class="nav navbar-nav navbar-right dropdown" style="margin-left:75px;">
       @if(auth()->check())
       <li><a class="navbar-btn btn btn-primary hidden-xs" href="/donate">Donate</a></li>
       <li id="userMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left" src="{{ image(auth()->user()->avatar->source . '?w=100') }}" alt="{{ auth()->user()->name }}"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>

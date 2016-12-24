@@ -34,7 +34,7 @@
 						<label for="name">Desired Completion Date</label>
 						<!--<date-picker class="form-control"-->
 									 <!--:time.sync="complete_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
-						<input type="text" class="form-control disabled" v-model="complete_at|moment 'MMMM YYYY'" id="complete_at"
+						<input type="text" class="form-control disabled" disabled readonly v-show="initiativeId" v-model="complete_at|moment 'MMMM YYYY'" id="complete_at"
 							   v-validate:end="['required']" required>
 
 					</div>

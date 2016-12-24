@@ -106,6 +106,7 @@ $api->version('v1', [
 
     $api->post('contact', 'UtilitiesController@sendContactEmail');
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
+    $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
 
     /*
     |--------------------------------------------------------------------------

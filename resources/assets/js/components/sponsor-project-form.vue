@@ -21,7 +21,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-show="initiativeId">
 					<div class="col-sm-6" :class="{ 'has-error': checkForError('initiative') }">
 						<label for="initiative">Select a type</label>
 						<select class="form-control" v-model="initiativeId" v-validate:initiative="['required']">
@@ -34,7 +34,7 @@
 						<label for="name">Desired Completion Date</label>
 						<!--<date-picker class="form-control"-->
 									 <!--:time.sync="complete_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
-						<input type="text" class="form-control disabled" disabled readonly v-show="initiativeId" v-model="complete_at|moment 'MMMM YYYY'" id="complete_at"
+						<input type="text" class="form-control disabled" disabled readonly v-model="complete_at|moment 'MMMM YYYY'" id="complete_at"
 							   v-validate:end="['required']" required>
 
 					</div>

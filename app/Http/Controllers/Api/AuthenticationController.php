@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\v1\User;
+use Dingo\Api\Contract\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\v1\UserRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;

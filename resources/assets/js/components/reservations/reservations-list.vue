@@ -50,6 +50,10 @@
                         Filters
                         <i class="fa fa-filter"></i>
                     </button>
+                    <export-utility url="reservations/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                 </form>
                 <hr class="divider sm inv">
             </div>
@@ -93,9 +97,10 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import exportUtility from '../export-utility.vue';
     export default{
         name: 'reservations-list',
-        components: {vSelect},
+        components: {vSelect, exportUtility},
         props: ['userId', 'type'],
         data(){
             return {
@@ -114,7 +119,42 @@
                     groups: '',
                     campaign: '',
                     type: ''
-                }
+                },
+                exportOptions: {
+                    managing_user: 'Managing User',
+                    user_email: 'User Email',
+                    user_primary_phone: 'User Primary Phone',
+                    user_secondary_phone: 'User Secondary Phone',
+                    trip_type: 'Trip Type',
+                    campaign: 'Campaign',
+                    group: 'Group',
+                    country_located: 'Country Located',
+                    start_date: 'Trip Start Date',
+                    end_date: 'Trip End Date',
+                    given_names: 'Given Names',
+                    surname: 'Surname',
+                    gender: 'Gender',
+                    marital_status: 'Marital Status',
+                    shirt_size: 'Shirt Size',
+                    age: 'Age',
+                    birthday: 'Birthday',
+                    email: 'Email',
+                    primary_phone: 'Primary Phone',
+                    secondary_phone: 'Secondary Phone',
+                    street_address: 'Street Address',
+                    city: 'City',
+                    state_providence: 'State/Providence',
+                    zip_postal: 'Zip/Postal Code',
+                    country: 'Country',
+                    payments: 'Payments Due',
+                    applied_costs: 'Applied Costs',
+                    requirements: 'Travel Requirements',
+                    percent_raised: 'Percent Raised',
+                    amount_raised: 'Amount Raised',
+                    outstanding: 'Outstanding',
+                    deadlines: 'Other Deadlines'
+                },
+                exportFilters: {},
             }
         },
         watch: {
@@ -169,6 +209,7 @@
                 }
                 $.extend(params, this.filters);
 
+                this.exportFilters = params;
 
                 this.$http.get('reservations', params).then(function (response) {
                     this.reservations = response.data.data

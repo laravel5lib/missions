@@ -39,7 +39,7 @@ class ReservationTransformer extends TransformerAbstract
             'gender'              => $reservation->gender,
             'status'              => $reservation->status,
             'shirt_size'          => $reservation->shirt_size,
-            'shirt_size_name'     => implode(array_values(ShirtSize::get($reservation->shirt_size)), ''),
+            'shirt_size_name'     => shirtSize($reservation->shirt_size),
             'age'                 => $reservation->age,
             'birthday'            => $reservation->birthday->toDateString(),
             'email'               => $reservation->email,

@@ -189,44 +189,7 @@
                                 <h5>Travel Requirements</h5>
                             </div>
                             <div class="panel-body">
-                                <ul class="list-group">
-                                    @foreach($reservation->requirements as $requirement)
-
-                                    <h4>
-                                        {{ $requirement->name }} <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
-                                        @if($requirement->pivot->status == 'complete')
-                                            <span class="badge {{ $requirement->pivot->status }} badge-success pull-right"><i class="fa fa-check"></i> Complete</span>
-                                        @elseif($requirement->pivot->status == 'reviewing')
-                                            <span class="badge {{ $requirement->pivot->status }} badge-info pull-right"><i class="fa fa-circle-o-notch fa-spin"></i> Reviewing</span>
-                                        @elseif($requirement->pivot->status == 'incomplete')
-                                            <span class="badge {{ $requirement->pivot->status }} badge-danger pull-right"><i class="fa fa-exclamation"></i> Incomplete</span>
-                                        @endif
-                                    </h4>
-
-                                    @if($requirement->name === 'Medical Release')
-                                        <reservations-medical-releases-manager
-                                                reservation-id="{{ $reservation->id }}"
-                                                medical-release-id="{{ $reservation->medical_release_id }}">
-                                        </reservations-medical-releases-manager>
-                                    @endif
-
-                                    @if($requirement->name === 'Passport')
-                                        <reservations-passports-manager
-                                                reservation-id="{{ $reservation->id }}"
-                                                passport-id="{{ $reservation->passport_id }}">
-                                        </reservations-passports-manager>
-                                    @endif
-
-                                    @if($requirement->name === 'Visa')
-                                        <reservations-visas-manager
-                                                reservation-id="{{ $reservation->id }}"
-                                                visa-id="{{ $reservation->visa_id }}">
-                                        </reservations-visas-manager>
-                                    @endif
-
-                                    <hr />
-                                @endforeach
-                            </ul>
+                            </div>
                         </div>
                     </div><!-- end panel -->
                 </div>

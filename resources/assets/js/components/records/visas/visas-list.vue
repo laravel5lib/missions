@@ -1,33 +1,10 @@
 <template>
     <div class="row">
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-            <hr class="divider inv sm">
-            <form class="col-sm-12">
-
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" v-model="filters.expired"> Expired
-                    </label>
-                </div>
-
-                <div class="form-group">
-                    <label>Sort By</label>
-                    <select class="form-control input-sm" v-model="filters.sort">
-                        <option value="given_names">Given Names</option>
-                        <option value="surname">Surname</option>
-                        <option value="number">Passport Number</option>
-                    </select>
-                </div>
-
-                <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
-            </form>
-        </aside>
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox">
+                <div style="margin-right:5px;" class="checkbox" v-if="userId">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's visas
                     </label>
@@ -36,10 +13,6 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <!--<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-                    Filters
-                    <i class="fa fa-filter"></i>
-                </button>-->
             </form>
             <hr class="divider sm inv">
         </div>
@@ -52,13 +25,13 @@
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="visa in visas" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div style="min-height:220px;" class="panel-body">
-                    <a role="button" :href="'/dashboard/records/visas/' + visa.id">
+                    <a role="button" :href="'/'+ url + '/records/visas/' + visa.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{visa.given_names}} {{visa.surname}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/dashboard/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ url +'/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -74,6 +47,12 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-xs-12">
+                            <label>COUNTRY</label>
+                            <p class="small">{{visa.country_name}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-sm-6">
                             <label>ISSUED ON</label>
                             <p class="small">{{visa.issued_at|moment 'll'}}</p>
@@ -84,6 +63,13 @@
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end panel-body -->
+                <div class="panel-footer" style="padding: 0;" v-if="selector">
+                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
+                        <a class="btn btn-danger" @click="setVisa(visa)">
+                            Select
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
@@ -106,7 +92,11 @@
         props: {
             'userId': {
                 type: String,
-                required: true
+                required: false
+            },
+            'selector': {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -146,7 +136,15 @@
                 this.searchVisas();
             }
         },
+        computed: {
+            url: function() {
+                return document.location.pathname.split("/").slice(1,2).toString();
+            }
+        },
         methods:{
+            setVisa(visa) {
+                this.$dispatch('set-document', visa);
+            },
             // emulate pagination
             searchVisas(){
                 let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};

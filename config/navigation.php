@@ -79,6 +79,28 @@ return [
                 'label' => 'Funds',
                 'url' => 'funds'
             ],
+        ],
+        'records' => [
+            [
+                'label' => 'Passports',
+                'url' => 'passports'
+            ],
+            [
+                'label' => 'Visas',
+                'url' => 'visas'
+            ],
+            [
+                'label' => 'Medical Releases',
+                'url' => 'medical-releases'
+            ],
+            [
+                'label' => 'Referrals',
+                'url' => 'referrals'
+            ],
+            [
+                'label' => 'Essays',
+                'url' => 'essays'
+            ]
         ]
     ]
 ];

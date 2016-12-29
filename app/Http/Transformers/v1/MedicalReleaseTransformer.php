@@ -30,6 +30,8 @@ class MedicalReleaseTransformer extends TransformerAbstract
             'ins_provider'      => $release->ins_provider,
             'ins_policy_no'     => $release->ins_policy_no,
             'is_risk'           => (bool) $release->is_risk,
+            'has_conditions'    => (bool) $release->has('conditions'),
+            'has_allergies'     => (bool) $release->has('allergies'),
             'emergency_contact' => $release->emergency_contact,
             'created_at'        => $release->created_at->toDateTimeString(),
             'updated_at'        => $release->updated_at->toDateTimeString(),

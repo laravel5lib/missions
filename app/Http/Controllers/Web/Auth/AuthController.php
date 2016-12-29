@@ -30,7 +30,7 @@ class AuthController extends Controller
 
     public function __construct(User $user)
     {
-        $this->middleware('guest', ['except' => ['logout']]);
+        $this->middleware('guest', ['except' => ['logout', 'loginAsUser']]);
         $this->user = $user;
     }
 
@@ -57,6 +57,7 @@ class AuthController extends Controller
     /**
      * Handle an authentication attempt.
      *
+     * @param Request $request
      * @return Response
      */
     public function authenticate(Request $request)

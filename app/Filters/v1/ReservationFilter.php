@@ -146,19 +146,6 @@ class ReservationFilter extends Filter
     }
 
     /**
-     * Has a passport.
-     *
-     * @param $hasPassport
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function hasPassport($hasPassport)
-    {
-        return $hasPassport == 'yes' ?
-            $this->whereNotNull('passport_id') :
-            $this->whereNull('passport_id');
-    }
-
-    /**
      * Is currently active.
      *
      * @return \Illuminate\Database\Eloquent\Builder

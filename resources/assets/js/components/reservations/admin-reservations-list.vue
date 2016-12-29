@@ -75,21 +75,6 @@
 					</div>
 				</div>
 
-				<div class="form-group" style="padding: 3px 20px;">
-					<label class="control-label small">Passport</label>
-					<div>
-						<label class="radio-inline">
-							<input type="radio" name="passports" id="passports1" v-model="filters.hasPassport" :value="null"> Any
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="passports" id="passports2" v-model="filters.hasPassport" value="yes"> Yes
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="passports" id="passports3" v-model="filters.hasPassport" value="no"> No
-						</label>
-					</div>
-				</div>
-
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
@@ -191,11 +176,10 @@
 						Filters
 						<i class="fa fa-filter"></i>
 					</button>
-					<button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
-						Export
-						<span class="fa fa-download"></span>
-					</button>
-                    <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
+					<export-utility url="reservations/export"
+									:options="exportOptions"
+									:filters="exportFilters">
+					</export-utility>
                 </form>
             </div>
         </div>
@@ -232,10 +216,6 @@
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
 				Companions
-				<i class="fa fa-close"></i>
-			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasPassport !== null" @click="filters.hasPassport = null" >
-				Passport
 				<i class="fa fa-close"></i>
 			</span>
 		</div>
@@ -415,9 +395,10 @@
 </style>
 <script type="text/javascript">
 	import vSelect from "vue-select";
+	import exportUtility from '../export-utility.vue';
 	export default{
         name: 'admin-reservations-list',
-		components: {vSelect},
+		components: {vSelect, exportUtility},
 		props:{
 			tripId: {
 				type: String,
@@ -474,14 +455,44 @@
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null,
-					hasPassport:null,
+					hasCompanions:null
 				},
 				showFilters: false,
-				showExportModal: false,
-				exportSettings: {
-				    fields: [],
-				}
+				exportOptions: {
+					managing_user: 'Managing User',
+					user_email: 'User Email',
+					user_primary_phone: 'User Primary Phone',
+					user_secondary_phone: 'User Secondary Phone',
+					trip_type: 'Trip Type',
+					campaign: 'Campaign',
+					group: 'Group',
+					country_located: 'Country Located',
+					start_date: 'Trip Start Date',
+					end_date: 'Trip End Date',
+					given_names: 'Given Names',
+					surname: 'Surname',
+					gender: 'Gender',
+					marital_status: 'Marital Status',
+					shirt_size: 'Shirt Size',
+					age: 'Age',
+					birthday: 'Birthday',
+					email: 'Email',
+					primary_phone: 'Primary Phone',
+					secondary_phone: 'Secondary Phone',
+					street_address: 'Street Address',
+					city: 'City',
+					state_providence: 'State/Providence',
+					zip_postal: 'Zip/Postal Code',
+					country: 'Country',
+					payments: 'Payments Due',
+					applied_costs: 'Applied Costs',
+					requirements: 'Travel Requirements',
+					percent_raised: 'Percent Raised',
+					amount_raised: 'Amount Raised',
+					outstanding: 'Outstanding',
+					deadlines: 'Other Deadlines'
+				},
+				exportFilters: {}
             }
         },
 		computed: {
@@ -571,7 +582,6 @@
 						status: this.filters.status,
 						shirtSize: this.filters.shirtSize,
 						hasCompanions: this.filters.hasCompanions,
-						hasPassport: this.filters.hasPassport,
 					}
 				});
 
@@ -604,8 +614,7 @@
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null,
-					hasPassport:null,
+					hasCompanions:null
 				}
 
 
@@ -643,6 +652,9 @@
 				$.extend(params, {
 					age: [ this.ageMin, this.ageMax]
 				});
+
+				this.exportFilters = params;
+
 				return params;
 			},
             searchReservations(){
@@ -680,17 +692,6 @@
 				this.$http.get('users', { search: search}).then(function (response) {
 					this.usersOptions = response.data.data;
 					loading ? loading(false) : void 0;
-				})
-			},
-			exportList(){
-				let params = this.getListSettings();
-				$.extend(params, this.exportSettings);
-				// Send to api route
-
-				this.$http.post('reservations/export', params).then(function (response) {
-					console.log(response);
-				}, function (error) {
-					console.log(error);
 				})
 			}
         },

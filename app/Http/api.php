@@ -27,7 +27,6 @@ $api->version('v1', [
 
     $api->resource('uploads', 'UploadsController');
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
-    $api->post('/login', 'AuthenticationController@authenticate');
     $api->post('/register', 'AuthenticationController@register');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
     $api->post('/refresh', 'AuthenticationController@refresh');
@@ -48,6 +47,7 @@ $api->version('v1', [
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
     $api->resource('reservations', 'ReservationsController');
+    $api->post('reservations/export', 'ReservationsController@export');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
@@ -85,6 +85,7 @@ $api->version('v1', [
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('requirements', 'RequirementsController');
     $api->resource('deadlines', 'DeadlinesController');
+    $api->resource('questionnaires', 'QuestionnairesController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

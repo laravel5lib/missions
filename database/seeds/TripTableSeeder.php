@@ -82,8 +82,10 @@ class TripTableSeeder extends Seeder
                 factory(App\Models\v1\Requirement::class)->make(['name' => 'Visa', 'document_type' => 'visas']),
                 factory(App\Models\v1\Requirement::class)->make(['name' => 'Passport', 'document_type' => 'passports']),
                 factory(App\Models\v1\Requirement::class)->make(['name' => 'Medical Release', 'document_type' => 'medical_releases']),
-                factory(App\Models\v1\Requirement::class)->make(['name' => 'Arrival Designation', 'document_type' => 'arrival_designation']),
-                factory(App\Models\v1\Requirement::class)->make(['name' => 'Testimony', 'document_type' => 'essays'])
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Arrival Designation', 'document_type' => 'arrival_designations']),
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Testimony', 'document_type' => 'essays']),
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Pastoral Referral', 'document_type' => 'referrals']),
+                factory(App\Models\v1\Requirement::class)->make(['name' => 'Airport Preference', 'document_type' => 'airport_preferences'])
             ]);
 
             $t->notes()->save(factory(App\Models\v1\Note::class)->make());

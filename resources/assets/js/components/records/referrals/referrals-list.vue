@@ -3,7 +3,7 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox">
+                <div style="margin-right:5px;" class="checkbox" v-if="userId">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's referrals
                     </label>
@@ -12,10 +12,6 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <!--<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-                    Filters
-                    <i class="fa fa-filter"></i>
-                </button>-->
             </form>
             <hr class="divider sm inv">
         </div>
@@ -26,15 +22,44 @@
         <div class="col-md-4 col-sm-6" v-for="referral in referrals">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <label>{{referral.type|capitalize}} Type</label>
-                    <a role="button" :href="'/dashboard/records/referrals/' + referral.id">
+                    <a role="button" :href="'/'+ url +'/records/referrals/' + referral.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
-                            {{referral.referral_name}}
+                            {{referral.name}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:20px;top:5px;">
-                        <a style="margin-right:3px;" :href="'/dashboard/records/referrals/' + referral.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ url +'/records/referrals/' + referral.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedReferral = referral, deleteModal = true"><i class="fa fa-times"></i></a>
+                    </div>
+                    <hr class="divider">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>TYPE</label>
+                            <p class="small">{{referral.type|capitalize}} Reference</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label>REFERRAL:</label>
+                            <p class="small">{{referral.referral_name}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>STATUS:</label>
+                            <p class="small">{{referral.status | capitalize}}</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>UPDATED:</label>
+                            <p class="small">{{referral.updated_at | moment 'll'}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="padding: 0;" v-if="selector">
+                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
+                        <a class="btn btn-danger" @click="setReferral(referral)">
+                            Select
+                        </a>
                     </div>
                 </div>
             </div>
@@ -57,7 +82,11 @@
         props: {
             'userId': {
                 type: String,
-                required: true
+                required: false
+            },
+            'selector': {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -85,7 +114,15 @@
                 this.searchReferrals();
             }
         },
+        computed: {
+            url: function() {
+                return document.location.pathname.split("/").slice(1,2).toString();
+            }
+        },
         methods:{
+            setReferral(referral) {
+                this.$dispatch('set-document', referral);
+            },
             removeReferral(referral){
                 if(referral) {
                     this.$http.delete('referrals/' + referral.id).then(function (response) {

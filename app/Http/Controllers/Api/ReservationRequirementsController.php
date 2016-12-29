@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\RequirementWasUpdated;
 use App\Http\Transformers\v1\RequirementTransformer;
 use App\Http\Transformers\v1\ReservationRequirementTransformer;
 use App\Models\v1\Reservation;
@@ -82,6 +83,8 @@ class ReservationRequirementsController extends Controller
             'completed_at' => $request->get('completed_at', $requirement->completed_at),
             'document_id' => $request->get('document_id', $requirement->document_id)
         ]);
+
+        event(new RequirementWasUpdated($requirement));
 
         return $this->response->item($requirement, new ReservationRequirementTransformer);
     }

@@ -24,5 +24,8 @@
     <li @if(in_array(request()->segment(2), ['causes', 'projects', 'initiatives']))class="active"@endif>
         <a href="/admin/causes"><i class="fa fa-tint" style="margin-left:3px;"></i></a>
     </li>
+    <li @if(request()->segment(2) == 'records')class="active"@endif>
+      <a href="/admin/records"><i class="fa fa-archive"></i></a>
+    </li>
   </ul>
 </div>

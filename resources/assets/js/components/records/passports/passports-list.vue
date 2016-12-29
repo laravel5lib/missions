@@ -26,7 +26,7 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox">
+                <div style="margin-right:5px;" class="checkbox" v-if="userId">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's passports
                     </label>
@@ -50,13 +50,13 @@
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="passport in passports" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a role="button" :href="'/dashboard/records/passports/' + passport.id">
+                    <a role="button" :href="'/'+ url +'/records/passports/' + passport.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{passport.given_names}} {{passport.surname}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/dashboard/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ url +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -71,7 +71,7 @@
                             </span>
                         </div>
                     </div>
-                    <label>BIRTH COUNTRY</label>
+                    <label>CITIZENSHIP</label>
                     <p class="small">{{passport.citizenship_name}}</p>
                     <div class="row">
                         <div class="col-sm-6">
@@ -84,6 +84,13 @@
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end panel-body -->
+                <div class="panel-footer" style="padding: 0;" v-if="selector">
+                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
+                        <a class="btn btn-danger" @click="setPassport(passport)">
+                        Select
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
@@ -107,7 +114,11 @@
         props: {
             'userId': {
                 type: String,
-                required: true
+                required: false
+            },
+            'selector': {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -148,7 +159,15 @@
             }
 
         },
+        computed: {
+            url: function() {
+                return document.location.pathname.split("/").slice(1,2).toString();
+            }
+        },
         methods:{
+            setPassport(passport) {
+              this.$dispatch('set-document', passport);
+            },
             // emulate pagination
             removePassport(passport){
                 if(passport) {

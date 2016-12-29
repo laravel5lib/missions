@@ -1,5 +1,5 @@
 <template>
-    <div style="display: inline-block;">
+    <div style="display: inline-block;" class="text-left">
         <button class="btn btn-default btn-sm" type="button" @click="showExportModal=true">
             Export <span class="fa fa-download"></span>
         </button>

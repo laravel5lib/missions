@@ -42,3 +42,20 @@ Route::resource('donors', 'DonorsController');
 Route::resource('funds', 'FundsController');
 
 Route::resource('transactions', 'TransactionsController');
+
+Route::get('records/{tab?}', function($tab = 'passports') {
+    return view('admin.records.'.$tab.'.index', compact('tab'));
+});
+
+Route::get('records/passports/create', function () {
+    return view('admin.records.passports.create');
+});
+
+Route::get('records/passports/{id}', function ($id) use ($dispatcher) {
+    $passport = $dispatcher->get('passports/' . $id);
+    return view('admin.records.passports.show', compact('passport'));
+});
+
+Route::get('records/passports/{id}/edit', function ($id) {
+    return view('admin.records.passports.edit', compact('id'));
+});

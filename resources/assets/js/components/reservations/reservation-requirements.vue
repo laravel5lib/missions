@@ -1,13 +1,12 @@
 <template>
     <section>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-xs-6">
                 <h5>Travel Requirements</h5>
             </div>
             <div class="col-xs-6">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for requirements">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
@@ -35,10 +34,9 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <component :is="documentManager(requirement.document_type)"
-                                   :reservation-id="id"
-                                   :requirement-id="requirement.id">
-                        </component>
+                        <document-manager :reservation-id="id"
+                                          :requirement-id="requirement.id">
+                        </document-manager>
                     </div>
                 </div>
             </div>
@@ -54,18 +52,10 @@
     </section>
 </template>
 <script>
-    import passportManager from './passport-manager.vue';
-    import medicalReleaseManager from './medical-release-manager.vue';
-    import essayManager from './essay-manager.vue';
-    import visaManager from './visa-manager.vue';
-    import arrivalDesignation from './arrival-designation.vue';
+    import documentManager from './document-manager.vue';
     export default{
         components: {
-            passportManager,
-            medicalReleaseManager,
-            essayManager,
-            visaManager,
-            arrivalDesignation
+            documentManager,
         },
         props: {
             'id': {
@@ -127,39 +117,26 @@
                         return 'fa-exclamation';
                 }
             },
-            documentManager(document) {
-                switch(document) {
-                    case 'passports':
-                        return 'passport-manager'
-                        break;
-                    case 'visas':
-                        return 'visa-manager'
-                        break;
-                    case 'essays':
-                        return 'essay-manager'
-                        break;
-                    case 'medical_releases':
-                        return 'medical-release-manager'
-                        break;
-                    case 'arrival_designation':
-                        return 'arrival-designation'
-                        break;
-                    default:
-                        return 'passport-manager'
-                }
-            },
             fetch() {
                 var params = {
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                    sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
+                    //sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
                 };
 
                 this.$http.get('reservations/' + this.id + '/requirements', params).then(function (response) {
                     this.requirements = response.data.data
                     this.pagination = response.data.meta.pagination;
                 });
+            }
+        },
+        events: {
+            'set-status': function(requirement) {
+                var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
+                if (index !== -1) {
+                  this.requirements[index].status = requirement.status;
+                }
             }
         },
         ready() {

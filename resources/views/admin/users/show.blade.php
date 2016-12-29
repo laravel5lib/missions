@@ -113,6 +113,10 @@
             </div>
 
             <div class="col-sm-4">
+                <p class="small text-muted text-center">Temporarily login as this user.</p>
+                <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
+                   class="btn btn-default btn-block"><i class="fa fa-user-secret"></i> Impersonate</a>
+                <hr class="divider inv">
                 <user-permissions user_id="{{ $user->id }}"></user-permissions>
             </div>
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\v1\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class UsersController extends Controller
 {
@@ -44,5 +46,23 @@ class UsersController extends Controller
          $this->authorize('create', $this->user);
 
          return view('admin.users.create');
+    }
+
+    public function impersonate($id)
+    {
+        $user = User::find($id);
+
+        Auth::user()->setImpersonating($user->id);
+
+        return redirect()->to('/dashboard');
+    }
+
+    public function stopImpersonate()
+    {
+        $id = Session::get('impersonate');
+
+        Auth::user()->stopImpersonating();
+
+        return redirect()->to('/admin/users/'.$id);
     }
 }

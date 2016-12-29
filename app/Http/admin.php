@@ -12,6 +12,9 @@ Route::get('/', function () {
     return view('admin.index');
 });
 
+Route::get('users/stop', 'UsersController@stopImpersonate');
+Route::get('users/{id}/impersonate', 'UsersController@impersonate');
+
 Route::resource('campaigns', 'CampaignsController');
 Route::resource('campaigns.trips', 'TripsController');
 Route::resource('campaigns.regions', 'RegionsController');

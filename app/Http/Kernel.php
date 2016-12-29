@@ -51,5 +51,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'internal' => \App\Http\Middleware\InjectJwtToken::class,
+        'impersonate' => \App\Http\Middleware\Impersonate::class,
     ];
 }

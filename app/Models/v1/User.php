@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Illuminate\Support\Facades\Session;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -648,5 +649,20 @@ class User extends Authenticatable implements JWTSubject
         // team call sign
         // role name
         // available forms
+    }
+
+    public function setImpersonating($id)
+    {
+        Session::put('impersonate', $id);
+    }
+
+    public function stopImpersonating()
+    {
+        Session::forget('impersonate');
+    }
+
+    public function isImpersonating()
+    {
+        return Session::has('impersonate');
     }
 }

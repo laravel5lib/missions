@@ -448,12 +448,20 @@ new Vue({
         },
         showSuccess: false,
         showError: false,
-        message: ''
+        message: '',
+        impersonatedUser: null
     },
     computed: {
+        impersonatedToken() {
+            return this.$cookie.get('impersonate');
+        },
         user() {
-            return JSON.parse(this.$cookie.get('user'));
-        }
+            if (this.impersonatedToken !== null) {
+                return this.getImpersonatedUser();
+            } else {
+                return JSON.parse(this.$cookie.get('user'));
+            }
+        },
     },
     components: {
         login,
@@ -593,12 +601,23 @@ new Vue({
             this.showError = true;
         });
 
+        console.log(this.user);
     },
     methods: {
         setUser: function (user) {
           // Save user info
           this.user = user;
           this.authenticated = true;
+        },
+        getImpersonatedUser: function () {
+            if (this.impersonatedUser !== null) {
+                return this.impersonatedUser
+            } else {
+                return this.$http.get('users/me', null, { headers: { impersonation: 'Bearer ' + this.impersonatedToken} })
+                    .then(function (response) {
+                        return this.impersonatedUser = response.data.data;
+                    }.bind(this))
+            }
         }
     },
     events: {

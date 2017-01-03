@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\v1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class UsersController extends Controller
@@ -52,17 +53,15 @@ class UsersController extends Controller
     {
         $user = User::find($id);
 
-        Auth::user()->setImpersonating($user->id);
-
-        return redirect()->to('/dashboard');
+        return redirect()->to('/dashboard')->withCookie('impersonate', $user->id, 60);
     }
 
     public function stopImpersonate()
     {
-        $id = Session::get('impersonate');
+        $id = Cookie::get('impersonate');
 
-        Auth::user()->stopImpersonating();
+        $cookie = Cookie::forget('impersonate');
 
-        return redirect()->to('/admin/users/'.$id);
+        return redirect()->to('/admin/users/'.$id)->withCookie($cookie);
     }
 }

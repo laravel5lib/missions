@@ -460,6 +460,12 @@
     export default{
         name: 'user-settings',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
+        props: {
+          'id': {
+              type: String,
+              required: true
+          }
+        },
         data(){
             return {
                 id: '',
@@ -504,7 +510,7 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                resource: this.$resource('users/me?include=links'),
+                resource: this.$resource('users/'+this.id+'?include=links'),
                 errors: {},
                 showError: false,
                 showSuccess: false,

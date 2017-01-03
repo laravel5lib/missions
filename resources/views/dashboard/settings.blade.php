@@ -34,7 +34,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <user-settings></user-settings>
+                <user-settings id="{{ auth()->user()->id }}"></user-settings>
             </div>
         </div>
     </div>

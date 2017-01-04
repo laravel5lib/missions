@@ -42,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
             'questionnaires' => \App\Models\v1\Questionnaire::class,
             'arrival_designations' => \App\Models\v1\Questionnaire::class,
             'airport_preferences' => \App\Models\v1\Questionnaire::class,
+            'notes' => \App\Models\v1\Note::class,
+            'todos' => \App\Models\v1\Todo::class
         ]);
     }
 

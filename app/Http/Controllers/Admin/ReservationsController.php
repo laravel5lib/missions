@@ -38,9 +38,10 @@ class ReservationsController extends Controller
      * Get the specified reservation.
      *
      * @param $id
+     * @param string $tab
      * @return $this
      */
-    public function show($id)
+    public function show($id, $tab = "details")
     {
         $this->authorize('view', $this->reservation);
 
@@ -48,14 +49,14 @@ class ReservationsController extends Controller
 
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        return view('admin.reservations.show', compact('reservation', 'rep'));
+        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab'));
     }
 
     /**
      * Edit the specified reservation
      *
      * @param $reservationId
-     * @return $this
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($reservationId)
     {
@@ -66,14 +67,8 @@ class ReservationsController extends Controller
 
     /**
      * Create a new reservation.
-     *
-     * @param $campaignId
      */
-    public function create($campaignId)
+    public function create()
     {
         $this->authorize('create', $this->reservation);
-
-        // $campaign = Reservation::whereId($campaignId)->orWhere('page_url', $campaignId)->first();
-        // $this->api->get('campaigns/'.$campaignId);
-        // return view('admin.reservations.create')->with('campaign', $campaign);
     }}

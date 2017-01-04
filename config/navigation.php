@@ -101,6 +101,40 @@ return [
                 'label' => 'Essays',
                 'url' => 'essays'
             ]
-        ]
+        ],
+        'reservation' => [
+            [
+                'label' => 'Details',
+                'url' => 'details'
+            ],
+            [
+                'label' => 'Costs / Payments',
+                'url' => 'costs'
+            ],
+            [
+                'label' => 'Travel Requirements',
+                'url' => 'requirements'
+            ],
+            [
+                'label' => 'Funding',
+                'url' => 'funding'
+            ],
+            [
+                'label' => 'Deadlines',
+                'url' => 'deadlines'
+            ],
+            [
+                'label' => 'Legal',
+                'url' => 'legal'
+            ],
+            [
+                'label' => 'Todos',
+                'url' => 'todos'
+            ],
+            [
+                'label' => 'Notes',
+                'url' => 'notes'
+            ]
+        ],
     ]
 ];

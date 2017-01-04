@@ -27,7 +27,9 @@ Route::resource('groups', 'GroupsController');
 Route::resource('interests', 'TripInterestsController');
 
 Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped|prospects');
-Route::resource('reservations', 'ReservationsController');
+Route::get('reservations/create', 'ReservationsController@create');
+Route::get('reservations/{id}/edit', 'ReservationsController@edit');
+Route::get('reservations/{id}/{tab?}', 'ReservationsController@show');
 
 Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');
 Route::get('causes/{cause_id}/initiatives/create', 'ProjectInitiativesController@create');

@@ -93,10 +93,6 @@
 				<p>Invitation to Special Retreats with Executive Leadership Team</p>
 			</div>
 		</div><!-- end row -->
-		<div class="row">
-			<hr class="divider inv">
-			<p class="text-center"><a class="btn btn-primary btn-lg" href="/support-monthly">Become A Legacy Partner</a></p>
-		</div>
 	</div>
 	</div><!-- end container -->
 </div><!-- end dark-bg-primary -->

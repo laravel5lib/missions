@@ -76086,7 +76086,7 @@ Object.defineProperty(exports, "__esModule", {
 var marked = require('marked');
 exports.default = {
     name: 'fundraisers-manager',
-    props: ['id', 'sponsorId', 'authId'],
+    props: ['id', 'sponsorId'],
     data: function data() {
         return {
             description: '',
@@ -76122,7 +76122,7 @@ exports.default = {
     },
     methods: {
         isUser: function isUser() {
-            return this.sponsorId === this.authId;
+            return this.sponsorId === this.$root.user.id;
         },
         reset: function reset() {
             this.description = this.fundraiser.description;
@@ -76208,7 +76208,7 @@ Object.defineProperty(exports, "__esModule", {
 var marked = require('marked');
 exports.default = {
     name: 'fundraisers-stories',
-    props: ['id', 'sponsorId', 'authId'],
+    props: ['id', 'sponsorId'],
     data: function data() {
         return {
             stories: [],
@@ -76238,7 +76238,7 @@ exports.default = {
     },
     methods: {
         isUser: function isUser() {
-            return this.sponsorId === this.authId;
+            return this.sponsorId === this.$root.user.id;
         },
         removeStory: function removeStory(story) {
             if (story) {
@@ -76253,11 +76253,11 @@ exports.default = {
         },
         updateStory: function updateStory(story) {
             if (story) {
-                story.author_id = this.authId;
+                story.author_id = this.$root.user.id;
                 story.author_type = 'users';
 
                 if (this.includeProfile) {
-                    story.publications.push({ type: 'users', id: this.authId });
+                    story.publications.push({ type: 'users', id: this.$root.user.id });
                 }
 
                 // this.$refs.spinner.show();
@@ -76275,11 +76275,11 @@ exports.default = {
         },
         createStory: function createStory(story) {
             if (story) {
-                story.author_id = this.authId;
+                story.author_id = this.$root.user.id;
                 story.author_type = 'users';
 
                 if (this.includeProfile) {
-                    story.publications.push({ type: 'users', id: this.authId });
+                    story.publications.push({ type: 'users', id: this.$root.user.id });
                 }
 
                 // this.$refs.spinner.show();
@@ -76351,7 +76351,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
     name: 'fundraisers-uploads',
-    props: ['id', 'sponsorId', 'authId'],
+    props: ['id', 'sponsorId'],
     components: { 'upload-create-update': _adminUploadCreateUpdate2.default },
     data: function data() {
         return {
@@ -76385,7 +76385,7 @@ exports.default = {
     },
     methods: {
         isUser: function isUser() {
-            return this.sponsorId && this.authId && this.sponsorId === this.authId;
+            return this.sponsorId && this.$root.user.id && this.sponsorId === this.$root.user.id;
         },
         viewUpload: function viewUpload(upload) {
             this.selectedUpload = upload;
@@ -76537,7 +76537,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
     name: 'fundraisers',
-    props: ['id', 'type', 'authId'],
+    props: ['id', 'type'],
     data: function data() {
         return {
             featuredFundraisers: [],
@@ -77607,7 +77607,7 @@ Object.defineProperty(exports, "__esModule", {
 var marked = require('marked');
 exports.default = {
     name: 'group-profile-stories',
-    props: ['id', 'authId', 'managerIds'],
+    props: ['id', 'managerIds'],
     data: function data() {
         return {
             stories: [],
@@ -77636,7 +77636,7 @@ exports.default = {
     },
     methods: {
         isManager: function isManager() {
-            return _.contains(this.managerIds, this.authId);
+            return _.contains(this.managerIds, this.$root.user.id);
         },
         removeStory: function removeStory(story) {
             if (story) {
@@ -77651,7 +77651,7 @@ exports.default = {
         },
         updateStory: function updateStory(story) {
             if (story) {
-                story.author_id = this.authId;
+                story.author_id = this.$root.user.id;
                 story.author_type = 'users';
                 story.publications = [{ type: 'users', id: this.id }];
 
@@ -77667,7 +77667,7 @@ exports.default = {
         },
         createStory: function createStory(story) {
             if (story) {
-                story.author_id = this.authId;
+                story.author_id = this.$root.user.id;
                 story.author_type = 'users';
 
                 // this.$refs.spinner.show();
@@ -87624,8 +87624,6 @@ if (module.hot) {(function () {  module.hot.accept()
   }
 })()}
 },{"babel-runtime/core-js/json/stringify":4,"vue":282,"vue-hot-reload-api":277,"vue-select":279,"vueify/lib/insert-css":283}],413:[function(require,module,exports){
-var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\ndiv.list-group-item[_v-4391f733] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4391f733] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4391f733] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4391f733]:hover {\n  color: #d8262e; }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -87646,21 +87644,41 @@ exports.default = {
     props: {
         'user_id': {
             type: String
+        },
+        'userRoles': {
+            type: Array
         }
     },
     data: function data() {
         return {
-            abilities: {},
-            showAbilities: false,
-            selectedRoles: ['member'],
-            availableRoles: ['member', 'admin', 'intern', 'manager', 'facilitator']
+            roles: [],
+            selectedRoles: [],
+            abilities: [],
+            selectedAbilities: [],
+            permissions: [],
+            showAbilities: false
         };
     },
 
     methods: {
-        fetch: function fetch() {
-            this.$http.get('users/' + this.user_id + '/permissions').then(function (response) {
+        customize: function customize() {
+            this.showAbilities = !this.showAbilities;
+
+            if (this.showAbilities) {
+                this.getAbilities();
+            }
+        },
+        getAbilities: function getAbilities() {
+            this.$http.get('permissions/abilities').then(function (response) {
                 this.abilities = response.data.data;
+            });
+        },
+        fetch: function fetch() {
+            this.$http.get('permissions/roles').then(function (response) {
+                this.roles = response.data.data;
+            });
+            this.$http.get('users/' + this.user_id + '/permissions').then(function (response) {
+                this.permissions = response.data.data;
             });
         }
     },
@@ -87669,22 +87687,18 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\" style=\"position:relative;\" _v-4391f733=\"\">\n    <spinner v-ref:spinner=\"\" size=\"sm\" text=\"Loading\" _v-4391f733=\"\"></spinner>\n    <div class=\"panel-heading\" _v-4391f733=\"\">\n        <h5 class=\"panel-header\" _v-4391f733=\"\">Permissions <button class=\"btn btn-xs btn-default-hollow pull-right\" style=\"margin-top:-3px\" @click=\"showAbilities = !showAbilities\" _v-4391f733=\"\">\n           <i class=\"fa fa-cog icon-left\" _v-4391f733=\"\"></i> Manage \n        </button></h5>\n\n    </div>\n    <div class=\"panel-body\" _v-4391f733=\"\">\n        <label _v-4391f733=\"\">User Roles</label>\n        <v-select class=\"form-control\" multiple=\"\" :value.sync=\"selectedRoles\" :options=\"availableRoles\" label=\"roles\" _v-4391f733=\"\">\n        </v-select>\n    </div>\n    <div class=\"panel-body\" v-if=\"showAbilities\" _v-4391f733=\"\">\n        <div class=\"list-gorup-item\" _v-4391f733=\"\">\n            <label _v-4391f733=\"\">User Abilities</label>\n            <v-select class=\"form-control\" :value.sync=\"selectedAbility\" :options=\"availableAbilities\" placeholder=\"add an ability\" label=\"abilities\" _v-4391f733=\"\">\n            </v-select>\n        </div>\n        <div class=\"list-group-item ability-item\" v-for=\"ability in abilities\" _v-4391f733=\"\">\n            <div class=\"row\" _v-4391f733=\"\">\n                <div class=\"col-xs-11\" _v-4391f733=\"\">\n                    <small class=\"text-muted\" _v-4391f733=\"\">can</small> {{ ability.display_name }}\n                </div>\n                <div class=\"col-xs-1 col-sm-1 text-right\" _v-4391f733=\"\">\n                    <i class=\"fa fa-times fa-lg text-muted remove-ability\" _v-4391f733=\"\">\n                    </i>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h5 class=\"panel-header\">Permissions</h5>\n    </div>\n    <div class=\"panel-body\">\n        <h5>Role(s)</h5>\n\n        <div class=\"row\" v-for=\"role in roles\">\n            <div class=\"col-xs-12\">\n                {{ role.name | capitalize }}\n                <button class=\"btn btn-xs btn-default-hollow pull-right\">Assign</button>\n                <hr>\n                <!--<button class=\"btn btn-xs btn-default ptn-pull-right\">Revoke</button>-->\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12 text-center text-muted small\">\n                <a @click=\"customize()\"><i class=\"fa fa-cog\"></i> Customize User Abilities</a>\n            </div>\n        </div>\n\n        <div class=\"row\" v-if=\"showAbilities\">\n            <div class=\"col-xs-12\"><h5>Abilities</h5></div>\n            <hr class=\"divider inv\">\n            <div class=\"col-xs-12\" v-for=\"ability in abilities\">\n                <h5>{{ $key }}</h5>\n                <p v-for=\"item in ability\">\n                    {{ item.name | capitalize }}\n                    <button class=\"btn btn-xs btn-default-hollow pull-right\">Allow</button>\n                    <!--<button class=\"btn btn-xs btn-default ptn-pull-right\">Deny</button>-->\n                    </p><hr class=\"divider\">\n                <p></p>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
-  module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 2, stdin */\ndiv.list-group-item[_v-4391f733] {\n  cursor: pointer; }\n\n/* line 6, stdin */\n.remove-ability[_v-4391f733] {\n  display: none; }\n\n/* line 10, stdin */\ndiv.ability-item:hover i.remove-ability[_v-4391f733] {\n  display: inline; }\n\n/* line 14, stdin */\ni.remove-ability[_v-4391f733]:hover {\n  color: #d8262e; }\n"] = false
-    document.head.removeChild(__vueify_style__)
-  })
   if (!module.hot.data) {
     hotAPI.createRecord("_v-4391f733", module.exports)
   } else {
     hotAPI.update("_v-4391f733", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":282,"vue-hot-reload-api":277,"vue-select":279,"vueify/lib/insert-css":283}],414:[function(require,module,exports){
+},{"vue":282,"vue-hot-reload-api":277,"vue-select":279}],414:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -87700,7 +87714,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'user-profile-countries',
     components: { vSelect: _vueSelect2.default },
-    props: ['id', 'authId'],
+    props: ['id'],
     data: function data() {
         return {
             accolades: [],
@@ -87718,7 +87732,7 @@ exports.default = {
 
     methods: {
         isUser: function isUser() {
-            return this.id === this.authId;
+            return this.id === this.$root.user.id;
         },
         removeAccolade: function removeAccolade(country) {
             this.deleteModal = true;
@@ -87919,7 +87933,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {
 	name: 'user-profile-fundraisers',
-	props: ['id', 'userUrl', 'authId'],
+	props: ['id', 'userUrl'],
 	data: function data() {
 		return {
 			fundraisers: [],
@@ -87967,7 +87981,7 @@ Object.defineProperty(exports, "__esModule", {
 var marked = require('marked');
 exports.default = {
     name: 'user-profile-stories',
-    props: ['id', 'authId'],
+    props: ['id'],
     data: function data() {
         return {
             stories: [],
@@ -88002,7 +88016,7 @@ exports.default = {
     },
     methods: {
         isUser: function isUser() {
-            return this.id === this.authId;
+            return this.id === this.$root.user.id;
         },
         removeStory: function removeStory(story) {
             if (story) {
@@ -88017,7 +88031,7 @@ exports.default = {
         },
         updateStory: function updateStory(story) {
             if (story) {
-                story.author_id = this.authId;
+                story.author_id = this.$root.user.id;
                 story.author_type = 'users';
                 story.publications = [{ type: 'users', id: this.id }];
 
@@ -88033,7 +88047,7 @@ exports.default = {
         },
         createStory: function createStory(story) {
             if (story) {
-                story.author_id = this.authId;
+                story.author_id = this.$root.user.id;
                 story.author_type = 'users';
 
                 this.$http.post('stories', story).then(function (response) {
@@ -88094,7 +88108,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'user-profile-trip-history',
     components: { vSelect: _vueSelect2.default },
-    props: ['id', 'authId'],
+    props: ['id'],
     data: function data() {
         return {
             accolades: [],
@@ -88111,7 +88125,7 @@ exports.default = {
 
     methods: {
         isUser: function isUser() {
-            return this.id === this.authId;
+            return this.id === this.$root.user.id;
         },
         removeAccolade: function removeAccolade(trip) {
             this.deleteModal = true;
@@ -89218,11 +89232,19 @@ new _vue2.default({
         },
         showSuccess: false,
         showError: false,
-        message: ''
+        message: '',
+        impersonatedUser: null
     },
     computed: {
+        impersonatedToken: function impersonatedToken() {
+            return this.$cookie.get('impersonate');
+        },
         user: function user() {
-            return JSON.parse(this.$cookie.get('user'));
+            if (this.impersonatedToken !== null) {
+                return this.getImpersonatedUser();
+            } else {
+                return JSON.parse(this.$cookie.get('user'));
+            }
         }
     },
     components: {
@@ -89362,12 +89384,23 @@ new _vue2.default({
             this.message = msg;
             this.showError = true;
         });
+
+        console.log(this.user);
     },
     methods: {
         setUser: function setUser(user) {
             // Save user info
             this.user = user;
             this.authenticated = true;
+        },
+        getImpersonatedUser: function getImpersonatedUser() {
+            if (this.impersonatedUser !== null) {
+                return this.impersonatedUser;
+            } else {
+                return this.$http.get('users/' + this.impersonatedToken).then(function (response) {
+                    return this.impersonatedUser = response.data.data;
+                }.bind(this));
+            }
         }
     },
     events: {

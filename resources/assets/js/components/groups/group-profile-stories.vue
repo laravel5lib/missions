@@ -124,7 +124,7 @@
     var marked = require('marked');
     export default{
         name: 'group-profile-stories',
-        props:['id', 'authId', 'managerIds'],
+        props:['id', 'managerIds'],
         data(){
             return{
                 stories: [],
@@ -154,7 +154,7 @@
         },
         methods:{
             isManager(){
-                return _.contains(this.managerIds, this.authId);
+                return _.contains(this.managerIds, this.$root.user.id);
             },
             removeStory(story){
                 if(story) {
@@ -169,7 +169,7 @@
             },
             updateStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
                     story.publications = [{ type: 'users', id: this.id }];
 
@@ -185,7 +185,7 @@
             },
             createStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
 
                     // this.$refs.spinner.show();

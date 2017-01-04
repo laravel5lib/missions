@@ -74,7 +74,7 @@
 <script type="text/javascript">
 	export default{
 		name: 'user-profile-fundraisers',
-		props: ['id', 'userUrl', 'authId'],
+		props: ['id', 'userUrl'],
 		data(){
 			return {
 				fundraisers: [],

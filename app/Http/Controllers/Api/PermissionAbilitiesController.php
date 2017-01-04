@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Transformers\v1\UserPermissionTransformer;
+use App\Http\Transformers\v1\AbilityTransformer;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -30,10 +30,6 @@ class PermissionAbilitiesController extends Controller
     {
         $abilities = $this->ability->all();
 
-        $abilities = $abilities->groupBy(function ($item, $key) {
-            return ($item['entity_type'] ? ucwords($item['entity_type']) : 'Application');
-        })->all();
-
-        return ['data' => $abilities];
+        return $this->response->collection($abilities, new AbilityTransformer);
     }
 }

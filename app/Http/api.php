@@ -34,7 +34,10 @@ $api->version('v1', [
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');
     $api->resource('users.contacts', 'ContactsController');
-    $api->resource('users.permissions', 'UserPermissionsController');
+    $api->post('users/{id}/roles', 'UserRolesController@store');
+    $api->delete('users/{id}/roles', 'UserRolesController@destroy');
+    $api->post('users/{id}/abilities', 'UserAbilitiesController@store');
+    $api->delete('users/{id}/abilities', 'UserAbilitiesController@destroy');
     $api->get('{recipient}/{id}/accolades', 'AccoladesController@index');
     $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');

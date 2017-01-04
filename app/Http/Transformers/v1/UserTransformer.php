@@ -15,7 +15,7 @@ class UserTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'reservations', 'notes', 'managing', 'facilitating',
         'passports', 'visas', 'uploads', 'accolades', 'fundraisers',
-        'medical_releases', 'roles', 'links'
+        'medical_releases', 'roles', 'links', 'abilities'
     ];
 
     /**
@@ -60,6 +60,13 @@ class UserTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    public function includeAbilities(User $user)
+    {
+        $abilities = $user->getAbilities();
+
+        return $this->collection($abilities, new AbilityTransformer);
     }
 
     /**

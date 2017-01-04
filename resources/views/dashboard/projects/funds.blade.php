@@ -9,11 +9,12 @@
             <div class="row">
                 <div class="col-sm-6 col-md-4 text-center">
                     <label>Funding Progress</label>
-                    <div class="progress">
+                    <div class="progress" style="margin-bottom:5px;">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $project->percent_raised }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $project->percent_raised }}%;">
-                            {{ $project->percent_raised }}% of ${{ $project->goal }} Raised
                         </div>
                     </div>
+                    <span class="text-success">{{ $project->percent_raised }}% of ${{ $project->goal }}</span> <small>Raised</small>
+                    <hr class="divider inv">
                 </div>
                 <div class="col-sm-6 col-md-4 text-center">
                     <label>Total In Fund</label>

@@ -14,6 +14,7 @@
                             </div>
                         </div>
                         <span class="text-success">{{ $reservation->getPercentRaised() }}%</span> <small>of ${{ $reservation->getTotalCost() }} Raised</small>
+                        <hr class="divider inv">
                     </div>
                     <div class="col-sm-6 col-md-4 text-center">
                         <label>Total In Fund</label>

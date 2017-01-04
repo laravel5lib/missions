@@ -38,6 +38,6 @@ class FundDonorsController extends Controller
                         ->filter($request->all())
                         ->paginate($request->get('per_page', 10));
 
-        return $this->response->paginator($donors, new DonorTransformer);
+        return $this->response->paginator($donors, new DonorTransformer(['fund_id' => $fund_id]));
     }
 }

@@ -20,7 +20,7 @@
         @endcan
         <li role="separator" class="divider"></li>
         <li><a href="/logout">Sign Out <i style="margin-top:6px;" class="fa fa-chevron-right pull-right"></i></a></li>
-        @if(auth()->user()->isImpersonating())
+        @if(request()->cookie('impersonate'))
           <li><a href="/admin/users/stop">Stop Impersonating</a></li>
         @endif
       </ul>

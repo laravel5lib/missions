@@ -16,9 +16,9 @@ class Impersonate
      */
     public function handle($request, Closure $next)
     {
-        if($request->session()->has('impersonate'))
+        if($request->cookie('impersonate'))
         {
-            Auth::onceUsingId($request->session()->get('impersonate'));
+            Auth::onceUsingId($request->cookie('impersonate'));
         }
 
         return $next($request);

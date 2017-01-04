@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 $dispatcher = app('Dingo\Api\Dispatcher');
 
-Route::group(['middleware' => ['auth', 'can:access-dashboard', 'impersonate'], 'prefix' => 'dashboard' ], function () use($dispatcher)
+Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'dashboard' ], function () use($dispatcher)
 {
     Route::get('/', function () {
         return view('dashboard.index');

@@ -24,8 +24,6 @@
                             <ul class="dropdown-menu">
                                 <li><a href="create">New</a></li>
                                 <li><a href="{{ Request::url() }}/edit">Edit</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="">Impersonate</a><br /><small>Temporarily login as this user</small></li>
                                 {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
                                 <li role="separator" class="divider"></li>
                                 <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>

@@ -84,9 +84,9 @@
             },
             getGroups(){
                 // this.$refs.spinner.show();
-                this.$http.get('users/me', {
+                this.$http.get('users/' + this.$root.user.id, {
                     include: 'managing',
-                    user: new Array(this.userId)
+                    user: new Array(this.$root.user.id)
                 }).then(function (response) {
                     this.groups = response.data.data.managing.data;
                     // this.$refs.spinner.hide();

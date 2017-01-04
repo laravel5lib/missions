@@ -600,8 +600,6 @@ new Vue({
             this.message = msg;
             this.showError = true;
         });
-
-        console.log(this.user);
     },
     methods: {
         setUser: function (user) {
@@ -613,7 +611,7 @@ new Vue({
             if (this.impersonatedUser !== null) {
                 return this.impersonatedUser
             } else {
-                return this.$http.get('users/' + this.impersonatedToken)
+                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities')
                     .then(function (response) {
                         return this.impersonatedUser = response.data.data;
                     }.bind(this))

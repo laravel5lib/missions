@@ -122,15 +122,19 @@
                     name: role.name
                 }).then(function (response) {
                     this.selectedRoles.push(role);
-                    console.log(response.data.message)
+                    this.$dispatch('showSuccess', 'User permissions updated.')
                 });
             },
             revoke(role) {
                 this.$http.delete('users/' + this.user_id + '/roles', {
                     name: role.name
                 }).then(function (response) {
-                    this.selectedRoles.$remove(role);
-                    console.log(response.data.message)
+                    //this.selectedRoles.$remove(role);
+                    var index = this.selectedRoles.indexOf(_.findWhere(this.selectedRoles, {id: role.id}));
+                    if (index !== -1) {
+                      this.selectedRoles.splice(index, 1);
+                    }
+                    this.$dispatch('showSuccess', 'User permissions updated.')
                 });
             },
             allow(ability) {
@@ -139,7 +143,7 @@
                     entity_type: ability.entity_type
                 }).then(function (response) {
                     this.selectedAbilities.push(ability);
-                    console.log(response.data.message)
+                    this.$dispatch('showSuccess', 'User permissions updated.')
                 });
             },
             deny(ability) {
@@ -147,11 +151,12 @@
                     name: ability.name,
                     entity_type: ability.entity_type
                 }).then(function (response) {
-                    this.selectedAbilities.$remove(ability);
-                    // this.selectedAbilities = _.reject(this.selectedAbilities, function(a) {
-                        // return a == ability;
-                    // });
-                    console.log(response.data.message)
+                    //this.selectedAbilities.$remove(ability);
+                    var index = this.selectedAbilities.indexOf(_.findWhere(this.selectedAbilities, {id: ability.id}));
+                    if (index !== -1) {
+                      this.selectedAbilities.splice(index, 1);
+                    }
+                    this.$dispatch('showSuccess', 'User permissions updated.')
                 });
             }
         },

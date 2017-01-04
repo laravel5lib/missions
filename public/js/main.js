@@ -88204,6 +88204,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
     name: 'user-settings',
     components: { vSelect: _vueSelect2.default, 'upload-create-update': _adminUploadCreateUpdate2.default },
+    props: {
+        'id': {
+            type: String,
+            required: true
+        }
+    },
     data: function data() {
         return {
             id: '',
@@ -88248,7 +88254,7 @@ exports.default = {
             dobMonth: null,
             dobDay: null,
             dobYear: null,
-            resource: this.$resource('users/me?include=links'),
+            resource: this.$resource('users/' + this.id + '?include=links'),
             errors: {},
             showError: false,
             showSuccess: false,

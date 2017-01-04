@@ -264,6 +264,9 @@ Route::get('/sponsor-a-project', function () {
 Route::get('/support-monthly', function () {
     return view('site.support-monthly');
 });
+Route::get('/legacy', function () {
+    return view('site.legacy');
+});
 
 Route::get('/{slug}', function ($slug) {
     return $slug;

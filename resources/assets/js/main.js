@@ -613,7 +613,7 @@ new Vue({
             if (this.impersonatedUser !== null) {
                 return this.impersonatedUser
             } else {
-                return this.$http.get('users/me', null, { headers: { impersonation: 'Bearer ' + this.impersonatedToken} })
+                return this.$http.get('users/' + this.impersonatedToken)
                     .then(function (response) {
                         return this.impersonatedUser = response.data.data;
                     }.bind(this))

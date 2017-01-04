@@ -6,7 +6,7 @@
 				<h5>Facilitators</h5>
 			</div>
 			<div class="col-xs-6 text-right">
-				<button class="btn btn-default btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal">
+				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal">
 					<i class="fa fa-plus icon-left"></i> Add
 				</button>
 			</div>
@@ -14,19 +14,16 @@
 		</div><!-- end panel-heading -->
 		<div class="panel-body" style="position:relative">
 			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-			<div class="col-sm-6 col-xs-12" v-for="facilitator in facilitators" track-by="id">
-				<div class="media-left media-top">
-					<a href="#">
-						<img :src="facilitator.avatar + '?w=50&h=50'" class="media-object" alt="{{ facilitator.name }}">
-					</a>
-				</div>
-				<div class="media-body">
-					<h5 v-text="facilitator.name" class="media-heading"></h5>
-					<p>
-						<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">
-							<i class="fa fa-times"></i> Remove
+			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" track-by="id">
+					<h5>
+					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" alt="{{ facilitator.name }}">
+					{{ facilitator.name }}
+					</h5>
+					<div style="position:absolute;right:25px;top:22px;">
+					<a @click="removeFacilitator(facilitator)">
+							<i class="fa fa-times"></i>
 						</a>
-					</p>
+					</div>
 				</div>
 				<hr class="divider inv" />
 			</div>

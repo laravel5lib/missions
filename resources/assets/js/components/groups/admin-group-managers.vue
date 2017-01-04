@@ -14,22 +14,16 @@
 			</div>
 		</div>
 		<div class="panel-body">
-			<div class="media" v-for="manager in managers" track-by="id">
-				<div class="media-left media-top">
-					<a href="#">
-						<img :src="manager.avatar + '?w=50&h=50'" class="media-object img-rounded"
-							 alt="{{ manager.name }}">
+			<div class="col-xs-12 panel panel-default" v-for="manager in managers" track-by="id">
+				<h5>
+					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" alt="{{ manager.name }}">
+					{{ manager.name }}
+				</h5>
+				<div style="position:absolute;right:25px;top:22px;">
+					<a @click="removeManager(manager)">
+						<i class="fa fa-times"></i>
 					</a>
 				</div>
-				<div class="media-body">
-					<h5 v-text="manager.name" class="media-heading"></h5>
-					<p>
-						<a class="btn btn-xs btn-default-hollow" @click="removeManager(manager)">
-							<i class="fa fa-times"></i> Remove
-						</a>
-					</p>
-				</div>
-				<hr/>
 			</div>
 		</div>
 		<div class="modal fade" id="AddManagerModal">

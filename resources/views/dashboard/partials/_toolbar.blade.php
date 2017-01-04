@@ -18,7 +18,7 @@
     </li>
     @endif
     <li @if(request()->segment(2) == 'projects')class="active"@endif>
-      <a href="/dashboard/projects"><i class="fa fa-tint"></i></a>
+      <a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;"></i></a>
     </li>
   </ul>
 </div>

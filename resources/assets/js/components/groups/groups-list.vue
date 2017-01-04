@@ -19,18 +19,16 @@
     <div class="col-xs-12 col-sm-6 col-md-4" v-for="group in groups" v-if="!selectUi && groups.length > 0">
         <div class="panel panel-default">
             <div class="panel-heading text-center">
-                <h5>{{ group.name }} <small>{{ group.country }}</small></h5>
+                <h5 class="text-uppercase">{{ group.type }} Group</h5>
             </div>
             <div class="panel-body text-center">
-                <img :src="group.avatar||group.banner" class="img-circle img-lg">
+                <img :src="group.avatar||group.banner" class="img-circle img-md">
+                <h4>{{ group.name }}</h4>
+                <p class="small">{{ group.country }}</p>
                 <hr class="divider inv sm">
-                <h6 class="label label-default text-uppercase">{{ group.type }} Group</h6>
                 <!--<h4>{{ group.surname }}, {{ group.given_names }}</h4>-->
-                <h5 class="text-capitalize"> </h5>
-                <div class="btn-group btn-group-justified">
-                    <a v-if="group.public" class="btn btn-sm btn-info" href="/groups/{{ group.url }}"><i class="fa fa-eye"></i> View</a>
-                    <a class="btn btn-sm btn-primary" href="/dashboard/groups/{{ group.id }}"><i class="fa fa-pencil"></i> Manage</a>
-                </div>
+                <a v-if="group.public" class="btn btn-sm btn-primary" href="/groups/{{ group.url }}">View Group</a><br>
+                <label><a href="/dashboard/groups/{{ group.id }}"><i class="fa fa-pencil"></i> Manage</a></label>
             </div>
         </div>
     </div>

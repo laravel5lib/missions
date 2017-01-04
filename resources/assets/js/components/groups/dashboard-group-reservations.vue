@@ -109,9 +109,8 @@
                 </form>
             </div>
         </div>
-        <hr class="divider sm">
 		<div>
-			Active Filters:
+			<label>Active Filters</label>
 			<button type="button"class="btn btn-xs btn-default" v-show="filters.tags.length" @click="filters.tags = []" >
 				Tags
 				<span class="badge">x</span>
@@ -150,24 +149,28 @@
 			</button>
 		</div>
         <hr class="divider sm">
-		<div class="col-xs-12 col-sm-6 col-md-4">
-			<div class="panel panel-default" v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
-				<div class="panel-heading text-center">
-					<h5>{{ reservation.given_names }} {{ reservation.surname }}</h5>
-				</div>
-				<div class="panel-body text-center">
-					<img :src="reservation.avatar" class="img-circle img-lg">
-					<hr class="divider inv sm">
-					<h6 class=" text-uppercase text-center">Registered on <br>{{ reservation.created_at | moment 'll' }}</h6>
-					<!--<div class="btn-group btn-group-justified">
-						<a class="btn btn-sm btn-primary" href="/dashboard/groups{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i> Manage</a>
-					</div>-->
-				</div>
-				<div class="panel-footer text-center">
-					<h5 class="text-capitalize">{{ reservation.percent_raised | number '2' }}% Raised</h5>
-				</div>
-			</div>
-		</div>
+        <div class="row">
+			<div class="col-xs-12 col-sm-4 col-md-3">
+				<div class="panel panel-default" v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+					<div class="panel-heading text-center">
+						<h5>{{ reservation.given_names }} {{ reservation.surname }}</h5>
+					</div>
+					<div class="panel-body text-center">
+						<img :src="reservation.avatar" class="img-circle img-md">
+						<hr class="divider inv sm">
+						<label style="margin-bottom:2px;">Registered On</label>
+						<h5 style="margin-top:5px;" class="text-center">{{ reservation.created_at | moment 'll' }}</h5>
+						<!--<div class="btn-group btn-group-justified">
+							<a class="btn btn-sm btn-primary" href="/dashboard/groups{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i> Manage</a>
+						</div>-->
+					</div>
+					<div class="panel-footer text-center">
+						<h5 class="text-capitalize"><span class="text-success">{{ reservation.percent_raised | number '2' }}%</span> <small>Raised</small></h5>
+					</div>
+				</div><!-- end panel -->
+			</div><!-- end col -->
+		</div><!-- end row -->
+		<hr class="divider xlg inv">
     </div>
 </template>
 <style>

@@ -196,6 +196,116 @@
             <pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
         </div>
     </div>
+    <hr class="divider hidden-xs" style="margin-top:0;margin-bottom:0;">
+        <div id="carousel-fundraising-platform" class="carousel slide hidden-sm hidden-xs" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carousel-fundraising-platform" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-fundraising-platform"></li>
+              </ol>
+              <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img class="img-responsive" src="../images/groups/groups-slide-1.jpg">
+                    <div class="carousel-caption">
+                      <h3 class="dash-trailing">You're In Control</h3>
+                        <p>Control who has administrator access to your group, assign facilitators to manage your trips, and customize your organization's public profile. Use the Stories feature to encourage and inform your supporters or make important announcements.</p>
+                    </div>
+                </div><!-- end item -->
+                <div class="item">
+                    <img class="img-responsive" src="../images/groups/groups-slide-2.jpg">
+                    <div class="carousel-caption">
+                      <h3 class="dash-trailing">Monitor & Promote Your Trips</h3>
+                        <p>Easily capture new signups or interests as you walk visitors through the registration process. See important details about your customized Missions.Me trip and get notified of account activity.</p>
+                    </div>
+                </div><!-- end item -->  
+                <div class="item">
+                    <img class="img-responsive" src="../images/groups/groups-slide-3.jpg">
+                    <div class="carousel-caption">
+                      <h3 class="dash-trailing">Trip Management Made Easy</h3>
+                        <p>See who's coming and track their fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
+                    </div>
+                </div><!-- end item -->
+                <div class="item">
+                    <img class="img-responsive" src="../images/groups/groups-slide-4.jpg">
+                    <div class="carousel-caption">
+                      <h3 class="dash-trailing">Sponsor Projects</h3>
+                        <p>Raise funds for an Angel House or water well as an organization, then promote it with a customizable fundraising page. Receive donations toward your project directly online without the third party transaction fees.</p>
+                    </div>
+                </div><!-- end item --> 
+              </div>
+              <a class="left carousel-control" href="#carousel-fundraising-platform" role="button" data-slide="prev">
+                <span class="fa fa-angle-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right carousel-control" href="#carousel-fundraising-platform" role="button" data-slide="next">
+                <span class="fa fa-angle-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+              </a>
+    </div><!-- end carousel -->
+    <hr class="divider hidden-xs hidden-sm" style="margin-top:0;margin-bottom:0;">
+    <div class="white-bg visible-sm visible-xs">
+      <div class="container">
+          <div class="content-section">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+              <img class="img-responsive" src="../images/groups/mobile/groups-slide-1.png">
+              </div><!-- end col -->
+              <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                <h3 class="dash-trailing">You're In Control</h3>
+                <p>Control who has administrator access to your group, assign facilitators to manage your trips, and customize your organization's public profile. Use the Stories feature to encourage and inform your supporters or make important announcements.</p>
+              </div><!-- end col -->
+            </div><!-- end row -->
+          </div><!-- end content-section -->
+      </div><!-- end container -->
+      <hr class="divider" style="margin-top:0;margin-bottom:0;">
+    </div><!-- end gray-lighter-bg -->
+    <div class="gray-lighter-bg visible-sm visible-xs">
+      <div class="container">
+          <div class="content-section">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+              <img class="img-responsive" src="../images/groups/mobile/groups-slide-2.png">
+              </div><!-- end col -->
+              <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                <h3 class="dash-trailing">Monitor & Promote Your Trips</h3>
+                <p>Easily capture new signups or interests as you walk visitors through the registration process. See important details about your customized Missions.Me trip and get notified of account activity.</p>
+              </div><!-- end col -->
+            </div><!-- end row -->
+          </div><!-- end content-section -->
+      </div><!-- end container -->
+      <hr class="divider" style="margin-top:0;margin-bottom:0;">
+    </div><!-- end gray-lighter-bg -->
+    <div class="white-bg visible-sm visible-xs">
+      <div class="container">
+          <div class="content-section">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+              <img class="img-responsive" src="../images/groups/mobile/groups-slide-3.png">
+              </div><!-- end col -->
+              <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                <h3 class="dash-trailing">Trip Management Made Easy</h3>
+                <p>See who's coming and track their fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
+              </div><!-- end col -->
+            </div><!-- end row -->
+          </div><!-- end content-section -->
+      </div><!-- end container -->
+      <hr class="divider" style="margin-top:0;margin-bottom:0;">
+    </div><!-- end gray-lighter-bg -->
+    <div class="gray-lighter-bg visible-sm visible-xs">
+      <div class="container">
+          <div class="content-section">
+            <div class="row">
+              <div class="col-xs-12 col-sm-6">
+              <img class="img-responsive" src="../images/groups/mobile/groups-slide-4.png">
+              </div><!-- end col -->
+              <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
+                <h3 class="dash-trailing">Sponsor Projects</h3>
+                <p>Raise funds for an Angel House or water well as an organization, then promote it with a customizable fundraising page. Receive donations toward your project directly online without the third party transaction fees.</p>
+              </div><!-- end col -->
+            </div><!-- end row -->
+          </div><!-- end content-section -->
+      </div><!-- end container -->
+      <hr class="divider" style="margin-top:0;margin-bottom:0;">
+    </div><!-- end gray-lighter-bg -->
     <div class="dark-bg-primary">
       <div class="container">
       <div class="content-section">

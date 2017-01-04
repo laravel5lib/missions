@@ -9,11 +9,11 @@
                 <div class="row">
                     <div class="col-sm-6 col-md-4 text-center">
                         <label>Funding Progress</label>
-                        <div class="progress">
+                        <div class="progress" style="margin-bottom:5px;">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $reservation->getPercentRaised() }}%;">
-                                {{ $reservation->getPercentRaised() }}% of ${{ $reservation->getTotalCost() }} Raised
                             </div>
                         </div>
+                        <span class="text-success">{{ $reservation->getPercentRaised() }}%</span> <small>of ${{ $reservation->getTotalCost() }} Raised</small>
                     </div>
                     <div class="col-sm-6 col-md-4 text-center">
                         <label>Total In Fund</label>

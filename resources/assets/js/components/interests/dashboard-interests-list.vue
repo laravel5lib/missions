@@ -17,29 +17,29 @@
     </div>
 
     <hr class="divider sm">
-
-    <div class="col-sm-6 col-md-4" v-for="interest in interests">
-        <div class="panel panel-default" :id="interest.id">
-            <div class="panel-heading"><h6>{{ interest.name }}</h6></div>
-            <div class="panel-body">
-                <dl class="dl-hoizontal">
-                    <dt>Email</dt>
-                    <dd><a :href="interest.email ? ('mailto:' + interest.email) : '#'">{{ interest.email || 'None Provided'}}</a></dd>
-                    <dt>Phone</dt>
-                    <dd><a :href="interest.phone ? ('tel:' + interest.phone) : '#'">{{ interest.phone || 'None Provided'}}</a></dd>
-                    <dt>Contact Pref.</dt>
-                    <dd>{{ interest.communication_preferences}}</dd>
-                    <dt>Interested since</dt>
-                    <dd>{{ interest.created | moment 'll'}}</dd>
-                </dl>
+    <div class="row">
+        <div class="col-sm-6 col-md-4" v-for="interest in interests">
+            <div class="panel panel-default" :id="interest.id">
+                <div class="panel-heading"><h5>{{ interest.name }}</h5></div>
+                <div class="panel-body">
+                    <label>Email</label>
+                    <p class="small" style="margin-bottom:5px;"><a :href="interest.email ? ('mailto:' + interest.email) : '#'">{{ interest.email || 'None Provided'}}</a></p>
+                    <label>Phone</label>
+                    <p class="small" style="margin-bottom:5px;"><a :href="interest.phone ? ('tel:' + interest.phone) : '#'">{{ interest.phone || 'None Provided'}}</a></p>
+                    <label>Contact Pref.</label>
+                    <p class="small" style="margin-bottom:5px;">{{ interest.communication_preferences}}</p>
+                    <label>Interested since</label>
+                    <p class="small" style="margin-bottom:5px;">{{ interest.created | moment 'll'}}</p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-xs-12 text-center">
-        <pagination :pagination.sync="pagination" :callback="searchInterests"></pagination>
-    </div>
-
+    </div><!-- end row -->
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <pagination :pagination.sync="pagination" :callback="searchInterests"></pagination>
+        </div>
+    </div><!-- end row -->
+    <hr class="divider inv xlg">
 </template>
 <script type="text/javascript">
     export default{

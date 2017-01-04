@@ -5,20 +5,31 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                <h3 class="text-capitalize">
-                    <a href="#">
-                        <img class="av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
-                    </a>
+                <h3 class="hidden-xs text-capitalize">
+                    <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
                     {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
                 </h3>
+                <div class="visible-xs text-center">
+                    <hr class="divider inv">
+                    <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
+                    <h4 class="text-capitalize">{{ $trip->campaign->name }}</h4>
+                    <label>Trip Details</label>
+                </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-4 hidden-xs">
+                <hr class="divider inv">
                 <hr class="divider inv sm">
                 <a href="/dashboard/groups/{{ $group->id }}" class="btn btn-primary pull-right">
                     Group Details
                 </a>
             </div>
-
+            <div class="col-sm-4 visible-xs text-center">
+                <hr class="divider inv">
+                <a href="/dashboard/groups/{{ $group->id }}" class="btn btn-primary">
+                    Group Details
+                </a>
+                <hr class="divider inv sm">
+            </div>
         </div>
     </div>
 </div>
@@ -39,12 +50,22 @@
                 <div role="tabpanel" class="tab-pane active" id="details">
                     <div class="col-xs-12 col-sm-4 col-md-3">
                         <div class="panel panel-default">
-                            <div class="list-group" role="tablist">
-                                <a href="#detailsA" class="list-group-item" role="tab" data-toggle="tab">Details</a>
-                                <a href="#registration" class="list-group-item" role="tab" data-toggle="tab">Registration</a>
-                                <a href="#pricing" class="list-group-item" role="tab" data-toggle="tab">Pricing</a>
-                                <a href="#requirements" class="list-group-item" role="tab" data-toggle="tab">Requirements</a>
-                                <a href="#deadlines" class="list-group-item" role="tab" data-toggle="tab">Deadlines</a>
+                            <div class="nav nav-pills nav-stacked" role="tablist">
+                                <li>
+                                    <a href="#detailsA" role="tab" data-toggle="tab">Details</a>
+                                </li>
+                                <li>
+                                    <a href="#registration" role="tab" data-toggle="tab">Registration</a>
+                                </li>
+                                <li>
+                                    <a href="#pricing" role="tab" data-toggle="tab">Pricing</a>
+                                </li>
+                                <li>
+                                    <a href="#requirements" role="tab" data-toggle="tab">Requirements</a>
+                                </li>
+                                <li>
+                                    <a href="#deadlines" role="tab" data-toggle="tab">Deadlines</a>
+                                </li>
                             </div>
                         </div>
                     </div>

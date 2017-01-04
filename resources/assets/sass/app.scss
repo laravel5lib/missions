@@ -757,6 +757,21 @@ img.onenation-logo {
   }
 }
 
+.login-bg {
+  color: #fff;
+  background: $brand-primary url(../../images/login/login-bg.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  @media screen and (max-width: 991px) {
+    background: $brand-primary url(../../images/login/login-bg-medium.jpg) no-repeat center fixed;
+  }
+  @media screen and (max-width: 767px) {
+    background: $brand-primary url(../../images/login/login-bg-small.jpg) no-repeat center scroll;
+  }
+}
+
 // -- Custom Image Sizes -- //
 $img-base-size: 40px;
 .img-xs {

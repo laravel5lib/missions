@@ -16252,6 +16252,17 @@ img.onenation-logo {
     .donate-bg {
       background: #f6323e; } }
 
+.login-bg {
+  color: #fff;
+  background: #f6323e url(../../images/login/login-bg.jpg) no-repeat center fixed;
+  background-size: cover; }
+  @media screen and (max-width: 991px) {
+    .login-bg {
+      background: #f6323e url(../../images/login/login-bg-medium.jpg) no-repeat center fixed; } }
+  @media screen and (max-width: 767px) {
+    .login-bg {
+      background: #f6323e url(../../images/login/login-bg-small.jpg) no-repeat center scroll; } }
+
 .img-xs {
   max-height: 40px;
   max-width: 40px; }

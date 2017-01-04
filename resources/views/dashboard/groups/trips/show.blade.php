@@ -242,7 +242,7 @@
                                         @foreach($trip->requirements as $requirement)
                                             <div class="row">
                                                 <div class="col-xs-8">
-                                                    <h5><a href="#">{{ $requirement->item }} {{ $requirement->item_type }}</a></h5>
+                                                    <h5><a href="#">{{ $requirement->name }} {{ $requirement->item_type }}</a></h5>
                                                     <h6><small>Enforced: {{ $requirement->enforced ? 'Yes' : 'No' }}</small></h6>
                                                 </div>
                                                 <div class="col-xs-4 text-right">

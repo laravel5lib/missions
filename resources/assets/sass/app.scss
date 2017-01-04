@@ -978,7 +978,11 @@ h1.home-college-header {
 
 @media (max-width: 767px) {
     .vid-bg {
-        background: url('../../video/video-placeholder.png') center center / cover no-repeat;
+      background: url('../../video/video-placeholder.jpg') center center / cover no-repeat;
+      video::-webkit-media-controls-start-playback-button {
+          display: none!important;
+          -webkit-appearance: none;
+      }
     }
 
     .vid-bg-video {

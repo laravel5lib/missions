@@ -254,16 +254,13 @@
 
 					<div class="form-group">
 						<div class="col-xs-10  col-xs-offset-1">
-							<label class="control-labal">Gender</label>
-							<div class="form-group">
-								<label class="radio-inline lightcolor">
-									<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender">
+							<label class="control-labal">Gender</label><br>
+							<label class="radio-inline lightcolor">
+								<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender">
 									Male</label>
-								<label class="radio-inline lightcolor">
-									<input name="gender" type="radio" value="Female" id="gender"
+							<label class="radio-inline lightcolor">
+								<input name="gender" type="radio" value="Female" id="gender"
 										   v-model="newUser.gender"> Female</label>
-
-							</div>
 						</div><!-- end col -->
 					</div><!-- end form-group -->
 					<div class="form-group">

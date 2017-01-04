@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Transformers\v1\UserPermissionTransformer;
+use App\Models\v1\Reservation;
 use App\Models\v1\User;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,9 @@ class UserPermissionsController extends Controller
 
     public function index($user_id)
     {
-        $abilities = $this->user->findOrFail($user_id)->getAbilities();
+        $user = $this->user->findOrFail($user_id);
+
+        $abilities = $user->getAbilities();
 
         return $this->response->collection($abilities, new UserPermissionTransformer);
     }

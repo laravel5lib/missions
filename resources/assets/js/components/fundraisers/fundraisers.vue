@@ -86,7 +86,7 @@
 <script type="text/javascript">
     export default{
         name: 'fundraisers',
-        props: ['id', 'type', 'authId'],
+        props: ['id', 'type'],
         data(){
             return{
                 featuredFundraisers: [],

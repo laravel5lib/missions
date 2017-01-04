@@ -86,6 +86,8 @@ $api->version('v1', [
     $api->resource('requirements', 'RequirementsController');
     $api->resource('deadlines', 'DeadlinesController');
     $api->resource('questionnaires', 'QuestionnairesController');
+    $api->resource('permissions/roles', 'PermissionRolesController');
+    $api->resource('permissions/abilities', 'PermissionAbilitiesController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

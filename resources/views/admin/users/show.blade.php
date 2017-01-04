@@ -24,6 +24,8 @@
                             <ul class="dropdown-menu">
                                 <li><a href="create">New</a></li>
                                 <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="">Impersonate</a><br /><small>Temporarily login as this user</small></li>
                                 {{--<li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>--}}
                                 <li role="separator" class="divider"></li>
                                 <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
@@ -110,6 +112,13 @@
                     </div><!-- end col -->
                     </div><!-- end panel body -->
                 </div><!-- end panel -->
+
+                <notes type="users"
+                       id="{{ $user->id }}"
+                       user_id="{{ auth()->user()->id }}"
+                       :per_page="3"
+                       :can-modify="{{ auth()->user()->can('modify-notes') }}">
+                </notes>
             </div>
 
             <div class="col-sm-4">
@@ -117,7 +126,7 @@
                 <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
                    class="btn btn-default btn-block"><i class="fa fa-user-secret"></i> Impersonate</a>
                 <hr class="divider inv">
-                <user-permissions user_id="{{ $user->id }}"></user-permissions>
+                <user-permissions user_id="{{ $user->id }}" user-roles="{{ $user->roles->pluck('name') }}"></user-permissions>
             </div>
 
         </div>

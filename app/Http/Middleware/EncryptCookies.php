@@ -12,6 +12,7 @@ class EncryptCookies extends BaseEncrypter
      * @var array
      */
     protected $except = [
-        'api_token'
+        'api_token',
+        'impersonate'
     ];
 }

@@ -53,7 +53,7 @@ class UsersController extends Controller
     {
         $user = User::find($id);
 
-        return redirect()->to('/dashboard')->withCookie('impersonate', $user->id, 60);
+        return redirect()->to('/dashboard')->withCookie('impersonate', $user->id, 60, null, null, false, false);
     }
 
     public function stopImpersonate()

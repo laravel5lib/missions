@@ -96,7 +96,7 @@
     var marked = require('marked');
     export default{
         name: 'fundraisers-manager',
-        props: ['id', 'sponsorId', 'authId'],
+        props: ['id', 'sponsorId'],
         data(){
             return {
                 description: '',
@@ -131,7 +131,7 @@
         },
         methods: {
             isUser(){
-                return this.sponsorId === this.authId;
+                return this.sponsorId === this.$root.user.id;
             },
             reset(){
                 this.description = this.fundraiser.description;

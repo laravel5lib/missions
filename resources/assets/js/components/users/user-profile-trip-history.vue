@@ -67,7 +67,7 @@
     export default{
         name: 'user-profile-trip-history',
         components: {vSelect},
-        props:['id', 'authId'],
+        props:['id'],
         data(){
             return{
                 accolades: [],
@@ -83,7 +83,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.authId;
+                return this.id === this.$root.user.id;
             },
             removeAccolade(trip){
 				this.deleteModal = true;

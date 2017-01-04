@@ -145,7 +145,7 @@
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'fundraisers-uploads',
-        props: ['id', 'sponsorId', 'authId'],
+        props: ['id', 'sponsorId'],
         components: {'upload-create-update': uploadCreateUpdate},
         data(){
             return{
@@ -178,7 +178,7 @@
         },
         methods:{
             isUser(){
-                return this.sponsorId && this.authId && this.sponsorId === this.authId;
+                return this.sponsorId && this.$root.user.id && this.sponsorId === this.$root.user.id;
             },
             viewUpload(upload){
                 this.selectedUpload = upload;

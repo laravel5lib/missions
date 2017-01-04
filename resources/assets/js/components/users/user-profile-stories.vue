@@ -125,7 +125,7 @@
     var marked = require('marked');
     export default{
         name: 'user-profile-stories',
-        props:['id', 'authId'],
+        props:['id'],
         data(){
             return{
                 stories: [],
@@ -161,7 +161,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.authId;
+                return this.id === this.$root.user.id;
             },
             removeStory(story){
                 if(story) {
@@ -176,7 +176,7 @@
             },
             updateStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
                     story.publications = [{ type: 'users', id: this.id }];
 
@@ -192,7 +192,7 @@
             },
             createStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
 
                     this.$http.post('stories', story).then(function (response) {

@@ -66,7 +66,7 @@
     export default{
         name: 'user-profile-countries',
         components: {vSelect},
-        props:['id', 'authId'],
+        props:['id'],
         data(){
             return{
                 accolades: [],
@@ -83,7 +83,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.authId;
+                return this.id === this.$root.user.id;
             },
             removeAccolade(country){
 				this.deleteModal = true;

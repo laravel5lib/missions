@@ -126,7 +126,7 @@
     var marked = require('marked');
     export default{
         name: 'fundraisers-stories',
-        props:['id', 'sponsorId', 'authId'],
+        props:['id', 'sponsorId'],
         data(){
             return{
                 stories: [],
@@ -158,7 +158,7 @@
         },
         methods:{
             isUser(){
-                return this.sponsorId === this.authId;
+                return this.sponsorId === this.$root.user.id;
             },
             removeStory(story){
                 if(story) {
@@ -173,11 +173,11 @@
             },
             updateStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
 
                     if (this.includeProfile) {
-                        story.publications.push({ type: 'users', id: this.authId });
+                        story.publications.push({ type: 'users', id: this.$root.user.id });
                     }
 
                     // this.$refs.spinner.show();
@@ -195,11 +195,11 @@
             },
             createStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
 
                     if (this.includeProfile) {
-                        story.publications.push({ type: 'users', id: this.authId });
+                        story.publications.push({ type: 'users', id: this.$root.user.id });
                     }
 
                     // this.$refs.spinner.show();

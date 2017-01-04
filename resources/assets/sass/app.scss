@@ -168,13 +168,14 @@ p.large-line-height {
   }
 }
 
-.navmenu, .navbar-offcanvas {background:transparent !important; z-index: 9999;}
+.navmenu, .navbar-offcanvas {width:55px; z-index: 9999;}
 
-.navmenu-nav {
-  width: 55px;
-  background: #222;
-  height: 100%;
-}
+// .navmenu-nav {
+//   width: 55px;
+//   background: #222;
+//   height: 100%;
+//   margin-bottom:0;
+// }
 
 @media (min-width: 992px) {
 #dashboard {

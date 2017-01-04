@@ -15724,13 +15724,8 @@ p.large-line-height {
       color: #777; }
 
 .navmenu, .navbar-offcanvas {
-  background: transparent !important;
-  z-index: 9999; }
-
-.navmenu-nav {
   width: 55px;
-  background: #222;
-  height: 100%; }
+  z-index: 9999; }
 
 @media (min-width: 992px) {
   #dashboard {

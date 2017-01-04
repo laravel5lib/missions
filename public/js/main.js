@@ -77808,9 +77808,9 @@ exports.default = {
         },
         getGroups: function getGroups() {
             // this.$refs.spinner.show();
-            this.$http.get('users/me', {
+            this.$http.get('users/' + this.$root.user.id, {
                 include: 'managing',
-                user: new Array(this.userId)
+                user: new Array(this.$root.user.id)
             }).then(function (response) {
                 this.groups = response.data.data.managing.data;
                 // this.$refs.spinner.hide();
@@ -89442,8 +89442,6 @@ new _vue2.default({
             this.message = msg;
             this.showError = true;
         });
-
-        console.log(this.user);
     },
     methods: {
         setUser: function setUser(user) {
@@ -89455,7 +89453,7 @@ new _vue2.default({
             if (this.impersonatedUser !== null) {
                 return this.impersonatedUser;
             } else {
-                return this.$http.get('users/' + this.impersonatedToken).then(function (response) {
+                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities').then(function (response) {
                     return this.impersonatedUser = response.data.data;
                 }.bind(this));
             }

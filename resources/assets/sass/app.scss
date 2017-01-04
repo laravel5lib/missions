@@ -168,7 +168,13 @@ p.large-line-height {
   }
 }
 
-.navmenu, .navbar-offcanvas {width: 55px; z-index: 9999;}
+.navmenu, .navbar-offcanvas {background:transparent !important; z-index: 9999;}
+
+.navmenu-nav {
+  width: 55px;
+  background: #222;
+  height: 100%;
+}
 
 @media (min-width: 992px) {
 #dashboard {
@@ -530,8 +536,8 @@ li.av-nav > a {
     text-align: center;
     padding: 5px 0;
     border-radius: 4px;
-    top: -5px;
-    left: 39px; 
+    top: 17px;
+    left: 65px; 
  
     /* Position the tooltip text - see examples below! */
     position: absolute;

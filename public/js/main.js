@@ -87644,23 +87644,38 @@ exports.default = {
     props: {
         'user_id': {
             type: String
-        },
-        'userRoles': {
-            type: Array
         }
     },
     data: function data() {
         return {
-            roles: [],
+            availableRoles: [],
             selectedRoles: [],
-            abilities: [],
+            availableAbilities: [],
             selectedAbilities: [],
-            permissions: [],
             showAbilities: false
         };
     },
 
+    computed: {
+        roles: function roles() {
+            return _.intersection(_.pluck(this.availableRoles, 'id'), _.pluck(this.selectedRoles, 'id'));
+        },
+        abilities: function abilities() {
+            return _.intersection(_.pluck(this.availableAbilities, 'id'), _.pluck(this.selectedAbilities, 'id'));
+        },
+        abilitiesList: function abilitiesList() {
+            return _.groupBy(this.availableAbilities, function (ability) {
+                return ability.entity_type ? ability.entity_type : 'application';
+            });
+        }
+    },
     methods: {
+        hasRole: function hasRole(role) {
+            return _.contains(this.roles, role.id);
+        },
+        hasAbility: function hasAbility(ability) {
+            return _.contains(this.abilities, ability.id);
+        },
         customize: function customize() {
             this.showAbilities = !this.showAbilities;
 
@@ -87670,15 +87685,58 @@ exports.default = {
         },
         getAbilities: function getAbilities() {
             this.$http.get('permissions/abilities').then(function (response) {
-                this.abilities = response.data.data;
+                this.availableAbilities = response.data.data;
             });
         },
         fetch: function fetch() {
             this.$http.get('permissions/roles').then(function (response) {
-                this.roles = response.data.data;
+                this.availableRoles = response.data.data;
             });
-            this.$http.get('users/' + this.user_id + '/permissions').then(function (response) {
-                this.permissions = response.data.data;
+            this.$http.get('users/' + this.user_id + '?include=roles,abilities').then(function (response) {
+                this.selectedRoles = response.data.data.roles.data;
+                this.selectedAbilities = response.data.data.abilities.data;
+            });
+        },
+        assign: function assign(role) {
+            this.$http.post('users/' + this.user_id + '/roles', {
+                name: role.name
+            }).then(function (response) {
+                this.selectedRoles.push(role);
+                this.$dispatch('showSuccess', 'User permissions updated.');
+            });
+        },
+        revoke: function revoke(role) {
+            this.$http.delete('users/' + this.user_id + '/roles', {
+                name: role.name
+            }).then(function (response) {
+                //this.selectedRoles.$remove(role);
+                var index = this.selectedRoles.indexOf(_.findWhere(this.selectedRoles, { id: role.id }));
+                if (index !== -1) {
+                    this.selectedRoles.splice(index, 1);
+                }
+                this.$dispatch('showSuccess', 'User permissions updated.');
+            });
+        },
+        allow: function allow(ability) {
+            this.$http.post('users/' + this.user_id + '/abilities', {
+                name: ability.name,
+                entity_type: ability.entity_type
+            }).then(function (response) {
+                this.selectedAbilities.push(ability);
+                this.$dispatch('showSuccess', 'User permissions updated.');
+            });
+        },
+        deny: function deny(ability) {
+            this.$http.delete('users/' + this.user_id + '/abilities', {
+                name: ability.name,
+                entity_type: ability.entity_type
+            }).then(function (response) {
+                //this.selectedAbilities.$remove(ability);
+                var index = this.selectedAbilities.indexOf(_.findWhere(this.selectedAbilities, { id: ability.id }));
+                if (index !== -1) {
+                    this.selectedAbilities.splice(index, 1);
+                }
+                this.$dispatch('showSuccess', 'User permissions updated.');
             });
         }
     },
@@ -87687,7 +87745,7 @@ exports.default = {
     }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h5 class=\"panel-header\">Permissions</h5>\n    </div>\n    <div class=\"panel-body\">\n        <h5>Role(s)</h5>\n\n        <div class=\"row\" v-for=\"role in roles\">\n            <div class=\"col-xs-12\">\n                {{ role.name | capitalize }}\n                <button class=\"btn btn-xs btn-default-hollow pull-right\">Assign</button>\n                <hr>\n                <!--<button class=\"btn btn-xs btn-default ptn-pull-right\">Revoke</button>-->\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12 text-center text-muted small\">\n                <a @click=\"customize()\"><i class=\"fa fa-cog\"></i> Customize User Abilities</a>\n            </div>\n        </div>\n\n        <div class=\"row\" v-if=\"showAbilities\">\n            <div class=\"col-xs-12\"><h5>Abilities</h5></div>\n            <hr class=\"divider inv\">\n            <div class=\"col-xs-12\" v-for=\"ability in abilities\">\n                <h5>{{ $key }}</h5>\n                <p v-for=\"item in ability\">\n                    {{ item.name | capitalize }}\n                    <button class=\"btn btn-xs btn-default-hollow pull-right\">Allow</button>\n                    <!--<button class=\"btn btn-xs btn-default ptn-pull-right\">Deny</button>-->\n                    </p><hr class=\"divider\">\n                <p></p>\n            </div>\n        </div>\n    </div>\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        <h5 class=\"panel-header\">Permissions</h5>\n    </div>\n    <div class=\"panel-body\">\n        <h5>Role(s)</h5>\n\n        <div class=\"row\" v-for=\"role in availableRoles\">\n            <div class=\"col-xs-12\">\n                {{ role.name | capitalize }}\n                <button class=\"btn btn-xs btn-default-hollow pull-right\" v-if=\"!hasRole(role)\" @click=\"assign(role)\">Assign</button>\n                <button class=\"btn btn-xs btn-default pull-right\" v-if=\"hasRole(role)\" @click=\"revoke(role)\">Revoke</button>\n                <hr class=\"divider\">\n            </div>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-xs-12 text-center text-muted small\">\n                <a @click=\"customize()\"><i class=\"fa fa-cog\"></i> Customize User Abilities</a>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-heading\" v-if=\"showAbilities\">\n        <h5 class=\"panel-header\">Abilities</h5>\n    </div>\n    <div class=\"panel-body\" v-if=\"showAbilities\">\n        <div class=\"row\">\n            <div class=\"col-xs-12\" v-for=\"ability in abilitiesList\">\n                <h5>{{ $key | capitalize }}</h5>\n                <p v-for=\"item in ability\">\n                    {{ item.name | capitalize }}\n                    <button class=\"btn btn-xs btn-default-hollow pull-right\" v-if=\"! hasAbility(item)\" @click=\"allow(item)\">Allow</button>\n                    <button class=\"btn btn-xs btn-default pull-right\" v-if=\"hasAbility(item)\" @click=\"deny(item)\">Deny&nbsp;</button>\n                    </p><hr class=\"divider\">\n                <p></p>\n            </div>\n        </div>\n    </div>\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

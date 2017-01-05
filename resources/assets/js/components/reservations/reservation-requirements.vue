@@ -19,7 +19,9 @@
                         <div class="row">
                             <div class="col-xs-8">
                                 <h5>
-                                    <a class="text-muted" @click="edit(requirement)")><i class="fa fa-cog"></i></a> {{ requirement.name }}
+                                    <a class="text-muted" @click="edit(requirement)" v-if="canEdit">
+                                        <i class="fa fa-cog"></i>
+                                    </a> {{ requirement.name }}
                                     <span class="label" :class="statusLabel(requirement.status)">
                                         <i class="fa" :class="statusIcon(requirement.status)"></i>
                                         <span class="hidden-xs"> {{ requirement.status | capitalize }}</span>
@@ -92,6 +94,15 @@
             'id': {
                 type: String,
                 required: true
+            }
+        },
+        computed: {
+            canEdit() {
+                if (_.findWhere(this.$root.user.abilities.data, {slug: "manage requirements-reservations"})) {
+                    return true;
+                }
+
+                return false;
             }
         },
         watch: {
@@ -179,6 +190,7 @@
                 }).then(function (response) {
                     this.$emit('set-status', response.data.data);
                     this.$dispatch('showSuccess', 'Requirement has been updated.');
+                    this.showEditModal = false;
                 });
             }
         },

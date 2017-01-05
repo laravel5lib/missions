@@ -40,7 +40,7 @@
 							<div class="input-group" :class="{ 'has-error': checkForError('start') }">
 								<span class="input-group-addon">Start</span>
 								<date-picker class="form-control" :time.sync="started_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="started_atdden|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
+								<input type="datetime" class="form-control hidden" v-model="started_at|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
 									   v-validate:start="{ required: true }" required>
 							</div>
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>

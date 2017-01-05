@@ -1,5 +1,27 @@
 <template>
     <div>
+        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+            <hr class="divider inv sm">
+            <form class="col-sm-12">
+                <div class="form-group">
+                    <select class="form-control" v-model="filters.type" style="width:100%;">
+                        <option value="">Any Type</option>
+                        <option value="avatar">Avatar</option>
+                        <option value="banner">Banner</option>
+                        <option value="file">File</option>
+                        <option value="photo">Photo</option>
+                        <option value="thumbnail">Thumbnail</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
+                           :debounce="250" placeholder="Tag, tag2, tag3...">
+                </div>
+
+                <hr class="divider inv sm">
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+            </form>
+        </aside>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
@@ -36,6 +58,10 @@
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
 						</ul>
                     </div>
+                    <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+                        Filters
+                        <span class="caret"></span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -108,10 +134,12 @@
                 direction: 1,
                 page: 1,
                 per_page: 10,
+                tagsString: '',
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',
 				// filter vars
+                showFilters: false,
 				filters: {
 					type:'',
 					tags: [],
@@ -140,6 +168,11 @@
             'direction': function (val, oldVal) {
 				this.searchUploads();
             },
+            'tagsString': function (val) {
+                let tags = val.split(/[\s,]+/);
+                this.filters.tags = tags[0] !== '' ? tags : '';
+                this.searchUploads();
+            },
             'page': function (val, oldVal) {
 				this.searchUploads();
             },
@@ -166,7 +199,7 @@
 				}
 			},
             searchUploads(){
-            	var params = {
+            	let params = {
 					include: '',
 					search: this.search,
 					per_page: this.per_page,

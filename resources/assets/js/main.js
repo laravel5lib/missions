@@ -80,6 +80,7 @@ import adminInterestsList from './components/interests/admin-interests-list.vue'
 import adminGroups from './components/groups/admin-groups-list.vue';
 import adminGroupCreate from './components/groups/admin-group-create.vue';
 import adminGroupEdit from './components/groups/admin-group-edit.vue';
+import adminGroupDelete from './components/groups/admin-group-delete.vue';
 import adminGroupManagers from './components/groups/admin-group-managers.vue';
 import adminReservationsList from './components/reservations/admin-reservations-list.vue';
 import adminReservationCreate from './components/reservations/admin-reservation-create.vue';
@@ -544,6 +545,7 @@ new Vue({
         adminGroups,
         adminGroupCreate,
         adminGroupEdit,
+        adminGroupDelete,
         adminGroupManagers,
         adminReservationsList,
         adminReservationCreate,

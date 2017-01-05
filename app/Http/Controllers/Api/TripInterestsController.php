@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\TripInterestWasCreated;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\TripInterestRequest;
 use App\Http\Transformers\v1\TripInterestTransformer;
+use App\Jobs\ExportTripInterests;
 use App\Models\v1\TripInterest;
 use Illuminate\Http\Request;
 
@@ -97,5 +99,20 @@ class TripInterestsController extends Controller
         $interest->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export trip interests.
+     *
+     * @param ExportRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportTripInterests($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 }

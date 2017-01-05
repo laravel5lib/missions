@@ -107,6 +107,10 @@
                         Filters
                         <i class="fa fa-filter"></i>
                     </button>
+                    <export-utility url="interests/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                 </form>
             </div>
         </div>
@@ -220,9 +224,10 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import exportUtility from "../export-utility.vue";
     export default{
         name: 'admin-interests-list',
-        components: {vSelect},
+        components: {vSelect, exportUtility},
         data(){
             return{
                 interests: [],
@@ -249,7 +254,19 @@
                     trip_type: '',
                     status: ''
                 },
-                showFilters: false
+                showFilters: false,
+                exportOptions: {
+                    name: 'Name',
+                    email: 'Email',
+                    phone: 'Phone',
+                    communication_preferences: 'Communication Preferences',
+                    status: 'Status',
+                    trip_type: 'Trip Type',
+                    campaign: 'Campaign',
+                    group: 'Group',
+                    created_at: 'Created On'
+                },
+                exportFilters: {}
             }
         },
         watch: {
@@ -330,6 +347,7 @@
                     per_page: this.per_page,
                     page: this.pagination.current_page
                 };
+                this.exportFilters = params;
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();

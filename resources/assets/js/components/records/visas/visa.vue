@@ -1,7 +1,7 @@
 <template>
     <div>
         <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.country_name}}</h6>
-        <a role="button" :href="'/dashboard/records/visas/' + visa.id">
+        <a role="button" :href="'/' + firstUrlSegment + '/records/visas/' + visa.id">
             <h5 style="text-transform:capitalize;" class="text-primary">
                 {{visa.given_names}} {{visa.surname}}
             </h5>

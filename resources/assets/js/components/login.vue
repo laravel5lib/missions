@@ -399,7 +399,7 @@
 			getUserData: function (redirectTo, ignoreRedirect) {
 				let that = this;
 				let deferred = $.Deferred();
-				that.$http.get('users/me')
+				that.$http.get('users/me?include=roles,abilities')
 					.then(function (response) {
 						console.log(response.data.data);
 						that.$root.$emit('userHasLoggedIn', response.data.data);

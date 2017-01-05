@@ -41,7 +41,7 @@ class ProjectsController extends Controller
      */
     public function show($id, $tab = 'details')
     {
-        $this->authorize('manage-projects');
+        $this->authorize('view', $this->project);
 
         $project = $this->project->findOrFail($id);
 
@@ -56,7 +56,7 @@ class ProjectsController extends Controller
      */
     public function create($cause_id)
     {
-        $this->authorize('manage-projects');
+        $this->authorize('create', $this->project);
 
         $cause = $this->cause->findOrFail($cause_id);
 

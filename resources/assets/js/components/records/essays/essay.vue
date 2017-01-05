@@ -1,7 +1,7 @@
 <template>
     <div>
         <h6 class="text-uppercase"><i class="fa fa-file-text"></i> {{essay.subject}}</h6>
-        <a role="button" :href="'/dashboard/records/essays/' + essay.id">
+        <a role="button" :href="'/' + firstUrlSegment + '/records/essays/' + essay.id">
             <h5 style="text-transform:capitalize;" class="text-primary">
                 {{essay.author_name}}
             </h5>

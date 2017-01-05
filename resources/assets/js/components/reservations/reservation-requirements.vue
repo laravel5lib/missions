@@ -19,7 +19,9 @@
                         <div class="row">
                             <div class="col-xs-8">
                                 <h5>
-                                    {{ requirement.name }}
+                                    <a class="text-muted" @click="edit(requirement)" v-if="canEdit">
+                                        <i class="fa fa-cog"></i>
+                                    </a> {{ requirement.name }}
                                     <span class="label" :class="statusLabel(requirement.status)">
                                         <i class="fa" :class="statusIcon(requirement.status)"></i>
                                         <span class="hidden-xs"> {{ requirement.status | capitalize }}</span>
@@ -49,6 +51,37 @@
               </pagination>
           </div>
         </div>
+
+        <modal :title="'Edit ' + editedRequirement.name" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
+            <div slot="modal-body" class="modal-body">
+                <validator name="EditRequirement">
+                    <form class="form" novalidate>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group" :class="{'has-error': checkForEditRequirementError('grace') }">
+                                    <label for="grace_period">Grace Period</label>
+                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditRequirementError('grace') }">
+                                        <input id="grace_period" type="number" class="form-control" number v-model="editedRequirement.grace_period"
+                                               v-validate:grace="{required: { rule: true }}">
+                                        <span class="input-group-addon">Days</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select v-model="editedRequirement.status" class="form-control">
+                                        <option value="incomplete">Incomplete</option>
+                                        <option value="reviewing">Reviewing</option>
+                                        <option value="attention">Attention</option>
+                                        <option value="complete">Complete</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </validator>
+            </div>
+        </modal>
+
     </section>
 </template>
 <script>
@@ -61,6 +94,15 @@
             'id': {
                 type: String,
                 required: true
+            }
+        },
+        computed: {
+            canEdit() {
+                if (_.findWhere(this.$root.user.abilities.data, {slug: "manage requirements-reservations"})) {
+                    return true;
+                }
+
+                return false;
             }
         },
         watch: {
@@ -83,10 +125,17 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',
-                orderByField: 'status'
+                orderByField: 'status',
+                editedRequirement: {},
+                showEditModal: false,
+                attemptSubmit: false
             }
         },
         methods: {
+            checkForEditRequirementError(field) {
+                // if user clicked submit button while the field is invalid trigger error styles
+                return this.$EditRequirement[field].invalid && this.attemptSubmit;
+            },
             statusLabel(status) {
                 switch(status) {
                     case 'complete':
@@ -128,6 +177,20 @@
                 this.$http.get('reservations/' + this.id + '/requirements', params).then(function (response) {
                     this.requirements = response.data.data
                     this.pagination = response.data.meta.pagination;
+                });
+            },
+            edit(requirement) {
+                this.editedRequirement = requirement;
+                this.showEditModal = true;
+            },
+            update() {
+                this.$http.put('reservations/' + this.id + '/requirements/' + this.editedRequirement.id, {
+                    status: this.editedRequirement.status,
+                    grace_period: this.editedRequirement.grace_period
+                }).then(function (response) {
+                    this.$emit('set-status', response.data.data);
+                    this.$dispatch('showSuccess', 'Requirement has been updated.');
+                    this.showEditModal = false;
                 });
             }
         },

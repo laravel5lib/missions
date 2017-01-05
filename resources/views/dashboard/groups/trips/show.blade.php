@@ -36,15 +36,6 @@
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Details</a></li>
-                    <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
-                    <li role="presentation"><a href="#interests" aria-controls="interests" role="tab" data-toggle="tab">Interests</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="details">
@@ -288,21 +279,8 @@
                         </div>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="reservations">
-                    <div class="col-xs-12">
-                        <dashboard-group-reservations trip-id="{{ $trip->id }}"></dashboard-group-reservations>
-                    </div>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="interests">
-                    <div class="col-xs-12">
-                        <dashboard-interests-list group-id="{{ $groupId }}" trip-id="{{ $trip->id }}"></dashboard-interests-list>
-                    </div>
-                </div>
             </div>
         </div>
-
-{{--        <admin-trip-duplicate trip-id="{{ $trip->id }}"></admin-trip-duplicate>--}}
-{{--        <admin-trip-delete trip-id="{{ $trip->id }}"></admin-trip-delete>--}}
 
     </div>
     <style>

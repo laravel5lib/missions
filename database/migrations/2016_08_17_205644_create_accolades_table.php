@@ -13,6 +13,7 @@ class CreateAccoladesTable extends Migration
     public function up()
     {
         Schema::create('accolades', function (Blueprint $table) {
+            $table->uuid('id')->primary();
             $table->string('display_name');
             $table->string('name');
             $table->json('items')->nullabe();
@@ -20,7 +21,6 @@ class CreateAccoladesTable extends Migration
             $table->uuid('recipient_type');
             $table->timestamps();
             $table->softDeletes();
-            $table->primary(['recipient_id', 'recipient_type', 'name']);
         });
     }
 

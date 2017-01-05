@@ -2,17 +2,12 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Accolade extends Model
 {
-    /**
-     * primaryKey
-     *
-     * @var integer
-     * @access protected
-     */
-    protected $primaryKey = 'recipient_id';
+    use UuidForKey;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -26,7 +21,7 @@ class Accolade extends Model
      *
      * @var array
      */
-    protected $fillable = ['display_name', 'name', 'items'];
+    protected $fillable = ['display_name', 'name', 'items', 'recipient_id', 'recipient_type'];
 
     /**
      * The attributes that should be casted to native types.

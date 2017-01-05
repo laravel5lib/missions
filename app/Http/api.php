@@ -39,7 +39,7 @@ $api->version('v1', [
     $api->delete('users/{id}/roles', 'UserRolesController@destroy');
     $api->post('users/{id}/abilities', 'UserAbilitiesController@store');
     $api->delete('users/{id}/abilities', 'UserAbilitiesController@destroy');
-    $api->get('{recipient}/{id}/accolades', 'AccoladesController@index');
+    $api->get('{recipient}/{id}/accolades/{name}', 'AccoladesController@index');
     $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');
     $api->get('groups/{id}/notes', 'GroupsController@notes');
@@ -50,6 +50,7 @@ $api->version('v1', [
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
+    $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');

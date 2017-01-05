@@ -449,18 +449,16 @@ new Vue({
         showSuccess: false,
         showError: false,
         message: '',
-        impersonatedUser: null
     },
     computed: {
+        impersonatedUser() {
+            return JSON.parse(localStorage.getItem('impersonatedUser'));
+        },
         impersonatedToken() {
             return this.$cookie.get('impersonate');
         },
         user() {
-            if (this.impersonatedToken !== null) {
-                return this.getImpersonatedUser();
-            } else {
-                return JSON.parse(this.$cookie.get('user'));
-            }
+            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(localStorage.getItem('user'));
         },
     },
     components: {
@@ -600,6 +598,19 @@ new Vue({
             this.message = msg;
             this.showError = true;
         });
+
+    },
+    created () {
+        // if api_token cookie doesn't exist user data will be cleared if they do exist
+        if (this.$cookie.get('api_token') === null) {
+            if (localStorage.hasOwnProperty('user'))
+                localStorage.removeItem('user');
+            if (localStorage.hasOwnProperty('impersonatedUser'))
+                localStorage.removeItem('impersonatedUser');
+        } else {
+            // because user is computed, this must be called to initiate impersonation or normal user before anything else
+            this.user;
+        }
     },
     methods: {
         setUser: function (user) {
@@ -609,10 +620,13 @@ new Vue({
         },
         getImpersonatedUser: function () {
             if (this.impersonatedUser !== null) {
+                console.log('impersonating: ', this.impersonatedUser.name);
                 return this.impersonatedUser
             } else {
                 return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities')
                     .then(function (response) {
+                        console.log('impersonating: ', response.data.data.name);
+                        localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
                         return this.impersonatedUser = response.data.data;
                     }.bind(this))
             }
@@ -628,7 +642,7 @@ new Vue({
             this.showError = true;
         },
         'userHasLoggedIn': function (user) {
-            this.$cookie.set('user', JSON.stringify(user), 1);
+            localStorage.setItem('user', JSON.stringify(user));
         }
     }
 });

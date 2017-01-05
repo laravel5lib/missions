@@ -16243,6 +16243,7 @@ img.onenation-logo {
 
 .donate-bg {
   color: #fff;
+  padding: 180px 0px;
   background: #f6323e url(../../images/donate/donate-bg.jpg) no-repeat center fixed;
   background-size: cover; }
   @media screen and (max-width: 991px) {
@@ -16250,10 +16251,12 @@ img.onenation-logo {
       background: #f6323e url(../../images/donate/donate-bg-medium.jpg) no-repeat center fixed; } }
   @media screen and (max-width: 767px) {
     .donate-bg {
-      background: #f6323e; } }
+      background: #f6323e;
+      padding: 80px 0 100px; } }
 
 .login-bg {
   color: #fff;
+  padding: 180px 0px;
   background: #f6323e url(../../images/login/login-bg.jpg) no-repeat center fixed;
   background-size: cover; }
   @media screen and (max-width: 991px) {
@@ -16261,7 +16264,8 @@ img.onenation-logo {
       background: #f6323e url(../../images/login/login-bg-medium.jpg) no-repeat center fixed; } }
   @media screen and (max-width: 767px) {
     .login-bg {
-      background: #f6323e url(../../images/login/login-bg-small.jpg) no-repeat center scroll; } }
+      background: #f6323e url(../../images/login/login-bg-small.jpg) no-repeat center scroll;
+      padding: 80px 0 350px; } }
 
 .img-xs {
   max-height: 40px;

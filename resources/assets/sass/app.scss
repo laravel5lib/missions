@@ -751,6 +751,7 @@ img.onenation-logo {
 
 .donate-bg {
   color: #fff;
+  padding:180px 0px;
   background: $brand-primary url(../../images/donate/donate-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -761,11 +762,13 @@ img.onenation-logo {
   }
   @media screen and (max-width: 767px) {
     background: $brand-primary;
+    padding: 80px 0 100px;
   }
 }
 
 .login-bg {
   color: #fff;
+  padding:180px 0px;
   background: $brand-primary url(../../images/login/login-bg.jpg) no-repeat center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -776,6 +779,7 @@ img.onenation-logo {
   }
   @media screen and (max-width: 767px) {
     background: $brand-primary url(../../images/login/login-bg-small.jpg) no-repeat center scroll;
+    padding: 80px 0 350px;
   }
 }
 

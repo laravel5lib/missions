@@ -94,53 +94,42 @@
 			</template>
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="media">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object"
-									 :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100"
-									 :alt="selectedAvatar ? selectedAvatar.name : ''">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-									data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-								Set Avatar
-							</button>
-						</div>
-					</div>
+					<h5>
+						<img class="av-left img-circle img-md"
+							:src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100"
+							:alt="selectedAvatar ? selectedAvatar.name : ''">
+						<small>{{selectedAvatar ? selectedAvatar.name : ''}}</small>
+						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+								data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+							<i class="fa fa-camera icon-left"></i> Set Avatar
+						</button>
+					</h5>
+				</div><!-- end col -->
+				<div class="col-sm-6">
+					<h5>
+						<img class="av-left img-rounded img-md"
+								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100"
+								 :alt="selectedBanner ? selectedBanner.name : ''">
+						<small>{{selectedBanner ? selectedBanner.name : ''}}</small>
+						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+								data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+							<i class="fa fa-camera icon-left"></i> Set Banner
+						</button>
+					</h5>
+				</div><!-- end col -->
+				<div class="col-xs-12">
 					<div class="collapse" id="avatarCollapse">
 						<div class="well">
 							<upload-create-update type="avatar" :lock-type="true" :is-child="true"
-												  :tags="['campaign']"></upload-create-update>
+													  :tags="['campaign']"></upload-create-update>
 						</div>
-					</div>
-				</div><!-- end col -->
-				<div class="col-sm-6">
-					<div class="media">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object"
-									 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100"
-									 :alt="selectedBanner ? selectedBanner.name : ''">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-									data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
-								Set Banner
-							</button>
-						</div>
-					</div>
-
+					</div><!-- end collapse -->
 					<div class="collapse" id="bannerCollapse">
 						<div class="well">
 							<upload-create-update type="banner" :lock-type="true" :is-child="true"
 												  :tags="['campaign']"></upload-create-update>
 						</div>
-					</div>
+					</div><!-- end collapse -->
 				</div><!-- end col -->
 			</div><!-- end row -->
 			<hr class="divider inv lg">

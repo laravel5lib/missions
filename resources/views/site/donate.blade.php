@@ -3,8 +3,6 @@
 @section('content')
 <div class="donate-bg">
     <div class="container">
-        <hr class="divider inv xlg hidden-xs">
-        <hr class="divider inv lg">
         <div class="row">
             <div class="col-sm-6 col-sm-push-6 col-md-6 home-half-section">
                 <h1 class="text-hero">Become A Difference Maker.</h1>
@@ -21,7 +19,6 @@
                 </div>
             </div><!-- end col -->
         </div>
-        <hr class="divider inv xlg">
     </div>
 </div>
 @endsection

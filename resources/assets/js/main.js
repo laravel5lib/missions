@@ -601,15 +601,16 @@ new Vue({
 
     },
     created () {
-        // if
+        // if api_token cookie doesn't exist user data will be cleared if they do exist
         if (this.$cookie.get('api_token') === null) {
             if (localStorage.hasOwnProperty('user'))
                 localStorage.removeItem('user');
             if (localStorage.hasOwnProperty('impersonatedUser'))
                 localStorage.removeItem('impersonatedUser');
+        } else {
+            // because user is computed, this must be called to initiate impersonation or normal user before anything else
+            this.user;
         }
-        // because user is computed, this must be called to initiate impersonation or normal user before anything else
-        console.log(this.user);
     },
     methods: {
         setUser: function (user) {

@@ -449,18 +449,16 @@ new Vue({
         showSuccess: false,
         showError: false,
         message: '',
-        impersonatedUser: null
     },
     computed: {
+        impersonatedUser() {
+            return JSON.parse(this.$cookie.get('impersonatedUser'));
+        },
         impersonatedToken() {
             return this.$cookie.get('impersonate');
         },
         user() {
-            if (this.impersonatedToken !== null) {
-                return this.getImpersonatedUser();
-            } else {
-                return JSON.parse(this.$cookie.get('user'));
-            }
+            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(this.$cookie.get('user'));
         },
     },
     components: {
@@ -600,6 +598,11 @@ new Vue({
             this.message = msg;
             this.showError = true;
         });
+
+    },
+    created () {
+        // because user is computed, this must be called to initiate impersonation or normal user before anything else
+        this.user;
     },
     methods: {
         setUser: function (user) {
@@ -609,10 +612,13 @@ new Vue({
         },
         getImpersonatedUser: function () {
             if (this.impersonatedUser !== null) {
+                console.log('impersonating: ', this.impersonatedUser.name);
                 return this.impersonatedUser
             } else {
                 return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities')
                     .then(function (response) {
+                        console.log('impersonating: ', response.data.data.name);
+                        this.$cookie.set('impersonatedUser', JSON.stringify(response.data.data), 1);
                         return this.impersonatedUser = response.data.data;
                     }.bind(this))
             }

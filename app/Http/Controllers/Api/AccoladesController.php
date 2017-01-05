@@ -35,11 +35,12 @@ class AccoladesController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function index($recipient, $id)
+    public function index($recipient, $id, $name)
     {
         $accolades = $this->accolade
                           ->where('recipient_type', $recipient)
                           ->where('recipient_id', $id)
+                          ->where('name', $name)
                           ->get();
 
         return $this->response->collection($accolades, new AccoladeTransformer);
@@ -55,11 +56,24 @@ class AccoladesController extends Controller
      */
     public function store($recipient, $id, AccoladeRequest $request)
     {
-        $accolade = $this->accolade->updateOrCreate([
+//        $accolade = $this->accolade->updateOrCreate([
+//            'recipient_id' => $id,
+//            'recipient_type' => $recipient,
+//            'name' => $request->get('name')
+//        ], $request->all());
+
+        $accolade = $this->accolade->firstOrNew([
+            'name' => $request->get('name'),
             'recipient_id' => $id,
-            'recipient_type' => $recipient,
-            'name' => $request->get('name')
-        ], $request->all());
+            'recipient_type' => $recipient
+        ]);
+
+        $accolade->recipient_id = $id;
+        $accolade->recipient_type = $recipient;
+        $accolade->display_name = $request->get('display_name');
+        $accolade->name = $request->get('name');
+        $accolade->items = $request->get('items');
+        $accolade->save();
 
         return $this->response->item($accolade, new AccoladeTransformer);
     }

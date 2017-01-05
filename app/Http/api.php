@@ -39,7 +39,7 @@ $api->version('v1', [
     $api->delete('users/{id}/roles', 'UserRolesController@destroy');
     $api->post('users/{id}/abilities', 'UserAbilitiesController@store');
     $api->delete('users/{id}/abilities', 'UserAbilitiesController@destroy');
-    $api->get('{recipient}/{id}/accolades', 'AccoladesController@index');
+    $api->get('{recipient}/{id}/accolades/{name}', 'AccoladesController@index');
     $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');
     $api->get('groups/{id}/notes', 'GroupsController@notes');

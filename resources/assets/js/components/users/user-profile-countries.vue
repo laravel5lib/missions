@@ -78,7 +78,7 @@
                 manageModal: false,
                 deleteModal: false,
                 showSuccess: false,
-                resource: this.$resource('users{/id}/accolades')
+                resource: this.$resource('users{/id}/accolades{/name}')
             }
         },
         methods:{
@@ -119,7 +119,7 @@
 				});
             },
             getAccolades(){
-                this.resource.get({id: this.id}).then(function (response) {
+                this.resource.get({id: this.id, name: 'countries_visited'}).then(function (response) {
                     this.accolades = response.data.data[0];
 					if (this.isUser()) {
    						this.filterAccolades();

@@ -78,7 +78,7 @@
                 selectedTripRemove: { name: null},
                 manageModal: false,
                 deleteModal: false,
-                resource: this.$resource('users{/id}/accolades')
+                resource: this.$resource('users{/id}/accolades{/name}')
             }
         },
         methods:{
@@ -98,7 +98,7 @@
 				this.addModal = true;
             },
             updateAccolades(){
-				let allCodes = _.union(this.accolades, this.selectedTrips);
+				let allCodes = _.union(this.accolades.items, this.selectedTrips);
 
 				// save to API
 				this.resource.save({id: this.id}, {
@@ -113,8 +113,8 @@
 				});
             },
             getAccolades(){
-                this.resource.get({id: this.id}).then(function (response) {
-                    this.accolades = response.data.data[1];
+                this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
+                    this.accolades = response.data.data[0];
 					if (this.isUser()) {
    						this.filterAccolades();
 					}

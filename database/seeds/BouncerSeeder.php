@@ -113,5 +113,10 @@ class BouncerSeeder extends Seeder
         Bouncer::allow('admin')->to('modify', \App\Models\v1\Todo::class);
         // notes
         Bouncer::allow('admin')->to('modify', \App\Models\v1\Note::class);
+        // uploads
+        Bouncer::allow('admin')->to('view', \App\Models\v1\Upload::class);
+        Bouncer::allow('admin')->to('create', \App\Models\v1\Upload::class);
+        Bouncer::allow('admin')->to('edit', \App\Models\v1\Upload::class);
+        Bouncer::allow('admin')->to('delete', \App\Models\v1\Upload::class);
     }
 }

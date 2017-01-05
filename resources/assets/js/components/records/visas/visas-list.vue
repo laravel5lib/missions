@@ -25,13 +25,13 @@
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="visa in visas" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div style="min-height:220px;" class="panel-body">
-                    <a role="button" :href="'/'+ url + '/records/visas/' + visa.id">
+                    <a role="button" :href="'/'+ firstUrlSegment + '/records/visas/' + visa.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{visa.given_names}} {{visa.surname}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/'+ url +'/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -134,11 +134,6 @@
             'includeManaging': function (val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchVisas();
-            }
-        },
-        computed: {
-            url: function() {
-                return document.location.pathname.split("/").slice(1,2).toString();
             }
         },
         methods:{

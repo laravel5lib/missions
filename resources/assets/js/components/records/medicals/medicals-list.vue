@@ -22,13 +22,13 @@
 		<div class="col-sm-6 col-md-4" v-for="medical_release in medical_releases">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<a role="button" :href="'/'+ url +'/records/medical-releases/' + medical_release.id">
+					<a role="button" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id">
 						<h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
 							{{medical_release.name}}
 						</h5>
 					</a>
 					<div style="position:absolute;right:25px;top:12px;">
-						<a style="margin-right:3px;" :href="'/'+ url +'/records/medical-releases/' + medical_release.id + '/edit'"><i
+						<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id + '/edit'"><i
 								class="fa fa-pencil"></i></a>
 						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
 								class="fa fa-times"></i></a>
@@ -117,11 +117,6 @@
 				this.searchMedicals();
 			}
 
-		},
-		computed: {
-			url: function() {
-				return document.location.pathname.split("/").slice(1,2).toString();
-			}
 		},
 		methods: {
 			setMedical(medical) {

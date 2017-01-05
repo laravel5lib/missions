@@ -1,7 +1,7 @@
 <template>
     <div>
         <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
-        <a role="button" :href="'/dashboard/records/passports/' + passport.id">
+        <a role="button" :href="'/' + firstUrlSegment + '/records/passports/' + passport.id">
             <h5 style="text-transform:capitalize;" class="text-primary">
                 {{passport.given_names}} {{passport.surname}}
             </h5>

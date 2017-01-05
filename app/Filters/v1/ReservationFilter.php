@@ -42,10 +42,12 @@ class ReservationFilter extends Filter
      * By users.
      *
      * @param $ids
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function user($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('user_id', $ids);
     }
 
@@ -53,10 +55,12 @@ class ReservationFilter extends Filter
      * By shirt sizes.
      *
      * @param $shirtSizes
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function shirtSize($shirtSizes)
     {
+        if($shirtSizes == []) return $this;
+
         return $this->whereIn('shirt_size', $shirtSizes);
     }
 
@@ -64,10 +68,12 @@ class ReservationFilter extends Filter
      * By gender.
      *
      * @param $gender
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function gender($gender)
     {
+        if( !$gender) return $this;
+
         return $this->where('gender', $gender);
     }
 
@@ -75,10 +81,12 @@ class ReservationFilter extends Filter
      * My relationship status.
      *
      * @param $status
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function status($status)
     {
+        if( !$status) return $this;
+
         return $this->where('status', $status);
     }
 
@@ -86,10 +94,12 @@ class ReservationFilter extends Filter
      * By reps.
      *
      * @param $ids
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function rep($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('rep_id', $ids);
     }
 
@@ -97,10 +107,12 @@ class ReservationFilter extends Filter
      * By trips.
      *
      * @param $ids
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function trip($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('trip_id', $ids);
     }
 
@@ -108,10 +120,12 @@ class ReservationFilter extends Filter
      * Between ages.
      *
      * @param $ages
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function age($ages)
     {
+        if($ages == []) return $this;
+
         // $start needs to be the greater number to produce a year earlier than end
         $start = Carbon::now()->subYears($ages[1]);
         $end = Carbon::now()->subYears($ages[0]);
@@ -122,7 +136,7 @@ class ReservationFilter extends Filter
     /**
      * Has a birthday this month.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function hasBirthday()
     {
@@ -136,10 +150,12 @@ class ReservationFilter extends Filter
      * Has travel companions.
      *
      * @param $hasCompanions
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function hasCompanions($hasCompanions)
     {
+        if(!$hasCompanions) return $this;
+
         return $hasCompanions == 'yes' ?
             $this->has('companions') :
             $this->has('companions', '<', 1);
@@ -148,7 +164,7 @@ class ReservationFilter extends Filter
     /**
      * Is currently active.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function current()
     {
@@ -160,7 +176,7 @@ class ReservationFilter extends Filter
     /**
      * Is archived.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return mixed
      */
     public function archived()
     {

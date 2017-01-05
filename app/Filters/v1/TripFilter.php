@@ -46,10 +46,12 @@ class TripFilter extends Filter
      * Find by Groups.
      *
      * @param $ids
-     * @return mixed
+     * @return $this
      */
     public function groups($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('group_id', $ids);
     }
 
@@ -57,10 +59,12 @@ class TripFilter extends Filter
      * Find by Campaign.
      *
      * @param $id
-     * @return mixed
+     * @return $this
      */
     public function campaign($id)
     {
+        if(!$id) return $this;
+
         return $this->where('campaign_id', $id);
     }
 
@@ -68,10 +72,12 @@ class TripFilter extends Filter
      * Find by reps.
      *
      * @param $ids
-     * @return mixed
+     * @return $this
      */
     public function reps($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('rep_id', $ids);
     }
 
@@ -79,10 +85,12 @@ class TripFilter extends Filter
      * Find by countries.
      *
      * @param $codes
-     * @return mixed
+     * @return $this
      */
     public function countries($codes)
     {
+        if($codes == []) return $this;
+
         return $this->whereIn('country_code', $codes);
     }
 
@@ -90,10 +98,12 @@ class TripFilter extends Filter
      * Find by type.
      *
      * @param $type
-     * @return mixed
+     * @return $this
      */
     public function type($type)
     {
+        if(! $type) return $this;
+
         return $this->where('type', $type);
     }
 
@@ -101,10 +111,12 @@ class TripFilter extends Filter
      * Find by status.
      *
      * @param $status
-     * @return mixed
+     * @return $this
      */
     public function status($status)
     {
+        if(! $status) return $this;
+
         return $this->{$status}();
     }
 
@@ -112,10 +124,12 @@ class TripFilter extends Filter
      * Find by difficulties.
      *
      * @param $difficulties
-     * @return mixed
+     * @return $this
      */
     public function difficulties($difficulties)
     {
+        if($difficulties == []) return $this;
+
         return $this->whereIn('difficulty', $difficulties);
     }
 
@@ -167,6 +181,8 @@ class TripFilter extends Filter
      */
     public function hasFacilitators($hasFacilitators)
     {
+        if ($hasFacilitators == []) return $this;
+
         return $hasFacilitators == 'yes' ?
             $this->has('facilitators') :
             $this->has('facilitators', '<', 1);
@@ -180,6 +196,8 @@ class TripFilter extends Filter
      */
     public function hasNotes($hasNotes)
     {
+        if ($hasNotes == []) return $this;
+
         return $hasNotes == 'yes' ?
             $this->has('notes') :
             $this->has('notes', '<', 1);
@@ -193,6 +211,8 @@ class TripFilter extends Filter
      */
     public function published($published)
     {
+        if (! $published) return $this;
+
         return $published == 'yes' ?
             $this->where('published_at', '<=', Carbon::now()) :
             $this->where('published_at', '>=', Carbon::now());
@@ -202,10 +222,13 @@ class TripFilter extends Filter
      * Find by requirements.
      *
      * @param $requirements
+     * @return $this
      */
     public function requirements($requirements)
     {
-        $this->whereHas('requirements', function ($r) use ($requirements)
+        if($requirements == []) return $this;
+
+        return $this->whereHas('requirements', function ($r) use ($requirements)
         {
             return $r->whereIn('name', $requirements);
         });
@@ -215,10 +238,13 @@ class TripFilter extends Filter
      * Find by cost types.
      *
      * @param $costs
+     * @return $this
      */
     public function costs($costs)
     {
-        $this->whereHas('costs', function ($c) use ($costs)
+        if ($costs == []) return $this;
+
+        return $this->whereHas('costs', function ($c) use ($costs)
         {
             return $c->whereIn('name', $costs);
         });
@@ -234,7 +260,7 @@ class TripFilter extends Filter
     {
         if(count($amounts) < 2) return $this;
 
-        $this->whereHas('costs', function ($c) use ($amounts)
+        return $this->whereHas('costs', function ($c) use ($amounts)
         {
             return $c->whereBetween('amount', $amounts);
         });

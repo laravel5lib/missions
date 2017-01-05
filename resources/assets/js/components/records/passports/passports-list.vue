@@ -50,13 +50,13 @@
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="passport in passports" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a role="button" :href="'/'+ url +'/records/passports/' + passport.id">
+                    <a role="button" :href="'/'+ firstUrlSegment +'/records/passports/' + passport.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{passport.given_names}} {{passport.surname}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/'+ url +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -158,11 +158,6 @@
                 this.searchPassports();
             }
 
-        },
-        computed: {
-            url: function() {
-                return document.location.pathname.split("/").slice(1,2).toString();
-            }
         },
         methods:{
             setPassport(passport) {

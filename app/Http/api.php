@@ -50,6 +50,7 @@ $api->version('v1', [
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
     $api->resource('interests', 'TripInterestsController');
+    $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');

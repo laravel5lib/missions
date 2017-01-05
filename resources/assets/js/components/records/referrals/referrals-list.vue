@@ -22,13 +22,13 @@
         <div class="col-md-4 col-sm-6" v-for="referral in referrals">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a role="button" :href="'/'+ url +'/records/referrals/' + referral.id">
+                    <a role="button" :href="'/'+ firstUrlSegment +'/records/referrals/' + referral.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{referral.name}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:20px;top:5px;">
-                        <a style="margin-right:3px;" :href="'/'+ url +'/records/referrals/' + referral.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/referrals/' + referral.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedReferral = referral, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -112,11 +112,6 @@
             'includeManaging': function (val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchReferrals();
-            }
-        },
-        computed: {
-            url: function() {
-                return document.location.pathname.split("/").slice(1,2).toString();
             }
         },
         methods:{

@@ -424,6 +424,11 @@ Vue.mixin({
             this.$refs.spinner.hide();
         },*/
     },
+    computed: {
+        firstUrlSegment: function () {
+            return document.location.pathname.split("/").slice(1,2).toString();
+        }
+    },
     ready() {
         function isTouchDevice(){
             return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);

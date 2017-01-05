@@ -23,7 +23,7 @@
         <div class="col-md-4 col-sm-6" v-for="essay in essays">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <a role="button" :href="'/'+ url +'/records/essays/' + essay.id">
+                    <a role="button" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
                             {{essay.author_name}}
                         </h5>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div style="position:absolute;right:20px;top:5px;">
-                        <a style="margin-right:3px;" :href="'/'+ url +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>
                         <a @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
@@ -107,11 +107,6 @@
             'includeManaging': function (val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchEssays();
-            }
-        },
-        computed: {
-            url: function() {
-                return document.location.pathname.split("/").slice(1,2).toString();
             }
         },
         methods:{

@@ -1,7 +1,7 @@
 <template>
     <div>
         <h6 class="text-uppercase"><i class="fa fa-heartbeat"></i> {{medical.name}}</h6>
-        <a role="button" :href="'/dashboard/records/medical-releases/' + medical.id">
+        <a role="button" :href="'/' + firstUrlSegment + '/records/medical-releases/' + medical.id">
             <h5 style="text-transform:capitalize;" class="text-primary">
                 {{medical.name}}
             </h5>

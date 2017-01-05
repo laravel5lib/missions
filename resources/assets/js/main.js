@@ -452,13 +452,13 @@ new Vue({
     },
     computed: {
         impersonatedUser() {
-            return JSON.parse(this.$cookie.get('impersonatedUser'));
+            return JSON.parse(localStorage.getItem('impersonatedUser'));
         },
         impersonatedToken() {
             return this.$cookie.get('impersonate');
         },
         user() {
-            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(this.$cookie.get('user'));
+            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(localStorage.getItem('user'));
         },
     },
     components: {
@@ -601,8 +601,15 @@ new Vue({
 
     },
     created () {
+        // if
+        if (this.$cookie.get('api_token') === null) {
+            if (localStorage.hasOwnProperty('user'))
+                localStorage.removeItem('user');
+            if (localStorage.hasOwnProperty('impersonatedUser'))
+                localStorage.removeItem('impersonatedUser');
+        }
         // because user is computed, this must be called to initiate impersonation or normal user before anything else
-        this.user;
+        console.log(this.user);
     },
     methods: {
         setUser: function (user) {
@@ -618,7 +625,7 @@ new Vue({
                 return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities')
                     .then(function (response) {
                         console.log('impersonating: ', response.data.data.name);
-                        this.$cookie.set('impersonatedUser', JSON.stringify(response.data.data), 1);
+                        localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
                         return this.impersonatedUser = response.data.data;
                     }.bind(this))
             }
@@ -634,7 +641,7 @@ new Vue({
             this.showError = true;
         },
         'userHasLoggedIn': function (user) {
-            this.$cookie.set('user', JSON.stringify(user), 1);
+            localStorage.setItem('user', JSON.stringify(user));
         }
     }
 });

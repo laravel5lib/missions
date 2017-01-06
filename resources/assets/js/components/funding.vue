@@ -3,7 +3,14 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
-                    <h5 v-if="fund">{{ fund.name }}</h5>
+                    <h5 v-if="fund">
+                        <a :href="'/admin/funds/' + fund.id" v-if="firstUrlSegment == 'admin'">
+                            {{ fund.name }}
+                        </a>
+                        <span v-else>
+                            {{ fund.name }}
+                        </span>
+                    </h5>
                 </div>
                 <div class="col-xs-12 col-sm-4 visible-xs">
                     <div class="btn-group btn-group-sm btn-group-justified" role="group" aria-label="...">

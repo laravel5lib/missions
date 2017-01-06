@@ -12,7 +12,7 @@
       <div class="content-section">
         <div class="row">
           <div class="col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 text-center">
-            <h1 class="text-primary">Missions.Me empowers people<br>to change the world</h1>
+            <h1 class="text-primary">Missions.Me empowers people<br>to change the world.</h1>
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->
@@ -39,7 +39,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/team-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Teams</h6>
+                    <h6 class="text-uppercase text-center">Group Mission Trips</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -47,7 +47,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/medical-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Medical</h6>
+                    <h6 class="text-uppercase text-center">Free Medical Clinics</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -57,7 +57,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/orphans-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Rescue Orphans</h6>
+                    <h6 class="text-uppercase text-center">Rescue Orphanages</h6>
                   </div><!-- end panel-body -->
                 </div><!-- end panel -->
               </div><!-- end col -->

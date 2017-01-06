@@ -64,3 +64,23 @@ Route::get('records/passports/{id}', function ($id) use ($dispatcher) {
 Route::get('records/passports/{id}/edit', function ($id) {
     return view('admin.records.passports.edit', compact('id'));
 });
+
+Route::get('records/visas/{id}', function ($id) use ($dispatcher) {
+    $visa = $dispatcher->get('visas/' . $id);
+    return view('admin.records.visas.show', compact('visa'));
+});
+
+Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
+    $essay = $dispatcher->get('essays/' . $id);
+    return view('admin.records.essays.show', compact('essay'));
+});
+
+Route::get('records/medical-releases/{id}', function ($id) use ($dispatcher) {
+    $release = $dispatcher->get('medical/releases/' . $id);
+    return view('admin.records.medical-releases.show', compact('release'));
+});
+
+Route::get('records/referrals/{id}', function ($id) use ($dispatcher) {
+    $referral = $dispatcher->get('referrals/' . $id);
+    return view('admin.records.referrals.show', compact('referral'));
+});

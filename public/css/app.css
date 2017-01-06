@@ -10960,6 +10960,7 @@ button.close {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
+  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
@@ -13425,7 +13426,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:focus {
-    background-color: #f6323e;
+    background-color: #090909;
     color: #fff; }
     .navmenu-inverse .navmenu-nav > .open > a .caret, .navmenu-inverse .navmenu-nav > .open > a:hover .caret, .navmenu-inverse .navmenu-nav > .open > a:focus .caret,
     .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a .caret,
@@ -13439,7 +13440,7 @@ button.close {
     border-bottom-color: #e6e6e6; }
   .navmenu-inverse .navmenu-nav.dropdown-menu,
   .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu {
-    background-color: #f6323e; }
+    background-color: #090909; }
     .navmenu-inverse .navmenu-nav.dropdown-menu > .divider,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .divider {
       background-color: #222; }
@@ -13447,7 +13448,7 @@ button.close {
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:hover,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:focus {
-      background-color: #f51220; }
+      background-color: black; }
   .navmenu-inverse .navmenu-nav > li > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > li > a {
     color: #e6e6e6; }
@@ -13461,7 +13462,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
     color: #fff;
-    background-color: #f6323e; }
+    background-color: #090909; }
   .navmenu-inverse .navmenu-nav > .disabled > a, .navmenu-inverse .navmenu-nav > .disabled > a:hover, .navmenu-inverse .navmenu-nav > .disabled > a:focus,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a:hover,
@@ -16243,6 +16244,7 @@ img.onenation-logo {
 
 .donate-bg {
   color: #fff;
+  padding: 180px 0px;
   background: #f6323e url(../../images/donate/donate-bg.jpg) no-repeat center fixed;
   background-size: cover; }
   @media screen and (max-width: 991px) {
@@ -16250,10 +16252,12 @@ img.onenation-logo {
       background: #f6323e url(../../images/donate/donate-bg-medium.jpg) no-repeat center fixed; } }
   @media screen and (max-width: 767px) {
     .donate-bg {
-      background: #f6323e; } }
+      background: #f6323e;
+      padding: 80px 0 100px; } }
 
 .login-bg {
   color: #fff;
+  padding: 180px 0px;
   background: #f6323e url(../../images/login/login-bg.jpg) no-repeat center fixed;
   background-size: cover; }
   @media screen and (max-width: 991px) {
@@ -16261,7 +16265,8 @@ img.onenation-logo {
       background: #f6323e url(../../images/login/login-bg-medium.jpg) no-repeat center fixed; } }
   @media screen and (max-width: 767px) {
     .login-bg {
-      background: #f6323e url(../../images/login/login-bg-small.jpg) no-repeat center scroll; } }
+      background: #f6323e url(../../images/login/login-bg-small.jpg) no-repeat center scroll;
+      padding: 80px 0 350px; } }
 
 .img-xs {
   max-height: 40px;

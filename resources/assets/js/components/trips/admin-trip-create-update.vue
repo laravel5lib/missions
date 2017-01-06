@@ -4,14 +4,14 @@
             <validator name="TripCreateUpdate" @valid="onValid">
                 <form id="TripDetailsForm" class="form-horizontal" novalidate>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Campaign</label>
-                        <div class="col-sm-10">
-                            <p>{{campaign.name|capitalize}}</p>
+                        <div class="col-sm-12 text-center">
+                        	<label class="control-label">Campaign</label>
+                            <h3>{{campaign.name|capitalize}}</h3>
                         </div>
                     </div>
                     <div class="form-group" :class="{ 'has-error': checkForError('group') }">
-                        <label class="col-sm-2 control-label">Group</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">	
+                        	<label class="control-label">Group</label>
                             <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
                                       label="name"></v-select>
                             <select hidden v-model="group_id" v-validate:group="{ required: true}">
@@ -19,68 +19,67 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="form-group" :class="{ 'has-error': checkForError('type') }">
-                        <label for="type" class="col-sm-2 control-label">Type</label>
-                        <div class="col-sm-10">
-                            <select id="type" class="form-control input-sm" v-model="type"
-                                    v-validate:type="{ required: true }" required>
-                                <option value="">-- select --</option>
-                                <option value="ministry">Ministry</option>
-                                <option value="family">Family</option>
-                                <option value="international">International</option>
-                                <option value="media">Media</option>
-                                <option value="medical">Medical</option>
-                                <option value="leader">Leader</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
-                        <label class="col-sm-2 control-label">Perfect For</label>
-                        <div class="col-sm-10">
-                            <v-select multiple class="form-control" id="group" :value.sync="prospectsObj"
-                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-                            <select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
-                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group" :class="{ 'has-error': checkForError('difficulty') }">
-                        <label for="difficulty" class="col-sm-2 control-label">Difficulty</label>
-                        <div class="col-sm-10">
-                            <select id="difficulty" class="form-control input-sm" v-model="difficulty"
-                                    v-validate:difficulty="{ required: true }" required>
-                                <option value="">-- select --</option>
-                                <option value="level_1">Level 1</option>
-                                <option value="level_2">Level 2</option>
-                                <option value="level_3">Level 3</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group" :class="{ 'has-error': checkForError('companions') }">
-                        <label for="companion_limit" class="col-sm-2 control-label">Companion Limit</label>
-                        <div class="col-sm-10">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
-                                <input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-                                       v-validate:companions="{ required: true, min:0 }"/>
-                            </div>
-                            <div class="help-block">Number of companions a user can have. Leave at 0 to disable
-                                companions.
-                            </div>
-                        </div>
-                    </div>
-
+                    <div class="row">
+	                    <div class="col-sm-6">
+	                    	<div :class="{ 'has-error': checkForError('type') }">
+	                        	<label for="type" class="control-label">Type</label>
+	                            <select id="type" class="form-control" v-model="type"
+	                                    v-validate:type="{ required: true }" required>
+	                                <option value="">-- select --</option>
+	                                <option value="ministry">Ministry</option>
+	                                <option value="family">Family</option>
+	                                <option value="international">International</option>
+	                                <option value="media">Media</option>
+	                                <option value="medical">Medical</option>
+	                                <option value="leader">Leader</option>
+	                            </select>
+	                        </div>
+	                    </div><!-- end col -->
+	                    <div class="col-sm-6">
+	                    	<div :class="{ 'has-error': checkForError('prospects') }">
+	                        	<label class="control-label">Perfect For</label>
+	                            <v-select multiple class="form-control" id="group" :value.sync="prospectsObj"
+	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
+	                            <select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
+	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
+	                                </option>
+	                            </select>
+	                        </div>
+	                    </div><!-- end col -->
+                    </div><!-- end row -->
+                    <div class="row">
+	                    <div class="col-sm-6">
+	                    		<div :class="{ 'has-error': checkForError('difficulty') }">
+		                        	<label for="difficulty" class="control-label">Difficulty</label>
+		                            <select id="difficulty" class="form-control" v-model="difficulty"
+		                                    v-validate:difficulty="{ required: true }" required>
+		                                <option value="">-- select --</option>
+		                                <option value="level_1">Level 1</option>
+		                                <option value="level_2">Level 2</option>
+		                                <option value="level_3">Level 3</option>
+		                            </select>
+		                        </div>
+	                    </div><!-- end col -->
+	                    <div class="col-sm-6">
+		                    <div :class="{ 'has-error': checkForError('companions') }">
+		                        	<label for="companion_limit" class="control-label">Companion Limit</label>
+		                            <div class="input-group">
+		                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
+		                                <input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
+		                                       v-validate:companions="{ required: true, min:0 }"/>
+		                            </div>
+		                            <div class="help-block">Number of companions a user can have. Leave at 0 to disable
+		                                companions.
+		                            </div>
+		                    </div>
+	                    </div><!-- end col -->
+                    </div><!-- end row -->
                     <div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
-                        <label for="started_at" class="col-sm-2 control-label">Dates</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
+                        	<label for="started_at" class="control-label">Dates</label>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="input-group input-group-sm"
+                                    <div class="input-group"
                                          :class="{ 'has-error': checkForError('start') }">
                                         <span class="input-group-addon">Start</span>
 										<date-picker class="form-control" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
@@ -89,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="input-group input-group-sm"
+                                    <div class="input-group"
                                          :class="{ 'has-error': checkForError('end') }">
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
@@ -102,8 +101,8 @@
                     </div>
 
                     <div class="form-group"	>
-                        <label class="col-sm-2 control-label">Trip Rep.</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
+                        	<label class="control-label">Trip Rep.</label>
                             <v-select multiple class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
                                       label="name"></v-select>
                             <!--v-validate:rep="{ required: false}"-->
@@ -112,43 +111,41 @@
                             </select>
                         </div>
                     </div>
-
-
-					<div class="form-group" :class="{ 'has-error': checkForError('spots') }">
-						<label for="spots" class="col-sm-2 control-label">Spots Available</label>
-						<div class="col-sm-10">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon"><i class="fa fa-users"></i></span>
-								<input type="number" id="spots" v-model="spots" class="form-control"
-									   v-validate:spots="{ required: true, min:0 }"/>
+                    <div class="row">
+	                    <div class="col-sm-6">
+							<div :class="{ 'has-error': checkForError('spots') }">
+								<label for="spots" class="control-label">Spots Available</label>
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-users"></i></span>
+									<input type="number" id="spots" v-model="spots" class="form-control"
+										   v-validate:spots="{ required: true, min:0 }"/>
+								</div>
+								<div class="help-block">Number of companions a user can have. Leave at 0 to disable
+									companions.
+								</div>
 							</div>
-							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
-								companions.
+						</div><!-- end col -->
+						<div class="col-sm-6">
+							<div :class="{ 'has-error': checkForError('closed') }">
+								<label for="closed_at" class="control-label">Registration Closes</label>
+								<date-picker class="form-control" :time.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+								<input type="datetime" class="form-control hidden" v-model="closed_at | moment 'LLLL'" v-validate:closed="{ required: true }" id="closed_at">
 							</div>
-						</div>
-					</div>
-
-					<div class="form-group" :class="{ 'has-error': checkForError('closed') }">
-						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
-						<div class="col-sm-10">
-							<date-picker class="form-control input-sm" :time.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at | moment 'LLLL'" v-validate:closed="{ required: true }" id="closed_at">
-						</div>
-					</div>
-
+						</div><!-- end col -->
+					</div><!-- end row -->
 					<div class="form-group">
-						<label for="published_at" class="col-sm-2 control-label">Publish</label>
-						<div class="col-sm-10">
-							<date-picker class="form-control input-sm" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control input-sm hidden" v-model="published_at | moment 'LLLL'" id="published_at">
+						<div class="col-sm-12">
+							<label for="published_at" class="control-label">Publish</label>
+							<date-picker class="form-control" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<input type="datetime" class="form-control hidden" v-model="published_at | moment 'LLLL'" id="published_at">
 						</div>
 					</div>
 
 					<div class="col-sm-12 text-center">
 						<div class="form-group">
-							<a class="btn btn-link" @click="back()">Back</a>
+							<a class="btn btn-default" @click="back()">Cancel</a>
 							<a class="btn btn-success" v-if="isUpdate" @click="finish()">Update</a>
-							<a class="btn btn-success" v-if="!isUpdate" @click="finish()">Save</a>
+							<a class="btn btn-success" v-if="!isUpdate" @click="finish()">Create</a>
 						</div>
 					</div>
 

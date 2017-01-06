@@ -54,6 +54,52 @@
                                         <hr class="divider inv" />
                                     </div>
                                 </div>
+    <validator name="UserSettings" @touched="onTouched">
+        <form id="UserSettingsForm" class="" novalidate style="position:relative;">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Account</h5>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <label>Profile Photo (max file size:2mb)</label>
+                                    <h5>
+                                        <a href="#">
+                                            <img class="av-left img-circle img-md" :src="avatar + '?w=64&h=64'" :alt="name" width="64">
+                                        </a>
+                                        <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button>
+                                    </h5>
+                                </div>
+                                <hr class="divider inv visible-xs">
+                                <div class="col-sm-6">
+                                    <label>Cover Photo (max file size:2mb)</label>
+                                    <h5>
+                                        <a href="#">
+                                            <img class="av-left img-rounded img-md"
+                                                :src="banner + '?w=64&h=64&fit=crop-center'"
+                                                :alt="name" width="64">
+                                        </a>
+                                        <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
+                                    </h5>
+                                </div><!-- end col -->
+                                <div class="col-sm-12">
+                                    <div class="collapse" id="avatarCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                    <div class="collapse" id="bannerCollapse">
+                                        <div class="well">
+                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                        </div>
+                                    </div>
+                                    <hr class="divider inv" />
+                                </div>
+                            </div><!-- end row -->
 
                                 <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
                                     <div class="col-sm-12">

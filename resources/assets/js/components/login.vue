@@ -1,6 +1,8 @@
 <template>
 	<div class="panel panel-default">
 		<div class="panel-body">
+			<h6 class="text-uppercase text-center">Welcome To Missions.Me</h6>
+			<hr class="divider inv">
 			<template v-if="currentState==='login'">
 				<validator name="LoginForm">
 					<form class="form-horizontal" role="form">

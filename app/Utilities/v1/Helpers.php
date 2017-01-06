@@ -117,3 +117,27 @@ function generateQbClassName($data)
         return $data->name . ' - General';
     }
 }
+
+/**
+ * Remove http from url.
+ * Use protocol relative.
+ * @param $url
+ * @return mixed
+ */
+function remove_http($url) {
+
+    // check for protocol and remove
+    $disallowed = array('http://', 'https://');
+    foreach($disallowed as $d) {
+        if(strpos($url, $d) === 0) {
+            $url = str_replace($d, '//', $url);
+        }
+    }
+
+    // add relative protocol if missing
+    if(strpos($url, '//') === false) {
+        $url = '//'.$url;
+    }
+
+    return $url;
+}

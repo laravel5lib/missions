@@ -1,64 +1,10 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <validator name="UserSettings" @touched="onTouched">
-            <form id="UserSettingsForm" class="" novalidate style="position:relative;">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>Account</h5>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row form-group">
-                                    <div class="col-sm-6">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <a href="#">
-                                                    <img class="media-object img-rounded" :src="avatar + '?w=64&h=64'" :alt="name" width="64">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button><br>
-                                                <small>Max file size: 2MB</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr class="divider inv visible-xs">
-                                    <div class="col-sm-6">
-                                        <div class="media">
-                                            <div class="media-left">
-                                                <a href="#">
-                                                    <img class="media-object img-rounded"
-                                                         :src="banner + '?w=64&h=64&fit=crop-center'"
-                                                         :alt="name" width="64">
-                                                </a>
-                                            </div>
-                                            <div class="media-body">
-                                                <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button><br>
-                                                <small>Max file size: 2MB</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="collapse" id="avatarCollapse">
-                                            <div class="well">
-                                                <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
-                                            </div>
-                                        </div>
-                                        <div class="collapse" id="bannerCollapse">
-                                            <div class="well">
-                                                <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="8" :is-child="true" :tags="['User']"></upload-create-update>
-                                            </div>
-                                        </div>
-                                        <hr class="divider inv" />
-                                    </div>
-                                </div>
     <validator name="UserSettings" @touched="onTouched">
         <form id="UserSettingsForm" class="" novalidate style="position:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-offset-2 col-sm-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5>Account</h5>
@@ -352,99 +298,102 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" :class="{ 'has-error': checkForError('url') || errors.url }" v-if="!!public">
-                                    <div class="col-sm-12">
-                                        <label for="url" class="control-label">Url Slug</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">www.missions.me/users/</span>
-                                            <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
-                                        </div>
-                                        <div v-show="errors.url" class="help-block">{{errors.url}}</div>
+                            <div class="form-group" :class="{ 'has-error': checkForError('url') || errors.url }" v-if="!!public">
+                                <div class="col-sm-12">
+                                    <label for="url" class="control-label">Url Slug</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">missions.me/@</span>
+                                        <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>Contact Info</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Contact Info</h5>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="bio">Bio</label>
+                                    <textarea class="form-control" v-model="bio" id="bio" placeholder="User Bio" maxlength="120"></textarea>
+                                    <span class="help-block">Characters left: {{120 - (bio ? bio.length : 0||0)}}</span>
+                                </div>
                             </div>
-                            <div class="panel-body">
-                                <div class="row form-group">
-                                    <div class="col-sm-12">
-                                        <label class="control-label" for="bio">Bio</label>
-                                        <textarea class="form-control" v-model="bio" id="bio" placeholder="User Bio" maxlength="120"></textarea>
-                                        <span class="help-block">Characters left: {{120 - (bio.length||0)}}</span>
-                                    </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="infoAddress">Address 1</label>
+                                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
                                 </div>
-                                <div class="row form-group">
-                                    <div class="col-sm-12">
-                                        <label class="control-label" for="infoAddress">Address 1</label>
-                                        <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-                                    </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-12">
+                                    <label class="control-label" for="infoAddress2">Address 2</label>
+                                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
                                 </div>
-                                <div class="row form-group">
-                                    <div class="col-sm-12">
-                                        <label class="control-label" for="infoAddress2">Address 2</label>
-                                        <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
-                                    </div>
-                                </div>
+                            </div>
 
-                                <div class="row form-group">
-                                    <div class="col-sm-6">
-                                        <label for="infoCity">City</label>
-                                        <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="infoState">State/Prov.</label>
-                                        <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
-                                    </div>
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <label for="infoCity">City</label>
+                                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
                                 </div>
-                                <div class="row form-group">
-                                    <div class="col-sm-4">
-                                        <label for="infoZip">ZIP/Postal Code</label>
-                                        <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <div :class="{ 'has-error': checkForError('country') }">
-                                            <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                                            <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                                            <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
-                                                <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-6">
+                                    <label for="infoState">State/Prov.</label>
+                                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
                                 </div>
-                                <div class="row form-group" :class="{ 'has-error': checkForError('timezone') }">
-                                    <div class="col-sm-12">
-                                        <label for="timezone" class="control-label">Timezone</label>
-                                        <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
-                                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-4">
+                                    <label for="infoZip">ZIP/Postal Code</label>
+                                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                                </div>
+                                <div class="col-sm-8">
+                                    <div :class="{ 'has-error': checkForError('country') }">
+                                        <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
+                                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
+                                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row form-group" :class="{ 'has-error': checkForError('timezone') }">
+                                <div class="col-sm-12">
+                                    <label for="timezone" class="control-label">Timezone</label>
+                                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
+                                        <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                                    </select>
+                                </div>
+                            </div>
 
 
-                                <div class="row form-group">
-                                    <div class="col-sm-6">
-                                        <label for="infoPhone">Phone 1</label>
-                                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="infoMobile">Phone 2</label>
-                                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
-                                    </div>
+                            <div class="row form-group">
+                                <div class="col-sm-6">
+                                    <label for="infoPhone">Phone 1</label>
+                                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="infoMobile">Phone 2</label>
+                                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
                                 </div>
                             </div>
                         </div>
-                    </div><!-- end col -->
-                    <div class="col-sm-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5>Social Media</h5>
-                            </div>
+                    </div>
+                </div><!-- end col -->
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5>Social Media</h5>
+                        </div>
                             <div class="panel-body">
                                 <div class="row form-group">
                                     <div class="col-sm-12">
@@ -478,19 +427,7 @@
                         <hr class="divider inv xlg">
                     </div><!-- end col -->
                 </div><!-- end row -->
-                <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-                    <span class="icon-info-circled alert-icon-float-left"></span>
-                    <strong>Oh No!</strong>
-                    <p>There are errors on the form.</p>
-                    <!--<ul v-if="errors.length">
-						<li v-for="error in errors">{{error}}</li>
-					</ul>-->
-                </alert>
-                <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-                    <span class="icon-ok-circled alert-icon-float-left"></span>
-                    <strong>Well Done!</strong>
-                    <p>Profile updated successfully</p>
-                </alert>
+
                 <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                     <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
                 </modal>
@@ -575,7 +512,7 @@
                 return this.dobYear && this.dobMonth && this.dobDay
                         ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
                         : null;
-            }
+            },
         },
         events:{
             'uploads-complete'(data){
@@ -606,7 +543,7 @@
                 this.attemptSubmit = true;
                 if (this.$UserSettings.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.update({id: this.userId}, {
+                    this.resource.update({
                         name: this.name,
                         email: this.email,
                         alt_email: this.alt_email,
@@ -653,14 +590,12 @@
                         ]
                 }).then(function (response) {
                         this.setUserData(response.data.data);
-                        this.showSuccess = true;
+                        this.$dispatch('showSuccess', 'Settings updated successfully.');
                         this.hasChanged = false;
-                        // this.$refs.spinner.hide();
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showError', 'Please check the form.');
                     });
                 } else {
                     this.showError = true;
@@ -703,15 +638,14 @@
                 this.alt_email = user.alt_email;
                 this.avatar_upload_id = user.avatar_upload_id;
                 this.banner_upload_id = user.banner_upload_id;
-                this.facebook = _.findWhere(user.links.data, {name: "facebook"}).url;
-                this.twitter = _.findWhere(user.links.data, {name: "twitter"}).url;
-                this.instagram = _.findWhere(user.links.data, {name: "instagram"}).url;
-                this.linkedIn = _.findWhere(user.links.data, {name: "linkedin"}).url;
-                this.website = '';
+                this.facebook = _.findWhere(user.links.data, {name: "facebook"}) ? _.findWhere(user.links.data, {name: "facebook"}).url : null;
+                this.twitter = _.findWhere(user.links.data, {name: "twitter"}) ? _.findWhere(user.links.data, {name: "twitter"}).url : null;
+                this.instagram = _.findWhere(user.links.data, {name: "instagram"}) ? _.findWhere(user.links.data, {name: "instagram"}).url : null;
+                this.linkedIn = _.findWhere(user.links.data, {name: "linkedin"}) ? _.findWhere(user.links.data, {name: "linkedin"}).url : null;
+                this.website = _.findWhere(user.links.data, {name: "website"}) ? _.findWhere(user.links.data, {name: "website"}).url : null;
             }
         },
         ready(){
-            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
@@ -725,7 +659,6 @@
             }, function (response) {
                 console.log('Update Failed! :(');
                 console.log(response);
-                // this.$refs.spinner.hide();
             });
 
             this.$root.$on('save-settings', function () {

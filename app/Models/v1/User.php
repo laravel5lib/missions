@@ -547,18 +547,22 @@ class User extends Authenticatable implements JWTSubject
     {
         if ( ! $links) return;
 
-        $ids = $this->links()->lists('id', 'id');
+        $links = collect($links)->reject(function($link) {
+            return strlen($link['url']) < 1;
+        })->all();
+
+        $names = $this->links()->pluck('id', 'name');
 
         foreach($links as $link)
         {
-            if( ! isset($link['id'])) $link['id'] = null;
+            array_forget($names, $link['name']);
 
-            array_forget($ids, $link['id']);
+            $link['url'] = remove_http($link['url']);
 
-            $this->links()->updateOrCreate(['id' => $link['id']], $link);
+            $this->links()->updateOrCreate(['name' => $link['name']], $link);
         }
 
-        if( ! $ids->isEmpty()) Link::destroy($ids);
+        if( ! $names->isEmpty()) Link::destroy(array_values($names->toArray()));
     }
 
     public function getCountriesVisited()

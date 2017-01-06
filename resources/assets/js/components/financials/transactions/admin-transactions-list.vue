@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker class="form-control" :time.sync="filters.minDate"></date-picker>
+                    <date-picker class="form-control" :time.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker class="form-control" :time.sync="filters.maxDate"></date-picker>
+                    <date-picker class="form-control" :time.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -367,8 +367,8 @@
                     minAmount: null,
                     maxAmount: null,
                     type: null,
-                    maxDate: null,
-                    minDate: null,
+                    maxDate: '',
+                    minDate: '',
                     payment: ''
                 },
                 showFilters: false,
@@ -486,6 +486,8 @@
                         minAmount: null,
                         maxAmount: null,
                         type: '',
+                        maxDate: '',
+                        minDate: '',
                     }
                 });
             },

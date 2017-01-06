@@ -13,7 +13,8 @@
             <div class="form-group">
                 <div class="col-sm-12">
                     <label for="description">Description</label>
-                    <textarea class="form-control" v-model="description" id="description" placeholder="Description of Group"></textarea>
+                    <textarea class="form-control" v-model="description" id="description" placeholder="Description of Group" maxlength="120"></textarea>
+                    <span class="help-block">Characters left: {{120 - (description.length||0)}}</span>
                 </div>
             </div>
             <div class="form-group">

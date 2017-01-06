@@ -40,7 +40,7 @@
 							<div class="input-group" :class="{ 'has-error': checkForError('start') }">
 								<span class="input-group-addon">Start</span>
 								<date-picker class="form-control" :time.sync="started_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="started_atdden|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
+								<input type="datetime" class="form-control hidden" v-model="started_at|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
 									   v-validate:start="{ required: true }" required>
 							</div>
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
@@ -96,9 +96,8 @@
 				<div class="col-sm-6">
 					<h5>
 						<img class="av-left img-circle img-md"
-							:src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100"
+							:src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
 							:alt="selectedAvatar ? selectedAvatar.name : ''">
-						<small>{{selectedAvatar ? selectedAvatar.name : ''}}</small>
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 								data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
 							<i class="fa fa-camera icon-left"></i> Set Avatar
@@ -108,9 +107,8 @@
 				<div class="col-sm-6">
 					<h5>
 						<img class="av-left img-rounded img-md"
-								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100"
+								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
 								 :alt="selectedBanner ? selectedBanner.name : ''">
-						<small>{{selectedBanner ? selectedBanner.name : ''}}</small>
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 								data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
 							<i class="fa fa-camera icon-left"></i> Set Banner

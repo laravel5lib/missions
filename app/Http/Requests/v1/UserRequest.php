@@ -55,8 +55,8 @@ class UserRequest extends FormRequest
             $rules['country_code'] = 'sometimes|required|in:' . Country::codes();
             $rules['timezone'] = 'sometimes|required|max:25';
             $rules['links'] = 'array';
-            $rules['links.*.name'] = 'required|string';
-            $rules['links.*.url'] = 'required|string';
+             $rules['links.*.name'] = 'string';
+             $rules['links.*.url'] = 'string';
         }
 
         return $rules;

@@ -103,12 +103,10 @@
 						<div class="media-left">
 							<a href="#">
 								<img class="media-object"
-									 :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100"
-									 :alt="selectedAvatar ? selectedAvatar.name : ''">
+									 :src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
 							</a>
 						</div>
 						<div class="media-body">
-							<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
 							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 									data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
 								Set Avatar
@@ -127,12 +125,10 @@
 						<div class="media-left">
 							<a href="#">
 								<img class="media-object"
-									 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100"
-									 :alt="selectedBanner ? selectedBanner.name : ''">
+									 :src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
 							</a>
 						</div>
 						<div class="media-body">
-							<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
 							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 									data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
 								Set Banner
@@ -224,9 +220,9 @@
 				page_url: null,
 				page_src: null,
 				attemptSubmit: false,
-				selectedAvatar: null,
+				selectedAvatar: { source: null },
 				avatar_upload_id: null,
-				selectedBanner: null,
+				selectedBanner: { source: null },
 				banner_upload_id: null,
 				resource: this.$resource('campaigns{/id}'),
 				showSuccess: false,
@@ -346,6 +342,8 @@
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
+				this.selectedAvatar.source = campaign.avatar;
+				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();
 			});
 

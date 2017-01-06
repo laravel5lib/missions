@@ -96,9 +96,8 @@
 				<div class="col-sm-6">
 					<h5>
 						<img class="av-left img-circle img-md"
-							:src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100"
+							:src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
 							:alt="selectedAvatar ? selectedAvatar.name : ''">
-						<small>{{selectedAvatar ? selectedAvatar.name : ''}}</small>
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 								data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
 							<i class="fa fa-camera icon-left"></i> Set Avatar
@@ -108,9 +107,8 @@
 				<div class="col-sm-6">
 					<h5>
 						<img class="av-left img-rounded img-md"
-								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100"
+								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
 								 :alt="selectedBanner ? selectedBanner.name : ''">
-						<small>{{selectedBanner ? selectedBanner.name : ''}}</small>
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 								data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
 							<i class="fa fa-camera icon-left"></i> Set Banner

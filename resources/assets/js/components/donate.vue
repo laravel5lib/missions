@@ -122,16 +122,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <hr class="divider inv sm">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" v-model="cardSave">Save payment details for next time
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                    <hr class="divider inv">
                     <div class="col-sm-12 text-center" v-if="!child">
                         <div class="form-group" style="margin-bottom:0;">
                             <div class="">
@@ -178,10 +169,6 @@
                                     <div class="col-xs-4">
                                         <label>Billing Zip</label>
                                         <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardZip}}</p>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <label>Save Payment Method</label>
-                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardSave ? 'Yes' : 'No'}}</p>
                                     </div>
                                 </div>
                             </div><!-- end panel-body -->

@@ -1056,22 +1056,38 @@ h1.home-college-header {
     width: 450px;
   }
 }
+.campaign-carousel .carousel-caption {
+  padding-bottom: 50px;
+  left: 30%;
+  right:30%;
+      h3 {
+        font-size: 4em;
+      }
+      h6 {
+        font-size: 1.2em;
+      }
+      p {
+        font-size: 1.5em;
+      }
+}
 @media screen and (max-width: 991px) {
   .campaign-carousel .carousel-caption {
       bottom: 0px;
+      padding-bottom: 30px;
       h3 {
         font-size: 2em;
       }
       h6 {
-        font-size: .7em;
+        font-size: .8em;
       }
       p {
-        font-size: 1em;
+        font-size: 1.2em;
       }
   }
 }
 @media screen and (max-width: 767px) {
   .campaign-carousel .carousel-caption {
+    padding-bottom: 15px;
     h3 {
       font-size: 1.8em;
     }
@@ -1092,6 +1108,11 @@ h1.home-college-header {
 }
 .carousel-control .fa-angle-left, .carousel-control .fa-angle-right, .carousel-control .icon-prev, .carousel-control .icon-next {
   height: 32px;
+}
+.featured-tag {
+  position:absolute;
+  left:25px;
+  top:25px;
 }
 
 /* Partner Panels */

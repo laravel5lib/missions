@@ -130,13 +130,13 @@
               <li class="text-primary-darker">'08 Barahona, Dominican Rep.</li>
               <li class="text-primary-darker">'08 Puerto Cortes, Honduras</li>
               <li class="text-primary-darker">'08 Santa Cruz, Bolivia</li>
+              <li class="text-primary-darker">'09 Managua, Nicaragua</li>
+              <li class="text-primary-darker">'09 Petionville, Haiti</li>
+              <li class="text-primary-darker">'10 Kurnool, India</li>
             </ul>
           </div><!-- end col -->
           <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
               <ul class="list-unstyled">
-                <li class="text-primary-darker">'09 Managua, Nicaragua</li>
-                <li class="text-primary-darker">'09 Petionville, Haiti</li>
-                <li class="text-primary-darker">'10 Kurnool, India</li>
                 <li class="text-primary-darker">'10 San Cristobal, Dominican Rep.</li>
                 <li class="text-primary-darker">'10 Lima, Peru</li>
                 <li class="text-primary-darker">'10 Warangal, India</li>
@@ -148,16 +148,16 @@
                 <li class="text-primary-darker">'11 Bhimavaram, India</li>
                 <li class="text-primary-darker">'12 Buriram, Thailand</li>
                 <li class="text-primary-darker">'12 La Ceiba, Honduras</li>
-              </ul>
-          </div><!-- end col -->
-          <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-              <ul class="list-unstyled">
                 <li class="text-primary-darker">'12 Patna, India</li>
                 <li class="text-primary-darker">'12 Quito, Ecuador</li>
                 <li class="text-primary-darker">'12 Bangkok, Thailand</li>
                 <li class="text-primary-darker">'12 Lima, Peru</li>
                 <li class="text-primary-darker">'12 Hyderabad, India</li>
                 <li class="text-primary-darker">'13 Patna, India</li>
+              </ul>
+          </div><!-- end col -->
+          <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+              <ul class="list-unstyled">
                 <li class="text-primary-darker">'13 1Nation1Day Honduras</li>
                 <li class="text-primary-darker">'13 Hyderabad, India</li>
                 <li class="text-primary-darker">'14 Yoro, Honduras</li>
@@ -165,6 +165,15 @@
                 <li class="text-primary-darker">'14 Kumasi, Ghana</li>
                 <li class="text-primary-darker">'14 Lima, Peru</li>
                 <li class="text-primary-darker">'14 Kathmandu, Nepal</li>
+                <li class="text-primary-darker">‘15 India</li>
+                <li class="text-primary-darker">‘15 1Nation1Day Dominican Republic</li>
+                <li class="text-primary-darker">‘15 Christmas in India</li>
+                <li class="text-primary-darker">‘16 India</li>
+                <li class="text-primary-darker">‘16 Ecuador</li>
+                <li class="text-primary-darker">‘16 Nicaragua</li>
+                <li class="text-primary-darker">‘16 Honduras 1N1D Follow up</li>
+                <li class="text-primary-darker">‘16 Nepal</li>
+                <li class="text-primary-darker">‘16 Christmas in India</li>
               </ul>
           </div><!-- end col -->
         </div><!-- end row -->

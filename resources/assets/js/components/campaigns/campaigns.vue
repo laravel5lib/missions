@@ -34,9 +34,11 @@
 					<h3>1Nation1Day 2017</h3>
 					<p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
 					<a href="#" class="btn btn-primary btn-sm">More Details</a>
-					<hr class="divider inv hidden-xs"/>
 				</div>
 			</div>
+		</div>
+		<div class="featured-tag">
+			<a class="btn btn-info btn-sm hidden-xs" style="border-radius:50px;"><i class="fa fa-bolt icon-left"></i> Featured</a>
 		</div>
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
@@ -51,7 +53,7 @@
 	</div>
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<div class="col-xs-12 col-sm-6 col-md-3" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
+		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="'/campaigns/' + campaign.page_url" role="button">
 					<img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
@@ -367,3 +369,4 @@
 		}
 	}
 </script>
+

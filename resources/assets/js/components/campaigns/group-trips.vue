@@ -35,7 +35,8 @@
 						</span></p>
 							<label>Spots Available</label>
 							<p>{{ trip.spots }}</p>
-							<h3 class="text-success">{{ trip.starting_cost | currency }}</h3>
+							<label>Starting At</label>
+							<h3 style="margin-top:0px;" class="text-success">{{ trip.starting_cost | currency }}</h3>
 							<a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a>
 						</div>
 					</div>

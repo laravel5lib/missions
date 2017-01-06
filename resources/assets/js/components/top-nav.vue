@@ -43,7 +43,7 @@
 				<template v-if="isAdmin()">
 					<li class="navlabel">Admin</li>
 					<li><a href="/admin"><i class="fa fa-tachometer"></i> Dashboard</a></li>
-					<li><a href="/admin/campaigns"><i class="fa fa-globe"></i> Campaings</a></li>
+					<li><a href="/admin/campaigns"><i class="fa fa-globe"></i> Campaigns</a></li>
 					<li><a href="/admin/reservations/current"><i class="fa fa-ticket"></i> Reservations</a></li>
 					<li><a href="/admin/groups"><i class="fa fa-users"></i> Groups</a></li>
 					<li><a href="/admin/interests"><i class="fa fa-question-mark"></i> Interests</a></li>

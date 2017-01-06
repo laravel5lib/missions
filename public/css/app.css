@@ -10960,7 +10960,6 @@ button.close {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
-  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
@@ -13426,7 +13425,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:focus {
-    background-color: #090909;
+    background-color: #f6323e;
     color: #fff; }
     .navmenu-inverse .navmenu-nav > .open > a .caret, .navmenu-inverse .navmenu-nav > .open > a:hover .caret, .navmenu-inverse .navmenu-nav > .open > a:focus .caret,
     .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a .caret,
@@ -13440,7 +13439,7 @@ button.close {
     border-bottom-color: #e6e6e6; }
   .navmenu-inverse .navmenu-nav.dropdown-menu,
   .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu {
-    background-color: #090909; }
+    background-color: #f6323e; }
     .navmenu-inverse .navmenu-nav.dropdown-menu > .divider,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .divider {
       background-color: #222; }
@@ -13448,7 +13447,7 @@ button.close {
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:hover,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:focus {
-      background-color: black; }
+      background-color: #f51220; }
   .navmenu-inverse .navmenu-nav > li > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > li > a {
     color: #e6e6e6; }
@@ -13462,7 +13461,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
     color: #fff;
-    background-color: #090909; }
+    background-color: #f6323e; }
   .navmenu-inverse .navmenu-nav > .disabled > a, .navmenu-inverse .navmenu-nav > .disabled > a:hover, .navmenu-inverse .navmenu-nav > .disabled > a:focus,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a:hover,
@@ -16501,32 +16500,51 @@ h1.home-college-header {
     left: 10%;
     width: 450px; }
 
+.campaign-carousel .carousel-caption {
+  padding-bottom: 50px;
+  left: 30%;
+  right: 30%; }
+  .campaign-carousel .carousel-caption h3 {
+    font-size: 4em; }
+  .campaign-carousel .carousel-caption h6 {
+    font-size: 1.2em; }
+  .campaign-carousel .carousel-caption p {
+    font-size: 1.5em; }
+
 @media screen and (max-width: 991px) {
   .campaign-carousel .carousel-caption {
-    bottom: 0px; }
+    bottom: 0px;
+    padding-bottom: 30px; }
     .campaign-carousel .carousel-caption h3 {
       font-size: 2em; }
     .campaign-carousel .carousel-caption h6 {
-      font-size: .7em; }
+      font-size: .8em; }
     .campaign-carousel .carousel-caption p {
-      font-size: 1em; } }
+      font-size: 1.2em; } }
 
 @media screen and (max-width: 767px) {
-  .campaign-carousel .carousel-caption h3 {
-    font-size: 1.8em; }
-  .campaign-carousel .carousel-caption h6 {
-    font-size: .7em; }
-  .campaign-carousel .carousel-caption p {
-    display: none; }
-  .campaign-carousel .carousel-caption .btn-sm, .campaign-carousel .carousel-caption .btn-group-sm > .btn {
-    padding: 3px 15px;
-    font-size: 11px; } }
+  .campaign-carousel .carousel-caption {
+    padding-bottom: 15px; }
+    .campaign-carousel .carousel-caption h3 {
+      font-size: 1.8em; }
+    .campaign-carousel .carousel-caption h6 {
+      font-size: .7em; }
+    .campaign-carousel .carousel-caption p {
+      display: none; }
+    .campaign-carousel .carousel-caption .btn-sm, .campaign-carousel .carousel-caption .btn-group-sm > .btn {
+      padding: 3px 15px;
+      font-size: 11px; } }
 
 .carousel-control > span.fa {
   background-color: #454545 !important; }
 
 .carousel-control .fa-angle-left, .carousel-control .fa-angle-right, .carousel-control .icon-prev, .carousel-control .icon-next {
   height: 32px; }
+
+.featured-tag {
+  position: absolute;
+  left: 25px;
+  top: 25px; }
 
 /* Partner Panels */
 .partner-equals-panel {

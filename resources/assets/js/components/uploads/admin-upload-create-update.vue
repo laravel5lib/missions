@@ -23,10 +23,10 @@
 			</form>-->
 			<br>
 			<div class="" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex;flex: 1">
+				<div class="" :class="columnCLasses" v-for="upload in uploads" style="display:flex;flex: 1">
 					<div class="panel panel-default">
 
-							<a @click="selectExisting(upload)" role="button">
+							<a @click="preview(upload)" role="button">
 								<tooltip effect="scale" placement="top" content="Preview">
 									<img :src="upload.source + '?w=100&h=100&fit=crop-center&q=50'" :alt="upload.name" class="img-responsive">
 								</tooltip>
@@ -140,6 +140,13 @@
 			</form>
 		</validator>
 
+		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400">
+			<div slot="modal-body" class="modal-body" v-if="previewUpload">
+				<h5 class="text-center">{{previewUpload.name}}</h5>
+				<img :src="previewUpload.source + '?w=720&fit=max&q=65'" :alt="previewUpload.name" class="img-responsive">
+			</div>
+		</modal>
+
 	</div>
 </template>
 <script type="text/javascript">
@@ -200,7 +207,6 @@
 				type: Number,
 				default: 100
 			},
-
 		},
         data(){
             return {
@@ -211,6 +217,8 @@
                 y_axis: null,
 
 				// logic variables
+				previewModal: false,
+				previewUpload: null,
 				attemptSubmit: false,
 				coords: 'Try to move/resize the selection',
 				constrained: true,
@@ -248,6 +256,14 @@
 
 				if (this.type === 'file') {
 					return 'application/pdf';
+				}
+			},
+			columnClasses() {
+			    if (this.isChild && this.perPage !== 6) {
+			        let col = 12 / this.perPage;
+			        return 'col-sm-' + col.toString() + ' col-md-' + col.toString()
+				} else {
+			        return 'col-sm-2 col-md-2';
 				}
 			}
 		},
@@ -316,6 +332,8 @@
 					height: 100,
 
 					// logic variables
+					previewModal: false,
+					previewUpload: null,
 					attemptSubmit: false,
 					constrained: true,
 					scaledWidth: 400,
@@ -474,6 +492,10 @@
 			selectExisting(upload){
 				// Assumes this is a child component
 				this.$dispatch('uploads-complete', upload);
+			},
+			preview(upload){
+			    this.previewModal = true;
+			    this.previewUpload = upload;
 			}
         },
 		ready(){

@@ -10960,6 +10960,7 @@ button.close {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
+  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
@@ -13425,7 +13426,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a:focus {
-    background-color: #f6323e;
+    background-color: #090909;
     color: #fff; }
     .navmenu-inverse .navmenu-nav > .open > a .caret, .navmenu-inverse .navmenu-nav > .open > a:hover .caret, .navmenu-inverse .navmenu-nav > .open > a:focus .caret,
     .navbar-inverse .navbar-offcanvas .navmenu-nav > .open > a .caret,
@@ -13439,7 +13440,7 @@ button.close {
     border-bottom-color: #e6e6e6; }
   .navmenu-inverse .navmenu-nav.dropdown-menu,
   .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu {
-    background-color: #f6323e; }
+    background-color: #090909; }
     .navmenu-inverse .navmenu-nav.dropdown-menu > .divider,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .divider {
       background-color: #222; }
@@ -13447,7 +13448,7 @@ button.close {
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:hover,
     .navbar-inverse .navbar-offcanvas .navmenu-nav.dropdown-menu > .active > a:focus {
-      background-color: #f51220; }
+      background-color: black; }
   .navmenu-inverse .navmenu-nav > li > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > li > a {
     color: #e6e6e6; }
@@ -13461,7 +13462,7 @@ button.close {
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
     color: #fff;
-    background-color: #f6323e; }
+    background-color: #090909; }
   .navmenu-inverse .navmenu-nav > .disabled > a, .navmenu-inverse .navmenu-nav > .disabled > a:hover, .navmenu-inverse .navmenu-nav > .disabled > a:focus,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a,
   .navbar-inverse .navbar-offcanvas .navmenu-nav > .disabled > a:hover,

@@ -244,6 +244,7 @@
                 <div class="col-sm-12">
                     <label class="control-label" for="bio">Bio</label>
                     <textarea class="form-control" v-model="bio" id="bio" placeholder="User Bio" maxlength="120"></textarea>
+                    <span class="help-block">Characters left: {{120 - (bio.length||0)}}</span>
                 </div>
             </div>
             <div class="row">

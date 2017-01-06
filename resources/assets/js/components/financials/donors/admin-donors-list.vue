@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="position: relative;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
@@ -59,14 +59,18 @@
                         <div class="col-xs-12">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">Start</span>
-                                <input type="datetime-local" class="form-control" v-model="filters.starts"/>
+                                <!--<input type="datetime-local" class="form-control" v-model="filters.starts"/>-->
+                                <date-picker class="form-control" :time.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss" v-if="filters"></date-picker>
+
                             </div>
                             <br>
                         </div>
                         <div class="col-xs-12">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon">End</span>
-                                <input type="datetime-local" class="form-control" v-model="filters.ends"/>
+                                <!--<input type="datetime-local" class="form-control" v-model="filters.ends"/>-->
+                                <date-picker class="form-control" :time.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+
                             </div>
                         </div>
                     </div>
@@ -293,6 +297,7 @@
                 causeObj: null,
                 tripsOptions: [],
                 tripObj: null,
+                tagsString: '',
                 projectsOptions: [],
                 projectObj: null,
                 filters: {

@@ -111,4 +111,7 @@
             </div>
         </div>
     </div>
+
+    <admin-group-delete group-id="{{ $group->id }}"></admin-group-delete>
+
 @endsection

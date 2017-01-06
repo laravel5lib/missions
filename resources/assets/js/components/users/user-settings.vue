@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="collapse" id="bannerCollapse">
                                         <div class="well">
-                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                     <hr class="divider inv" />

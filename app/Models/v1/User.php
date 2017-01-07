@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Support\Facades\Session;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities;
+    use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities, CanResetPassword;
 
     /**
      * The table associated with the model.

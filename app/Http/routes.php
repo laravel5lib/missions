@@ -196,9 +196,14 @@ Route::get('referrals/{id}', function($id) use($dispatcher) {
 
 Route::get('/login', 'Auth\AuthController@login');
 Route::post('/login', 'Auth\AuthController@authenticate');
-Route::get('/register', 'Auth\Authcontroller@create');
+Route::get('/register', 'Auth\AuthController@create');
 Route::post('/register', 'Auth\AuthController@register');
 Route::get('/logout', 'Auth\AuthController@logout');
+// Password Reset Routes...
+$this->get('/password/email', 'Auth\PasswordController@showLinkRequestForm');
+$this->get('/password/reset/{token?}', 'Auth\PasswordController@showResetForm');
+$this->post('/password/email', 'Auth\PasswordController@sendResetLinkEmail');
+$this->post('/password/reset', 'Auth\PasswordController@reset');
 
 Route::get('/fundraisers', 'FundraisersController@index');
 Route::get('/groups', function() {

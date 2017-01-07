@@ -24,6 +24,7 @@
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="user.password"
 									   v-validate:password="{ required: true }" required/>
+								<span class="help-block"><a href="/password/email">Forgot password?</a></span>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group">
@@ -298,8 +299,10 @@
 				</form><!-- end form -->
 			</template>
 			<!--<a v-if="currentState === 'login' || currentState === 'create'" @click="currentState='reset'">Forgot Your Password?</a>-->
-			<p class="text-center"><a v-if="currentState === 'reset' || currentState === 'create'"
-									  @click="currentState='login'">I Have An Account</a></p>
+			<p class="text-center">
+				<a v-if="currentState === 'reset' || currentState === 'create'"
+				  @click="currentState='login'">I Have An Account</a>
+			</p>
 			<p class="text-center"><a v-if="currentState === 'login' || currentState === 'reset'"
 									  @click="currentState='create'">Create A New Account</a></p>
 		</div>

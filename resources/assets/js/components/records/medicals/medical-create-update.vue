@@ -72,7 +72,7 @@
                                     <div class="col-sm-6">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed?
+                                                <input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed by Doctor?
                                             </label>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                                     <div class="col-sm-6">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed?
+                                                <input type="checkbox" v-model="condition.diagnosed"> Medically Diagnosed by Doctor?
                                             </label>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
                                     <div class="col-sm-6">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed?
+                                                <input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed by Doctor?
                                             </label>
                                         </div>
                                     </div>
@@ -175,7 +175,7 @@
                                     <div class="col-sm-6">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed?
+                                                <input type="checkbox" v-model="allergy.diagnosed"> Medically Diagnosed by Doctor?
                                             </label>
                                         </div>
                                     </div>

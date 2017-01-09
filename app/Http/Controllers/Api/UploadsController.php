@@ -65,6 +65,12 @@ class UploadsController extends Controller
             return $this->response->item($upload, new UploadTransformer);
         }
 
+        if ($request->get('type') == 'file') {
+            $upload = $this->savePDF($request);
+
+            return $this->response->item($upload, new UploadTransformer);
+        }
+
         $stream = $this->process($request);
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
@@ -248,6 +254,31 @@ class UploadsController extends Controller
         return 'other';
     }
 
+    /**
+     * Save PDF.
+     *
+     * @param $request
+     * @return Upload
+     */
+    private function savePDF($request)
+    {
+        $file = $request->get('file');
+        $path = $request['path'];
+        $filename = isset($request['name']) ? snake_case(trim($request['name'])).'_'.time() : time();
+        $source = $path.'/'.$filename.'.pdf';
+
+        Storage::disk('s3')
+            ->put($source, fopen($file, 'r+'));
+
+        return $this->upload->create([
+            'name' => $request->get('name'),
+            'type' => 'file',
+            'source' => $source,
+            'meta' => [
+                'format' => 'pdf'
+            ]
+        ]);
+    }
     /**
      * Save Video.
      *

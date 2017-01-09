@@ -221,6 +221,9 @@
                         <div class="col-sm-6">
                             <h5>Completed Forms</h5>
                             <p>Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>
+                            <ul class="list-group" v-if="uploads.length">
+                                <li class="list-group-item" v-for="upload in uploads"><i class="fa fa-file-pdf-o"></i> {{upload.name}}</li>
+                            </ul>
                             <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
                         </div>
                     </div>
@@ -321,6 +324,8 @@
                 is_risk:true,
                 conditions: [],
                 allergies: [],
+                uploads: [],
+                forms: [],
                 emergency_contact: {
                     name: '',
                     email: '',
@@ -467,6 +472,10 @@
         events:{
             'uploads-complete'(data){
                 switch(data.type){
+                    case 'file':
+                        this.uploads.push(data);
+                        this.forms.push(data.id);
+                        break;
                     case 'other':
                         //save for preview
                         this.selectedAvatar = data;

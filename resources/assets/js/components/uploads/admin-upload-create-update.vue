@@ -389,7 +389,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-					var params = {
+					let params = {
 						name: this.name,
 						tags: this.tags,
 						type: this.type,

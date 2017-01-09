@@ -1,27 +1,45 @@
 <template>
 	<div>
-		<div class="dark-bg-primary">
+		<div class="white-header-bg">
 			<div class="container">
-				<hr class="divider inv xlg">
 				<div class="row">
-					<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
-						<a :href="'/groups/' + group.url"><img class="img-circle img-lg" :src="group.avatar"></a>
-						<h3>{{ group.name }}</h3>
-					</div>
+					<div class="col-sm-8">
+                		<h3 class="hidden-xs">
+                			<a :href="'/groups/' + group.url"><img class="img-circle img-sm av-left" :src="group.avatar">
+							{{ group.name }}</a>
+						</h3>
+						<div class="visible-xs text-center">
+							<hr class="divider inv">
+							<a :href="'/groups/' + group.url"><img class="img-circle img-md av-left" :src="group.avatar"></a>
+							<h4 style="margin-bottom:0;">{{ group.name }}</h4>
+						</div>
+					</div><!-- end col -->
+					<div class="col-sm-4 text-right hidden-xs">
+						<hr class="divider inv">
+                		<hr class="divider inv sm">
+						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Start Over</a>
+						<hr class="divider inv">
+					</div><!-- end col -->
+					<div class="col-xs-12 text-center visible-xs">
+						<hr class="divider inv sm">
+						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Start Over</a>
+						<hr class="divider inv">
+					</div><!-- end col -->
 				</div>
-				<hr class="divider inv lg">
 			</div>
 		</div>
 		<div class="container">
 			<hr class="divider inv lg">
 			<div class="row">
 				<div class="col-xs-12 text-center">
-					<h2>Choose A Trip</h2>
+					<h2>Choose A Trip Type</h2>
+					<p>If you don't see the trip type you desire, try choosing a different group to travel with.</p>
 					<hr class="divider red-small lg">
+					<hr class="divider inv">
 				</div>
 			</div>
 			<div class="row">
-				<div v-for="trip in trips" class="col-xs-6 col-sm-3">
+				<div v-for="trip in trips" class="col-xs-12 col-sm-6 col-md-3">
 					<div class="panel panel-default">
 						<div class="panel-heading" :class="'panel-' + trip.type">
 							<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>

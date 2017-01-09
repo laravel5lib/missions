@@ -1,3 +1,19 @@
+<div class="dark-bg-primary">
+	<div class="container">
+		<div class="col-sm-8 text-center">
+			<hr class="divider inv sm">
+			<hr class="divider inv sm">
+			<h4>Join The Campaign. Find a group to travel with and register for a trip.</h4>
+			<hr class="divider inv sm">
+			<hr class="divider inv sm hidden-xs">
+		</div>
+		<div class="col-sm-4 text-center">
+			<hr class="divider inv sm hidden-xs">
+			<a href="#" class="btn btn-white-hollow">Register For A Trip</a>
+			<hr class="divider inv sm">
+		</div>
+	</div><!-- end container -->
+</div><!-- end dark-bg-primary -->
 <div class="onenation-header">
     <div class="container">
         <div class="row">
@@ -53,3 +69,15 @@
 	</div>
 	</div>
 </div><!-- end onenation-vision -->
+<div class="dark-bg-primary">
+	<div class="content-section">
+		<div class="container">
+			<div class="col-sm-8 col-sm-offset-2 text-center">
+				<h5 class="text-uppercase">Join The Campaign</h5>
+				<h3>Find a group to travel with and register for a trip.</h3>
+				<hr class="divider inv">
+				<a href="#" class="btn btn-white-hollow">Register For A Trip</a>
+			</div>
+		</div><!-- end container -->
+	</div><!-- end content-section -->
+</div><!-- end dark-bg-primary -->

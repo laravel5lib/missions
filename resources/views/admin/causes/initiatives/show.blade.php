@@ -40,7 +40,7 @@
                         <div class="panel-heading">
                             <h5>Pricing</h5>
                         </div>
-                        <cost-manager id="{{ $initiative->id }}" assignment="project-initiatives"></cost-manager>
+                        <cost-manager id="{{ $initiative->id }}" assignment="project_initiatives"></cost-manager>
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                        <deadlines-manager id="{{ $initiative->id }}" assignment="project-initiatives"></deadlines-manager>
+                        <deadlines-manager id="{{ $initiative->id }}" assignment="project_initiatives"></deadlines-manager>
                     </div>
                 </div>
             </div>

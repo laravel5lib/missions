@@ -32,6 +32,7 @@ class TripRequest extends FormRequest
             'started_at'   => 'required|date',
             'ended_at'     => 'required|date',
             'closed_at'    => 'required|date',
+            'public'       => 'required|boolean',
         ];
 
         if ($this->isMethod('put'))

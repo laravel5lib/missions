@@ -3,7 +3,7 @@
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<p class="text-muted text-center" v-if="fundraisers.length < 1"><em>No fundraisers found.</em></p>
 		<div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
-			<div class="panel panel-default">
+			<div class="panel panel-default" v-if="isVisible(fundraiser)">
 				<div class="panel-heading">
 					<h6 class="text-center">{{ fundraiser.name }}</h6>
 				</div>
@@ -81,6 +81,17 @@
 				oldFundraisers: [],
 
 				pathName: window.location.pathname
+			}
+		},
+		methods: {
+			isVisible(fundraiser) {
+				if(! fundraiser.public && this.$root.user.id == fundraiser.sponsor_id) {
+					return true;
+				} else if(fundraiser.public) {
+					return true;
+				} else {
+					return false;
+				}
 			}
 		},
 		ready(){

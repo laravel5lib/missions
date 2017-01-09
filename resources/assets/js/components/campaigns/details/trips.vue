@@ -3,7 +3,6 @@
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
-
                 <div class="form-group">
                     <select  class="form-control input-sm" v-model="filters.type">
                         <option value="">Any Type</option>
@@ -15,7 +14,6 @@
                         <option value="leader">Leader</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <select class="form-control input-sm" v-model="filters.status" style="width:100%;">
                         <option value="">Any Status</option>
@@ -25,7 +23,6 @@
                         <option value="draft">Draft</option>
                     </select>
                 </div>
-
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
@@ -43,7 +40,6 @@
             </div><!-- end panel-heading -->
             <div class="panel-body">
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-
                 <div class="row">
                     <div class="col-sm-12">
                         <form class="form-inline" novalidate>
@@ -88,6 +84,7 @@
                         <th>
                             Start &amp; End
                         </th>
+                        <th><i class="fa fa-eye"></i></th>
                         <th><i class="fa fa-plane"></i></th>
                         <th></th>
                     </tr>
@@ -98,9 +95,10 @@
                         <td>{{trip.type|capitalize}}</td>
                         <td>{{trip.status|capitalize}}</td>
                         <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
+                        <td><i class="fa fa-check" v-if="trip.public"></i></td>
                         <td>{{trip.reservations}}</td>
                         <td class="text-center">
-                            <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-gear"></i></a>
+                            <a href="/admin/trips/{{ trip.id }}"><i class="fa fa-gear"></i></a>
                         </td>
                     </tr>
                     </tbody>

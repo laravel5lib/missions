@@ -43,6 +43,27 @@ class TripFilter extends Filter
     }
 
     /**
+     * Only public.
+     *
+     * @return mixed
+     */
+    public function onlyPublic()
+    {
+        return $this->public();
+    }
+
+    /**
+     * Only private.
+     *
+     * @return mixed
+     */
+    public function onlyPrivate()
+    {
+        return $this->private();
+    }
+
+
+    /**
      * Find by Groups.
      *
      * @param $ids

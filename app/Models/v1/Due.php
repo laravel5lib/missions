@@ -48,7 +48,11 @@ class Due extends Model
     public function getStatus()
     {
         // make sure the date is compared with the user's timezone
-        $timezone = $this->payable->user->timezone;
+        if($this->payable instanceof Project) {
+            $timezone = $this->payable->sponsor->timezone;
+        } else {
+            $timezone = $this->payable->user->timezone;
+        }
 
         if ($this->due_at
             ->timezone($timezone)

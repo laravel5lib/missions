@@ -1,33 +1,36 @@
 @extends('site.layouts.default')
 
 @section('content')
-<div class="dark-bg-primary">
+<div class="white-header-bg">
     <div class="container">
-        <hr class="divider inv xlg">
         <div class="row">
-            <div class="col-xs-12">
-                <h1 class="text-capitalize"><img class="img-circle img-sm av-left" src="{{ image($trip->group->avatar->source . '?w=100') }}">{{ $trip->group->name }} <span class="hidden-xs small text-white text-capitalize">&middot; {{ $trip->type }}</span></h1>
-            </div>
+            <div class="col-sm-12">
+                <h3 class="hidden-xs text-capitalize">
+                    <img class="img-circle img-sm av-left" src="{{ image($trip->group->avatar->source . '?w=100') }}">{{ $trip->group->name }} <small>&middot; {{ $trip->type }}</small>
+                </h3>
+                <div class="visible-xs text-center text-capitalize">
+                    <hr class="divider inv">
+                    <img class="img-circle img-sm" src="{{ image($trip->group->avatar->source . '?w=100') }}">
+                    <h4 style="margin-bottom:0;">{{ $trip->group->name }}</h4>
+                    <label>{{ $trip->type }}</label>
+                    <hr class="divider inv">
+                </div>
+            </div><!-- end col -->
         </div>
-        <hr class="divider inv xlg">
     </div>
 </div>
 <div class="container">
-    <hr class="divider inv xlg hidden-xs">
-    <hr class="divider inv lg visible-xs">
+    <hr class="divider inv lg">
     <div class="row">
         <div class="visible-xs">
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-8 text-center">
                 <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseDetails" aria-expanded="false" aria-controls="collapseDetails">Read Details</a>
-                <hr class="divider inv xlg">
+                <hr class="divider inv lg">
             </div>
             <div id="collapseDetails" class="collapse">
                 <div class="col-xs-12">
-
                     {% $trip->description %}
-
                     <hr class="divider inv" />
-
                     <h4>Missionaries Registered</h4>
                     <hr class="divider">
                     <div class="row">
@@ -94,5 +97,6 @@
             @endif
         </div>
     </div>
+    <hr class="divider inv lg">
 </div>
 @endsection

@@ -6,39 +6,40 @@
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
 						<hr class="divider inv">
-						<h6 class="text-center text-uppercase">Find the trip that's right for you.</h6>
-						<!--<h6 class="text-center text-uppercase">Which group would you like to travel with?</h6>-->
+						<h3 class="text-center">First, find a group to travel with.</h3>
 						<input type="text" class="form-control" v-model="searchText" debounce="500"
-							   placeholder="Search anything .. (i.e. medical, teens, oakland church)">
+							   placeholder="Search anything (i.e. medical, teens, church name)">
 						<hr class="divider inv sm">
-						<p class="small text-center">Then select a participating travel group below.</p>
+						<p class="small text-center">Next, you'll pick your trip type.</p>
 						<hr class="divider inv">
 					</div>
 				</div>
 				<hr class="divider inv xlg">
+				<h3 class="text-center"><i class="fa fa-chevron-down"></i></h3>
 			</div>
 		</div>
 		<hr class="divider inv xlg">
 
 		<template v-if="groups.length > 0">
-			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+			<div class="container">
 				<!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
-				<div class="col-xs-6 col-sm-4 col-md-3" v-for="group in groups" style="display:flex">
+				<div class="col-xs-12 col-sm-6 col-md-4" v-for="group in groups">
 					<div class="panel panel-default">
+						<div class="panel-body">
 						<a role="button" @click="selectGroup(group)">
-							<img :src="group.avatar" :alt="group.name" class="img-responsive">
-							<div class="panel-body">
-								<h5 class="text-center">{{group.name}}</h5>
-							</div>
+							<h5 style="margin:0px;">
+							<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
+							{{group.name}}
+							</h5>
 						</a>
-					</div>
-				</div>
+						</div><!-- end panel-body -->
+					</div><!-- end panel -->
+				</div><!-- end col -->
 			</div>
 		</template>
 		<template v-else>
 			<div class="container text-center">
-				<p class="lead">Sorry, we couldn't find any participating groups.</p>
-				<p><a href="#">Don't see your group?</a></p>
+				<p class="lead text-muted"><em>Sorry, we couldn't find any participating groups.</em></p>
 			</div>
 		</template>
 
@@ -76,6 +77,7 @@
 				let resource = this.$resource('trips', {
 					include: "group",
 					onlyPublished: true,
+					onlyPublic: true,
 					campaign: this.id,
 					per_page: 8,
 					search: this.searchText,
@@ -88,7 +90,9 @@
 					for (let i in trips.data.data) {
 						arr.push(trips.data.data[i].group.data)
 					}
-					this.groups = arr;
+					this.groups = _.filter(arr, function(group) {
+						return group['public'] == true;
+					});
 				}, function (error) {
 					//TODO error alert message
 				});

@@ -61,7 +61,7 @@
 		methods: {
 			getTrips(){
 				let resource = this.$resource('groups{/id}', {
-					include: "trips.costs",
+					include: "trips:status(active):public,trips.costs",
 					//campaign: this.id,
 					//per_page: 8,
 					//search: this.searchText,

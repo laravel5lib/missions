@@ -88,6 +88,7 @@
                         <th>
                             Start &amp; End
                         </th>
+                        <th><i class="fa fa-eye"></i></th>
                         <th><i class="fa fa-plane"></i></th>
                         <th></th>
                     </tr>
@@ -98,9 +99,10 @@
                         <td>{{trip.type|capitalize}}</td>
                         <td>{{trip.status|capitalize}}</td>
                         <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
+                        <td><i class="fa fa-check" v-if="trip.public"></i></td>
                         <td>{{trip.reservations}}</td>
                         <td class="text-center">
-                            <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-gear"></i></a>
+                            <a href="/admin/trips/{{ trip.id }}"><i class="fa fa-gear"></i></a>
                         </td>
                     </tr>
                     </tbody>

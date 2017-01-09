@@ -49,6 +49,7 @@ class TripTransformer extends TransformerAbstract
             'todos'           => $trip->todos,
             'prospects'       => $trip->prospects,
             'description'     => $trip->description,
+            'public'          => (boolean) $trip->public,
             'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
             'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),
@@ -115,6 +116,7 @@ class TripTransformer extends TransformerAbstract
      * Include Costs
      *
      * @param Trip $trip
+     * @param ParamBag $params
      * @return \League\Fractal\Resource\Collection
      */
     public function includeCosts(Trip $trip, ParamBag $params = null)

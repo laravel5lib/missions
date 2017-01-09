@@ -6,9 +6,13 @@
         <div class="row">
             <div class="col-sm-12 col-md-8">
                 <div class="row">
-                    <div class="col-sm-6 text-center">
+                    <div class="col-sm-3 text-center">
                         <label>Status</label>
                         <p>{{ ucfirst($trip->status) }}</p>
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <label>Visibility</label>
+                        <p>{{ $trip->public ? 'Public' : 'Private' }}</p>
                     </div>
                     <div class="col-sm-6 text-center">
                         <label>Publish Date</label>

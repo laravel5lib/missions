@@ -200,8 +200,8 @@
             searchGroups(){
                 // this.$refs.spinner.show();
                 this.$http.get('groups', {
-                    include:'trips:onlyPublished,notes',
-                    search: this.searchText,
+                    include:'trips:status(active),notes',
+                    search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
                     pending: this.pending ? true : null

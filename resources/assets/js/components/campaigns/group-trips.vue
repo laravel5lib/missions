@@ -42,6 +42,12 @@
 					</div>
 				</div>
 			</div><!-- end row -->
+
+			<div class="container">
+				<div class="col-sm-12 text-center">
+					<pagination :pagination.sync="pagination" :callback="getTrips"></pagination>
+				</div>
+			</div><!-- end container -->
 			<hr class="divider inv xlg">
 		</div><!-- end container -->
 	</div>
@@ -55,31 +61,31 @@
 			return {
 				group:{},
 				trips: [],
-				page: 1
+				page: 1,
+				pagination: { current_page: 1 }
 			}
 		},
 		methods: {
 			getTrips(){
-				let resource = this.$resource('groups{/id}', {
-					include: "trips:status(active):public,trips.costs",
-					//campaign: this.id,
+				let resource = this.$resource('trips', {
+					include: "costs",
+					onlyPublished: true,
+					onlyPublic: true,
+					groups: new Array(this.id),
+					campaign: this.campaignId,
 					//per_page: 8,
 					//search: this.searchText,
-					page: this.page,
+					page: this.pagination.current_page,
 				});
 				// this.$refs.spinner.show();
-				resource.query({id: this.id}).then(function (group) {
-					this.group = group.data.data;
-					let t = this.group.trips.data, cId = this.campaignId, arr = [], calcLowest = this.calcStartingCost;
-					t.forEach(function (val, i) {
-						if( val.campaign_id === cId) {
-							val.lowest = calcLowest(val.costs.data);
-							arr.push(val);
-						}
+				resource.query().then(function (response) {
+					this.pagination = response.data.meta.pagination;
+					this.trips = response.data.data;
 
+					let cId = this.campaignId, calcLowest = this.calcStartingCost;
+					_.each(this.trips, function (trip, index, list) {
+						list[index].lowest = calcLowest(trip.costs.data);
 					});
-					this.trips = arr;
-					// this.$refs.spinner.hide();
 				}, function (error) {
 					// this.$refs.spinner.hide();
 				});
@@ -102,6 +108,9 @@
 		activate(done){
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
+			this.$http.get('groups/' + this.id).then(function (response) {
+				this.group = response.data.data;
+			});
 			this.getTrips();
 			done();
 		}

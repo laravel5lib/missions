@@ -49,10 +49,12 @@
 							<select id="type" class="form-control input-sm" v-model="type"
 									v-validate:type="{ required: true }" required>
 								<option value="">-- select --</option>
-								<option value="full">Full</option>
+								<option value="ministry">Ministry</option>
+								<option value="family">Family</option>
 								<option value="media">Media</option>
 								<option value="medical">Medical</option>
-								<option value="short">Short</option>
+								<option value="international">International</option>
+								<option value="leader">Leader</option>
 							</select>
 						</div>
 					</div>

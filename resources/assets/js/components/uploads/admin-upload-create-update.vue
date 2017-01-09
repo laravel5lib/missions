@@ -140,7 +140,7 @@
 			</form>
 		</validator>
 
-		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400">
+		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400" ok-text="Select" callback="selectExisting(previewUpload)">
 			<div slot="modal-body" class="modal-body" v-if="previewUpload">
 				<h5 class="text-center">{{previewUpload.name}}</h5>
 				<img :src="previewUpload.source + '?w=720&fit=max&q=65'" :alt="previewUpload.name" class="img-responsive">

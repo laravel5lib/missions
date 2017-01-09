@@ -77,6 +77,7 @@
 				let resource = this.$resource('trips', {
 					include: "group",
 					onlyPublished: true,
+					onlyPublic: true,
 					campaign: this.id,
 					per_page: 8,
 					search: this.searchText,
@@ -89,7 +90,9 @@
 					for (let i in trips.data.data) {
 						arr.push(trips.data.data[i].group.data)
 					}
-					this.groups = arr;
+					this.groups = _.filter(arr, function(group) {
+						return group['public'] == true;
+					});
 				}, function (error) {
 					//TODO error alert message
 				});

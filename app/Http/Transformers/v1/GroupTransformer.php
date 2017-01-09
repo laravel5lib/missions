@@ -3,10 +3,13 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Group;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class GroupTransformer extends TransformerAbstract
 {
+    private $validParams = ['public', 'private', 'status'];
+
     /**
      * List of resources available to include
      *
@@ -70,11 +73,31 @@ class GroupTransformer extends TransformerAbstract
      * Include Trips
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @param ParamBag $params
+     * @return mixed
      */
-    public function includeTrips(Group $group)
+    public function includeTrips(Group $group, ParamBag $params = null)
     {
-        $trips = $group->trips;
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $trips = [];
+
+            if ($params->get('public')) {
+                $trips = $group->trips()->filter(['onlyPublic' => true])->get();
+            }
+
+            if ($params->get('private')) {
+                $trips = $group->trips()->filter(['onlyPrivate' => true])->get();
+            }
+
+            if ($params->get('status')) {
+                $trips = $group->trips()->filter(['status' => $params->get('status')[0]])->get();
+            }
+
+        } else {
+            $trips = $group->trips;
+        }
 
         return $this->collection($trips, new TripTransformer);
     }
@@ -83,7 +106,7 @@ class GroupTransformer extends TransformerAbstract
      * Include Managers
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeManagers(Group $group)
     {
@@ -96,7 +119,7 @@ class GroupTransformer extends TransformerAbstract
      * Include Facilitators
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeFacilitators(Group $group)
     {
@@ -142,5 +165,17 @@ class GroupTransformer extends TransformerAbstract
         $notes = $group->notes()->recent()->get();
 
         return $this->collection($notes, new NoteTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
+                implode(',', $this->validParams)
+            ));
+        }
     }
 }

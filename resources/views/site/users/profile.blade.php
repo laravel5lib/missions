@@ -68,7 +68,7 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="row tab-pane active" id="fundraisers">
-                        <user-profile-fundraisers id="{{ $user->id }}" user-url="{{ '@'.$user->url }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-fundraisers>
+                        <user-profile-fundraisers id="{{ $user->id }}" user-url="{{ '@'.$user->url }}"></user-profile-fundraisers>
                     </div><!-- end row -->
                     <div role="tabpanel" class="row tab-pane" id="updates">
                         <div class="col-md-12 col-md-offset-0 col-xs-12">

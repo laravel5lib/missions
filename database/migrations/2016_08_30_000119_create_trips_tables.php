@@ -27,6 +27,7 @@ class CreateTripsTables extends Migration
             $table->json('todos')->nullable();
             $table->json('prospects')->nullable();
             $table->text('description');
+            $table->boolean('public')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->timestamp('closed_at');
             $table->timestamps();

@@ -30,7 +30,7 @@ class Trip extends Model
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
         'companion_limit', 'published_at', 'closed_at',
-        'prospects'
+        'prospects', 'public'
     ];
 
     /**
@@ -392,6 +392,16 @@ class Trip extends Model
     public function scopeDraft($query)
     {
         return $query->whereNull('published_at');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
+    public function scopePrivate($query)
+    {
+        return $query->where('public', false);
     }
 
 }

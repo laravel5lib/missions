@@ -311,15 +311,25 @@
 					optional: optionalArr,
 				}
 			});
+
+			let self = this;
+			this.$root.$on('userHasLoggedIn', function (val) {
+				// expecting userData object
+				self.userData = val;
+				self.currentStep.complete = !!val;
+				// force next step
+				self.nextStep();
+			})
 		},
 		events: {
-			'userHasLoggedIn'(val){
+			/*'userHasLoggedIn'(val){
+			    debugger;
 				// expecting userData object
 				this.userData = val;
 				this.currentStep.complete = !!val;
 				// force next step
 				this.nextStep();
-			},
+			},*/
 			'tos-agree'(val){
 				this.currentStep.complete = val;
 			},

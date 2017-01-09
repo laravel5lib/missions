@@ -480,9 +480,10 @@
 			});
 
 			if (this.isChildComponent) {
-				// After reload from login / registratration
+				// After reload from login / registration
 				// Check if user is logged in
-				this.getUserData(false);
+				if ( this.$cookie.get('api_token') )
+					this.getUserData(false);
 			}
 
 		}

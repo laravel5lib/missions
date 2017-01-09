@@ -140,7 +140,7 @@
 			</form>
 		</validator>
 
-		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400" ok-text="Select" callback="selectExisting(previewUpload)">
+		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400" ok-text="Select" :callback="selectExistingPreview">
 			<div slot="modal-body" class="modal-body" v-if="previewUpload">
 				<h5 class="text-center">{{previewUpload.name}}</h5>
 				<img :src="previewUpload.source + '?w=720&fit=max&q=65'" :alt="previewUpload.name" class="img-responsive">
@@ -475,7 +475,7 @@
 				}
 			},
 			searchUploads(){
-				var params = {
+				let params = {
 					include: '',
 					per_page: this.perPage,
 					page: this.pagination.current_page,
@@ -492,6 +492,10 @@
 			selectExisting(upload){
 				// Assumes this is a child component
 				this.$dispatch('uploads-complete', upload);
+			},
+			selectExistingPreview(){
+				// Assumes this is a child component
+				this.$dispatch('uploads-complete', this.previewUpload);
 			},
 			preview(upload){
 			    this.previewModal = true;

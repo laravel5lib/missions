@@ -70,7 +70,7 @@ class GroupTransformer extends TransformerAbstract
      * Include Trips
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeTrips(Group $group)
     {
@@ -83,7 +83,7 @@ class GroupTransformer extends TransformerAbstract
      * Include Managers
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeManagers(Group $group)
     {
@@ -96,7 +96,7 @@ class GroupTransformer extends TransformerAbstract
      * Include Facilitators
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeFacilitators(Group $group)
     {

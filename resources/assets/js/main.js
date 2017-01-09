@@ -101,6 +101,8 @@ import projectsList from './components/admin/projects-list.vue';
 import projectEditor from './components/admin/project-editor.vue';
 import projectCosts from './components/projects/project-costs.vue';
 import projectDues from './components/projects/project-dues.vue';
+import adminProjectCosts from './components/admin/admin-project-costs.vue';
+import adminProjectDues from './components/admin/admin-project-dues.vue';
 import initiativesList from './components/admin/initiatives-list.vue';
 import initiativeEditor from './components/admin/initiative-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
@@ -573,6 +575,8 @@ new Vue({
         projectEditor,
         projectCosts,
         projectDues,
+        adminProjectCosts,
+        adminProjectDues,
         initiativesList,
         initiativeEditor,
         adminDonorsList,

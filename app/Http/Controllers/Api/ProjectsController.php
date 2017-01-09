@@ -70,6 +70,8 @@ class ProjectsController extends Controller
             'plaque_message' => $request->get('plaque_message')
         ]);
 
+        $project->syncCosts($request->get('costs'));
+
         return $this->response->item($project, new ProjectTransformer);
     }
 
@@ -78,20 +80,22 @@ class ProjectsController extends Controller
      *
      * @param $id
      * @param ProjectRequest $request
-     * @return \Dingo\Api\Http\Response\Factory
+     * @return \Dingo\Api\Http\Response
      */
     public function update($id, ProjectRequest $request)
     {
         $project = $this->project->findOrFail($id);
 
         $project->update([
-            'name' => $request->get('name'),
-            'project_initiative_id' => $request->get('project_initiative_id'),
-            'sponsor_id' => $request->get('sponsor_id'),
-            'sponsor_type' => $request->get('sponsor_type'),
-            'plaque_prefix' => $request->get('plaque_prefix'),
-            'plaque_message' => $request->get('plaque_message'),
+            'name' => $request->get('name', $project->name),
+            'project_initiative_id' => $request->get('project_initiative_id', $project->project_initiative_id),
+            'sponsor_id' => $request->get('sponsor_id', $project->sponsor_id),
+            'sponsor_type' => $request->get('sponsor_type', $project->sponsor_type),
+            'plaque_prefix' => $request->get('plaque_prefix', $project->plaque_prefix),
+            'plaque_message' => $request->get('plaque_message', $project->plaque_message),
         ]);
+
+        $project->syncCosts($request->get('costs'));
 
         return $this->response->item($project, new ProjectTransformer);
     }

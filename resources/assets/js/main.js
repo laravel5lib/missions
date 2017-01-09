@@ -99,6 +99,8 @@ import projectCauses from './components/admin/project-causes.vue';
 import causeEditor from './components/admin/cause-editor.vue';
 import projectsList from './components/admin/projects-list.vue';
 import projectEditor from './components/admin/project-editor.vue';
+import projectCosts from './components/projects/project-costs.vue';
+import projectDues from './components/projects/project-dues.vue';
 import initiativesList from './components/admin/initiatives-list.vue';
 import initiativeEditor from './components/admin/initiative-editor.vue';
 import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
@@ -569,6 +571,8 @@ new Vue({
         causeEditor,
         projectsList,
         projectEditor,
+        projectCosts,
+        projectDues,
         initiativesList,
         initiativeEditor,
         adminDonorsList,

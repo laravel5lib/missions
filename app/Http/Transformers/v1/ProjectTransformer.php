@@ -18,7 +18,8 @@ class ProjectTransformer extends Fractal\TransformerAbstract
         'costs',
         'sponsor',
         'rep',
-        'initiative'
+        'initiative',
+        'dues'
     ];
 
     /**
@@ -117,5 +118,18 @@ class ProjectTransformer extends Fractal\TransformerAbstract
         $notes = $project->notes()->recent()->get();
 
         return $this->collection($notes, new NoteTransformer);
+    }
+
+    /**
+     * Include dues.
+     *
+     * @param Project $project
+     * @return Fractal\Resource\Collection
+     */
+    public function includeDues(Project $project)
+    {
+        $dues = $project->dues;
+
+        return $this->collection($dues, new DueTransformer);
     }
 }

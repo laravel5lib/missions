@@ -201,7 +201,8 @@
         data(){
             return{
                 project: {
-                    sponsor_type: 'users'
+                    sponsor_type: 'users',
+                    costs: []
                 },
                 sponsor: {},
                 initiative: {
@@ -213,10 +214,7 @@
                 cause: {},
                 editMode: false,
                 sponsors: [],
-                selectedSponsor: null,
-                showSuccess: false,
-                showError: false,
-                message: null
+                selectedSponsor: null
             }
         },
         computed: {
@@ -229,7 +227,7 @@
         },
         methods: {
             getInitiatives() {
-                this.$http.get('causes/' + this.cause.id + '/initiatives', {
+                this.$http.get('causes/' + this.cause.id + '/initiatives?include=costs.payments', {
                     country: this.initiative.country.code
                 }).then(function (response) {
                     this.availableInitiatives = response.data.data;
@@ -266,12 +264,10 @@
                 this.$http.put('projects/' + this.id, this.project).then(function (response) {
                     this.editMode = false;
                     this.$refs.loader.hide();
-                    this.message = 'Your changes were saved successfully.',
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Your changes were saved successfully.');
                 }).error(function() {
                     this.$refs.loader.hide();
-                    this.message = 'There are problems with the form.',
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are problems with the form.');
                 });
             },
             create() {
@@ -281,8 +277,7 @@
                     window.location = '/admin/projects/' + response.data.data.id;
                 }).error(function() {
                     this.$refs.loader.hide();
-                    this.message = 'There are problems with the form.',
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are problems with the form.');
                 });
             },
             cancel() {

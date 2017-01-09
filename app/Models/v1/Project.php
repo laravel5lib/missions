@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use App\Jobs\SyncProjectPaymentsDue;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -220,10 +221,32 @@ class Project extends Model
 
         $data = $costs->keyBy('id')->map(function($item) {
             return [
-                'quantity' => $item->quantity,
+//                'quantity' => $item['quantity'],
             ];
         })->toArray();
 
         $this->costs()->sync($data);
+
+        dispatch(new SyncProjectPaymentsDue($this));
+    }
+
+    /**
+     * Project Dues.
+     *
+     * @return mixed
+     */
+    public function dues()
+    {
+        return $this->morphMany(Due::class, 'payable')->sortRecent();
+    }
+
+    /**
+     * Manage a Project's Payments.
+     *
+     * @return ProjectPayment
+     */
+    public function payments()
+    {
+        return new ProjectPayment($this);
     }
 }

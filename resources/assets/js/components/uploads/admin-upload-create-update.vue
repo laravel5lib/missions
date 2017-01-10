@@ -68,6 +68,12 @@
 					</select>
 				</div>
 
+				<div class="row" v-if="isUpdate">
+					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other'">
+						<img :src="src" class="img-responsive">
+					</div>
+				</div>
+
 				<div class="row" v-if="type && type === 'other' && !uiLocked">
 					<div class="checkbox">
 						<label>
@@ -325,6 +331,7 @@
 				_.extend(this, {
 					url: '',
 					path: '',
+					src: '',
 					file: null,
 					x_axis: null,
 					y_axis: null,
@@ -389,7 +396,7 @@
             submit(){
                 this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-					var params = {
+					let params = {
 						name: this.name,
 						tags: this.tags,
 						type: this.type,
@@ -505,10 +512,11 @@
 		ready(){
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
-					var upload = response.data.data;
+					let upload = response.data.data;
 					this.name = upload.name;
 					this.tags = upload.tags;
 					this.type = upload.type;
+					this.src = upload.source;
 				});
 			}
 

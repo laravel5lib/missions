@@ -37,11 +37,11 @@ Route::group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.groups.edit', compact('group', 'id'));
     });
 
-    Route::get('groups/{groupId}/trips/{id}', function($groupId, $id) use ($dispatcher) {
+    Route::get('groups/{groupId}/trips/{id}/{tab?}', function($groupId, $id, $tab = 'details') use ($dispatcher) {
         if( ! auth()->user()->managing()->count()) abort(403);
         $group = $dispatcher->get('groups/' . $groupId);
-        $trip = $dispatcher->get('trips/' . $id);
-        return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id'));
+        $trip = $dispatcher->get('trips/' . $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+        return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id', 'tab'));
     });
 
     Route::get('records/{tab?}', function($tab = 'passports') {

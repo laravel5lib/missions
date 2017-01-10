@@ -468,6 +468,28 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/user-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
+    }
+
+    /**
      * Get the user's page banner.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -475,6 +497,28 @@ class User extends Authenticatable implements JWTSubject
     public function banner()
     {
         return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
+    /**
+     * Helper method to retrieve the user's banner
+     * 
+     * @return mixed
+     */
+    public function getBanner()
+    {
+        if( ! $this->banner) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'default',
+                'type' => 'banner',
+                'source' => 'images/banners/1n1d17-missionary-2560x800.jpg',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->banner;
     }
 
     /**

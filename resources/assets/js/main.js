@@ -117,6 +117,7 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 // jQuery
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
+window.timezone = require('moment-timezone');
 window._ = require('underscore');
 window.marked = require('marked');
 require('gsap');

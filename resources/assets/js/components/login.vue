@@ -74,7 +74,7 @@
 					</div><!-- end alert -->
 					<div class="form-group">
 						<div class="col-xs-10  col-xs-offset-1">
-							<label class="control-label">First And Last Name</label>
+							<label class="control-label">Name</label>
 							<input type="text" class="form-control" v-model="newUser.name" placeholder="John Doe"
 								   required
 								   maxlength="100"/>
@@ -331,10 +331,12 @@
 					dobMonth: null,
 					dobDay: null,
 					dobYear: null,
-					dob: null,
+					birthday: null,
 					gender: null,
 					country_code: null,
-					timezone: null
+					timezone: timezone.tz.guess(),
+					status: null,
+					_token: $('meta[name="csrf-token"]').attr('content')
 				},
 				reset: {
 					email: null
@@ -353,6 +355,9 @@
 		watch: {
 			'countryCodeObj': function (val) {
 				this.newUser.country_code = _.isObject(val) ? val.code : null;
+			},
+			'currentState': function(val) {
+				this.messages = [];
 			}
 		},
 		computed: {},
@@ -385,17 +390,20 @@
 									type: 'danger',
 									message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
 								});
+								this.$dispatch('showError', 'Please check the form.');
 							}
 
 							if (response.status && response.status === 422) {
 								that.messages = [{
 									type: 'danger',
 									message: 'Please enter a valid email and password.'
-								}]
+								}];
+								this.$dispatch('showError', 'Please check the form.');
 							}
 						})
 				} else {
 					this.messages = [{type: 'warning', message: 'Please check the form'}];
+					this.$dispatch('showError', 'Please check the form.');
 				}
 			},
 
@@ -426,24 +434,24 @@
 			registerUser: function (e) {
 				e.preventDefault();
 				$.extend(this.newUser, {
-					dob: moment().set({
+					birthday: moment().set({
 						year: this.newUser.dobYear,
 						month: this.newUser.dobMonth,
 						day: this.newUser.dobDay
-					}).format('LL')
+					}).format('YYYY-MM-DD')
 				});
 
-				this.$http.post('register', this.newUser).then(function (response) {
-					console.log(response.data.token);
+				this.$http.post('/register', this.newUser).then(function (response) {
+					// console.log(response.data.token);
 					// set cookie - name, token
 					this.$cookie.set('api_token', response.data.token);
 					// reload to set cookie
 					/*if (this.isChildComponent) {
 					 window.location.reload();
 					 }*/
-					this.getUserData();
+					this.getUserData(response.data.redirect_to);
 				}, function (response) {
-					console.log(response);
+					// console.log(response);
 					let messages = [];
 					_.each(response.data.errors, function (error) {
 						messages.push({
@@ -452,6 +460,7 @@
 						})
 					});
 					this.messages = messages;
+					this.$dispatch('showError', 'Please check the form.');
 				})
 			},
 

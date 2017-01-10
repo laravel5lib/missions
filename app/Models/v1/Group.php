@@ -158,6 +158,50 @@ class Group extends Model
     }
 
     /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/logo-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
+    }
+
+    /**
+     * Helper method to retrieve the group's banner
+     * 
+     * @return mixed
+     */
+    public function getBanner()
+    {
+        if( ! $this->banner) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'default',
+                'type' => 'banner',
+                'source' => 'images/banners/1n1d17-vision3-2560x800.jpg',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->banner;
+    }
+
+    /**
      * Get the group's social links.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany

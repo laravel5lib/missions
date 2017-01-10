@@ -14,13 +14,13 @@
 @section('content')
 
     <div id="parallax1" class="prof-cover-photo hidden-xs">
-        <img src="{{ image($group->banner->source) }}" alt="{{ $group->name }}">
+        <img src="{{ image($group->getBanner()->source) }}" alt="{{ $group->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-12">
                 <div class="panel panel-default profile-pic-panel" data-aos="fade-up">
-                    <img src="{{ image($group->avatar->source) }}" alt="{{ $group->name }}" class="img-responsive">
+                    <img src="{{ image($group->getAvatar()->source) }}" alt="{{ $group->name }}" class="img-responsive">
                     <div class="panel-body">
                         <h4>{{ $group->name }}</h4>
                         <h6 class="small text-muted">/groups/{{ $group->url }}</h6>

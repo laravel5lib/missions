@@ -35,25 +35,39 @@
 
         <div class="row">
 
-            <div class="col-xs-12 text-right">
-                <form class="form-inline">
-                    <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
-                        <label>
-                            <input type="checkbox" v-model="includeManaging"> Include my group's reservations
-                        </label>
+            <div class="col-xs-12">
+                <form>
+                <div class="row">
+                    <div class="form-group col-lg-5 col-md-4 col-sm-12">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <div class="form-group col-lg-7 col-md-8 col-sm-12">
+                        <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+                            Filters
+                            <i class="fa fa-filter"></i>
+                        </button>
+                        <export-utility url="reservations/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                        <div class="btn-group">
+                            <button class="btn btn-sm"
+                                    :class="[layout == 'list' ? 'btn-default-hollow' : 'btn-default']"
+                                    @click.prevent="layout = 'list'"><i class="fa fa-list-ul"></i></button>
+                            <button class="btn btn-sm"
+                                    :class="[layout == 'grid' ? 'btn-default-hollow' : 'btn-default']"
+                                    @click.prevent="layout = 'grid'"><i class="fa fa-th-large"></i></button>
+                        </div>
+                        <div style="display: inline-block;" v-if="isFacilitator">
+                            <label>
+                                <input type="checkbox" v-model="includeManaging"> Include my group's reservations
+                            </label>
+                        </div>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-                        Filters
-                        <i class="fa fa-filter"></i>
-                    </button>
-                    <export-utility url="reservations/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                </div>
                 </form>
                 <hr class="divider sm inv">
             </div>
@@ -61,7 +75,7 @@
             <div class="col-xs-12" style="position:relative">
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
-                    <div class="row">
+                    <div class="row" v-if="layout == 'grid'">
                         <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
                             <div class="panel panel-default">
                                 <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
@@ -79,6 +93,47 @@
                                     <hr class="divider inv sm">
                                     <a class="btn btn-sm btn-primary" :href="'/dashboard/reservations/' + reservation.id">View Reservation</a>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" v-if="layout == 'list'">
+                        <div class="col-xs-12">
+                            <div class="list-group">
+                                <div class="list-group-item default">
+                                    <div class="row text-muted">
+                                        <div class="col-sm-3">Name/Role</div>
+                                        <div class="col-sm-3">Campaign/Country</div>
+                                        <div class="col-sm-3">Group/Type</div>
+                                        <div class="col-sm-3">Status</div>
+                                    </div>
+                                </div>
+                                <a :href="'/dashboard/reservations/' + reservation.id" class="list-group-item" v-for="reservation in reservations">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>{{ reservation.trip.data.campaign.data.name | capitalize }}<br />
+                                            <small class="text-muted">{{ reservation.country_name | capitalize }}</small><p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>{{ reservation.trip.data.group.data.name | capitalize }}<br />
+                                            <small class="text-muted">{{ reservation.trip.data.type | capitalize }}</small></p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>
+                                                <span class="text-success">
+                                                {{ reservation.percent_raised }}%
+                                                </span> of {{ reservation.total_cost | currency }}
+                                                <br />
+                                                <span class="label label-success">0</span>
+                                                <span class="label label-info">1</span>
+                                                <span class="label label-default">1</span>
+                                                <span class="label label-danger">4</span>
+                                            <p>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -155,6 +210,7 @@
                     deadlines: 'Other Deadlines'
                 },
                 exportFilters: {},
+                layout: 'list',
             }
         },
         watch: {
@@ -188,7 +244,7 @@
             },
             getReservations(){
                 let params = {
-                    include: 'trip.campaign,trip.group',
+                    include: 'trip.campaign,trip.group,requirements',
                     search: this.search,
                     page: this.pagination.current_page
                 };

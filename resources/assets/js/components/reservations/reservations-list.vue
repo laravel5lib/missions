@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="form-group" v-if="!tripId">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaignsg"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>

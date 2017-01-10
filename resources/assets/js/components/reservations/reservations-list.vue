@@ -99,12 +99,12 @@
                     <div class="row" v-if="layout == 'list'">
                         <div class="col-xs-12">
                             <div class="list-group">
-                                <div class="list-group-item default">
+                                <div class="list-group-item default hidden-xs">
                                     <div class="row text-muted">
                                         <div class="col-sm-3">Name/Role</div>
                                         <div class="col-sm-3">Campaign/Country</div>
                                         <div class="col-sm-3">Group/Type</div>
-                                        <div class="col-sm-3">Status</div>
+                                        <div class="col-sm-3">Raised/Requirements</div>
                                     </div>
                                 </div>
                                 <a :href="'/dashboard/reservations/' + reservation.id" class="list-group-item" v-for="reservation in reservations">
@@ -126,10 +126,18 @@
                                                 {{ reservation.percent_raised }}%
                                                 </span> of {{ reservation.total_cost | currency }}
                                                 <br />
-                                                <span class="label label-success">0</span>
-                                                <span class="label label-info">1</span>
-                                                <span class="label label-default">1</span>
-                                                <span class="label label-danger">4</span>
+                                                <tooltip effect="scale" placement="top" content="Complete">
+                                                    <span class="label label-success">{{ complete(reservation) }}</span>
+                                                </tooltip>
+                                                <tooltip effect="scale" placement="top" content="Needs Attention">
+                                                    <span class="label label-info">{{ attention(reservation) }}</span>
+                                                </tooltip>
+                                                <tooltip effect="scale" placement="top" content="Under Review">
+                                                    <span class="label label-default">{{ reviewing(reservation) }}</span>
+                                                </tooltip>
+                                                <tooltip effect="scale" placement="top" content="Incomplete">
+                                                    <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
+                                                </tooltip>
                                             <p>
                                         </div>
                                     </div>
@@ -211,6 +219,7 @@
                 },
                 exportFilters: {},
                 layout: 'list',
+                incomplete: []
             }
         },
         watch: {
@@ -239,6 +248,18 @@
             }
         },
         methods: {
+            getIncomplete(reservation) {
+                return _.where(reservation.requirements.data, {status: 'incomplete'}).length;
+            },
+            complete(reservation) {
+                return _.where(reservation.requirements.data, {status: 'complete'}).length;
+            },
+            attention(reservation) {
+                return _.where(reservation.requirements.data, {status: 'attention'}).length;
+            },
+            reviewing(reservation) {
+                return _.where(reservation.requirements.data, {status: 'reviewing'}).length;
+            },
             country(code){
                 return code;
             },

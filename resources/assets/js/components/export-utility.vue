@@ -36,7 +36,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-6" v-for="(key, value) in options">
-                            <div class="checkbox">
+                            <div>
                                 <label>
                                     <input type="checkbox"
                                            v-model="exportSettings.fields"

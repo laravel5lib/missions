@@ -27,6 +27,7 @@ class AuthController extends Controller
     use ThrottlesLogins;
 
     protected $user;
+    protected $redirectPath = '/dashboard';
 
     public function __construct(User $user)
     {
@@ -117,6 +118,8 @@ class AuthController extends Controller
             return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])
                              ->withCookie($cookie);
         }
+
+        dispatch(new SendWelcomeEmail($user));
 
         return redirect()->intended('/dashboard')
                          ->withCookie($cookie);

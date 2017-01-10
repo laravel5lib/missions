@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-sm-8">
                     <h3>
-                        <img src="{{ image($user->avatar->source . '?w=100') }}" alt="{{ $user->name }}" class="img-circle av-left img-sm">
+                        <img src="{{ image($user->getAvatar()->source . '?w=100') }}" alt="{{ $user->name }}" class="img-circle av-left img-sm">
                         {{ $user->name }}
                         <small>&middot; User</small>
                     </h3>

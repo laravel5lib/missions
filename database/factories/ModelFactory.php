@@ -792,10 +792,9 @@ $factory->defineAs(App\Models\v1\Upload::class, 'avatar', function (Faker\Genera
     return [
         'name' => $faker->word,
         'source' => $faker->randomElement([
-            'images/avatars/avatar1.jpg',
-            'images/avatars/avatar2.jpg',
-            'images/avatars/avatar3.jpg',
-            'images/avatars/avatar4.jpg'
+            'images/avatars/1n1d17-dark-400x400.jpg',
+            'images/avatars/1n1d17-red-400x400.jpg',
+            'images/avatars/1n1d17-white-400x400.jpg'
         ]),
         'type' => 'avatar'
     ];
@@ -806,10 +805,12 @@ $factory->defineAs(App\Models\v1\Upload::class, 'banner', function (Faker\Genera
     return [
         'name' => $faker->word,
         'source' => $faker->randomElement([
-            'images/banners/banner1.jpg',
-            'images/banners/banner2.jpg',
-            'images/banners/banner3.jpg',
-            'images/banners/banner4.jpg'
+            'images/banners/1n1d17-missionary-2560x800.jpg',
+            'images/banners/1n1d17-speak-2560x800.jpg',
+            'images/banners/1n1d17-vision-2560x800.jpg',
+            'images/banners/1n1d17-vision2-2560x800.jpg',
+            'images/banners/1n1d17-vision3-2560x800.jpg',
+            'images/banners/1n1d17-water-2560x800.jpg'
         ]),
         'type' => 'banner'
     ];

@@ -69,7 +69,7 @@ class UsersController extends Controller
         $user->url = $request->get('url', str_random(10));
         $user->save();
 
-        $this->dispatch(new SendWelcomeEmail($user));
+        dispatch(new SendWelcomeEmail($user));
 
         return $this->response->item($user, new UserTransformer);
     }

@@ -11,7 +11,7 @@
                 </div>
 
                 <div class="form-group" v-if="!tripId">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaignsg"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
@@ -35,33 +35,47 @@
 
         <div class="row">
 
-            <div class="col-xs-12 text-right">
-                <form class="form-inline">
-                    <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
-                        <label>
-                            <input type="checkbox" v-model="includeManaging"> Include my group's reservations
-                        </label>
+            <div class="col-xs-12">
+                <form>
+                <div class="row">
+                    <div class="form-group col-lg-5 col-md-4 col-sm-12">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
                     </div>
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
-                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                    </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-                        Filters
-                        <i class="fa fa-filter"></i>
-                    </button>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sort By <span class="caret"></span>
+                    <div class="form-group col-lg-7 col-md-8 col-sm-12">
+                        <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+                            Filters
+                            <i class="fa fa-filter"></i>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li v-for="option in sortOptions" :class="{'active': filters.sort === option.value && filters.direction === option.direction}"><a @click="filters.sort = option.value,filters.direction = option.direction" v-text="option.name"></a></li>
-                        </ul>
+						<div class="btn-group">
+							<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Sort By <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li v-for="option in sortOptions" :class="{'active': filters.sort === option.value && filters.direction === option.direction}"><a @click="filters.sort = option.value,filters.direction = option.direction" v-text="option.name"></a></li>
+							</ul>
+						</div>
+						<export-utility url="reservations/export"
+                                        :options="exportOptions"
+                                        :filters="exportFilters">
+                        </export-utility>
+                        <div class="btn-group">
+                            <button class="btn btn-sm"
+                                    :class="[layout == 'list' ? 'btn-default-hollow' : 'btn-default']"
+                                    @click.prevent="layout = 'list'"><i class="fa fa-list-ul"></i></button>
+                            <button class="btn btn-sm"
+                                    :class="[layout == 'grid' ? 'btn-default-hollow' : 'btn-default']"
+                                    @click.prevent="layout = 'grid'"><i class="fa fa-th-large"></i></button>
+                        </div>
+                        <div style="display: inline-block;" v-if="isFacilitator">
+                            <label>
+                                <input type="checkbox" v-model="includeManaging"> Include my group's reservations
+                            </label>
+                        </div>
                     </div>
-                    <export-utility url="reservations/export"
-                                    :options="exportOptions"
-                                    :filters="exportFilters">
-                    </export-utility>
+                </div>
                 </form>
                 <hr class="divider sm inv">
             </div>
@@ -69,7 +83,7 @@
             <div class="col-xs-12" style="position:relative">
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
-                    <div class="row">
+                    <div class="row" v-if="layout == 'grid'">
                         <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
                             <div class="panel panel-default">
                                 <div class="panel-heading text-center" :class="'panel-' + reservation.trip.data.type">
@@ -87,6 +101,55 @@
                                     <hr class="divider inv sm">
                                     <a class="btn btn-sm btn-primary" :href="'/dashboard/reservations/' + reservation.id">View Reservation</a>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" v-if="layout == 'list'">
+                        <div class="col-xs-12">
+                            <div class="list-group">
+                                <div class="list-group-item default hidden-xs">
+                                    <div class="row text-muted">
+                                        <div class="col-sm-3">Name/Role</div>
+                                        <div class="col-sm-3">Campaign/Country</div>
+                                        <div class="col-sm-3">Group/Type</div>
+                                        <div class="col-sm-3">Raised/Requirements</div>
+                                    </div>
+                                </div>
+                                <a :href="'/dashboard/reservations/' + reservation.id" class="list-group-item" v-for="reservation in reservations">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            {{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>{{ reservation.trip.data.campaign.data.name | capitalize }}<br />
+                                            <small class="text-muted">{{ reservation.country_name | capitalize }}</small><p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>{{ reservation.trip.data.group.data.name | capitalize }}<br />
+                                            <small class="text-muted">{{ reservation.trip.data.type | capitalize }}</small></p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <p>
+                                                <span class="text-success">
+                                                {{ reservation.percent_raised }}%
+                                                </span> of {{ reservation.total_cost | currency }}
+                                                <br />
+                                                <tooltip effect="scale" placement="top" content="Complete">
+                                                    <span class="label label-success">{{ complete(reservation) }}</span>
+                                                </tooltip>
+                                                <tooltip effect="scale" placement="top" content="Needs Attention">
+                                                    <span class="label label-info">{{ attention(reservation) }}</span>
+                                                </tooltip>
+                                                <tooltip effect="scale" placement="top" content="Under Review">
+                                                    <span class="label label-default">{{ reviewing(reservation) }}</span>
+                                                </tooltip>
+                                                <tooltip effect="scale" placement="top" content="Incomplete">
+                                                    <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
+                                                </tooltip>
+                                            <p>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -173,6 +236,8 @@
                     deadlines: 'Other Deadlines'
                 },
                 exportFilters: {},
+                layout: 'list',
+                incomplete: []
             }
         },
         watch: {
@@ -201,12 +266,24 @@
             }
         },
         methods: {
+            getIncomplete(reservation) {
+                return _.where(reservation.requirements.data, {status: 'incomplete'}).length;
+            },
+            complete(reservation) {
+                return _.where(reservation.requirements.data, {status: 'complete'}).length;
+            },
+            attention(reservation) {
+                return _.where(reservation.requirements.data, {status: 'attention'}).length;
+            },
+            reviewing(reservation) {
+                return _.where(reservation.requirements.data, {status: 'reviewing'}).length;
+            },
             country(code){
                 return code;
             },
             getReservations(){
                 let params = {
-                    include: 'trip.campaign,trip.group',
+                    include: 'trip.campaign,trip.group,requirements',
                     search: this.search,
                     page: this.pagination.current_page
                 };

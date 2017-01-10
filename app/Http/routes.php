@@ -142,6 +142,18 @@ Route::get('/campaigns/{slug}', function ($slug = null) use ($dispatcher) {
     return view('site.campaigns.show', compact('campaign'));
 });
 
+Route::get('/campaigns/{slug}/trips', function ($slug = null) use ($dispatcher) {
+    try {
+        $campaign = $dispatcher->get('campaigns/' . $slug);
+    } catch (Dingo\Api\Exception\InternalHttpException $e) {
+        // We can get the response here to check the status code of the error or response body.
+        $response = $e->getResponse();
+
+        return $response;
+    }
+    return view('site.campaigns.trips.index', compact('campaign'));
+});
+
 Route::get('/trips', function () use ($dispatcher) {
     try {
         $trips = $dispatcher->get('trips', ['include' => 'campaign']);

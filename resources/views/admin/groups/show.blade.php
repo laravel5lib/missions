@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3>
-                    <img src="{{ image($group->avatar->source . '?w=100') }}" alt="{{ $group->name }}" class="img-circle av-left img-sm">
+                    <img src="{{ image($group->getAvatar()->source . '?w=100') }}" alt="{{ $group->name }}" class="img-circle av-left img-sm">
                     {{ $group->name }} <small>&middot; Group</small>
                 </h3>
             </div>

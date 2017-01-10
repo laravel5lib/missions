@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-md-6">
                         <label>Cost</label>
-                        <p>{{ due.cost }}</p>
+                        <p>{{ due.percent }}% of {{ due.cost }}<br />
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-3">

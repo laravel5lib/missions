@@ -12,13 +12,13 @@
 @endsection
 @section('content')
     <div id="parallax1" class="prof-cover-photo hidden-xs">
-        <img src="{{ image($user->banner->source) }}" alt="{{ $user->name }}">
+        <img src="{{ image($user->getBanner()->source) }}" alt="{{ $user->name }}">
     </div><!-- end page-header-outer -->
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-sm-4 col-xs-12">
                 <div class="panel panel-default profile-pic-panel" data-aos="fade-up">
-                    <img src="{{ image($user->avatar->source) }}" alt="{{ $user->name }}" class="img-responsive">
+                    <img src="{{ image($user->getAvatar()->source) }}" alt="{{ $user->name }}" class="img-responsive">
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-10">

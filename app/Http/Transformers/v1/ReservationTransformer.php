@@ -56,6 +56,7 @@ class ReservationTransformer extends TransformerAbstract
             'avatar'              => $reservation->avatar ? image($reservation->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'total_cost'          => (int) $reservation->getTotalCost(),
             'total_raised'        => (int) $reservation->fund->balance,
+            'percent_raised'      => (int) $reservation->getPercentRaised(),
             'total_owed'          => (int) $reservation->getTotalOwed(),
             'created_at'          => $reservation->created_at->toDateTimeString(),
             'updated_at'          => $reservation->updated_at->toDateTimeString(),

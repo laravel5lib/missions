@@ -81,6 +81,7 @@
             </template>
             <template v-if="activeView !== 'donor'">
                 <div class="list-group">
+                    <div class="list-group-item text-center" v-if="pagination.total === 0">No {{activeView}}s found.</div>
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
                         <h5>
                             <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>

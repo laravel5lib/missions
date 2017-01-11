@@ -222,9 +222,12 @@
                             <h5>Completed Forms</h5>
                             <p>Once you have completed the form(s) please attach them to your medical release by uploading them here in PDF format.</p>
                             <ul class="list-group" v-if="uploads.length">
-                                <li class="list-group-item" v-for="upload in uploads"><i class="fa fa-file-pdf-o"></i> {{upload.name}}</li>
+                                <li class="list-group-item" v-for="upload in uploads">
+                                    <i class="fa fa-file-pdf-o"></i> {{upload.name}}
+                                    <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
+                                </li>
                             </ul>
-                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today"></upload-create-update>
+                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today + '-' + uploadCounter"></upload-create-update>
                         </div>
                     </div>
                 </div>
@@ -325,7 +328,8 @@
                 conditions: [],
                 allergies: [],
                 uploads: [],
-                forms: [],
+                upload_ids: [],
+                uploadCounter: 1,
                 emergency_contact: {
                     name: '',
                     email: '',
@@ -435,6 +439,7 @@
                         emergency_contact: this.emergency_contact,
                         is_risk: this.is_risk,
                         user_id: this.user_id,
+                        upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
                         window.location.href = '/dashboard/records/medical-releases';
                     }, function (error) {
@@ -449,15 +454,16 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
-                    this.resource.update({id:this.id}, {
-                        given_names: this.given_names,
-                        surname: this.surname,
-                        number: this.number,
-                        issued_at: this.issued_at,
-                        expires_at: this.expires_at,
-                        country_code: this.country_code,
-                        upload_id: this.upload_id,
+                    this.resource.update({id:this.id, include: 'uploads'}, {
+                        name: this.name,
+                        ins_provider: this.ins_provider,
+                        ins_policy_no: this.ins_policy_no,
+                        conditions: this.conditions,
+                        allergies: this.allergies,
+                        emergency_contact: this.emergency_contact,
+                        is_risk: this.is_risk,
                         user_id: this.user_id,
+                        upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
                         this.showSuccess = true;
                         // this.$refs.spinner.hide();
@@ -467,6 +473,10 @@
                     });
                 }
             },
+            confirmUploadRemoval(upload){
+                this.uploads.$remove(upload);
+                this.upload_ids.$remove(upload.id);
+            },
 
         },
         events:{
@@ -474,13 +484,10 @@
                 switch(data.type){
                     case 'file':
                         this.uploads.push(data);
-                        this.forms.push(data.id);
-                        break;
-                    case 'other':
-                        //save for preview
-                        this.selectedAvatar = data;
-                        // save for upload reference
-                        this.upload_id = data.id;
+                        this.uploads = _.uniq(this.uploads);
+                        this.upload_ids.push(data.id);
+                        this.upload_ids = _.uniq(this.upload_ids);
+                        this.uploadCounter++;
                         break;
                 }
             }
@@ -489,10 +496,13 @@
             // set user data
             this.user_id = this.$root.user.id;
             if (this.isUpdate) {
-                this.$http.get('medical/releases/' + this.id, { include: 'conditions,allergies'}).then(function (response) {
+                this.$http.get('medical/releases/' + this.id, { include: 'conditions,allergies,uploads'}).then(function (response) {
                     // this.user = response.data.data;
                     this.user_id = response.data.data.id;
                     let medical_release = response.data.data;
+                    medical_release.uploads = medical_release.uploads.data;
+                    this.upload_ids = _.pluck(medical_release.uploads, 'id');
+                    this.uploadCounter = medical_release.uploads.length + 1;
                     $.extend(this, medical_release);
 
                     this.$http('medical/conditions').then(function (response) {

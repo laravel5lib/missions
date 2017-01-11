@@ -127,7 +127,7 @@
 				let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
 				if (this.includeManaging)
 					params.manager = this.userId;
-					params.include = 'conditions,allergies';
+					params.include = 'conditions,allergies,uploads';
 				$.extend(params, this.filters);
 				this.$http.get('medical/releases', params).then(function (response) {
 					this.medical_releases = response.data.data;

@@ -115,7 +115,7 @@
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h2>A generation will never know what it’s like to drink dirty, filthy, transport-in-a-bucket water ever again.</h2>
 				<p><a class="btn btn-info btn-lg" href="/sponsor-a-project">Sponsor A Well</a></p>
-				<p><a class="text-white" href="/donate">Donate To The Cause</a></p>
+				<p><a class="text-white" href="/donate/Clean Water">Donate To The Cause</a></p>
 			</div>
 		</div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->

@@ -172,4 +172,15 @@ class MedicalRelease extends Model
             ->delete();
     }
 
+    /**
+     * Get the fundraiser's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
+
 }

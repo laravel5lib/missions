@@ -19,6 +19,24 @@
                             </select>
                         </div>
                     </div>
+					<div class="row">
+						<div class="col-sm-6">
+							<label>Visibility</label>
+							<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
+								<label>
+									<input type="radio" v-model="public" :value="false" v-validate:visibility="{ required: { rule: true} }"> Private
+								</label>
+							</div>
+							<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
+								<label>
+									<input type="radio" v-model="public" :value="true" v-validate:visibility > Public
+								</label>
+							</div>
+							<span class="help-block" v-show="checkForError('visibility')">Select a Visibility</span>
+
+						</div>
+
+					</div>
                     <div class="row">
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('type') }">

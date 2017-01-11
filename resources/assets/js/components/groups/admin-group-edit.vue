@@ -2,6 +2,43 @@
     <validator name="UpdateGroup" @touched="onTouched">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <form id="UpdateGroupForm" class="form-horizontal" novalidate>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label>Profile Photo (max file size:2mb)</label>
+                    <h5>
+                        <a href="#">
+                            <img class="av-left img-circle img-md" :src="avatar + '?w=64&h=64'" :alt="name" width="64">
+                        </a>
+                        <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button>
+                    </h5>
+                </div>
+                <hr class="divider inv visible-xs">
+                <div class="col-sm-6">
+                    <label>Cover Photo (max file size:2mb)</label>
+                    <h5>
+                        <a href="#">
+                            <img class="av-left img-rounded img-md"
+                                 :src="banner + '?w=64&h=64&fit=crop-center'"
+                                 :alt="name" width="64">
+                        </a>
+                        <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
+                    </h5>
+                </div><!-- end col -->
+                <div class="col-sm-12">
+                    <div class="collapse" id="avatarCollapse">
+                        <div class="well">
+                            <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Group']"></upload-create-update>
+                        </div>
+                    </div>
+                    <div class="collapse" id="bannerCollapse">
+                        <div class="well">
+                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['Group']"></upload-create-update>
+                        </div>
+                    </div>
+                    <hr class="divider inv" />
+                </div>
+            </div><!-- end row -->
+
             <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
                 <div class="col-sm-12">
                     <label for="name">Name</label>
@@ -152,12 +189,15 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'group-edit',
-        components: { vSelect },
+        components: { vSelect, 'upload-create-update': uploadCreateUpdate},
         props: ['groupId', 'managing'],
         data(){
             return {
+                avatar: '',
+                banner: '',
                 name: '',
                 description: '',
                 type: '',
@@ -188,6 +228,10 @@
                 showSaveAlert: false,
                 hasChanged: false,
 
+                selectedAvatar: null,
+                avatar_upload_id: null,
+                selectedBanner: null,
+                banner_upload_id: null,
             }
         },
         computed: {
@@ -195,6 +239,23 @@
                 if (_.isObject(this.countryCodeObj)) {
                     return this.countryCodeObj.code;
                 }
+            }
+        },
+        events:{
+            'uploads-complete'(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                }
+                this.submit();
             }
         },
         methods: {
@@ -236,7 +297,9 @@
                         public: this.public,
                         status: this.status,
                         url: this.url,
-                        email: this.email
+                        email: this.email,
+                        avatar_upload_id: this.avatar_upload_id,
+                        banner_upload_id: this.banner_upload_id,
                     }).then(function (resp) {
                         //TODO switch to universal alerts
                         this.showSuccess = true;
@@ -267,6 +330,8 @@
             this.resource.get({id: this.groupId}).then(function (response) {
                 let group = response.data.data;
                 this.name = group.name;
+                this.avatar = group.avatar;
+                this.banner = group.banner;
                 this.description = group.description;
                 this.type = group.type;
                 this.countryCodeObj = _.findWhere(this.countries, {code: group.country_code});

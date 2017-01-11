@@ -18,13 +18,19 @@ class SendReceiptEmail extends Job implements ShouldQueue
     private $donation;
 
     /**
+     * @var email
+     */
+    private $email;
+
+    /**
      * Create a new job instance.
      *
      * @param Transaction $donation
      */
-    public function __construct(Transaction $donation)
+    public function __construct(Transaction $donation, $email = null)
     {
         $this->donation = $donation;
+        $this->email = $email;
     }
 
     /**
@@ -35,14 +41,13 @@ class SendReceiptEmail extends Job implements ShouldQueue
     public function handle(Mailer $mailer)
     {
         $donation = $this->donation;
+        $email = $this->email ? $this->email : $donation->donor->email;
 
-        if($donation->donor->email) {
-            $mailer->send('emails.donations.receipt', [
-                'donation' => $donation
-            ], function ($m) use ($donation) {
-                $m->to($donation->donor->email, $donation->donor->name)
-                    ->subject('Thanks for the donation!');
-            });
-        }
+        $mailer->send('emails.donations.receipt', [
+            'donation' => $donation
+        ], function ($m) use ($donation, $email) {
+            $m->to($email, $donation->donor->name)
+                ->subject('Thanks for the donation!');
+        });
     }
 }

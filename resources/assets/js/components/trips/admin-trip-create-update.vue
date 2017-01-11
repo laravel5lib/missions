@@ -1,6 +1,7 @@
 <template>
     <div class="row">
         <div class="col-sm-12">
+
             <validator name="TripCreateUpdate" @valid="onValid">
                 <form id="TripDetailsForm" class="form-horizontal" novalidate>
                     <div class="form-group">
@@ -12,31 +13,30 @@
                     <div class="form-group" :class="{ 'has-error': checkForError('group') }">
                         <div class="col-sm-12">	
                         	<label class="control-label">Group</label>
-                            <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
-                                      label="name"></v-select>
+                            <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
                             <select hidden v-model="group_id" v-validate:group="{ required: true}">
                                 <option :value="group.id" v-for="group in groups">{{group.name}}</option>
                             </select>
                         </div>
                     </div>
-					<div class="row">
-						<div class="col-sm-6">
-							<label>Visibility</label>
-							<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
-								<label>
-									<input type="radio" v-model="public" :value="false" v-validate:visibility="{ required: { rule: true} }"> Private
-								</label>
-							</div>
-							<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
-								<label>
-									<input type="radio" v-model="public" :value="true" v-validate:visibility > Public
-								</label>
-							</div>
-							<span class="help-block" v-show="checkForError('visibility')">Select a Visibility</span>
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Visibility</label>
+										<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
+											<label>
+												<input type="radio" v-model="public" :value="false" v-validate:visibility="{ required: { rule: true} }"> Private
+											</label>
+										</div>
+										<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
+											<label>
+												<input type="radio" v-model="public" :value="true" v-validate:visibility > Public
+											</label>
+										</div>
+										<span class="text-danger" v-show="checkForError('visibility')">Select a Visibility</span>
 
-						</div>
+									</div>
 
-					</div>
+								</div>
                     <div class="row">
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('type') }">
@@ -170,12 +170,9 @@
 				</form>
 
 			</validator>
-			<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-				<span class="icon-ok-circled alert-icon-float-left"></span>
-				<strong>Well Done!</strong>
-				<p>Trip Updated!</p>
-			</alert>
-
+			
+				</div>
+			</div>
 		</div>
     </div>
 </template>
@@ -270,11 +267,7 @@
 				spots: null,
 				closed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
 				published_at: '',
-
-				showSuccess: false,
-				showError: false,
-
-
+				public: false,
 			}
 		},
 		computed: {
@@ -310,7 +303,8 @@
 					rep_id: this.rep_id,
 					spots: this.spots,
 					closed_at: this.closed_at,
-					published_at: this.published_at
+					published_at: this.published_at,
+					public: this.public
 				});
 			},
 			getGroups(search, loading){
@@ -345,9 +339,9 @@
 							$.extend(this, response.data.data);
 							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
-							this.showSuccess = true;
+							this.$dispatch('showSuccess', 'Trip Updated');
 						}, function (error) {
-							this.showError = true;
+							this.$dispatch('ShowError', 'Please check the form.');
 							console.log(error);
 						});
 					} else {

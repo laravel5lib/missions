@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\v1\UserRequest;
+use App\Jobs\SendWelcomeEmail;
 
 class AuthController extends Controller
 {
@@ -114,12 +115,12 @@ class AuthController extends Controller
 
         $cookie = $this->makeApiTokenCookie($token);
 
+        dispatch(new SendWelcomeEmail($user));
+
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])
                              ->withCookie($cookie);
         }
-
-        dispatch(new SendWelcomeEmail($user));
 
         return redirect()->intended('/dashboard')
                          ->withCookie($cookie);

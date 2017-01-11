@@ -70,6 +70,10 @@ class ReleasesController extends Controller
 
         $release->syncAllergies($request->get('allergies'));
 
+        if ($request->has('upload_ids')) {
+            $fundraiser->uploads()->attach($request->get('upload_ids'));
+        }
+
         return $this->response->item($release, new MedicalReleaseTransformer);
     }
 
@@ -92,6 +96,10 @@ class ReleasesController extends Controller
         $release->syncConditions($request->get('conditions'));
 
         $release->syncAllergies($request->get('allergies'));
+
+        if ($request->has('upload_ids')) {
+            $fundraiser->uploads()->attach($request->get('upload_ids'));
+        }
 
         return $this->response->item($release, new MedicalReleaseTransformer);
     }

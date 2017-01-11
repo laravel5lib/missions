@@ -41,7 +41,9 @@ class ReleaseRequest extends FormRequest
             'emergency_contact.name'         => 'required|string',
             'emergency_contact.email'        => 'required|email',
             'emergency_contact.phone'        => 'required|string',
-            'emergency_contact.relationship' => 'required|in:friend,spouse,family,guardian,other'
+            'emergency_contact.relationship' => 'required|in:friend,spouse,family,guardian,other',
+            'upload_ids'                     => 'array',
+            'upload_ids.*'                   => 'required|exists:uploads,id'
         ];
     }
 }

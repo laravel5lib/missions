@@ -12,7 +12,7 @@ class MedicalReleaseTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'user', 'reservations', 'notes', 'conditions', 'allergies'
+        'user', 'reservations', 'notes', 'conditions', 'allergies', 'uploads'
     ];
 
     /**
@@ -109,5 +109,18 @@ class MedicalReleaseTransformer extends TransformerAbstract
         $allergies = $release->allergies;
 
         return $this->collection($allergies, new MedicalAllergyTransformer);
+    }
+
+    /**
+     * Include the uploads associated with the medical release.
+     *
+     * @param MedicalRelease $release
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(MedicalRelease $release)
+    {
+        $uploads = $release->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 }

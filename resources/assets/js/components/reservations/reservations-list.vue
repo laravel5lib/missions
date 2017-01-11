@@ -3,19 +3,16 @@
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
-
                 <div class="form-group">
                     <v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
                               :value.sync="groupsArr" :options="groupOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
-
                 <div class="form-group" v-if="!tripId">
                     <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaignsg"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
-
                 <div class="form-group">
                     <select  class="form-control input-sm" v-model="filters.type">
                         <option value="">Any Type</option>
@@ -27,24 +24,21 @@
                         <option value="leader">Leader</option>
                     </select>
                 </div>
-
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </aside>
-
         <div class="row">
-
             <div class="col-xs-12">
                 <form>
                 <div class="row">
-                    <div class="form-group col-lg-5 col-md-4 col-sm-12">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
                         <div class="input-group input-group-sm">
                             <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         </div>
-                    </div>
-                    <div class="form-group col-lg-7 col-md-8 col-sm-12">
+                    </div><!-- end col -->
+                    <div class="form-group col-lg-8 col-md-8 col-sm-12">
                         <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
                             Filters
                             <i class="fa fa-filter"></i>
@@ -55,23 +49,22 @@
                         </export-utility>
                         <div class="btn-group">
                             <button class="btn btn-sm"
-                                    :class="[layout == 'list' ? 'btn-default-hollow' : 'btn-default']"
+                                    :class="[layout == 'list' ? 'btn-primary' : 'btn-default']"
                                     @click.prevent="layout = 'list'"><i class="fa fa-list-ul"></i></button>
                             <button class="btn btn-sm"
-                                    :class="[layout == 'grid' ? 'btn-default-hollow' : 'btn-default']"
+                                    :class="[layout == 'grid' ? 'btn-primary' : 'btn-default']"
                                     @click.prevent="layout = 'grid'"><i class="fa fa-th-large"></i></button>
                         </div>
-                        <div style="display: inline-block;" v-if="isFacilitator">
+                        <div style="margin-left:5px;display: inline-block;" v-if="isFacilitator">
                             <label>
                                 <input type="checkbox" v-model="includeManaging"> Include my group's reservations
                             </label>
                         </div>
-                    </div>
+                    </div><!-- end col -->
                 </div>
                 </form>
                 <hr class="divider sm inv">
             </div>
-
             <div class="col-xs-12" style="position:relative">
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
@@ -99,47 +92,49 @@
                     <div class="row" v-if="layout == 'list'">
                         <div class="col-xs-12">
                             <div class="list-group">
-                                <div class="list-group-item default hidden-xs">
-                                    <div class="row text-muted">
-                                        <div class="col-sm-3">Name/Role</div>
-                                        <div class="col-sm-3">Campaign/Country</div>
-                                        <div class="col-sm-3">Group/Type</div>
-                                        <div class="col-sm-3">Raised/Requirements</div>
+                                <div class="list-group-item hidden-xs">
+                                    <div class="row">
+                                        <div class="col-sm-3"><h5>Name/Role</h5></div>
+                                        <div class="col-sm-3"><h5>Campaign/Country</h5></div>
+                                        <div class="col-sm-3"><h5>Group/Type</h5></div>
+                                        <div class="col-sm-3"><h5>Raised/Requirements</h5></div>
                                     </div>
                                 </div>
                                 <a :href="'/dashboard/reservations/' + reservation.id" class="list-group-item" v-for="reservation in reservations">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            {{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}
-                                        </div>
+                                            {{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}<br>
+                                            <label class="visible-xs">Name</label>
+                                            <hr class="divider inv sm visible-xs">
+                                        </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            <p>{{ reservation.trip.data.campaign.data.name | capitalize }}<br />
-                                            <small class="text-muted">{{ reservation.country_name | capitalize }}</small><p>
-                                        </div>
+                                            {{ reservation.trip.data.campaign.data.name | capitalize }}<br>
+                                            <label>{{ reservation.country_name | capitalize }}</label>
+                                            <hr class="divider inv sm visible-xs">
+                                        </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            <p>{{ reservation.trip.data.group.data.name | capitalize }}<br />
-                                            <small class="text-muted">{{ reservation.trip.data.type | capitalize }}</small></p>
-                                        </div>
+                                            {{ reservation.trip.data.group.data.name | capitalize }}<br>
+                                            <label>{{ reservation.trip.data.type | capitalize }}</label>
+                                            <hr class="divider inv sm visible-xs">
+                                        </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            <p>
-                                                <span class="text-success">
-                                                {{ reservation.percent_raised }}%
-                                                </span> of {{ reservation.total_cost | currency }}
-                                                <br />
-                                                <tooltip effect="scale" placement="top" content="Complete">
-                                                    <span class="label label-success">{{ complete(reservation) }}</span>
-                                                </tooltip>
-                                                <tooltip effect="scale" placement="top" content="Needs Attention">
-                                                    <span class="label label-info">{{ attention(reservation) }}</span>
-                                                </tooltip>
-                                                <tooltip effect="scale" placement="top" content="Under Review">
-                                                    <span class="label label-default">{{ reviewing(reservation) }}</span>
-                                                </tooltip>
-                                                <tooltip effect="scale" placement="top" content="Incomplete">
-                                                    <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
-                                                </tooltip>
-                                            <p>
-                                        </div>
+                                            <span class="text-success small">
+                                            {{ reservation.percent_raised }}%
+                                            </span> <small>of {{ reservation.total_cost | currency }}</small>
+                                            <br>
+                                            <tooltip effect="scale" placement="top" content="Complete">
+                                                <span class="label label-success">{{ complete(reservation) }}</span>
+                                            </tooltip>
+                                            <tooltip effect="scale" placement="top" content="Needs Attention">
+                                                <span class="label label-info">{{ attention(reservation) }}</span>
+                                            </tooltip>
+                                            <tooltip effect="scale" placement="top" content="Under Review">
+                                                <span class="label label-default">{{ reviewing(reservation) }}</span>
+                                            </tooltip>
+                                            <tooltip effect="scale" placement="top" content="Incomplete">
+                                                <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
+                                            </tooltip>
+                                        </div><!-- end col -->
                                     </div>
                                 </a>
                             </div>
@@ -152,7 +147,6 @@
                     </div>
                 </template>
             </div>
-
     <div class="col-xs-12" v-if="reservations.length < 1">
         <p class="text-muted text-center"><em>No reservations found</em></p>
     </div>

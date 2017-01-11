@@ -11,7 +11,6 @@
                 </div>
             </div>
         </div>
-
         <div class="collapse" id="mediaCollapse">
             <div class="panel panel-default"><div class="panel-body">
                 <!-- TAB NAVIGATION -->
@@ -108,7 +107,6 @@
             <span class="sr-only">Next</span>
         </a>
     </div><!-- end carousel -->
-
 </template>
 <style>
     video {
@@ -307,4 +305,11 @@
             });
         }
     }
+</script>
+<script>
+    $(function(){
+    $('.carousel').carousel({
+          interval: 2000
+        });
+    });
 </script>

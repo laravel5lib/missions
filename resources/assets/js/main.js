@@ -58,6 +58,7 @@ import userPermissions from './components/users/user-permissions.vue';
 import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
 import reservationRequirements from './components/reservations/reservation-requirements.vue';
 import referralResponse from './components/referrals/referral-response.vue';
+import sendEmail from './components/send-email.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -117,6 +118,7 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 // jQuery
 window.$ = window.jQuery = require('jquery');
 window.moment = require('moment');
+window.timezone = require('moment-timezone');
 window._ = require('underscore');
 window.marked = require('marked');
 require('gsap');
@@ -504,6 +506,7 @@ new Vue({
         uploadCreateUpdate,
         reservationRequirements,
         referralResponse,
+        sendEmail,
 
         //dashboard components
         recordsList,

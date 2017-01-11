@@ -38,6 +38,7 @@ class FundRequest extends FormRequest
             $rules = [
                 'name'          => 'required|string|unique:funds,name,' . $this->funds,
                 'balance'       => 'integer',
+                'slug'          => 'sometimes|required|unique:funds,slug',
                 'class'         => 'sometimes|required|string',
                 'item'          => 'sometimes|required|string',
                 'fundable_id'   => 'sometimes|required|string',

@@ -16,6 +16,7 @@ class SendReservationConfirmationEmail extends Command
      */
     protected $signature = 'email:send-reservation-confirmation 
                             { id : The reservation ID }
+                            { email? : Recipient email }
                             {--notify : Whether the facilitator(s) should be notified.}';
 
     /**
@@ -48,13 +49,14 @@ class SendReservationConfirmationEmail extends Command
     public function handle()
     {
         $id = $this->argument('id');
+        $email = $this->argument('email');
 
         $reservation = $this->reservation->find($id);
 
         if ( ! $reservation) $this->error('The reservation does not exist. Nothing sent.');
 
         if ($reservation) {
-            dispatch(new SendEmail($reservation));
+            dispatch(new SendEmail($reservation, $email));
             $this->info('Done. Confirmation email processed.');
 
             if($this->option('notify')) {

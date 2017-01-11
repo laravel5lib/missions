@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\v1\UserRequest;
+use App\Jobs\SendWelcomeEmail;
 
 class AuthController extends Controller
 {
@@ -27,6 +28,7 @@ class AuthController extends Controller
     use ThrottlesLogins;
 
     protected $user;
+    protected $redirectPath = '/dashboard';
 
     public function __construct(User $user)
     {
@@ -112,6 +114,8 @@ class AuthController extends Controller
         }
 
         $cookie = $this->makeApiTokenCookie($token);
+
+        dispatch(new SendWelcomeEmail($user));
 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])

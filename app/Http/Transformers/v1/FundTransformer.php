@@ -24,6 +24,7 @@ class FundTransformer extends TransformerAbstract {
             'type'       => str_singular($fund->fundable_type),
             'class'      => $fund->class,
             'item'       => $fund->item,
+            'slug'       => $fund->slug,
             'created_at' => $fund->created_at->toDateTimeString(),
             'updated_at' => $fund->updated_at->toDateTimeString(),
             'deleted_at' => $fund->deleted_at ? $fund->deleted_at->toDateTimeString() : null,

@@ -38,10 +38,10 @@
                 @foreach($reservation->requirements as $requirement)
                     <tr>
                         <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">
-                            {{ $requirement->item }}
+                            {{ $requirement->requirement->name }}
                         </td>
                         <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">
-                            {{ $requirement->due_at->format('F j, Y') }}
+                            {{ $requirement->requirement->due_at->format('F j, Y') }}
                         </td>
                     </tr>
                 @endforeach
@@ -68,7 +68,7 @@
                 @foreach($reservation->dues as $payment)
                     <tr>
                         <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">
-                            {{ $payment->outstanding_balance }}
+                            ${{ number_format($payment->outstanding_balance, 2) }} - {{ $payment->payment->percent_owed }}% {{ $payment->payment->cost->name }}
                         </td>
                         <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">
                             {{ $payment->due_at->format('F j, Y') }}
@@ -78,4 +78,8 @@
             @endif
         </tbody>
     </table>
+
+    @if($reservation->fund->fundraisers && $reservation->user->url)
+        <p><a href="{{ url('@'.$reservation->user->url.'/'.$reservation->fund->fundraisers()->first()->url) }}">Manage Fundraiser</a></p>
+    @endif
 @stop

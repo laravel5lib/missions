@@ -181,6 +181,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="panel-footer text-right">
+                        <send-email label="Resend receipt email" 
+                                 icon="fa fa-envelope"
+                                 class="btn btn-default btn-sm"
+                                 command="email:send-receipt" 
+                                 :parameters="{id: '{{ $transaction->id }}', email: '{{ $transaction->donor->email }}'}">
+                        </send-email>
+                    </div>
                 </div>
             </div>
         </div>

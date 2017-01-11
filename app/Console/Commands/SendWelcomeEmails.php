@@ -13,7 +13,7 @@ class SendWelcomeEmails extends Command
      *
      * @var string
      */
-    protected $signature = 'email:send-welcome { emails* : An array of user emails }';
+    protected $signature = 'email:send-welcome { id : The user id } { email? : Recipient email address }';
 
     /**
      * The console command description.
@@ -44,19 +44,20 @@ class SendWelcomeEmails extends Command
      */
     public function handle()
     {
-        $emails = $this->argument('emails');
-        $users =  $this->user->whereIn('email', $emails)->get();
+        $id = $this->argument('id');
 
-        if( ! count($users)) $this->error('Could not find users with matching emails! Nothing sent.');
+        $user =  $this->user->find($id);
 
-        if(count($users)) {
-            foreach($users as $user) {
-                dispatch(new SendWelcomeEmail($user));
+        $email = $this->argument('email') ? $this->argument('email') : $user->email;
 
-                $this->info('Processed email to ' . $user->email);
-            }
+        if( ! $user) $this->error('Could not find user with that id! Nothing sent.');
 
-            $this->info('Done. All emails processed!');
+        if($user) {
+            dispatch(new SendWelcomeEmail($user, $email));
+
+            $this->info('Processed email to ' . $email);
+
+            $this->info('Done. All email processed!');
         }
     }
 }

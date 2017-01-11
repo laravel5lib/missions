@@ -19,13 +19,19 @@ class SendWelcomeEmail extends Job implements ShouldQueue
     private $user;
 
     /**
+     * @var email
+     */
+    private $email;
+
+    /**
      * Create a new job instance.
      *
      * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct(User $user, $email = null)
     {
         $this->user = $user;
+        $this->email = $email;
     }
 
     /**
@@ -36,9 +42,10 @@ class SendWelcomeEmail extends Job implements ShouldQueue
     public function handle(Mailer $mailer)
     {
         $user = $this->user;
+        $email = $this->email ? $this->email : $user->emal;
 
-        $mailer->send('emails.welcome', ['user' => $user], function ($m) use ($user) {
-            $m->to($user->email, $user->name)->subject('Welcome to Missions.Me!');
+        $mailer->send('emails.welcome', ['user' => $user], function ($m) use ($user, $email) {
+            $m->to($email, $user->name)->subject('Welcome to Missions.Me!');
         });
     }
 }

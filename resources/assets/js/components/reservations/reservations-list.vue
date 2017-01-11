@@ -43,7 +43,15 @@
                             Filters
                             <i class="fa fa-filter"></i>
                         </button>
-                        <export-utility url="reservations/export"
+						<div class="btn-group">
+							<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Sort By <span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li v-for="option in sortOptions" :class="{'active': filters.sort === option.value && filters.direction === option.direction}"><a @click="filters.sort = option.value,filters.direction = option.direction" v-text="option.name"></a></li>
+							</ul>
+						</div>
+						<export-utility url="reservations/export"
                                         :options="exportOptions"
                                         :filters="exportFilters">
                         </export-utility>
@@ -175,8 +183,18 @@
                 filters: {
                     groups: '',
                     campaign: '',
-                    type: ''
+                    type: '',
+                    sort: 'created_at',
+                    direction: 'desc'
                 },
+                sortOptions: [
+                    { name: 'Given Names - Ascending', value: 'given_names', direction: 'asc'},
+                    { name: 'Given Names - Descending', value: 'given_names', direction: 'desc'},
+                    { name: 'Surname - Ascending', value: 'surname', direction: 'asc'},
+                    { name: 'Surname - Descending', value: 'surname', direction: 'desc'},
+                    { name: 'Registration Date - Ascending', value: 'created_at', direction: 'asc'},
+                    { name: 'Registration Date - Descending', value: 'created_at', direction: 'desc'},
+                ],
                 exportOptions: {
                     managing_user: 'Managing User',
                     user_email: 'User Email',

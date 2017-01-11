@@ -126,6 +126,8 @@ class UploadsController extends Controller
             if($source) {
                 // delete old file
                 Storage::disk('s3')->delete($upload->source);
+                // clear cache
+                $this->server->deleteCache($upload->source);
             }
         }
 
@@ -151,6 +153,8 @@ class UploadsController extends Controller
         $upload = $this->upload->findOrFail($id);
 
         Storage::disk('s3')->delete($upload->source);
+
+        $this->server->deleteCache($upload->source);
 
         $upload->delete();
 

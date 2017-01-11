@@ -15,6 +15,7 @@ class SendReceiptEmail extends Command
      */
     protected $signature = 'email:send-receipt 
                             { id : Transaction ID of the donation. }
+                            { email? : Recipient email. }
                             { --notify : Whether the recipient should be notified. }';
 
     /**
@@ -47,13 +48,14 @@ class SendReceiptEmail extends Command
     public function handle()
     {
         $id = $this->argument('id');
+        $email = $this->argument('email');
 
         $donation = $this->transaction->type('donation')->find($id);
 
         if ( ! $donation) $this->error('There is no donation matching that transaction ID. Nothing sent.');
 
         if ($donation) {
-            dispatch(new \App\Jobs\Transactions\SendReceiptEmail($donation));
+            dispatch(new \App\Jobs\Transactions\SendReceiptEmail($donation, $email));
             $this->info('Done. Receipt email processed.');
 
             if($this->option('notify')) {

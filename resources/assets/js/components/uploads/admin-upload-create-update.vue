@@ -356,6 +356,25 @@
 					page: 1,
 					search: '',
 				});
+
+				if (this.isUpdate) {
+					this.resource.get({id: this.uploadId}).then(function (response) {
+						let upload = response.data.data;
+						this.name = upload.name;
+						this.tags = upload.tags;
+						this.type = upload.type;
+						this.src = upload.source;
+					});
+				}
+
+				if(this.isChild){
+					this.typeObj = _.findWhere(this.typePaths, {type: this.type});
+					if (this.typeObj) {
+						this.path = this.typeObj.path;
+						if (this.file)
+							this.adjustSelectByType();
+					}
+				}
 			},
 			isSmall(){
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
@@ -376,8 +395,8 @@
 				this.width = this.scaledWidth * this.imageAspectRatio;
 				this.height = this.scaledHeight * this.imageAspectRatio;
 
-				var w = this.width;
-				var h = this.height;
+				let w = this.width;
+				let h = this.height;
 				// always go with the width when constrained
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
@@ -394,23 +413,28 @@
                 return this.$CreateUpload[field].invalid && this.attemptSubmit;
             },
             submit(){
-                this.attemptSubmit = true;
+				this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-					let params = {
-						name: this.name,
-						tags: this.tags,
-						type: this.type,
-					};
-
+					let params;
 					if (this.type === 'video') {
-						params.url = this.url;
+						params = {
+							name: this.name,
+							tags: this.tags,
+							type: this.type,
+							url: this.url
+						};
 					} else {
-						params.file = this.file;
-						params.path = this.path;
-						params.x_axis = parseInt(this.x_axis / this.imageAspectRatio);
-						params.y_axis = parseInt(this.y_axis / this.imageAspectRatio);
-						params.width = parseInt(this.coords.w / this.imageAspectRatio);
-						params.height = parseInt(this.coords.h / this.imageAspectRatio);
+						params = {
+							name: this.name,
+							tags: this.tags,
+							type: this.type,
+							file: this.file,
+							path: this.path,
+							x_axis: parseInt(this.x_axis / this.imageAspectRatio),
+							y_axis: parseInt(this.y_axis / this.imageAspectRatio),
+							width: parseInt(this.coords.w / this.imageAspectRatio),
+							height: parseInt(this.coords.h / this.imageAspectRatio),
+						};
 					}
 
                     this.resource.save(null, params).then(function (resp) {

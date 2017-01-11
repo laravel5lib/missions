@@ -95,5 +95,13 @@
             <p>{{ country($reservation->country_code) }}</p>
         </div>
     </div>
+    <div class="panel-footer text-right">
+        <send-email label="Resend confirmation email" 
+                 icon="fa fa-envelope"
+                 class="btn btn-default btn-sm"
+                 command="email:send-reservation-confirmation" 
+                 :parameters="{id: '{{ $reservation->id }}', email: '{{ $reservation->user->email }}'}">
+        </send-email>
+    </div>
 </div><!-- end panel -->
 @endsection

@@ -222,9 +222,9 @@
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
 			$('.form-toggle-menu .dropdown-menu').on('click', function(event){
-				var events = $._data(document, 'events') || {};
+				let events = $._data(document, 'events') || {};
 				events = events.click || [];
-				for(var i = 0; i < events.length; i++) {
+				for(let i = 0; i < events.length; i++) {
 					if(events[i].selector) {
 
 						//Check if the clicked element matches the event selector

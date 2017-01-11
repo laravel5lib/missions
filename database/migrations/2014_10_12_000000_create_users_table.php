@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name', 60);
-            $table->string('email', 60)->unique();
+            $table->string('email', 60);
             $table->string('alt_email', 60)->nullable();
             $table->string('password', 60);
             $table->string('gender', 10)->nullable();
@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('country_code', 2)->default('us');
             $table->string('timezone', 20)->default('US/Eastern');
             $table->string('bio', 120)->nullable();
-            $table->string('url', 60)->unique();
+            $table->string('url', 60);
             $table->boolean('public')->default(false);
             $table->string('stripe_id')->nullable();
             $table->string('card_brand')->nullable();

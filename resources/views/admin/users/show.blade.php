@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-sm-8">
                     <h3>
-                        <img src="{{ image($user->avatar->source . '?w=100') }}" alt="{{ $user->name }}" class="img-circle av-left img-sm">
+                        <img src="{{ image($user->getAvatar()->source . '?w=100') }}" alt="{{ $user->name }}" class="img-circle av-left img-sm">
                         {{ $user->name }}
                         <small>&middot; User</small>
                     </h3>
@@ -120,9 +120,18 @@
             </div>
 
             <div class="col-sm-4">
-                <p class="small text-muted text-center">Temporarily login as this user.</p>
+                <h5>Tools</h5>
+                <hr class="divider">
+                <send-email label="Resend welcome email" 
+                                 icon="fa fa-envelope"
+                                 class="btn btn-default btn-md btn-block"
+                                 command="email:send-welcome" 
+                                 :parameters="{id: '{{ $user->id }}', email: '{{ $user->email }}'}">
+                </send-email>
                 <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
-                   class="btn btn-default btn-block"><i class="fa fa-user-secret"></i> Impersonate</a>
+                   class="btn btn-default btn-md btn-block">
+                   <i class="fa fa-user-secret"></i> Temporarily login as this user
+               </a>
                 <hr class="divider inv">
                 <user-permissions user_id="{{ $user->id }}" user-roles="{{ $user->roles->pluck('name') }}"></user-permissions>
             </div>

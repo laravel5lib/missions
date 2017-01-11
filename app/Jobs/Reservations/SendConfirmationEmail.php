@@ -18,13 +18,19 @@ class SendConfirmationEmail extends Job implements ShouldQueue
     private $reservation;
 
     /**
+     * @var email
+     */
+    private $email;
+
+    /**
      * Create a new job instance.
      *
      * @param Reservation $reservation
      */
-    public function __construct(Reservation $reservation)
+    public function __construct(Reservation $reservation, $email = null)
     {
         $this->reservation = $reservation;
+        $this->email = $email;
     }
 
     /**
@@ -35,11 +41,12 @@ class SendConfirmationEmail extends Job implements ShouldQueue
     public function handle(Mailer $mailer)
     {
         $reservation = $this->reservation;
+        $email = $this->email ? $this->email : $reservation->user->email;
 
         $mailer->send('emails.reservations.confirmation', [
             'reservation' => $reservation
-        ], function($m) use($reservation) {
-            $m->to($reservation->user->email, $reservation->user->name)
+        ], function($m) use($reservation, $email) {
+            $m->to($email, $reservation->user->name)
               ->subject('Pack Your Bags!');
         });
     }

@@ -239,8 +239,8 @@ Route::get('{type}/{slug?}/donate', function ($type, $slug) {
     return view('site.donate', compact('type', 'slug'));
 })->where('type', 'profiles|groups|reservations|trips');
 
-Route::get('/donate', function () {
-    return view('site.donate');
+Route::get('/donate/{recipient?}', function ($recipient = null) {
+    return view('site.donate', compact('recipient'));
 });
 Route::get('/speakers', function () {
     return view('site.speakers');

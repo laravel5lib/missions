@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3 class="hidden-xs">
-                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($group->avatar->source) }}"> {{ $group->name }} <small>&middot; Group</small>
+                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($group->getAvatar()->source) }}"> {{ $group->name }} <small>&middot; Group</small>
                 </h3>
                 <div class="visible-xs text-center">
                     <hr class="divider inv">
-                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($group->avatar->source) }}">
+                    <img class="av-left img-sm img-circle" style="width:100px; height:100px" src="{{ image($group->getAvatar()->source) }}">
                     <h4 style="margin-bottom:0;">{{ $group->name }}</h4>
                     <label>Group</label>
                 </div>

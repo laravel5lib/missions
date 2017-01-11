@@ -45,9 +45,9 @@ class SendEmails extends Command
 
         switch ($type) {
             case 'Welcome Email':
-                $emails = $this->ask('Please enter all the user account emails you wish to send emails to.');
+                $id = $this->ask('Please enter the user id.');
 
-                $this->call('email:send-welcome', ['emails' => explode(',', $emails)]);
+                $this->call('email:send-welcome', ['id' => $id]);
 
                 break;
 

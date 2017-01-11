@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -142,5 +145,15 @@ $api->version('v1', [
             $api->resource('sites', 'Interaction\SitesController');
             $api->resource('stats', 'Interaction\StatsController');
         });
+    });
+
+    $api->post('/commands', function (Request $request) {
+        
+        $command = $request->get('command');
+        $params = $request->get('parameters');
+
+        $exitCode = Artisan::call($command, $params);
+
+        return $exitCode;
     });
 });

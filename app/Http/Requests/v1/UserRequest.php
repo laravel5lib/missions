@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name'             => 'required|max:100',
-            'email'            => 'required|email|unique:users,email',
+            'email'            => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password'         => 'required|confirmed|min:8',
             'alt_email'        => 'email|unique:users,alt_email',
             'gender'           => 'in:Male,Female',
@@ -37,7 +37,7 @@ class UserRequest extends FormRequest
             'zip'              => 'string|max:10',
             'country_code'     => 'required|in:' . Country::codes(),
             'timezone'         => 'required|max:25',
-            'url'              => 'string|unique:users,url,',
+            'url'              => 'string|unique:users,url,NULL,id,deleted_at,NULL',
             'public'           => 'boolean',
             'bio'              => 'string|max:120',
             'banner_upload_id' => 'string|exists:uploads,id',
@@ -50,13 +50,13 @@ class UserRequest extends FormRequest
 
             $rules['password'] = 'sometimes|required|confirmed|min:8';
             $rules['alt_email'] = 'email|unique:users,alt_email,' . $user_id;
-            $rules['email'] = 'sometimes|required|email|unique:users,email,' . $user_id;
+            $rules['email'] = 'sometimes|required|email|unique:users,email,' . $user_id . ',id,deleted_at,NULL';
             $rules['url'] = 'string|unique:users,url,' . $user_id;
             $rules['country_code'] = 'sometimes|required|in:' . Country::codes();
             $rules['timezone'] = 'sometimes|required|max:25';
             $rules['links'] = 'array';
-             $rules['links.*.name'] = 'string';
-             $rules['links.*.url'] = 'string';
+            $rules['links.*.name'] = 'string';
+            $rules['links.*.url'] = 'string';
         }
 
         return $rules;

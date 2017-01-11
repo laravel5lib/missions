@@ -47,7 +47,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <datepicker v-if="loaded" :value.sync="birthday" format="yyyy-MM-dd" :clear-button="true" placeholder="Date of Birth"></datepicker>
+                    <date-picker v-if="loaded" class="form-control" :time.sync="birthday|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group" :class="{ 'has-error': checkForError('size') }">
@@ -67,13 +67,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Gender</label>
-                    <div class="radio" :class="{ 'has-error': checkForError('gender') }">
+                    <div class="radios" :class="{ 'has-error': checkForError('gender') }">
                         <label>
                             <input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
                                    value="male"> Male
                         </label>
                     </div>
-                    <div class="radio" :class="{ 'has-error': checkForError('gender') }">
+                    <div class="radios" :class="{ 'has-error': checkForError('gender') }">
                         <label>
                             <input type="radio" v-model="gender" v-validate:gender value="female"> Female
                         </label>
@@ -190,7 +190,7 @@
         </modal>
     </validator>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     import uploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     export default{

@@ -56,26 +56,32 @@ class EventServiceProvider extends ServiceProvider
         parent::boot($events);
 
         Trip::created(function ($trip) {
+            $name = generateFundName($trip);
             $trip->fund()->create([
-                'name' => generateFundName($trip),
+                'name' => $name,
+                'slug' => str_slug($name),
                 'balance' => 0,
                 'class' => generateQbClassName($trip),
                 'item' => 'Missionary Donation'
             ]);
         });
 
-        Campaign::created(function ($trip) {
-            $trip->fund()->create([
-                'name' => generateFundName($trip),
+        Campaign::created(function ($campaign) {
+            $name = generateFundName($campaign);
+            $campaign->fund()->create([
+                'name' => $name,
+                'slug' => str_slug($name),
                 'balance' => 0,
-                'class' => generateQbClassName($trip),
+                'class' => generateQbClassName($campaign),
                 'item' => 'General Donation'
             ]);
         });
 
         Project::created(function ($project) {
+            $name = $project->name . ' Project';
             $project->fund()->create([
-                'name' => $project->name . ' Project',
+                'name' => $name,
+                'slug' => str_slug($name),
                 'balance' => 0,
                 'class' => str_plural($project->initiative->cause->name),
                 'item' => $project->name .' - '. $project->initiative->cause->name
@@ -83,8 +89,10 @@ class EventServiceProvider extends ServiceProvider
         });
 
         ProjectCause::created(function ($cause) {
+            $name = $cause->name . ' Cause';
             $cause->fund()->create([
-                'name' => $cause->name . ' Cause',
+                'name' => $name,
+                'slug' => str_slug($name),
                 'balance' => 0,
                 'class' => str_plural($cause->name),
                 'item' => 'General Donation'

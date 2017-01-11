@@ -862,8 +862,10 @@ $factory->defineAs(App\Models\v1\Accolade::class, 'trip_history', function(Faker
 
 $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
 {
+    $name = $faker->sentence(4);
     return [
-        'name' => $faker->sentence(4),
+        'name' => $name,
+        'slug' => str_slug($name),
         'balance' => $faker->randomNumber,
         'fundable_id' => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
         'fundable_type' => 'reservations',

@@ -32,6 +32,7 @@ class CreateFinancialsTables extends Migration
 
         Schema::create('funds', function(Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('slug');
             $table->string('name');
             $table->integer('balance');
             $table->uuid('fundable_id');

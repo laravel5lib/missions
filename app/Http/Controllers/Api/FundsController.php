@@ -42,14 +42,16 @@ class FundsController extends Controller
     }
 
     /**
-     * Get a fund by it's id.
+     * Get a fund by it's id or slug.
      *
-     * @param $id
+     * @param $param
      * @return \Dingo\Api\Http\Response
      */
-    public function show($id)
+    public function show($param)
     {
-        $fund = $this->fund->findOrFail($id);
+        $fund = $this->fund->where('id', $param)
+                           ->orWhere('slug', $param)
+                           ->firstOrFail();
 
         return $this->response->item($fund, new FundTransformer);
     }
@@ -62,7 +64,15 @@ class FundsController extends Controller
      */
     public function store(FundRequest $request)
     {
-        $fund = $this->fund->create($request->all());
+        $fund = $this->fund->create([
+            'name' => $request->get('name'),
+            'slug' => str_slug($request->get('name'), '-'),
+            'balance' => $request->get('balance', 0),
+            'fundable_id' => $request->get('fundable_id'),
+            'fundable_type' => $request->get('fundable_type'),
+            'class' => $request->get('class'),
+            'item' => $request->get('item')
+        ]);
 
         if ($request->has('tags'))
             $fund->tag($request->get('tags'));
@@ -81,7 +91,15 @@ class FundsController extends Controller
     {
         $fund = $this->fund->findOrFail($id);
 
-        $fund->update($request->all());
+        $fund->update([
+            'name' => $request->get('name', $fund->name),
+            'slug' => $request->get('slug', $fund->slug),
+            'balance' => $request->get('balance', $fund->balance),
+            'fundable_id' => $request->get('fundable_id', $fund->fundable_id),
+            'fundable_type' => $request->get('fundable_type', $fund->fundable_type),
+            'class' => $request->get('class', $fund->class),
+            'item' => $request->get('item', $fund->item)
+        ]);
 
         if ($request->has('tags'))
             $fund->retag($request->get('tags'));

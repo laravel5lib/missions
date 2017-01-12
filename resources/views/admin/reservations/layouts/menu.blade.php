@@ -9,6 +9,8 @@
             <p style="font-size:10px;margin-top:3px;"><i class="fa fa-phone"></i> <a href="tel:{{ $reservation->user->phone_one }}">{{ $reservation->user->phone_one }}</a> / <i class="fa fa-envelope"></i> <a href="mailto:{{ $reservation->user->email }}">{{ $reservation->user->email }}</a></p>
         </div>
     </div><!-- end panel-heading -->
+
+    @if($rep)
     <div class="panel-heading">
         <div style="display:inline-block;">
             <img class="img-circle img-sm" src="{{ image($rep->avatar->source.'?w=50&h=50') }}">
@@ -19,6 +21,8 @@
             <p style="font-size:10px;margin-top:3px;"><i class="fa fa-phone"></i> <a href="tel:{{ $rep->phone_one }}">{{ $rep->phone_one }}</a> / <i class="fa fa-envelope"></i> <a href="mailto:{{ $rep->email }}">{{ $rep->email }}</a></p>
         </div>
     </div><!-- end panel-heading -->
+    @endif
+    
 </div>
 
 <div class="panel panel-default">

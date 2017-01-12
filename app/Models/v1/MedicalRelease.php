@@ -173,7 +173,7 @@ class MedicalRelease extends Model
     }
 
     /**
-     * Get the fundraiser's uploads.
+     * Get the medical release's uploads.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */

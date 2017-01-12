@@ -15,25 +15,21 @@
                         	<label class="control-label">Group</label>
                             <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
                             <select hidden v-model="group_id" v-validate:group="{ required: true}">
-                                <option :value="group.id" v-for="group in groups">{{group.name}}</option>
+                                <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
                             </select>
                         </div>
                     </div>
 								<div class="row">
 									<div class="col-sm-6">
 										<label>Visibility</label>
-										<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
+										<div class="radios">
 											<label>
-												<input type="radio" v-model="public" :value="false" v-validate:visibility="{ required: { rule: true} }"> Private
+												<input type="radio" v-model="public" :value="false"> Private
+											</label>
+											<label>
+												<input type="radio" v-model="public" :value="true"> Public
 											</label>
 										</div>
-										<div class="radios" :class="{ 'has-error': checkForError('visibility') }">
-											<label>
-												<input type="radio" v-model="public" :value="true" v-validate:visibility > Public
-											</label>
-										</div>
-										<span class="text-danger" v-show="checkForError('visibility')">Select a Visibility</span>
-
 									</div>
 
 								</div>

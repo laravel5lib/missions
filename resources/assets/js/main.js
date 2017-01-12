@@ -185,10 +185,9 @@ Vue.http.interceptors.push({
 
 
         // Show Spinners in all components where they exist
-        if (_.contains(['GET', 'POST', 'PUT'],request.method)) {
-            // debugger;
+        if (_.contains(['GET', 'POST', 'PUT'],request.method.toUpperCase())) {
             if (this.$refs.spinner) {
-                switch (request.method) {
+                switch (request.method.toUpperCase()) {
                     case 'GET':
                         this.$refs.spinner.show({text: 'Loading'});
                         break;

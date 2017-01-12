@@ -235,6 +235,11 @@
 									<input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
 								</label>
 							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="requirements" :disabled="maxCheck('requirements')"> Requirements
+								</label>
+							</li>
 							<li role="separator" class="divider"></li>
 							<li>
 								<div style="margin-bottom: 0px;" class="input-group input-group-sm">
@@ -361,6 +366,9 @@
 					<th v-if="isActive('email')">
 						Email
 					</th>
+					<th v-if="isActive('requirements')">
+						Requirements
+					</th>
 					<th><i class="fa fa-cog"></i></th>
 				</tr>
 				</thead>
@@ -378,6 +386,12 @@
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
 					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
+					<td v-if="isActive('requirements')">
+                <span class="label label-success">{{ complete(reservation) }}</span>
+                <span class="label label-info">{{ attention(reservation) }}</span>
+                <span class="label label-default">{{ reviewing(reservation) }}</span>
+                <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
+					</td>
 					<td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
 				</tr>
 				</tbody>
@@ -608,6 +622,18 @@
 			}*/
         },
         methods: {
+        	getIncomplete(reservation) {
+                return _.where(reservation.requirements.data, {status: 'incomplete'}).length;
+            },
+            complete(reservation) {
+                return _.where(reservation.requirements.data, {status: 'complete'}).length;
+            },
+            attention(reservation) {
+                return _.where(reservation.requirements.data, {status: 'attention'}).length;
+            },
+            reviewing(reservation) {
+                return _.where(reservation.requirements.data, {status: 'reviewing'}).length;
+            },
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
 			},
@@ -689,7 +715,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
+					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,requirements',
 					search: this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,

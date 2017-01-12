@@ -583,3 +583,8 @@
         }
     }
 </script>
+<style scoped>
+.aside {
+    overflow: visible;
+}
+</style>

@@ -306,10 +306,3 @@
         }
     }
 </script>
-<script>
-    $(function(){
-    $('.carousel').carousel({
-          interval: 2000
-        });
-    });
-</script>

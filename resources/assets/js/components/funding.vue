@@ -84,11 +84,14 @@
                     <div class="list-group-item text-center" v-if="pagination.total === 0">No {{activeView}}s found.</div>
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
                         <h5>
-                            <span class="text-success">{{ transaction.amount|currency }}</span> was {{ action }}<br>
+                            <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span> was {{ action }}<br>
                             <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name }}</a> on
                                 {{ transaction.created_at|moment 'll'}}</small>
                             <br />
-                            <small v-if="transaction.details">{{ transaction.details.comment }}</small>
+                            <small v-if="transaction.details">
+                                <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
+                                <span v-if="transaction.details.reason">{{ transaction.details.reason }} <br></span>
+                            </small>
                         </h5>
                     </div>
                 </div>

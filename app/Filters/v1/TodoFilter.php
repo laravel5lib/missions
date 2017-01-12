@@ -41,6 +41,11 @@ class TodoFilter extends Filter
         return $this->where('todoable_type', $param[0]);
     }
 
+    public function unique()
+    {
+        return $this->groupBy('task');
+    }
+
     /**
      * By status.
      *

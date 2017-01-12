@@ -50,4 +50,9 @@ class CostFilter extends Filter
 
         return $this->where('cost_assignable_type', $param[0]);
     }
+
+    public function unique()
+    {
+        return $this->groupBy('name');
+    }
 }

@@ -4,6 +4,7 @@
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
+					<label>Tags</label>
 					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
 				</div>
@@ -23,6 +24,7 @@
 							  placeholder="Filter by Campaign"></v-select>
 				</div>
 				<div class="form-group">
+					<label>Gender</label>
 					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
 						<option value="">Any Genders</option>
 						<option value="male">Male</option>
@@ -31,6 +33,7 @@
 				</div>
 
 				<div class="form-group">
+				<label>Marital Status</label>
 					<select class="form-control input-sm" v-model="filters.status" style="width:100%;">
 						<option value="">Any Status</option>
 						<option value="single">Single</option>
@@ -38,13 +41,84 @@
 					</select>
 				</div>
 
+				<!-- Cost/Payments -->
 				<div class="form-group">
+				<label>Applied Cost</label>
+					<select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
+						<option value="">Any Cost</option>
+						<option v-for="option in dueOptions" v-bind:value="option">
+					    {{ option }}
+					  </option>
+					</select>
+				</div>
+				<div class="form-group" v-if="filters.dueName">
+					<label>Payment Status</label>
+					<select class="form-control input-sm" v-model="filters.dueStatus" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="overdue">Overdue</option>
+						<option value="late">Late</option>
+						<option value="extended">Extended</option>
+						<option value="paid">Paid</option>
+						<option value="pending">Pending</option>
+					</select>
+				</div>
+				<!-- end cost/payments -->
+
+				<!-- Requirements -->
+				<div class="form-group">
+				<label>Requirements</label>
+					<select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
+						<option value="">Any Requirement</option>
+						<option v-for="option in requirementOptions" v-bind:value="option">
+					    {{ option }}
+					  </option>
+					</select>
+				</div>
+				<div class="form-group" v-if="filters.requirementName">
+					<select class="form-control input-sm" v-model="filters.requirementStatus" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="incomplete">Incomplete</option>
+						<option value="reviewing">Reviewing</option>
+						<option value="attention">Attention</option>
+						<option value="complete">Complete</option>
+					</select>
+				</div>
+				<!-- end requirements -->
+				
+				<!-- Todos -->
+				<div class="form-group">
+				<label>Todos</label>
+					<select class="form-control input-sm" v-model="filters.todoName" style="width:100%;">
+						<option value="">Any Todo</option>
+						<option v-for="option in todoOptions" v-bind:value="option">
+					    {{ option }}
+					  </option>
+					</select>
+				</div>
+				<div class="form-group" v-if="filters.todoName">
+					<label class="radio-inline">
+						<input type="radio" name="companions" id="companions1" v-model="filters.todoStatus" :value="null"> Any
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="companions" id="companions2" v-model="filters.todoStatus" value="complete"> Complete
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="companions" id="companions3" v-model="filters.todoStatus" value="incomplete"> Incomplete
+					</label>
+				</div>
+				<!-- end todos -->
+
+				<div class="form-group">
+					<label>Shirt Size</label>
 					<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
 				<div class="form-group">
 					<div class="row">
+						<div class="col-xs-12">
+							<label>Age Range</label>
+						</div>
 						<div class="col-xs-6">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Age Min</span>
@@ -60,8 +134,8 @@
 					</div>
 				</div>
 
-				<div class="form-group" style="padding: 3px 20px;">
-					<label class="control-label small">Travel Companions</label>
+				<div class="form-group">
+					<label>Travel Companions</label>
 					<div>
 						<label class="radio-inline">
 							<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
@@ -218,6 +292,18 @@
 				Companions
 				<i class="fa fa-close"></i>
 			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName.length" @click="filters.todoName = '', filters.todoStatus = null" >
+				{{ todo }}
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.requirementName.length" @click="filters.requirementName = '', filters.requirementStatus = ''" >
+				{{ requirement }}
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.dueName.length" @click="filters.dueName = '', filters.dueStatus = ''" >
+				{{ due }}
+				<i class="fa fa-close"></i>
+			</span>
 		</div>
         <hr class="divider sm">
 		<div>
@@ -314,72 +400,6 @@
 				</tfoot>
 			</table>
 		</div>
-		<modal title="Export Reservations List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
-			<div slot="modal-body" class="modal-body">
-				<ul class="list-unstyled">
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="given_names"> Given Names
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="surname"> Surname
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="group"> Group
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="campaign"> Campaign
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="type"> Type
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="total_raised"> Amout Raised
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="percent_raised"> Percent Raised
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="registered"> Registered On
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="gender"> Gender
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="status"> Status
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="age"> Age
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="email"> Email
-						</label>
-					</li>
-				</ul>
-			</div>
-		</modal>
     </div>
 </template>
 <style>
@@ -434,6 +454,9 @@
 				usersOptions: [],
 				campaignObj: null,
 				campaignOptions: [],
+				todoOptions: [],
+				requirementOptions: [],
+				dueOptions: [],
 				shirtSizeArr: [],
 				shirtSizeOptions: [
 					{id: 'XS', name: 'Extra Small'},
@@ -455,7 +478,14 @@
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null
+					hasCompanions:null,
+					due: '',
+					todoName: '',
+					todoStatus: null,
+					requirementName: '',
+					requirementStatus: '',
+					dueName: '',
+					dueStatus: ''
 				},
 				showFilters: false,
 				exportOptions: {
@@ -496,6 +526,25 @@
             }
         },
 		computed: {
+				'todo': function() {
+					if(this.filters.todoStatus) {
+						return this.filters.todoName+'|'+this.filters.todoStatus;
+					} else {
+						return this.filters.todoName;
+					}
+				},
+				'requirement': function() {
+					if(this.filters.requirementStatus)
+						return this.filters.requirementName+'|'+this.filters.requirementStatus;
+					
+					return this.filters.requirementName;
+				},
+				'due': function() {
+					if(this.filters.dueStatus)
+						return this.filters.dueName+'|'+this.filters.dueStatus;
+
+					return this.filters.dueName;
+				}
 		},
         watch: {
 			// watch filters obj
@@ -582,6 +631,12 @@
 						status: this.filters.status,
 						shirtSize: this.filters.shirtSize,
 						hasCompanions: this.filters.hasCompanions,
+						todoName: this.filters.todoName,
+						todoStatus: this.filters.todoStatus,
+						requirementName: this.filters.requirementName,
+						requirementStatus: this.filters.requirementStatus,
+						dueName: this.filters.dueName,
+						dueStatus: this.filters.dueStatus
 					}
 				});
 
@@ -614,7 +669,13 @@
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null
+					hasCompanions:null,
+					todoName: '',
+					todoStatus: null,
+					requirementName: '',
+					requirementStatus: '',
+					dueName: '',
+					dueStatus: ''
 				}
 
 
@@ -650,7 +711,10 @@
 
 				$.extend(params, this.filters);
 				$.extend(params, {
-					age: [ this.ageMin, this.ageMax]
+					age: [ this.ageMin, this.ageMax],
+					todo: this.todo,
+					requirement: this.requirement,
+					due: this.due
 				});
 
 				this.exportFilters = params;
@@ -693,6 +757,21 @@
 					this.usersOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
+			},
+			getTodos(){
+				this.$http.get('todos', {'type': 'reservations', 'per_page': 100, 'unique': true}).then(function (response) {
+					this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
+				});
+			},
+			getRequirements(){
+				this.$http.get('requirements', {'type': 'trips', 'per_page': 100, 'unique': true}).then(function (response) {
+					this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				});
+			},
+			getCosts(){
+				this.$http.get('costs', {'assignment': 'trips', 'per_page': 100, 'unique': true}).then(function (response) {
+					this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				});
 			}
         },
         ready(){
@@ -706,6 +785,9 @@
 			// populate
             this.getGroups();
             this.getCampaigns();
+            this.getCosts();
+            this.getRequirements();
+            this.getTodos();
 
 			// assign values from url search
 			if (window.location.search !== '') {

@@ -216,7 +216,7 @@ class ReservationFilter extends Filter
      */
     public function requirement($requirement)
     {
-        $param = preg_split('/\|+/', $requirement);
+        $param = preg_split('/\|+/', urldecode($requirement));
 
         return $this->whereHas('requirements', function($requirements) use($param) 
         {
@@ -239,7 +239,7 @@ class ReservationFilter extends Filter
      */
     public function todo($todo)
     {
-        $param = preg_split('/\|+/', $todo);
+        $param = preg_split('/\|+/', urldecode($todo));
 
         return $this->whereHas('todos', function($todos) use($param)
         {
@@ -264,7 +264,7 @@ class ReservationFilter extends Filter
      */
     public function due($due)
     {
-        $param = preg_split('/\|+/', $due);
+        $param = preg_split('/\|+/', urldecode($due));
 
         return $this->whereHas('dues', function($payments) use($param) {
 

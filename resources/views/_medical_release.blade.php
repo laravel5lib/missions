@@ -90,7 +90,17 @@
                     <h5>Doctor Notes</h5>
                 </div>
                 <div class="panel-body">
-                    <p>No notes found.</p>
+                    @if($release->uploads->count())
+                        <ul class="list-group">
+                            @foreach($release->uploads as $upload)
+                            <li class="list-group-item">
+                                <i class="fa fa-file-pdf-o"></i> {{ $upload->name }}
+                            </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>No notes found</p>
+                    @endif
                 </div>
             </div>
             <div class="panel panel-default">
@@ -101,22 +111,22 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Name</label>
-                            {{ $release->emergency_contact['name'] }}
+                            <p>{{ $release->emergency_contact['name'] }}</p>
                         </div>
                         <div class="col-sm-6">
                             <label>Email</label>
-                            {{ $release->emergency_contact['email'] }}
+                            <p>{{ $release->emergency_contact['email'] }}</p>
                         </div>
                     </div>
                     <hr class="divider">
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Phone</label>
-                            {{ $release->emergency_contact['phone'] }}
+                            <p>{{ $release->emergency_contact['phone'] }}</p>
                         </div>
                         <div class="col-sm-6">
                             <label>Relationship</label>
-                            {{ $release->emergency_contact['relationship'] }}
+                            <p>{{ $release->emergency_contact['relationship'] }}</p>
                         </div>
                     </div>
                 </div>

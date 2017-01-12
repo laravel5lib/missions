@@ -48,11 +48,7 @@ class Due extends Model
     public function getStatus()
     {
         // make sure the date is compared with the user's timezone
-        if($this->payable instanceof Project) {
-            $timezone = $this->payable->sponsor->timezone;
-        } else {
-            $timezone = $this->payable->user->timezone;
-        }
+        $timezone = $this->getTimezone();
 
         if ($this->due_at
             ->timezone($timezone)
@@ -63,13 +59,78 @@ class Due extends Model
         if ($this->due_at->timezone($timezone)->isPast() and $this->outstanding_balance > 0)
             return 'late';
 
-        if ($this->due_at > $this->payment->due_at and $this->due_at->timezone($timezone)->isFuture())
+        if ($this->due_at > $this->payment->due_at 
+                and $this->due_at->timezone($timezone)->isFuture() 
+                and $this->outstanding_balance > 0
+            )
             return 'extended';
 
         if ($this->outstanding_balance == 0)
             return 'paid';
 
         return 'pending';
+    }
+
+    /**
+     * Return dues that are extended.
+     * 
+     * @param  $query
+     * @param  Date $date
+     * @return mixed
+     */
+    public function scopeExtended($query)
+    {
+        return $query->join('payments', 'dues.payment_id', '=', 'payments.id')
+                     ->whereRaw('dues.due_at > payments.due_at')
+                     ->whereRaw('dues.due_at > NOW()')
+                     ->where('dues.outstanding_balance', '>', 0);
+    }
+
+    /**
+     * Return dues that are pending.
+     * 
+     * @param  $query
+     * @return mixed
+     */
+    public function scopePending($query)
+    {
+        return $query->whereRaw('due_at > NOW()')
+                     ->where('outstanding_balance', '>', 0);
+    }
+
+    /**
+     * Return dues that are overdue
+     * 
+     * @param  $query 
+     * @return mixed   
+     */
+    public function scopeOverdue($query)
+    {
+        return $query->whereRaw('DATE_ADD(due_at,INTERVAL grace_period DAY) < NOW()')
+                     ->where('outstanding_balance', '>', 0);
+    }
+
+    /**
+     * Return dues that are late
+     * 
+     * @param  $query 
+     * @return mixed   
+     */
+    public function scopeLate($query)
+    {
+        return $query->whereRaw('due_at < NOW()')
+                     ->where('outstanding_balance', '>', 0);
+    }
+
+    /**
+     * Return dues that are paid
+     * 
+     * @param  $query 
+     * @return mixed   
+     */
+    public function scopePaid($query)
+    {
+        return $query->where('outstanding_balance', '=', 0);
     }
 
     /**
@@ -108,5 +169,20 @@ class Due extends Model
     public function scopeSortRecent($query)
     {
         return $query->orderBy('due_at', 'asc');
+    }
+
+    /**
+     * Get Timezone
+     * @return String
+     */
+    private function getTimezone()
+    {
+        if($this->payable instanceof Project) {
+            $timezone = $this->payable->sponsor->timezone;
+        } else {
+            $timezone = $this->payable->user->timezone;
+        }
+
+        return $timezone;
     }
 }

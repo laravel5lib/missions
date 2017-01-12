@@ -194,4 +194,110 @@ class ReservationFilter extends Filter
     {
         return $this->onlyTrashed();
     }
+
+    /**
+     * By applied cost name
+     * 
+     * @param  string $name
+     * @return mixed
+     */
+    public function cost($name)
+    {
+        return $this->whereHas('costs', function($costs) use($name) {
+            return $costs->where('name', $name);
+        });
+    }
+
+    /**
+     * By requirement and/or it's status.
+     * 
+     * @param  String $requirement
+     * @return mixed
+     */
+    public function requirement($requirement)
+    {
+        $param = preg_split('/\|+/', $requirement);
+
+        return $this->whereHas('requirements', function($requirements) use($param) 
+        {
+            if (isset($param[1])) {
+                $requirements->where('status', $param[1]);
+            }
+
+            return $requirements->whereHas('requirement', function($req) use($param)
+            {
+                return $req->where('name', $param[0]);
+            });
+        });
+    }
+
+    /**
+     * By Todo and it's completion status.
+     * 
+     * @param  String $todo
+     * @return mixed
+     */
+    public function todo($todo)
+    {
+        $param = preg_split('/\|+/', $todo);
+
+        return $this->whereHas('todos', function($todos) use($param)
+        {
+            if (isset($param[1]) && $param[1] == 'complete') {
+                $todos->whereNotNull('completed_at');
+            }
+
+            if (isset($param[1]) && $param[1] == 'incomplete') {
+                $todos->whereNull('completed_at');
+            }
+               
+            return $todos->where('todoable_type', 'reservations')
+                        ->where('task', $param[0]);
+        });
+    }
+
+    /**
+     * By payment due and optionally by it's status.
+     * 
+     * @param  string $due 
+     * @return mixed      
+     */
+    public function due($due)
+    {
+        $param = preg_split('/\|+/', $due);
+
+        return $this->whereHas('dues', function($payments) use($param) {
+
+            $payments->whereHas('payment.cost', function($costs) use($param)
+            {
+                return $costs->where('name', $param[0]);
+            });
+
+            if(isset($param[1])) {
+                switch ($param[1]) {
+                    case 'overdue':
+                        return $payments->overdue();
+                        break;
+                    case 'late':
+                        return $payments->late();
+                        break;
+                    case 'paid':
+                        return $payments->paid();
+                        break;
+                    case 'pending':
+                        return $payments->pending();
+                        break;
+                    case 'extended':
+                        return $payments->extended();
+                        break;
+                    default:
+                        return $payments;
+                        break;
+                }
+            }
+
+            return $payments;
+
+        });
+    }
 }

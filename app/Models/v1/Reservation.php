@@ -110,6 +110,11 @@ class Reservation extends Model
                     ->withTimestamps();
     }
 
+    /**
+     * Get all of the reservation's active costs.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function activeCosts()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
@@ -118,6 +123,11 @@ class Reservation extends Model
                     ->withTimestamps();
     }
 
+    /**
+     * Get all the reservation's payments due.
+     * 
+     * @return Illuminate\Database\Eloquent\Reservations\MorphMany
+     */
     public function dues()
     {
         return $this->morphMany(Due::class, 'payable')->sortRecent();
@@ -164,10 +174,6 @@ class Reservation extends Model
     public function requirements()
     {
         return $this->hasMany(ReservationRequirement::class);
-//        return $this->belongsToMany(Requirement::class, 'reservation_requirements')
-//                    ->withPivot('grace_period', 'status', 'completed_at', 'document_type', 'document_id')
-//                    ->withTimestamps()
-//                    ->orderBy('due_at', 'desc');
     }
 
     /**

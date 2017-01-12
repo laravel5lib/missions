@@ -33,10 +33,22 @@ class ReservationTableSeeder extends Seeder
 
         $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-        $costs = $active->reject(function ($value) use ($maxDate)
+        $incrementalCosts = $active->filter(function ($value) use ($maxDate)
         {
-            return $value->type == 'incremental' && $value->active_at < $maxDate;
+            return $value->type == 'incremental' && $value->active_at == $maxDate;
         });
+
+        $staticCosts = $active->filter(function ($value)
+        {
+            return $value->type == 'static';
+        });
+
+        $optionalCosts = $active->filter(function ($value)
+        {
+            return $value->type == 'optional';
+        })->random(1);
+
+        $costs = $incrementalCosts->merge($staticCosts)->push($optionalCosts);
 
         $fund = $res->fund()->create([
             'name' => generateFundName($res),

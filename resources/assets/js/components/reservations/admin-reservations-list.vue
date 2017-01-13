@@ -113,9 +113,9 @@
 				<label>Trip Rep</label>
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
-						<option v-for="option in repOptions" track-by="$index" v-bind:value="option">
-					    {{ option }}
-					  	</option>
+						<option v-for="(key, option) in repOptions" v-bind:value="key">
+					    {{ option.name | capitalize }}
+					  </option>
 					</select>
 				</div>
 				<!-- end trip rep -->
@@ -306,6 +306,10 @@
 				Status
 				<i class="fa fa-close"></i>
 			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.rep != ''" @click="filters.rep = ''" >
+				Trip Rep.
+				<i class="fa fa-close"></i>
+			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize != ''" @click="filters.shirtSize = ''" >
 				Shirt Size
 				<i class="fa fa-close"></i>
@@ -462,9 +466,9 @@
 	import vSelect from "vue-select";
 	import exportUtility from '../export-utility.vue';
 	export default{
-        name: 'admin-reservations-list',
+		name: 'admin-reservations-list',
 		components: {vSelect, exportUtility},
-		props:{
+		props: {
 			tripId: {
 				type: String,
 				default: null
@@ -479,15 +483,15 @@
 			}
 		},
 		data(){
-            return{
-                reservations: [],
-                orderByField: 'surname',
-                direction: 1,
-                page: 1,
-                per_page: 10,
-                perPageOptions: [5, 10, 25, 50, 100],
-                pagination: { current_page: 1 },
-                search: '',
+			return {
+				reservations: [],
+				orderByField: 'surname',
+				direction: 1,
+				page: 1,
+				per_page: 10,
+				perPageOptions: [5, 10, 25, 50, 100],
+				pagination: {current_page: 1},
+				search: '',
 				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'percent_raised'],
 				maxActiveFields: 6,
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
@@ -517,14 +521,14 @@
 
 				// filter vars
 				filters: {
-					tags:[],
+					tags: [],
 					user: [],
-                	groups: [],
+					groups: [],
 					campaign: '',
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null,
+					hasCompanions: null,
 					due: '',
 					todoName: '',
 					todoStatus: null,
@@ -570,30 +574,30 @@
 					deadlines: 'Other Deadlines'
 				},
 				exportFilters: {}
-            }
-        },
-		computed: {
-				'todo': function() {
-					if(this.filters.todoStatus) {
-						return this.filters.todoName+'|'+this.filters.todoStatus;
-					} else {
-						return this.filters.todoName;
-					}
-				},
-				'requirement': function() {
-					if(this.filters.requirementStatus)
-						return this.filters.requirementName+'|'+this.filters.requirementStatus;
-					
-					return this.filters.requirementName;
-				},
-				'due': function() {
-					if(this.filters.dueStatus)
-						return this.filters.dueName+'|'+this.filters.dueStatus;
-
-					return this.filters.dueName;
-				}
+			}
 		},
-        watch: {
+		computed: {
+			'todo': function () {
+				if (this.filters.todoStatus) {
+					return this.filters.todoName + '|' + this.filters.todoStatus;
+				} else {
+					return this.filters.todoName;
+				}
+			},
+			'requirement': function () {
+				if (this.filters.requirementStatus)
+					return this.filters.requirementName + '|' + this.filters.requirementStatus;
+
+				return this.filters.requirementName;
+			},
+			'due': function () {
+				if (this.filters.dueStatus)
+					return this.filters.dueName + '|' + this.filters.dueStatus;
+
+				return this.filters.dueName;
+			}
+		},
+		watch: {
 			// watch filters obj
 			'filters': {
 				handler: function (val) {
@@ -603,23 +607,29 @@
 				},
 				deep: true
 			},
-        	'campaignObj': function (val) {
+			'campaignObj': function (val) {
 				this.filters.campaign = val ? val.id : '';
 			},
 			'reservations': function (val) {
-					this.repOptions = _.map(_.pluck(val, 'rep'), function(rep) {
-						return rep.data.name;
-					});
+				if (val.length) {
+					// use object/dictionary instead of array
+					let arr = {};
+					for (let index in val) {
+						// duplicate rep ids will be overwritten
+						arr[val[index].rep.data.id] = val[index].rep.data;
+					}
+					this.repOptions = arr;
+				}
 			},
 			'shirtSizeArr': function (val) {
-				this.filters.shirtSize = _.pluck(val, 'id')||'';
+				this.filters.shirtSize = _.pluck(val, 'id') || '';
 			},
 			'groupsArr': function (val) {
-				this.filters.groups = _.pluck(val, 'id')||'';
+				this.filters.groups = _.pluck(val, 'id') || '';
 //				this.searchReservations();
 			},
 			'usersArr': function (val) {
-				this.filters.user = _.pluck(val, 'id')||'';
+				this.filters.user = _.pluck(val, 'id') || '';
 //				this.searchReservations();
 			},
 			'tagsString': function (val) {
@@ -636,25 +646,25 @@
 			'direction': function (val) {
 				this.searchReservations();
 			},
-        	'activeFields': function (val, oldVal) {
-        		// if the orderBy field is removed from view
-        		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
-        			// default to first visible field
+			'activeFields': function (val, oldVal) {
+				// if the orderBy field is removed from view
+				if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+					// default to first visible field
 					this.orderByField = val[0];
 				}
 				this.updateConfig();
 			},
-            'search': function (val, oldVal) {
+			'search': function (val, oldVal) {
 				this.page = 1;
 				this.pagination.current_page = 1;
 				this.searchReservations();
-            },
-            'page': function (val, oldVal) {
+			},
+			'page': function (val, oldVal) {
 				this.searchReservations();
-            },
-            'per_page': function (val, oldVal) {
+			},
+			'per_page': function (val, oldVal) {
 				this.searchReservations();
-            },
+			},
 			/*'groups':function () {
 				this.searchReservations();
 			}*/
@@ -683,7 +693,7 @@
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
 			},
-        	updateConfig(){
+			updateConfig(){
 				localStorage[this.storageName] = JSON.stringify({
 					activeFields: this.activeFields,
 					maxActiveFields: this.maxActiveFields,
@@ -695,7 +705,7 @@
 					usersArr: this.usersArr,
 					campaignObj: this.campaignObj,
 					filters: {
-						tags:this.filters.tags,
+						tags: this.filters.tags,
 						user: this.filters.user,
 						groups: this.filters.groups,
 						campaign: this.filters.campaign,
@@ -708,7 +718,8 @@
 						requirementName: this.filters.requirementName,
 						requirementStatus: this.filters.requirementStatus,
 						dueName: this.filters.dueName,
-						dueStatus: this.filters.dueStatus
+						dueStatus: this.filters.dueStatus,
+						rep: this.filters.rep,
 					}
 				});
 
@@ -719,45 +730,46 @@
 			maxCheck(field){
 				return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
 			},
-            setOrderByField(field){
-                this.orderByField = field;
+			setOrderByField(field){
+				this.orderByField = field;
 				this.direction = 1;
 				this.searchReservations();
 			},
-            resetFilter(){
-                this.orderByField = 'surname';
-                this.direction = 1;
-                this.search = null;
+			resetFilter(){
+				this.orderByField = 'surname';
+				this.direction = 1;
+				this.search = null;
 				this.ageMin = 0;
 				this.ageMax = 120;
 				this.groupsArr = [];
 				this.usersArr = [];
 				this.campaignObj = null;
-				this.filters =  {
-					tags:[],
+				this.filters = {
+					tags: [],
 					user: [],
 					groups: [],
 					campaign: '',
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null,
+					hasCompanions: null,
 					todoName: '',
 					todoStatus: null,
 					requirementName: '',
 					requirementStatus: '',
+					rep: '',
 					dueName: '',
 					dueStatus: ''
 				}
 
 
 			},
-            country(code){
-                return code;
-            },
-            age(birthday){
-                return moment().diff(birthday, 'years')
-            },
+			country(code){
+				return code;
+			},
+			age(birthday){
+				return moment().diff(birthday, 'years')
+			},
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
@@ -768,7 +780,7 @@
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 				};
 
-				switch (this.type){
+				switch (this.type) {
 					case 'current':
 						params.current = true;
 						break;
@@ -783,7 +795,7 @@
 
 				$.extend(params, this.filters);
 				$.extend(params, {
-					age: [ this.ageMin, this.ageMax],
+					age: [this.ageMin, this.ageMax],
 					todo: this.todo,
 					requirement: this.requirement,
 					due: this.due
@@ -793,61 +805,73 @@
 
 				return params;
 			},
-            searchReservations(){
-            	let params = this.getListSettings();
+			searchReservations(){
+				let params = this.getListSettings();
 				// this.$refs.spinner.show();
 				this.$http.get('reservations', params).then(function (response) {
-                    let self = this;
-                    _.each(response.data.data, function (reservation) {
-                        reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
-                    }, this);
-                    this.reservations = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+					let self = this;
+					_.each(response.data.data, function (reservation) {
+						reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
+					}, this);
+					this.reservations = response.data.data;
+					this.pagination = response.data.meta.pagination;
 					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
 					// this.$refs.spinner.hide();
 				})
-            },
+			},
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('groups', { search: search}).then(function (response) {
+				this.$http.get('groups', {search: search}).then(function (response) {
 					this.groupsOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', { search: search}).then(function (response) {
+				this.$http.get('campaigns', {search: search}).then(function (response) {
 					this.campaignOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { search: search}).then(function (response) {
+				this.$http.get('users', {search: search}).then(function (response) {
 					this.usersOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getTodos(){
-				this.$http.get('todos', {'type': 'reservations', 'per_page': 100, 'unique': true}).then(function (response) {
+				this.$http.get('todos', {
+					'type': 'reservations',
+					'per_page': 100,
+					'unique': true
+				}).then(function (response) {
 					this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
 				});
 			},
 			getRequirements(){
-				this.$http.get('requirements', {'type': 'trips', 'per_page': 100, 'unique': true}).then(function (response) {
+				this.$http.get('requirements', {
+					'type': 'trips',
+					'per_page': 100,
+					'unique': true
+				}).then(function (response) {
 					this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
 				});
 			},
 			getCosts(){
-				this.$http.get('costs', {'assignment': 'trips', 'per_page': 100, 'unique': true}).then(function (response) {
+				this.$http.get('costs', {
+					'assignment': 'trips',
+					'per_page': 100,
+					'unique': true
+				}).then(function (response) {
 					this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
 				});
 			}
-        },
-        ready(){
-            // load view state
+		},
+		ready(){
+			// load view state
 			if (localStorage[this.storageName]) {
 				let config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
@@ -855,11 +879,11 @@
 				this.filters = config.filters;
 			}
 			// populate
-            this.getGroups();
-            this.getCampaigns();
-            this.getCosts();
-            this.getRequirements();
-            this.getTodos();
+			this.getGroups();
+			this.getCampaigns();
+			this.getCosts();
+			this.getRequirements();
+			this.getTodos();
 
 			// assign values from url search
 			if (window.location.search !== '') {

@@ -113,8 +113,8 @@
 				<label>Trip Rep</label>
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
-						<option v-for="option in repOptions" track-by="$index" v-bind:value="option.data.id">
-					    {{ option.data.name }}
+						<option v-for="option in repOptions" track-by="$index" v-bind:value="option">
+					    {{ option }}
 					  	</option>
 					</select>
 				</div>
@@ -408,17 +408,17 @@
 					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
-							<popover effect="fade" placement="top" title="Complete Requirements" content="list completed requirements here">
-								<span class="label label-success">{{ complete(reservation) }}</span>
+							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-success">{{ complete(reservation).length }}</span></a>
 							</popover>
-							<popover effect="fade" placement="top" title="Attention Requirements" content="list completed requirements here">
-								<span class="label label-info">{{ attention(reservation) }}</span>
+							<popover effect="fade" trigger="hover" placement="top" title="Needs Attention" :content="attention(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-info">{{ attention(reservation).length }}</span></a>
 							</popover>
-							<popover effect="fade" placement="top" title="Reviewing Requirements" content="list completed requirements here">
-								<span class="label label-default">{{ reviewing(reservation) }}</span>
+							<popover effect="fade" trigger="hover" placement="top" title="Under Review" :content="reviewing(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-default">{{ reviewing(reservation).length }}</span></a>
 							</popover>
-							<popover effect="fade" placement="top" title="Incomplete Requirements" content="list completed requirements here">
-								<span class="label label-danger" v-text="getIncomplete(reservation)"></span>
+							<popover effect="fade" trigger="hover" placement="top" title="Incomplete" :content="getIncomplete(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-danger" v-text="getIncomplete(reservation).length"></span></a>
 							</popover>
 						</div>
 					</td>
@@ -661,16 +661,24 @@
         },
         methods: {
         	getIncomplete(reservation) {
-                return _.where(reservation.requirements.data, {status: 'incomplete'}).length;
+                return _.map(_.where(reservation.requirements.data, {status: 'incomplete'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
             },
             complete(reservation) {
-                return _.where(reservation.requirements.data, {status: 'complete'}).length;
+                return _.map(_.where(reservation.requirements.data, {status: 'complete'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
             },
             attention(reservation) {
-                return _.where(reservation.requirements.data, {status: 'attention'}).length;
+                return _.map(_.where(reservation.requirements.data, {status: 'attention'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
             },
             reviewing(reservation) {
-                return _.where(reservation.requirements.data, {status: 'reviewing'}).length;
+                return _.map(_.where(reservation.requirements.data, {status: 'reviewing'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
             },
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
@@ -893,3 +901,10 @@
         }
     }
 </script>
+<style type="text/scss">
+.popover {
+	width: 200px !important;
+	min-width: 200px !important;
+	max-width: 400px !important;
+}
+</style>

@@ -613,9 +613,9 @@
 			'reservations': function (val) {
 				if (val.length) {
 					// use object/dictionary instead of array
-					// duplicate rep ids will be overwritten
 					let arr = {};
 					for (let index in val) {
+						// duplicate rep ids will be overwritten
 						arr[val[index].rep.data.id] = val[index].rep.data;
 					}
 					this.repOptions = arr;

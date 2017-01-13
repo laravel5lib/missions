@@ -239,8 +239,12 @@ Route::get('{type}/{slug?}/donate', function ($type, $slug) {
     return view('site.donate', compact('type', 'slug'));
 })->where('type', 'profiles|groups|reservations|trips');
 
-Route::get('/donate/{recipient?}', function ($recipient = null) {
-    return view('site.donate', compact('recipient'));
+Route::get('/donate/{recipient?}', function ($recipient = null) use ($dispatcher) {
+    $fund = !is_null($recipient) ? $dispatcher->get('funds/' . $recipient) : $dispatcher->get('funds/ipsam-placeat-perferendis');
+    $recipient = $fund->name;
+    $type = $fund->type;
+    $slug = $fund->slug;
+    return view('site.donate', compact('recipient', 'type', 'slug'));
 });
 Route::get('/speakers', function () {
     return view('site.speakers');

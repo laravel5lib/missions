@@ -91,6 +91,7 @@ $api->version('v1', [
     $api->resource('essays', 'EssaysController');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
+    $api->resource('reservations.dues', 'ReservationDuesController');
     $api->resource('requirements', 'RequirementsController');
     $api->resource('deadlines', 'DeadlinesController');
     $api->resource('questionnaires', 'QuestionnairesController');

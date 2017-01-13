@@ -96,11 +96,11 @@ class ReservationFilter extends Filter
      * @param $ids
      * @return mixed
      */
-    public function rep($ids)
+    public function rep($id)
     {
-        if($ids == []) return $this;
+        if(! $id) return $this;
 
-        return $this->whereIn('rep_id', $ids);
+        return $this->where('rep_id', $id);
     }
 
     /**

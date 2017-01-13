@@ -168,7 +168,8 @@ class Due extends Model
      */
     public function scopeSortRecent($query)
     {
-        return $query->orderBy('due_at', 'asc');
+        return $query->orderBy('due_at', 'asc')
+                     ->orderBy('outstanding_balance', 'asc');
     }
 
     /**

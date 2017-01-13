@@ -107,6 +107,18 @@
 					</label>
 				</div>
 				<!-- end todos -->
+				
+				<!-- Trip Rep -->
+				<div class="form-group">
+				<label>Trip Rep</label>
+					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
+						<option value="">Any Rep</option>
+						<option v-for="option in repOptions" v-bind:value="option.data.id">
+					    {{ option.data.name }}
+					  </option>
+					</select>
+				</div>
+				<!-- end trip rep -->
 
 				<div class="form-group">
 					<label>Shirt Size</label>
@@ -240,6 +252,11 @@
 									<input type="checkbox" v-model="activeFields" value="requirements" :disabled="maxCheck('requirements')"> Requirements
 								</label>
 							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="rep" :disabled="maxCheck('rep')"> Trip Rep
+								</label>
+							</li>
 							<li role="separator" class="divider"></li>
 							<li>
 								<div style="margin-bottom: 0px;" class="input-group input-group-sm">
@@ -369,6 +386,9 @@
 					<th v-if="isActive('requirements')">
 						Requirements
 					</th>
+					<th v-if="isActive('rep')">
+						Trip Rep
+					</th>
 					<th><i class="fa fa-cog"></i></th>
 				</tr>
 				</thead>
@@ -387,11 +407,14 @@
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
 					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
 					<td v-if="isActive('requirements')">
-                <span class="label label-success">{{ complete(reservation) }}</span>
+								<popover effect="fade" placement="top" title="Complete Requirements" content="list completed requirements here">
+								  <span class="label label-success">{{ complete(reservation) }}</span>
+								</popover>
                 <span class="label label-info">{{ attention(reservation) }}</span>
                 <span class="label label-default">{{ reviewing(reservation) }}</span>
                 <span class="label label-danger" v-text="getIncomplete(reservation)"></span>
 					</td>
+					<td v-if="isActive('rep')" v-text="reservation.rep.data.name|capitalize"></td>
 					<td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
 				</tr>
 				</tbody>
@@ -471,6 +494,7 @@
 				todoOptions: [],
 				requirementOptions: [],
 				dueOptions: [],
+				repOptions: [],
 				shirtSizeArr: [],
 				shirtSizeOptions: [
 					{id: 'XS', name: 'Extra Small'},
@@ -499,7 +523,8 @@
 					requirementName: '',
 					requirementStatus: '',
 					dueName: '',
-					dueStatus: ''
+					dueStatus: '',
+					rep: ''
 				},
 				showFilters: false,
 				exportOptions: {
@@ -572,6 +597,11 @@
 			},
         	'campaignObj': function (val) {
 				this.filters.campaign = val ? val.id : '';
+			},
+			'reservations': function (val) {
+					this.repOptions = _.map(_.pluck(val, 'rep'), function(rep) {
+						return rep.data.name;
+					});
 			},
 			'shirtSizeArr': function (val) {
 				this.filters.shirtSize = _.pluck(val, 'id')||'';
@@ -715,7 +745,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,requirements',
+					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,requirements,rep',
 					search: this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,

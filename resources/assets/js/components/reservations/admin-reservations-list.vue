@@ -277,19 +277,19 @@
 				Groups
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign !== ''" @click="filters.campaign = ''" >
 				Campaign
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.gender.length" @click="filters.gender = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.gender !== ''" @click="filters.gender = ''" >
 				Gender
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.status.length" @click="filters.status = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.status !== ''" @click="filters.status = ''" >
 				Status
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize !== ''" @click="filters.shirtSize = ''" >
 				Shirt Size
 				<i class="fa fa-close"></i>
 			</span>
@@ -297,15 +297,15 @@
 				Companions
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName.length" @click="filters.todoName = '', filters.todoStatus = null" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName !== ''" @click="filters.todoName = '', filters.todoStatus = null" >
 				{{ todo }}
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.requirementName.length" @click="filters.requirementName = '', filters.requirementStatus = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.requirementName !== ''" @click="filters.requirementName = '', filters.requirementStatus = ''" >
 				{{ requirement }}
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.dueName.length" @click="filters.dueName = '', filters.dueStatus = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.dueName !== ''" @click="filters.dueName = '', filters.dueStatus = ''" >
 				{{ due }}
 				<i class="fa fa-close"></i>
 			</span>

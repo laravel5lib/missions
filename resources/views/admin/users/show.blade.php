@@ -122,16 +122,16 @@
             <div class="col-sm-4">
                 <h5>Tools</h5>
                 <hr class="divider">
-                <send-email label="Resend welcome email" 
-                                 icon="fa fa-envelope"
+                <send-email label="Resend Welcome Email" 
+                                 icon="fa fa-envelope icon-left"
                                  class="btn btn-default btn-md btn-block"
                                  command="email:send-welcome" 
                                  :parameters="{id: '{{ $user->id }}', email: '{{ $user->email }}'}">
                 </send-email>
                 <a href="{{ url('admin/users/'.$user->id.'/impersonate') }}"
                    class="btn btn-default btn-md btn-block">
-                   <i class="fa fa-user-secret"></i> Temporarily login as this user
-               </a>
+                   <i class="fa fa-user-secret"></i> Temporarily Login As This User
+                </a>
                 <hr class="divider inv">
                 <user-permissions user_id="{{ $user->id }}" user-roles="{{ $user->roles->pluck('name') }}"></user-permissions>
             </div>

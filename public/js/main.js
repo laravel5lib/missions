@@ -90221,7 +90221,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n  <a :class=\"class\" @click=\"confirm = true\">\n    <i :class=\"icon\" v-if=\"icon\"></i> {{ label }}\n  </a>\n  <modal :title=\"label\" :show.sync=\"confirm\" effect=\"fade\" small=\"true\" ok-text=\"Yes\" :callback=\"fire\">\n    <div slot=\"modal-body\" class=\"modal-body\">\n      <h5>Are you sure you want to proceed?</h5>\n      <hr class=\"divider\">\n      <label>Recipient Email Address</label>\n      <input type=\"text\" class=\"form-control\" v-model=\"parameters.email\">\n    </div>\n  </modal>\n  <hr class=\"divider inv sm\">\n</div>\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n<div>\n  <a :class=\"class\" @click=\"confirm = true\">\n    <i :class=\"icon\" v-if=\"icon\"></i> {{ label }}\n  </a>\n  <modal :title=\"label\" :show.sync=\"confirm\" effect=\"fade\" small=\"true\" ok-text=\"Yes\" :callback=\"fire\">\n    <div slot=\"modal-body\" class=\"modal-body text-center\">\n      <h5>Are you sure you want to proceed?</h5>\n      <hr class=\"divider inv\">\n      <label>Recipient Email Address</label>\n      <input type=\"text\" class=\"form-control\" v-model=\"parameters.email\">\n    </div>\n  </modal>\n  <hr class=\"divider inv sm\">\n</div>\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

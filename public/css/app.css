@@ -16044,6 +16044,9 @@ li.av-nav > a {
   padding-bottom: 4px; }
 
 /* Offcanvas nav */
+.navmenu-inverse .navmenu-nav > .active > a, .navmenu-inverse .navmenu-nav > .active > a:hover, .navmenu-inverse .navmenu-nav > .active > a:focus, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
+  background-color: #f6323e; }
+
 /* Tooltip container */
 .offcanvas-tooltip {
   position: relative;
@@ -16288,10 +16291,12 @@ img.onenation-logo {
   max-width: 160px; }
 
 .av-left {
-  margin-right: 10px; }
+  margin-right: 10px;
+  border: 2px solid #bcbcbc; }
 
 .av-right {
-  margin-left: 10px; }
+  margin-left: 10px;
+  border: 2px solid #gray; }
 
 .profile-pic-panel {
   margin-top: -215px; }

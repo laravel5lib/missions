@@ -522,6 +522,9 @@ li.av-nav > a {
 }
 
 /* Offcanvas nav */
+.navmenu-inverse .navmenu-nav > .active > a, .navmenu-inverse .navmenu-nav > .active > a:hover, .navmenu-inverse .navmenu-nav > .active > a:focus, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
+  background-color: $brand-primary;
+}
 /* Tooltip container */
 .offcanvas-tooltip {
     position: relative;
@@ -807,9 +810,11 @@ $img-base-size: 40px;
 }
 .av-left {
   margin-right: 10px;
+  border: 2px solid $gray;
 }
 .av-right {
   margin-left: 10px;
+  border: 2px solid #gray;
 }
 .profile-pic-panel {
   margin-top: -215px;

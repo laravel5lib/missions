@@ -51,4 +51,9 @@ class RequirementFilter extends Filter
 
         return $this->where('requester_type', $param[0]);
     }
+
+    public function unique()
+    {
+        return $this->groupBy('name');
+    }
 }

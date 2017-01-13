@@ -4,6 +4,7 @@
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
+					<label>Tags</label>
 					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
 				</div>
@@ -23,6 +24,7 @@
 							  placeholder="Filter by Campaign"></v-select>
 				</div>
 				<div class="form-group">
+					<label>Gender</label>
 					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
 						<option value="">Any Genders</option>
 						<option value="male">Male</option>
@@ -31,6 +33,7 @@
 				</div>
 
 				<div class="form-group">
+				<label>Marital Status</label>
 					<select class="form-control input-sm" v-model="filters.status" style="width:100%;">
 						<option value="">Any Status</option>
 						<option value="single">Single</option>
@@ -38,13 +41,96 @@
 					</select>
 				</div>
 
+				<!-- Cost/Payments -->
 				<div class="form-group">
+				<label>Applied Cost</label>
+					<select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
+						<option value="">Any Cost</option>
+						<option v-for="option in dueOptions" v-bind:value="option">
+					    {{ option }}
+					  </option>
+					</select>
+				</div>
+				<div class="form-group" v-if="filters.dueName">
+					<label>Payment Status</label>
+					<select class="form-control input-sm" v-model="filters.dueStatus" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="overdue">Overdue</option>
+						<option value="late">Late</option>
+						<option value="extended">Extended</option>
+						<option value="paid">Paid</option>
+						<option value="pending">Pending</option>
+					</select>
+				</div>
+				<!-- end cost/payments -->
+
+				<!-- Requirements -->
+				<div class="form-group">
+				<label>Requirements</label>
+					<select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
+						<option value="">Any Requirement</option>
+						<option v-for="option in requirementOptions" v-bind:value="option">
+					    {{ option }}
+					  </option>
+					</select>
+				</div>
+				<div class="form-group" v-if="filters.requirementName">
+					<select class="form-control input-sm" v-model="filters.requirementStatus" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="incomplete">Incomplete</option>
+						<option value="reviewing">Reviewing</option>
+						<option value="attention">Attention</option>
+						<option value="complete">Complete</option>
+					</select>
+				</div>
+				<!-- end requirements -->
+				
+				<!-- Todos -->
+				<div class="form-group">
+				<label>Todos</label>
+					<select class="form-control input-sm" v-model="filters.todoName" style="width:100%;">
+						<option value="">Any Todo</option>
+						<option v-for="option in todoOptions" v-bind:value="option">
+					    {{ option }}
+					  </option>
+					</select>
+				</div>
+				<div class="form-group" v-if="filters.todoName">
+					<label class="radio-inline">
+						<input type="radio" name="companions" id="companions1" v-model="filters.todoStatus" :value="null"> Any
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="companions" id="companions2" v-model="filters.todoStatus" value="complete"> Complete
+					</label>
+					<label class="radio-inline">
+						<input type="radio" name="companions" id="companions3" v-model="filters.todoStatus" value="incomplete"> Incomplete
+					</label>
+				</div>
+				<!-- end todos -->
+				
+				<!-- Trip Rep -->
+				<div class="form-group">
+				<label>Trip Rep</label>
+					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
+						<option value="">Any Rep</option>
+						<option v-for="(key, option) in repOptions" v-bind:value="key">
+					    {{ option.name | capitalize }}
+					  </option>
+					</select>
+				</div>
+				<!-- end trip rep -->
+
+				<div class="form-group">
+					<label>Shirt Size</label>
 					<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
 				<div class="form-group">
 					<div class="row">
+						<div class="col-xs-12">
+							<label>Age Range</label>
+						</div>
 						<div class="col-xs-6">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Age Min</span>
@@ -60,8 +146,8 @@
 					</div>
 				</div>
 
-				<div class="form-group" style="padding: 3px 20px;">
-					<label class="control-label small">Travel Companions</label>
+				<div class="form-group">
+					<label>Travel Companions</label>
 					<div>
 						<label class="radio-inline">
 							<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
@@ -161,6 +247,16 @@
 									<input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
 								</label>
 							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="requirements" :disabled="maxCheck('requirements')"> Requirements
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="rep" :disabled="maxCheck('rep')"> Trip Rep
+								</label>
+							</li>
 							<li role="separator" class="divider"></li>
 							<li>
 								<div style="margin-bottom: 0px;" class="input-group input-group-sm">
@@ -198,19 +294,23 @@
 				Groups
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign.length" @click="filters.campaign = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign != ''" @click="filters.campaign = ''" >
 				Campaign
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.gender.length" @click="filters.gender = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.gender != ''" @click="filters.gender = ''" >
 				Gender
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.status.length" @click="filters.status = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.status != ''" @click="filters.status = ''" >
 				Status
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize.length" @click="filters.shirtSize = ''" >
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.rep != ''" @click="filters.rep = ''" >
+				Trip Rep.
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.shirtSize != ''" @click="filters.shirtSize = ''" >
 				Shirt Size
 				<i class="fa fa-close"></i>
 			</span>
@@ -218,9 +318,21 @@
 				Companions
 				<i class="fa fa-close"></i>
 			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName != ''" @click="filters.todoName = '', filters.todoStatus = null" >
+				{{ todo }}
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.requirementName != ''" @click="filters.requirementName = '', filters.requirementStatus = ''" >
+				{{ requirement }}
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.dueName != ''" @click="filters.dueName = '', filters.dueStatus = ''" >
+				{{ due }}
+				<i class="fa fa-close"></i>
+			</span>
 		</div>
         <hr class="divider sm">
-		<div>
+		<div style="position:relative;">
 			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 			<table class="table table-striped">
 				<thead>
@@ -275,6 +387,12 @@
 					<th v-if="isActive('email')">
 						Email
 					</th>
+					<th v-if="isActive('requirements')">
+						Requirements
+					</th>
+					<th v-if="isActive('rep')">
+						Trip Rep
+					</th>
 					<th><i class="fa fa-cog"></i></th>
 				</tr>
 				</thead>
@@ -292,6 +410,23 @@
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
 					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
+					<td v-if="isActive('requirements')">
+						<div style="position:relative;">
+							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-success">{{ complete(reservation).length }}</span></a>
+							</popover>
+							<popover effect="fade" trigger="hover" placement="top" title="Needs Attention" :content="attention(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-info">{{ attention(reservation).length }}</span></a>
+							</popover>
+							<popover effect="fade" trigger="hover" placement="top" title="Under Review" :content="reviewing(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-default">{{ reviewing(reservation).length }}</span></a>
+							</popover>
+							<popover effect="fade" trigger="hover" placement="top" title="Incomplete" :content="getIncomplete(reservation).join('<br>')">
+								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-danger" v-text="getIncomplete(reservation).length"></span></a>
+							</popover>
+						</div>
+					</td>
+					<td v-if="isActive('rep')" v-text="reservation.rep.data.name|capitalize"></td>
 					<td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
 				</tr>
 				</tbody>
@@ -314,72 +449,6 @@
 				</tfoot>
 			</table>
 		</div>
-		<modal title="Export Reservations List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
-			<div slot="modal-body" class="modal-body">
-				<ul class="list-unstyled">
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="given_names"> Given Names
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="surname"> Surname
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="group"> Group
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="campaign"> Campaign
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="type"> Type
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="total_raised"> Amout Raised
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="percent_raised"> Percent Raised
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="registered"> Registered On
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="gender"> Gender
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="status"> Status
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="age"> Age
-						</label>
-					</li>
-					<li>
-						<label class="small" style="margin-bottom: 0px;">
-							<input type="checkbox" v-model="exportSettings.fields" value="email"> Email
-						</label>
-					</li>
-				</ul>
-			</div>
-		</modal>
     </div>
 </template>
 <style>
@@ -397,9 +466,9 @@
 	import vSelect from "vue-select";
 	import exportUtility from '../export-utility.vue';
 	export default{
-        name: 'admin-reservations-list',
+		name: 'admin-reservations-list',
 		components: {vSelect, exportUtility},
-		props:{
+		props: {
 			tripId: {
 				type: String,
 				default: null
@@ -414,15 +483,15 @@
 			}
 		},
 		data(){
-            return{
-                reservations: [],
-                orderByField: 'surname',
-                direction: 1,
-                page: 1,
-                per_page: 10,
-                perPageOptions: [5, 10, 25, 50, 100],
-                pagination: { current_page: 1 },
-                search: '',
+			return {
+				reservations: [],
+				orderByField: 'surname',
+				direction: 1,
+				page: 1,
+				per_page: 10,
+				perPageOptions: [5, 10, 25, 50, 100],
+				pagination: {current_page: 1},
+				search: '',
 				activeFields: ['given_names', 'surname', 'group', 'campaign', 'type', 'percent_raised'],
 				maxActiveFields: 6,
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
@@ -434,6 +503,10 @@
 				usersOptions: [],
 				campaignObj: null,
 				campaignOptions: [],
+				todoOptions: [],
+				requirementOptions: [],
+				dueOptions: [],
+				repOptions: [],
 				shirtSizeArr: [],
 				shirtSizeOptions: [
 					{id: 'XS', name: 'Extra Small'},
@@ -448,14 +521,22 @@
 
 				// filter vars
 				filters: {
-					tags:[],
+					tags: [],
 					user: [],
-                	groups: [],
+					groups: [],
 					campaign: '',
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null
+					hasCompanions: null,
+					due: '',
+					todoName: '',
+					todoStatus: null,
+					requirementName: '',
+					requirementStatus: '',
+					dueName: '',
+					dueStatus: '',
+					rep: ''
 				},
 				showFilters: false,
 				exportOptions: {
@@ -493,11 +574,30 @@
 					deadlines: 'Other Deadlines'
 				},
 				exportFilters: {}
-            }
-        },
-		computed: {
+			}
 		},
-        watch: {
+		computed: {
+			'todo': function () {
+				if (this.filters.todoStatus) {
+					return this.filters.todoName + '|' + this.filters.todoStatus;
+				} else {
+					return this.filters.todoName;
+				}
+			},
+			'requirement': function () {
+				if (this.filters.requirementStatus)
+					return this.filters.requirementName + '|' + this.filters.requirementStatus;
+
+				return this.filters.requirementName;
+			},
+			'due': function () {
+				if (this.filters.dueStatus)
+					return this.filters.dueName + '|' + this.filters.dueStatus;
+
+				return this.filters.dueName;
+			}
+		},
+		watch: {
 			// watch filters obj
 			'filters': {
 				handler: function (val) {
@@ -507,18 +607,29 @@
 				},
 				deep: true
 			},
-        	'campaignObj': function (val) {
+			'campaignObj': function (val) {
 				this.filters.campaign = val ? val.id : '';
 			},
+			'reservations': function (val) {
+				if (val.length) {
+					// use object/dictionary instead of array
+					let arr = {};
+					for (let index in val) {
+						// duplicate rep ids will be overwritten
+						arr[val[index].rep.data.id] = val[index].rep.data;
+					}
+					this.repOptions = arr;
+				}
+			},
 			'shirtSizeArr': function (val) {
-				this.filters.shirtSize = _.pluck(val, 'id')||'';
+				this.filters.shirtSize = _.pluck(val, 'id') || '';
 			},
 			'groupsArr': function (val) {
-				this.filters.groups = _.pluck(val, 'id')||'';
+				this.filters.groups = _.pluck(val, 'id') || '';
 //				this.searchReservations();
 			},
 			'usersArr': function (val) {
-				this.filters.user = _.pluck(val, 'id')||'';
+				this.filters.user = _.pluck(val, 'id') || '';
 //				this.searchReservations();
 			},
 			'tagsString': function (val) {
@@ -535,34 +646,54 @@
 			'direction': function (val) {
 				this.searchReservations();
 			},
-        	'activeFields': function (val, oldVal) {
-        		// if the orderBy field is removed from view
-        		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
-        			// default to first visible field
+			'activeFields': function (val, oldVal) {
+				// if the orderBy field is removed from view
+				if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+					// default to first visible field
 					this.orderByField = val[0];
 				}
 				this.updateConfig();
 			},
-            'search': function (val, oldVal) {
+			'search': function (val, oldVal) {
 				this.page = 1;
 				this.pagination.current_page = 1;
 				this.searchReservations();
-            },
-            'page': function (val, oldVal) {
+			},
+			'page': function (val, oldVal) {
 				this.searchReservations();
-            },
-            'per_page': function (val, oldVal) {
+			},
+			'per_page': function (val, oldVal) {
 				this.searchReservations();
-            },
+			},
 			/*'groups':function () {
 				this.searchReservations();
 			}*/
         },
         methods: {
+        	getIncomplete(reservation) {
+                return _.map(_.where(reservation.requirements.data, {status: 'incomplete'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
+            },
+            complete(reservation) {
+                return _.map(_.where(reservation.requirements.data, {status: 'complete'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
+            },
+            attention(reservation) {
+                return _.map(_.where(reservation.requirements.data, {status: 'attention'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
+            },
+            reviewing(reservation) {
+                return _.map(_.where(reservation.requirements.data, {status: 'reviewing'}), function(req) {
+                	return '&middot; ' + req.name;
+                });
+            },
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
 			},
-        	updateConfig(){
+			updateConfig(){
 				localStorage[this.storageName] = JSON.stringify({
 					activeFields: this.activeFields,
 					maxActiveFields: this.maxActiveFields,
@@ -574,7 +705,7 @@
 					usersArr: this.usersArr,
 					campaignObj: this.campaignObj,
 					filters: {
-						tags:this.filters.tags,
+						tags: this.filters.tags,
 						user: this.filters.user,
 						groups: this.filters.groups,
 						campaign: this.filters.campaign,
@@ -582,6 +713,13 @@
 						status: this.filters.status,
 						shirtSize: this.filters.shirtSize,
 						hasCompanions: this.filters.hasCompanions,
+						todoName: this.filters.todoName,
+						todoStatus: this.filters.todoStatus,
+						requirementName: this.filters.requirementName,
+						requirementStatus: this.filters.requirementStatus,
+						dueName: this.filters.dueName,
+						dueStatus: this.filters.dueStatus,
+						rep: this.filters.rep,
 					}
 				});
 
@@ -592,50 +730,57 @@
 			maxCheck(field){
 				return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
 			},
-            setOrderByField(field){
-                this.orderByField = field;
+			setOrderByField(field){
+				this.orderByField = field;
 				this.direction = 1;
 				this.searchReservations();
 			},
-            resetFilter(){
-                this.orderByField = 'surname';
-                this.direction = 1;
-                this.search = null;
+			resetFilter(){
+				this.orderByField = 'surname';
+				this.direction = 1;
+				this.search = null;
 				this.ageMin = 0;
 				this.ageMax = 120;
 				this.groupsArr = [];
 				this.usersArr = [];
 				this.campaignObj = null;
-				this.filters =  {
-					tags:[],
+				this.filters = {
+					tags: [],
 					user: [],
 					groups: [],
 					campaign: '',
 					gender: '',
 					status: '',
 					shirtSize: [],
-					hasCompanions:null
+					hasCompanions: null,
+					todoName: '',
+					todoStatus: null,
+					requirementName: '',
+					requirementStatus: '',
+					rep: '',
+					dueName: '',
+					dueStatus: ''
 				}
 
 
 			},
-            country(code){
-                return code;
-            },
-            age(birthday){
-                return moment().diff(birthday, 'years')
-            },
+			country(code){
+				return code;
+			},
+			age(birthday){
+				return moment().diff(birthday, 'years')
+			},
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
+					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,requirements,rep',
 					search: this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
 				};
 
-				switch (this.type){
+				switch (this.type) {
 					case 'current':
 						params.current = true;
 						break;
@@ -650,53 +795,83 @@
 
 				$.extend(params, this.filters);
 				$.extend(params, {
-					age: [ this.ageMin, this.ageMax]
+					age: [this.ageMin, this.ageMax],
+					todo: this.todo,
+					requirement: this.requirement,
+					due: this.due
 				});
 
 				this.exportFilters = params;
 
 				return params;
 			},
-            searchReservations(){
-            	let params = this.getListSettings();
+			searchReservations(){
+				let params = this.getListSettings();
 				// this.$refs.spinner.show();
 				this.$http.get('reservations', params).then(function (response) {
-                    let self = this;
-                    _.each(response.data.data, function (reservation) {
-                        reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
-                    }, this);
-                    this.reservations = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+					let self = this;
+					_.each(response.data.data, function (reservation) {
+						reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
+					}, this);
+					this.reservations = response.data.data;
+					this.pagination = response.data.meta.pagination;
 					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
 					// this.$refs.spinner.hide();
 				})
-            },
+			},
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('groups', { search: search}).then(function (response) {
+				this.$http.get('groups', {search: search}).then(function (response) {
 					this.groupsOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', { search: search}).then(function (response) {
+				this.$http.get('campaigns', {search: search}).then(function (response) {
 					this.campaignOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { search: search}).then(function (response) {
+				this.$http.get('users', {search: search}).then(function (response) {
 					this.usersOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
+			},
+			getTodos(){
+				this.$http.get('todos', {
+					'type': 'reservations',
+					'per_page': 100,
+					'unique': true
+				}).then(function (response) {
+					this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
+				});
+			},
+			getRequirements(){
+				this.$http.get('requirements', {
+					'type': 'trips',
+					'per_page': 100,
+					'unique': true
+				}).then(function (response) {
+					this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				});
+			},
+			getCosts(){
+				this.$http.get('costs', {
+					'assignment': 'trips',
+					'per_page': 100,
+					'unique': true
+				}).then(function (response) {
+					this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				});
 			}
-        },
-        ready(){
-            // load view state
+		},
+		ready(){
+			// load view state
 			if (localStorage[this.storageName]) {
 				let config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
@@ -704,8 +879,11 @@
 				this.filters = config.filters;
 			}
 			// populate
-            this.getGroups();
-            this.getCampaigns();
+			this.getGroups();
+			this.getCampaigns();
+			this.getCosts();
+			this.getRequirements();
+			this.getTodos();
 
 			// assign values from url search
 			if (window.location.search !== '') {
@@ -747,3 +925,10 @@
         }
     }
 </script>
+<style type="text/scss">
+.popover {
+	width: 200px !important;
+	min-width: 200px !important;
+	max-width: 400px !important;
+}
+</style>

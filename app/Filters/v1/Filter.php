@@ -64,10 +64,11 @@ class Filter extends ModelFilter
         {
             foreach($this->searchable as $column) {
                 if (strpos($column, '.')) {
-                    list($relationship, $field) = explode(".", $column);
 
-                    $query->orWhereHas($relationship, function($col) use($field, $terms) {
-                        $col->where($field, 'LIKE', "%$terms%");
+                    list($field, $relationship) = explode(".", strrev($column), 2);
+
+                    $query->orWhereHas(strrev($relationship), function($col) use($field, $terms) {
+                        $col->where(strrev($field), 'LIKE', "%$terms%");
                     });
 
                 } else {

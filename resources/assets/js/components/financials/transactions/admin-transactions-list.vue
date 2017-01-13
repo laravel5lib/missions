@@ -368,8 +368,8 @@
                     maxAmount: null,
                     type: null,
                     maxDate: '',
-                    minDate: '',
-                    payment: ''
+                    minDate: null,
+                    payment: null
                 },
                 showFilters: false,
                 exportOptions: {
@@ -451,6 +451,8 @@
                         donor: this.filters.donor,
                         minAmount: this.filters.minAmount,
                         maxAmount: this.filters.maxAmount,
+                        minDate: this.filters.minDate,
+                        maxDate: this.filters.maxDate,
                         type: this.filters.type,
                     }
                 });
@@ -486,8 +488,8 @@
                         minAmount: null,
                         maxAmount: null,
                         type: '',
-                        maxDate: '',
-                        minDate: '',
+                        maxDate: null,
+                        minDate: null,
                     }
                 });
             },
@@ -538,6 +540,9 @@
         ready() {
             // load view state
             if (localStorage[this.storageName]) {
+                this.filters.minDate = '';
+                this.filters.maxDate = '';
+
                 let config = JSON.parse(localStorage[this.storageName]);
                 this.filters = config.filters;
             }
@@ -578,3 +583,8 @@
         }
     }
 </script>
+<style scoped>
+.aside {
+    overflow: visible;
+}
+</style>

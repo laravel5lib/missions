@@ -9,6 +9,7 @@ use App\Models\v1\ProjectCause;
 use App\Models\v1\Referral;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
+use App\Models\v1\Payment;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -105,6 +106,10 @@ class EventServiceProvider extends ServiceProvider
 
         Referral::created(function ($referral) {
            dispatch(new SendReferralRequestEmail($referral));
+        });
+
+        Payment::updated(function ($payment) {
+            $payment->due->payable->payments()->sync();
         });
     }
 }

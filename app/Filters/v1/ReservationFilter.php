@@ -96,11 +96,13 @@ class ReservationFilter extends Filter
      * @param $ids
      * @return mixed
      */
-    public function rep($ids)
+    public function rep($id)
     {
-        if($ids == []) return $this;
+        if(! $id) return $this;
 
-        return $this->whereIn('rep_id', $ids);
+        return $this->whereHas('trip.rep', function($rep) use($id) {
+            return $rep->where('id', $id);
+        })->orWhere('rep_id', $id);
     }
 
     /**
@@ -216,7 +218,7 @@ class ReservationFilter extends Filter
      */
     public function requirement($requirement)
     {
-        $param = preg_split('/\|+/', $requirement);
+        $param = preg_split('/\|+/', urldecode($requirement));
 
         return $this->whereHas('requirements', function($requirements) use($param) 
         {
@@ -239,7 +241,7 @@ class ReservationFilter extends Filter
      */
     public function todo($todo)
     {
-        $param = preg_split('/\|+/', $todo);
+        $param = preg_split('/\|+/', urldecode($todo));
 
         return $this->whereHas('todos', function($todos) use($param)
         {
@@ -264,7 +266,7 @@ class ReservationFilter extends Filter
      */
     public function due($due)
     {
-        $param = preg_split('/\|+/', $due);
+        $param = preg_split('/\|+/', urldecode($due));
 
         return $this->whereHas('dues', function($payments) use($param) {
 

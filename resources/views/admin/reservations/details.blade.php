@@ -50,14 +50,14 @@
                 </div>
                 <div class="col-md-6">
                     <label>Group</label>
-                    <p>{{ $reservation->trip->group->name }}</p>
+                    <p><a href="{{ url('/admin/groups/' . $reservation->trip->group->id) }}">{{ $reservation->trip->group->name }}</a> <sup class="text-muted"><i class="fa fa-external-link"></i></p>
                 </div>
             </div>
             <hr class="divider">
             <div class="row">
                 <div class="col-md-6">
                     <label>Trip Type</label>
-                    <p>{{ $reservation->trip->type }} Missionary</p>
+                    <p><a href="{{ url('/admin/trips/' . $reservation->trip->id) }}">{{ ucwords($reservation->trip->type) }} Trip</a> <sup class="text-muted"><i class="fa fa-external-link"></i></sup></p>
                 </div>
                 <div class="col-md-6">
                     <label>Start Date</label>

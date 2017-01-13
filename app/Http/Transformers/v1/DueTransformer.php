@@ -3,13 +3,10 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Due;
-use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class DueTransformer extends TransformerAbstract
 {
-    private $validParams = ['status'];
-
     /**
      * List of resources available to include
      *
@@ -28,6 +25,7 @@ class DueTransformer extends TransformerAbstract
         $due->load('payment.cost');
 
         return [
+            'id'           => $due->id,
             'cost'         => $due->payment->cost->name,
             'amount'       => (int) $due->payment->amount_owed,
             'percent'      => (int) $due->payment->percent_owed,
@@ -36,18 +34,6 @@ class DueTransformer extends TransformerAbstract
             'grace_period' => $due->grace_period,
             'status'       => $due->getStatus()
         ];
-    }
-
-    private function validateParams($params)
-    {
-        $usedParams = array_keys(iterator_to_array($params));
-        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
-            throw new \Exception(sprintf(
-                'Invalid param(s): "%s". Valid param(s): "%s"',
-                implode(',', $usedParams),
-                implode(',', $this->validParams)
-            ));
-        }
     }
 
 }

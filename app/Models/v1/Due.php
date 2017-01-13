@@ -2,13 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Due extends Model
 {
-//    protected $primaryKey = 'id';
-
-    public $incrementing = false;
+    use UuidForKey, Filterable;
 
     protected $table = 'dues';
 
@@ -17,8 +17,6 @@ class Due extends Model
     ];
 
     protected $dates = ['due_at'];
-
-    public $timestamps = false;
 
     /**
      * Get the due's payment.
@@ -168,7 +166,8 @@ class Due extends Model
      */
     public function scopeSortRecent($query)
     {
-        return $query->orderBy('due_at', 'asc');
+        return $query->orderBy('due_at', 'asc')
+                     ->orderBy('outstanding_balance', 'asc');
     }
 
     /**

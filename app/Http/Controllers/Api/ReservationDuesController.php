@@ -63,7 +63,7 @@ class ReservationDuesController extends Controller
      */
     public function update($reservation_id, $due_id, DueRequest $request)
     {
-        $dues = $this->reservation
+        $due = $this->reservation
                      ->findOrFail($reservation_id)
                      ->dues()
                      ->findOrFail($due_id);

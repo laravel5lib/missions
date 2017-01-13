@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <div>
+    <div style="position:relative;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <!--<button class="btn btn-primary btn-xs" @click="add"><span
 					   class="fa fa-plus"></span> Add Existing
@@ -17,11 +17,11 @@
                 <th>Outstanding Balance</th>
                 <th>Grace Period</th>
                 <th>Due</th>
-                <th></th>
+                <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
-            <tbody v-if="reservation">
-            <template v-for="due in reservation.dues.data">
+            <tbody>
+            <template v-for="due in dues" track-by="id">
                 <tr>
                     <td class="text-center">
                         <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
@@ -32,14 +32,14 @@
                     <td>{{ due.due_at | moment 'll' }}</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
-                        <a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>
+                        <!--<a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>-->
                     </td>
                 </tr>
             </template>
             </tbody>
         </table>
 
-        <modal title="Add Dues" :show.sync="showAddModal" effect="fade" width="800" :callback="addDues">
+        <!--<modal title="Add Dues" :show.sync="showAddModal" effect="fade" width="800" :callback="addDues">
             <div slot="modal-body" class="modal-body">
                 <validator name="AddDue">
                     <form class="for" novalidate>
@@ -54,7 +54,7 @@
                     </form>
                 </validator>
             </div>
-        </modal>
+        </modal>-->
 
         <modal title="Edit Due" :show.sync="showEditModal" effect="fade" width="800" :callback="updateDue">
             <div slot="modal-body" class="modal-body">
@@ -72,7 +72,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="due_date">Due Date</label>
-                                    <input id="due_date" type="datetime-local" class="form-control" v-model="editedDue.due_at">
+                                    <!--<input id="due_date" type="datetime" class="form-control" v-model="editedDue.due_at">-->
+                                    <date-picker class="form-control" :time.sync="editedDue.due_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="editedDue.due_at"></date-picker>
                                 </div>
                             </div>
                         </div>
@@ -94,6 +95,7 @@
                 reservation: null,
                 reservationsDues:[],
                 dues:[],
+                pagination: { current_page: 1 },
                 selectedDues: [],
                 availableDues: [],
                 editedDue: {
@@ -108,12 +110,11 @@
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('reservations/' + this.id, { include: 'dues,costs.payments,trip.costs.payments' }),
+                resource: this.$resource('reservations/' + this.id + '/dues{/due_id}'),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,
                 attemptSubmit: false,
-
                 preppedReservation : {}
             }
         },
@@ -150,7 +151,7 @@
             isPast(date){
                 return moment().isAfter(date);
             },
-            add(){
+            /*add(){
                 this.attemptSubmit = false;
                 this.showAddModal = true;
             },
@@ -158,43 +159,40 @@
                 this.attemptSubmit = false;
                 this.showNewModal = true;
 
-            },
+            },*/
             edit(due){
-                due.due_at = moment(due).format('YYYY-MM-DDTHH:MM:SS');
-                this.editedDue = due;
+                this.editedDue = _.extend({}, due);
                 this.attemptSubmit = false;
                 this.showEditModal = true;
             },
             updateDue(){
-                console.log(this.editedDue.due_at);
-                // prep current dues
-                let dues = [];
-                _.each(this.reservation.dues.data, function (due) {
-                    if (due.cost_id === this.editedDue.cost_id) {
-                        dues.push({ id: this.editedDue.cost_id, grace_period: this.editedDue.grace_period, due_at: this.editedDue.due_at });
-                    } else {
-                        dues.push({id: due.cost_id, grace_period: due.grace_period});
-                    }
-                }.bind(this));
-
-                let reservation = this.preppedReservation;
-                reservation.dues = dues;
-
-                return this.doUpdate(reservation);
+                this.resource.update({due_id: this.editedDue.id}, {
+                    due_at: this.editedDue.due_at,
+                    grace_period: this.editedDue.grace_period,
+                }).then(function (response) {
+                    this.showEditModal = false;
+                    this.getDues();
+                    this.editedDue = {
+                        name: '',
+                        date: null,
+                        grace_period: 0,
+                        enforced: false,
+                    };
+                });
             },
-            remove(due){
+            /*remove(due){
                 let reservation = this.preppedReservation;
                 reservation.dues = [];
                 _.each(this.reservation.dues.data, function (cs) {
                     if (cs.due_id !== due.due_id) {
-                        reservation.dues.push({ id: cs.due_id/*, locked: cs.locked*/})
+                        reservation.dues.push({ id: cs.due_id/!*, locked: cs.locked*!/})
                     }
                 });
                 console.log(reservation.dues);
 
                 return this.doUpdate(reservation);
-            },
-            addDues(){
+            },*/
+            /*addDues(){
                 // prep current dues
                 let currentDueIds = [];
                 _.each(this.reservation.dues.data, function (due) {
@@ -216,8 +214,8 @@
                 reservation.dues = newDues;
 
                 return this.doUpdate(reservation);
-            },
-            addNew(){
+            },*/
+            /*addNew(){
                 // get trip object
                 let trip = this.reservation.trip.data;
 
@@ -239,21 +237,21 @@
                     return this.adddues();
 
                 });
-            },
+            },*/
 
-            getDues(search, loading){
+            /*getDues(search, loading){
                 loading(true);
 
-            },
-            doUpdate(reservation){
+            },*/
+            /*doUpdate(reservation){
                 // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
                     this.setReservationData(response.data.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
-            },
-            setReservationData(reservation){
+            },*/
+            /*setReservationData(reservation){
                 this.reservation = reservation;
                 this.preppedReservation = {
                     given_names: this.reservation.given_names,
@@ -273,19 +271,22 @@
 
                 // Extend dues data
 
+            }*/
+            getDues(){
+                this.resource.get({ page: this.pagination.current_page }).then(function (response) {
+                    this.dues = response.data.data;
+                    this.pagination = response.data.meta.pagination;
+                });
             }
         },
         ready(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data)
-                // this.$refs.spinner.hide();
-            });
+            this.getDues();
 
             //Listen to Event Bus
-            this.$root.$on('AdminReservation:CostsUpdated', function (data) {
+            /*this.$root.$on('AdminReservation:CostsUpdated', function (data) {
                 this.setReservationData(data)
-            }.bind(this));
+            }.bind(this));*/
 
         }
     }

@@ -100,7 +100,9 @@ class ReservationFilter extends Filter
     {
         if(! $id) return $this;
 
-        return $this->where('rep_id', $id);
+        return $this->whereHas('trip.rep', function($rep) use($id) {
+            return $rep->where('id', $id);
+        })->orWhere('rep_id', $id);
     }
 
     /**

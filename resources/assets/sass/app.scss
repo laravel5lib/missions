@@ -1050,6 +1050,68 @@ h1.home-college-header {
     }
 }
 
+/* Group Carousel */
+.quote {
+    color: rgba(0,0,0,.1);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/*-------------------------------*/
+/*    Carousel Fade Transition   */
+/*-------------------------------*/
+
+#fade-quote-carousel.carousel {
+  padding-bottom: 40px;
+}
+#fade-quote-carousel.carousel .carousel-inner .item {
+  opacity: 0;
+  -webkit-transition-property: opacity;
+      -ms-transition-property: opacity;
+          transition-property: opacity;
+}
+#fade-quote-carousel.carousel .carousel-inner .active {
+  opacity: 1;
+  -webkit-transition-property: opacity;
+      -ms-transition-property: opacity;
+          transition-property: opacity;
+}
+#fade-quote-carousel.carousel .carousel-indicators {
+  bottom:10px;
+  li {
+    visibility:visible !important;
+  }
+  > li {
+    background-color:transparent;
+    border:1px solid $brand-primary !important;
+    &.active {
+      background-color:$brand-primary;
+    }
+  }
+}
+#fade-quote-carousel blockquote {
+    margin-top:10px;
+    font-style: italic;
+    color:$gray-dark;
+    text-align:center;
+    border:none;
+    margin-bottom:0;
+    line-height: 1.8em;
+    cite {
+      font-style: normal;
+      font-size: .6em;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+}
+#fade-quote-carousel .profile-circle {
+    width:90px;
+    height:90px;
+    margin:0 auto;
+    border:2px solid $brand-primary;
+}
+
 /* Fundraiser Carousel */
 #carousel-fundraising-platform {
   background-color: #f7f7f7;

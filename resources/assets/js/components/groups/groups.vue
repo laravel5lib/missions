@@ -306,6 +306,55 @@
       </div><!-- end container -->
       <hr class="divider" style="margin-top:0;margin-bottom:0;">
     </div><!-- end gray-lighter-bg -->
+    <div id="testimonial-carousel" class="white-bg">
+      <div class="container">
+        <div class="content-section" style="padding:40px 0 25px;">
+            <div class="row">
+              <div class="col-md-6 col-md-offset-3">
+                <div class="carousel slide" id="fade-quote-carousel" data-ride="carousel" data-interval="3000">
+                  <ol class="carousel-indicators">
+                    <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#fade-quote-carousel" data-slide-to="1"></li>
+                    <li data-target="#fade-quote-carousel" data-slide-to="2"></li>
+                    <li data-target="#fade-quote-carousel" data-slide-to="3"></li>
+                  </ol>
+                  <!-- Carousel items -->
+                  <div class="carousel-inner">
+                    <div class="active item">
+                      <img class="img-responsive img-circle profile-circle" src="images/testimonies/cameron-testimony.jpg">
+                      <blockquote>
+                        <p>On the mission field, I found God’s heart for these people in my own heart.</p>
+                        <cite title="Cameron C">Cameron C</cite>
+                      </blockquote> 
+                    </div>
+                    <div class="item">
+                      <img class="img-responsive img-circle profile-circle" src="images/testimonies/anthony-testimony.jpg">
+                      <blockquote>
+                        <p>I’ve learned true happiness comes through serving those around us.</p>
+                        <cite title="Anthony M">Anthony M</cite>
+                      </blockquote>
+                    </div>
+                    <div class="item">
+                      <img class="img-responsive img-circle profile-circle" src="images/testimonies/danielle-testimony.jpg">
+                      <blockquote>
+                        <p>I will never forget bringing people hope and showing them the love of Jesus.</p>
+                        <cite title="Danielle O">Danielle O</cite>
+                      </blockquote>
+                    </div>
+                    <div class="item">
+                        <img class="img-responsive img-circle profile-circle" src="images/testimonies/ruth-testimony.jpg">
+                        <blockquote>
+                        <p>God has transformed my heart and I will never be the same.</p>
+                        <cite title="Ruth P">Ruth P</cite>
+                      </blockquote>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end content-section -->
+      </div><!-- end container -->
+    </div><!-- end white-bg -->
     <div class="dark-bg-primary">
       <div class="container">
       <div class="content-section">

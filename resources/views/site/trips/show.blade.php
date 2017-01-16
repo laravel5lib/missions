@@ -77,7 +77,7 @@
                     <hr class="divider lg">
 
                     <h6 class="text-uppercase text-center">
-                        <img class="img-xs av-left"
+                        <img class="img-xs img-circle av-left"
                              src="../images/why-mm/{{ strtolower(str_replace(' ', '', $trip->difficulty)) }}.png"
                              alt="{{ $trip->difficulty }}"
                         >

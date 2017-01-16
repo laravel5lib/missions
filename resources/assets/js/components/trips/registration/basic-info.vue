@@ -26,6 +26,17 @@
 					<!--</template>-->
 
 					<div class="col-md-6">
+						<div class="form-group">
+							<label for="#">Desired Role</label>
+								<select class="form-control input-sm" v-model="#">
+									<option value="single">Missionary</option>
+									<option value="married">Medical</option>
+									<option value="divorced">Media</option>
+									<option value="widowed">Group Leader</option>
+									<option value="widowed">Pastor/Speaker</option>
+									<option value="widowed">Business Leader</option>
+								</select>
+						</div><!-- end form-group -->
 						<label>Full Legal Name</label>
 						<div class="row">
 							<div class="col-sm-12">

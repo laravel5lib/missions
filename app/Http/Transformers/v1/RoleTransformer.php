@@ -27,6 +27,6 @@ class RoleTransformer extends TransformerAbstract
     {
         $abilities = $role->abilities;
 
-        return $this->collection($abilities, new UserPermissionTransformer());
+        return $this->collection($abilities, new AbilityTransformer);
     }
 }

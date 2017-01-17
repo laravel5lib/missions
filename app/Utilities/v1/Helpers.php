@@ -5,6 +5,8 @@ use App\Models\v1\Project;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\Reservation;
 use App\Models\v1\Trip;
+use App\Models\v1\Slug;
+use App\Models\v1\Fundraiser;
 use Carbon\Carbon;
 
 function country($code)
@@ -140,4 +142,49 @@ function remove_http($url) {
     }
 
     return $url;
+}
+
+/**
+ * Generate a unique slug
+ * 
+ * @param  String $string
+ * @return String
+ */
+function generate_slug($string)
+{
+    $slug = str_slug($string);
+
+    $count = Slug::whereRaw("url RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+
+    return $count ? "{$slug}-{$count}" : $slug;
+}
+
+/**
+ * Generate a unique fund slug
+ * 
+ * @param  String $string
+ * @return String
+ */
+function generate_fund_slug($string)
+{
+    $slug = str_slug($string);
+
+    $count = Fund::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+
+    return $count ? "{$slug}-{$count}" : $slug;
+}
+
+/**
+ * Generate a unique fundraiser slug
+ * 
+ * @param  String $string
+ * @return String
+ */
+function generate_fundraiser_slug($string)
+{
+    $slug = str_slug($string);
+
+    $count = Fundraiser::whereRaw("url RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+
+    return $count ? "{$slug}-{$count}" : $slug;
 }

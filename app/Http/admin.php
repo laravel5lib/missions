@@ -17,8 +17,8 @@ Route::get('users/{id}/impersonate', 'UsersController@impersonate');
 
 Route::resource('campaigns', 'CampaignsController');
 Route::resource('campaigns.trips', 'TripsController');
-Route::resource('campaigns.regions', 'RegionsController');
-Route::resource('campaigns.transports', 'TransportsController');
+// Route::resource('campaigns.regions', 'RegionsController');
+// Route::resource('campaigns.transports', 'TransportsController');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::resource('trips', 'TripsController');

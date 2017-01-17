@@ -9,7 +9,7 @@ class Slug extends Model
 {
     use UuidForKey;
 
-    protected $guard = [];
+    protected $guarded = [];
 
     protected $dates = ['created_at', 'updated_at'];
 

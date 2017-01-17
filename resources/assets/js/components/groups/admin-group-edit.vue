@@ -241,7 +241,7 @@
                 }
             },
             isAdmin(){
-                return _.contains(_.pluck(this.$root.user.roles.data, 'id'), 3);
+                return _.contains(_.pluck(this.$root.user.abilities.data, 'slug'), 'edit-groups');
             },
         },
         events:{

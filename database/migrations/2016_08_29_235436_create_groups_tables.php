@@ -19,7 +19,6 @@ class CreateGroupsTables extends Migration
             $table->string('description')->nullable();
             $table->boolean('public')->default(false);
             $table->string('timezone')->default('US/Eastern');
-            $table->string('url')->nullable();
             $table->string('address_one')->nullable();
             $table->string('address_two')->nullable();
             $table->string('city')->nullable();

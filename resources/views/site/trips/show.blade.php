@@ -4,7 +4,7 @@
 <div class="white-header-bg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-8">
                 <h3 class="hidden-xs text-capitalize">
                     <img class="img-circle img-sm av-left" src="{{ image($trip->group->avatar->source . '?w=100') }}">{{ $trip->group->name }} <small>&middot; {{ $trip->type }}</small>
                 </h3>
@@ -16,6 +16,19 @@
                     <hr class="divider inv">
                 </div>
             </div><!-- end col -->
+            <div class="col-sm-4 text-right hidden-xs">
+                <hr class="divider inv">
+                <hr class="divider inv sm">
+                <a href="{{ url($trip->campaign->slug->url.'/trips') }}" class="btn btn-default">
+                    <i class="fa fa-chevron-left icon-left"></i> More Options
+                </a>
+            </div>
+            <div class="col-xs-12 text-center visible-xs">
+                <a href="{{ url($trip->campaign->slug->url.'/trips') }}" class="btn btn-default">
+                    <i class="fa fa-chevron-left icon-left"></i> More Options
+                </a>
+                <hr class="divider inv">
+            </div>
         </div>
     </div>
 </div>

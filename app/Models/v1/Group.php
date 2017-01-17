@@ -244,6 +244,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's slug.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
      * Get public groups.
      *
      * @param $query

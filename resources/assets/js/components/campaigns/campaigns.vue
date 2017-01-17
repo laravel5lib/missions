@@ -1,30 +1,4 @@
 <template>
-	<!-- <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-		  <ol class="carousel-indicators">-->
-	<!--<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>-->
-	<!--<li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="campaign in campaigns"></li>
-  </ol>
-  <div class="carousel-inner" role="listbox">
-	<div class="item {{ $index == 0 ? 'active' : '' }}" v-for="campaign in campaigns">
-	  <img :src="campaign.banner">
-	  <div class="carousel-caption">
-		<h6 class="text-uppercase">{{campaign.country}}</h6>
-		<h3>{{campaign.name}}</h3>
-		<p>{{campaign.description}}</p>
-		<a :href="'/campaigns/' + campaign.id" class="btn btn-primary btn-sm">More Details</a>
-		<hr class="divider inv" />
-	  </div>
-	</div>
-  </div>
-  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-	<span class="fa fa-angle-left" aria-hidden="true"></span>
-	<span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-	<span class="fa fa-angle-right" aria-hidden="true"></span>
-	<span class="sr-only">Next</span>
-  </a>
-</div> -->
 	<div id="carousel-example-generic" class="carousel slide campaign-carousel" data-ride="carousel">
 		<div class="carousel-inner">
 			<div class="item active">
@@ -55,13 +29,13 @@
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
-				<a class="hidden-xs hidden-sm" :href="'/campaigns/' + campaign.page_url" role="button">
+				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
 					<img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
 				</a>
 				<div style="min-height:220px;" class="panel-body">
 					<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i
 							class="fa fa-map-marker"></i> {{campaign.country}}</h6>
-					<a :href="'/campaigns/' + campaign.page_url" role="button">
+					<a :href="campaign.page_url" role="button">
 						<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
 					</a>
 					<h6 style="font-size:12px;">

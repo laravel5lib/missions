@@ -5,12 +5,12 @@
 				<div class="row">
 					<div class="col-sm-8">
                 		<h3 class="hidden-xs">
-                			<a :href="'/groups/' + group.url"><img class="img-circle img-sm av-left" :src="group.avatar">
+                			<a :href="group.url"><img class="img-circle img-sm av-left" :src="group.avatar">
 							{{ group.name }}</a>
 						</h3>
 						<div class="visible-xs text-center">
 							<hr class="divider inv">
-							<a :href="'/groups/' + group.url"><img class="img-circle img-md av-left" :src="group.avatar"></a>
+							<a :href="group.url"><img class="img-circle img-md av-left" :src="group.avatar"></a>
 							<h4 style="margin-bottom:0;">{{ group.name }}</h4>
 						</div>
 					</div><!-- end col -->

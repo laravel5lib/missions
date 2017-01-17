@@ -278,7 +278,7 @@
 		},
 		created(){
 			// login component skipped for now
-			this.currentStep = this.stepList[0];
+			this.currentStep = this.stepList[4];
 		},
 		ready(){
 			//get trip costs

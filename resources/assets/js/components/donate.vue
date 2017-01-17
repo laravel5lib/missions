@@ -146,11 +146,11 @@
                     </div>
                     <div class="col-sm-12">
                         <hr class="divider inv">
-                        <div class="panel panel-default" style="border-color:#47ada0;">
-                            <div class="panel-heading" style="background-color:#8ed4cc;border-color:#47ada0;">
-                                <h6 style="font-size:.6em;color:#47ada0;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;"><i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i> Secure Information</h6>
+                        <div class="panel panel-default" style="border-color:#05ce7b;">
+                            <div class="panel-heading" style="background-color:#05ce7b;border-color:#05ce7b;">
+                                <h6 style="font-size:.6em;color:#3c763d;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;"><i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i> Secure Information</h6>
                             </div><!-- end panel-heading -->
-                            <div class="panel-body" style="padding:10px;">
+                            <div class="panel-body" style="padding:10px;background:#f7f7f7;border-radius:0 0 4px 4px;">
                                 <label>Card Holder Name</label>
                                 <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardHolderName}}</p>
                                 <label>Card Number</label>
@@ -187,9 +187,9 @@
             </div>
             <div class="" v-show="donationState === 'confirmation'">
                 <div class="text-center">
-                    <h1><i class="fa fa-check-circle-o text-success success fa-2x"></i></h1>
-                    <h3>Donation Confirmed</h3>
-                    <h5>Thank you for your generosity!</h5>
+                    <img class="img-md" src="/images/donate/donation-check.png" alt="Donation Confirmed">
+                    <h3 style="color:#808080;margin-bottom:0;">Donation Confirmed</h3>
+                    <h5 style="color:#808080;margin-bottom:25px;">Thank you for your generosity!</h5>
                 </div>
                 <!--<div class="panel-footer" v-if="!child">
                     <a @click="done" class="btn btn-success">Close</a>

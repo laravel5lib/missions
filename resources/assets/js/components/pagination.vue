@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <ul class="pagination" v-if="pagination.total_pages > 0" :class="sizeClass">
+        <ul style="margin-bottom:5px;" class="pagination" v-if="pagination.total_pages > 0" :class="sizeClass">
             <li v-if="showPrevious()" :class="{ 'disabled' : pagination.current_page <= 1 }">
                 <span v-if="pagination.current_page <= 1">
                     <span aria-hidden="true">{{ config.previousText }}</span>
@@ -23,7 +23,7 @@
                 </a>
             </li>
         </ul>
-        <p class="text-center text-muted">Total: {{ pagination.total }}</p>
+        <label class="text-center" style="display:block;margin-bottom:10px;">{{ pagination.total }} total</label>
     </nav>
 </template>
 <script type="text/javascript">
@@ -42,7 +42,8 @@
                 type: Object
             },
             size: {
-                type: String
+                type: String,
+                default: 'small'
             }
         },
         data(){

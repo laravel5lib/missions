@@ -26,15 +26,15 @@
 					<!--</template>-->
 
 					<div class="col-md-6">
-						<div class="form-group">
-							<label for="#">Desired Role</label>
-								<select class="form-control input-sm" v-model="#">
-									<option value="single">Missionary</option>
-									<option value="married">Medical</option>
-									<option value="divorced">Media</option>
-									<option value="widowed">Group Leader</option>
-									<option value="widowed">Pastor/Speaker</option>
-									<option value="widowed">Business Leader</option>
+						<div class="form-group" :class="{ 'has-error': checkForError('role') }">
+							<label for="desiredRole">Desired Role</label>
+								<select class="form-control input-sm" id="desiredRole" v-model="role" v-validate:role="{ required: true }">
+									<option value="missionary">Missionary</option>
+									<option value="medical">Medical</option>
+									<option value="media">Media</option>
+									<option value="group-leader">Group Leader</option>
+									<option value="speaker">Pastor/Speaker</option>
+									<option value="business">Business Leader</option>
 								</select>
 						</div><!-- end form-group -->
 						<label>Full Legal Name</label>
@@ -318,6 +318,7 @@
 				onBehalf: false,
 
 				// basic info data
+				role: 'missionary',
 				address: null,
 				city: null,
 				state: null,
@@ -360,6 +361,7 @@
 			},
 			userInfo(){
 				return {
+					role: this.role,
 					address: this.address,
 					city: this.city,
 					state: this.state,

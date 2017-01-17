@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendWelcomeEmail;
 use App\Models\v1\User;
+use App\Services\UserListImport;
+use App\Services\UserListImportHandler;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
 use App\Http\Transformers\v1\UserTransformer;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportUsers;
 
 class UsersController extends Controller
 {
@@ -115,5 +119,35 @@ class UsersController extends Controller
         $user->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export users.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportUsers($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of users.
+     * 
+     * @param  UserListImport $import
+     * @return response
+     */
+    public function import(UserListImport $import)
+    {
+        $import->handleImport();
+
+        return $this->response()->created(null, [
+            'message' => 'List is being imported. This may take some time.'
+        ]);
     }
 }

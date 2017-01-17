@@ -32,6 +32,8 @@ class UserFilter extends Filter
      */
     public function isPublic($isPublic)
     {
+        if( ! $isPublic) return $this;
+
         return $isPublic == 'yes' ?
             $this->where('public', true) :
             $this->where('public', false);
@@ -45,6 +47,8 @@ class UserFilter extends Filter
      */
     public function gender($gender)
     {
+        if ( ! $gender) return $this;
+
         return $this->where('gender', $gender);
     }
 
@@ -56,6 +60,8 @@ class UserFilter extends Filter
      */
     public function status($status)
     {
+        if ( ! $status) return $this;
+
         return $this->where('status', $status);
     }
 
@@ -67,6 +73,8 @@ class UserFilter extends Filter
      */
     public function country($countries)
     {
+        if ($countries = []) return $this;
+
         return $this->whereIn('country_code', $countries);
     }
 
@@ -78,7 +86,11 @@ class UserFilter extends Filter
      */
     public function url($url)
     {
-        return $this->where('url', $url);
+        if ( ! $url) return $this;
+
+        return $this->whereHas('slug', function($slug) use($url) {
+            return $slug->where('url', $url);
+        });
     }
 
     /**
@@ -89,6 +101,8 @@ class UserFilter extends Filter
      */
     public function fundraiser($url)
     {
+        if ( ! $url) return $this;
+
         return $this->whereHas('fundraisers', function($fundraiser) use($url) {
            $fundraiser->where('url', $url);
         });

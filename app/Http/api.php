@@ -37,6 +37,8 @@ $api->version('v1', [
     $api->get('/users/me', 'UsersController@show');
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');
+    $api->post('users/export', 'UsersController@export');
+    $api->post('users/import', 'UsersController@import');
     $api->resource('users.contacts', 'ContactsController');
     $api->post('users/{id}/roles', 'UserRolesController@store');
     $api->delete('users/{id}/roles', 'UserRolesController@destroy');

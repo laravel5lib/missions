@@ -12,7 +12,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3>Edit Your Reservation</h3>
+                    <h3>Reservation <small>&middot; Edit</small></h3>
                 </div>
             </div>
         </div>

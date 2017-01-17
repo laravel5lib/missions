@@ -104,20 +104,14 @@
 
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="media">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object"
-									 :src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
-							</a>
-						</div>
-						<div class="media-body">
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-									data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-								Set Avatar
-							</button>
-						</div>
-					</div>
+					<h5>
+						<img class="av-left img-circle img-md"
+							:src="selectedAvatar.source ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
+						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+							data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+							<i class="fa fa-camera icon-left"></i> Set Avatar
+						</button>
+					</h5>
 					<div class="collapse" id="avatarCollapse">
 						<div class="well">
 							<upload-create-update type="avatar" :lock-type="true" :is-child="true"
@@ -126,20 +120,14 @@
 					</div>
 				</div><!-- end col -->
 				<div class="col-sm-6">
-					<div class="media">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object"
-									 :src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
-							</a>
-						</div>
-						<div class="media-body">
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
-									data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
-								Set Banner
-							</button>
-						</div>
-					</div>
+					<h5>
+						<img class="av-left img-rounded img-lg"
+							:src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
+						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+							data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+								<i class="fa fa-camera icon-left"></i> Set Banner
+						</button>
+					</h5>
 
 					<div class="collapse" id="bannerCollapse">
 						<div class="well">

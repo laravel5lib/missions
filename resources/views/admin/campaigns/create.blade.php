@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Create Your Campaign</h3>
+                <h3>Campaign <small>&middot; Create</small></h3>
             </div>
         </div>
     </div>

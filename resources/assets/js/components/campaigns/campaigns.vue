@@ -147,10 +147,9 @@
 						<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<a href="missionary.html"><img class="img-responsive"
-																   src="images/why-mm/missionary.jpg" alt=""></a>
+									<img class="img-responsive" src="images/why-mm/missionary.jpg" alt="">
 									<div class="panel-body">
-										<a href="missionary.html"><h4 class="text-primary">Missionary</h4></a>
+										<h4 class="text-primary">Missionary</h4>
 										<p class="small">Anyone age 13+ can be an M.M missionary. Set out on the journey
 											with your friend or family to bring a message of love and hope along with an
 											unforgettable cultural experience.</p>
@@ -159,11 +158,9 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<a href="medical-missionary.html"><img class="img-responsive"
-																		   src="images/why-mm/medical-missionary.jpg"
-																		   alt=""></a>
+									<img class="img-responsive" src="images/why-mm/medical-missionary.jpg" alt="">
 									<div class="panel-body">
-										<a href="medical-missionary.html"><h4>Medical Missionary</h4></a>
+										<h4>Medical Missionary</h4>
 										<p class="small">Treat, diagnose, prescribe, and share the love of Jesus. Anyone
 											in a medical field can serve, including students currently enrolled in
 											school. Physicians, Dentists, Nurses, and all assistants needed.</p>
@@ -172,10 +169,9 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<a href="group-leader.html"><img class="img-responsive"
-																	 src="images/why-mm/group-leader.jpg" alt=""></a>
+									<img class="img-responsive" src="images/why-mm/group-leader.jpg" alt="">
 									<div class="panel-body">
-										<a href="group-leader.html"><h4>Group Leader</h4></a>
+										<h4>Group Leader</h4>
 										<p class="small">M.M specializes in organizing and creating turn-key group
 											missions experiences for youth groups, college groups, and business groups.
 											You bring passion; we take care of the rest.</p>
@@ -186,10 +182,9 @@
 						<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<a href="pastor-speaker.html"><img class="img-responsive"
-																	   src="images/why-mm/speaker.jpg" alt=""></a>
+									<img class="img-responsive" src="images/why-mm/speaker.jpg" alt="">
 									<div class="panel-body">
-										<a href="pastor-speaker.html"><h4>Pastor/Speaker</h4></a>
+										<h4>Pastor/Speaker</h4>
 										<p class="small">Share your gift of leadership with the team by leading a
 											morning devo then impart spiritual wisdom into local church leadership. Let
 											us create a custom schedule that makes the most of your valuable time.</p>
@@ -198,10 +193,9 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<a href="business-leader.html"><img class="img-responsive"
-																		src="images/why-mm/business-person.jpg" alt=""></a>
+									<img class="img-responsive" src="images/why-mm/business-person.jpg" alt="">
 									<div class="panel-body">
-										<a href="business-leader.html"><h4>Business Leader</h4></a>
+										<h4>Business Leader</h4>
 										<p class="small">A shortened “Business Class” trip is available on select trips.
 											You will experience conferences, stadium outreaches, street ministry, and
 											connect with God in a whole new way. All trips will have you back on Sunday
@@ -211,11 +205,9 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<a href="media-missionary.html"><img class="img-responsive"
-																		 src="images/why-mm/media-missionary.jpg"
-																		 alt=""></a>
+									<img class="img-responsive" src="images/why-mm/media-missionary.jpg" alt="">
 									<div class="panel-body">
-										<a href="media-missionary.html"><h4>Media Missionary</h4></a>
+										<h4>Media Missionary</h4>
 										<p class="small">Tell the story of life change! M.M needs you to film, shoot,
 											interview, edit, export, and be creative! Experience a whole new world
 											through the lens of a camera while capturing the most exciting moments of

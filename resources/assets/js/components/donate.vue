@@ -187,9 +187,9 @@
             </div>
             <div class="" v-show="donationState === 'confirmation'">
                 <div class="text-center">
-                    <h1><i class="fa fa-check-circle text-success success fa-3x"></i></h1>
-                    <h2>Donation Confirmed</h2>
-                    <h3>Thank you!</h3>
+                    <h1><i class="fa fa-check-circle-o text-success success fa-2x"></i></h1>
+                    <h3>Donation Confirmed</h3>
+                    <h5>Thank you for your generosity!</h5>
                 </div>
                 <!--<div class="panel-footer" v-if="!child">
                     <a @click="done" class="btn btn-success">Close</a>

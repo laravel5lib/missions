@@ -1,22 +1,15 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="UpdateReservation" @touched="onTouched">
         <form id="UpdateReservation" novalidate class="form-horizontal">
-
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="media">
-                        <div class="media-left">
-                            <a href="#">
-                                <img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
-                            <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-                                Set Avatar
-                            </button>
-                        </div>
-                    </div>
+                    <h5>
+                        <img class="av-left img-circle img-md" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
+                        {{selectedAvatar ? selectedAvatar.name : ''}}
+                        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+                            <i class="fa fa-camera icon-left"></i> Set Avatar
+                        </button>
+                    </h5>
                     <div class="collapse" id="avatarCollapse">
                         <div class="well">
                             <upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
@@ -24,10 +17,9 @@
                     </div>
                 </div><!-- end col -->
             </div>
-
             <div class="row">
                 <div class="col-sm-6">
-                    <div class="form-group" :class="{ 'has-error': checkForError('givennames') }">
+                    <div :class="{ 'has-error': checkForError('givennames') }">
                         <label for="given_names">Given Names</label>
                         <input type=    "text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
@@ -35,7 +27,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group" :class="{ 'has-error': checkForError('surname')  }">
+                    <div :class="{ 'has-error': checkForError('surname')  }">
                     <label for="surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                            placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -50,7 +42,7 @@
                     <date-picker v-if="loaded" class="form-control" :time.sync="birthday|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group" :class="{ 'has-error': checkForError('size') }">
+                    <div :class="{ 'has-error': checkForError('size') }">
                         <label for="infoShirtSize">Shirt Sizes</label>
                         <select class="form-control" v-model="shirt_size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
                                 id="infoShirtSize">
@@ -79,10 +71,9 @@
                         </label>
                     </div>
                     <span class="help-block" v-show="checkForError('gender')">Select a gender</span>
-
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group" :class="{ 'has-error': checkForError('status') }">
+                    <div :class="{ 'has-error': checkForError('status') }">
                         <label for="infoRelStatus">Relationship Status</label>
                         <select class="form-control" v-model="status"
                                 v-validate:status="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
@@ -90,13 +81,12 @@
                             <option value="married">Married</option>
                             <option value="divorced">Divorced</option>
                             <option value="widowed">Widowed</option>
-
                         </select>
                     </div>
                 </div>
             </div>
 
-            <div class="row form-group">
+            <div class="row">
                 <div class="col-sm-6">
                     <label for="infoPhone">Phone 1</label>
                     <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
@@ -107,37 +97,35 @@
                 </div>
             </div>
 
-            <div class="row form-group" :class="{ 'has-error': checkForError('email') }">
-                <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('email') }">
                     <label for="infoEmail">Email</label>
                     <input type="email" class="form-control" v-model="email" id="infoEmail" v-validate:email="['email']" placeholder="Email˚">
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-sm-12">
+                <div class="col-sm-6">
                     <label for="infoAddress">Address 1</label>
                     <input type="text" class="form-control" v-model="address" id="infoAddress" v-validate:address="{}" placeholder="Street Address 1">
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-sm-6">
+                <div class="col-sm-6">
                     <label for="infoCity">City</label>
                     <input type="text" class="form-control" v-model="city" id="infoCity" v-validate:city="{}" placeholder="City">
                 </div>
-                <div class="form-group col-sm-6">
+                <div class="col-sm-6">
                     <label for="infoState">State/Prov.</label>
                     <input type="text" class="form-control" v-model="state" id="infoState" v-validate:state="{}" placeholder="State/Province">
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-sm-4">
+                <div class="col-sm-4">
                     <label for="infoZip">ZIP/Postal Code</label>
                     <input type="text" class="form-control" v-model="zip" id="infoZip" v-validate:zip="{}" placeholder="12345">
                 </div>
                 <div class="col-sm-8">
-                    <div class="form-group">
+                    <div>
                         <label for="country">Country</label>
                         <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="" v-model="country_code">
@@ -149,7 +137,7 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <div class="form-group" :class="{ 'has-error': checkForError('user') }">
+                    <div :class="{ 'has-error': checkForError('user') }">
                         <label for="manager">Managing User</label>
                         <v-select class="form-control" :value.sync="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
@@ -159,14 +147,14 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="form-group" :class="{ 'has-error': checkForError('companions') }">
+                    <div :class="{ 'has-error': checkForError('companions') }">
                         <label for="companions">Companions</label>
                         <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="row">
                 <div class="col-sm-12 text-center">
                     <br>
                     <a @click="update" class="btn btn-primary">Save</a>

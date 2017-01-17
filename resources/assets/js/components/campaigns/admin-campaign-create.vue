@@ -111,7 +111,7 @@
 				</div><!-- end col -->
 				<div class="col-sm-6">
 					<h5>
-						<img class="av-left img-rounded img-md"
+						<img class="av-left img-rounded img-lg"
 								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
 								 :alt="selectedBanner ? selectedBanner.name : ''">
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"

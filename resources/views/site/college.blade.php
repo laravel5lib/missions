@@ -7,42 +7,25 @@
 @endsection
 
 @section('content')
-<div class="college-vid-bg">
-  <video muted autoplay loop poster="images/college/home-placeholder.jpg" class="college-vid-bg-video">
-    <source src="images/college/mmc-vid-bg.webm" type="video/webm">
-    <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
-    <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
-  </video>
-  <div class="container">
-	  <div class="row">
-	    <hr class="divider inv xlg">
-	    <hr class="divider inv xlg">
-	    <hr class="divider inv xlg">
-	    <hr class="divider inv xlg">
-	    <hr class="divider inv xlg">
-	    <div class="col-md-6 col-md-offset-3 text-center">
-	    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
-	      <h1 class="text-white">Launching students into a life of significance.</h1>
-	      <hr class="divider inv">
-	      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
-	      <hr class="divider inv xlg">
-	      <hr class="divider inv xlg">
-	      <hr class="divider inv xlg">
-	      <hr class="divider inv xlg">
-	      <hr class="divider inv xlg">
-	      </div>
-	    </div><!-- end col -->
-	  </div><!-- end row -->
-	</div><!-- end container -->
-</div>
-<div class="darker-bg-primary">
-	<div class="white-bg">
-		<ul class="nav nav-tabs hidden-xs hidden-sm">
-		    <li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
-		    <li><a class="scrollNav" href="#academics">Academics</a></li>
-		    <li><a class="scrollNav" href="#community">Community</a></li>
-		    <li><a class="scrollNav" href="#students">Prospective Students</a></li>
-		    <li><a class="scrollNav" href="/college-financial">Financial Aid</a></li>
+<div class="white-header-bg" style="padding:0;">
+	<div class="container">
+		<ul class="nav nav-tabs hidden-xs hidden-sm" style="margin-bottom:0;border-bottom:none;">
+			<li class="dropdown"><a id="aboutMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <i class="fa fa-angle-down"></i></a>
+				<ul class="dropdown-menu" style="margin-top:-2px;" aria-labelledby="aboutMenu">
+					<li><a href="#">About Us</a></li>
+					<li><a href="#">Student Life</a></li>
+					<li><a href="#">Community</a></li>
+					<li><a href="#">Location</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a id="academicsMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Academics <i class="fa fa-angle-down"></i></a>
+				<ul class="dropdown-menu" style="margin-top:-2px;" aria-labelledby="academicsMenu">
+					<li><a class="scrollNav" href="#academics">Academics</a></li>
+					<li><a class="scrollNav" href="#faqs">F.A.Q.s</a></li>
+					<li><a href="/college-financial">Financial Aid</a></li>
+				</ul>
+			</li>
 		    <li><a class="scrollNav" href="#academics">Missions</a></li>
 		    <li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
@@ -61,41 +44,77 @@
 				<li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 			</ul>
 		</div>
-	</div><!-- end white-bg -->
-	<div class="container">
-	<div class="content-section">
-		<div class="row">
-			<div class="col-sm-8 col-sm-offset-2 text-center">
-				<h5 class="text-uppercase">Fulfill the great commission</h5>
-				<h1 class="text-hero">Be The Change</h1>
-			</div><!-- end col -->
-		</div><!-- end row -->
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="video-outer">
-					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/130333477" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-					</div>
-				</div>
-			</div><!-- end col -->
-			<div class="col-sm-6">
-				<div class="video-outer">
-					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/156320313" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-					</div>
-				</div>
-			</div><!-- end col -->
-		</div><!-- end row -->
-		<hr class="divider inv">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-lg btn-info">Apply Now</a>
-			</div>
-		</div><!-- end row -->
-	</div>
 	</div><!-- end container -->
-</div><!-- end dark-bg-primary -->
-<div class="white-bg" id="who-we-are">
+</div><!-- end white-bg -->
+<div class="college-vid-bg">
+  <video muted autoplay loop poster="images/college/home-placeholder.jpg" class="college-vid-bg-video">
+    <source src="images/college/mmc-vid-bg.webm" type="video/webm">
+    <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
+    <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
+  </video>
+  <div class="container">
+	  <div class="row">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <hr class="divider inv xlg">
+	    <div class="col-md-8 col-md-offset-2 text-center">
+	    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
+	      <h1 class="text-hero text-white">Launching students into a life of significance.</h1>
+	      <hr class="divider inv">
+	      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      <hr class="divider inv xlg">
+	      </div>
+	    </div><!-- end col -->
+	  </div><!-- end row -->
+	</div><!-- end container -->
+</div>
+<div class="white-bg">
+	<div class="container">
+		<div class="content-section" style="padding:0; margin:-60px 0 60px;">
+				<div class="row">
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="video-outer">
+								<div class="video-inner">
+									<iframe src="https://player.vimeo.com/video/199504307?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div>
+							</div>
+						</div><!-- end panel -->
+					</div><!-- end col -->
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="video-outer">
+								<div class="video-inner">
+									<iframe src="https://player.vimeo.com/video/130333477" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div>
+							</div>
+						</div><!-- end panel -->
+					</div><!-- end col -->
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="video-outer">
+								<div class="video-inner">
+									<iframe src="https://player.vimeo.com/video/156320313" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div>
+							</div>
+						</div><!-- end panel -->
+					</div><!-- end col -->
+				</div><!-- end row -->
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<div class="addthis_sharing_toolbox"></div>
+				</div>
+			</div><!-- end row -->
+		</div>
+	</div><!-- end container -->
+</div><!-- end white-bg -->
+<div class="gray-bg-lighter" id="who-we-are">
 	<div class="container">
 	<div class="content-section">
 		<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
@@ -145,7 +164,7 @@
 	</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
-<div class="dark-bg-primary" id="academics">
+<div class="white-bg" id="academics">
 	<div class="container">
 	<div class="content-section">
 		<div class="row">
@@ -171,25 +190,9 @@
 	</div>
 	</div><!-- end container -->
 </div><!-- end dark-bg-primary -->
-<div class="gray-lighter-bg">
+<div class="gray-bg-lighter">
 	<div class="container">
 	<div class="content-section">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<h4 class="text-uppercase">It’s for those who call themselves followers of Jesus.</h4>
-				<hr class="divider inv">
-				<a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-md btn-primary">Apply Now</a>
-			</div><!-- end col -->
-		</div><!-- end row -->
-	</div>
-	</div><!-- end container -->
-</div><!-- end gray-bg -->
-<div class="white-bg">
-	<div class="container">
-	<div class="content-section">
-		<div class="row">
-			<div class="col-sm-12">
-				<h1 class="dash-trailing">Student Testimonials</h1>
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="panel panel-default">
@@ -219,17 +222,15 @@
 						</div><!-- end panel -->
 					</div><!-- end col -->
 				</div><!-- end row -->
-			</div><!-- end col -->
-		</div><!-- end row -->
 	</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
-<div class="gray-lighter-bg" id="community">
+<div class="dark-bg-primary" id="community">
 	<div class="container">
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-6">
-				<h3 class="text-primary">Community</h3>
+				<h3>Community</h3>
 				<p>The MMC team is a select group of people ready to passionately pursue Christ together and change the world at the same time.</p>
 
 				<p>We hope to create a family culture. We believe in working hard and playing hard – together. At Missions.Me, we have more fun in the office than most people have at Disney World.</p>

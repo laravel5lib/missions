@@ -12,7 +12,7 @@
 			</div>
 			<div class="col-sm-4 text-center">
 				<hr class="divider inv sm hidden-xs">
-				<a href="{{ url('/campaigns/' . $campaign->page_url . '/trips') }}" class="btn btn-white-hollow">Register For A Trip</a>
+				<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register For A Trip</a>
 				<hr class="divider inv sm">
 			</div>
 		</div><!-- end container -->
@@ -29,7 +29,7 @@
 					<h5 class="text-uppercase">Join The Campaign</h5>
 					<h3>Find a group to travel with and register for a trip.</h3>
 					<hr class="divider inv">
-					<a href="{{ url('/campaigns/' . $campaign->page_url . '/trips') }}" class="btn btn-white-hollow">Register For A Trip</a>
+					<a href="{{ url($campaign->slug->url . '/trips') }}" class="btn btn-white-hollow">Register For A Trip</a>
 				</div>
 			</div><!-- end container -->
 		</div><!-- end content-section -->

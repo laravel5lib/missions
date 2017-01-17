@@ -175,12 +175,12 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-xs-6 col-sm-3 col-md-2" v-for="group in groups|limitBy groupsLimit" v-if="groups.length" style="display:flex">
             <div class="panel panel-default">
-                <a :href="'/groups/' + group.url" role="button">
+                <a :href="group.url" role="button">
                     <img :src="group.avatar" :alt="group.name" class="img-responsive">
                 </a>
                     <div class="panel-body text-center">
                         <!--<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
-                        <a :href="'/groups/' + group.url" role="button">
+                        <a :href="group.url" role="button">
                             <h5 style="margin-bottom:0;" class="text-primary text-capitalize">{{group.name}}</h5>
                         </a>
                         <label>{{group.type}} Group</label>

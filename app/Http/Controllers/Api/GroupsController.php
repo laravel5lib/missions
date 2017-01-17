@@ -80,7 +80,9 @@ class GroupsController extends Controller
      */
     public function store(GroupRequest $request)
     {
-        $group = $this->group->create($request->all());
+        $group = $this->group->create($request->except('url'));
+
+        $group->slug()->create(['url' => $request->get('url')]);
 
         $group->syncmanagers($request->get('managers'));
 
@@ -122,7 +124,9 @@ class GroupsController extends Controller
     {
         $group = $this->group->findOrFail($id);
 
-        $group->update($request->all());
+        $group->update($request->except('url'));
+
+        $group->slug()->update(['url' => $request->get('url')]);
 
         $group->syncmanagers($request->get('managers'));
 

@@ -1,32 +1,4 @@
     <template>
-    <!--<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">-->
-        <!--&lt;!&ndash; Indicators &ndash;&gt;-->
-        <!--<ol class="carousel-indicators">-->
-            <!--&lt;!&ndash;<li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>&ndash;&gt;-->
-            <!--<li data-target="#carousel-example-generic" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="fundraiser in featuredFundraisers"></li>-->
-        <!--</ol>-->
-        <!--&lt;!&ndash; Wrapper for slides &ndash;&gt;-->
-        <!--<div class="carousel-inner" role="listbox">-->
-            <!--<div class="item {{ $index == 0 ? 'active' : '' }}" v-for="fundraiser in featuredFundraisers">-->
-                <!--<img :src="fundraiser.banner">-->
-                <!--<div class="carousel-caption">-->
-                    <!--<h6 class="text-uppercase"><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h6>-->
-                    <!--<h3>{{fundraiser.name}}</h3>-->
-                    <!--<a :href="'/fundraisers/' + fundraiser.url" class="btn btn-primary btn-sm">More Details</a>-->
-                    <!--<hr class="divider inv" />-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--&lt;!&ndash; Controls &ndash;&gt;-->
-        <!--<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">-->
-            <!--<span class="fa fa-angle-left" aria-hidden="true"></span>-->
-            <!--<span class="sr-only">Previous</span>-->
-        <!--</a>-->
-        <!--<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">-->
-            <!--<span class="fa fa-angle-right" aria-hidden="true"></span>-->
-            <!--<span class="sr-only">Next</span>-->
-        <!--</a>-->
-    <!--</div>&lt;!&ndash; end carousel &ndash;&gt;-->
     <div class="content-page-header">
         <img class="img-responsive" src="images/fundraising/fundraisers-header.jpg" alt="Fundraisers">
         <div class="c-page-header-text">
@@ -110,14 +82,15 @@
         },
         methods:{
             calcPath(fundraiser){
-                switch (fundraiser.sponsor_type) {
-                    case 'users':
-                        return'@' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
-                        break;
-                    case 'groups':
-                        return 'groups/' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
-                        break;
-                }
+                return fundraiser.sponsor.data.url + '/' + fundraiser.url;
+                // switch (fundraiser.sponsor_type) {
+                //     case 'users':
+                //         return'@' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
+                //         break;
+                //     case 'groups':
+                //         return 'groups/' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
+                //         break;
+                // }
             },
             searchFundraisers(){
                 // this.$refs.spinner.show();

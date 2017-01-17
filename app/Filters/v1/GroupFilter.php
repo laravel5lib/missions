@@ -28,7 +28,7 @@ class GroupFilter extends Filter
      */
     public $searchable = [
         'name', 'type', 'email', 'city', 'state',
-        'phone_one', 'phone_two', 'zip'
+        'phone_one', 'phone_two', 'zip', 'slug.url'
     ];
 
     /**

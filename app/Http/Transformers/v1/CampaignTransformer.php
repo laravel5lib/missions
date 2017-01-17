@@ -32,7 +32,7 @@ class CampaignTransformer extends TransformerAbstract
             'name'         => $campaign->name,
             'country'      => country($campaign->country_code),
             'description'  => $campaign->short_desc,
-            'page_url'     => $campaign->page_url,
+            'page_url'     => $campaign->slug ? $campaign->slug->url : null,
             'page_src'     => $campaign->page_src,
             'avatar'       => $campaign->avatar ? image($campaign->avatar->source) : url('/images/placeholders/campaign-placeholder.png'),
             'banner'       => $campaign->banner ? image($campaign->banner->source) : null,

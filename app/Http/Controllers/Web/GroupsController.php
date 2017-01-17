@@ -9,25 +9,23 @@ use App\Http\Controllers\Controller;
 
 class GroupsController extends Controller
 {
-    public function profile($slug)
+    public function index()
     {
-        $response = $this->api->get('/groups', [
-            'include' => 'social',
-            'url' => $slug
-        ]);
+        return view('site.groups.index');
+    }
 
-        $group = $response->shift();
+    public function show($id)
+    {
+        $group = $this->api->get('/groups/'.$id, [
+            'include' => 'social'
+        ]);
 
         return view('site.groups.profile', compact('group'));
     }
 
     public function signup($slug)
     {
-        $response = $this->api->get('/groups', [
-            'url' => $slug
-        ]);
-
-        $group = $response->shift();
+        $group = $this->api->get('/groups/'.$id);
 
         return view('site.groups.signup', compact('group'));
     }

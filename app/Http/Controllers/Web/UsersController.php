@@ -9,13 +9,9 @@ use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
-    public function profile($slug)
+    public function show($id)
     {
-        $slug = str_replace('@', '', $slug);
-
-        $user = $this->api->get('/users?url='.$slug);
-
-        $user = $user->shift();
+        $user = $this->api->get('/users/'.$id);
 
         return view('site.users.profile', compact('user'));
     }

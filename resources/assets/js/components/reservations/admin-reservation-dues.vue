@@ -284,10 +284,9 @@
             this.getDues();
 
             //Listen to Event Bus
-            /*this.$root.$on('AdminReservation:CostsUpdated', function (data) {
-                this.setReservationData(data)
-            }.bind(this));*/
-
+            this.$root.$on('AdminReservation:CostsUpdated', function (data) {
+                this.getDues();
+            }.bind(this));
         }
     }
 </script>

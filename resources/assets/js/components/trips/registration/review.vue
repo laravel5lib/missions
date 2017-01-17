@@ -35,7 +35,7 @@
 								<label>Weight</label><p>{{userInfo.weight}} lbs.</p>
 							</div><!-- end col -->
 							<div class="col-sm-4">
-								<label>Role</label><p>ROLE INPUT HERE</p>
+								<label>Role</label><p>{{userInfo.role}}</p>
 							</div><!-- end col -->
 						</div><!-- end row -->
 						<hr class="divider">

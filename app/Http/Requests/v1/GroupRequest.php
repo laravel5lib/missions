@@ -28,7 +28,7 @@ class GroupRequest extends FormRequest {
     {
         $required = [
             'name'         => 'required|max:100',
-            'url'          => 'required_if:public,true',
+            'url'          => 'required_if:public,true|unique:slugs,url',
             'type'         => 'required|in:church,business,nonprofit,youth,other',
             'timezone'     => 'required|timezone',
             'country_code' => 'required|in:' . Country::codes(),
@@ -38,7 +38,7 @@ class GroupRequest extends FormRequest {
         {
             $required = [
                 'name'         => 'sometimes|required|max:100',
-                'url'          => 'sometimes|required_if:public,true',
+                'url'          => 'sometimes|required_if:public,true|unique:slugs,url,'.$this->route('groups').',slugable_id',
                 'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
                 'timezone'     => 'sometimes|required|timezone',
                 'country_code' => 'sometimes|required|in:' . Country::codes(),

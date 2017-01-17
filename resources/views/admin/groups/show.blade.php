@@ -58,15 +58,15 @@
                                     </div>
                                 </div>
                                 <hr class="divider">
-                                @unless( ! $group->url)
+                                @unless( ! $group->slug)
                                 <div class="row">
                                     <div class="col-sm-12 text-center">
                                         <div class="well">
                                             <label>Url slug</label>
                                             @if($group->public)
-                                                <h4><a href="/groups/{{ $group->url }}">http://missions.me/groups/{{ $group->url }}</a></h4>
+                                                <h4><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></h4>
                                             @else
-                                                <h4 class="text-strike text-muted">http://missions.me/groups/{{ $group->url }}</h4>
+                                                <h4 class="text-strike text-muted">http://missions.me/{{ $group->slug->url }}</h4>
                                             @endif
                                         </div>
                                     </div>

@@ -114,6 +114,15 @@ $api->version('v1', [
         $api->get('countries/{$code}', 'UtilitiesController@getCountry');
         $api->get('timezones', 'UtilitiesController@getTimezones');
         $api->get('past-trips', 'UtilitiesController@getPastTrips');
+        $api->get('make-slug/{$string}', function($string) {
+            return ['slug' => generate_slug($string) ];
+        });
+        $api->get('make-fundraiser-slug/{$string}', function($string) {
+            return ['slug' => generate_fundraiser_slug($string) ];
+        });
+        $api->get('make-fund-slug/{$string}', function($string) {
+            return ['slug' => generate_fundraiser_slug($string) ];
+        });
     });
 
     $api->post('contact', 'UtilitiesController@sendContactEmail');

@@ -65,9 +65,12 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $user = new User($request->all());
-        $user->url = $request->get('url', str_random(10));
+        $user = new User($request->except('url'));
         $user->save();
+
+        $user->slug()->create([
+            'url' => $request->get('url', generate_slug( $request->get('name') ))
+        ]);
 
         dispatch(new SendWelcomeEmail($user));
 
@@ -88,11 +91,13 @@ class UsersController extends Controller
         else
             $user = $this->auth()->user();
 
-        $user->update($request->all());
+        $user->update($request->except('url'));
 
         if ($request->has('links')) {
             $user->syncLinks($request->get('links'));
         }
+
+        $user->slug()->update(['url' => $request->get('url', $user->slug->url)]);
 
         return $this->response->item($user, new UserTransformer);
     }

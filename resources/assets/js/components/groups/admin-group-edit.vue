@@ -312,7 +312,7 @@
                         console.log(error);
                         this.showError = true;
                         // this.$refs.spinner.hide();
-                        debugger;
+                        // debugger;
                         //TODO add error alert
                     });
                 } else {

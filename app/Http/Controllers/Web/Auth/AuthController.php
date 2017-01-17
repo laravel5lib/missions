@@ -99,7 +99,11 @@ class AuthController extends Controller
      */
     public function register(UserRequest $request)
     {
+        $slug = generate_slug($request->get('name'));
+
         $user = $this->user->create($request->all());
+
+        $user->slug()->create(['url' => $slug]);
 
         Auth::login($user, true);
 

@@ -31,19 +31,21 @@ class FundRequest extends FormRequest
             'fundable_id'   => 'required|string',
             'fundable_type' => 'required|string|in:reservations,trips,groups,campaigns,causes,project',
             'tags'          => 'array',
+            'slug'           => 'unique:funds,slug'
         ];
 
         if ($this->isMethod('put'))
         {
             $rules = [
-                'name'          => 'required|string|unique:funds,name,' . $this->funds,
+                'name'          => 'required|string|unique:funds,name,' . $this->route('funds'),
                 'balance'       => 'integer',
                 'slug'          => 'sometimes|required|unique:funds,slug',
                 'class'         => 'sometimes|required|string',
                 'item'          => 'sometimes|required|string',
                 'fundable_id'   => 'sometimes|required|string',
-                'fundable_type' => 'sometimes|required|string|in:reservations,trips,groups,campaigns,causes,project',
+                'fundable_type' => 'sometimes|required|string|in:reservations,trips,groups,campaigns,causes,projects',
                 'tags'          => 'array',
+                'slug'          => 'unique:funds,slug,' . $this->route('funds')
             ];
         }
 

@@ -37,7 +37,7 @@
                         <button class="btn btn-xs btn-default-hollow pull-right"
                                 v-if="! hasAbility(item)"
                                 @click="allow(item)">Allow</button>
-                        <button class="btn btn-xs btn-default pull-right"
+                        <button class="btn btn-xs btn-default pull-right" :disabled="hasAbilityByRole(item)"
                                 v-if="hasAbility(item)"
                                 @click="deny(item)">Deny&nbsp;</button>
                         <hr class="divider" />
@@ -47,7 +47,7 @@
         </div>
     </div>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select';
     export default {
         name: 'user-permissions',
@@ -83,8 +83,8 @@
             },
             abilitiesList() {
                 return _.groupBy(this.availableAbilities, function(ability){
-                            return ability.entity_type ? ability.entity_type : 'application';
-                        });
+                    return ability.entity_type ? ability.entity_type : 'application';
+                });
             }
         },
         methods: {
@@ -95,6 +95,12 @@
             hasAbility(ability)
             {
                 return _.contains(this.abilities, ability.id);
+            },
+            hasAbilityByRole(ability)
+            {
+                return _.some(this.selectedRoles, function(role) {
+                    return _.contains(_.pluck(role.abilities.data, 'id'), ability.id);
+                });
             },
             customize() {
                 this.showAbilities = !this.showAbilities;
@@ -112,7 +118,7 @@
                 this.$http.get('permissions/roles').then(function (response) {
                     this.availableRoles = response.data.data;
                 });
-                this.$http.get('users/' + this.user_id + '?include=roles,abilities').then(function (response) {
+                this.$http.get('users/' + this.user_id + '?include=roles.abilities,abilities').then(function (response) {
                     this.selectedRoles = response.data.data.roles.data;
                     this.selectedAbilities = response.data.data.abilities.data;
                 });

@@ -584,6 +584,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get the user's profile slug.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
      * Synchronize User Profile Links.
      *
      * @param $links

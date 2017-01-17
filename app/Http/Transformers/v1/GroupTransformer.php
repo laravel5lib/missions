@@ -37,7 +37,7 @@ class GroupTransformer extends TransformerAbstract
             'type'         => $group->type,
             'timezone'     => $group->timezone,
             'description'  => $group->description,
-            'url'          => $group->url,
+            'url'          => $group->slug ? $group->slug->url : null,
             'public'       => (bool) $group->public,
             'address_one'  => $group->address_one,
             'address_two'  => $group->address_two,

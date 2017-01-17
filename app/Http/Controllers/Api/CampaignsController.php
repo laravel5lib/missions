@@ -23,9 +23,6 @@ class CampaignsController extends Controller
      */
     public function __construct(Campaign $campaign)
     {
-        $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
-        $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
-//        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->campaign = $campaign;
     }
 
@@ -50,9 +47,11 @@ class CampaignsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function show($id)
+    public function show($param)
     {
-        $campaign = $this->campaign->whereId($id)->orWhere('page_url', $id)->firstOrFail();
+        $campaign = $this->campaign->whereId($param)->orWhereHas('slug', function($slug) use($param) {
+            return $slug->where('url', $param);
+        })->first();
 
         return $this->response->item($campaign, new CampaignTransformer);
     }

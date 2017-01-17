@@ -23,7 +23,7 @@
                     <label>Spots Available</label>
                     <p>{{ trip.spots }}</p>
                     <p class="text-left" data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
-                    <p><a class="btn btn-primary btn-block" :href="'/trips/' + trip.id">Details</a></p>
+                    <p><a class="btn btn-primary btn-block" :href="trip.campaign.data.page_url + '/trips/' + trip.id">Details</a></p>
                 </div><!-- end panel-body -->
             </div><!-- end panel -->
         </div><!-- end col -->
@@ -37,7 +37,7 @@
         data(){
             return{
                 trips:[],
-                resource: this.$resource('trips?include=campaign&onlyPublished=true&groups[]=' + this.id)
+                resource: this.$resource('trips?include=campaign&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
             }
         },
         ready(){

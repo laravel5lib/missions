@@ -24,7 +24,7 @@
         <div class="row">
             <hr class="divider inv xlg">
             <h3 class="text-center text-primary">{{ $fundraiser->name }}</h3>
-            <h5 class="text-center text-capitalize">organized by <a href="{{ url($fundraiser->sponsor_type.'/'.$fundraiser->sponsor->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
+            <h5 class="text-center text-capitalize">organized by <a href="{{ url($fundraiser->sponsor->slug->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
             <hr class="divider inv lg">
             <div class="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
                 <div class="panel panel-default">

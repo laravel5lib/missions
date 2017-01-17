@@ -26,27 +26,17 @@
                 <h4>{{ group.name }}</h4>
                 <p class="small">{{ group.country }}</p>
                 <hr class="divider inv sm">
-                <!--<h4>{{ group.surname }}, {{ group.given_names }}</h4>-->
-                <a v-if="group.public" class="btn btn-sm btn-primary" href="/groups/{{ group.url }}">View Group</a><br>
+                <a v-if="group.public" class="btn btn-sm btn-primary" href="/{{ group.url }}">View Group</a><br>
                 <label><a href="/dashboard/groups/{{ group.id }}"><i class="fa fa-pencil"></i> Manage</a></label>
             </div>
         </div>
     </div>
     <div class="alert alert-info" v-if="!selectUi && groups.length < 1">No groups found</div>
-    <!--<div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
-        <div class="panel panel-default" v-if="currentGroup != null && currentGroup !== 'undefined'">
-            <div class="panel-body">
-                <group-edit :group-id="currentGroup" :managing="true"></group-edit>
-            </div>
-        </div>
-    </div>-->
 </div>
 </template>
 <script type="text/javascript">
-//    import groupEdit from './admin-group-edit.vue';
     export default{
         name: 'groups-list',
-//        components: {'group-edit': groupEdit},
         props: {
             userId: {
                 type: String,
@@ -83,13 +73,11 @@
                 }
             },
             getGroups(){
-                // this.$refs.spinner.show();
                 this.$http.get('users/' + this.$root.user.id, {
                     include: 'managing',
                     user: new Array(this.$root.user.id)
                 }).then(function (response) {
                     this.groups = response.data.data.managing.data;
-                    // this.$refs.spinner.hide();
                 })
             },
         },

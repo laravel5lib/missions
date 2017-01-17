@@ -180,6 +180,16 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's slug.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
      * Get public campaigns.
      *
      * @param $query

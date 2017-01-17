@@ -47,7 +47,7 @@ class UserTransformer extends TransformerAbstract
             'country_name' => country($user->country_code),
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
-            'url'          => $user->url,
+            'url'          => $user->slug ? $user->slug->url : null,
             'avatar'       => $user->avatar ? image($user->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'banner'       => $user->banner ? image($user->banner->source) : null,
             'public'       => (bool) $user->public,

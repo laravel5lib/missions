@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use League\Glide\Server;
 use League\Glide\ServerFactory;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,16 @@ class AppServiceProvider extends ServiceProvider
             'notes' => \App\Models\v1\Note::class,
             'todos' => \App\Models\v1\Todo::class
         ]);
+
+        Validator::extend('slug', function($attribute, $value, $parameters, $validator) {
+            if($parameters && $parameters[0] === 'fundraiser') {
+                return ! \App\Models\v1\Fundraiser::where('url', $parameters[0])
+                    ->where('sponsor_type', $parameters[1])
+                    ->where('sponsor_id', $parameter[2]);
+            }
+
+            return ! \App\Models\v1\Slug::where('url', $value)->first();
+        });
     }
 
     /**

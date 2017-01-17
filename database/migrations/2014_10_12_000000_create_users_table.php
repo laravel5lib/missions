@@ -30,7 +30,6 @@ class CreateUsersTable extends Migration
             $table->string('country_code', 2)->default('us');
             $table->string('timezone', 20)->default('US/Eastern');
             $table->string('bio', 120)->nullable();
-            $table->string('url', 60);
             $table->boolean('public')->default(false);
             $table->string('stripe_id')->nullable();
             $table->string('card_brand')->nullable();

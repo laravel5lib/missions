@@ -156,7 +156,7 @@
                     <div class="col-sm-12">
                         <label for="url" class="control-label">Url Slug</label>
                         <div class="input-group">
-                            <span class="input-group-addon">www.missions.me/groups/</span>
+                            <span class="input-group-addon">www.missions.me/</span>
                             <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>
                         </div>
                     </div>

@@ -1,4 +1,13 @@
 <?php
+
+/**
+ * Slug Factory
+ */
+$factory->define(App\Models\v1\Slug::class, function (Faker\Generator $faker)
+{
+    return [ 'url' => $faker->slug ];
+});
+
 /**
  * User Factory
  */
@@ -23,7 +32,6 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'country_code'     => strtolower($faker->countryCode),
         'timezone'         => $faker->timezone,
         'bio'              => $faker->optional(0.5)->realText(120),
-        'url'              => str_slug($name).'-'.time(),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
@@ -39,8 +47,7 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
     $user = $factory->raw(App\Models\v1\User::class);
 
     return array_merge($user, [
-        'name'     => 'Admin',
-        'url'      => 'admin',
+        'name'     => 'Administrator',
         'email'    => 'admin@admin.com',
         'password' => 'secret'
     ]);
@@ -144,7 +151,6 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
         'name'             => 'One Nation One Day 2017',
         'country_code'     => 'ni',
         'short_desc'       => '1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it\'s about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.',
-        'page_url'         => '1n1d17',
         'page_src'         => '_1n1d2017',
         'started_at'       => '2017-07-22 00:00:00',
         'ended_at'         => '2017-07-30 22:59:59',
@@ -160,7 +166,6 @@ $factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Gener
         'name'             => 'Christmas in India 2016',
         'country_code'     => 'in',
         'short_desc'       => 'Venture deep into southern India as together we Rescue EVERY Child in several villages in the state of Andhra Pradesh. Watch as they enjoy their first Christmas and shower them with more Christmas gifts than their little arms can hold.',
-        'page_url'         => 'christmasinindia2016',
         'page_src'         => '_india',
         'started_at'       => '2016-12-03 00:00:00',
         'ended_at'         => '2016-12-11 22:59:59',
@@ -193,7 +198,6 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'phone_two'        => $faker->optional(0.5)->phoneNumber,
         'email'            => $faker->safeEmail,
         'public'           => $faker->boolean(75),
-        'url'              => str_slug($company),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];

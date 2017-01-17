@@ -96,14 +96,16 @@
 		},
 		ready(){
 			this.$http.get('fundraisers?active=true', {
-				sponsor: this.userUrl,
+				sponsorId: this.id,
+				sponsorType: 'user',
 				per_page: 100
 			}).then(function (response) {
 				this.fundraisers = response.data.data;
 			});
 
 			this.$http.get('fundraisers?archived=true', {
-				sponsor: this.userUrl,
+				sponsorId: this.id,
+				sponsorType: 'user',
 				per_page: 100
 			}).then(function (response) {
 				this.oldFundraisers = response.data.data;

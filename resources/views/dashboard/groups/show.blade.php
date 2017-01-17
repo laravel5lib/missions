@@ -61,11 +61,11 @@
                                         <div class="well">
                                             <label>Url slug</label>
                                             @if($group->public)
-                                                <h4 class="hidden-xs"><a href="/groups/{{ $group->url }}">http://missions.me/groups/{{ $group->url }}</a></h4>
-                                                <p class="visible-xs"><a href="/groups/{{ $group->url }}">http://missions.me/groups/{{ $group->url }}</a></p>
+                                                <h4 class="hidden-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></h4>
+                                                <p class="visible-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></p>
                                             @else
-                                                <h4 class="text-strike text-muted hidden-xs">http://missions.me/groups/{{ $group->url }}</h4>
-                                                <p class="text-strike text-muted visible-xs">http://missions.me/groups/{{ $group->url }}</p>
+                                                <h4 class="text-strike text-muted hidden-xs">http://missions.me/{{ $group->slug->url }}</h4>
+                                                <p class="text-strike text-muted visible-xs">http://missions.me/{{ $group->slug->url }}</p>
                                             @endif
                                         </div>
                                     </div>

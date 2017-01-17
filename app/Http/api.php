@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Artisan;
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
-//    'middleware' => 'api.throttle', 'limit' => 50, 'expires' => 1, DISABLE FOR DEVELOPMENT
+    'middleware' => 'api.throttle', 'limit' => 100, 'expires' => 1,
     'namespace' => 'App\Http\Controllers\Api'
 ], function($api)
 {
@@ -111,16 +111,16 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'utilities'], function ($api) {
         $api->get('countries', 'UtilitiesController@getCountries');
-        $api->get('countries/{$code}', 'UtilitiesController@getCountry');
+        $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones', 'UtilitiesController@getTimezones');
         $api->get('past-trips', 'UtilitiesController@getPastTrips');
-        $api->get('make-slug/{$string}', function($string) {
+        $api->get('make-slug/{string}', function($string) {
             return ['slug' => generate_slug($string) ];
         });
-        $api->get('make-fundraiser-slug/{$string}', function($string) {
+        $api->get('make-fundraiser-slug/{string}', function($string) {
             return ['slug' => generate_fundraiser_slug($string) ];
         });
-        $api->get('make-fund-slug/{$string}', function($string) {
+        $api->get('make-fund-slug/{string}', function($string) {
             return ['slug' => generate_fundraiser_slug($string) ];
         });
     });

@@ -235,10 +235,14 @@
             }
         },
         watch: {
+            'layout': function () {
+                this.updateConfig();
+            },
             // watch filters obj
             'filters': {
                 handler: function (val) {
                     // console.log(val);
+                    this.updateConfig();
                     this.pagination.current_page = 1;
                     this.getReservations();
                 },
@@ -319,9 +323,29 @@
                     loading ? loading(false) : void 0;
                 })
             },
+            updateConfig(){
+                localStorage['DashboardReservations'] = JSON.stringify({
+                    layout: this.layout,
+                    filters: {
+                        groups: this.filters.groups,
+                        campaign: this.filters.campaign,
+                        type: this.filters.type,
+                        sort: this.filters.sort,
+                        direction: this.filters.direction,
+                    }
+                });
+
+            }
 
         },
         ready(){
+            // load view state
+            if (localStorage['DashboardReservations']) {
+                let config = JSON.parse(localStorage['DashboardReservations']);
+                this.layout = config.layout;
+                this.filters = config.filters;
+            }
+
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
                 let user = response.data.data;
                 let managing = [];

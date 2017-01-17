@@ -129,7 +129,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" v-if="isAdmin">
                 <div class="col-sm-12">
                     <label for="status" class="control-label">Status</label>
                     <select class="form-control" name="status" id="status" v-model="status">
@@ -239,7 +239,10 @@
                 if (_.isObject(this.countryCodeObj)) {
                     return this.countryCodeObj.code;
                 }
-            }
+            },
+            isAdmin(){
+                return _.contains(_.pluck(this.$root.user.roles.data, 'id'), 3);
+            },
         },
         events:{
             'uploads-complete'(data){

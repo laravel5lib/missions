@@ -152,13 +152,14 @@
             </div>
 
             <template v-if="!!public">
-                <div class="form-group" :class="{ 'has-error': checkForError('url') }">
+                <div class="form-group" :class="{ 'has-error': checkForError('url') || errors.url }">
                     <div class="col-sm-12">
                         <label for="url" class="control-label">Url Slug</label>
                         <div class="input-group">
                             <span class="input-group-addon">www.missions.me/</span>
                             <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>
                         </div>
+                        <span class="help-block" v-if="errors.url" v-text="errors.url"></span>
                     </div>
                 </div>
             </template>
@@ -169,17 +170,6 @@
                     <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
-
-            <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-                <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Well Done!</strong>
-                <p>Group updated!</p>
-            </alert>
-            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-                <span class="icon-info-circled alert-icon-float-left"></span>
-                <strong>Oh No!</strong>
-                <p>There are errors on the form.</p>
-            </alert>
 
             <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                 <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
@@ -232,6 +222,7 @@
                 avatar_upload_id: null,
                 selectedBanner: null,
                 banner_upload_id: null,
+                errors: [],
             }
         },
         computed: {
@@ -280,6 +271,7 @@
                 return this.back(true);
             },
             submit(){
+                this.errors = [];
                 this.attemptSubmit = true;
                 if (this.$UpdateGroup.valid) {
                     let formData = this.data;
@@ -304,16 +296,11 @@
                         avatar_upload_id: this.avatar_upload_id,
                         banner_upload_id: this.banner_upload_id,
                     }).then(function (resp) {
-                        //TODO switch to universal alerts
-                        this.showSuccess = true;
+                        this.$root.$emit('showSuccess', 'Group updated!');
                         this.hasChanged = false;
-                        // this.$refs.spinner.hide();
                     }, function (error) {
-                        console.log(error);
-                        this.showError = true;
-                        // this.$refs.spinner.hide();
-                        // debugger;
-                        //TODO add error alert
+                        this.errors = error.data.errors;
+                        this.$root.$emit('showError', 'There are errors on the form.');
                     });
                 } else {
                     this.showError = true;

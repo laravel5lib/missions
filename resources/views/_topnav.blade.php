@@ -32,12 +32,7 @@
         </div>
       </li>
       @endif
-      <top-nav auth="{{ auth()->check()? 1 : 0 }}"
-               admin="{{ (auth()->check() && auth()->user()->can('access-admin'))? 1 : 0 }}"
-               name="{{ auth()->check() ? auth()->user()->name : null }}"
-               avatar="{{ auth()->check() ? image(auth()->user()->getAvatar()->source) : null }}"
-               url="{{ auth()->check() ?  auth()->user()->slug->url : null }}"
-               managing="{{ (auth()->check() && auth()->user()->managing()->count()) or 0 }}">
+      <top-nav managing="{{ (auth()->check() && auth()->user()->managing()->count()) or 0 }}">
       </top-nav>
     </div><!-- /.navbar-right -->
   </div><!-- end container -->

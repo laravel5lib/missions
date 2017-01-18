@@ -86,24 +86,10 @@
 		</aside>
 	</li>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'top-nav',
 		props: {
-			'auth': {
-				type: Boolean,
-				default: false,
-				coerce: function (val) {
-					return !!parseInt(val);
-				}
-			},
-			'admin': {
-				type: Boolean,
-				default: false,
-				coerce: function (val) {
-					return !!parseInt(val);
-				}
-			},
 			'managing': {
 				type: Boolean,
 				default: false,
@@ -111,23 +97,31 @@
 					return parseInt(val) > 0;
 				}
 			},
-			name: {
-				type: String,
-				default: null
-			},
-			avatar: {
-				type: String,
-				default: null
-			},
-			url: {
-				type: String,
-				default: null
-			}
 		},
 		data(){
 			return {
 				showRight: false,
 			}
+		},
+		computed:{
+		    auth() {
+		        return !!this.$root.user
+			},
+			admin() {
+		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'admin') : false;
+			},
+			/*managing() {
+		        return this.auth ? this.$root.user : '';
+			},*/
+			name() {
+		        return this.auth ? this.$root.user.name : '';
+			},
+			avatar() {
+		        return this.auth ? this.$root.user.avatar : '';
+			},
+			url() {
+		        return this.auth ? this.$root.user.url : '';
+			},
 		},
 		methods: {
 			isDashboard(){

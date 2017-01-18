@@ -72,7 +72,7 @@
 							{{ message.message }}
 						</div>
 					</div><!-- end alert -->
-					<div class="form-group">
+					<div class="form-group" :class="{ 'has-error': registerErrors.name }">
 						<div class="col-xs-10  col-xs-offset-1">
 							<label class="control-label">Name</label>
 							<input type="text" class="form-control" v-model="newUser.name" placeholder="John Doe"
@@ -80,7 +80,7 @@
 								   maxlength="100"/>
 						</div><!-- end col -->
 					</div><!-- end form-group -->
-					<div class="form-group">
+					<div class="form-group" :class="{ 'has-error': registerErrors.email }">
 						<div class="col-xs-10  col-xs-offset-1">
 							<label class="control-label">E-Mail Address</label>
 							<input type="email" class="form-control" v-model="newUser.email"
@@ -88,7 +88,7 @@
 								   required/>
 						</div><!-- end col -->
 					</div><!-- end form-group -->
-					<div class="form-group">
+					<div class="form-group" :class="{ 'has-error': registerErrors.password }">
 						<div class="col-xs-10  col-xs-offset-1">
 							<label class="control-label">Password</label>
 							<input type="password" class="form-control" v-model="newUser.password" required
@@ -96,7 +96,7 @@
 							<div class="help-block">Password must be at least 8 characters long</div>
 						</div><!-- end col -->
 					</div><!-- end form-group -->
-					<div class="form-group">
+					<div class="form-group" :class="{ 'has-error': registerErrors.password }">
 						<div class="col-xs-10  col-xs-offset-1">
 							<label class="control-label">Password Again</label>
 							<input type="password" class="form-control" v-model="newUser.password_confirmation" required
@@ -266,7 +266,7 @@
 										   v-model="newUser.gender"> Female</label>
 						</div><!-- end col -->
 					</div><!-- end form-group -->
-					<div class="form-group">
+					<div class="form-group" :class="{ 'has-error': registerErrors.country_code }">
 						<div class="col-xs-10 col-xs-offset-1">
 							<label for="country" class="control-label">Country</label>
 							<v-select class="form-control" id="country" :value.sync="countryCodeObj"
@@ -349,6 +349,8 @@
 				timezones: [],
 				countries: [],
 				countryCodeObj: null,
+				attemptRegister: false,
+				registerErrors: []
 			}
 		},
 
@@ -363,6 +365,10 @@
 		computed: {},
 		methods: {
 			checkForLoginError(field){
+				// if user clicked continue button while the field is invalid trigger error styles
+				return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
+			},
+			checkForRegisterError(field){
 				// if user clicked continue button while the field is invalid trigger error styles
 				return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
 			},
@@ -441,6 +447,8 @@
 					}).format('YYYY-MM-DD')
 				});
 
+				this.attemptRegister = true;
+
 				this.$http.post('/register', this.newUser).then(function (response) {
 					// console.log(response.data.token);
 					// set cookie - name, token
@@ -453,7 +461,8 @@
 				}, function (response) {
 					// console.log(response);
 					let messages = [];
-					_.each(response.data.errors, function (error) {
+					this.registerErrors = response.data;
+					_.each(this.registerErrors, function (error) {
 						messages.push({
 							type: 'danger',
 							message: _.values(error)[0]
@@ -461,6 +470,7 @@
 					});
 					this.messages = messages;
 					this.$dispatch('showError', 'Please check the form.');
+					this.attemptRegister = false;
 				})
 			},
 

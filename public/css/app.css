@@ -16495,6 +16495,12 @@ h1.home-college-header {
   .college-vid-bg-video {
     display: none; } }
 
+.college-cali-bg {
+  color: #fff;
+  background: #808080 url("../../images/college/cali-bg.jpg") no-repeat bottom fixed;
+  background-size: cover;
+  padding: 100px 0 100px; }
+
 /* Group Carousel */
 .quote {
   color: rgba(0, 0, 0, 0.1);

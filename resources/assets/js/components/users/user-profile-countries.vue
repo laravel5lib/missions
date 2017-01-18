@@ -124,7 +124,7 @@
             getAccolades(){
                 this.resource.get({id: this.id, name: 'countries_visited'}).then(function (response) {
                     this.accolades = response.data.data[0] || { items: [] };
-					if (this.isUser() && this.accolades) {
+					if (this.isUser()) {
    						this.filterAccolades();
 					}
                 });

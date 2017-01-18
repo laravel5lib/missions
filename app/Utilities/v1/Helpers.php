@@ -14,6 +14,11 @@ function country($code)
     return implode('', array_keys(App\Utilities\v1\Country::get($code)));
 }
 
+function teamRole($code)
+{
+    return implode(array_values(App\Utilities\v1\TeamRole::get($code)), '');
+}
+
 function shirtSize($size)
 {
     return implode(array_values(App\Utilities\v1\ShirtSize::get($size)), '');

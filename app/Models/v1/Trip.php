@@ -30,7 +30,7 @@ class Trip extends Model
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
         'companion_limit', 'published_at', 'closed_at',
-        'prospects', 'public'
+        'prospects', 'public', 'team_roles'
     ];
 
     /**
@@ -59,7 +59,8 @@ class Trip extends Model
      */
     protected $casts = [
         'todos' => 'array',
-        'prospects' => 'array'
+        'prospects' => 'array',
+        'team_roles' => 'array'
     ];
 
     /**
@@ -220,6 +221,16 @@ class Trip extends Model
     public function setTodosAttribute($value)
     {
         $this->attributes['todos'] = json_encode($value);
+    }
+
+    /**
+     * Set the trip's team roles list.
+     *
+     * @param $value
+     */
+    public function setTeamRolesAttribute($value)
+    {
+        $this->attributes['team_roles'] = json_encode($value);
     }
 
     /**

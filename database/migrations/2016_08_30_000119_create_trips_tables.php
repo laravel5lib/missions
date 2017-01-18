@@ -26,6 +26,7 @@ class CreateTripsTables extends Migration
             $table->uuid('rep_id')->nullable()->index();
             $table->json('todos')->nullable();
             $table->json('prospects')->nullable();
+            $table->json('team_roles')->nullable();
             $table->text('description');
             $table->boolean('public')->default(false);
             $table->timestamp('published_at')->nullable();

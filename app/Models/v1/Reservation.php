@@ -33,7 +33,7 @@ class Reservation extends Model
         'address', 'city', 'state', 'zip', 'country_code',
         'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
         'passport_id', 'user_id', 'email', 'avatar_upload_id',
-        'arrival_designation', 'testimony_id'
+        'arrival_designation', 'testimony_id', 'desired_role'
     ];
 
     /**

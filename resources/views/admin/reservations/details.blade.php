@@ -10,6 +10,9 @@
             <label>Reservation ID</label>
             <p>{{ $reservation->id }}</p>
             <hr class="divider">
+            <label>Desired Role</label>
+            <p>{{ teamRole($reservation->desired_role) }}</p>
+            <hr class="divider">
             <div class="row">
                 <div class="col-md-6">
                     <label>Surname</label>

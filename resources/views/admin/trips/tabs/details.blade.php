@@ -52,6 +52,12 @@
                         <li class="badge">{{ $prospect }}</li>
                     @endforeach
                 </ul>
+                <label>Team Roles</label>
+                <ul class="list-unstyled">
+                    @foreach($trip->team_roles as $role)
+                        <li class="badge">{{ teamRole($role) }}</li>
+                    @endforeach
+                </ul>
             </div>
             <div class="col-sm-12 col-md-4 text-center">
                 <div class="panel panel-default">

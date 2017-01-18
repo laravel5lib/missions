@@ -27,14 +27,9 @@
 
 					<div class="col-md-6">
 						<div class="form-group" :class="{ 'has-error': checkForError('role') }">
-							<label for="desiredRole">Desired Role</label>
-								<select class="form-control input-sm" id="desiredRole" v-model="role" v-validate:role="{ required: true }">
-									<option value="missionary">Missionary</option>
-									<option value="medical">Medical</option>
-									<option value="media">Media</option>
-									<option value="group-leader">Group Leader</option>
-									<option value="speaker">Pastor/Speaker</option>
-									<option value="business">Business Leader</option>
+							<label for="desiredRole">Desired Team Role</label>
+								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:role="{ required: true }">
+									<option v-for="role in roles" :value="role.value">{{role.name}}</option>
 								</select>
 						</div><!-- end form-group -->
 						<label>Full Legal Name</label>
@@ -310,6 +305,7 @@
 				currentYear: new Date().getFullYear(),
 				dobYearCalc: '',
 				attemptedContinue: false,
+				roles: [],
 				countries: [],
 				usersArr: [],
 				countryCodeObj: null,
@@ -318,7 +314,7 @@
 				onBehalf: false,
 
 				// basic info data
-				role: 'missionary',
+				desired_role: 'MISS',
 				address: null,
 				city: null,
 				state: null,
@@ -361,7 +357,7 @@
 			},
 			userInfo(){
 				return {
-					role: this.role,
+					desired_role: this.desired_role,
 					address: this.address,
 					city: this.city,
 					state: this.state,
@@ -458,6 +454,12 @@
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
 				this.toggleUserData();
+			});
+
+			this.$http.get('utilities/team-roles').then(function (response) {
+				_.each(response.data.roles, function (name, key) {
+					this.roles.push({ value: key, name: name});
+				}.bind(this));
 			});
 
 			this.$dispatch('basic-info', true);

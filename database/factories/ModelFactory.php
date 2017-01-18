@@ -79,6 +79,7 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'status'             => $faker->randomElement(['single', 'married']),
         'birthday'           => $faker->dateTimeBetween('-60 years', '-12 years'),
         'shirt_size'         => $faker->randomElement(array_keys(App\Utilities\v1\ShirtSize::all())),
+        'desired_role'       => $faker->randomElement(array_keys(App\Utilities\v1\TeamRole::all())),
         'user_id'            => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
         'address'            => $faker->address,
         'city'               => $faker->city,
@@ -130,6 +131,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
         'started_at'      => $campaign->started_at,
         'ended_at'        => $campaign->ended_at,
         'todos'           => ['Send shirt', 'Send wrist band', 'Enter into LGL', 'Send launch guide', 'Send luggage tag'],
+        'team_roles'      => $faker->randomElements(array_keys(App\Utilities\v1\TeamRole::all()), 4),
         'prospects'       => $faker->randomElements([
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',

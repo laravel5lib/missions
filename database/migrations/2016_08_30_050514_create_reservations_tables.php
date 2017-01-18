@@ -28,6 +28,7 @@ class CreateReservationsTables extends Migration
             $table->string('state', 100)->nullable();
             $table->string('zip', 15)->nullable();
             $table->string('country_code', 2)->default('us');
+            $table->string('desired_role', 4)->nullable();
             $table->uuid('user_id')->index();
             $table->uuid('trip_id')->index();
             $table->uuid('rep_id')->index()->nullable();

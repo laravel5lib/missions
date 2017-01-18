@@ -2,7 +2,7 @@
 
 namespace App\Utilities\v1;
 
-class Role {
+class TeamRole {
 
     protected static $leadership = [
         'GPLR' => 'Group Leader',

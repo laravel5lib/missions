@@ -54,6 +54,7 @@ class TripRequest extends FormRequest
             'spots'           => 'numeric',
             'todos'           => 'array',
             'prospects'       => 'array',
+            'team_roles'      => 'array',
             'description'     => 'string',
             'published_at'    => 'date',
             'companion_limit' => 'numeric',

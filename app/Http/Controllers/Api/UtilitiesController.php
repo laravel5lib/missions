@@ -6,24 +6,30 @@ use App\Models\v1\ProjectCause;
 use App\Models\v1\ProjectInitiative;
 use App\Utilities\v1\Country;
 use Dingo\Api\Contract\Http\Request;
+use App\Utilities\v1\TeamRole;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 
 class UtilitiesController extends Controller
-{
+{   
+    public function getTeamRoles()
+    {
+        $roles = TeamRole::all();
+
+        return response()->json(compact('roles'));
+    }
 
     public function getCountries()
     {
         $countryList = Country::all();
-        /*array_walk($countries, function (&$item, $key){
-            $item = "['name' => $key, 'code' => $item]";
-        });*/
+
         $countries = [];
         foreach ($countryList as $key => $country) {
             $countries[] = ['name' => $key, 'code' => $country];
         }
+
         return response()->json(compact('countries'));
     }
 

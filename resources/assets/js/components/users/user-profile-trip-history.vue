@@ -70,7 +70,7 @@
         props:['id'],
         data(){
             return{
-                accolades: [],
+                accolades: { items: [] },
                 trips: [],
                 availableTrips: [],
                 selectedTrips: null,
@@ -114,7 +114,7 @@
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
-                    this.accolades = response.data.data[0];
+                    this.accolades = response.data.data[0] || { items: [] };
 					if (this.isUser()) {
    						this.filterAccolades();
 					}

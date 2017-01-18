@@ -123,7 +123,7 @@
 								<div class="panel">
 									<img class="img-responsive" src="images/why-mm/missionary.jpg" alt="">
 									<div class="panel-body">
-										<h4 class="text-primary">Missionary</h4>
+										<h4>Missionary</h4>
 										<p class="small">Anyone age 13+ can be an M.M missionary. Set out on the journey
 											with your friend or family to bring a message of love and hope along with an
 											unforgettable cultural experience.</p>

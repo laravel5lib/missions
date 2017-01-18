@@ -33,6 +33,8 @@ class FundraisersController extends Controller
             'url' => $fundraiser_slug
         ])->first();
 
+        if (! $fundraiser) abort(404);
+
         $loggedInUserId = auth()->check() ? auth()->user()->id : null;
 
         if (! $fundraiser->public && $loggedInUserId <> $fundraiser->sponsor_id) {

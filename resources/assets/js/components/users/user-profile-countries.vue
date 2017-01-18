@@ -13,12 +13,15 @@
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-                <p style="display:inline-block;margin-bottom:3px;" v-for="accolade in accolades.items">
+				<template v-if="accolades">
+					<p style="display:inline-block;margin-bottom:3px;" v-for="accolade in accolades.items">
                     <span class="label label-default">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
                     </span>
-                </p>
-				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
+					</p>
+
+					<p class="text-muted text-center small" v-if="accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
+				</template>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -37,7 +40,7 @@
 					</form>
 				</validator>
 
-				<ul class="list-group">
+				<ul class="list-group" v-if="accolades">
 					<li class="list-group-item" v-for="accolade in accolades.items">
 						<div class="row">
 							<div class="col-xs-8 text-left">
@@ -69,7 +72,7 @@
         props:['id'],
         data(){
             return{
-                accolades: [],
+                accolades: { items: [] },
                 countries: [],
                 availableCountries: [],
                 selectedCountries: null,
@@ -120,7 +123,7 @@
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'countries_visited'}).then(function (response) {
-                    this.accolades = response.data.data[0];
+                    this.accolades = response.data.data[0] || { items: [] };
 					if (this.isUser()) {
    						this.filterAccolades();
 					}

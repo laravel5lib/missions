@@ -110,6 +110,13 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 						</div><!-- end panel -->
 					</div><!-- end col -->
 				</div><!-- end row -->
+				<hr class="divider inv">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1 text-center">
+						<h3>The big dreams in your heart are not an accident.</h3>
+						<a class="btn btn-primary" href="/about-mmc">More About Our Program</a>
+					</div><!-- end col -->
+				</div><!-- end row -->
 		</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
@@ -117,10 +124,35 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-10 col-sm-offset-1 text-center">
-					<h1 class="text-hero">The big dreams in your heart are not an accident.</h1>
-					<a class="btn btn-primary btn-lg" href="/about-mmc">More About Our Program</a>
+				<div class="col-sm-12">
+					<h3 class="text-center">Location Matters</h3>
+					<hr class="divider red-small">
+					<hr class="divider inv lg">
 				</div>
+				<div class="col-sm-3 text-center">
+					<div class="panel panel-default panel-body" style="background-color: rgba(0,0,0,0.3);color:#fff;border:none">
+						<h1 class="text-hero">25</h1>
+						<h6>Minutes From Disneyland</h6>
+					</div>
+				</div><!-- end col -->
+				<div class="col-sm-3 text-center">
+					<div class="panel panel-default panel-body" style="background-color: rgba(0,0,0,0.3);color:#fff;border:none;">
+						<h1 class="text-hero">65&deg;</h1>
+						<h6>Minutes From Disneyland</h6>
+					</div>
+				</div><!-- end col -->
+				<div class="col-sm-3 text-center">
+					<div class="panel panel-default panel-body" style="background-color: rgba(0,0,0,0.3);color:#fff;border:none;">
+						<h1 class="text-hero">25</h1>
+						<h6>Minutes From Disneyland</h6>
+					</div>
+				</div><!-- end col -->
+				<div class="col-sm-3 text-center">
+					<div class="panel panel-default panel-body" style="background-color: rgba(0,0,0,0.3);color:#fff;border:none;">
+						<h1 class="text-hero">25</h1>
+						<h6>Minutes From Disneyland</h6>
+					</div>
+				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->
 	</div><!-- end container -->

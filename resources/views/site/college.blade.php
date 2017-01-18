@@ -10,24 +10,12 @@
 <div class="white-header-bg" style="padding:0;">
 	<div class="container">
 		<ul class="nav nav-tabs hidden-xs hidden-sm" style="margin-bottom:0;border-bottom:none;">
-			<li class="dropdown"><a id="aboutMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About <i class="fa fa-angle-down"></i></a>
-				<ul class="dropdown-menu" style="margin-top:-2px;" aria-labelledby="aboutMenu">
-					<li><a href="#">About Us</a></li>
-					<li><a href="#">Student Life</a></li>
-					<li><a href="#">Community</a></li>
-					<li><a href="#">Location</a></li>
-				</ul>
-			</li>
-			<li class="dropdown">
-				<a id="academicsMenu" class="dropdown-toggle hidden-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Academics <i class="fa fa-angle-down"></i></a>
-				<ul class="dropdown-menu" style="margin-top:-2px;" aria-labelledby="academicsMenu">
-					<li><a class="scrollNav" href="#academics">Academics</a></li>
-					<li><a class="scrollNav" href="#faqs">F.A.Q.s</a></li>
-					<li><a href="/college-financial">Financial Aid</a></li>
-				</ul>
-			</li>
-		    <li><a class="scrollNav" href="#academics">Missions</a></li>
-		    <li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
+		    <li class="active"><a href="/college">Home</a></li>
+		    <li><a href="/about-mmc">About</a></li>
+		    <li><a href="/academics">Academics</a></li>
+		    <li><a href="/student-life">Student Life</a></li>
+		    <li><a href="/admissions">Admissions</a></li>
+		    <li><a href="/mmc-faqs">FAQ's</a></li>
 		</ul>
 		<div class="btn-group btn-group-justified visible-xs-block visible-sm-block" role="group">
 			<a class="btn btn-default dropdown-toggle" style="border-radius:0;" data-toggle="dropdown" role="button"
@@ -35,13 +23,12 @@
 				Menu <span class="caret"></span>
 			</a>
 			<ul style="right:0;" class="dropdown-menu">
-				<li class="active"><a class="scrollNav" href="#who-we-are">Who We Are</a></li>
-				<li><a class="scrollNav" href="#academics">Academics</a></li>
-				<li><a class="scrollNav" href="#community">Community</a></li>
-				<li><a class="scrollNav" href="#students">Prospective Students</a></li>
-				<li><a class="scrollNav" href="/college-financial">Financial Aid</a></li>
-				<li><a class="scrollNav" href="#academics">Missions</a></li>
-				<li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
+				<li class="active"><a href="/college">Home</a></li>
+		    	<li><a href="/about-mmc">About</a></li>
+		    	<li><a href="/academics">Academics</a></li>
+		    	<li><a href="/student-life">Student Life</a></li>
+		    	<li><a href="/admissions">Admissions</a></li>
+		    	<li><a href="/mmc-faqs">FAQ's</a></li>
 			</ul>
 		</div>
 	</div><!-- end container -->
@@ -57,16 +44,13 @@
 	    <hr class="divider inv xlg">
 	    <hr class="divider inv xlg">
 	    <hr class="divider inv xlg">
-	    <hr class="divider inv xlg">
-	    <hr class="divider inv xlg">
-	    <div class="col-md-8 col-md-offset-2 text-center">
+	    <div class="col-md-12 col-md-offset-0">
 	    	<img style="width:200px" src="images/college/mm-college-logo.png" alt="Missions.Me College">
-	      <h1 class="text-hero text-white">Launching students into a life of significance.</h1>
+	      <h1 class="text-hero text-white text-uppercase">Live the<br>impossible</h1>
 	      <hr class="divider inv">
 	      <a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/" class="btn btn-white-hollow btn-lg">Apply Now</a>
 	      <hr class="divider inv xlg">
-	      <hr class="divider inv xlg">
-	      <hr class="divider inv xlg">
+	      <h2 class="text-white text-center" style="margin:0;"><i class="fa fa-angle-down"></i></h2>
 	      <hr class="divider inv xlg">
 	      <hr class="divider inv xlg">
 	      </div>
@@ -85,6 +69,25 @@
 									<iframe src="https://player.vimeo.com/video/199504307?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								</div>
 							</div>
+							<div class="panel-body text-center">
+								<h6 class="text-uppercase">New Campus Location!</h6>
+								<p class="small">We're expanding to Dana Point, CA</p>
+								<a href="#" class="btn btn-primary btn-sm">Learn More</a>
+							</div>
+						</div><!-- end panel -->
+					</div><!-- end col -->
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="video-outer">
+								<div class="video-inner">
+									<iframe src="https://player.vimeo.com/video/89317516?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+								</div>
+							</div>
+							<div class="panel-body text-center">
+								<h6 class="text-uppercase">New Campus Location!</h6>
+								<p class="small">We're expanding to Dana Point, CA</p>
+								<a href="#" class="btn btn-primary btn-sm">Learn More</a>
+							</div>
 						</div><!-- end panel -->
 					</div><!-- end col -->
 					<div class="col-sm-4">
@@ -94,26 +97,44 @@
 									<iframe src="https://player.vimeo.com/video/130333477" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 								</div>
 							</div>
-						</div><!-- end panel -->
-					</div><!-- end col -->
-					<div class="col-sm-4">
-						<div class="panel panel-default">
-							<div class="video-outer">
-								<div class="video-inner">
-									<iframe src="https://player.vimeo.com/video/156320313" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-								</div>
+							<div class="panel-body text-center">
+								<h6 class="text-uppercase">New Campus Location!</h6>
+								<p class="small">We're expanding to Dana Point, CA</p>
+								<a href="#" class="btn btn-primary btn-sm">Learn More</a>
 							</div>
 						</div><!-- end panel -->
 					</div><!-- end col -->
 				</div><!-- end row -->
+				<hr class="divider inv lg">
 			<div class="row">
 				<div class="col-sm-12 text-center">
-					<div class="addthis_sharing_toolbox"></div>
+					<h2>The big dreams in your heart <span class="text-primary">are not</span> an accident.</h2>
 				</div>
 			</div><!-- end row -->
 		</div>
 	</div><!-- end container -->
 </div><!-- end white-bg -->
+<!-- MODAL -->
+<div class="modal video-modal fade" id="westVid" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-video">
+                    <div class="video-outer">
+                      <div class="video-inner">
+                        <iframe src="https://player.vimeo.com/video/199504307?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="gray-bg-lighter" id="who-we-are">
 	<div class="container">
 	<div class="content-section">

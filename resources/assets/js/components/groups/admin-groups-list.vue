@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="position:relative;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
@@ -24,48 +24,48 @@
                         <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="status" value=""> Any Status
+                                    <input type="radio" v-model="filters.status" value=""> Any Status
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="status" value="true"> Public Only
+                                    <input type="radio" v-model="filters.status" value="yes"> Public Only
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="status" value="false"> Private only
+                                    <input type="radio" v-model="filters.status" value="no"> Private only
                                 </label>
                             </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="type" value=""> Any Type
+                                    <input type="radio" v-model="filters.type" value=""> Any Type
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="type" value="church"> Church Only
+                                    <input type="radio" v-model="filters.type" value="church"> Church Only
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="type" value="business"> Business only
+                                    <input type="radio" v-model="filters.type" value="business"> Business only
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="type" value="nonprofit"> Non-Profit Only
+                                    <input type="radio" v-model="filters.type" value="nonprofit"> Non-Profit Only
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="type" value="youth"> Private only
+                                    <input type="radio" v-model="filters.type" value="youth"> Private only
                                 </label>
                             </li>
                             <li>
                                 <label style="margin-bottom: 0" class="small">
-                                    <input type="radio" v-model="type" value="other"> Other only
+                                    <input type="radio" v-model="filters.type" value="other"> Other only
                                 </label>
                             </li>
                         </ul>
@@ -123,7 +123,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="group in groups|filterBy search|orderBy orderByField direction|filterBy status in 'public'|filterBy type in 'type'">
+            <tr v-for="group in groups">
                 <td>{{group.name}}</td>
                 <td>{{group.type|capitalize}}</td>
                 <template v-if="pending">
@@ -163,22 +163,38 @@
             }
         },
         data(){
-            return{
+            return {
                 groups: [],
                 orderByField: 'name',
                 direction: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
-                pagination: { current_page: 1 },
+                pagination: {current_page: 1},
                 search: '',
-                status: '',
-                type: ''
+                filters: {
+                    status: '',
+                    type: ''
+                }
             }
         },
         watch: {
             'search': function (val, oldVal) {
-                this.page = 1;
                 this.pagination.current_page = 1;
+                this.searchGroups();
+            },
+            // watch filters obj
+            'filters': {
+                handler: function (val) {
+                    // console.log(val);
+                    this.pagination.current_page = 1;
+                    this.searchGroups();
+                },
+                deep: true
+            },
+            'orderByField': function (val, oldVal) {
+                this.searchGroups();
+            },
+            'direction': function (val) {
                 this.searchGroups();
             },
             'per_page': function (val, oldVal) {
@@ -186,7 +202,7 @@
             }
         },
 
-        methods:{
+        methods: {
             setOrderByField(field){
                 return this.orderByField = field, this.direction = 1;
             },
@@ -200,7 +216,10 @@
             searchGroups(){
                 // this.$refs.spinner.show();
                 this.$http.get('groups', {
-                    include:'trips:status(active),notes',
+                    include: 'trips:status(active),notes',
+                    sort: this.orderByField + (this.direction ? ' ASC' : ' DESC'),
+                    isPublic: this.filters.status,
+                    type: this.filters.type,
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,

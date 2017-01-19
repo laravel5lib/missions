@@ -214,7 +214,6 @@
                 this.type = '';
             },
             searchGroups(){
-                // this.$refs.spinner.show();
                 this.$http.get('groups', {
                     include: 'trips:status(active),notes',
                     sort: this.orderByField + (this.direction ? ' ASC' : ' DESC'),
@@ -227,10 +226,8 @@
                 }).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;
-                    // this.$refs.spinner.hide();
                 }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
+                    this.$root.$emit('showError', 'Something went wrong!')
                 })
             }
         },

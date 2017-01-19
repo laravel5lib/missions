@@ -35,6 +35,7 @@ class TripTransformer extends TransformerAbstract
             'group_id'        => $trip->group_id,
             'campaign_id'     => $trip->campaign_id,
             'rep_id'          => $trip->rep_id,
+            'rep'             => $trip->rep ? $trip->rep->name : null,
             'spots'           => (int) $trip->spots,
             'status'          => $trip->status,
             'starting_cost'   => (int) $trip->starting_cost,

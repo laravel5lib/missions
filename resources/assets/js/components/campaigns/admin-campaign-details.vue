@@ -28,9 +28,8 @@
 	<hr class="divider inv lg">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-3">
-				<div class="panel panel-default">
-					<ul class="nav nav-pills nav-stacked">
+			<div class="col-sm-12">
+					<ul class="nav nav-tabs" role="tablist">
 						<li :class="{'active': currentView === 'details'}">
 							<a @click="toView('details')">Details</a>
 						</li>
@@ -38,18 +37,15 @@
 							<a @click="toView('trips')">Trips</a>
 						</li>
 					</ul>
-				</div>
 			</div>
-			<div class="col-sm-9">
-				<div class="row">
-					<div class="col-sm-12">
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
 						<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 						<component :is="currentView" transition="fade" transition-mode="out-in">
 
 						</component>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

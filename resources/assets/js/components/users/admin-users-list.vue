@@ -173,6 +173,15 @@
 							<li role="separator" class="divider"></li>
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
 						</ul>
+              <export-utility url="users/export"
+                  :options="exportOptions"
+                  :filters="exportFilters">
+              </export-utility>
+              <import-utility title="Import Users List" 
+                              url="users/import" 
+                              :required-fields="importRequiredFields" 
+                              :optional-fields="importOptionalFields">
+              </import-utility>
                     </div>
                 </form>
             </div>
@@ -290,9 +299,11 @@
 </style>
 <script type="text/javascript">
 	import vSelect from "vue-select";
+  import exportUtility from '../export-utility.vue';
+  import importUtility from '../import-utility.vue';
 	export default{
         name: 'admin-users-list',
-		components: {vSelect},
+		components: {vSelect, exportUtility, importUtility},
 		data(){
             return{
                 users: [],
@@ -308,6 +319,34 @@
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
 				countriesArr: [],
 				countriesOptions: [],
+        exportOptions: {
+          name: 'Name',
+          email: 'Email',
+          alt_email: 'Alternate Email',
+          gender: 'Gender',
+          status: 'Marital Status',
+          birthday: 'Birthday',
+          phone_one: 'Primary Phone',
+          phone_two: 'Secondary Phone',
+          address: 'Street Address',
+          city: 'City',
+          state: 'State/Providence',
+          country_code: 'Country',
+          timezone: 'Timezone',
+          bio: 'Bio',
+          visibility: 'Visibility',
+          created_at: 'Created On',
+          updated_at: 'Last Updated'
+        },
+        exportFilters: {},
+        importRequiredFields: [
+          'name', 'email', 'country_code', 'timezone',
+        ],
+        importOptionalFields: [
+          'alt_email', 'password', 'gender', 'status', 'birthday',
+          'phone_one', 'phone_two', 'address', 'city', 'state', 'zip', 
+          'url', 'bio', 'visibility', 'avatar_file_name', 'banner_file_name'
+        ],
 
 				// filter vars
 				filters: {
@@ -432,6 +471,8 @@
 				};
 
 				$.extend(params, this.filters);
+        this.exportFilters = params;
+
                 this.$http.get('users', params).then(function (response) {
                     var self = this;
                     this.users = response.data.data;
@@ -478,6 +519,12 @@
 				}
 				event.stopPropagation(); //Always stop propagation
 			});
+        },
+      events: {
+        'importComplete': function(msg) {
+          console.log(msg);
+          this.searchUsers();
         }
+      },
     }
 </script>

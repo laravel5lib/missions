@@ -10960,6 +10960,7 @@ button.close {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
+  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
@@ -14764,8 +14765,8 @@ body.vjs-full-window {
   text-align: center;
   text-transform: lowercase; }
 
-.vjs-menu li.vjs-menu-item:focus,
-.vjs-menu li.vjs-menu-item:hover {
+.vjs-menu li:focus,
+.vjs-menu li:hover {
   outline: 0;
   background-color: #73859f;
   background-color: rgba(115, 133, 159, 0.5); }
@@ -16494,6 +16495,12 @@ h1.home-college-header {
     background: url("../../images/college/home-placeholder.jpg") center center/cover no-repeat; }
   .college-vid-bg-video {
     display: none; } }
+
+.college-cali-bg {
+  color: #fff;
+  background: #808080 url("../../images/college/cali-bg.jpg") no-repeat bottom fixed;
+  background-size: cover;
+  padding: 100px 0 100px; }
 
 /* Group Carousel */
 .quote {

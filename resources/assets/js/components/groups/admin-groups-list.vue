@@ -127,6 +127,15 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
+                    <export-utility url="groups/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
+                    <import-utility title="Import Groups List"
+                              url="groups/import"
+                              :required-fields="importRequiredFields"
+                              :optional-fields="importOptionalFields">
+                    </import-utility>
                 </form>
             </div>
         </div>
@@ -209,8 +218,11 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../export-utility.vue';
+    import importUtility from '../import-utility.vue';
     export default{
         name: 'admin-groups',
+        components: {exportUtility, importUtility},
         props: {
             pending: {
                 type: Boolean,
@@ -233,7 +245,36 @@
                 activeFields: this.pending ? ['name', 'type', 'location', 'phone_one', 'email'] : ['name', 'type', 'location', 'status', 'trips'],
                 maxActiveFields: 5,
                 maxActiveFieldsOptions: [2, 3, 4, 5, 6],
-
+                exportOptions: {
+                  name: 'Name',
+                  email: 'Email',
+                  type: 'Type',
+                  status: 'Status',
+                  phone_one: 'Primary Phone',
+                  phone_two: 'Secondary Phone',
+                  address: 'Street Address',
+                  city: 'City',
+                  state: 'State/Providence',
+                  country: 'Country',
+                  country_code: 'Country Code',
+                  timezone: 'Timezone',
+                  description: 'Description',
+                  visibility: 'Visibility',
+                  url: 'Profile URL',
+                  avatar_source: 'Logo Source',
+                  banner_source: 'Banner Source',
+                  created: 'Created On',
+                  updated: 'Last Updated'
+                },
+                exportFilters: {},
+                importRequiredFields: [
+                  'name', 'type', 'country_code', 'timezone',
+                ],
+                importOptionalFields: [
+                  'email', 'status', 'url', 'created_at', 'updated_at',
+                  'phone_one', 'phone_two', 'address', 'city', 'state', 'zip',
+                  'url', 'description', 'visibility', 'logo_source', 'banner_source'
+                ],
             }
         },
         watch: {

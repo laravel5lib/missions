@@ -8,6 +8,10 @@ use App\Models\v1\User;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
 use App\Http\Transformers\v1\UserTransformer;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportUsers;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\UserListImport;
 
 class UsersController extends Controller
 {
@@ -115,5 +119,33 @@ class UsersController extends Controller
         $user->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export users.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportUsers($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of users.
+     * 
+     * @param  UserListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, UserListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

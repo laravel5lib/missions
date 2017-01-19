@@ -16,6 +16,62 @@
                         <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
+                    <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Fields
+                            <span class="caret"></span>
+                        </button>
+                        <ul style="padding: 10px 20px;" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="name" :disabled="maxCheck('name')"> Group Name
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="type" :disabled="maxCheck('type')"> Type
+                                </label>
+                            </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="location" :disabled="maxCheck('location')"> Location
+                                </label>
+                            </li>
+                            <template v-if="pending">
+                                <li>
+                                    <label class="small" style="margin-bottom: 0px;">
+                                        <input type="checkbox" v-model="activeFields" value="phone_one" :disabled="maxCheck('phone_one')"> Phone
+                                    </label>
+                                </li>
+                                <li1>
+                                    <label class="small" style="margin-bottom: 0px;">
+                                        <input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
+                                    </label>
+                                </li>
+                            </template>
+                            <template v-else>
+                                <li>
+                                    <label class="small" style="margin-bottom: 0px;">
+                                        <input type="checkbox" v-model="activeFields" value="status" :disabled="maxCheck('status')"> Status
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="small" style="margin-bottom: 0px;">
+                                        <input type="checkbox" v-model="activeFields" value="trips" :disabled="maxCheck('trips')"> Active Trips
+                                    </label>
+                                </li>
+                            </template>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <div style="margin-bottom: 0px;" class="input-group input-group-sm">
+                                    <label>Max Visible Fields</label>
+                                    <select class="form-control" v-model="maxActiveFields">
+                                        <option v-for="option in maxActiveFieldsOptions" :value="option">{{option}}</option>
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="dropdown" style="display: inline-block;">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                             Sort By
@@ -78,45 +134,45 @@
         <table class="table table-hover table-striped">
             <thead>
             <tr>
-                <th :class="{'text-primary': orderByField === 'name'}">
+                <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
                     Group
                     <i @click="setOrderByField('name')" v-if="orderByField !== 'name'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
-                <th :class="{'text-primary': orderByField === 'type'}">
+                <th v-if="isActive('type')" :class="{'text-primary': orderByField === 'type'}">
                     Type
                     <i @click="setOrderByField('type')" v-if="orderByField !== 'type'" class="fa fa-sort pull-right"></i>
                     <i @click="direction=direction*-1" v-if="orderByField === 'type'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                 </th>
                 <template v-if="pending">
-                    <th :class="{'text-primary': orderByField === 'country_name'}">
+                    <th v-if="isActive('location')" :class="{'text-primary': orderByField === 'country_name'}">
                         Location
                         <!--<i @click="setOrderByField('notes.data[0].content')" v-if="orderByField !== 'notes.data[0].content'" class="fa fa-sort pull-right"></i>-->
                         <!--<i @click="direction=direction*-1" v-if="orderByField === 'notes.data[0].content'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
                     </th>
-                    <th :class="{'text-primary': orderByField === 'phone_one'}">
+                    <th v-if="isActive('phone_one')" :class="{'text-primary': orderByField === 'phone_one'}">
                         Phone One
                         <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
                         <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
-                    <th :class="{'text-primary': orderByField === 'email'}">
+                    <th v-if="isActive('email')" :class="{'text-primary': orderByField === 'email'}">
                         Email
                         <i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
                         <i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
                 </template>
                 <template v-else>
-                    <th :class="{'text-primary': orderByField === 'country_name'}">
+                    <th v-if="isActive('location')" :class="{'text-primary': orderByField === 'country_name'}">
                         Location
                         <!--<i @click="setOrderByField('campaign.data.name')" v-if="orderByField !== 'campaign.data.name'" class="fa fa-sort pull-right"></i>-->
                         <!--<i @click="direction=direction*-1" v-if="orderByField === 'campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>-->
                     </th>
-                    <th :class="{'text-primary': orderByField === 'public'}">
+                    <th v-if="isActive('status')" :class="{'text-primary': orderByField === 'public'}">
                         Status
                         <i @click="setOrderByField('public')" v-if="orderByField !== 'public'" class="fa fa-sort pull-right"></i>
                         <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
-                    <th>Active Trips</th>
+                    <th v-if="isActive('trips')">Active Trips</th>
                 </template>
 
                 <th><i class="fa fa-cog"></i></th>
@@ -124,17 +180,16 @@
             </thead>
             <tbody>
             <tr v-for="group in groups">
-                <td>{{group.name}}</td>
-                <td>{{group.type|capitalize}}</td>
+                <td v-if="isActive('name')">{{group.name}}</td>
+                <td v-if="isActive('type')">{{group.type|capitalize}}</td>
+                <td v-if="isActive('location')">{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
                 <template v-if="pending">
-                    <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
-                    <td>{{group.phone_one}}</td>
-                    <td>{{group.email}}</td>
+                    <td v-if="isActive('phone_one')">{{group.phone_one}}</td>
+                    <td v-if="isActive('email')">{{group.email}}</td>
                 </template>
                 <template v-else>
-                    <td>{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
-                    <td>{{group.public ? 'Public' : 'Private'}}</td>
-                    <td>{{group.trips.data.length}}</td>
+                    <td v-if="isActive('status')">{{group.public ? 'Public' : 'Private'}}</td>
+                    <td v-if="isActive('trips')">{{group.trips.data.length}}</td>
                 </template>
                 <td>
                     <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin{{group.links[0].uri}}"><i class="fa fa-gear"></i></a>
@@ -174,7 +229,11 @@
                 filters: {
                     status: '',
                     type: ''
-                }
+                },
+                activeFields: this.pending ? ['name', 'type', 'location', 'phone_one', 'email'] : ['name', 'type', 'location', 'status', 'trips'],
+                maxActiveFields: 5,
+                maxActiveFieldsOptions: [2, 3, 4, 5, 6],
+
             }
         },
         watch: {
@@ -191,7 +250,14 @@
                 },
                 deep: true
             },
-            'orderByField': function (val, oldVal) {
+            'activeFields': function (val, oldVal) {
+                // if the orderBy field is removed from view
+                if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
+                    // default to first visible field
+                    this.orderByField = val[0];
+                }
+                // this.updateConfig();
+            },'orderByField': function (val, oldVal) {
                 this.searchGroups();
             },
             'direction': function (val) {
@@ -203,6 +269,12 @@
         },
 
         methods: {
+            isActive(field){
+                return _.contains(this.activeFields, field);
+            },
+            maxCheck(field){
+                return !_.contains(this.activeFields, field) && this.activeFields.length >= this.maxActiveFields
+            },
             setOrderByField(field){
                 return this.orderByField = field, this.direction = 1;
             },
@@ -234,6 +306,29 @@
         ready(){
             this.searchGroups();
             $('[data-toggle="tooltip"]').tooltip();
+
+            //Manually handle dropdown functionality to keep dropdown open until finished
+            $('.form-toggle-menu .dropdown-menu').on('click', function(event){
+                let events = $._data(document, 'events') || {};
+                events = events.click || [];
+                for(let i = 0; i < events.length; i++) {
+                    if(events[i].selector) {
+
+                        //Check if the clicked element matches the event selector
+                        if($(event.target).is(events[i].selector)) {
+                            events[i].handler.call(event.target, event);
+                        }
+
+                        // Check if any of the clicked element parents matches the
+                        // delegated event selector (Emulating propagation)
+                        $(event.target).parents(events[i].selector).each(function(){
+                            events[i].handler.call(this, event);
+                        });
+                    }
+                }
+                event.stopPropagation(); //Always stop propagation
+            });
+
         }
     }
 </script>

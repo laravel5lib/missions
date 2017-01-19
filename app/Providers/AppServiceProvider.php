@@ -46,6 +46,13 @@ class AppServiceProvider extends ServiceProvider
             'notes' => \App\Models\v1\Note::class,
             'todos' => \App\Models\v1\Todo::class
         ]);
+
+        Validator::extend('is_csv',function($attribute, $value, $params, $validator) {
+            $file = base64_decode($value);
+            $f = finfo_open();
+            $result = finfo_buffer($f, $file, FILEINFO_MIME_TYPE);
+            return $result == 'text/csv';
+        });
     }
 
     /**

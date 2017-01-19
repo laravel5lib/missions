@@ -173,10 +173,15 @@
 							<li role="separator" class="divider"></li>
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
 						</ul>
-                <export-utility url="users/export"
+              <export-utility url="users/export"
                   :options="exportOptions"
                   :filters="exportFilters">
               </export-utility>
+              <import-utility title="Import Users List" 
+                              url="users/import" 
+                              :required-fields="importRequiredFields" 
+                              :optional-fields="importOptionalFields">
+              </import-utility>
                     </div>
                 </form>
             </div>
@@ -295,9 +300,10 @@
 <script type="text/javascript">
 	import vSelect from "vue-select";
   import exportUtility from '../export-utility.vue';
+  import importUtility from '../import-utility.vue';
 	export default{
         name: 'admin-users-list',
-		components: {vSelect, exportUtility},
+		components: {vSelect, exportUtility, importUtility},
 		data(){
             return{
                 users: [],
@@ -333,6 +339,14 @@
           updated_at: 'Last Updated'
         },
         exportFilters: {},
+        importRequiredFields: [
+          'name', 'email', 'country_code', 'timezone',
+        ],
+        importOptionalFields: [
+          'alt_email', 'password', 'gender', 'status', 'birthday',
+          'phone_one', 'phone_two', 'address', 'city', 'state', 'zip', 
+          'url', 'bio', 'visibility', 'avatar_file_name', 'banner_file_name'
+        ],
 
 				// filter vars
 				filters: {
@@ -505,6 +519,12 @@
 				}
 				event.stopPropagation(); //Always stop propagation
 			});
+        },
+      events: {
+        'importComplete': function(msg) {
+          console.log(msg);
+          this.searchUsers();
         }
+      },
     }
 </script>

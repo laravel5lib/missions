@@ -286,6 +286,7 @@
             'filters': {
                 handler: function (val) {
                     // console.log(val);
+                    this.exportFilters = val;
                     this.pagination.current_page = 1;
                     this.searchGroups();
                 },

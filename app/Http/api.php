@@ -49,6 +49,8 @@ $api->version('v1', [
     $api->resource('groups', 'GroupsController');
     $api->get('groups/{id}/notes', 'GroupsController@notes');
     $api->post('groups/submit', 'GroupsController@submit');
+    $api->post('groups/export', 'GroupsController@export');
+    $api->post('groups/import', 'GroupsController@import');
     $api->resource('campaigns', 'CampaignsController');
     $api->post('campaigns/export', 'CampaignsController@export');
     $api->post('campaigns/import', 'CampaignsController@import');
@@ -74,6 +76,8 @@ $api->version('v1', [
     $api->post('passports/export', 'PassportsController@export');
     $api->post('passports/import', 'PassportsController@import');
     $api->resource('visas', 'VisasController');
+    $api->resource('visas/export', 'VisasController@export');
+    $api->resource('visas/import', 'VisasController@import');
     $api->resource('referrals', 'ReferralsController');
     $api->post('referrals/export', 'ReferralsController@export');
     $api->resource('regions', 'RegionsController');

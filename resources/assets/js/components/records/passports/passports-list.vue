@@ -156,7 +156,9 @@
                     given_names: 'Given Names',
                     surname: 'Surname',
                     birth_country: 'Birth Country',
+                    birth_country_code: 'Birth Country Code',
                     citizenship: 'Citizenship',
+                    citizenship_country_code: 'Citizenship Country Code',
                     issued_at: 'Issue Date',
                     expires_at: 'Expire Date',
                     created_at: 'Created On',
@@ -168,7 +170,7 @@
                 },
                 exportFilters: {},
                 importRequiredFields: [
-                    'passport_number', 'user_email', 'given_names', 'surname',
+                    'number', 'user_email', 'given_names', 'surname',
                     'birth_country_code', 'citizenship_country_code', 'issued_at',
                     'expires_at'
                 ],

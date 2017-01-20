@@ -18,7 +18,7 @@ class PassportListImportHandler extends ImportHandler {
      * 
      * @var array
      */
-    public $duplicates = ['number' => 'passport_number'];
+    public $duplicates = ['number' => 'number'];
 
     public $matches = ['user.email' => 'user_email' ];
 
@@ -26,7 +26,7 @@ class PassportListImportHandler extends ImportHandler {
     public function match_columns_to_properties($passport)
     {
         return [
-            'number' => $passport->passport_number,
+            'number' => $passport->number,
             'given_names' => $passport->given_names,
             'surname' => $passport->surname,
             'birth_country' => strtolower(trim($passport->birth_country_code)),

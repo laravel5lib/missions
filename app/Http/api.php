@@ -50,6 +50,8 @@ $api->version('v1', [
     $api->get('groups/{id}/notes', 'GroupsController@notes');
     $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
+    $api->post('campaigns/export', 'CampaignsController@export');
+    $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
     $api->post('trips/export', 'TripsController@export');
     $api->get('trips/{id}/todos', 'TripTodosController@index');

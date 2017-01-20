@@ -15,6 +15,15 @@
 						<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
 						<span class="input-group-addon"><i class="fa fa-search"></i></span>
 					</div>
+					<export-utility url="campaigns/export"
+              :options="exportOptions"
+              :filters="exportFilters">
+          </export-utility>
+          <import-utility title="Import Campaigns List" 
+              url="campaigns/import" 
+              :required-fields="importRequiredFields" 
+              :optional-fields="importOptionalFields">
+          </import-utility>
 				</form>
 			</div>
 		</div>
@@ -58,30 +67,57 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import exportUtility from '../export-utility.vue';
+  	import importUtility from '../import-utility.vue';
     export default{
     	name: 'admin-campaigns-list',
-        components: {vSelect},
+        components: {vSelect, exportUtility, importUtility},
 		props: {
 			type: {
 				type: String,
 				default: 'current'
 			}
 		},
-        data(){
-            return{
-                campaigns: [],
-                orderByField: 'surname',
-                direction: 1,
-                page: 1,
-                per_page: 10,
-                perPageOptions: [5, 10, 25, 50, 100],
-                pagination: {current_page: 1},
-                search: '',
-				filters: {
-
-				},
-            }
-        },
+    data(){
+        return{
+            campaigns: [],
+            orderByField: 'surname',
+            direction: 1,
+            page: 1,
+            per_page: 10,
+            perPageOptions: [5, 10, 25, 50, 100],
+            pagination: {current_page: 1},
+            search: '',
+            exportOptions: {
+            	id: 'Campaign ID',
+		          name: 'Name',
+              country: 'Country',
+		          country_code: 'Country Code',
+              groups: 'Groups',
+              fund: 'Fund',
+		          short_desc: 'Short Description',
+              url: 'Page URL',
+		          page_filename: 'Page Filename',
+		          avatar_filename: 'Avatar Filename',
+		          banner_filename: 'Banner Filename',
+		          started_at: 'Started',
+		          ended_at: 'Ended',
+		          published_at: 'Published',
+		          created_at: 'Created On',
+		          updated_at: 'Last Updated'
+		        },
+		        exportFilters: {},
+		        importRequiredFields: [
+		          'name', 'country_code', 'started_at', 'ended_at'
+		        ],
+		        importOptionalFields: [
+		          'short_desc', 'page_filename', 'avatar_filename', 'banner_filename',
+		          'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at',
+              'url'
+		        ],
+						filters: {}
+        }
+    },
 		watch: {
 			'per_page': function (val, oldVal) {
 				this.searchCampaigns();
@@ -112,6 +148,8 @@
 				}
 
 				$.extend(params, this.filters);
+        this.exportFilters = params;
+
 				this.$http.get('campaigns', params).then(function (response) {
 				    if (this.type === 'archived') {
 						this.campaigns = _.filter(response.data.data, function (campaign) {

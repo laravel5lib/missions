@@ -33,7 +33,7 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
     { 
         $this->validate($import);
 
-        $totalRows = $import->get()->count() - 1; // -1 for header row
+        $totalRows = $import->get()->count();
 
         $totalImported = $import->get()->reject(function($item) {
             return $this->find_existing($this->get_duplicates($item));

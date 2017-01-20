@@ -33,7 +33,8 @@ class User extends Authenticatable implements JWTSubject
         'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
         'stripe_id', 'card_brand', 'card_last_four',
-        'avatar_upload_id', 'banner_upload_id'
+        'avatar_upload_id', 'banner_upload_id',
+        'created_at', 'updated_at'
     ];
 
     /**

@@ -39,6 +39,15 @@
                     Filters
                     <i class="fa fa-filter"></i>
                 </button>
+                <export-utility url="passports/export"
+                      :options="exportOptions"
+                      :filters="exportFilters">
+                  </export-utility>
+                  <import-utility title="Import Passports List" 
+                      url="passports/import" 
+                      :required-fields="importRequiredFields" 
+                      :optional-fields="importOptionalFields">
+                  </import-utility>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -109,8 +118,11 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../../export-utility.vue';
+    import importUtility from '../../import-utility.vue';
     export default{
         name: 'passports-list',
+        components: {exportUtility, importUtility},
         props: {
             'userId': {
                 type: String,
@@ -139,6 +151,30 @@
                 },
                 loaded: false,
                 deleteModal: false,
+                exportOptions: {
+                    number: 'Passport Number',
+                    given_names: 'Given Names',
+                    surname: 'Surname',
+                    birth_country: 'Birth Country',
+                    citizenship: 'Citizenship',
+                    issued_at: 'Issue Date',
+                    expires_at: 'Expire Date',
+                    created_at: 'Created On',
+                    updated_at: 'Last Updated',
+                    user_name: 'User Name',
+                    user_email: 'User Email',
+                    user_phone_one: 'User Primary Phone',
+                    user_phone_two: 'User Secondary Phone'
+                },
+                exportFilters: {},
+                importRequiredFields: [
+                    'passport_number', 'user_email', 'given_names', 'surname',
+                    'birth_country_code', 'citizenship_country_code', 'issued_at',
+                    'expires_at'
+                ],
+                importOptionalFields: [
+                    'created_at', 'updated_at'
+                ],
             }
         },
         watch:{

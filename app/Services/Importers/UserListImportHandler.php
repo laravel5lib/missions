@@ -17,7 +17,7 @@ class UserListImportHandler extends ImportHandler {
      * 
      * @var array
      */
-    public $match = ['email' => 'email'];
+    public $duplicates = ['email' => 'email'];
 
 
     public function match_columns_to_properties($user)

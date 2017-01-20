@@ -8,6 +8,10 @@ use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\PassportRequest;
 use App\Http\Transformers\v1\PassportTransformer;
 use App\Models\v1\Passport;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportPassports;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\PassportListImport;
 
 class PassportsController extends Controller
 {
@@ -96,5 +100,33 @@ class PassportsController extends Controller
         $passport->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export passports.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportPassports($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of passports.
+     * 
+     * @param  PassportListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, PassportListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

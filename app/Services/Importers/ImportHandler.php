@@ -19,7 +19,9 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
      * 
      * @var array
      */
-    public $match = [];
+    public $duplicates = [];
+
+    public $matches = [];
 
     /**
      * Handle the import
@@ -34,7 +36,9 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         $totalRows = $import->get()->count() - 1; // -1 for header row
 
         $totalImported = $import->get()->reject(function($item) {
-            return $this->find_existing($this->get_matches($item));
+            return $this->find_existing($this->get_duplicates($item));
+        })->filter(function($item) {
+            return $this->find_matching($item);
         })->map(function($item) {
             return $this->match_columns_to_properties($item);
         })->each(function($item) {
@@ -49,21 +53,21 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
     }
 
     /**
-     * Get column matches.
+     * Get duplicates.
      * 
      * @param  Collection $item
      * @return array
      */
-    private function get_matches($item)
+    private function get_duplicates($item)
     {   
-        $matches = [];
+        $duplicates = [];
 
-        foreach($this->match as $databaseColumn => $documentColumn)
+        foreach($this->duplicates as $databaseColumn => $documentColumn)
         {
-            $matches[$databaseColumn] = $item->{$documentColumn};
+            $duplicates[$databaseColumn] = $item->{$documentColumn};
         }
 
-        return $matches;
+        return $duplicates;
     }
 
     /**
@@ -77,6 +81,46 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         $item = app($this->model)->firstOrNew($attributes);
 
         return $item->id ? true : false;
+    }
+
+    /**
+     * Find matching
+     * 
+     * @param  Collection $item
+     * @return Boolean
+     */
+    private function find_matching($item)
+    {   
+        $results = [];
+        $matches = [];
+
+        foreach($this->matches as $property => $documentColumn)
+        {
+            if (strpos($property, '.')) {
+                $properties = explode('.', $property);
+
+                $method = $properties[0];
+                $attribute = $properties[1];
+
+                $model = app($this->model)->whereHas($method, function($m) use($attribute, $item, $documentColumn) {
+                    return $m->where($attribute, $item->{$documentColumn});
+                })->first();
+
+                $results[] = $model ? true : false;
+
+            } else {
+
+                $matches[$property] = $item->{$documentColumn};
+            }
+        }
+
+        if ($matches <> []) {
+            $model = app($this->model)->firstOrNew($matches);
+
+            $results[] = $model->id ? true : false;
+        }
+
+        return collect($results)->contains(false) ? false : true;
     }
 
     /**
@@ -130,12 +174,34 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
      */
     private function validate($import)
     {
-        $missingValues = $import->select(Request::get('required'))->get()->filter(function($item) {
+        if ($this->check_for_missing_columns($import))
+            return abort(422, 'Missing required fields');
+
+        if ($this->check_for_missing_values($import))
+            return abort(422, 'Some required fields are blank');
+
+        return true;
+    }
+
+    private function check_for_missing_columns($import)
+    {
+        $required = Request::get('required');
+
+        $numberOfColumns = $import->select($required)->get()->first()->count();
+
+        return ($numberOfColumns != count($required)) ? true : false;
+    }
+
+    private function check_for_missing_values($import)
+    {
+        $required = Request::get('required');
+
+        $missingValues = $import->select($required)->get()->filter(function($item) {
             $item = collect($item);
             return $item->contains(null) || $item->contains('');
         })->count();
 
-        return $missingValues > 0 ? abort(422, 'Missing required fields') : true;
+        return ($missingValues > 0) ? true : false;
     }
 
 }

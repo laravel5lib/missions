@@ -68,6 +68,8 @@ $api->version('v1', [
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');
     $api->resource('passports', 'PassportsController');
+    $api->post('passports/export', 'PassportsController@export');
+    $api->post('passports/import', 'PassportsController@import');
     $api->resource('visas', 'VisasController');
     $api->resource('referrals', 'ReferralsController');
     $api->resource('regions', 'RegionsController');

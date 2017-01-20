@@ -15,7 +15,7 @@ class Passport extends Model
     protected $fillable = [
         'given_names', 'surname', 'number', 'issued_at',
         'expires_at', 'birth_country', 'citizenship',
-        'upload_id', 'user_id'
+        'upload_id', 'user_id', 'created_at', 'updated_at'
     ];
 
     protected $dates = [

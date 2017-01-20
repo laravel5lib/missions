@@ -13,7 +13,7 @@ class ExportGroups extends Exporter
                 ->get();
     }
 
-    public function columns($fund)
+    public function columns($group)
     {
         return [
             'name' => $group->name,

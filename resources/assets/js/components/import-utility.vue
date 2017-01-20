@@ -9,7 +9,7 @@
                 <spinner v-ref:spinner size="sm" text="importing"></spinner>
                 
                 <div class="alert alert-info" v-if="totalRows > 0">
-                    <p>{{ totalImported }} of {{ totalRows }} records were imported. {{ duplicates }} duplicates were ignored.</p>
+                    <p>{{ totalImported }} of {{ totalRows }} records were imported. {{ rejected }} duplicates or non-matching records were ignored.</p>
                 </div>
 
                 <validator name="validation" :classes="{ invalid: 'has-error' }">
@@ -71,7 +71,7 @@
             }
         },
         computed: {
-            duplicates() {
+            rejected() {
                 return this.totalRows - this.totalImported;
             }
         },

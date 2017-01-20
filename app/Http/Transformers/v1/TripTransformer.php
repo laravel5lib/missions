@@ -49,6 +49,7 @@ class TripTransformer extends TransformerAbstract
             'ended_at'        => $trip->ended_at->toDateString(),
             'todos'           => $trip->todos,
             'prospects'       => $trip->prospects,
+            'team_roles'       => $trip->team_roles,
             'description'     => $trip->description,
             'public'          => (boolean) $trip->public,
             'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,

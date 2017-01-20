@@ -63,6 +63,7 @@ import sendEmail from './components/send-email.vue';
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
 import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
+import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
@@ -538,6 +539,7 @@ new Vue({
         // admin components
         campaignCreate,
         campaignEdit,
+        adminCampaignsList,
         adminCampaignDetails,
         campaignTripCreateWizard,
         campaignTripEditWizard,

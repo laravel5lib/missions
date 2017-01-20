@@ -156,6 +156,17 @@
 
             <div class="row">
                 <div class="col-sm-12 text-center">
+                    <div class="form-group" :class="{ 'has-error': checkForError('desiredrole') }">
+                        <label for="desiredRole">Desired Team Role</label>
+                        <select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:desiredrole="{ required: true }">
+                            <option v-for="role in roles" :value="role.value">{{role.name}}</option>
+                        </select>
+                    </div><!-- end form-group -->
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 text-center">
                     <br>
                     <a @click="update" class="btn btn-primary">Save</a>
                     <a @click="back()" class="btn btn-success">Done</a>
@@ -163,16 +174,6 @@
             </div>
 
         </form>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Awesome!</strong>
-            <p>Reservation updated!</p>
-        </alert>
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>There are errors on the form.</p>
-        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -193,6 +194,7 @@
                 birthday: '',
                 shirt_size: '',
                 user_id: null,
+                desired_role: '',
                 status: '',
                 companion_limit: 0,
 
@@ -216,6 +218,7 @@
                 userObj: null,
                 errors: [],
                 countries: [],
+                roles: [],
 				showSuccess: false,
 				showError: false,
                 showSaveAlert: false,
@@ -272,14 +275,15 @@
                         companion_limit: this.companion_limit,
                         avatar_upload_id: this.avatar_upload_id,
                         user_id: this.user_id,
+                        desired_role: this.desired_role,
                     }).then(function (response) {
                         $.extend(this, response.data.data);
-						this.showSuccess = true;
+                        this.$root.$emit('showSuccess', 'Reservation updated!');
 						this.hasChanged = false;
-
+                        this.desired_role = response.data.data.desired_role.code;
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
+                        this.$root.$emit('showError', 'There are errors on the form.');
                     });
                 } {
                     this.showError = true;
@@ -313,6 +317,11 @@
                 this.countries = response.data.countries;
             });
 
+            this.$http.get('utilities/team-roles').then(function (response) {
+                _.each(response.data.roles, function (name, key) {
+                    this.roles.push({ value: key, name: name});
+                }.bind(this));
+            });
 
             this.resource.get().then(function (response) {
                 var reservation = response.data.data;
@@ -335,6 +344,7 @@
                 this.email = reservation.email;
                 this.userObj = reservation.user.data;
                 this.selectedAvatar = {source: reservation.avatar};
+                this.desired_role = reservation.desired_role.code;
 
                 this.loaded = true;
             })

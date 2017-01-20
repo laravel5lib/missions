@@ -19,36 +19,36 @@
                             </select>
                         </div>
                     </div>
-								<div class="row">
-									<div class="col-sm-6">
-										<label>Visibility</label>
-										<div class="radios">
-											<label>
-												<input type="radio" v-model="public" :value="false"> Private
-											</label>
-											<label>
-												<input type="radio" v-model="public" :value="true"> Public
-											</label>
-										</div>
-									</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<label>Visibility</label>
+							<div class="radios">
+								<label>
+									<input type="radio" v-model="public" :value="false"> Private
+								</label>
+								<label>
+									<input type="radio" v-model="public" :value="true"> Public
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div :class="{ 'has-error': checkForError('type') }">
+								<label for="type" class="control-label">Type</label>
+								<select id="type" class="form-control" v-model="type"
+										v-validate:type="{ required: true }" required>
+									<option value="">-- select --</option>
+									<option value="ministry">Ministry</option>
+									<option value="family">Family</option>
+									<option value="international">International</option>
+									<option value="media">Media</option>
+									<option value="medical">Medical</option>
+									<option value="leader">Leader</option>
+								</select>
+							</div>
+						</div><!-- end col -->
 
-								</div>
+					</div>
                     <div class="row">
-	                    <div class="col-sm-6">
-	                    	<div :class="{ 'has-error': checkForError('type') }">
-	                        	<label for="type" class="control-label">Type</label>
-	                            <select id="type" class="form-control" v-model="type"
-	                                    v-validate:type="{ required: true }" required>
-	                                <option value="">-- select --</option>
-	                                <option value="ministry">Ministry</option>
-	                                <option value="family">Family</option>
-	                                <option value="international">International</option>
-	                                <option value="media">Media</option>
-	                                <option value="medical">Medical</option>
-	                                <option value="leader">Leader</option>
-	                            </select>
-	                        </div>
-	                    </div><!-- end col -->
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('prospects') }">
 	                        	<label class="control-label">Perfect For</label>
@@ -57,6 +57,16 @@
 	                            <select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
 	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
 	                                </option>
+	                            </select>
+	                        </div>
+	                    </div><!-- end col -->
+	                    <div class="col-sm-6">
+	                    	<div :class="{ 'has-error': checkForError('teamroles') }">
+	                        	<label class="control-label">Available Roles</label>
+	                            <v-select multiple class="form-control" id="group" :value.sync="rolesObj"
+	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
+	                            <select hidden multiple v-model="team_roles" v-validate:teamroles="{ required: true}">
+	                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
 	                            </select>
 	                        </div>
 	                    </div><!-- end col -->
@@ -218,6 +228,7 @@
 				},
 				reps: [],
 				groups: [],
+				teamRolesList: [],
 				prospectsList: [
 					{value: "adults", name: "Adults"},
 					{value: "young adults", name: "Young Adults (18-29)"},
@@ -258,7 +269,8 @@
 				ended_at: '',
 				repObj: null,
 				rep_id: '',
-				roles: [],
+				rolesObj: null,
+				team_roles: [],
 				// details data
 				spots: null,
 				closed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -275,6 +287,9 @@
 			},
 			prospects(){
 				return _.pluck(this.prospectsObj, 'value');
+			},
+			team_roles(){
+				return _.pluck(this.rolesObj, 'value');
 			}
 		},
 		filters: {
@@ -294,6 +309,7 @@
 					difficulty: this.difficulty,
 					companion_limit: this.companion_limit,
 					prospects: this.prospects,
+					team_roles: this.team_roles,
 					started_at: this.started_at,
 					ended_at: this.ended_at,
 					rep_id: this.rep_id,
@@ -351,6 +367,13 @@
 			}
 		},
 		ready(){
+		    // get team roles list
+			this.$http.get('utilities/team-roles').then(function (response) {
+			    _.each(response.data.roles, function (name, key) {
+					this.teamRolesList.push({ value: key, name: name});
+				}.bind(this));
+			});
+
 			if (this.isUpdate) {
 				this.$http.get('trips/' + this.tripId, {include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (response) {
 					let trip = response.data.data;
@@ -360,6 +383,7 @@
 					this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
 					// this.prospects = trip.prospects;
 					this.prospectsObj = _.filter(this.prospectsList, function(p) { return _.contains(trip.prospects, p.value);});
+					this.rolesObj = _.filter(this.teamRolesList, function(p) { return _.contains(trip.team_roles, p.value);});
 
 					this.trip = trip;
 					// this.wizardData.campaign_id = this.trip.campaign_id;

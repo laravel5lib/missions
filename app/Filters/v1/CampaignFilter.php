@@ -22,7 +22,7 @@ class CampaignFilter extends Filter
      *
      * @var array
      */
-    public $searchable = ['name'];
+    public $searchable = ['name', 'country.name'];
 
     /**
      * Filter by has trips or not

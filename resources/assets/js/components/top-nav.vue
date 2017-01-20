@@ -46,9 +46,11 @@
 					<li><a href="/admin/campaigns"><i class="fa fa-globe"></i> Campaigns</a></li>
 					<li><a href="/admin/reservations/current"><i class="fa fa-ticket"></i> Reservations</a></li>
 					<li><a href="/admin/groups"><i class="fa fa-users"></i> Groups</a></li>
-					<li><a href="/admin/interests"><i class="fa fa-question-mark"></i> Interests</a></li>
 					<li><a href="/admin/users"><i class="fa fa-user"></i> Users</a></li>
 					<li><a href="/admin/uploads"><i class="fa fa-picture-o"></i> Uploads</a></li>
+					<li><a href="/admin/funds"><i class="fa fa-usd"></i> Financials</a></li>
+					<li><a href="/admin/causes"><i class="fa fa-tint"></i> Projects</a></li>
+					<li><a href="/admin/records"><i class="fa fa-archive"></i> Records</a></li>
 				</template>
 				<!-- Get Started -->
 				<li class="navlabel">Get Started</li>

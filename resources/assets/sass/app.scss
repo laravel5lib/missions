@@ -87,10 +87,6 @@ a {
     color: $gray-dark;
 }
 
-.text-strike {
-  text-decoration: line-through;
-}
-
 p.large-type {
   max-width: 420px;
 }
@@ -1050,14 +1046,21 @@ h1.home-college-header {
     }
 }
 
-.college-cali-bg {
+.mmc-cali-bg {
   color: #fff;
   background: $gray-dark url('../../images/college/cali-bg.jpg') no-repeat bottom fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding: 100px 0 100px;
+  padding: 50px 0;
+}
+.text-mmc-brush {
+  padding: 45px 0;
+  background-image: url('../../images/college/text-mmc-brush.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Group Carousel */

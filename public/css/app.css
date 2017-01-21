@@ -5952,6 +5952,15 @@ mark,
 .text-capitalize {
   text-transform: capitalize; }
 
+.text-strike {
+  text-decoration: line-through; }
+
+.text-serif {
+  font-family: 'Playfair Display', serif; }
+
+.text-lightweight {
+  font-weight: 400; }
+
 .text-muted {
   color: #bcbcbc; }
 
@@ -10960,7 +10969,6 @@ button.close {
 :root .fa-rotate-270,
 :root .fa-flip-horizontal,
 :root .fa-flip-vertical {
-  -webkit-filter: none;
   filter: none; }
 
 .fa-stack {
@@ -14765,8 +14773,8 @@ body.vjs-full-window {
   text-align: center;
   text-transform: lowercase; }
 
-.vjs-menu li:focus,
-.vjs-menu li:hover {
+.vjs-menu li.vjs-menu-item:focus,
+.vjs-menu li.vjs-menu-item:hover {
   outline: 0;
   background-color: #73859f;
   background-color: rgba(115, 133, 159, 0.5); }
@@ -15653,9 +15661,6 @@ a {
 .pagination > li > a:hover, .pagination > li > a:focus, .pagination > li > span:hover, .pagination > li > span:focus {
   color: #808080; }
 
-.text-strike {
-  text-decoration: line-through; }
-
 p.large-type {
   max-width: 420px; }
 
@@ -16496,11 +16501,18 @@ h1.home-college-header {
   .college-vid-bg-video {
     display: none; } }
 
-.college-cali-bg {
+.mmc-cali-bg {
   color: #fff;
   background: #808080 url("../../images/college/cali-bg.jpg") no-repeat bottom fixed;
   background-size: cover;
-  padding: 100px 0 100px; }
+  padding: 50px 0; }
+
+.text-mmc-brush {
+  padding: 45px 0;
+  background-image: url("../../images/college/text-mmc-brush.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat; }
 
 /* Group Carousel */
 .quote {

@@ -93,37 +93,28 @@ mark,
 }
 
 // Alignment
-.text-left           { text-align: left; }
-.text-right          { text-align: right; }
-.text-center         { text-align: center; }
-.text-justify        { text-align: justify; }
-.text-nowrap         { white-space: nowrap; }
+.text-left           {text-align: left;}
+.text-right          {text-align: right;}
+.text-center         {text-align: center;}
+.text-justify        {text-align: justify;}
+.text-nowrap         {white-space: nowrap;}
 
 // Transformation
-.text-lowercase      { text-transform: lowercase; }
-.text-uppercase      { text-transform: uppercase; letter-spacing: 2px;}
-.text-capitalize     { text-transform: capitalize; }
+.text-lowercase      {text-transform: lowercase;}
+.text-uppercase      {text-transform: uppercase; letter-spacing: 2px;}
+.text-capitalize     {text-transform: capitalize;}
+.text-strike         {text-decoration: line-through;}
+.text-serif          {font-family: 'Playfair Display', serif;}
+.text-lightweight    {font-weight: 400;}
 
 // Contextual colors
-.text-muted {
-  color: $text-muted;
-}
+.text-muted {color: $text-muted;}
 
-.text-primary-darker {
-  color: $text-primary-darker;
-}
-.text-primary-dark {
-  color: $text-primary-dark;
-}
-.text-primary-light {
-  color: $text-primary-light;
-}
-.text-primary-lighter {
-  color: $text-primary-lighter;
-}
-.text-white {
-  color: #fff !important;
-}
+.text-primary-darker {color: $text-primary-darker;}
+.text-primary-dark {color: $text-primary-dark;}
+.text-primary-light {color: $text-primary-light;}
+.text-primary-lighter {color: $text-primary-lighter;}
+.text-white {color: #fff !important;}
 
 @include text-emphasis-variant('.text-primary', $brand-primary);
 

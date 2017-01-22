@@ -458,7 +458,8 @@
 
 			this.$http.get('utilities/team-roles').then(function (response) {
 				_.each(response.data.roles, function (name, key) {
-					this.roles.push({ value: key, name: name});
+				    if (_.contains(this.$parent.trip.team_roles, key))
+						this.roles.push({ value: key, name: name});
 				}.bind(this));
 			});
 

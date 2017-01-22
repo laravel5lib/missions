@@ -5,7 +5,7 @@
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <div class="col-sm-12">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" v-model="name"
+                    <input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
                            placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
@@ -159,6 +159,16 @@
                 countryCodeObj: null,
                 timezones: [],
                 //timezoneObj: null,
+            }
+        },
+        watch: {
+            'name': function (val) {
+                if (typeof val === 'string') {
+                    // pre-populate slug
+                    this.$http.get('utilities/make-slug{/string}', { string: val, hideLoader: true }).then(function (response) {
+                        this.url = response.data.slug;
+                    });
+                }
             }
         },
         computed: {

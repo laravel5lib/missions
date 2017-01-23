@@ -213,6 +213,7 @@
                 let params = {user: this.userId, sort: 'surname', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)
                     params.manager = this.userId;
+                this.exportFilters = params;
                 $.extend(params, this.filters);
                 this.$http.get('passports', params).then(function (response) {
                     this.passports = response.data.data;

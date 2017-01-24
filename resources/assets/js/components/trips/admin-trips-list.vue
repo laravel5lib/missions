@@ -50,6 +50,10 @@
                         Filters
                         <i class="fa fa-filter"></i>
                     </button>
+                    <export-utility url="trips/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                     <a class="btn btn-primary btn-sm" href="trips/create"><i class="fa fa-plus icon-left"></i> New</a>
                 </form>
             </div>
@@ -115,8 +119,10 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../export-utility.vue';
     export default{
         name: 'admin-trips',
+        components: {exportUtility},
         data(){
             return{
                 trips: [],
@@ -131,7 +137,30 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: { current_page: 1 },
                 search: '',
-                showFilters: false
+                showFilters: false,
+                exportOptions: {
+                    id: 'ID',
+                    group_name: 'Group Name',
+                    campaign_name: 'Campaign Name',
+                    spots: 'Spots',
+                    companion_limit: 'Companion Limit',
+                    country: 'Country',
+                    country_code: 'Country Code',
+                    type: 'Type',
+                    difficulty: 'Difficulty',
+                    started_at: 'Statred On',
+                    ended_at: 'Ended On',
+                    rep_name: 'Rep',
+                    todos: 'Todos',
+                    prospects: 'Prospects',
+                    team_roles: 'Team Roles',
+                    visibility: 'Visibility',
+                    published_at: 'Published On',
+                    closed_at: 'Closed On',
+                    created_at: 'Created On',
+                    updated_at: 'Last Updated',
+                },
+                exportFilters: {},
             }
         },
         watch: {
@@ -178,7 +207,7 @@
                     page: this.pagination.current_page,
                 };
                 $.extend(params, this.filters);
-
+                this.exportFilters = params;
                 this.$http.get('trips', params).then(function (response) {
                     this.pagination = response.data.meta.pagination;
                     this.trips = response.data.data;

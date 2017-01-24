@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ReferralRequest;
 use App\Http\Transformers\v1\ReferralTransformer;
+use App\Jobs\ExportReferrals;
 use App\Models\v1\Referral;
 use Carbon\Carbon;
 use Dingo\Api\Contract\Http\Request;
@@ -118,4 +120,20 @@ class ReferralsController extends Controller
 
         return $this->response->noContent();
     }
+
+    /**
+     * Export referrals.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportReferrals($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
 }

@@ -649,7 +649,12 @@ new Vue({
                         return this.impersonatedUser = response.data.data;
                     }.bind(this))
             }
-        }
+        },
+        hasAbility(ability) {
+            let abilities = _.pluck(this.user.abilities.data, 'name');
+            return !!this.user ? _.contains(abilities, ability) : false;
+        },
+
     },
     events: {
         'showSuccess': function (msg) {

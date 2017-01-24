@@ -51,6 +51,7 @@ $api->version('v1', [
     $api->post('groups/submit', 'GroupsController@submit');
     $api->resource('campaigns', 'CampaignsController');
     $api->resource('trips', 'TripsController');
+    $api->post('trips/export', 'TripsController@export');
     $api->get('trips/{id}/todos', 'TripTodosController@index');
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
@@ -72,6 +73,7 @@ $api->version('v1', [
     $api->post('passports/import', 'PassportsController@import');
     $api->resource('visas', 'VisasController');
     $api->resource('referrals', 'ReferralsController');
+    $api->post('referrals/export', 'ReferralsController@export');
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
     $api->resource('teams.members', 'TeamMembersController');
@@ -87,12 +89,16 @@ $api->version('v1', [
     $api->resource('transactions', 'TransactionsController');
     $api->post('transactions/export', 'TransactionsController@export');
     $api->resource('causes', 'ProjectCausesController');
+    $api->post('causes/export', 'ProjectCausesController@export');
     $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');
     $api->resource('initiatives', 'ProjectInitiativesController', ['except' => 'index']);
+    $api->post('initiatives/export', 'ProjectInitiativesController@export');
     $api->resource('projects', 'ProjectsController');
+    $api->post('projects/export', 'ProjectsController@export');
     $api->resource('notes', 'NotesController');
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');
+    $api->post('essays/export', 'EssaysController@export');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');

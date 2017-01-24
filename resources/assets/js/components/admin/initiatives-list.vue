@@ -55,6 +55,10 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
+                    <export-utility url="initiatives/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                     <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/initiatives/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
@@ -126,8 +130,10 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../export-utility.vue';
     export default{
         name: 'initiatives-list',
+        components: {exportUtility},
         props: {
             'causeId': {
                 type: String,
@@ -150,6 +156,18 @@
                 search: '',
                 activeFields: ['type', 'country', 'started_at', 'ended_at'],
                 maxActiveFields: 6,
+                exportOptions: {
+                    id: 'ID',
+                    type: 'Type',
+                    country: 'Country',
+                    country_code: 'Country Code',
+                    short_desc: 'Short Description',
+                    started_at: 'Statred On',
+                    ended_at: 'Ended On',
+                    created_at: 'Created On',
+                    updated_at: 'Last Updated',
+                },
+                exportFilters: {},
             }
         },
         watch: {
@@ -201,7 +219,7 @@
                         break;
                 }
 
-                return params;
+                return this.exportFilters = params;
             },
             searchInitiatives(){
                 // this.$refs.spinner.show();

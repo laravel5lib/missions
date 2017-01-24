@@ -28,6 +28,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 		    <li><a href="/student-life">Student Life</a></li>
 		    <li><a href="/admissions">Admissions</a></li>
 		    <li><a href="/mmc-faqs">FAQ's</a></li>
+		    <li class="pull-right"><a class="btn-college-nav" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
 		<div class="btn-group btn-group-justified visible-xs-block visible-sm-block" role="group">
 			<a class="btn btn-default dropdown-toggle" style="border-radius:0;" data-toggle="dropdown" role="button"
@@ -41,6 +42,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 		    	<li><a href="/student-life">Student Life</a></li>
 		    	<li><a href="/admissions">Admissions</a></li>
 		    	<li><a href="/mmc-faqs">FAQ's</a></li>
+		    	<li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 			</ul>
 		</div>
 	</div><!-- end container -->

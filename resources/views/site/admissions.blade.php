@@ -16,7 +16,7 @@
 		    <li><a href="/student-life">Student Life</a></li>
 		    <li class="active"><a href="/admissions">Admissions</a></li>
 		    <li class="scrollNav"><a href="/admissions#faq">FAQ's</a></li>
-		    <li class="pull-right"><a class="btn btn-info btn-sm" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
+		    <li class="pull-right"><a class="btn-college-nav" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
 		<div class="btn-group btn-group-justified visible-xs-block visible-sm-block" role="group">
 			<a class="btn btn-default dropdown-toggle" style="border-radius:0;" data-toggle="dropdown" role="button"

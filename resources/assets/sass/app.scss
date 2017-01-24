@@ -1062,6 +1062,18 @@ h1.home-college-header {
   background-position: center;
   background-repeat: no-repeat;
 }
+a.btn-college-nav {
+  background-color: $brand-primary;
+  padding-left: 41px !important;
+  padding-right: 41px !important;
+  border-radius:0 !important;
+  color: #fff !important;
+  &:hover,
+  &:focus,
+  &.focus {
+    background-color: $text-primary-dark !important;
+  }
+}
 
 /* Group Carousel */
 .quote {

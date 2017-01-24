@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="position: relative;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
@@ -70,6 +70,10 @@
                         </ul>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
+                    <export-utility url="projects/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
                     <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/projects/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
@@ -152,8 +156,10 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../export-utility.vue';
     export default{
         name: 'projects-list',
+        components: {exportUtility},
         props: {
           'causeId': {
               type: String,
@@ -176,6 +182,17 @@
                 search: '',
                 activeFields: ['name', 'sponsor', 'type', 'percent_raised'],
                 maxActiveFields: 6,
+                exportOptions: {
+                    id: 'ID',
+                    name: 'Name',
+                    initiative_type: 'Initiative Type',
+                    rep_name: 'Rep Name',
+                    sponsor_name: 'Sponsor Name',
+                    plaque: 'Plaque (Prefix + Message)',
+                    created_at: 'Created On',
+                    updated_at: 'Last Updated',
+                },
+                exportFilters: {},
             }
         },
         watch: {
@@ -211,7 +228,7 @@
             getParameters()
             {
                 var params = {
-                    include:'sponsor,initiative',
+                    include:'sponsor,initiative,rep',
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
@@ -228,7 +245,7 @@
                         break;
                 }
 
-                return params;
+                return this.exportFilters = params;
             },
             searchProjects(){
                 // this.$refs.spinner.show();

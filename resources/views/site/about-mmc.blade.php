@@ -69,7 +69,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 		</div><!-- end content-section -->
 	</div><!-- end container -->
 </div><!-- end white-bg -->
-<div class="mmc-cali-bg">
+<div class="mmc-cali-bg" style="background:url('/images/college/vision-bg.jpg') no-repeat bottom fixed;">
 	<div class="container">
 		<div class="content-section">
 			<div class="row">

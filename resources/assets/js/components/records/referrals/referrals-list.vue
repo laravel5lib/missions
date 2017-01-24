@@ -12,7 +12,7 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility url="referrals/export"
+                <export-utility v-if="canExport" url="referrals/export"
                                 :options="exportOptions"
                                 :filters="exportFilters">
                 </export-utility>
@@ -137,6 +137,12 @@
             }
         },
         methods:{
+            canExport() {
+                let roles = _.pluck(this.$root.user.roles.data, 'name');
+                return !!this.$root.user ? _.contains(roles, 'admin') : false;
+                // TODO - use abilities instead of roles
+                // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
+            },
             setReferral(referral) {
                 this.$dispatch('set-document', referral);
             },

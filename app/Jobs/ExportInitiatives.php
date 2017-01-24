@@ -18,8 +18,8 @@ class ExportInitiatives extends Exporter
         return [
             'id'             => $initiative->id,
             'type'           => $initiative->type,
+            'country'        => country($initiative->country_code),
             'country_code'   => $initiative->country_code,
-            'country_name'   => country($initiative->country_code),
             'short_desc'     => $initiative->short_desc,'started_at'     => $initiative->started_at->toDateTimeString(),
             'ended_at'       => $initiative->ended_at->toDateTimeString(),
             'created_at'     => $initiative->created_at->toDateTimeString(),

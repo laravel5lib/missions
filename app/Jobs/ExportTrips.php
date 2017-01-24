@@ -9,16 +9,20 @@ class ExportTrips extends Exporter
     public function data($request)
     {
         return Trip::filter($request)
-            ->with(['group', 'campaign'])
+            ->with(['group', 'campaign', 'rep'])
             ->get();
     }
 
     public function columns($trip)
     {
+        $teamRoles = collect($trip->team_roles)->map(function ($code) {
+            return teamRole($code);
+        })->implode(', ');
+
         return [
             'id'              => $trip->id,
-            'group_id'        => $trip->group_id,
-            'campaign_id'     => $trip->campaign_id,
+            'group_name'      => $trip->group_name,
+            'campaign_name'   => $trip->campaign_name,
             'rep_name'        => $trip->rep ? $trip->rep->name : null,
             'spots'           => $trip->spots,
             'status'          => $trip->status,
@@ -29,10 +33,10 @@ class ExportTrips extends Exporter
             'difficulty'      => $trip->difficulty,
             'started_at'      => $trip->started_at->toDateString(),
             'ended_at'        => $trip->ended_at->toDateString(),
-            'todos'           => $trip->todos,
-            'prospects'       => $trip->prospects,
-            'team_roles'      => $trip->team_roles,
-            'visibility'      => $trip->public,
+            'todos'           => implode(', ', $trip->todos),
+            'prospects'       => implode(', ', $trip->prospects),
+            'team_roles'      => $teamRoles,
+            'visibility'      => $trip->public ? 'public' : 'private',
             'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
             'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),

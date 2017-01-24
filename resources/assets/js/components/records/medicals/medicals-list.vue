@@ -12,6 +12,15 @@
 					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
+				<export-utility url="medical/releases/export"
+            :options="exportOptions"
+            :filters="exportFilters">
+        </export-utility>
+        <import-utility title="Import Medical Release List" 
+            url="medical/releases/import" 
+            :required-fields="importRequiredFields" 
+            :optional-fields="importOptionalFields">
+        </import-utility>
 			</form>
 			<hr class="divider sm inv">
 		</div>
@@ -68,8 +77,11 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import exportUtility from '../../export-utility.vue';
+  import importUtility from '../../import-utility.vue';
 	export default{
 		name: 'medicals-list',
+		components: {exportUtility, importUtility},
 		props: {
 			'userId': {
 				type: String,
@@ -98,16 +110,41 @@
 				},
 				loaded: false,
 				deleteModal: false,
+				exportOptions: {
+            name: 'Name',
+            ins_provider: 'Insurance Provider',
+            ins_policy_no: 'Insurance Policy No.',
+            emergency_name: 'Emergency Name',
+            emergency_phone: 'Emergency Phone',
+            emergency_email: 'Emergency Email',
+            created_at: 'Created On',
+            updated_at: 'Last Updated',
+            user_name: 'User Name',
+            user_email: 'User Email',
+            user_phone_one: 'User Primary Phone',
+            user_phone_two: 'User Secondary Phone',
+            conditions: 'Conditions',
+            allergies: 'Allergies'
+        },
+        exportFilters: {},
+        importRequiredFields: [
+            'name', 'user_email',
+            'ins_provider', 'ins_policy_no'
+        ],
+        importOptionalFields: [
+            'emergency_name', 'emergency_phone', 'emergency_email', 
+            'conditions', 'allergies','created_at', 'updated_at'
+        ]
 			}
 		},
 		watch: {
-            'filters': {
-                handler: function (val) {
-					this.pagination.current_page = 1;
-					this.searchMedicals();
-                },
-                deep: true
-            },
+      'filters': {
+          handler: function (val) {
+						this.pagination.current_page = 1;
+						this.searchMedicals();
+          },
+          deep: true
+      },
 			'search': function (val, oldVal) {
 				this.pagination.current_page = 1;
 				this.searchMedicals();
@@ -122,7 +159,6 @@
 			setMedical(medical) {
 				this.$dispatch('set-document', medical);
 			},
-			// emulate pagination
 			searchMedicals(){
 				let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
 				if (this.includeManaging)
@@ -133,17 +169,14 @@
 					this.medical_releases = response.data.data;
 					this.pagination = response.data.meta.pagination;
 					this.loaded = true;
-					// this.$refs.spinner.hide();
 				});
 			},
 			removeMedicalRelease(medical_release){
 				if (medical_release) {
-					// this.$refs.spinner.show();
 					this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
 						this.medical_releases.$remove(medical_release);
 						this.paginatedMedical_releases.$remove(medical_release);
 						this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
-						// this.$refs.spinner.hide();
 					});
 				}
 			}

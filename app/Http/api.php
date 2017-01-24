@@ -117,6 +117,8 @@ $api->version('v1', [
     $api->group(['prefix' => 'medical'], function($api)
     {
         $api->resource('releases', 'Medical\ReleasesController');
+        $api->post('releases/export', 'Medical\ReleasesController@export');
+        $api->post('releases/import', 'Medical\ReleasesController@import');
         $api->get('conditions', function() {
            return ['data' => \App\Models\v1\MedicalCondition::available()];
         });

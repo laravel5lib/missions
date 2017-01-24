@@ -42,7 +42,7 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         })->map(function($item) {
             return $this->match_columns_to_properties($item);
         })->each(function($item) {
-            return $this->save_new($item);
+            $this->save_new($item);
         })->count();
 
         return [
@@ -95,7 +95,7 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         $matches = [];
 
         foreach($this->matches as $property => $documentColumn)
-        {
+        {   
             if (strpos($property, '.')) {
                 $properties = explode('.', $property);
 
@@ -131,17 +131,9 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
      */
     private function save_new($item)
     {   
-        $data = collect($item)->reject(function($i) {
-            return is_array($i);
-        })->all();
+        $model = $this->save_properties($item);
 
-        $model = app($this->model)->create($data);
-
-        $relations = collect($item)->filter(function($i) {
-            return is_array($i);
-        })->each(function($data, $method) use($model) {
-            $model->{$method}()->create($data);
-        });
+        $this->save_relations($model, $item);
 
         return $item;
     }
@@ -167,6 +159,59 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
     }
 
     /**
+     * Save properties to the model.
+     * 
+     * @param  Array $item
+     * @return Object $model
+     */
+    private function save_properties($item)
+    {   
+        $model = app($this->model);
+
+        $data = collect($item)->reject(function($i, $key) use($model) {
+            return is_array($i) && method_exists($model, $key);
+        })->all();
+
+        $newModel = $model->create($data);
+
+        return $newModel;
+    }
+
+    /**
+     * Save related models.
+     * 
+     * @param  Array $item
+     * @return Array $item
+     */
+    private function save_relations($model, $item)
+    {
+        $relations = collect($item)->filter(function($i, $key) use($model) {
+            return is_array($i) && method_exists($model, $key);
+        })->each(function($data, $method) use($model) {
+
+            // if relationship is a list
+            $isArray = array_first($data, function ($key, $value) {
+                return is_array($value);
+            });
+
+            if ($isArray) {
+
+                collect($data)->each(function($item) use($model, $method) {
+                    $model->{$method}()->create($item);
+                });
+
+            } else {
+                
+                // if relationship is an item
+                $model->{$method}()->create($data);
+            }
+
+        });
+
+        return $item;
+    }
+
+    /**
      * Validate the imported file.
      * 
      * @param  Collection $import
@@ -183,20 +228,32 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         return true;
     }
 
+    /**
+     * Check for missing required columns.
+     * 
+     * @param  Object $import
+     * @return Boolean
+     */
     private function check_for_missing_columns($import)
     {
         $required = Request::get('required');
 
-        $numberOfColumns = $import->select($required)->get()->first()->count();
+        $numberOfColumns = $import->get()->first()->only($required)->count();
 
         return ($numberOfColumns != count($required)) ? true : false;
     }
 
+    /**
+     * Check for missing values in each required column.
+     * 
+     * @param  Object $import
+     * @return Boolean
+     */
     private function check_for_missing_values($import)
     {
         $required = Request::get('required');
 
-        $missingValues = $import->select($required)->get()->filter(function($item) {
+        $missingValues = $import->get()->only($required)->filter(function($item) {
             $item = collect($item);
             return $item->contains(null) || $item->contains('');
         })->count();

@@ -7,6 +7,10 @@ use App\Http\Requests\v1\Medical\ReleaseRequest;
 use App\Http\Transformers\v1\MedicalReleaseTransformer;
 use App\Models\v1\MedicalRelease;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportMedicalReleases;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\MedicalReleaseListImport;
 
 class ReleasesController extends Controller
 {
@@ -117,5 +121,33 @@ class ReleasesController extends Controller
         $release->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export MedicalReleases.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportMedicalReleases($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of MedicalReleases.
+     * 
+     * @param  MedicalReleaseListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, MedicalReleaseListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

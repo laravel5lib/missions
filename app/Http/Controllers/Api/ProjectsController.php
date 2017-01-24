@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ProjectRequest;
 use App\Http\Transformers\v1\ProjectTransformer;
+use App\Jobs\ExportProjects;
 use App\Models\v1\Project;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -114,4 +116,20 @@ class ProjectsController extends Controller
 
         return $this->response->noContent();
     }
+
+    /**
+     * Export referrals.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportProjects($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
 }

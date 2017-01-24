@@ -12,6 +12,10 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
+                <export-utility v-if="canExport" url="referrals/export"
+                                :options="exportOptions"
+                                :filters="exportFilters">
+                </export-utility>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -77,8 +81,10 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../../export-utility.vue';
     export default{
         name: 'referrals-list',
+        components: {exportUtility},
         props: {
             'userId': {
                 type: String,
@@ -102,6 +108,22 @@
                 },
                 loaded: false,
                 deleteModal: false,
+                exportOptions: {
+                    id: 'ID',
+                    name: 'name',
+                    type: 'Type',
+                    referral_name: 'Referral Name',
+                    referral_phone: 'Referral Phone',
+                    referral_email: 'Referral Email',
+                    status: 'Status',
+                    sent_at: 'Sent On',
+                    created_at: 'Created On',
+                    updated_at: 'Last Updated',
+                    user_name: 'User Name',
+                    user_email: 'User Email',
+                    user_phone: 'User Primary Phone',
+                },
+                exportFilters: {},
             }
         },
         watch:{
@@ -115,6 +137,12 @@
             }
         },
         methods:{
+            canExport() {
+                let roles = _.pluck(this.$root.user.roles.data, 'name');
+                return !!this.$root.user ? _.contains(roles, 'admin') : false;
+                // TODO - use abilities instead of roles
+                // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
+            },
             setReferral(referral) {
                 this.$dispatch('set-document', referral);
             },
@@ -132,6 +160,7 @@
                 let params = {user: this.userId, sort: '', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)
                     params.manager = this.userId;
+                this.exportFilters = params;
                 this.$http.get('referrals', params).then(function (response) {
                     this.referrals = response.data.data;
                     this.pagination = response.data.meta.pagination;

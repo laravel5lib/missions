@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\EssayRequest;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Transformers\v1\EssayTransformer;
+use App\Jobs\ExportEssays;
 use App\models\v1\Essay;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
@@ -106,4 +108,20 @@ class EssaysController extends Controller
 
         return $this->response->noContent();
     }
+
+    /**
+     * Export essays.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportEssays($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
 }

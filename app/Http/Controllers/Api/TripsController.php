@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\RegisteredForTrip;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\TripRegistrationRequest;
 use App\Http\Transformers\v1\ReservationTransformer;
+use App\Jobs\ExportTrips;
 use App\Models\v1\Trip;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
@@ -133,4 +135,20 @@ class TripsController extends Controller
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
+
+    /**
+     * Export trips.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportTrips($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
 }

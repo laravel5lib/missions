@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ProjectInitiativeRequest;
 use App\Http\Transformers\v1\ProjectInitiativeTransformer;
+use App\Jobs\ExportInitiatives;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\ProjectInitiative;
 use Illuminate\Http\Request;
@@ -123,4 +125,20 @@ class ProjectInitiativesController extends Controller
 
         return $this->response->noContent();
     }
+
+    /**
+     * Export referrals.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportInitiatives($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
 }

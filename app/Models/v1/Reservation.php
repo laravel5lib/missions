@@ -95,7 +95,8 @@ class Reservation extends Model
      */
     public function companions()
     {
-        return $this->hasMany(Companion::class);
+        return $this->belongsToMany(Reservation::class, 'companions', 'reservation_id', 'companion_reservation_id')
+                    ->withPivot('relationship');
     }
 
     /**

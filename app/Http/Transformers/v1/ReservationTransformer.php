@@ -32,7 +32,7 @@ class ReservationTransformer extends TransformerAbstract
     {
         $reservation->load('tagged', 'avatar', 'fund');
 
-        return [
+        $data = [
             'id'                  => $reservation->id,
             'given_names'         => $reservation->given_names,
             'surname'             => $reservation->surname,
@@ -72,6 +72,12 @@ class ReservationTransformer extends TransformerAbstract
                 ]
             ],
         ];
+
+        if($reservation->pivot) {
+            $data['relationship'] = $reservation->pivot->relationship;
+        }
+
+        return $data;
     }
 
     /**

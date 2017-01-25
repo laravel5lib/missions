@@ -2,13 +2,14 @@
 
 namespace App\Providers;
 
+use League\Glide\Server;
 use App\TransactionHandler;
+use App\Models\v1\Reservation;
+use League\Glide\ServerFactory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use League\Glide\Server;
-use League\Glide\ServerFactory;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -52,6 +53,39 @@ class AppServiceProvider extends ServiceProvider
             $f = finfo_open();
             $result = finfo_buffer($f, $file, FILEINFO_MIME_TYPE);
             return $result == 'text/csv';
+        });
+
+        Validator::extend('is_compatable',function($attribute, $value, $params, $validator) {
+
+            if (isset($params[0])) {
+                $reservation = Reservation::find($params[0]);
+
+                return $reservation ? Reservation::whereHas('trip', function($trip) use($reservation) {
+                            return $trip->where('campaign_id', $reservation->trip->campaign_id)
+                                        ->where('group_id', $reservation->trip->group_id);
+                        })->where('id', $value)->first() : false;
+            }
+            
+            return false;
+        });
+
+        Validator::extend('within_companion_limit',function($attribute, $value, $params, $validator) {
+            
+            if (isset($params[0])) {
+                $reservation = Reservation::find($params[0]);
+                $reservation_within_limit = $reservation ? 
+                       $reservation->companions->count() <= $reservation->companion_limit : 
+                       false;
+
+                $companion = Reservation::find($value);
+                $companion_within_limit = $companion ? 
+                   $companion->companions->count() <= $companion->companion_limit :
+                   false;
+
+               return $reservation_within_limit && $companion_within_limit;
+            }
+
+            return false;
         });
     }
 

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Ramsey\Uuid\Uuid;
 use App\Http\Requests;
+use App\Models\v1\Companion;
 use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
+use Illuminate\Support\Collection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\CompanionRequest;
 use App\Http\Transformers\v1\ReservationTransformer;
@@ -12,10 +15,12 @@ use App\Http\Transformers\v1\ReservationTransformer;
 class CompanionsController extends Controller
 {
     private $reservation;
+    private $companion;
 
-    public function __construct(Reservation $reservation)
+    public function __construct(Reservation $reservation, Companion $companion)
     {
         $this->reservation = $reservation;
+        $this->companion = $companion;
     }
 
     /**
@@ -28,7 +33,7 @@ class CompanionsController extends Controller
     {
         $reservation = $this->reservation->findOrFail($reservation_id);
 
-        return $this->response->collection($reservation->companions, new ReservationTransformer);
+        return $this->response->collection($reservation->companionReservations, new ReservationTransformer);
     }
 
     /**
@@ -39,77 +44,128 @@ class CompanionsController extends Controller
      */
     public function store($reservation_id, CompanionRequest $request)
     {
-        $this->set_companion_relationship($reservation_id, $request);
+        $companion_id = $request->get('companion_reservation_id');
 
-        $this->set_reverse_relationship($reservation_id, $request);
+        $this->set_companions($reservation_id, $companion_id, $request->get('relationship'));
 
         return $this->response->created();
     }
 
     /**
-     * Remove a companion
+     * Remove a companion from the group
      * 
      * @param  String $reservation_id
      * @param  String $companion_reservation_id
      * @return response
      */
-    public function destroy($reservation_id, $companion_reservation_id)
+    public function destroy($reservation_id)
     {
-        $this->remove_companion_relationship($reservation_id, $companion_reservation_id);
+        $reservation = $this->reservation->findOrFail($reservation_id);
 
-        $this->remove_reverse_relationship($reservation_id, $companion_reservation_id);
+        $this->leaveGroup($reservation);
 
         return $this->response->noContent();
     }
 
-    private function set_companion_relationship($reservation_id, $request)
+    private function set_companions($reservation_id, $companion_id, $relationship)
     {
-        $reservation = $this->reservation->findOrFail($reservation_id);
+        $reservation = $this->reservation->with('companions')->find($reservation_id);
+        $companion   = $this->reservation->with('companions')->find($companion_id);
 
-        $reservation->companions()
-                    ->attach($request->get('companion_reservation_id'), [
-                        'relationship' => $request->get('relationship')
-                    ]);
-    }
+        if ($reservation->companions->count() && $companion->companions->count())
+        {
+            $this->leaveGroup($reservation); // leave it's current group
+            $this->joinGroup($reservation, $companion, $relationship); // join it's companion's group
 
-    private function set_reverse_relationship($reservation_id, $request)
-    {
-        $companion = $this->reservation->findOrFail($request->get('companion_reservation_id'));
+        } elseif ( ! $reservation->companions->count() && ! $companion->companions->count())
+        {
+            $this->createGroup($reservation, $companion, $relationship); // create a new group
 
-        $relationship = $this->get_reciprocal_relationship($request->get('relationship'));
-
-        $companion->companions()
-                  ->attach($reservation_id, [
-                    'relationship' => $relationship
-                  ]);
-    }
-
-    private function get_reciprocal_relationship($relationship)
-    {
-        switch ($relationship) {
-            case 'guardian':
-                return 'dependent';
-                break;
-            case 'dependent':
-                return 'guardian';
-                break;
-            default:
-                return $relationship;
-                break;
+        } else
+        {
+            $reservation->companions->count() ? 
+                $this->joinGroup($companion, $reservation, $relationship) : // add companion to reservation's group
+                $this->joinGroup($reservation, $companion, $relationship); // add reservation to companion's group
         }
     }
 
-    private function remove_companion_relationship($reservation_id, $companion_reservation_id)
+    /**
+     * Join a companion group.
+     * 
+     * @param  Collection $new_member
+     * @param  Collection $existing_member
+     * @param  String     $relationship
+     * @return void
+     */
+    private function joinGroup($new_member, $existing_member, $relationship)
     {
-        $reservation = $this->reservation->findOrFail($reservation_id);
+        $group_key = $existing_member->companions->pluck('group_key')->first();
 
-        $reservation->companions()->detach($companion_reservation_id);
+        $companions = $this->companion->where('group_key', $group_key)->get();
+
+        $companions->each(function($companion) use($new_member, $existing_member, $relationship) {
+            $this->companion->create([
+                'reservation_id' => $companion->companion_id,
+                'companion_id'   => $new_member->id,
+                'relationship'   => ($companion->companion_id == $existing_member->id) ? $relationship : 'other',
+                'group_key'      => $companion->group_key
+            ]);
+            $this->companion->create([
+                'reservation_id' => $new_member->id,
+                'companion_id'   => $companion->companion_id,
+                'relationship'   => ($companion->companion_id == $existing_member->id) ? $relationship : 'other',
+                'group_key'      => $companion->group_key
+            ]);
+        });
     }
 
-    private function remove_reverse_relationship($reservation_id, $companion_reservation_id)
+    /**
+     * Create a new companion group.
+     * 
+     * @param  Collection $reservation
+     * @param  Collection $companion
+     * @param  String $relationship
+     * @return void
+     */
+    private function createGroup($reservation, $companion, $relationship)
     {
-        $companion = $this->reservation->findOrFail($companion_reservation_id);
+        $group_key = Uuid::uuid4();
 
-        $companion->companions()->detach($reservation_id);
+        $this->companion->create([
+            'reservation_id' => $reservation->id, 
+            'companion_id' => $companion->id, 
+            'group_key' => $group_key,
+            'relationship' => $relationship
+        ]);
+
+        $this->companion->create([
+            'reservation_id' => $companion->id, 
+            'companion_id' => $reservation->id, 
+            'group_key' => $group_key,
+            'relationship' => $relationship
+        ]);
+    }
+
+    /**
+     * Leave a companion group.
+     * 
+     * @param  Collection $existing_member
+     * @return void
+     */
+    private function leaveGroup($existing_member)
+    {
+        $group_key = $existing_member->companions->pluck('group_key')->first();
+
+        $companions = $this->companion
+                           ->where('group_key', $group_key)
+                           ->whereNested(function ($query) use($existing_member) {
+                                $query->where('reservation_id', '=', $existing_member->id)
+                                      ->orWhere('companion_id', '=', $existing_member->id);
+                            })
+                           ->get();
+
+        $companions->each(function($companion) {
+            $this->companion->destroy($companion->id);
+        });
     }
 }

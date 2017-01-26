@@ -82,7 +82,7 @@ return [
     'url'                  => 'The :attribute format is invalid.',
     'is_csv'               => 'The file is not a .csv file format.',
     'is_compatable'        => 'The :attribute is not a compatable companion.',
-    'within_companion_limit' => 'One or both of the reservations have exceeded their companion limit.',
+    'within_companion_limit' => 'Cannot add companion because it would exceeded the cumulative limit.',
 
     /*
     |--------------------------------------------------------------------------

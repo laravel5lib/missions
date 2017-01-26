@@ -115,6 +115,7 @@ import tripInterestEditor from './components/interests/trip-interests-editor.vue
 import refundForm from './components/financials/transactions/refund-form.vue';
 import transactionDelete from './components/financials/transactions/transaction-delete.vue';
 import fundManager from './components/financials/funds/fund-manager.vue';
+import companionManager from './components/reservations/companion-manager.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -590,7 +591,8 @@ new Vue({
         tripInterestEditor,
         refundForm,
         transactionDelete,
-        fundManager
+        fundManager,
+        companionManager
     },
     http: {
         headers: {

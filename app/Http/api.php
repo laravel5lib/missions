@@ -64,7 +64,9 @@ $api->version('v1', [
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
-    $api->resource('reservations.companions', 'CompanionsController', ['only' => ['index', 'store', 'destroy']]);
+    $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
+    $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
+    $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
     $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');

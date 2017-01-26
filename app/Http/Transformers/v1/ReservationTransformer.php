@@ -249,9 +249,9 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function includeCompanions(Reservation $reservation)
     {
-        $companions = $reservation->companions;
+        $companions = $reservation->companionReservations;
 
-        return $this->collection($companions, new CompanionTransformer);
+        return $this->collection($companions, new ReservationTransformer);
     }
 
     /**

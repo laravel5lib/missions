@@ -108,4 +108,7 @@
         </send-email>
     </div>
 </div><!-- end panel -->
+
+<companion-manager reservation-id="{{ $reservation->id }}"></companion-manager>
+
 @endsection

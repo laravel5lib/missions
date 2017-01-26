@@ -2,14 +2,14 @@
 
 namespace App\Models\v1;
 
-use App\Jobs\Reservations\SyncPaymentsDue;
-use App\UuidForKey;
 use Carbon\Carbon;
+use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
@@ -89,14 +89,24 @@ class Reservation extends Model
     }
 
     /**
-     * Get all of the reservation's companions
+     * Get all of the reservation's companion reservations
      *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function companionReservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'companions', 'companion_id')
+                    ->withPivot('relationship');
+    }
+
+    /**
+     * Get the reservation's companions.
+     * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function companions()
     {
-        return $this->belongsToMany(Reservation::class, 'companions', 'reservation_id', 'companion_reservation_id')
-                    ->withPivot('relationship');
+        return $this->hasMany(Companion::class, 'reservation_id');
     }
 
     /**

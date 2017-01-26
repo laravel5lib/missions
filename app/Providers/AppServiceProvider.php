@@ -72,17 +72,44 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('within_companion_limit',function($attribute, $value, $params, $validator) {
             
             if (isset($params[0])) {
-                $reservation = Reservation::find($params[0]);
-                $reservation_within_limit = $reservation ? 
-                       $reservation->companions->count() <= $reservation->companion_limit : 
-                       false;
+                
+                $companion = Reservation::with('companionReservations')->find($value);
+                $reservation = Reservation::with('companionReservations')->find($params[0]);
 
-                $companion = Reservation::find($value);
-                $companion_within_limit = $companion ? 
-                   $companion->companions->count() <= $companion->companion_limit :
-                   false;
+                if ($companion->companionReservations->count()) {
+                    $companion_limit = $companion->companionReservations->min('companion_limit');
+                    $companion_count = $companion->companionReservations->count();
+                } else {
+                    $companion_limit = $companion->companion_limit;
+                    $companion_count = 0;
+                }
 
-               return $reservation_within_limit && $companion_within_limit;
+                if ($reservation->companionReservations->count()) {
+                    $reservation_limit = $reservation->companionReservations->min('companion_limit');
+                    $reservation_count = $reservation->companionReservations->count();
+                } else {
+                    $reservation_limit = $reservation->companion_limit;
+                    $reservation_count = 0;
+                }
+
+                $limit = collect(
+                    ($companion_limit - $companion_count), 
+                    ($reservation_limit - $reservation_count)
+                )->min();
+
+                return $limit > 0;
+
+               //  $reservation = Reservation::find($params[0]);
+               //  $reservation_within_limit = $reservation ? 
+               //         $reservation->companions->count() < $reservation->companion_limit : 
+               //         false;
+
+               //  $companion = Reservation::find($value);
+               //  $companion_within_limit = $companion ? 
+               //     $companion->companions->count() < $companion->companion_limit :
+               //     false;
+
+               // return $reservation_within_limit && $companion_within_limit;
             }
 
             return false;

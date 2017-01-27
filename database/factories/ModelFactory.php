@@ -896,6 +896,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'donation', function(Faker\
         'donor_id' => $donor['id'],
         'type' => 'donation',
         'amount' => $faker->randomNumber(2),
+        'anonymous' => $faker->boolean(25),
         'details' => [
             'type' => 'card',
             'last_four' => substr($faker->creditCardNumber, -4),

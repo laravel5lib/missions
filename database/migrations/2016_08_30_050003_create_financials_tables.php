@@ -50,6 +50,7 @@ class CreateFinancialsTables extends Migration
             $table->json('details')->nullable();
             $table->uuid('fund_id')->index();
             $table->uuid('donor_id')->nullable()->index();
+            $table->boolean('anonymous')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

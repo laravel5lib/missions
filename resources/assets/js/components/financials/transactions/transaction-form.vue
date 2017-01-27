@@ -82,6 +82,9 @@
                             </select>
                         </div>
                         <div class="col-xs-12">
+                            <label><input type="checkbox" v-model="transaction.anonymous"> Give Anonymously</label>
+                        </div>
+                        <div class="col-xs-12">
                             <label>Comment</label>
                             <textarea class="form-control" v-model="transaction.comment"></textarea>
                         </div>
@@ -262,6 +265,7 @@
             return {
                 transaction: {
                     type: 'donation',
+                    anonymous: false,
                     details: {
                         type: "card",
                         reason: null
@@ -398,7 +402,7 @@
                 this.$http.post('transactions', data).then(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
-                    this.$root.$emit('transactionCreated');
+                    this.$dispatch('transactionCreated');
                 }).error(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');

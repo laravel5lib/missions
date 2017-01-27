@@ -27,7 +27,7 @@ class Transaction extends Model
     protected $with = 'fund';
 
     protected $fillable = [
-        'amount', 'type', 'details', 'fund_id', 'donor_id'
+        'amount', 'type', 'details', 'fund_id', 'donor_id', 'anonymous'
     ];
 
     /**

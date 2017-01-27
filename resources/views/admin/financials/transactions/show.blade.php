@@ -105,7 +105,11 @@
 
                         @if($transaction->details && $transaction->type == 'donation')
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-6">
+                                    <label>Given Anonymously</label>
+                                    <p>{{ $transaction->anonymous ? 'Yes' : 'No' }}</p>
+                                </div>
+                                <div class="col-xs-6">
                                     <label>Payment Type</label>
                                     <p>{{ $transaction->details['type'] or 'n/a' }}</p>
                                 </div>

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use App\Http\Requests;
-use App\Http\Transformers\v1\DonationTransformer;
-use App\Http\Transformers\v1\DonorTransformer;
-use App\Http\Transformers\v1\TransactionTransformer;
 use App\Models\v1\Donor;
 use App\Models\v1\Fundraiser;
-use App\Http\Requests\v1\FundraiserRequest;
-use App\Http\Transformers\v1\FundraiserTransformer;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\FundraiserRequest;
+use App\Http\Transformers\v1\DonorTransformer;
+use App\Http\Transformers\v1\DonationTransformer;
+use App\Http\Transformers\v1\FundraiserTransformer;
+use App\Http\Transformers\v1\TransactionTransformer;
 
 class FundraisersController extends Controller
 {
@@ -64,20 +66,54 @@ class FundraisersController extends Controller
      */
     public function donors($id, Request $request)
     {
+        $per_page = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+
         $fundraiser = $this->fundraiser->findOrFail($id);
 
-        $donors = $fundraiser->donors()
-            ->filter($request->all())
-            ->paginate($request->get('per_page', 10));
+        $amountGivenAnonymously = $fundraiser->donations()->where('anonymous', true)->sum('amount');
 
-        // In order to calculate the total amount donated for the fundraiser
-        // we have to pass in a fund id, a start date, and an end date.
-        return $this->response->paginator($donors, new DonorTransformer([
-            // These values will be used by the donation() method on the donor model.
-            'fund_id' => $fundraiser->fund_id,
-            'started_at' => $fundraiser->started_at,
-            'ended_at' => $fundraiser->ended_at
-        ]));
+        $donors = $fundraiser->donations()
+                             ->where('anonymous', false)
+                             ->with('donor.account.slug')
+                             ->filter($request->all())
+                             ->get()
+                             ->groupBy('donor.id')
+                             ->map(function($donation) {
+                                return [
+                                    'name' => $donation->pluck('donor.name')->first(),
+                                    'total_donated' => $donation->sum('amount'),
+                                    'account_url' => $donation->pluck('donor.account.slug.url')->first()
+                                ];
+                             });
+
+        if ($amountGivenAnonymously > 0) {
+            $donors->put((string) Uuid::uuid4(), [
+                'name' => 'Anonymous',
+                'total_donated' => $amountGivenAnonymously,
+                'account_url' => null
+            ]);
+        }
+        
+        $donors->sortByDesc('total_donated');
+
+        $count = $donors->count();
+
+        $donors = $donors->forPage($page, $per_page)->all();
+
+       return [
+        'data' => $donors, 
+        'meta' => [
+                'pagination' => [
+                    "total" => (int) $count,
+                    "count" => (int) $count,
+                    "per_page" => (int) $per_page,
+                    "current_page" => (int) $page,
+                    "total_pages" => (int) ceil($count / $per_page),
+                    "links" => []
+                ]
+            ]
+        ];
     }
 
     /**

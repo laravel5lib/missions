@@ -52,8 +52,8 @@ class Fund extends Model
     public function donations()
     {
         return $this->transactions()
-                    ->type('donation')
-                    ->latest();
+                    ->type('donation');
+                    // ->latest();
     }
 
     /**

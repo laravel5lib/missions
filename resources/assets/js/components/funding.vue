@@ -50,9 +50,7 @@
                 <div class="list-group">
                     <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
                         <h5>
-                            <a role="button">
-                                {{ donor.name }} <span class="small">donated <span class="text-success">{{donor.total_donated|currency}}</span></span>
-                            </a>
+                            {{ donor.name }} <span class="small">donated <span class="text-success">{{donor.total_donated|currency}}</span></span>
                         </h5>
                     </div>
                 </div>
@@ -85,8 +83,10 @@
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
                         <h5>
                             <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span> was {{ action }}<br>
-                            <small v-if="contains(['donation'], transaction.type)" class="small">by <a :href="'@' + transaction.donor.data.account_url">{{ transaction.donor.data.name }}</a> on
-                                {{ transaction.created_at|moment 'll'}}</small>
+                            <small v-if="contains(['donation'], transaction.type)" class="small">by 
+                            <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
+                            <span v-else>an anonymous donor</span>
+                             on {{ transaction.created_at|moment 'll'}}</small>
                             <br />
                             <small v-if="transaction.details">
                                 <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
@@ -183,7 +183,7 @@
             searchDonors(){
                 // this.$refs.spinner.show();
                 this.$http.get('funds/'+ this.fundId +'/donors', {page: this.donorPagination.current_page}).then(function (response) {
-                    this.donors = response.data.data;
+                    this.donors = _.toArray(response.data.data);
                     this.donorPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });

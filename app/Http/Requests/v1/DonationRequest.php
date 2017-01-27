@@ -25,6 +25,7 @@ class DonationRequest extends FormRequest
     public function rules()
     {
         $rules = [
+            'anonymous'          => 'boolean',
             'amount'             => 'required|numeric',
             'description'        => 'string|max:120',
             'comment'            => 'string|max:120',

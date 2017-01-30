@@ -638,7 +638,6 @@ class User extends Authenticatable implements JWTSubject
         )->where('payable_type', 'reservations')
          ->withBalance()
          ->sortRecent()
-         ->take(5)
          ->get();
 
         return $dues;
@@ -652,10 +651,9 @@ class User extends Authenticatable implements JWTSubject
              ->pluck('requirements')
              ->flatten()
              ->reject(function($item) {
-                 $item->status = 'incomplete';
+                 $item->status = 'incomplete' || 'attention';
              })
-             ->sortBy('due_at')
-             ->take(5);
+             ->sortBy('due_at');
 
         return $requirements;
     }

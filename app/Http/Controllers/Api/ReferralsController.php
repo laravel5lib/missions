@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\ExportRequest;
-use App\Http\Requests\v1\ReferralRequest;
-use App\Http\Transformers\v1\ReferralTransformer;
-use App\Jobs\ExportReferrals;
-use App\Models\v1\Referral;
 use Carbon\Carbon;
+use App\Models\v1\Referral;
+use App\Jobs\ExportReferrals;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Http\Requests\v1\ReferralRequest;
+use App\Services\Importers\ReferralListImport;
+use App\Http\Transformers\v1\ReferralTransformer;
 
 class ReferralsController extends Controller
 {
@@ -134,6 +136,13 @@ class ReferralsController extends Controller
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'
         ]);
+    }
+
+    public function import(ImportRequest $request, ReferralListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 
 }

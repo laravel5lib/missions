@@ -87,9 +87,10 @@
 </template>
 <script type="text/javascript">
     import exportUtility from '../../export-utility.vue';
+    import importUtility from '../../import-utility.vue';
     export default{
         name: 'referrals-list',
-        components: {exportUtility},
+        components: {exportUtility, importUtility},
         props: {
             'userId': {
                 type: String,

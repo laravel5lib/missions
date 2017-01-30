@@ -83,6 +83,7 @@ $api->version('v1', [
     $api->resource('visas/import', 'VisasController@import');
     $api->resource('referrals', 'ReferralsController');
     $api->post('referrals/export', 'ReferralsController@export');
+    $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
     $api->resource('teams.members', 'TeamMembersController');
@@ -108,6 +109,7 @@ $api->version('v1', [
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');
     $api->post('essays/export', 'EssaysController@export');
+    $api->post('essays/import', 'EssaysController@import');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');

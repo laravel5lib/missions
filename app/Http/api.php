@@ -56,6 +56,7 @@ $api->version('v1', [
     $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
     $api->post('trips/export', 'TripsController@export');
+    $api->post('trips/import', 'TripsController@import');
     $api->get('trips/{id}/todos', 'TripTodosController@index');
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
@@ -67,7 +68,6 @@ $api->version('v1', [
     $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
     $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
     $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
-    $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');

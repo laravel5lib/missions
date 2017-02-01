@@ -9,7 +9,7 @@
                 <spinner v-ref:spinner size="sm" text="importing"></spinner>
                 
                 <div class="alert alert-info" v-if="totalRows > 0">
-                    <p>{{ totalImported }} of {{ totalRows }} records were imported. {{ rejected }} duplicates or non-matching records were ignored.</p>
+                    <p>{{ totalRows }} records are being processed. An email will be sent when importing is completed.</p>
                 </div>
 
                 <validator name="validation" :classes="{ invalid: 'has-error' }">
@@ -22,17 +22,20 @@
                     </div>
                     <hr class="divider">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <label>Required Fields</label>
-                            <ul>
-                                <li v-for="required in requiredFields"><code>{{ required }}</code></li>
-                            </ul>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4" v-for="required in requiredFields">
+                            <code>{{ required }}</code>
+                        </div>
+                    </div>
+                    <hr class="divider">
+                    <div class="row">
+                        <div class="col-sm-12">
                             <label>Optional Fields</label>
-                            <ul>
-                                <li v-for="optional in optionalFields"><code>{{ optional }}</code></li>
-                            </ul>
+                        </div>
+                        <div class="col-sm-4" v-for="optional in optionalFields">
+                            <code>{{ optional }}</code>
                         </div>
                     </div>
                 </validator>
@@ -59,6 +62,10 @@
             'optionalFields': {
                 type: Array,
                 default: []
+            },
+            'parentId': {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -104,7 +111,7 @@
                     }
                 });
 
-                this.$http.post(this.url, {file: this.file||undefined, required: this.requiredFields}).then(function (response) {
+                this.$http.post(this.url, {file: this.file||undefined, required: this.requiredFields, email: this.$root.user.email, parent_id: this.parentId}).then(function (response) {
                     this.totalRows = response.data.total_rows;
                     this.totalImported = response.data.total_imported;
                     this.$dispatch('showSuccess', response.data.message);

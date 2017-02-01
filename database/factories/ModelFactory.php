@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 /**
  * Slug Factory
  */
@@ -19,7 +21,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'name'             => $name,
         'email'            => $faker->unique()->safeEmail,
         'alt_email'        => $faker->optional(0.5)->safeEmail,
-        'password'         => str_random(10),
+        'password'         => bcrypt(str_random(10)),
         'gender'           => $faker->randomElement(['male', 'female']),
         'status'           => $faker->randomElement(['single', 'married']),
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
@@ -49,7 +51,7 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
     return array_merge($user, [
         'name'     => 'Administrator',
         'email'    => 'admin@admin.com',
-        'password' => 'secret'
+        'password' => bcrypt('secret')
     ]);
 });
 
@@ -91,23 +93,6 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
         'companion_limit'    => random_int(0, 3),
         'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
-    ];
-});
-
-/**
- * Assignment Factory
- */
-$factory->define(App\Models\v1\Assignment::class, function (Faker\Generator $faker)
-{
-    return [
-        'given_names' => $faker->firstName . ' ' . $faker->firstName,
-        'surname'     => $faker->lastName,
-        'gender'      => $faker->randomElement(['male', 'female']),
-        'status'      => $faker->randomElement(['single', 'married']),
-        'birthday'    => $faker->dateTimeBetween('-60 years', '-12 years'),
-        'user_id'     => $faker->randomElement(App\Models\v1\User::lists('id')->toArray()),
-        'campaign_id' => $faker->randomElement(App\Models\v1\Campaign::lists('id')->toArray()),
-        'type'        => $faker->randomElement(['translator', 'coordinator', 'transportation'])
     ];
 });
 
@@ -154,9 +139,9 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
         'country_code'     => 'ni',
         'short_desc'       => '1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it\'s about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.',
         'page_src'         => '_1n1d2017',
-        'started_at'       => '2017-07-22 00:00:00',
-        'ended_at'         => '2017-07-30 22:59:59',
-        'published_at'     => '2016-01-01 00:00:00',
+        'started_at'       => Carbon::parse('2017-07-22 00:00:00'),
+        'ended_at'         => Carbon::parse('2017-07-30 22:59:59'),
+        'published_at'     => Carbon::parse('2016-01-01 00:00:00'),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
@@ -169,9 +154,9 @@ $factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Gener
         'country_code'     => 'in',
         'short_desc'       => 'Venture deep into southern India as together we Rescue EVERY Child in several villages in the state of Andhra Pradesh. Watch as they enjoy their first Christmas and shower them with more Christmas gifts than their little arms can hold.',
         'page_src'         => '_india',
-        'started_at'       => '2016-12-03 00:00:00',
-        'ended_at'         => '2016-12-11 22:59:59',
-        'published_at'     => '2016-01-01 00:00:00',
+        'started_at'       => Carbon::parse('2016-12-03 00:00:00'),
+        'ended_at'         => Carbon::parse('2016-12-11 22:59:59'),
+        'published_at'     => Carbon::parse('2016-01-01 00:00:00'),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];

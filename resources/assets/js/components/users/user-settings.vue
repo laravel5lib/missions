@@ -413,6 +413,22 @@
                                         <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="LinkedIn Profile">
                                     </div>
                                     <div class="col-sm-12">
+                                        <label class="control-label" for="pintrest">Pinterest</label>
+                                        <input type="text" class="form-control" v-model="pinterest" id="pinterest" placeholder="Printerest Profile">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label" for="google-plus">Google +</label>
+                                        <input type="text" class="form-control" v-model="google" id="google" placeholder="Googe + Profile">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label" for="vimeo">Vimeo</label>
+                                        <input type="text" class="form-control" v-model="vimeo" id="vimeo" placeholder="Vimeo Profile">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label" for="youtube">YouTube</label>
+                                        <input type="text" class="form-control" v-model="youtube" id="youtube" placeholder="YouTube Profile">
+                                    </div>
+                                    <div class="col-sm-12">
                                         <label class="control-label" for="website">Website</label>
                                         <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
                                     </div>
@@ -476,6 +492,10 @@
                 twitter: '',
                 instagram: '',
                 linkedIn: '',
+                pinterest: '',
+                google: '',
+                vimeo: '',
+                youtube: '',
                 website: '',
 
                 // logic variables

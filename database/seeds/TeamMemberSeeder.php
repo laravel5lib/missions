@@ -12,6 +12,5 @@ class TeamMemberSeeder extends Seeder
     public function run()
     {
         factory(App\Models\v1\TeamMember::class, config('seeders.reservations'))->create();
-        factory(App\Models\v1\TeamMember::class, 'assignment', config('seeders.assignments'))->create();
     }
 }

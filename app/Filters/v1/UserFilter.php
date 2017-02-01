@@ -21,7 +21,7 @@ class UserFilter extends Filter
      */
     public $searchable = [
         'name', 'email', 'alt_email', 'city', 'state',
-        'phone_one', 'phone_two', 'zip', 'slug.url'
+        'phone_one', 'phone_two', 'zip'
     ];
 
     /**

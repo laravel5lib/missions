@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\v1\Trip;
+use App\Jobs\ExportTrips;
 use App\Events\RegisteredForTrip;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\ExportRequest;
-use App\Http\Requests\v1\TripRegistrationRequest;
-use App\Http\Transformers\v1\ReservationTransformer;
-use App\Jobs\ExportTrips;
-use App\Models\v1\Trip;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\TripListImport;
 use App\Http\Transformers\v1\TripTransformer;
+use App\Http\Requests\v1\TripRegistrationRequest;
+use App\Http\Transformers\v1\ReservationTransformer;
 
 class TripsController extends Controller
 {
@@ -149,6 +151,19 @@ class TripsController extends Controller
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'
         ]);
+    }
+
+    /**
+     * Import a list of trips.
+     * 
+     * @param  TripListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, TripListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 
 }

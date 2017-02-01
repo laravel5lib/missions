@@ -31,7 +31,8 @@ class Group extends Model
         'city', 'state', 'zip', 'country_code', 'phone_one',
         'phone_two', 'email', 'description',
         'stripe_id', 'card_brand', 'card_last_four',
-        'status'
+        'status', 'avatar_upload_id', 'banner_upload_id',
+        'created_at', 'updated_at'
     ];
 
     /**
@@ -251,6 +252,16 @@ class Group extends Model
     public function slug()
     {
         return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
+     * Get the group's links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function links()
+    {
+        return $this->morphMany(Link::class, 'linkable');
     }
 
     /**

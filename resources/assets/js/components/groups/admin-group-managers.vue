@@ -16,7 +16,7 @@
 		<div class="panel-body">
 			<div class="col-xs-12 panel panel-default" v-for="manager in managers" track-by="id">
 				<h5>
-					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" alt="{{ manager.name }}">
+					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ manager.name }}">
 					{{ manager.name }}
 				</h5>
 				<div style="position:absolute;right:25px;top:22px;">

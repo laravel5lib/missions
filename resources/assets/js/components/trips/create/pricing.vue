@@ -7,7 +7,6 @@
 						<button type="button" class="btn btn-sm btn-primary" @click="toggleNewCost=!toggleNewCost">
 							<i class="fa fa-plus"></i> New Cost
 						</button>
-
 					</div>
 					<hr>
 

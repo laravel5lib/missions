@@ -30,7 +30,7 @@ class Trip extends Model
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
         'companion_limit', 'published_at', 'closed_at',
-        'prospects', 'public', 'team_roles'
+        'prospects', 'public', 'team_roles', 'country_code'
     ];
 
     /**

@@ -458,8 +458,8 @@
                 password_confirmation: null,
                 bio: '',
                 status: '',
-                birthday: null,
-                country_code: null,
+                // birthday: null,
+                // country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -643,6 +643,9 @@
                 this.instagram = _.findWhere(user.links.data, {name: "instagram"}) ? _.findWhere(user.links.data, {name: "instagram"}).url : null;
                 this.linkedIn = _.findWhere(user.links.data, {name: "linkedin"}) ? _.findWhere(user.links.data, {name: "linkedin"}).url : null;
                 this.website = _.findWhere(user.links.data, {name: "website"}) ? _.findWhere(user.links.data, {name: "website"}).url : null;
+                this.dobDay = moment(user.birthday).format('DD');
+                this.dobMonth = moment(user.birthday).format('MM');
+                this.dobYear = moment(user.birthday).format('YYYY');
             }
         },
         ready(){

@@ -116,24 +116,25 @@
                                         <div class="row">
                                             <div class="col-xs-5">
                                                 <select class="form-control" name="dob_month" v-model="dobMonth" required>
-                                                    <option value="01">January</option>
-                                                    <option value="02">February</option>
-                                                    <option value="03">March</option>
-                                                    <option value="04">April</option>
-                                                    <option value="05">May</option>
-                                                    <option value="06">June</option>
-                                                    <option value="07">July</option>
-                                                    <option value="08">August</option>
-                                                    <option value="09">September</option>
-                                                    <option value="10">October</option>
-                                                    <option value="11">November</option>
-                                                    <option value="12">December</option>
+                                                    <option :value="1">January</option>
+                                                    <option :value="2">February</option>
+                                                    <option :value="3">March</option>
+                                                    <option :value="4">April</option>
+                                                    <option :value="5">May</option>
+                                                    <option :value="6">June</option>
+                                                    <option :value="7">July</option>
+                                                    <option :value="8">August</option>
+                                                    <option :value="9">September</option>
+                                                    <option :value="10">October</option>
+                                                    <option :value="11">November</option>
+                                                    <option :value="12">December</option>
                                                 </select>
                                                 <h6 class="help-block lightcolor">Month</h6>
                                             </div>
                                             <div class="col-xs-3">
                                                 <select class="form-control" name="dob_day" v-model="dobDay" required>
-                                                    <option value="01">1</option>
+                                                    <option v-for="day in days" :value="day">{{ day }}</option>
+                                                    <!-- <option value="01">1</option>
                                                     <option value="02">2</option>
                                                     <option value="03">3</option>
                                                     <option value="04">4</option>
@@ -163,13 +164,15 @@
                                                     <option value="28">28</option>
                                                     <option value="29">29</option>
                                                     <option value="30">30</option>
-                                                    <option value="31">31</option>
+                                                    <option value="31">31</option> -->
                                                 </select>
                                                 <h6 class="help-block lightcolor">Day</h6>
                                             </div>
                                             <div class="col-xs-4">
                                                 <select class="form-control" name="dob_year" v-model="dobYear">
-                                                    <option value="1930">1930</option>
+                                                <option v-for="year in years" :value="year">{{ year }}</option>
+
+                                                    <!-- <option value="1930">1930</option>
                                                     <option value="1931">1931</option>
                                                     <option value="1932">1932</option>
                                                     <option value="1933">1933</option>
@@ -254,7 +257,7 @@
                                                     <option value="2012">2012</option>
                                                     <option value="2013">2013</option>
                                                     <option value="2014">2014</option>
-                                                    <option value="2015">2015</option>
+                                                    <option value="2015">2015</option> -->
                                                 </select>
                                                 <h6 class="help-block lightcolor">Year</h6>
                                             </div>
@@ -528,8 +531,26 @@
             },
             birthday() {
                 return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
+                        ? moment(this.dobYear+'-'+this.dobMonth+'-'+this.dobDay).format('YYYY-MM-DD 00:00:00')
                         : null;
+            },
+            years() {
+                var currentYear = new moment().subtract(8, 'years').year(), years = [];
+                startYear = new moment().subtract(100, 'years').year();
+
+                while ( startYear <= currentYear ) {
+                        years.push(startYear++);
+                } 
+
+                return years;
+            },
+            days() {
+                var day = 1, days = [];
+                while ( day <= 31 ) {
+                        days.push(day++);
+                } 
+
+                return days;
             },
         },
         events:{
@@ -569,6 +590,7 @@
                         password_confirmation: this.changePassword ? this.password_confirmation : undefined,
                         bio: this.bio,
                         type: this.type,
+                        birthday: this.birthday,
                         country_code: this.country_code,
                         timezone: this.timezone,
                         phone_one: this.phone_one,

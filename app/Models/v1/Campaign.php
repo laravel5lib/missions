@@ -25,8 +25,9 @@ class Campaign extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'country_code', 'short_desc', 'page_url', 'thumb_src',
-        'started_at', 'ended_at', 'published_at', 'page_src'
+        'name', 'country_code', 'short_desc',
+        'started_at', 'ended_at', 'published_at', 
+        'page_src', 'created_at', 'updated_at', 'deleted_at'
     ];
 
     /**
@@ -46,15 +47,6 @@ class Campaign extends Model
      * @var array
      */
     protected $touches = [];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'countries' => 'array',
-    ];
 
     /**
      * Indicates if the model should be timestamped.
@@ -209,6 +201,17 @@ class Campaign extends Model
     public function scopeActive($query)
     {
         return $query->whereDate('ended_at', '>=', date('Y-m-d'));
+    }
+
+    /**
+     * Get inactive campaigns.
+     * 
+     * @param $query
+     * @return $mixed
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('ended_at', '<', date('Y-m-d'));
     }
 
 }

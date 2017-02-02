@@ -113,9 +113,9 @@
 		        importOptionalFields: [
 		          'short_desc', 'page_filename', 'avatar_filename', 'banner_filename',
 		          'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at',
-              'url'
+                  'url'
 		        ],
-						filters: {}
+				filters: {}
         }
     },
 		watch: {
@@ -151,16 +151,8 @@
         this.exportFilters = params;
 
 				this.$http.get('campaigns', params).then(function (response) {
-				    if (this.type === 'archived') {
-						this.campaigns = _.filter(response.data.data, function (campaign) {
-							return moment(campaign.ended_at).isBefore();
-						});
-					} else {
-						this.campaigns = response.data.data;
-					}
-
+					this.campaigns = response.data.data;
 					this.pagination = response.data.meta.pagination;
-
 				})
 			}
         },

@@ -32,7 +32,6 @@ class User extends Authenticatable implements JWTSubject
         'phone_one', 'phone_two', 'gender', 'status',
         'birthday', 'address', 'city', 'zip', 'country_code',
         'state', 'timezone', 'url', 'public', 'bio',
-        'stripe_id', 'card_brand', 'card_last_four',
         'avatar_upload_id', 'banner_upload_id',
         'created_at', 'updated_at'
     ];
@@ -94,10 +93,10 @@ class User extends Authenticatable implements JWTSubject
      *
      * @param $value
      */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
+    // public function setPasswordAttribute($value)
+    // {
+    //     $this->attributes['password'] = bcrypt($value);
+    // }
 
     /**
      * Set the user's name
@@ -638,7 +637,6 @@ class User extends Authenticatable implements JWTSubject
         )->where('payable_type', 'reservations')
          ->withBalance()
          ->sortRecent()
-         ->take(5)
          ->get();
 
         return $dues;
@@ -652,10 +650,9 @@ class User extends Authenticatable implements JWTSubject
              ->pluck('requirements')
              ->flatten()
              ->reject(function($item) {
-                 $item->status = 'incomplete';
+                 $item->status = 'incomplete' || 'attention';
              })
-             ->sortBy('due_at')
-             ->take(5);
+             ->sortBy('due_at');
 
         return $requirements;
     }

@@ -345,7 +345,9 @@
         importOptionalFields: [
           'alt_email', 'password', 'gender', 'status', 'birthday',
           'phone_one', 'phone_two', 'address', 'city', 'state', 'zip', 
-          'url', 'bio', 'visibility', 'avatar_file_name', 'banner_file_name'
+          'url', 'bio', 'visibility', 'avatar_source', 'banner_source',
+          'facebook_url', 'instagram_url', 'linkedin_url', 'twitter_url',
+          'pinterest_url', 'website_url', 'youtube_url', 'vimeo_url', 'google_url'
         ],
 
 				// filter vars

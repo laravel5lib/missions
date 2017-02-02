@@ -13,9 +13,9 @@
   </div>
   <hr class="divider inv lg">
   <div class="container">
-    <div class="alert alert-success">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 style="margin-bottom:5px;">Welcome to your new dashboard</h4>
+    <div class="alert alert-info">
+      {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> --}}
+      <h4 style="margin-bottom:5px;">Welcome back {{ auth()->user()->name }}!</h4>
       <p class="small">Access the most important information about your account in one place</p>
     </div>
     <div class="row">

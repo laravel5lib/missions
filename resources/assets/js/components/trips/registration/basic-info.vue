@@ -32,7 +32,7 @@
 									<option v-for="role in roles" :value="role.value">{{role.name}}</option>
 								</select>
 						</div><!-- end form-group -->
-						<label>Full Legal Name</label>
+						<label>Given Names</label>
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('firstName') }">
@@ -42,14 +42,9 @@
 										   id="infoFirstName">
 								</div>
 							</div>
-							<!--<div class="col-sm-12">
-								<div class="form-group" :class="{ 'has-error': checkForError('middleName') }">
-									&lt;!&ndash;<label for="infoMiddleName">Middle</label>&ndash;&gt;
-									<input type="text" class="form-control input-sm" v-model="middleName"
-										   v-validate:middleName="{ required: true }" :classes="{ invalid: 'has-error' }" placeholder="Middle"
-										   id="infoMiddleName">
-								</div>
-							</div>-->
+						</div>
+						<label>Surname</label>
+						<div class="row">
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
@@ -167,6 +162,7 @@
 									<select class="form-control input-sm" v-model="relationshipStatus"
 											v-validate:relationshipStatus="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
 										<option value="single">Single</option>
+										<option value="engaged">Engaged</option>
 										<option value="married">Married</option>
 										<option value="divorced">Divorced</option>
 										<option value="widowed">Widowed</option>

@@ -16,6 +16,11 @@
                                 :options="exportOptions"
                                 :filters="exportFilters">
                 </export-utility>
+                <import-utility title="Import Referrals List" 
+                      url="referrals/import" 
+                      :required-fields="importRequiredFields" 
+                      :optional-fields="importOptionalFields">
+                </import-utility>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -82,9 +87,10 @@
 </template>
 <script type="text/javascript">
     import exportUtility from '../../export-utility.vue';
+    import importUtility from '../../import-utility.vue';
     export default{
         name: 'referrals-list',
-        components: {exportUtility},
+        components: {exportUtility, importUtility},
         props: {
             'userId': {
                 type: String,
@@ -124,6 +130,12 @@
                     user_phone: 'User Primary Phone',
                 },
                 exportFilters: {},
+                importRequiredFields: [
+                    'name', 'user_email', 'referral_name', 'referral_email', 'referral_phone'
+                ],
+                importOptionalFields: [
+                    'sent_at', 'created_at', 'updated_at'
+                ],
             }
         },
         watch:{

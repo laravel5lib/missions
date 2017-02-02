@@ -54,6 +54,11 @@
                                     :options="exportOptions"
                                     :filters="exportFilters">
                     </export-utility>
+                    <import-utility title="Import trips List" 
+                      url="trips/import"
+                      :required-fields="importRequiredFields"
+                      :optional-fields="importOptionalFields">
+                    </import-utility>
                     <a class="btn btn-primary btn-sm" href="trips/create"><i class="fa fa-plus icon-left"></i> New</a>
                 </form>
             </div>
@@ -120,9 +125,10 @@
 </template>
 <script type="text/javascript">
     import exportUtility from '../export-utility.vue';
+    import importUtility from '../import-utility.vue';
     export default{
         name: 'admin-trips',
-        components: {exportUtility},
+        components: {exportUtility, importUtility},
         data(){
             return{
                 trips: [],
@@ -161,6 +167,11 @@
                     updated_at: 'Last Updated',
                 },
                 exportFilters: {},
+                importRequiredFields: [
+                  'type', 'country_code', 'started_at', 'ended_at'
+                ],
+                importOptionalFields: [
+                ]
             }
         },
         watch: {

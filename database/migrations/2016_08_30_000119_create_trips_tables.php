@@ -82,6 +82,48 @@ class CreateTripsTables extends Migration
                 ->onDelete('cascade');
         });
 
+        Schema::create('prospects', function(Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+        });
+
+        Schema::create('trip_prospect', function(Blueprint $table) {
+            $table->uuid('trip_id');
+            $table->uuid('prospect_id');
+        });
+
+        Schema::table('trip_prospect', function($table)
+        {
+            $table->foreign('trip_id')
+                  ->references('id')->on('trips')
+                  ->onDelete('cascade');
+
+            $table->foreign('prospect_id')
+                  ->references('id')->on('prospects')
+                  ->onDelete('cascade');
+        });
+
+        Schema::create('assignments', function(Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+        });
+
+        Schema::create('trip_assignment', function(Blueprint $table) {
+            $table->uuid('trip_id');
+            $table->uuid('assignment_id');
+        });
+
+        Schema::table('trip_assignment', function($table)
+        {
+            $table->foreign('trip_id')
+                  ->references('id')->on('trips')
+                  ->onDelete('cascade');
+
+            $table->foreign('assignment_id')
+                  ->references('id')->on('assignments')
+                  ->onDelete('cascade');
+        });
+
     }
 
     /**
@@ -93,8 +135,12 @@ class CreateTripsTables extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::drop('facilitators');
-        Schema::drop('trips');
+        Schema::dropIfExists('facilitators');
+        Schema::dropIfExists('trips');
         Schema::dropIfExists('trip_interests');
+        Schema::dropIfExists('prospects');
+        Schema::dropIfExists('trip_prospect');
+        Schema::dropIfExists('assignments');
+        Schema::dropIfExists('trip_assignment');
     }
 }

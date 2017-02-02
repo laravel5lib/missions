@@ -43,7 +43,7 @@
                                         <input type="checkbox" v-model="activeFields" value="phone_one" :disabled="maxCheck('phone_one')"> Phone
                                     </label>
                                 </li>
-                                <li1>
+                                <li>
                                     <label class="small" style="margin-bottom: 0px;">
                                         <input type="checkbox" v-model="activeFields" value="email" :disabled="maxCheck('email')"> Email
                                     </label>
@@ -273,7 +273,9 @@
                 importOptionalFields: [
                   'email', 'status', 'url', 'created_at', 'updated_at',
                   'phone_one', 'phone_two', 'address', 'city', 'state', 'zip',
-                  'url', 'description', 'visibility', 'logo_source', 'banner_source'
+                  'description', 'visibility', 'logo_source', 'banner_source',
+                  'facebook_url', 'instagram_url', 'linkedin_url', 'twitter_url',
+                  'pinterest_url', 'website_url', 'youtube_url', 'vimeo_url', 'google_url'
                 ],
             }
         },

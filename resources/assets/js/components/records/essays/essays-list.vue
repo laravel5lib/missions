@@ -16,6 +16,11 @@
                                 :options="exportOptions"
                                 :filters="exportFilters">
                 </export-utility>
+                <import-utility title="Import Essays List" 
+                      url="essays/import" 
+                      :required-fields="importRequiredFields" 
+                      :optional-fields="importOptionalFields">
+                </import-utility>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -77,9 +82,10 @@
 </template>
 <script type="text/javascript">
     import exportUtility from '../../export-utility.vue';
+    import importUtility from '../../import-utility.vue';
     export default{
         name: 'essays-list',
-        components: {exportUtility},
+        components: {exportUtility, importUtility},
         props: {
             'userId': {
                 type: String,
@@ -111,6 +117,12 @@
                     updated_at: 'Last Updated',
                 },
                 exportFilters: {},
+                importRequiredFields: [
+                    'author_name', 'user_email', 'subject', 'content'
+                ],
+                importOptionalFields: [
+                    'created_at', 'updated_at'
+                ],
             }
         },
         watch:{

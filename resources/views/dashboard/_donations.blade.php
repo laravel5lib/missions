@@ -7,7 +7,10 @@
             <tbody>
             @forelse(auth()->user()->recentDonations() as $donation)
                 <tr>
-                    <td style="padding:5px 15px;vertical-align:middle;"><h4 class="text-success" style="margin:0px;">${{ $donation->amount }}</h4><span class="small">{{ $donation->donor->name }}</span></td>
+                    <td style="padding:5px 15px;vertical-align:middle;">
+                        <h4 class="text-success" style="margin:0px;">${{ number_format($donation->amount, 2) }} <small> from {{ $donation->donor->name }}</h4>
+                        <span class="small">{{ $donation->description }}</span class="small">
+                        {{-- <span class="small">from {{ $donation->donor->name }}</span></td> --}}
                     <td class="text-right text-muted" style="vertical-align:middle;font-size:10px;">{{ $donation->created_at->diffForHumans() }}</td>
                 </tr>
                 @empty

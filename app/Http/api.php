@@ -56,6 +56,7 @@ $api->version('v1', [
     $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
     $api->post('trips/export', 'TripsController@export');
+    $api->post('trips/import', 'TripsController@import');
     $api->get('trips/{id}/todos', 'TripTodosController@index');
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
@@ -67,7 +68,6 @@ $api->version('v1', [
     $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
     $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
     $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
-    $api->resource('assignments', 'AssignmentsController');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
@@ -83,6 +83,7 @@ $api->version('v1', [
     $api->resource('visas/import', 'VisasController@import');
     $api->resource('referrals', 'ReferralsController');
     $api->post('referrals/export', 'ReferralsController@export');
+    $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
     $api->resource('teams.members', 'TeamMembersController');
@@ -108,6 +109,7 @@ $api->version('v1', [
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');
     $api->post('essays/export', 'EssaysController@export');
+    $api->post('essays/import', 'EssaysController@import');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');

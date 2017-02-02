@@ -413,6 +413,22 @@
                                         <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="LinkedIn Profile">
                                     </div>
                                     <div class="col-sm-12">
+                                        <label class="control-label" for="pintrest">Pinterest</label>
+                                        <input type="text" class="form-control" v-model="pinterest" id="pinterest" placeholder="Printerest Profile">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label" for="google-plus">Google +</label>
+                                        <input type="text" class="form-control" v-model="google" id="google" placeholder="Googe + Profile">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label" for="vimeo">Vimeo</label>
+                                        <input type="text" class="form-control" v-model="vimeo" id="vimeo" placeholder="Vimeo Profile">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="control-label" for="youtube">YouTube</label>
+                                        <input type="text" class="form-control" v-model="youtube" id="youtube" placeholder="YouTube Profile">
+                                    </div>
+                                    <div class="col-sm-12">
                                         <label class="control-label" for="website">Website</label>
                                         <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
                                     </div>
@@ -458,8 +474,6 @@
                 password_confirmation: null,
                 bio: '',
                 status: '',
-                birthday: null,
-                country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -476,6 +490,10 @@
                 twitter: '',
                 instagram: '',
                 linkedIn: '',
+                pinterest: '',
+                google: '',
+                vimeo: '',
+                youtube: '',
                 website: '',
 
                 // logic variables
@@ -643,6 +661,9 @@
                 this.instagram = _.findWhere(user.links.data, {name: "instagram"}) ? _.findWhere(user.links.data, {name: "instagram"}).url : null;
                 this.linkedIn = _.findWhere(user.links.data, {name: "linkedin"}) ? _.findWhere(user.links.data, {name: "linkedin"}).url : null;
                 this.website = _.findWhere(user.links.data, {name: "website"}) ? _.findWhere(user.links.data, {name: "website"}).url : null;
+                this.dobDay = moment(user.birthday).format('DD');
+                this.dobMonth = moment(user.birthday).format('MM');
+                this.dobYear = moment(user.birthday).format('YYYY');
             }
         },
         ready(){

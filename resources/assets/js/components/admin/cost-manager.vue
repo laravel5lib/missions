@@ -14,7 +14,7 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters It!</button>
             </form>
         </aside>
         <form class="panel-body form-inline text-right" novalidate>
@@ -23,6 +23,11 @@
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
             </div>
             <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
+            <import-utility title="Import Costs" 
+              url="costs/import"
+              :required-fields="importRequiredFields"
+              :optional-fields="importOptionalFields">
+            </import-utility>
             <a class="btn btn-primary btn-sm" @click="showAddModal=true">New <i class="fa fa-plus"></i></a>
         </form>
         <hr class="divider sm">
@@ -237,10 +242,11 @@
 </template>
 <script type="text/javascript">
     import paymentManager from './payment-manager.vue'
+    import importUtility from '../import-utility.vue'
     export default{
         name: 'cost-manager',
         props: ['id', 'assignment'],
-        components: { paymentManager },
+        components: { paymentManager, importUtility },
         data(){
             return {
                 costs: [],
@@ -271,6 +277,12 @@
                 search: '',
                 sort: 'active_at',
                 resource: this.$resource('costs{/id}'),
+                importRequiredFields: [
+                    'name', 'amount', 'type', 'active_at'
+                ],
+                importOptionalFields: [
+                    'description', 'created_at', 'updated_at', 'payments'
+                ]
             }
         },
         watch: {

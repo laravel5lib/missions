@@ -54,9 +54,9 @@
                 </ul>
                 <label>Team Roles</label>
                 <ul class="list-unstyled">
-                    @foreach($trip->team_roles as $role)
+                    {{-- @foreach($trip->team_roles as $role)
                         <li class="badge">{{ teamRole($role) }}</li>
-                    @endforeach
+                    @endforeach --}}
                 </ul>
             </div>
             <div class="col-sm-12 col-md-4 text-center">
@@ -65,9 +65,11 @@
                         <label>Type</label>
                         <p class="text-capitalize">{{ $trip->type }}</p>
                         <hr class="divider">
+                        @if($trip->rep_id)
                         <label>Trip Rep</label>
                         <p><a href="/admin/users/{{ $trip->rep_id }}">{{ $trip->rep->name or ''}}</a></p>
                         <hr class="divider">
+                        @endif
                         <label>Tags</label>
                         <ul class="list-unstyled">
                             @forelse($trip->tags as $tag)

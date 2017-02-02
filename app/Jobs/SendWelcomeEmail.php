@@ -42,7 +42,7 @@ class SendWelcomeEmail extends Job implements ShouldQueue
     public function handle(Mailer $mailer)
     {
         $user = $this->user;
-        $email = $this->email ? $this->email : $user->emal;
+        $email = $this->email ? $this->email : $user->email;
 
         $mailer->send('emails.welcome', ['user' => $user], function ($m) use ($user, $email) {
             $m->to($email, $user->name)->subject('Welcome to Missions.Me!');

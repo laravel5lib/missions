@@ -2,9 +2,13 @@
 
 namespace App\Services\Importers;
 
+use App\Jobs\SendImportFinishedEmail;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
+
+    use DispatchesJobs;
 
     /**
      * The model class to use
@@ -34,21 +38,42 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         $this->validate($import);
 
         $totalRows = $import->get()->count();
+        
+        $import->chunk(250, function($results)
+        {
+            $results->reject(function($item) {
+                return $this->find_existing($item);
+            })->map(function($item) {
+                return $this->match_columns_to_properties($item);
+            })->each(function($item) {
+                $this->save_new($item);
+            });
+        }, false);
 
-        $totalImported = $import->get()->reject(function($item) {
-            return $this->find_existing($this->get_duplicates($item));
-        })->filter(function($item) {
-            return $this->find_matching($item);
-        })->map(function($item) {
-            return $this->match_columns_to_properties($item);
-        })->each(function($item) {
-            $this->save_new($item);
-        })->count();
+        $job = (new SendImportFinishedEmail(
+                    $email = Request::get('email'),
+                    $records = $totalRows,
+                    $list = $this->model
+                ))
+                    ->onQueue('import')
+                    ->delay(60 * 5); // 5 minutes
+
+        $this->dispatch($job);
+
+        // $totalImported = $import->get()->reject(function($item) {
+        //     return $this->find_existing($this->get_duplicates($item));
+        // })->filter(function($item) {
+        //     return $this->find_matching($item);
+        // })->map(function($item) {
+        //     return $this->match_columns_to_properties($item);
+        // })->each(function($item) {
+        //     $this->save_new($item);
+        // })->count();
 
         return [
             'total_rows' => $totalRows, 
-            'total_imported' => $totalImported, 
-            'message' => 'Import complete.'
+            // 'total_imported' => $totalImported, 
+            'message' => 'File processed. You will be notified when finished importing.'
         ];
     }
 
@@ -76,25 +101,25 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
      * @param  Array $attributes
      * @return Boolean
      */
-    private function find_existing($attributes)
-    {
-        $item = app($this->model)->firstOrNew($attributes);
+    // private function find_existing($attributes)
+    // {
+    //     $item = app($this->model)->firstOrNew($attributes);
 
-        return $item->id ? true : false;
-    }
+    //     return $item->id ? true : false;
+    // }
 
     /**
-     * Find matching
+     * Find existing
      * 
      * @param  Collection $item
      * @return Boolean
      */
-    private function find_matching($item)
+    private function find_existing($item)
     {   
         $results = [];
         $matches = [];
 
-        foreach($this->matches as $property => $documentColumn)
+        foreach($this->duplicates as $property => $documentColumn)
         {   
             if (strpos($property, '.')) {
                 $properties = explode('.', $property);
@@ -197,13 +222,26 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
             if ($isArray) {
 
                 collect($data)->each(function($item) use($model, $method) {
-                    $model->{$method}()->create($item);
+
+                    $related = class_basename(get_class($model->{$method}()));
+
+                    if ($related == 'BelongsToMany') {
+                        $model->{$method}()->attach($item);
+                    } else {
+                        $model->{$method}()->create($item);
+                    }
                 });
 
             } else {
                 
                 // if relationship is an item
-                $model->{$method}()->create($data);
+                $related = class_basename(get_class($model->{$method}()));
+
+                if ($related == 'BelongsToMany') {
+                    $model->{$method}()->attach($data);
+                } else {
+                    $model->{$method}()->create($data);
+                }
             }
 
         });

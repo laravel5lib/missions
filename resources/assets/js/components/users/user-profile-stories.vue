@@ -47,6 +47,9 @@
                 </form>
             </div>
         </div>
+        <div class="text-center text-muted" v-if="! stories.length">
+            <p><em>You haven't posted any stories yet. New stories will appear here.</em></p>
+        </div>
         <div class="panel panel-default" v-for="story in stories">
             <div class="panel-heading" role="tab" id="heading-{{ story.id }}">
                 <h5>
@@ -109,6 +112,7 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
+            <hr class="divider inv">
             <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 

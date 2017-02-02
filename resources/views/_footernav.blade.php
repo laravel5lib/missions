@@ -38,7 +38,7 @@
       <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center">
         <div class="cta">
           <h5>Take action and partner with us!</h5>
-          <a href="/donate" class="btn btn-primary">Donate</a>
+          <a href="/donate/general" class="btn btn-primary">Donate</a>
         </div><!-- end cta -->
       </div><!-- end col -->
     </div><!-- end row -->

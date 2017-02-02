@@ -35,11 +35,23 @@
           </address>
         </ul>
       </div><!-- end col -->
-      <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center">
-        <div class="cta">
-          <h5>Take action and partner with us!</h5>
-          <a href="/donate" class="btn btn-primary">Donate</a>
-        </div><!-- end cta -->
+      <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+        <hr class="divider">
+        <h6 class="text-uppercase" style="margin-bottom:18px;">Stay Updated</h6>
+        <p class="small">Subscribe to receive email updates about Missions.Me.</p>
+        <!-- Begin MailChimp Signup Form -->
+          <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+          <div id="mc_embed_signup">
+            <form action="//missions.us6.list-manage.com/subscribe/post?u=f45300dcd54baa832da1ab52d&amp;id=83511388e2" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+              <div id="mc_embed_signup_scroll">
+                <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Email Address" required>
+                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_f45300dcd54baa832da1ab52d_83511388e2" tabindex="-1" value=""></div>
+                <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+              </div>
+            </form>
+          </div>
+        <!--End mc_embed_signup-->
       </div><!-- end col -->
     </div><!-- end row -->
   </div><!-- end container -->

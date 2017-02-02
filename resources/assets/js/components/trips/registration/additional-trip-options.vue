@@ -12,6 +12,8 @@
 							{{option.name}}
 							<span class="pull-right">{{option.amount | currency}}</span>
 						</label>
+						<span class="help-block">{{option.description}}</span>
+						<hr class="divider lg">
 					</div>
 					<h5 v-if="optionalCosts.length==0">
 						No additional options available

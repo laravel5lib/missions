@@ -66,6 +66,20 @@ return [
             'engine' => null,
         ],
 
+        'godot' => [
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => '33060',
+            'database' => 'mm_db01',
+            'username' => 'homestead',
+            'password' => 'secret',
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'localhost'),

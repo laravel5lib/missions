@@ -458,8 +458,6 @@
                 password_confirmation: null,
                 bio: '',
                 status: '',
-                // birthday: null,
-                // country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',

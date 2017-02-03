@@ -51,7 +51,7 @@ class ReservationEventListener {
         $name = generateFundName($event->reservation);
         $fund = $event->reservation->fund()->create([
             'name' => $name,
-            'slug' => str_slug($name),
+            'slug' => generate_fund_slug($name),
             'balance' => 0,
             'class' => generateQbClassName($event->reservation),
             'item' => 'Missionary Donation'

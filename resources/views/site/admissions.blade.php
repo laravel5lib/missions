@@ -117,12 +117,12 @@
 						  <div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
-						          How does food and housing work?
+						          How does housing work?
 						        </a>
 						    </div>
 						    <div id="collapseSix" class="panel-collapse collapse">
 						      <div class="panel-body">
-						       	<p class="small">You will be living with other students in our approved student-housing complex. Our meal plan includes a monthly dining debit card that you will be able to use for groceries, restaurants, and midnight pizza runs.</p>
+						       	<p class="small">You will be living in the MMC designated apartments with other students in the stunning Dana Point, California region.</p>
 						      </div>
 						    </div>
 						  </div>
@@ -134,7 +134,7 @@
 						    </div>
 						    <div id="collapseSeven" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">August 24, 2015 - August 1, 2016</p>
+						        <p class="small">August 26, 2017 - August 1, 2018</p>
 						      </div>
 						    </div>
 						  </div>

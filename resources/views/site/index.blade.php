@@ -73,10 +73,10 @@ $('.video-modal').on('hide.bs.modal', function(e) {
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 text-center">
           <img data-aos="fade-up" class="img-responsive" src="../images/home/take-group.png">
-          <h1 data-aos="fade-up">Take Your Group</h1>
+          <h1 data-aos="fade-up">Mobilize A Team</h1>
           <hr data-aos="fade-up" class="divider red-small">
           <hr class="divider inv">
-          <p class="large-line-height" data-aos="fade-up">Missions.Me specializes in taking groups around the world on life-changing missions experiences. Missions.Me can provide your group with custom missions trips created especially for your group.</p>
+          <p class="large-line-height" data-aos="fade-up">Missions.Me produces the most exciting, highest impact group missions experiences in the world.  Let us provide your team a "once in a life-time” level outreach.</p>
           <hr class="divider inv">
           <a data-aos="fade-up" href="{{ url('groups') }}" class="btn btn-info">Take Your Group</a>
         </div><!-- end col -->
@@ -95,7 +95,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           </div><!-- end col -->
           <div class="col-sm-6 home-half-section">
             <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
-            <p class="large-line-height large-type" data-aos="fade-left">The mission of 1Nation1Day is to unite the global church for the salvation and transformation of nations.  We believe we are living in a New Missions Era.</p>
+            <p class="large-line-height large-type" data-aos="fade-left">We are now living in a missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
             <hr class="divider inv">
             <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
           </div><!-- end col -->
@@ -137,7 +137,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
         <h1 class="home-college-header text-white" data-aos="fade-up">Missions.Me College</h1>
         <hr class="divider red-small" data-aos="fade-up">
         <hr class="divider inv">
-        <p class="large-line-height text-white" data-aos="fade-up">We believe success is a byproduct of significance and strive to develop a premiere training facility where individuals are equipped with the tools to live impact filled lives.</p>
+        <p class="large-line-height text-white" data-aos="fade-up">To create a movement of young leaders to <em>Live The Impossible</em> through world-class leadership training, innovative academic instruction, real-world experience, and global outreach opportunities.</p>
         <hr class="divider inv">
         <a href="{{ url('college') }}" class="btn btn-white-hollow" data-aos="fade-up">Learn More</a>
         <hr class="divider inv xlg">
@@ -153,8 +153,8 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <div class="content-section">
       <div class="row">
         <div class="col-sm-12 text-center">
-          <h1 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">Begin changing the world with us.</h1>
-          <a data-aos="zoom-in" data-aos-duration="800" data-aos-delay="200" href="{{ url('login?action=signup') }}" class="btn btn-info btn-lg">Create Your Account</a>
+          <h1 data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100">Begin changing the world with us.</h1>
+          <a data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" href="{{ url('login?action=signup') }}" class="btn btn-default btn-lg" style="background-color:#3e3e3e;border-color:#3e3e3e;">Create Your Account</a>
           <a href="{{ url('donate') }}"><h6 data-aos="zoom-in" data-aos-duration="800" data-aos-delay="300" class="text-uppercase text-white">Or Donate</h6></a>
         </div><!-- end col -->
       </div><!-- end row -->

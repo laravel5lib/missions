@@ -246,7 +246,7 @@
 				        	<div class="panel panel-default">
 								<div class="panel-body">
 									<h4>The Accounting</h4>
-									<p class="small">The independent accounting firm, Richard J Boyse CPA, PC, compiles the finances given to Missions.Me. This accounting firm designates a staff CPA that organizes every Missions.Me financial contribution and ensures that each dollar is applied to its designated missionary or project. Missions.Me also files an annual 990 to the IRS.</p>
+									<p class="small">The independent accounting firm, Richard J Boyse CPA, PC, compiles the finances given to Missions.Me. This accounting firm designates a staff CPA that organizes every Missions.Me financial contribution and ensures that each dollar is applied to its designated missionary or project. Missions.Me files an annual 990 to the IRS and also undergoes an annual voluntary audit.</p>
 								</div>
 				        	</div><!-- end panel -->
 				        </div><!-- end col -->

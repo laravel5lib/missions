@@ -13,6 +13,8 @@ class UsersController extends Controller
     {
         $user = $this->api->get('/users/'.$id);
 
+        if( !$user->public && (auth()->user() ? auth()->user()->id : null) <> $user->id) abort(403);
+
         return view('site.users.profile', compact('user'));
     }
 }

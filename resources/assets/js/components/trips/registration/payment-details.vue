@@ -14,6 +14,8 @@
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
 								<span class="pull-right">{{cost.amount | currency}}</span>
+								<hr class="divider sm inv">
+								<p class="small">{{cost.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -21,7 +23,7 @@
 							<table class="table">
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{toDate(p.due_at)}}</td>
+										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
@@ -31,6 +33,8 @@
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
 								<span class="pull-right">{{cost.amount | currency}}</span>
+								<hr class="divider sm inv">
+								<p class="small">{{cost.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -38,7 +42,7 @@
 							<table class="table">
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{toDate(p.due_at)}}</td>
+										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
@@ -48,6 +52,8 @@
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
 								<span class="pull-right">{{cost.amount | currency}}</span>
+								<hr class="divider sm inv">
+								<p class="small">{{cost.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -55,7 +61,7 @@
 							<table class="table">
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{toDate(p.due_at)}}</td>
+										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
@@ -367,7 +373,7 @@
 				if(date) {
 					return moment(date).format('LL');
 				} else {
-					return 'Due Now';
+					return 'Now';
 				}
 			},
 			resetCaching() {

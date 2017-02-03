@@ -278,6 +278,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'super', function (Faker\Generator
 {
     return [
         'name'                 => 'Super Early Registration',
+        'description'          => 'Discounted cost for early registration and all funds raised early.',
         'active_at'            => '2016-01-01 00:00:00',
         'amount'               => $faker->numberBetween($min = 1000, $max = 1200),
         'type'                 => 'incremental',
@@ -289,6 +290,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'early', function (Faker\Generator
 {
     return [
         'name'                 => 'Early Registration',
+        'description'          => 'Discounted cost for early registration and all funds raised early.',
         'active_at'            => '2017-01-01 00:00:00',
         'amount'               => $faker->numberBetween($min = 1300, $max = 1500),
         'type'                 => 'incremental',
@@ -300,6 +302,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'general', function (Faker\Generat
 {
     return [
         'name'                 => 'General Registration',
+        'description'          => 'Standard cost to register.',
         'active_at'            => '2017-03-01 00:00:00',
         'amount'               => $faker->numberBetween($min = 1600, $max = 1800),
         'type'                 => 'incremental',
@@ -311,6 +314,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'late', function (Faker\Generator 
 {
     return [
         'name'                 => 'Late Registration',
+        'description'          => 'Cost for registering late.',
         'active_at'            => '2017-07-01 00:00:00',
         'amount'               => $faker->numberBetween($min = 1900, $max = 2000),
         'type'                 => 'incremental',
@@ -322,6 +326,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'double', function (Faker\Generato
 {
     return [
         'name'                 => 'Double Room Request',
+        'description'          => 'Requesting a Double Bed Room (hotel room with two beds for a maximum of two people) for comfort purposes.',
         'active_at'            => '2016-01-01 00:00:00',
         'amount'               => 225,
         'type'                 => 'optional',
@@ -333,6 +338,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'triple', function (Faker\Generato
 {
     return [
         'name'                 => 'Triple Room Request',
+        'description'          => 'Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.',
         'active_at'            => '2016-01-01 00:00:00',
         'amount'               => 150,
         'type'                 => 'optional',
@@ -344,6 +350,7 @@ $factory->defineAs(App\Models\v1\Cost::class, 'deposit', function (Faker\Generat
 {
     return [
         'name'                 => 'Deposit',
+        'description'          => 'Non-refundable, non-transferable amount required to secure your initial spot on the trip.',
         'active_at'            => '2016-01-01 00:00:00',
         'amount'               => 100,
         'type'                 => 'static',

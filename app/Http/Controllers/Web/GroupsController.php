@@ -17,13 +17,17 @@ class GroupsController extends Controller
     public function show($id)
     {
         $group = $this->api->get('/groups/'.$id, [
-            'include' => 'social'
+            'include' => 'social,managers'
         ]);
+
+        $authId = auth()->user() ? auth()->user()->id : null;
+
+        if ( !$group->public && ! $group->managers->pluck('id')->contains($authId) ) abort(403);
 
         return view('site.groups.profile', compact('group'));
     }
 
-    public function signup($slug)
+    public function signup($id)
     {
         $group = $this->api->get('/groups/'.$id);
 

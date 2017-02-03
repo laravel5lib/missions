@@ -31,7 +31,7 @@ class Group extends Model
         'city', 'state', 'zip', 'country_code', 'phone_one',
         'phone_two', 'email', 'description',
         'stripe_id', 'card_brand', 'card_last_four',
-        'status'
+        'status','avatar_upload_id', 'banner_upload_id',
     ];
 
     /**

@@ -59,8 +59,8 @@ class GroupRequest extends FormRequest {
             'public'           => 'boolean',
             'managers'         => 'array',
             'tags'             => 'array',
-            'avatar_upload_id' => 'string|exists:uploads',
-            'banner_upload_id' => 'string|exists:uploads',
+            'avatar_upload_id' => 'string|exists:uploads,id',
+            'banner_upload_id' => 'string|exists:uploads,id',
             'status'           => 'in:pending,approved'
         ];
 

@@ -175,6 +175,9 @@
                 if(story) {
                     story.author_id = this.$root.user.id;
                     story.author_type = 'users';
+                    story.publications = [
+                        { type: 'fundraisers', id: this.id },
+                    ];
 
                     if (this.includeProfile) {
                         story.publications.push({ type: 'users', id: this.$root.user.id });

@@ -43,11 +43,11 @@
                       :options="exportOptions"
                       :filters="exportFilters">
                   </export-utility>
-                  <import-utility title="Import Passports List" 
+                  <!-- <import-utility title="Import Passports List" 
                       url="passports/import" 
                       :required-fields="importRequiredFields" 
                       :optional-fields="importOptionalFields">
-                  </import-utility>
+                  </import-utility> -->
             </form>
             <hr class="divider sm inv">
         </div>
@@ -139,7 +139,6 @@
                 selectedPassport: null,
                 //logic vars
                 filters: {
-                    expired: false,
                     sort: 'surname'
                 },
                 showFilters: false,

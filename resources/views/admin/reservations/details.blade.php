@@ -38,7 +38,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <label>Shirt Size</label>
-                    <p>{{ $reservation->shirt_size }}</p>
+                    <p>{{ shirtSize($reservation->shirt_size) }}</p>
                 </div>
                 <div class="col-md-6">
                     <label>Age</label>

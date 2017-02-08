@@ -170,6 +170,8 @@ Vue.use(require('vue-validator'));
 // Vue Textarea Autosize
 var VueAutosize = require('vue-autosize');
 Vue.use(VueAutosize);
+// Vue Truncate
+Vue.use(require('vue-truncate'));
 
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push({

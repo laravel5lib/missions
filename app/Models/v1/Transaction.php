@@ -30,6 +30,16 @@ class Transaction extends Model
         'amount', 'type', 'details', 'fund_id', 'donor_id', 'anonymous'
     ];
 
+    public function getAmountAttribute($value)
+    {
+        return $value/100; // convert to dollars
+    }
+
+     public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value*100; // convert to cents
+    }
+
     /**
      * Get the transactions description.
      *

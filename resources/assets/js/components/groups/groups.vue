@@ -469,7 +469,7 @@
                 // logic vars
                 campaigns:[],
                 groups:[],
-                groupsLimit: 8,
+                groupsLimit: 12,
                 attemptSubmit: false,
                 resource: this.$resource('groups?isPublic=yes'),
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],

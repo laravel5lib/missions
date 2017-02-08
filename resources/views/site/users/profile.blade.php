@@ -44,13 +44,13 @@
                                 <h6 class="small text-muted">/{{ $user->slug->url }}</h6>
                             </div>
                             <div class="col-xs-2">
-                                @can('edit', auth()->user())
+                                @if($user->id == (auth()->user() ? auth()->user()->id : null))
                                 <h4>
                                     <a class="pull-right text-muted" href="{{ url('dashboard/settings') }}">
                                         <i class="fa fa-edit"></i>
                                     </a>
                                 </h4>
-                                @endcan
+                                @endif
                             </div>
                         </div>
                         <p class="small">{{ $user->bio }}</p>
@@ -81,9 +81,9 @@
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
                     <li data-toggle="tooltip" title="Stories" role="presentation" class="active"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-list-ul"></i> <span class="hidden-xs">Stories</span></a></li>
                     <li data-toggle="tooltip" title="Fundraisers" role="presentation"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li>
-                    @can('edit', auth()->user())
+                    @if($user->id == (auth()->user() ? auth()->user()->id : null))
                     <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="{{ url('dashboard') }}"><i class="fa fa-tachometer"></i></a></li>
-                    @endcan
+                    @endif
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="row tab-pane active" id="stories">

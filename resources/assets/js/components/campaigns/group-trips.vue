@@ -48,9 +48,9 @@
 							<p class="badge">{{ trip.status | capitalize }}</p><br>
 							<p class="small">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>
 							<label>Perfect For</label>
-							<p class="small"><span v-for="prospect in trip.prospects">
+							<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
 								{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
-						</span></p>
+						</span><span v-show="trip.prospects.length > 3">...</span></p>
 							<label>Spots Available</label>
 							<p>{{ trip.spots }}</p>
 							<label>Starting At</label>

@@ -41,7 +41,6 @@ class CreateGroupsTables extends Migration
         Schema::create('managers', function (Blueprint $table) {
             $table->uuid('group_id')->index();
             $table->uuid('user_id')->index();
-            $table->json('permissions')->nullable();
             $table->timestamps();
         });
 

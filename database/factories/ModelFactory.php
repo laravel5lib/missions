@@ -986,12 +986,21 @@ $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $fa
 /**
  * Project Cause Factory
  */
-$factory->define(App\Models\v1\ProjectCause::class, function(Faker\Generator $faker) {
+$factory->defineAs(App\Models\v1\ProjectCause::class, 'orphans', function(Faker\Generator $faker) {
     return [
-        'name' => $faker->unique()->randomElement(['Angel House', 'Clean Water']),
+        'name' => 'Angel House',
         'short_desc' => $faker->realText(200),
         'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
-        'countries' => [$faker->countryCode]
+        'countries' => ['in', 'np']
+    ];
+});
+
+$factory->defineAs(App\Models\v1\ProjectCause::class, 'water', function(Faker\Generator $faker) {
+    return [
+        'name' => 'Clean Water',
+        'short_desc' => $faker->realText(200),
+        'upload_id' => $faker->randomElement(App\Models\v1\Upload::pluck('id')->toArray()),
+        'countries' => ['do', 'ni']
     ];
 });
 

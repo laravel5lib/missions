@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('gender', 10)->nullable();
             $table->string('status', 10)->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('weight')->nullable();
+            $table->string('shirt_size')->nullable();
             $table->date('birthday')->nullable();
             $table->string('phone_one', 20)->nullable();
             $table->string('phone_two', 20)->nullable();

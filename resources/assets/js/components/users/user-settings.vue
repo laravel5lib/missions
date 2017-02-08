@@ -330,14 +330,8 @@
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-12">
-                                    <label class="control-label" for="infoAddress">Address 1</label>
-                                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-sm-12">
-                                    <label class="control-label" for="infoAddress2">Address 2</label>
-                                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
+                                    <label class="control-label" for="infoAddress">Address</label>
+                                    <input type="text" class="form-control" v-model="address" id="infoAddress" placeholder="Street Address">
                                 </div>
                             </div>
 
@@ -480,8 +474,7 @@
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
-                address_one: '',
-                address_two: '',
+                address: '',
                 city: '',
                 state: '',
                 zip: '',
@@ -664,8 +657,7 @@
                 this.timezone = user.timezone;
                 this.phone_one = user.phone_one;
                 this.phone_two = user.phone_two;
-                this.address_one = user.address_one;
-                this.address_two = user.address_two;
+                this.address = user.address;
                 this.city = user.city;
                 this.state = user.state;
                 this.zip = user.zip;

@@ -30,6 +30,7 @@
     "vue-resource": "^0.7.4",
     "vue-select": "^1.3.3",
     "vue-strap": "^1.1.29",
-    "vue-validator": "^2.1.7"
+    "vue-validator": "^2.1.7",
+    "vue-truncate": "^1.0.0"
   }
 }

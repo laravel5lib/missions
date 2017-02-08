@@ -51,7 +51,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Shirt Size</label>
-                        <p>{{ $reservation->shirt_size }}</p>
+                        <p>{{ shirtSize($reservation->shirt_size) }}</p>
                     </div>
                     <div class="col-md-6">
                         <label>Age</label>
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Trip Type</label>
-                        <p class="text-capitalize">{{ $reservation->trip->type }} Missionary</p>
+                        <p class="text-capitalize">{{ $reservation->trip->type }}</p>
                     </div>
                     <div class="col-md-6">
                         <label>Start Date</label>

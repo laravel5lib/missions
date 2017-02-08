@@ -2,9 +2,11 @@
 
 namespace App\Http\Transformers\v1;
 
+use Carbon\Carbon;
+use App\Models\v1\User;
+use League\Fractal\ParamBag;
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
-use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class ReservationTransformer extends TransformerAbstract
@@ -152,6 +154,12 @@ class ReservationTransformer extends TransformerAbstract
     public function includeRep(Reservation $reservation)
     {
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
+
+        if ( ! $rep) $rep = new User([
+            'name' => 'none',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
 
         return $this->item($rep, new UserTransformer);
     }

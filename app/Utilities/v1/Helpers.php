@@ -194,3 +194,58 @@ function generate_fundraiser_slug($string)
 
     return $count ? "{$slug}-{$count}" : $slug;
 }
+
+/**
+ * Converts a height value given in feet/inches to cm
+ *
+ * @param int $feet
+ * @param int $inches
+ * @return int
+ */
+function convert_to_cm($feet, $inches = 0) {
+    $inches = ($feet * 12) + $inches;
+    return (int) round($inches / 0.393701);
+}
+
+/**
+ * Converts a height value given in cm to feet and inches
+ *
+ * @param int $cm
+ * @return array
+ */
+function convert_to_inches($cm) {
+    $inches = round($cm * 0.393701);
+    $result = [
+        'ft' => intval($inches / 12),
+        'in' => $inches % 12,
+    ];
+
+    return $result;
+}
+
+/**
+ * Converts a weight value given in pounds
+ * 
+ * @param  integer $pounds
+ * @return integer
+ */
+function convert_to_kg($pounds)
+{
+    return round($pounds * 0.4535); // kilogram per pound
+}
+
+/**
+ * Converts a weight value given in kilograms
+ * 
+ * @param  integer $kg 
+ * @return integer
+ */
+function convert_to_pounds($kg)
+{
+    return round($kg * 2.20462); // pounds per kilogram
+}
+
+function convert_to_cents($dollars)
+{
+    //
+}

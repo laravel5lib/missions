@@ -44,12 +44,15 @@ class CreateTripsTables extends Migration
             $table->foreign('campaign_id')
                 ->references('id')->on('campaigns')
                 ->onDelete('cascade');
+
+            $table->foreign('rep_id')
+                ->references('id')->on('users')
+                ->onDelete('set null');
         });
 
         Schema::create('facilitators', function (Blueprint $table) {
             $table->uuid('trip_id')->index();
             $table->uuid('user_id')->index();
-            $table->json('permissions')->nullable();
             $table->timestamps();
         });
 

@@ -71,7 +71,11 @@
                     <h5>Photo Copy</h5>
                 </div>
                 <div class="panel-body">
+                    @if($passport->upload)
                     <img class="img-responsive" src="{{ image($passport->upload->source) }}" />
+                    @else
+                    <p class="text-center text-muted"><em>No photo copy provided</em></p>
+                    @endif
                 </div>
             </div>
         </div>

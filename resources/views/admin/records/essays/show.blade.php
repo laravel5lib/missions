@@ -11,9 +11,12 @@
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">
                     <div class="btn-group">
-                        <a href="{{ url('admin/records/essays') }}" class="btn btn-primary-darker">
+                        <button class="btn btn-primary-darker" onclick="window.history.back()">
                             <span class="fa fa-chevron-left icon-left"></span>
-                        </a>
+                        </button>
+                        {{-- <a href="{{ url('admin/records/essays') }}" class="btn btn-primary-darker">
+                            <span class="fa fa-chevron-left icon-left"></span>
+                        </a> --}}
                         <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
                             Edit
                         </a>

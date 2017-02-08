@@ -596,6 +596,13 @@
 
 				return this.filters.dueName;
 			}
+			// 'rep': function() {
+			// 	return this.reservation.rep.data.name;
+			// 	// if (this.reservation.rep)
+			// 	// 	return this.reservation.rep.data.name;
+				
+			// 	// return 'none';
+			// }
 		},
 		watch: {
 			// watch filters obj
@@ -616,7 +623,8 @@
 					let arr = {};
 					for (let index in val) {
 						// duplicate rep ids will be overwritten
-						arr[val[index].rep.data.id] = val[index].rep.data;
+						if(val[index].rep)
+							arr[val[index].rep.data.id] = val[index].rep.data;
 					}
 					this.repOptions = arr;
 				}

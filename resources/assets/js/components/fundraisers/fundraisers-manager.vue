@@ -88,7 +88,7 @@
         </template>
 
         <template v-else>
-            {{ fundraiser.description }}
+            <div v-html="fundraiser.description | marked"></div>
         </template>
     </div>
 </template>
@@ -103,7 +103,9 @@
                 showDescriptionSuccess: false,
                 showSettingsSuccess: false,
                 newMarkedContentToggle: true,
-                fundraiser: {},
+                fundraiser: {
+                    description: ''
+                },
                 resource: this.$resource('fundraisers{/id}'),
 
                 // settings vars

@@ -214,4 +214,26 @@ class Campaign extends Model
         return $query->where('ended_at', '<', date('Y-m-d'));
     }
 
+    /**
+     * Get the campaign's avatar
+     * 
+     * @return Object
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/campaign-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
+    }
+
 }

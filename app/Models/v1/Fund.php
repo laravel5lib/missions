@@ -84,7 +84,7 @@ class Fund extends Model
      */
     public function reconcile()
     {
-        $this->balance = (int) $this->transactions()->sum('amount');
+        $this->balance = (int) $this->transactions()->sum('amount') / 100; // convert to dollars
 
         $this->save();
     }

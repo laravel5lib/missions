@@ -29,7 +29,7 @@
 						<a role="button" @click="selectGroup(group)">
 							<h5 style="margin:0px;">
 							<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
-							{{group.name}}
+							{{group.name | truncate 30 '...'}}
 							</h5>
 						</a>
 						</div><!-- end panel-body -->
@@ -74,12 +74,14 @@
 		},
 		methods: {
 			searchGroups() {
+				// search public groups with public published trips belongs to the given campaign id
+				// search by trip type, trip prospects, group type, and group name
 				let resource = this.$resource('trips', {
 					include: "group",
 					onlyPublished: true,
 					onlyPublic: true,
 					campaign: this.id,
-					per_page: 8,
+					per_page: 12,
 					search: this.searchText,
 					page: this.pagination.current_page
 				});

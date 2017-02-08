@@ -25,7 +25,7 @@
       @foreach($campaigns->active()->get() as $campaign)
       <div class="col-lg-3 col-sm-6">
         <div class="circle-tile ">
-          <a href="admin/campaigns/{{ $campaign->id }}"><div class="circle-tile-heading"><img class="img-responsive img-circle" src="{{ image($campaign->avatar->source) }}"></div></a>
+          <a href="admin/campaigns/{{ $campaign->id }}"><div class="circle-tile-heading"><img class="img-responsive img-circle" src="{{ image($campaign->getAvatar()->source) }}"></div></a>
           <div class="circle-tile-content">
             <div class="circle-tile-description">Reservations</div>
             <div class="circle-tile-name">{{ $campaign->name }}</div>

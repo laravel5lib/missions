@@ -47,7 +47,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/medical-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Free Medical Clinics</h6>
+                    <h6 class="text-uppercase text-center">Medical Missions</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -109,7 +109,7 @@
           <div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
             <h6 class="text-uppercase">The History</h6>
             <h1>Since 2004</h1>
-            <p>Missions.Me has successfully hosted thousands of young people on life-transforming missions experiences. Missions.Me has successfully organized large scale outreaches in the following cities and nations:</p>
+            <p>Missions.Me has successfully hosted thousands of people on life-transforming missions experiences. Missions.Me has successfully organized large scale outreaches in the following cities and nations:</p>
           </div><!-- end col -->
         </div><!-- end row -->
         <hr class="divider inv lg">

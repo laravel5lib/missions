@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Jobs\SendWelcomeEmail;
 use App\Models\v1\User;
+use App\Jobs\ExportUsers;
+use App\Jobs\SendWelcomeEmail;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
-use App\Http\Transformers\v1\UserTransformer;
 use App\Http\Requests\v1\ExportRequest;
-use App\Jobs\ExportUsers;
 use App\Http\Requests\v1\ImportRequest;
 use App\Services\Importers\UserListImport;
+use App\Http\Transformers\v1\UserTransformer;
 
 class UsersController extends Controller
 {
@@ -68,7 +68,9 @@ class UsersController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function store(UserRequest $request)
-    {
+    {   
+        $request->merge(['password' => bcrypt($request->get('password'))]);
+
         $user = new User($request->except('url'));
         $user->save();
 

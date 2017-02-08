@@ -2,9 +2,13 @@
 
 namespace App\Services\Importers;
 
+use App\Jobs\SendImportFinishedEmail;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
+
+    use DispatchesJobs;
 
     /**
      * The model class to use
@@ -33,22 +37,43 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
     { 
         $this->validate($import);
 
-        $totalRows = $import->get()->count() - 1; // -1 for header row
+        $totalRows = $import->get()->count();
+        
+        $import->chunk(250, function($results)
+        {
+            $results->reject(function($item) {
+                return $this->find_existing($item);
+            })->map(function($item) {
+                return $this->match_columns_to_properties($item);
+            })->each(function($item) {
+                $this->save_new($item);
+            });
+        }, false);
 
-        $totalImported = $import->get()->reject(function($item) {
-            return $this->find_existing($this->get_duplicates($item));
-        })->filter(function($item) {
-            return $this->find_matching($item);
-        })->map(function($item) {
-            return $this->match_columns_to_properties($item);
-        })->each(function($item) {
-            return $this->save_new($item);
-        })->count();
+        $job = (new SendImportFinishedEmail(
+                    $email = Request::get('email'),
+                    $records = $totalRows,
+                    $list = $this->model
+                ))
+                    ->onQueue('import')
+                    ->delay(60 * 5); // 5 minutes
+
+        $this->dispatch($job);
+
+        // $totalImported = $import->get()->reject(function($item) {
+        //     return $this->find_existing($this->get_duplicates($item));
+        // })->filter(function($item) {
+        //     return $this->find_matching($item);
+        // })->map(function($item) {
+        //     return $this->match_columns_to_properties($item);
+        // })->each(function($item) {
+        //     $this->save_new($item);
+        // })->count();
 
         return [
             'total_rows' => $totalRows, 
-            'total_imported' => $totalImported, 
-            'message' => 'Import complete.'
+            // 'total_imported' => $totalImported, 
+            'message' => 'File processed. You will be notified when finished importing.'
         ];
     }
 
@@ -76,26 +101,26 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
      * @param  Array $attributes
      * @return Boolean
      */
-    private function find_existing($attributes)
-    {
-        $item = app($this->model)->firstOrNew($attributes);
+    // private function find_existing($attributes)
+    // {
+    //     $item = app($this->model)->firstOrNew($attributes);
 
-        return $item->id ? true : false;
-    }
+    //     return $item->id ? true : false;
+    // }
 
     /**
-     * Find matching
+     * Find existing
      * 
      * @param  Collection $item
      * @return Boolean
      */
-    private function find_matching($item)
+    private function find_existing($item)
     {   
         $results = [];
         $matches = [];
 
-        foreach($this->matches as $property => $documentColumn)
-        {
+        foreach($this->duplicates as $property => $documentColumn)
+        {   
             if (strpos($property, '.')) {
                 $properties = explode('.', $property);
 
@@ -131,17 +156,9 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
      */
     private function save_new($item)
     {   
-        $data = collect($item)->reject(function($i) {
-            return is_array($i);
-        })->all();
+        $model = $this->save_properties($item);
 
-        $model = app($this->model)->create($data);
-
-        $relations = collect($item)->filter(function($i) {
-            return is_array($i);
-        })->each(function($data, $method) use($model) {
-            $model->{$method}()->create($data);
-        });
+        $this->save_relations($model, $item);
 
         return $item;
     }
@@ -167,6 +184,72 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
     }
 
     /**
+     * Save properties to the model.
+     * 
+     * @param  Array $item
+     * @return Object $model
+     */
+    private function save_properties($item)
+    {   
+        $model = app($this->model);
+
+        $data = collect($item)->reject(function($i, $key) use($model) {
+            return is_array($i) && method_exists($model, $key);
+        })->all();
+
+        $newModel = $model->create($data);
+
+        return $newModel;
+    }
+
+    /**
+     * Save related models.
+     * 
+     * @param  Array $item
+     * @return Array $item
+     */
+    private function save_relations($model, $item)
+    {
+        $relations = collect($item)->filter(function($i, $key) use($model) {
+            return is_array($i) && method_exists($model, $key);
+        })->each(function($data, $method) use($model) {
+
+            // if relationship is a list
+            $isArray = array_first($data, function ($key, $value) {
+                return is_array($value);
+            });
+
+            if ($isArray) {
+
+                collect($data)->each(function($item) use($model, $method) {
+
+                    $related = class_basename(get_class($model->{$method}()));
+
+                    if ($related == 'BelongsToMany') {
+                        $model->{$method}()->attach($item);
+                    } else {
+                        $model->{$method}()->create($item);
+                    }
+                });
+
+            } else {
+                
+                // if relationship is an item
+                $related = class_basename(get_class($model->{$method}()));
+
+                if ($related == 'BelongsToMany') {
+                    $model->{$method}()->attach($data);
+                } else {
+                    $model->{$method}()->create($data);
+                }
+            }
+
+        });
+
+        return $item;
+    }
+
+    /**
      * Validate the imported file.
      * 
      * @param  Collection $import
@@ -183,20 +266,32 @@ class ImportHandler implements \Maatwebsite\Excel\Files\ImportHandler {
         return true;
     }
 
+    /**
+     * Check for missing required columns.
+     * 
+     * @param  Object $import
+     * @return Boolean
+     */
     private function check_for_missing_columns($import)
     {
         $required = Request::get('required');
 
-        $numberOfColumns = $import->select($required)->get()->first()->count();
+        $numberOfColumns = $import->get()->first()->only($required)->count();
 
         return ($numberOfColumns != count($required)) ? true : false;
     }
 
+    /**
+     * Check for missing values in each required column.
+     * 
+     * @param  Object $import
+     * @return Boolean
+     */
     private function check_for_missing_values($import)
     {
         $required = Request::get('required');
 
-        $missingValues = $import->select($required)->get()->filter(function($item) {
+        $missingValues = $import->get()->only($required)->filter(function($item) {
             $item = collect($item);
             return $item->contains(null) || $item->contains('');
         })->count();

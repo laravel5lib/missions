@@ -27,8 +27,8 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 		    <li><a href="/academics">Academics</a></li>
 		    <li><a href="/student-life">Student Life</a></li>
 		    <li><a href="/admissions">Admissions</a></li>
-		    <li><a href="/mmc-faqs">FAQ's</a></li>
-		    <li class="pull-right"><a class="btn btn-info btn-sm" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
+		    <li><a href="/admissions#faq">FAQ's</a></li>
+		    <li class="pull-right"><a class="btn-college-nav" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 		</ul>
 		<div class="btn-group btn-group-justified visible-xs-block visible-sm-block" role="group">
 			<a class="btn btn-default dropdown-toggle" style="border-radius:0;" data-toggle="dropdown" role="button"
@@ -41,7 +41,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 		    	<li><a href="/academics">Academics</a></li>
 		    	<li><a href="/student-life">Student Life</a></li>
 		    	<li><a href="/admissions">Admissions</a></li>
-		    	<li><a href="/mmc-faqs">FAQ's</a></li>
+		    	<li><a href="/admissions#faq">FAQ's</a></li>
 		    	<li><a target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></li>
 			</ul>
 		</div>
@@ -232,11 +232,13 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 </div>
 <div class="dark-bg-primary">
 	<div class="container" style="padding:20px 0;">
-		<div class="row">
-			<div class="col-sm-10 col-sm-offset-1 text-center">
-				<h3>Apply today and learn about your next steps. <a style="margin-left:20px;" class="btn btn-white-hollow btn-md" href="#">Apply Now</a></h3>
+			<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 text-center">
+				<h3 class="hidden-xs">Apply today and learn about your next steps. <a style="margin-left:20px;" class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a></h3>
+				<div class="visible-xs">
+					<h3>Apply today and learn about your next steps.</h3>
+					<a class="btn btn-white-hollow btn-md" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Now</a>
+				</div>
 			</div><!-- end col -->
-		</div><!-- end row -->
 	</div><!-- end container -->
 </div><!-- end gray-light-bg -->
 @endsection

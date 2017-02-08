@@ -21,13 +21,14 @@ class ReservationsController extends Controller
 
         try {
             $reservation = $this->api->get('reservations/' . $id, ['include' => $include]);
+            $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
         } catch (InternalHttpException $e) {
             $response = $e->getResponse();
 
             return $response;
         }
 
-        return view('dashboard.reservations.' . $tab, compact('reservation', 'tab'));
+        return view('dashboard.reservations.' . $tab, compact('reservation', 'rep', 'tab'));
     }
 
     private function getDataToInclude($tab)

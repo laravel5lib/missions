@@ -13,8 +13,10 @@ class CreateCompanionsTable extends Migration
     public function up()
     {
         Schema::create('companions', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('group_key')->index();
             $table->uuid('reservation_id')->index();
-            $table->uuid('companion_reservation_id')->index();
+            $table->uuid('companion_id')->index();
             $table->string('relationship');
         });
     }

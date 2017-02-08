@@ -22,7 +22,7 @@ class CampaignFilter extends Filter
      *
      * @var array
      */
-    public $searchable = ['name'];
+    public $searchable = ['name', 'country_code'];
 
     /**
      * Filter by has trips or not
@@ -55,6 +55,16 @@ class CampaignFilter extends Filter
     public function current()
     {
         return $this->active();
+    }
+
+    /**
+     * Show Only Current Campaigns
+     *
+     * @return mixed
+     */
+    public function archived()
+    {
+        return $this->inactive();
     }
 
     /**

@@ -7,7 +7,7 @@
             <div class="col-sm-8">
                 <h3 class="text-capitalize">
                     <a href="#">
-                        <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}">
+                        {{-- <img class="img-circle av-left img-sm" src="{{ image($trip->campaign->avatar->source . '?w=100') }}" alt="{{ $trip->campaign->name }}"> --}}
                     </a>
                     {{ $trip->campaign->name }} <small>&middot; Trip Details</small>
                 </h3>

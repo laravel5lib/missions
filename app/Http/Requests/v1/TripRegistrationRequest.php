@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
+use Carbon\Carbon;
 use App\Utilities\v1\Country;
 use App\Utilities\v1\ShirtSize;
-use Carbon\Carbon;
+use Dingo\Api\Http\FormRequest;
 
-class TripRegistrationRequest extends Request
+class TripRegistrationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -415,6 +415,28 @@ body:not(.modal-open) {
     }
   }
 }
+#mc_embed_signup {
+  background:transparent;
+  clear:left;
+  font:14px Montserrat,Helvetica,Arial,sans-serif;
+  form {
+    padding: 0 !important;
+  }
+  input.email {
+    color:#888;
+    padding:12px 18px !important;
+    border:1px solid #e6e6e6;
+    height: 47px !important;
+    margin:0 4% 20px 0 !important;
+  }
+  #mc-embedded-subscribe-form input {
+    width:100%;
+  }
+  #mc-embedded-subscribe {
+    height: 47px;
+    background-color:$brand-primary;
+  }
+}
 
 .input-group .form-control.date-picker-active {
   z-index: initial;
@@ -1061,6 +1083,18 @@ h1.home-college-header {
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+}
+a.btn-college-nav {
+  background-color: $brand-primary;
+  padding-left: 41px !important;
+  padding-right: 41px !important;
+  border-radius:0 !important;
+  color: #fff !important;
+  &:hover,
+  &:focus,
+  &.focus {
+    background-color: $text-primary-dark !important;
+  }
 }
 
 /* Group Carousel */

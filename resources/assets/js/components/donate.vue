@@ -31,6 +31,12 @@
                             <input type="text" class="form-control" v-model="company_name">
                         </div>
                     </div>
+                    <hr class="divider sm inv">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label><input type="checkbox" v-model="anonymous"> Give Anonymously</label>
+                        </div>
+                    </div>
                     <hr class="divider inv sm">
                     <div class="row" v-if="!child">
                         <div class="col-sm-12 text-center">
@@ -143,6 +149,8 @@
                         <p style="margin-bottom:0;">{{recipient}}</p>
                         <label>Designation</label>
                         <p style="margin-bottom:0;">{{title}}</p>
+                        <label>Giving Anonymously</label>
+                        <p style="margin-bottom:0;">{{anonymous ? 'Yes' : 'No'}}</p>
                     </div>
                     <div class="col-sm-12">
                         <hr class="divider inv">
@@ -262,6 +270,7 @@
                 amount: 1,
                 validateWith: 'email',
                 token: null,
+                anonymous: false,
 
                 //card vars
                 card: null,
@@ -444,6 +453,7 @@
                 this.$refs.donationspinner.show();
                 var data = {
                     amount: this.amount,
+                    anonymous: this.anonymous,
                     currency: 'USD', // determined from card token
                     description: 'Donation to ' + this.title,
                     comment: null,

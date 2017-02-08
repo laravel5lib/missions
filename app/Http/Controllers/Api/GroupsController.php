@@ -11,6 +11,10 @@ use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\GroupRequest;
 use App\Http\Transformers\v1\GroupTransformer;
 use Ramsey\Uuid\Uuid;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportGroups;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\GroupListImport;
 
 class GroupsController extends Controller
 {
@@ -82,7 +86,9 @@ class GroupsController extends Controller
     {
         $group = $this->group->create($request->except('url'));
 
-        $group->slug()->create(['url' => $request->get('url')]);
+        $url = $request->get('url') ? $request->get('url') : generate_slug($group->name);
+
+        $group->slug()->create(['url' => $url]);
 
         $group->syncmanagers($request->get('managers'));
 
@@ -146,5 +152,33 @@ class GroupsController extends Controller
         $group->delete();
 
         return $this->response->noContent();
+    }
+
+     /**
+     * Export Groups.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportGroups($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of Groups.
+     * 
+     * @param  GroupListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, GroupListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

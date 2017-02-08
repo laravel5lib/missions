@@ -24,6 +24,10 @@ return [
                 'url' => 'deadlines'
             ],
             [
+                'label' => 'Companions',
+                'url' => 'companions'
+            ],
+            [
                 'label' => 'Legal',
                 'url' => 'legal'
             ]
@@ -122,6 +126,10 @@ return [
             [
                 'label' => 'Deadlines',
                 'url' => 'deadlines'
+            ],
+            [
+                'label' => 'Companions',
+                'url' => 'companions'
             ],
             [
                 'label' => 'Legal',

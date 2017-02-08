@@ -15,10 +15,23 @@ class Donor extends Model
     protected $fillable = [
         'name', 'email', 'phone', 'company', 'zip',
         'country_code', 'account_id', 'account_type',
-        'customer_id', 'address', 'city', 'state'
+        'customer_id', 'address', 'city', 'state',
+        'created_at', 'updated_at'
     ];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['total_donated_amount'];
+
+    public function getTotalDonatedAmountAttribute()
+    {
+        return $this->donations()->sum('amount') / 100; //convert to dollars
+    }
 
     public function account()
     {
@@ -56,10 +69,6 @@ class Donor extends Model
             // These values are passed by default when querying
             // for donations related to a fundraiser.
             $transactions = $transactions->where('fund_id', $designation->get('fund_id'));
-//                ->whereBetween('created_at', [
-//                    $designation->get('started_at'),
-//                    $designation->get('ended_at')
-//                ]);
         }
 
         return $transactions;

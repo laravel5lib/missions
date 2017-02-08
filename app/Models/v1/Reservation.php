@@ -2,14 +2,14 @@
 
 namespace App\Models\v1;
 
-use App\Jobs\Reservations\SyncPaymentsDue;
-use App\UuidForKey;
 use Carbon\Carbon;
+use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
@@ -33,7 +33,8 @@ class Reservation extends Model
         'address', 'city', 'state', 'zip', 'country_code',
         'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
         'passport_id', 'user_id', 'email', 'avatar_upload_id',
-        'arrival_designation', 'testimony_id', 'desired_role'
+        'arrival_designation', 'testimony_id', 'desired_role',
+        'shirt_size', 'height', 'weight', 'created_at', 'updated_at'
     ];
 
     /**
@@ -89,13 +90,24 @@ class Reservation extends Model
     }
 
     /**
-     * Get all of the reservation's companions
+     * Get all of the reservation's companion reservations
      *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function companionReservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'companions', 'companion_id')
+                    ->withPivot('relationship');
+    }
+
+    /**
+     * Get the reservation's companions.
+     * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function companions()
     {
-        return $this->hasMany(Companion::class);
+        return $this->hasMany(Companion::class, 'reservation_id');
     }
 
     /**

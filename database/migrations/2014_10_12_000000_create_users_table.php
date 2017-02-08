@@ -20,6 +20,9 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->string('gender', 10)->nullable();
             $table->string('status', 10)->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('weight')->nullable();
+            $table->string('shirt_size')->nullable();
             $table->date('birthday')->nullable();
             $table->string('phone_one', 20)->nullable();
             $table->string('phone_two', 20)->nullable();
@@ -31,9 +34,6 @@ class CreateUsersTable extends Migration
             $table->string('timezone', 20)->default('US/Eastern');
             $table->string('bio', 120)->nullable();
             $table->boolean('public')->default(false);
-            $table->string('stripe_id')->nullable();
-            $table->string('card_brand')->nullable();
-            $table->string('card_last_four')->nullable();
             $table->uuid('avatar_upload_id')->nullable();
             $table->uuid('banner_upload_id')->nullable();
             $table->rememberToken();

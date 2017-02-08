@@ -19,6 +19,8 @@ class CreateReservationsTables extends Migration
             $table->string('gender');
             $table->string('status');
             $table->string('shirt_size')->nullable();
+            $table->integer('height')->nullable();
+            $table->integer('weight')->nullable();
             $table->date('birthday');
             $table->string('email')->nullable();
             $table->string('phone_one', 20)->nullable();

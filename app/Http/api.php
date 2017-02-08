@@ -49,9 +49,14 @@ $api->version('v1', [
     $api->resource('groups', 'GroupsController');
     $api->get('groups/{id}/notes', 'GroupsController@notes');
     $api->post('groups/submit', 'GroupsController@submit');
+    $api->post('groups/export', 'GroupsController@export');
+    $api->post('groups/import', 'GroupsController@import');
     $api->resource('campaigns', 'CampaignsController');
+    $api->post('campaigns/export', 'CampaignsController@export');
+    $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
     $api->post('trips/export', 'TripsController@export');
+    $api->post('trips/import', 'TripsController@import');
     $api->get('trips/{id}/todos', 'TripTodosController@index');
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
@@ -60,7 +65,9 @@ $api->version('v1', [
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
-    $api->resource('assignments', 'AssignmentsController');
+    $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
+    $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
+    $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
     $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
@@ -72,8 +79,11 @@ $api->version('v1', [
     $api->post('passports/export', 'PassportsController@export');
     $api->post('passports/import', 'PassportsController@import');
     $api->resource('visas', 'VisasController');
+    $api->resource('visas/export', 'VisasController@export');
+    $api->resource('visas/import', 'VisasController@import');
     $api->resource('referrals', 'ReferralsController');
     $api->post('referrals/export', 'ReferralsController@export');
+    $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
     $api->resource('teams.members', 'TeamMembersController');
@@ -99,6 +109,7 @@ $api->version('v1', [
     $api->resource('todos', 'TodosController');
     $api->resource('essays', 'EssaysController');
     $api->post('essays/export', 'EssaysController@export');
+    $api->post('essays/import', 'EssaysController@import');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');
@@ -111,6 +122,8 @@ $api->version('v1', [
     $api->group(['prefix' => 'medical'], function($api)
     {
         $api->resource('releases', 'Medical\ReleasesController');
+        $api->post('releases/export', 'Medical\ReleasesController@export');
+        $api->post('releases/import', 'Medical\ReleasesController@import');
         $api->get('conditions', function() {
            return ['data' => \App\Models\v1\MedicalCondition::available()];
         });

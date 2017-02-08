@@ -101,6 +101,8 @@ class AuthController extends Controller
     {
         $slug = generate_slug($request->get('name'));
 
+        $request->merge(['password' => bcrypt($request->get('password'))]);
+
         $user = $this->user->create($request->all());
 
         $user->slug()->create(['url' => $slug]);

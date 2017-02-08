@@ -24,7 +24,8 @@ class MedicalRelease extends Model
      */
     protected $fillable = [
         'user_id', 'ins_provider', 'ins_policy_no',
-        'is_risk', 'name', 'emergency_contact'
+        'is_risk', 'name', 'emergency_contact', 
+        'created_at', 'updated_at'
     ];
 
     /**

@@ -375,6 +375,7 @@
                 exportOptions: {
                     description: 'Description',
                     amount: 'Amount',
+                    anonymous: 'Is Anonymous',
                     payment_type: 'Payment Type',
                     transaction_type: 'Transaction Type',
                     date: 'Transaction Date',

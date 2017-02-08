@@ -25,7 +25,8 @@ class Fundraiser extends Model
      */
     protected $fillable = [
         'name', 'started_at', 'ended_at', 'goal_amount', 'description',
-        'sponsor_id', 'sponsor_type', 'url', 'type', 'public', 'show_donors'
+        'sponsor_id', 'sponsor_type', 'url', 'type', 'public', 'show_donors',
+        'created_at', 'updated_at'
     ];
 
     /**
@@ -84,8 +85,6 @@ class Fundraiser extends Model
     public function donations()
     {
         return $this->fund->donations();
-//                          ->from($this->started_at)
-//                          ->to($this->ended_at);
     }
 
     /**
@@ -105,10 +104,7 @@ class Fundraiser extends Model
      */
     public function donors()
     {
-        return $this->fund
-                    ->donors();
-//                    ->wherePivot('created_at', '>=', $this->started_at)
-//                    ->wherePivot('created_at', '<=', $this->ended_at);
+        return $this->fund->donors();
     }
 
     /**

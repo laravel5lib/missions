@@ -184,6 +184,8 @@ class TripTransformer extends TransformerAbstract
     {
         $rep = $trip->rep;
 
+        if ( ! $rep) return null;
+
         return $this->item($rep, new UserTransformer);
     }
 

@@ -7,8 +7,21 @@
             <tbody>
             @forelse(auth()->user()->outstandingRequirements() as $requirement)
                 <tr>
-                    <td style="padding:10px 15px;">{{ $requirement->requirement->name }}</td>
-                    <td style="padding:10px 15px;font-size:10px;vertical-align:middle;" class="text-right text-muted">{{ $requirement->requirement->due_at->format('M j') }}</td>
+                    <td style="padding:10px 15px;">
+                        <h4 style="margin:0px;">{{ $requirement->requirement->name }}</h4>
+                        <span class="small">{{ $requirement->reservation->name }}'s trip to 
+                        {{ country($requirement->reservation->trip->country_code) }}</span>
+                    </td>
+                    
+                    <td class="text-right" style="padding:10px 15px;">
+                        @if ($requirement->requirement->due_at->isPast())
+                            <span class="text-danger">Past Due</span>
+                        @else
+                            <span class="text-info">
+                                Due in {{ $requirement->requirement->due_at->diffForHumans(null, true) }}
+                            </span>
+                        @endif
+                    </td>
                 </tr>
                 @empty
                     <div style="padding: 40px 0;">

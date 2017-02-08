@@ -38,6 +38,13 @@ class ReservationFilter extends Filter
         'phone_two', 'zip', 'city', 'state'
     ];
 
+    public function ignore($ids)
+    {
+        if($ids == []) return $this;
+
+        return $this->whereNotIn('id', $ids);
+    }
+
     /**
      * By users.
      *

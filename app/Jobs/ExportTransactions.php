@@ -26,6 +26,7 @@ class ExportTransactions extends Exporter
             'date' => $transaction->created_at->toDateTimeString(),
             'fund_name' => $transaction->fund->name,
             'payment_type' => isset($transaction->details['type']) ? $transaction->details['type'] : null,
+            'anonymous' => $transaction->anonymous ? 'Yes' : 'No',
             'donor_name' => null,
             'donor_company' => null,
             'donor_email' => null,

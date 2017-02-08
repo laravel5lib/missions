@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\v1\EssayRequest;
-use App\Http\Requests\v1\ExportRequest;
-use App\Http\Transformers\v1\EssayTransformer;
-use App\Jobs\ExportEssays;
 use App\models\v1\Essay;
+use App\Jobs\ExportEssays;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\EssayRequest;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\EssayListImport;
+use App\Http\Transformers\v1\EssayTransformer;
 
 class EssaysController extends Controller
 {
@@ -122,6 +124,20 @@ class EssaysController extends Controller
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'
         ]);
+    }
+
+    /**
+     * Import essays.
+     * 
+     * @param  ImportRequest   $request 
+     * @param  EssayListImport $import  
+     * @return response                   
+     */
+    public function import(ImportRequest $request, EssayListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 
 }

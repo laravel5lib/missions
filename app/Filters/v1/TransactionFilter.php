@@ -26,6 +26,16 @@ class TransactionFilter extends Filter
         'type', 'amount', 'created_at'
     ];
 
+    public function anonymous()
+    {
+        return $this->where('anonymous', true);
+    }
+
+    public function undisclosed()
+    {
+        return $this->where('anonymous', false);
+    }
+
     /**
      * By fund.
      *

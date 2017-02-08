@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <div style="display:inline-block;">
-            <img class="img-circle img-sm" src="{{ image($reservation->user->avatar->source.'?w=50&h=50') }}">
+            <img class="img-circle img-sm" src="{{ image($reservation->user->getAvatar()->source.'?w=50&h=50') }}">
         </div>
         <div style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">
             <label style="margin-bottom:0px;font-size:10px;">Managing User</label>
@@ -9,11 +9,11 @@
             <p style="font-size:10px;margin-top:3px;"><i class="fa fa-phone"></i> <a href="tel:{{ $reservation->user->phone_one }}">{{ $reservation->user->phone_one }}</a> / <i class="fa fa-envelope"></i> <a href="mailto:{{ $reservation->user->email }}">{{ $reservation->user->email }}</a></p>
         </div>
     </div><!-- end panel-heading -->
-
+    
     @if($rep)
     <div class="panel-heading">
         <div style="display:inline-block;">
-            <img class="img-circle img-sm" src="{{ image($rep->avatar->source.'?w=50&h=50') }}">
+            <img class="img-circle img-sm" src="{{ image($rep->getAvatar()->source.'?w=50&h=50') }}">
         </div>
         <div style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">
             <label style="margin-bottom:0px;font-size:10px;">Assigned Trip Rep</label>

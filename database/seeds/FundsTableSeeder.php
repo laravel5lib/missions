@@ -14,6 +14,7 @@ class FundsTableSeeder extends Seeder
         factory(App\Models\v1\Fund::class)->create([
             'name' => 'Missions.Me',
             'balance' => 0,
+            'slug' => 'general',
             'class' => 'General',
             'item' => 'General Donation',
             'fundable_type' => 'groups',

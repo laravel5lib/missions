@@ -15,12 +15,15 @@ class TeamRole {
     ];
 
     protected static $general = [
-        'MISS' => 'Missionary',
+        'MISS' => 'Missionary (13+)',
+        'MINR' => 'Missionary (Child 8-12)',
         'PAST' => 'Pastor',
         'POLI' => 'Politican',
         'BUSP' => 'Business Professional',
         'MEDI' => 'Media Professional',
-        'MDPF' => 'Medical Professional'
+        'MDPF' => 'Medical Professional',
+        'INFL' => 'Influencer',
+        'WATR' => 'Clean Water Team Member'
     ];
 
     protected static $medical = [
@@ -112,6 +115,21 @@ class TeamRole {
         });
 
         return $result;
+    }
+
+    /**
+     * Return a single role by code
+     * 
+     * @param  sting $code 
+     * @return array       
+     */
+    public static function get_code($name)
+    {
+        $result = array_where(static::all(), function($key, $value) use($name) {
+            return $value === trim($name);
+        });
+
+        return array_keys($result);
     }
     
 }

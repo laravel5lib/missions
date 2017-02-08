@@ -80,6 +80,9 @@ return [
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
+    'is_csv'               => 'The file is not a .csv file format.',
+    'is_compatable'        => 'The :attribute is not a compatable companion.',
+    'within_companion_limit' => 'Cannot add companion because it would exceeded the cumulative limit.',
 
     /*
     |--------------------------------------------------------------------------

@@ -381,21 +381,6 @@
                 </div>
               </div>
               <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingTwo">
-                  <h5>
-                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                      International travel with teens?!
-                    </a>
-                  </h5>
-                </div>
-                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                  <div class="panel-body">
-                    <p>Don't freak out.</p>
-                    <p>Missions.Me will provide you with the flight itineraries, prepay baggage fees and be there waiting with pizza in hand when your group arrives. We dare you to find an easier missions experience.</p>
-                  </div>
-                </div>
-              </div>
-              <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingThree">
                   <h5>
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -484,7 +469,7 @@
                 // logic vars
                 campaigns:[],
                 groups:[],
-                groupsLimit: 8,
+                groupsLimit: 12,
                 attemptSubmit: false,
                 resource: this.$resource('groups?isPublic=yes'),
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],

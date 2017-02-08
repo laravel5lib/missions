@@ -13,6 +13,15 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
+                <export-utility url="visas/export"
+                      :options="exportOptions"
+                      :filters="exportFilters">
+                  </export-utility>
+                  <import-utility title="Import Visas List" 
+                      url="visas/import" 
+                      :required-fields="importRequiredFields" 
+                      :optional-fields="importOptionalFields">
+                  </import-utility>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -87,8 +96,11 @@
     </div>
 </template>
 <script type="text/javascript">
+    import exportUtility from '../../export-utility.vue';
+    import importUtility from '../../import-utility.vue';
     export default{
         name: 'visas-list',
+        components: {exportUtility, importUtility},
         props: {
             'userId': {
                 type: String,
@@ -117,6 +129,29 @@
                 },
                 loaded: false,
                 deleteModal: false,
+                exportOptions: {
+                    number: 'Visa Number',
+                    given_names: 'Given Names',
+                    surname: 'Surname',
+                    country: 'Country',
+                    country_code: 'Country Code',
+                    issued_at: 'Issue Date',
+                    expires_at: 'Expire Date',
+                    created_at: 'Created On',
+                    updated_at: 'Last Updated',
+                    user_name: 'User Name',
+                    user_email: 'User Email',
+                    user_phone_one: 'User Primary Phone',
+                    user_phone_two: 'User Secondary Phone'
+                },
+                exportFilters: {},
+                importRequiredFields: [
+                    'number', 'user_email', 'given_names', 'surname',
+                    'country_code', 'issued_at', 'expires_at'
+                ],
+                importOptionalFields: [
+                    'created_at', 'updated_at'
+                ]
             }
         },
         watch:{
@@ -146,6 +181,7 @@
                 if (this.includeManaging)
                     params.manager = this.userId;
                 $.extend(params, this.filters);
+                this.exportFilters = params;
                 this.$http.get('visas', params).then(function (response) {
                     this.visas = response.data.data;
                     this.pagination = response.data.meta.pagination;

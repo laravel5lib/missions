@@ -8,7 +8,9 @@ class DonorFilter extends Filter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'donations' => ['anonymous', 'undisclosed', 'fund']
+    ];
 
     /**
      * Default sortable fields.

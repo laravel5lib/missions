@@ -52,8 +52,8 @@ class Fund extends Model
     public function donations()
     {
         return $this->transactions()
-                    ->type('donation')
-                    ->latest();
+                    ->type('donation');
+                    // ->latest();
     }
 
     /**
@@ -84,7 +84,7 @@ class Fund extends Model
      */
     public function reconcile()
     {
-        $this->balance = (int) $this->transactions()->sum('amount');
+        $this->balance = (int) $this->transactions()->sum('amount') / 100; // convert to dollars
 
         $this->save();
     }

@@ -2,14 +2,16 @@
 
 namespace App\Providers;
 
-use App\Jobs\SendReferralRequestEmail;
-use App\Models\v1\Project;
-use App\Models\v1\Campaign;
-use App\Models\v1\ProjectCause;
-use App\Models\v1\Referral;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
+use App\Models\v1\Group;
+use App\Models\v1\Upload;
 use App\Models\v1\Payment;
+use App\Models\v1\Project;
+use App\Models\v1\Campaign;
+use App\Models\v1\Referral;
+use App\Models\v1\ProjectCause;
+use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -60,7 +62,7 @@ class EventServiceProvider extends ServiceProvider
             $name = generateFundName($trip);
             $trip->fund()->create([
                 'name' => $name,
-                'slug' => str_slug($name),
+                'slug' => generate_fund_slug($name),
                 'balance' => 0,
                 'class' => generateQbClassName($trip),
                 'item' => 'Missionary Donation'
@@ -71,7 +73,7 @@ class EventServiceProvider extends ServiceProvider
             $name = generateFundName($campaign);
             $campaign->fund()->create([
                 'name' => $name,
-                'slug' => str_slug($name),
+                'slug' => generate_fund_slug($name),
                 'balance' => 0,
                 'class' => generateQbClassName($campaign),
                 'item' => 'General Donation'
@@ -82,7 +84,7 @@ class EventServiceProvider extends ServiceProvider
             $name = $project->name . ' Project';
             $project->fund()->create([
                 'name' => $name,
-                'slug' => str_slug($name),
+                'slug' => generate_fund_slug($name),
                 'balance' => 0,
                 'class' => str_plural($project->initiative->cause->name),
                 'item' => $project->name .' - '. $project->initiative->cause->name
@@ -93,7 +95,7 @@ class EventServiceProvider extends ServiceProvider
             $name = $cause->name . ' Cause';
             $cause->fund()->create([
                 'name' => $name,
-                'slug' => str_slug($name),
+                'slug' => generate_fund_slug($name),
                 'balance' => 0,
                 'class' => str_plural($cause->name),
                 'item' => 'General Donation'
@@ -102,6 +104,16 @@ class EventServiceProvider extends ServiceProvider
 
         User::created(function ($user) {
             $user->assign('member');
+
+            $banner = Upload::randomBanner(['user'])->first();
+            $user->banner_upload_id = $banner ? $banner->id : null;
+            $user->save();
+        });
+
+        Group::created(function ($group) {
+            $banner = Upload::randomBanner(['group'])->first();
+            $group->banner_upload_id = $banner ? $banner->id : null;
+            $group->save();
         });
 
         Referral::created(function ($referral) {

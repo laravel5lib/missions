@@ -46,9 +46,11 @@
 					<li><a href="/admin/campaigns"><i class="fa fa-globe"></i> Campaigns</a></li>
 					<li><a href="/admin/reservations/current"><i class="fa fa-ticket"></i> Reservations</a></li>
 					<li><a href="/admin/groups"><i class="fa fa-users"></i> Groups</a></li>
-					<li><a href="/admin/interests"><i class="fa fa-question-mark"></i> Interests</a></li>
 					<li><a href="/admin/users"><i class="fa fa-user"></i> Users</a></li>
 					<li><a href="/admin/uploads"><i class="fa fa-picture-o"></i> Uploads</a></li>
+					<li><a href="/admin/funds"><i class="fa fa-usd"></i> Financials</a></li>
+					<li><a href="/admin/causes"><i class="fa fa-tint"></i> Projects</a></li>
+					<li><a href="/admin/records"><i class="fa fa-archive"></i> Records</a></li>
 				</template>
 				<!-- Get Started -->
 				<li class="navlabel">Get Started</li>
@@ -59,9 +61,9 @@
 
 				<!-- 1N1D-->
 				<li class="navlabel">1Nation1Day</li>
-				<li><a href="http://1nation1day.com/">2017 Nicaragua</a></li>
-				<li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>
-				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
+				<li><a target="_blank" href="http://1nation1day.com/">2017 Nicaragua</a></li>
+				<li><a target="_blank" href="http://1nation1day.com/dominican">2015 Dominican</a></li>
+				<li><a target="_blank" href="http://1nation1day.com/honduras">2013 Honduras</a></li>
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>

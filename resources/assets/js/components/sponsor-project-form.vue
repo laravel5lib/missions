@@ -26,7 +26,7 @@
 						<label for="initiative">Select a type</label>
 						<select class="form-control" v-model="initiativeId" v-validate:initiative="['required']">
 							<option value="">Select a type</option>
-							<option :value="initiative.id" v-for="initiative in initiatives"
+							<option :value="initiative.id" v-for="initiative in availableInitiatives"
 									v-text="initiative.type|capitalize"></option>
 						</select>
 					</div>
@@ -39,7 +39,7 @@
 
 					</div>
 				</div>
-				<div class="form-group" v-show="initiativeId">
+				<div class="form-group" v-if="initiativeId">
 					<div class="col-sm-6">
 						<label for="name">Project Description</label>
 						<p v-text="initiative.short_desc"></p>
@@ -139,24 +139,31 @@
 			initiative(){
 				return _.findWhere(this.initiatives, {id: this.initiativeId});
 			},
+			filteredCountries(){
+			    let cause = this.cause;
+			    return _.filter(this.availableCountries, function (country) {
+				    return _.contains(cause.countries, country.code.toLocaleLowerCase());
+                });
+			}
 		},
 		watch: {
 			'causeId': function (val) {
 				// Update Country List based on Cause selected
-				// Get all available country codes
-				let allCodes = _.flatten(_.union(_.pluck(this.causes, 'countries')));
+				// Get all available country codes for the selected cause
+				let allCodes = _.findWhere(this.causes, { id: val }).countries;
 				// filter selectable countries
 				this.availableCountries = [];
 				_.each(allCodes, function (code) {
 					let test = undefined;
 					if (test = _.findWhere(this.countries, { code: code.toLowerCase()}))
 					    this.availableCountries.push(test);
-				}.bind(this))
+				}.bind(this));
 				this.getInitiatives();
 			},
 			'country_code': function (val) {
 				// Update Initiative/Project List based on Country selected
-				this.availableInitiatives = _.filter(this.initiatives, function (ini) {
+                // this.availableInitiatives = _.where(this.initiatives, { country: { code: val } });
+                this.availableInitiatives = _.filter(this.initiatives, function (ini) {
 					return ini.country.code === val;
 				});
 			},

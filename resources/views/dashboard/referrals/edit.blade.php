@@ -10,10 +10,10 @@
                 </div>
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">
-                    <a href="/dashboard/records/referrals" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
+                    <a onclick="window.history.back()" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">
-                    <a href="/dashboard/records/referrals" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
+                    <a onclick="window.history.back()" class="btn btn-primary"><i class="fa fa-chevron-left icon-left"></i> Back To All</a>
                     <hr class="divider inv sm">
                 </div>
             </div>

@@ -11,12 +11,12 @@
           </div>
             <div class="col-sm-4 text-right hidden-xs">
                 <hr class="divider inv">
-                <a href="{{ url('admin/campaigns/' . $trip->campaign->id) }}" class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Back To All</a>
+                <a href="{{ url('admin/campaigns/' . $trip->campaign->id) }}" class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Back</a>
                 <hr class="divider inv">
             </div>
             <div class="col-xs-12 text-center visible-xs">
                 <hr class="divider inv sm">
-                <a href="{{ url('admin/campaigns/' . $trip->campaign->id) }}" class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Back To All</a>
+                <a href="{{ url('admin/campaigns/' . $trip->campaign->id) }}" class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Back</a>
                 <hr class="divider inv">
             </div>
         </div>

@@ -16,7 +16,7 @@
             </div>
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
-                <a class="btn btn-default" onclick="window.history.back()"><i class="fa fa-chevron-left icon-left"></i> Back To Library</a>
+                <a class="btn btn-default" onclick="window.history.back()"><i class="fa fa-chevron-left icon-left"></i> Back</a>
             </div>
         </div>
         <div class="row visible-xs">
@@ -24,7 +24,7 @@
                 <h3>Uploads <small>&middot; Edit</small></h3>
             </div>
             <div class="col-sm-4 text-center">
-                <a class="btn btn-default" onclick="window.history.back()"><i class="fa fa-chevron-left icon-left"></i> Back To Library</a>
+                <a class="btn btn-default" onclick="window.history.back()"><i class="fa fa-chevron-left icon-left"></i> Back</a>
                 <hr class="divider inv sm">
             </div>
         </div>

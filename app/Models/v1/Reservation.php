@@ -416,4 +416,26 @@ class Reservation extends Model
             return $trip->where('ended_at', '>', Carbon::now());
         });
     }
+
+    /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/user-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
+    }
 }

@@ -44,11 +44,11 @@
                 <div class="col-xs-12">
                     {% $trip->description %}
                     <hr class="divider inv" />
-                    <h4>Missionaries Registered</h4>
+                    {{-- <h4>Missionaries Registered</h4>
                     <hr class="divider">
                     <div class="row">
                         @each('site.trips.partials._missionaries', $trip->reservations, 'res', 'site.trips.partials._no_missionaries')
-                    </div>
+                    </div> --}}
                 </div><!-- end col -->
             </div><!-- end collapse -->
         </div><!-- end visible-xs -->

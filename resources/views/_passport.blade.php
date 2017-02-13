@@ -28,7 +28,7 @@
                             <hr class="divider">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label>Birth Country</label>
+                                    <label>Nationality</label>
                                     <p>{{ country($passport->birth_country) }}</p>
                                 </div>
                                 <div class="col-sm-6">
@@ -38,10 +38,6 @@
                             </div>
                             <hr class="divider">
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <label>Issued At</label>
-                                    <p>{{ $passport->issued_at->format('M d, Y') }}</p>
-                                </div>
                                 <div class="col-sm-6">
                                     <label>Expires At</label>
                                     <p>{{ $passport->expires_at->format('M d, Y') }}</p>

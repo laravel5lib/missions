@@ -116,10 +116,6 @@ class EventServiceProvider extends ServiceProvider
             $group->save();
         });
 
-        Referral::created(function ($referral) {
-           dispatch(new SendReferralRequestEmail($referral));
-        });
-
         Payment::updated(function ($payment) {
             $payment->due->payable->payments()->sync();
         });

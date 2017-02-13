@@ -34,7 +34,8 @@ class Reservation extends Model
         'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
         'passport_id', 'user_id', 'email', 'avatar_upload_id',
         'arrival_designation', 'testimony_id', 'desired_role',
-        'shirt_size', 'height', 'weight', 'created_at', 'updated_at'
+        'shirt_size', 'height', 'weight', 'created_at', 'updated_at',
+        'deleted_at'
     ];
 
     /**

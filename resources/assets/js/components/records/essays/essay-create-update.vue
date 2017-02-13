@@ -77,7 +77,7 @@
                     { q: 'Describe how you decided to follow Christ', a: ''},
                     { q: 'Describe your church involvement', a: ''},
                     { q: 'Describe your current walk with God', a: ''},
-                    { q: 'Have you been on a missions trip before? If so, please tell us about your experience', a: ''},
+                    { q: 'Please describe any prior missions trip experience you have', a: ''},
                 ],
                 user_id: this.userId,
 

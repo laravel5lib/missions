@@ -95,7 +95,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					<h4 class="text-serif text-lightweight text-primary">Lead</h4>
 					<p class="small">Some say leaders are born but we believe leaders are made. Our students become leaders marked by transparency, authenticity and character.</p>
 					<h4 class="text-serif text-lightweight text-primary">Go</h4>
-					<p class="small">We don’t just talk about global perspective; you experience it. Travel across the world fulfilling the great commission alongside your best friends and people who want to change the world just as much as you.</p>
+					<p class="small">We don’t only talk about global perspective; you actually experience it. Travel across the world fulfilling the great commission alongside your best friends and people who want to change the world as much as you do.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

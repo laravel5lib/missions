@@ -38,7 +38,7 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h3 class="text-center">Our mission is to provide <span class="text-info">clean water</span> to people in need just a few steps away from their front door.</h3>
+				<h3 class="text-center">Our mission is to provide <span class="text-info">clean water</span> to people in need, only a few steps away from their front door.</h3>
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">

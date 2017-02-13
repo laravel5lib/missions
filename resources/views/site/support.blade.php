@@ -31,7 +31,7 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h3>Why Partnership?</h3>
-				<p>Missions.Me is passionate about helping the less fortunate around the world. We can’t do this alone. It takes a team, and it takes a relationship that goes far deeper than just a pocket full of cash. When someone partners with Missions.Me, we take it seriously. We value the personal relationship</p>
+				<p>Missions.Me is passionate about helping the less fortunate around the world. We can’t do this alone. It takes a team, and it takes a relationship that goes far deeper than a pocket full of cash. When someone partners with Missions.Me, we take it seriously. We value the personal relationship</p>
 			</div>
 		</div>
 		<div class="row hidden-sm hidden-xs">

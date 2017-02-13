@@ -92,7 +92,7 @@
 					<p class="small">No matter your skill level you can surf Salt Creek or many world-famous spots along Southern California’s coastline, our location delivers consistent surf for all skill types.</p>
 
 					<h4 class="text-serif text-lightweight text-primary">Sports</h4>
-					<p class="small">Southern California is home to many professional teams and the public parks near the campus welcome you to join a pickup game of basketball, tennis or volleyball just a few steps from the ocean.</p>
+					<p class="small">Southern California is home to many professional teams and the public parks near the campus welcome you to join a pickup game of basketball, tennis or volleyball a few steps from the ocean.</p>
 
 					<h4 class="text-serif text-lightweight text-primary">Winter Activities</h4>
 					<p class="small">If you need a change of pace, let’s say some snow that covers half of the US for 6 months a year, then hop in your car and drive a couple hours to beautiful Lake Tahoe or Big Bear for endless winter sports and activities.</p>
@@ -107,7 +107,7 @@
 					<p class="small">SeaWorld is San Diego’s No. 1 tourist attraction and one of the most popular marine parks in the world. Spread out over more than 189 acres on beautiful Mission Bay Park, SeaWorld is known for its spectacular animal shows, interactive attractions, aquariums, rides and dining facilities.</p>
 
 					<h5 class="text-serif text-lightweight">San Diego Zoo:</h5>
-					<p class="small">Located just north of downtown San Diego in Balboa Park, home to over 4,000 rare and endangered animals representing more than 800 species and subspecies.</p>
+					<p class="small">Located north of downtown San Diego in Balboa Park, home to over 4,000 rare and endangered animals representing more than 800 species and subspecies.</p>
 
 
 					<h4 class="text-serif text-lightweight text-primary">Shopping</h4>

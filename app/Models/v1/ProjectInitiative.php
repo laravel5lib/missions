@@ -63,33 +63,13 @@ class ProjectInitiative extends Model
     }
 
     /**
-     * Get the project initiative's costs.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function costs()
-    {
-        return $this->morphMany(Cost::class, 'cost_assignable');
-    }
-
-    /**
-     * Get the project initiative's deadlines.
+     * Get the initiative's deadlines.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function deadlines()
     {
         return $this->morphMany(Deadline::class, 'deadline_assignable');
-    }
-
-    /**
-     * Get all the project initiative's active costs.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function activeCosts()
-    {
-        return $this->costs()->active();
     }
 
     /**

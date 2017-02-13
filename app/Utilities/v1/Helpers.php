@@ -88,6 +88,10 @@ function generateFundraiserName($data)
     if ($data instanceof Trip) {
         return generateFundraiserNameFromTrip($data);
     }
+
+    if ($data instanceof Project) {
+        return generateFundraiserNameFromProject($data);
+    }
 }
 
 function generateFundraiserNameFromReservation($reservation)
@@ -98,6 +102,11 @@ function generateFundraiserNameFromReservation($reservation)
 function generateFundraiserNameFromTrip($trip)
 {
     return 'Send ' . $trip->group->name . ' to ' . country($trip->country_code);
+}
+
+function generateFundraiserNameFromProject($project)
+{
+    return $project->initiative->type.' '.'Project';
 }
 
 function set_active($path, $active = 'active')

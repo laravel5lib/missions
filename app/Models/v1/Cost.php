@@ -47,6 +47,16 @@ class Cost extends Model
      */
     public $timestamps = false;
 
+    public function getAmountAttribute($value)
+    {
+        return number_format($value/100, 2, '.', ''); // convert to dollars
+    }
+
+     public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value*100; // convert to cents
+    }
+
     /**
      * Get all of the owning cost assignable models.
      *

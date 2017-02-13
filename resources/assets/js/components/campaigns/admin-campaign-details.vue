@@ -16,7 +16,7 @@
 						<hr class="divider inv sm">
 						<hr class="divider inv">
 						<div class="btn-group" role="group">
-							<a href="/admin/campaigns" class="btn btn-primary-darker"><span
+							<a onclick="window.history.back()" class="btn btn-primary-darker"><span
 									class="fa fa-chevron-left icon-left"></span></a>
 							<a class="btn btn-primary" href="/admin/campaigns/{{campaignId}}/edit">Edit</a>
 						</div>

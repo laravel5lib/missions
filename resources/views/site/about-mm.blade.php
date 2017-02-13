@@ -96,7 +96,7 @@
                 </div>
               </div><!-- end col -->
             </div><!-- end row -->
-            <!-- <p>Whether it is introducing a street orphan to their new home, leading a nation in a prayer of reconciliation, offering medical relief to the suffering, or hosting large missions teams, Missions.Me strategically connects willing hearts to urgent needs across the globe. Each project serves a long-term, sustainable purpose.</p> -->
+            <!-- <p>Whether it is introducing a street orphan to his or her new home, leading a nation in a prayer of reconciliation, offering medical relief to the suffering, or hosting large missions teams, Missions.Me strategically connects willing hearts to urgent needs across the globe. Each project serves a long-term, sustainable purpose.</p> -->
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->

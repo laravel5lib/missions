@@ -29,24 +29,13 @@
                 </div>
             </div>
 
-            <div class="row" :class="{ 'has-error': (checkForError('issued') || checkForError('expires')) }">
+            <div class="row" :class="{ 'has-error': checkForError('expires')) }">
                 <div class="col-sm-12">
-                    <label for="issued_at" class="control-label">Dates</label>
+                    <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group input-group-sms"
-                                 :class="{ 'has-error': checkForError('issued') }">
-                                <span class="input-group-addon">Issued</span>
-                                <date-picker class="form-control input-sms" :time.sync="issued_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-                                <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
-                                       v-validate:issued="{ required: true }" required>
-                            </div>
-                            <br>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
-                                <span class="input-group-addon">Exp</span>
                                 <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
@@ -58,7 +47,7 @@
             
             <div class="form-group" :class="{ 'has-error': checkForError('birth') }">
                 <div class="col-sm-12">
-                    <label for="birth" class="control-label">Birth Country</label>
+                    <label for="birth" class="control-label">Nationality</label>
                     <v-select class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
@@ -108,7 +97,7 @@
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Awesome!</strong>
+            <strong>Done</strong>
             <p>Reservation updated!</p>
         </alert>
 
@@ -145,7 +134,6 @@
                 given_names: '',
                 surname: '',
                 number: '',
-                issued_at: null,
                 expires_at: null,
                 birth_country: null,
                 citizenship: null,
@@ -202,7 +190,6 @@
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
-                        issued_at: this.issued_at,
                         expires_at: this.expires_at,
                         birth_country: this.birth_country,
                         citizenship: this.citizenship,
@@ -231,7 +218,6 @@
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
-                        issued_at: this.issued_at,
                         expires_at: this.expires_at,
                         birth_country: this.birth_country,
                         citizenship: this.citizenship,

@@ -394,7 +394,7 @@
 							if (response.status && response.status === 401) {
 								that.messages.push({
 									type: 'danger',
-									message: 'Sorry, we couldn\'t find an account that matches the email and password you provided.'
+									message: 'An account with that email and password could not be found.'
 								});
 								this.$dispatch('showError', 'Please check the form.');
 							}

@@ -57,7 +57,7 @@
 		</modal>
 
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Remove Country Visited" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to remove {{ selectedCountryRemove.name|capitalize }} from your list?</div>
+            <div slot="modal-body" class="modal-body text-center">Remove {{ selectedCountryRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedCountryRemove)'>Confirm</button>

@@ -34,7 +34,8 @@ class Reservation extends Model
         'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
         'passport_id', 'user_id', 'email', 'avatar_upload_id',
         'arrival_designation', 'testimony_id', 'desired_role',
-        'shirt_size', 'height', 'weight', 'created_at', 'updated_at'
+        'shirt_size', 'height', 'weight', 'created_at', 'updated_at',
+        'deleted_at'
     ];
 
     /**
@@ -414,5 +415,27 @@ class Reservation extends Model
         return $query->whereHas('trip', function($trip) {
             return $trip->where('ended_at', '>', Carbon::now());
         });
+    }
+
+    /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/user-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
     }
 }

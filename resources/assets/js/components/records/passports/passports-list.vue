@@ -84,10 +84,6 @@
                     <p class="small">{{passport.citizenship_name}}</p>
                     <div class="row">
                         <div class="col-sm-6">
-                            <label>ISSUED ON</label>
-                            <p class="small">{{passport.issued_at|moment 'll'}}</p>
-                        </div><!-- end col -->
-                        <div class="col-sm-6">
                             <label>EXPIRES ON</label>
                             <p class="small">{{passport.expires_at|moment 'll'}}</p>
                         </div><!-- end col -->
@@ -109,7 +105,7 @@
 
         </div>
         <modal :show.sync="deleteModal" title="Remove Passport" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Passport?</div>
+            <div slot="modal-body" class="modal-body text-center">Delete this Passport?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removePassport(selectedPassport)'>Confirm</button>
@@ -154,11 +150,10 @@
                     number: 'Passport Number',
                     given_names: 'Given Names',
                     surname: 'Surname',
-                    birth_country: 'Birth Country',
-                    birth_country_code: 'Birth Country Code',
+                    birth_country: 'Nationality',
+                    birth_country_code: 'Nationality Country Code',
                     citizenship: 'Citizenship',
                     citizenship_country_code: 'Citizenship Country Code',
-                    issued_at: 'Issue Date',
                     expires_at: 'Expire Date',
                     created_at: 'Created On',
                     updated_at: 'Last Updated',
@@ -170,7 +165,7 @@
                 exportFilters: {},
                 importRequiredFields: [
                     'number', 'user_email', 'given_names', 'surname',
-                    'birth_country_code', 'citizenship_country_code', 'issued_at',
+                    'birth_country_code', 'citizenship_country_code',
                     'expires_at'
                 ],
                 importOptionalFields: [

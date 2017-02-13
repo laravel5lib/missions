@@ -92,7 +92,7 @@
 								<h1 class="text-primary text-hero">1</h1>
 								<h4 class="text-primary">Intake</h4>
 								<hr class="divider inv">
-								<p class="small">The patient fills out a registration form and describes their problem to a medical professional that records it on the registration form.</p>
+								<p class="small">The patient fills out a registration form and describes his or her problem to a medical professional that records it on the registration form.</p>
 							</div>
 						</div>
 					</div>

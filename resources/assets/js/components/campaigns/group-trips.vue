@@ -17,12 +17,12 @@
 					<div class="col-sm-4 text-right hidden-xs">
 						<hr class="divider inv">
                 		<hr class="divider inv sm">
-						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Start Over</a>
+						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
 						<hr class="divider inv">
 					</div><!-- end col -->
 					<div class="col-xs-12 text-center visible-xs">
 						<hr class="divider inv sm">
-						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Start Over</a>
+						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
 						<hr class="divider inv">
 					</div><!-- end col -->
 				</div>
@@ -116,7 +116,10 @@
 					}
 				});
 				return lowest;
-			}
+			},
+            restartView() {
+			    this.$parent.restartView();
+            }
 		},
 		ready(){
 			if (this.id && this.campaignId && this.id.length>0 && !this.$parent.currentView) {

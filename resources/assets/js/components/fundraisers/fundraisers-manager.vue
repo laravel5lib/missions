@@ -76,14 +76,14 @@
 
             <alert :show.sync="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Yay!</strong>
-                <p>Description updated!</p>
+                <strong>Good job!</strong>
+                <p>Description updated</p>
             </alert>
 
             <alert :show.sync="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Yay!</strong>
-                <p>Settings updated!</p>
+                <strong>Good job!</strong>
+                <p>Settings updated</p>
             </alert>
         </template>
 

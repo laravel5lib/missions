@@ -5,7 +5,7 @@
         <div class="panel panel-default panel-body">
             <div class="row">
                 <div class="col-xs-8">
-                    Share your amazing stories with the world!
+                    Share your stories with the world
                 </div>
                 <div class="col-xs-4 text-right">
                     <button class="btn btn-primary btn-xs" @click="newMode=!newMode"><i class="fa fa-plus icon-left"></i> Post Story</button>
@@ -114,7 +114,7 @@
         </div>
 
         <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
-            <div slot="modal-body" class="modal-body">Are you sure you want to delete this Story?</div>
+            <div slot="modal-body" class="modal-body">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Confirm</button>

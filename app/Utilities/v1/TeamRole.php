@@ -28,8 +28,9 @@ class TeamRole {
 
     protected static $medical = [
         'MDPF' => 'Medical Professional',
+        'MDSG' => 'Medical Student',
         'RESP' => 'Respitory Therapist',
-        'PHYA' => 'Physican Assistant',
+        'PHYA' => 'Physican\'s Assistant',
         'PHYT' => 'Physical Therapist',
         'PHAT' => 'Pharmacy Tech',
         'PHAA' => 'Pharmacy Assistant',
@@ -125,11 +126,21 @@ class TeamRole {
      */
     public static function get_code($name)
     {
+        if (starts_with($name, 'Medical: ')) {
+            $name = str_ireplace('Medical: ', '', $name);
+        }
+
+        if (starts_with($name, 'Medical Student: ')) {
+            $name = 'Medical Student';
+        }
+
         $result = array_where(static::all(), function($key, $value) use($name) {
             return $value === trim($name);
         });
 
-        return array_keys($result);
+        if (! $result) return 'MISS';
+
+        return array_keys($result)[0];
     }
     
 }

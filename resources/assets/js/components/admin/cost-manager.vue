@@ -211,7 +211,7 @@
         </modal>
         <modal title="Delete Cost" :show.sync="showDeleteModal" effect="fade" small="true">
             <div slot="modal-body" class="modal-body">
-                <p v-if="selectedCost" class="text-center">Are you sure you want to delete {{ selectedCost.name }}?</p>
+                <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Cancel</button>
@@ -227,7 +227,7 @@
                         <h4 class="modal-title">Delete Cost</h4>
                     </div>
                     <div class="modal-body">
-                        <p v-if="selectedCost" class="text-center">Are you sure you want to delete {{ selectedCost.name }}?</p>
+                        <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Cancel</button>

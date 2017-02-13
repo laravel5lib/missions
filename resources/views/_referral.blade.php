@@ -14,30 +14,43 @@
                                     <p>{{ ucwords($referral->type) }}</p>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label>Name</label>
-                                    <p>{{ $referral->name }}</p>
+                                    <label>Applicant Name</label>
+                                    <p>{{ $referral->applicant_name }}</p>
                                 </div>
                             </div>
                             <hr class="divider">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <label>Referral Name</label>
-                                    <p>{{ $referral->referral_name }}</p>
+                                    <label>Attention to</label>
+                                    <p>{{ $referral->attention_to }}</p>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label>Referral Email</label>
-                                    <p>{{ $referral->referral_email }}</p>
+                                    <label>Recipient Email</label>
+                                    <p>{{ $referral->recipient_email }}</p>
                                 </div>
                             </div>
                             <hr class="divider">
                             <div class="row">
+                                @foreach($referral->referrer as $key => $value)
                                 <div class="col-sm-6">
-                                    <label>Referral Phone</label>
-                                    <p>{{ $referral->referral_phone }}</p>
+                                    <label>{{ ucwords($key) }}</label>
+                                    <p>{{ $value }}</p>
                                 </div>
-                                <div class="col-sm-6">
+                                @endforeach
+                            </div>
+                            <hr class="divider">
+                            <div class="row">
+                                <div class="col-sm-4">
                                     <label>Status</label>
                                     <p>{{ ucfirst($referral->status) }}</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Sent At</label>
+                                    <p>{{ $referral->sent_at ? $referral->sent_at->toDateTimeString() : 'n/a' }}</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label>Received At</label>
+                                    <p>{{ $referral->responded_at ? $referral->responded_at->toDateTimeString() : 'n/a' }}</p>
                                 </div>
                             </div>
                         </div>

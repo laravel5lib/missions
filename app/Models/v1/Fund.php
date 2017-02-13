@@ -14,6 +14,16 @@ class Fund extends Model
 
     protected $guarded = [];
 
+    public function getBalanceAttribute($value)
+    {
+        return number_format($value/100, 2, '.', ''); // convert to dollars
+    }
+
+    public function setBalanceAttribute($value)
+    {
+        $this->attributes['balance'] = $value*100; // convert to cents
+    }
+
     /**
      * Get all the fund's fundraisers.
      *

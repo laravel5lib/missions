@@ -53,7 +53,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Academics</h2>
 				</div>
 				<div class="col-sm-7 col-md-8">
-						<p class="small">MMC is committed to providing students with the very best education. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program.</p>
+						<p class="small">MMC is committed to providing students with the best education. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program.</p>
 
 						<p class="small">With a Bachelors of Science and Associate of Arts degree programs accredited under Southeastern University in Florida, students will receive the educational training they need to be successful in whatever field they desire.</p>
 
@@ -76,7 +76,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 
 					<p class="small">At Missions.Me, nearly every aspect of the organization is fueled by people like you. Our staff will coach you as we push the limits of traditional missions together.</p>
 
-					<p class="small">We believe in you, and we believe you can change the world. The world of a child born on the streets in India. The world of a single-mother in Ghana who walks three miles everyday just for water. The world of a family next door in your neighborhood. Missions isn’t just for those called to live in another country their whole lives.</p>
+					<p class="small">We believe in you, and we believe you can change the world. The world of a child born on the streets in India. The world of a single-mother in Ghana who walks three miles everyday for water. The world of a family next door in your neighborhood. Missions isn’t for those called to live in another country their whole lives.</p>
 					<a href="/about-mm" class="btn btn-sm btn-primary">About Missions.Me</a>
 					<a href="/campaigns" class="btn btn-sm btn-primary">Go On A Trip With Us</a>
 				</div><!-- end col -->

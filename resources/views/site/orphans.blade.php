@@ -73,7 +73,7 @@
 							<div class="panel-body">
 								<img class="img-xlg" src="images/orphans/bed-badge.png" alt="Bed">
 								<hr class="divider inv">
-								<p class="small">Many of these children have never slept in a bed. And definitely never used a pillow. Here, children are given their own brand new bed, sheets and pillow.</p>
+								<p class="small">Many of these children have never slept in a bed; and propably haven't used a pillow either! Here, children are given their own brand new bed, sheets and pillow.</p>
 							</div>
 						</div>
 					</div>

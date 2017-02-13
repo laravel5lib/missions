@@ -13,13 +13,13 @@ class Passport extends Model
     protected $table = 'passports';
 
     protected $fillable = [
-        'given_names', 'surname', 'number', 'issued_at',
+        'given_names', 'surname', 'number',
         'expires_at', 'birth_country', 'citizenship',
         'upload_id', 'user_id', 'created_at', 'updated_at'
     ];
 
     protected $dates = [
-        'issued_at', 'expires_at', 'created_at', 'updated_at'
+        'expires_at', 'created_at', 'updated_at'
     ];
 
     public $timestamps = true;

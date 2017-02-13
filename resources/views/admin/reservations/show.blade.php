@@ -24,6 +24,24 @@
         </div>
     </div>
 </div>
+@if($reservation->deleted_at)
+<div class="dark-bg-primary">
+    <div class="container">
+        <div class="col-sm-8 text-center">
+            <hr class="divider inv sm">
+            {{-- <hr class="divider inv sm"> --}}
+            <h5>This reservation was dropped and is no longer active.</h5>
+            <hr class="divider inv sm">
+            {{-- <hr class="divider inv sm hidden-xs"> --}}
+        </div>
+        <div class="col-sm-4 text-center">
+            <hr class="divider inv sm hidden-xs">
+            <button class="btn btn-sm btn-white-hollow"><i class="fa fa-undo"></i> Restore</button>
+            <hr class="divider inv sm">
+        </div>
+    </div><!-- end container -->
+</div><!-- end dark-bg-primary -->
+@endif
 <hr class="divider inv lg">
 <div class="container">
     <div class="row">

@@ -279,7 +279,7 @@
         </form>
 
         <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
-            <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Are you sure you want to delete {{ selectedItem.name }}?</div>
+            <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
@@ -288,8 +288,8 @@
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>Medical Release updated!</p>
+            <strong>Good job!</strong>
+            <p>Medical Release updated</p>
         </alert>
         <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
             <span class="icon-info-circled alert-icon-float-left"></span>

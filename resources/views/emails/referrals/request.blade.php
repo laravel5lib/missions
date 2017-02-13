@@ -2,9 +2,9 @@
 
 @section('content')
 
-    <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">Dear <span style="color:#f6323e;">{{ $referral->referral_name }}</span>,</h3>
+    <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">Greetings <span style="color:#f6323e;">{{ $referral->attention_to }}</span>,</h3>
 
-    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">{{ $referral->name }} is requesting a referral from you so they can participate in a Missions.Me mission trip.</p>
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">{{ $referral->applicant_name }} is requesting a referral from you so they can participate in a Missions.Me mission trip.</p>
 
     <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">Thank you for taking the time to honestly and thoroughly complete this referral.</p>
 

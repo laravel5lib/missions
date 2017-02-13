@@ -31,7 +31,7 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h3>Why Partnership?</h3>
-				<p>Missions.Me is passionate about helping the less fortunate around the world. We can’t do this alone. It takes a team, and it takes a relationship that goes far deeper than just a pocket full of cash. When someone partners with Missions.Me, we take it seriously. We value the personal relationship</p>
+				<p>Missions.Me is passionate about helping the less fortunate around the world. We can’t do this alone. It takes a team, and it takes a relationship that goes far deeper than a pocket full of cash. When someone partners with Missions.Me, we take it seriously. We value the personal relationship</p>
 			</div>
 		</div>
 		<div class="row hidden-sm hidden-xs">
@@ -285,7 +285,7 @@
           </div>
           <div class="col-md-6">
             <h4 class="bold uppercaseit ways-to-give">Workplace Giving</h4>
-            <p>Some corporations will match financial donations to qualified non-profits. Find out if your workplace will be proud to support the generosity of their employee.</p>
+            <p>Some corporations will match financial donations to qualified non-profits. Find out if your workplace will be proud to support the generosity of its employee.</p>
           </div>
         </div>
         <hr class="divider inv">

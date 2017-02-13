@@ -38,7 +38,7 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h3 class="text-center">Our mission is to provide <span class="text-info">clean water</span> to people in need just a few steps away from their front door.</h3>
+				<h3 class="text-center">Our mission is to provide <span class="text-info">clean water</span> to people in need, only a few steps away from their front door.</h3>
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
@@ -113,7 +113,7 @@
 	<img class="img-responsive" src="images/water/guana-well.jpg" alt="Well Locations">
 		<div class="c-page-bg-text">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
-				<h2>A generation will never know what it’s like to drink dirty, filthy, transport-in-a-bucket water ever again.</h2>
+				<h2>A generation will not know what it’s like to drink dirty, filthy, transport-in-a-bucket water ever again.</h2>
 				<p><a class="btn btn-info btn-lg" href="/sponsor-a-project">Sponsor A Well</a></p>
 				<p><a class="text-white" href="/donate/clean-water-cause">Donate To The Cause</a></p>
 			</div>

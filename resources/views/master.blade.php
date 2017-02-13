@@ -32,7 +32,7 @@
            width="400px"
            dismissable>
         <span class="icon-ok-circled alert-icon-float-left"></span>
-        <strong>Well Done!</strong>
+        <strong>Good job!</strong>
         <p>@{{ message }}</p>
     </alert>
 

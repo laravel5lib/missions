@@ -16,7 +16,7 @@
 
 				<h6>Personal Identification Information</h6>
 
-				<p class="small">We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, fill out a form, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, name, email address, mailing address, phone number, credit card information, social security number. Users may, however, visit our Site anonymously. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personally identification information, except that it may prevent them from engaging in certain Site related activities.</p>
+				<p class="small">We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, fill out a form, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, name, email address, mailing address, phone number, credit card information, social security number. Users may, however, visit our Site anonymously. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can refuse to supply personally identification information, except that it may prevent them from engaging in certain Site related activities.</p>
 
 				<h6>Non-Personal Identification Information</h6>
 
@@ -24,7 +24,7 @@
 
 				<h6>Web Browser Cookies</h6>
 
-				<p class="small">Our Site may use "cookies" to enhance User experience. User's web browser places cookies on their hard drive for record-keeping purposes and sometimes to track information about them. User may choose to set their web browser to refuse cookies, or to alert you when cookies are being sent. If they do so, note that some parts of the Site may not function properly.</p>
+				<p class="small">Our Site may use "cookies" to enhance User experience. User's web browser places cookies on his or her hard drive for record-keeping purposes and sometimes to track information about them. User may choose to set his or her web browser to refuse cookies, or to alert you when cookies are being sent. If they do so, note that some parts of the Site may not function properly.</p>
 
 				<h6>How we use collected information</h6>
 
@@ -42,7 +42,7 @@
 					<p class="small">To send Users information they agreed to receive about topics we think will be of interest to them.</p>
 					<li>To send periodic emails</li>
 				</ul>
-				<p class="small">We may use the email address to send User information and updates pertaining to their order. It may also be used to respond to their inquiries, questions, and/or other requests. If User decides to opt-in to our mailing list, they will receive emails that may include company news, updates, related product or service information, etc. If at any time the User would like to unsubscribe from receiving future emails, we include detailed unsubscribe instructions at the bottom of each email or User may contact us via our Site.</p>
+				<p class="small">We may use the email address to send User information and updates pertaining to his or her order. It may also be used to respond to his or her inquiries, questions, and/or other requests. If User decides to opt-in to our mailing list, they will receive emails that may include company news, updates, related product or service information, etc. If at any time the User would like to unsubscribe from receiving future emails, we include detailed unsubscribe instructions at the bottom of each email or User may contact us via our Site.</p>
 				
 				<h6>How we protect your information</h6>
 
@@ -56,11 +56,11 @@
 
 				<h6>Third party websites</h6>
 
-				<p class="small">Users may find advertising or other content on our Site that link to the sites and services of our partners, suppliers, advertisers, sponsors, licensors and other third parties. We do not control the content or links that appear on these sites and are not responsible for the practices employed by websites linked to or from our Site. In addition, these sites or services, including their content and links, may be constantly changing. These sites and services may have their own privacy policies and customer service policies. Browsing and interaction on any other website, including websites which have a link to our Site, is subject to that website's own terms and policies.</p>
+				<p class="small">Users may find advertising or other content on our Site that link to the sites and services of our partners, suppliers, advertisers, sponsors, licensors and other third parties. We do not control the content or links that appear on these sites and are not responsible for the practices employed by websites linked to or from our Site. In addition, these sites or services, including his or her content and links, may be constantly changing. These sites and services may have his or her own privacy policies and customer service policies. Browsing and interaction on any other website, including websites which have a link to our Site, is subject to that website's own terms and policies.</p>
 
 				<h6>Compliance with children's online privacy protection act</h6>
 
-				<p class="small">Protecting the privacy of the very young is especially important. For that reason, we never collect or maintain information at our Site from those we actually know are under 13, and no part of our website is structured to attract anyone under 13.</p>
+				<p class="small">Protecting the privacy of the young is especially important. For that reason, we don't collect or maintain information at our Site from those we actually know are under 13 without his or her parent's consent, and no part of our website is structured to attract anyone under 13.</p>
 
 				<h6>Changes to this privacy policy</h6>
 

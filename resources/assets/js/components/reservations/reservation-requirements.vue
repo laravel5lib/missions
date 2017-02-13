@@ -189,7 +189,7 @@
                     grace_period: this.editedRequirement.grace_period
                 }).then(function (response) {
                     this.$emit('set-status', response.data.data);
-                    this.$dispatch('showSuccess', 'Requirement has been updated.');
+                    this.$dispatch('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });
             }

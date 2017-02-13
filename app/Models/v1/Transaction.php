@@ -27,15 +27,15 @@ class Transaction extends Model
     protected $with = 'fund';
 
     protected $fillable = [
-        'amount', 'type', 'details', 'fund_id', 'donor_id', 'anonymous'
+        'amount', 'type', 'details', 'fund_id', 'donor_id', 'anonymous', 'created_at', 'updated_at'
     ];
 
     public function getAmountAttribute($value)
     {
-        return $value/100; // convert to dollars
+        return number_format($value/100, 2, '.', ''); // convert to dollars
     }
 
-     public function setAmountAttribute($value)
+    public function setAmountAttribute($value)
     {
         $this->attributes['amount'] = $value*100; // convert to cents
     }

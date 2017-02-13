@@ -8,7 +8,7 @@
                 </h6>
                 <hr class="divider lg">
 
-                <p v-if="editMode">Please enter the top three preferred <a href="https://www.world-airport-codes.com/" target="_blank" class="text-primary">airport codes</a> where would like to arrive.</p>
+                <p v-if="editMode">Please enter the <a href="https://www.world-airport-codes.com/" target="_blank" class="text-primary">airport codes</a> of your top three preferred arrival locations.</p>
                 <div class="row">
                     <div class="col-sm-4">
                         <label>1st Choice</label>

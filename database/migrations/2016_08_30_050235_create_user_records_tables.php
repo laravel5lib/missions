@@ -21,7 +21,6 @@ class CreateUserRecordsTables extends Migration
             $table->string('birth_country', 5);
             $table->string('citizenship', 5);
             $table->uuid('upload_id')->nullable();
-            $table->date('issued_at');
             $table->date('expires_at');
             $table->timestamps();
         });
@@ -65,14 +64,14 @@ class CreateUserRecordsTables extends Migration
         Schema::create('referrals', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('name');
+            $table->string('applicant_name');
+            $table->string('attention_to');
+            $table->string('recipient_email');
             $table->string('type');
-            $table->string('referral_name');
-            $table->string('referral_email');
-            $table->string('referral_phone');
-            $table->string('status');
+            $table->json('referrer')->nullable();
             $table->json('response')->nullable();
             $table->timestamp('sent_at');
+            $table->timestamp('responded_at');
             $table->timestamps();
         });
 

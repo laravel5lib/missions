@@ -3,23 +3,39 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use App\Models\v1\Cost;
 use App\Models\v1\Link;
+use App\Models\v1\Note;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
+use App\Models\v1\Visa;
 use App\Models\v1\Donor;
 use App\Models\v1\Group;
+use App\models\v1\Essay;
 use App\Models\v1\Upload;
 use App\Models\v1\Payment;
+use App\Models\v1\Project;
 use App\Models\v1\Campaign;
 use App\Models\v1\Deadline;
+use App\Models\v1\Passport;
+use App\Models\v1\Referral;
+use App\Models\v1\Companion;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Requirement;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
 use App\Utilities\v1\TeamRole;
+use App\Models\v1\ProjectCause;
 use Illuminate\Console\Command;
+use App\Models\v1\MedicalRelease;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use App\Models\v1\MedicalCondition;
+use App\Models\v1\ProjectInitiative;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Artisan;
+use App\Models\v1\ReservationRequirement;
 
 class TransferData extends Command
 {
@@ -71,182 +87,561 @@ class TransferData extends Command
             $this->info("\n" . 'Database re-migrated and seeded with defaults.');
         }
 
-        if ($this->confirm('Do you want to import users? [y|N]'))
+        if ($this->confirm('Do you want start importing data? [y|N]'))
         {
-            // STEP 1
-            $this->info('Importing users...');
+            // setup indexes to match 
+            // old ids with new ones
+            $userIndex = new Collection;
+            $groupIndex = new Collection;
+            $campaignIndex = new Collection;
+            $tripIndex = new Collection;
+            $requirementIndex = new Collection;
+            $reservationIndex = new Collection;
+            $fundraiserIndex = new Collection;
+            $transactionIndex = new Collection;
+            $passportIndex = new Collection;
+            $visaIndex = new Collection;
+            $referralIndex = new Collection;
+            $essayIndex = new Collection;
+            $medicalIndex = new Collection;
+            $causeIndex = new Collection;
+            $initiativeIndex = new Collection;
+            $projectIndex = new Collection;
+            $requirementIndex = new Collection;
 
-            $users = $this->users();
-            $progress = $this->output->createProgressBar($users->count());
+            // STEP 1 - IMPORT USERS
+            $this->import_users($userIndex);
+
+            // STEP 2 - IMPORT GROUPS
+            $this->import_groups($groupIndex, $userIndex);
+
+            // STEP 3 - PASSPORTS
+            $this->import_passports($passportIndex, $userIndex);
+
+            // STEP 4 - VISAS
+            $this->import_visas($visaIndex, $userIndex);
+
+            // STEP 5- TESTIMONIES
+            $this->import_essays($essayIndex, $userIndex);
+
+            // STEP 6 - PASTORAL RECOMMENDATIONS
+            $this->import_referrals($essayIndex, $userIndex);
+
+            // STEP 7 - MEDICAL RELEASES
+            $this->import_medical_releases($medicalIndex, $userIndex);
+
+            // STEP 8 - CAMPAIGNS
+            $this->import_campaigns($campaignIndex, $userIndex);
+
+            // STEP 9 - TRIPS
+            $this->import_trips($tripIndex, $campaignIndex, $groupIndex, $userIndex, $requirementIndex);
             
-            $users = $users->map(function($u) use($progress) {
-                $progress->advance();
-                return $this->get_new_or_existing_user($u);
-            });
+            // STEP 10 - RESERVATIONS
+            $this->import_reservations($reservationIndex, $tripIndex, $userIndex);
 
-            $progress->finish();
-            $this->info("\n" . 'Users imported.');
+            // STEP 11 - COMPANIONS
+            $this->import_companions($reservationIndex);
+
+            // STEP 12 - UPDATE RESERVATION REQUIREMENTS
+            $this->update_reservation_requirements($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex);
+
+            // STEP 13 - CAUSES
+            $this->import_causes($causeIndex, $initiativeIndex);
+
+            // STEP 14 - PROJECTS
+            $this->import_projects($initiativeIndex, $userIndex, $groupIndex);
         }
+    }
 
-        if ($this->confirm('Do you want to import groups? [y|N]')) {
-            // STEP 2
-            $this->line("\n" . 'Importing groups...');
-            $groups = $this->groups();
-            $loading = $this->output->createProgressBar($groups->count());
+    /**
+     * Import users
+     * 
+     * @param  Collection $userIndex
+     * @return void 
+     */
+    private function import_users($userIndex)
+    {
+        $this->line('Importing users...');
+        $users = $this->users();
+        $bar = $this->output->createProgressBar($users->count());
+
+        $newUsers = $users->map(function($item) use($userIndex, $bar) {
+            $user = [
+                'email' => $item->email,
+                'name' => ucwords($item->name),
+                'password' => $item->password,
+                'gender' => strtolower($item->gender),
+                'status' => $item->status <> '' ? strtolower($item->status) : 'single',
+                'shirt_size' => strtolower($item->shirt_size),
+                'height' => convert_to_cm($item->height_ft, $item->height_in),
+                'weight' => convert_to_kg($item->weight),
+                'birthday' => $item->dob,
+                'phone_one' => $item->cell_phone,
+                'phone_two' => $item->home_phone,
+                'address' => $item->address,
+                'city' => $item->city,
+                'state' => $item->state,
+                'zip' => $item->zip,
+                'country_code' => strtolower($item->country_code),
+                'timezone' => $item->timezone,
+                'bio' => $item->bio,
+                'public' => $item->public ? true : false,
+                'avatar_upload_id' => trim($item->profile_pic_src) ? 
+                    $this->get_avatar_id($item->profile_pic_src, $item->name) : null,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ];
+
+            $newUser = User::create($user);
             
-            $groups->map(function($g) use($loading) {
-                $loading->advance();
-                return $this->get_new_or_existing_group($g);
-            });
+            $item->admin > 0 ? $newUser->assign('admin') : $newUser->assign('member');
+            
+            $url = $item->url ? $item->url : generate_slug($newUser->name);
+            $newUser->slug()->create(['url' => $url]);
 
-            $loading->finish();
-            $this->info("\n" . 'Groups imported.');
-        }
+            $userIndex->put($item->id, $newUser->id);
+            
+            $links = $this->get_links($item)->map(function($link) {
+                 return new Link([
+                     'name' => $link['name'], 'url' => $link['url']
+                 ]);
+            })->all();
+            $newUser->links()->saveMany($links);
 
-        if ($this->confirm('Do you want to import campaigns, trips, and reservations? [y|N]')) {
-            // STEP 3
-            $campaigns = $this->campaigns();
-            $this->line('Importing Campaigns...' ."\n");
-
-            $campaigns->map(function($c) {
-                $campaign = $this->create_campaign($c);
-
-                // save trips & reservations
-                $this->line("\n" . 'Importing trips & reservations...');
-                $trips = $this->trips($c->id);
-                $tripsProgress = $this->output->createProgressBar($trips->count());
-                $trips->map(function($t) use($campaign, $tripsProgress) {
-                    $trip = $this->create_trip($t, $campaign);
-                    $tripsProgress->advance();
-                    return $trip;
-                })->all();
-                $tripsProgress->finish();
-                $this->info("\n" . 'Trips and reservations imported.');
-
-                return $campaign;
-            });
-
-            $this->info("\n" . 'Campaigns imported.');
-        }
+            $bar->advance();
+  
+        })->all();
+        $bar->finish();
+        $this->info("\n" . 'Users imported.');
     }
 
     /**
-     * Create a new campaign
+     * Import Groups
      * 
-     * @param  Collection $item
-     * @return Collection
+     * @param  Collection $groupIndex
+     * @param  Collection $userIndex
+     * @return void
      */
-    private function create_campaign($item)
+    private function import_groups($groupIndex, $userIndex)
     {
-        $campaign = new Campaign([
-            'name' => $item->name,
-            'country_code' => strtolower($item->country_code),
-            'short_desc' => null,
-            'page_src' => null,
-            'avatar_upload_id' => null,
-            'banner_upload_id' => null,
-            'started_at' => $item->start_date,
-            'ended_at' => $item->end_date,
-            'published_at' => $item->public ? $item->created_at : null,
-            'created_at' => $item->created_at,
-            'updated_at' => $item->updated_at
-        ]);
-        $campaign->save();
+        $this->line("\n" . 'Importing groups...');
+        $groups = $this->groups();
+        $bar = $this->output->createProgressBar($groups->count());
+        $groups->map(function($item) use($bar, $groupIndex, $userIndex) {
+            $group = Group::create([
+                'name' => ucwords($item->name),
+                'type' => str_replace('-', '', strtolower($item->type)),
+                'description' => trim($item->description),
+                'public' => $item->public ? true : false,
+                'timezone' => $item->timezone,
+                'address_one' => $item->address_one,
+                'city' => $item->city,
+                'state' => $item->state,
+                'zip' => $item->zip,
+                'country_code' => strtolower($item->country_code),
+                'phone_one' => $item->phone_one,
+                'email' => $item->email,
+                'status' => 'approved',
+                'avatar_upload_id' => trim($item->logo_src) ? 
+                    $this->get_avatar_id($item->logo_src, $item->name) : null,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ]);
+               
+           // add slug
+           $url = $item->slug ? $item->slug : generate_slug($group->name);
+           $group->slug()->create(['url' => $url]);
+           // add links
+           $links = $this->get_links($item)->map(function($link) {
+                return new Link([
+                    'name' => $link['name'], 'url' => $link['url']
+                ]);
+           })->all();
+           $group->links()->saveMany($links);
 
-        // set slug
-        $url = $item->slug ? $item->slug : generate_slug($campaign->name);
-        $campaign->slug()->create(['url' => $url]);
+           // add managers
+           if ($item->manager_ids) {
+                $managers = collect(explode(',', $item->manager_ids))
+                    ->map(function($manager_id) use($userIndex) {
+                        return $userIndex->get($manager_id);
+                    })->flatten()->all();
+                $group->managers()->attach(implode(',', $managers));
+           }
 
-        // generate a fund for the campaign
-        // $fundName = generateFundName($campaign);
-        // $fund = $campaign->fund()->create([
-        //     'name' => $fundName,
-        //     'slug' => generate_fund_slug($fundName),
-        //     'balance' => 0,
-        //     'class' => generateQbClassName($campaign),
-        //     'item' => 'General Donation'
-        // ]);
-        // Add campaign transactions to the fund
-        $transactions = $this->get_transactions($campaign->id, 'Campaign');
-        $campaign->fund->transactions()->saveMany($transactions);
-        $campaign->fund->reconcile();
+            $groupIndex->put($item->id, $group->id);
 
-        return $campaign;
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Groups imported.');
     }
 
     /**
-     * Create a new trip.
+     * Import Passports
      * 
-     * @param  Collection $item
-     * @return Object
+     * @param  Collection $passportIndex
+     * @param  Collection $userIndex
+     * @return void
      */
-    private function create_trip($item, $campaign)
+    private function import_passports($passportIndex, $userIndex)
     {
-        $trip = new Trip([
-            'group_id' => $this->get_new_group_id($item->group_id),
-            'spots' => $item->spots,
-            'companion_limit' => $item->companion_limit,
-            'type' => $this->get_trip_type($item->type),
-            'country_code' => $campaign->country_code,
-            'difficulty' => 'level_'.$item->difficulty_id,
-            'started_at' => $item->start_date,
-            'ended_at' => $item->end_date,
-            'rep_id' => $item->rep_id ? $this->get_new_user_ids([$item->rep_id])[0] : null,
-            'todos' => [
-                'Send shirt',
-                'Send wrist band',
-                'Enter into LGL',
-                'Send launch guide',
-                'Send luggage tag'
-            ],
-            'prospects' => $item->prospects ? explode(',', $item->prospects) : null,
-            'team_roles' => $this->get_team_role_codes($item->team_roles),
-            'description' => strip_tags($item->description),
-            'public' => true,
-            'published_at' => Carbon::now(),
-            'closed_at' => $item->registration ? 
-                            $item->registration : 
-                            Carbon::parse($item->start_date)
-                                        ->subDays(51)
-                                        ->toDateTimeString(),
-            'created_at' => $item->created_at,
-            'updated_at' => $item->updated_at
-        ]);
-
-        $trip = $campaign->trips()->save($trip);
-        $this->add_trip_costs($item, $trip);
-        $this->add_trip_requirements($item, $trip);
-        $this->add_trip_deadlines($item, $trip);
-        $this->add_reservations($item, $trip);
-
-        // $fundName = generateFundName($trip);
-        // $trip->fund()->create([
-        //     'name' => $fundName,
-        //     'slug' => generate_fund_slug($fundName),
-        //     'balance' => 0,
-        //     'class' => generateQbClassName($trip),
-        //     'item' => 'Missionary Donation'
-        // ]);
-
-        return $trip;
+        $this->line('Importing passports ...');
+        $oldPassports = $this->passports();
+        $bar = $this->output->createProgressBar($oldPassports->count());
+        $oldPassports->map(function($passport) use($bar, $passportIndex, $userIndex) {
+            $pass = new Passport([
+                'user_id' => $userIndex->get($passport->user_id),
+                'given_names' => $passport->given_names,
+                'surname' => $passport->surname,
+                'number' => $passport->number,
+                'birth_country' => strtolower($passport->birth_country),
+                'citizenship' => strtolower($passport->citizenship),
+                'upload_id' => $passport->image_scan ? $this->get_upload_id($passport->image_scan, 'passport-'.$passport->given_names.'-'.$passport->surname) : null,
+                'expires_at' => $passport->expiration,
+                'created_at' => $passport->created_at,
+                'updated_at' => $passport->updated_at
+            ]);
+            $pass->save();
+            $passportIndex->put($passport->id, $pass->id);
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Passports imported.' . "\n");
     }
 
     /**
-     * Add reservations to a trip.
+     * Import visas
      * 
-     * @param Collection $item
-     * @param Collection $trip
+     * @param  Collection $visaIndex
+     * @param  Collection $userIndex
+     * @return void
      */
-    private function add_reservations($item, $trip)
+    private function import_visas($visaIndex, $userIndex)
     {
+        $this->line('Importing visas ...');
+        $oldVisas = $this->visas();
+        $bar = $this->output->createProgressBar($oldVisas->count());
+        $oldVisas->map(function($visa) use($bar, $visaIndex, $userIndex) {
+            $newVisa = new Visa([
+                'user_id' => $userIndex->get($visa->user_id),
+                'given_names' => $visa->given_names,
+                'surname' => $visa->surname,
+                'number' => $visa->number,
+                'country_code' => 'in',
+                'upload_id' => $visa->image ? $this->get_upload_id($visa->image, 'visa-'.$visa->given_names.'-'.$visa->surname) : null,
+                'issued_at' => $visa->issued,
+                'expires_at' => $visa->expiration,
+                'created_at' => $visa->created_at,
+                'updated_at' => $visa->updated_at
+            ]);
+            $newVisa->save();
+            $visaIndex->put($visa->id, $newVisa->id);
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Visas imported.' . "\n");
+    }
+
+    /**
+     * Import Essays
+     * 
+     * @param  Collection $essayIndex
+     * @param  Collection $userIndex
+     * @return Void
+     */
+    private function import_essays($essayIndex, $userIndex)
+    {
+        $this->line('Importing testimonies ...');
+        $testimonies = $this->testimonies();
+        $bar = $this->output->createProgressBar($testimonies->count());
+        $testimonies->map(function($testimony) use($bar, $essayIndex, $userIndex) {
+            $essay = Essay::create([
+                'user_id' => $userIndex->get($testimony->user_id),
+                'author_name' => ucwords(strtolower($testimony->name)),
+                'subject' => 'Testimony',
+                'content' => [
+                    [
+                        'q' => 'Describe how you decided to follow Christ',
+                        'a' => strip_tags(trim($testimony->decision))
+                    ],
+                    [
+                        'q' => 'Describe your church involvement',
+                        'a' => strip_tags(trim($testimony->church))
+                    ],
+                    [
+                        'q' => 'Describe your current walk with God',
+                        'a' => strip_tags(trim($testimony->walk))
+                    ],
+                    [
+                        'q' => 'Please describe any prior missions trip experience you have',
+                        'a' => strip_tags(trim($testimony->missions_experience))
+                    ]
+                ],
+                'created_at' => $testimony->created_at,
+                'updated_at' => $testimony->updated_at
+            ]);
+            $essayIndex->put($testimony->id, $essay->id);
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Testimonies imported.' . "\n");
+    }
+
+    /**
+     * Import referrals
+     * 
+     * @param  Collection $referralIndex
+     * @param  Collection $userIndex
+     * @return void
+     */
+    private function import_referrals($referralIndex, $userIndex)
+    {
+        $this->line('Importing pastoral recommendations...');
+        $recommendations = $this->recommendations();
+        $bar = $this->output->createProgressBar($recommendations->count());
+        $recommendations->map(function($rec) use($bar, $referralIndex, $userIndex) {
+            $referral = Referral::create([
+                'user_id' => $userIndex->get($rec->user_id),
+                'applicant_name' => $rec->user_name,
+                'type' => 'pastoral',
+                'attention_to' => $rec->name,
+                'recipient_email' => $rec->email,
+                'referrer' => [
+                    'title' => $rec->offical_title,
+                    'name' => $rec->name,
+                    'organization' => $rec->org_name,
+                    'phone' => $rec->phone,
+                    'address' => $rec->address,
+                    'city' => $rec->city,
+                    'state' => $rec->state,
+                    'zip' => $rec->zip,
+                    'country' => $rec->country
+                ],
+                'response' => [
+                    [
+                        'q' => 'How long have you known the applicant?',
+                        'a' => strip_tags(trim($rec->known_applicant))
+                    ],
+                    [
+                        'q' => 'Please list any current roles the applicant serve in at your church:',
+                        'a' => strip_tags(trim($rec->applicant_roles))
+                    ],
+                    [
+                        'q' => 'To the best of your knowledge, what is the current state of the applicant\'s spiritual walk?',
+                        'a' => strip_tags(trim($rec->applicant_walk))
+                    ],
+                    [
+                        'q' => 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation? Please explain.',
+                        'a' => strip_tags(trim($rec->concerns))
+                    ],
+                    [
+                        'q' => 'Please list the applicant\'s significant strengths:',
+                        'a' => strip_tags(trim($rec->applicant_strength))
+                    ],
+                    [
+                        'q' => 'Please list the applicant\'s significant weaknesses:',
+                        'a' => strip_tags(trim($rec->applicant_weakness))
+                    ],
+                    [
+                        'q' => 'Would you recommend this applicant for a leadership role on the trip? Please explain.',
+                        'a' => strip_tags(trim($rec->leadership_recommendation))
+                    ]
+                ],
+                'sent_at' => $rec->created_at,
+                'responded_at' => $rec->responded_at,
+                'created_at' => $rec->created_at,
+                'updated_at' => $rec->updated_at
+            ]);
+            $referralIndex->put($rec->id, $referral->id);
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Pastoral recommendations imported.' . "\n");
+    }
+
+    /**
+     * Import medical releases
+     * 
+     * @param  Collection $medicalIndex
+     * @param  Collection $userIndex 
+     * @return void
+     */
+    private function import_medical_releases($medicalIndex, $userIndex)
+    {
+        $this->line('Importing medical releases...');
+        $medicalReleases = $this->medicalReleases();
+        $bar = $this->output->createProgressBar($medicalReleases->count());
+        $medicalReleases->map(function($release) use($bar, $medicalIndex, $userIndex) {
+            $medical = MedicalRelease::create([
+                'user_id' => $userIndex->get($release->user_id),
+                'name' => ucwords(strtolower($release->name)),
+                'ins_provider' => empty($release->provider) ? null : ucwords(strtolower($release->provider)),
+                'ins_policy_no' => empty($release->policy_number) ? null : strtoupper($release->policy_number),
+                'emergency_contact' => [
+                    'name' => ucwords(strtolower($release->emergency_name)),
+                    'email' => strtolower($release->emergency_email),
+                    'phone' => $release->emergency_phone
+                ],
+                'is_risk' => false,
+                'created_at' => $release->created_at,
+                'updated_at' => $release->updated_at
+            ]);
+            $conditions = $this->conditions($release->id)->map(function($condition) {
+                return new MedicalCondition([
+                    'name' => $condition->name,
+                    'medication' => false,
+                    'diagnosed' => true
+                ]);
+            })->all();
+            $medical->conditions()->saveMany($conditions);
+            $notes = collect([
+                'other' => $release->other, 
+                'allergies' => $release->allergies, 
+                'medications' => $release->medications
+            ])->reject(function($item) {
+                $string = trim(strtolower(preg_replace('[^A-Za-z]', '', $item)));
+                return in_array($string, [null, '', 'none', 'na', 'n/a', 'na/a', 'n/a.', 'n/s', 0, '0', '-', 'n.a.', 'nada', 'nil', 'nhone', 'nka', 'nkda', 'nope', 'npne', 'n\a', 'n /a', 'n.a', 'nine', 'nione'], true);
+            })->reject(function($item) {
+                return starts_with(strtolower($item), 'no') || starts_with(strtolower($item), 'nil') || starts_with(strtolower($item), 'n/a') || starts_with(strtolower($item), 'nka') || starts_with(strtolower($item), 'nkda') || empty($item) || $item === '';
+            })->map(function($value, $key) use($medical) {
+                return new Note([
+                    'subject' => $key == 'other' ? 'Other Concerns' : ucwords($key),
+                    'content' => ucfirst(strtolower($value)),
+                    'user_id' => $medical->user_id
+                ]);
+            })->all();
+            $medical->notes()->saveMany($notes);
+            $medicalIndex->put($release->id, $medical->id);
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Medical releases imported.' . "\n");
+    }
+
+    /**
+     * Import campaigns
+     * 
+     * @param  Collection $campaignIndex
+     * @return void
+     */
+    private function import_campaigns($campaignIndex, $userIndex)
+    {
+        $campaigns = $this->campaigns();
+        $bar = $this->output->createProgressBar($campaigns->count());
+        $this->line('Importing Campaigns...' ."\n");
+        $campaigns->map(function($item) use($bar, $campaignIndex, $userIndex) {
+            $campaign = Campaign::create([
+                'name' => $item->name,
+                'country_code' => strtolower($item->country_code),
+                'short_desc' => null,
+                'page_src' => null,
+                'avatar_upload_id' => trim($item->image) ? 
+                    $this->get_avatar_id($item->image, $item->name) : null,
+                'banner_upload_id' => null,
+                'started_at' => $item->start_date,
+                'ended_at' => $item->end_date,
+                'published_at' => $item->public ? $item->created_at : null,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ]);
+            $campaignIndex->put($item->id, $campaign->id);
+            // set slug
+            $url = $item->slug ? $item->slug : generate_slug($campaign->name);
+            $campaign->slug()->create(['url' => $url]);
+
+            $transactions = $this->get_transactions($item->id, 'Campaign', $userIndex);
+            $campaign->fund->transactions()->saveMany($transactions);
+            $campaign->fund->reconcile();
+
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Campaigns imported.' . "\n");
+    }
+
+    /**
+     * Import trips
+     * 
+     * @param  Collection $tripIndex     
+     * @param  Collection $campaignIndex 
+     * @param  Collection $groupIndex    
+     * @param  Collection $userIndex     
+     * @return void
+     */
+    private function import_trips($tripIndex, $campaignIndex, $groupIndex, $userIndex, $requirementIndex)
+    {
+        $this->line("\n" . 'Importing trips...');
+        $trips = $this->trips();
+        $bar = $this->output->createProgressBar($trips->count());
+        $trips->map(function($item) use($bar, $tripIndex, $campaignIndex, $groupIndex, $userIndex, $requirementIndex) {
+            $campaign_id = $campaignIndex->get($item->campaign_id);
+            $rep_id = $item->rep_id ? $userIndex->get($item->rep_id) : null;
+            $country_code = Campaign::where('id', $campaign_id)->pluck('country_code')->first();
+            $trip = Trip::create([
+                'campaign_id' => $campaign_id,
+                'group_id' => $groupIndex->get($item->group_id),
+                'spots' => $item->spots,
+                'companion_limit' => $item->companion_limit,
+                'type' => $this->get_trip_type($item->type),
+                'country_code' => $country_code,
+                'difficulty' => 'level_'.$item->difficulty_id,
+                'started_at' => $item->start_date,
+                'ended_at' => $item->end_date,
+                'rep_id' => $rep_id,
+                'todos' => [
+                    'Send shirt',
+                    'Send wrist band',
+                    'Enter into LGL',
+                    'Send launch guide',
+                    'Send luggage tag'
+                ],
+                'prospects' => $item->prospects ? explode(',', $item->prospects) : null,
+                'team_roles' => $this->get_team_role_codes($item->team_roles),
+                'description' => strip_tags($item->description),
+                'public' => true,
+                'published_at' => Carbon::now(),
+                'closed_at' => $item->registration ? 
+                                $item->registration : 
+                                Carbon::parse($item->start_date)
+                                            ->subDays(51)
+                                            ->toDateTimeString(),
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at
+            ]);
+            $this->add_trip_costs($item, $trip);
+            $this->add_trip_requirements($item, $trip, $requirementIndex);
+            $this->add_trip_deadlines($item, $trip);
+            $tripIndex->put($item->id, $trip->id);
+            $bar->advance();
+        })->all();
+        $bar->finish();
+        $this->info("\n" . 'Trips imported.');
+    }
+
+    /**
+     * Import reservations
+     * 
+     * @param  Collection $reservationIndex
+     * @param  Collection $tripIndex       
+     * @param  Collection $userIndex       
+     * @return void
+     */
+    private function import_reservations($reservationIndex, $tripIndex, $userIndex)
+    {
+        $this->line("\n" . 'Importing reservations...');
         // grab reservations from old sys and map to new format
-        $reservations = $this->reservations($item->id)->map(function($r) use($trip) {
+        $reservations = $this->reservations();
+        $bar = $this->output->createProgressBar($reservations->count());
+        $reservations->map(function($r) use($bar, $reservationIndex, $tripIndex, $userIndex) {
+            $user_id = $userIndex->get($r->user_id);
+            $rep_id = $r->rep_id ? $userIndex->get($r->rep_id) : null;
+            $trip_id = $tripIndex->get($r->trip_id);
 
-            // get a new user id from the old sys user id
-            $user_id = $this->get_new_user_ids([$r->user_id])[0];
             $user = User::findOrFail($user_id);
+            $trip = Trip::findOrFail($trip_id);
 
             $reservation = new Reservation([
+                'trip_id' => $trip->id,
                 'given_names' => $r->first_name.' '.$r->middle_name,
                 'surname' => $r->last_name,
                 'gender' => $user->gender,
@@ -262,69 +657,303 @@ class TransferData extends Command
                 'city' => $user->city,
                 'state' => $user->state,
                 'country_code' => $user->country_code,
-                // 'desired_role' => $r->role ? $this->get_team_role_codes($r->role)[0] : null,
+                'desired_role' => $r->role ? $this->get_team_role_codes($r->role)[0] : null,
                 'user_id' => $user->id,
-                'rep_id' => $r->rep_id ? $this->get_new_user_ids([$r->rep_id])[0] : null,
+                'rep_id' => $rep_id,
                 'avatar_upload_id' => $user->avatar_upload_id,
                 'companion_limit' => $trip->companion_limit,
                 'created_at' => $r->created_at,
                 'updated_at' => $r->updated_at,
                 'deleted_at' => $r->dropped ? Carbon::now() : null
             ]);
-
-            $res = $trip->reservations()->save($reservation);
-
+            $reservation->save();
+            // push to ID index
+            $reservationIndex->put($r->id, $reservation->id);
             // generate a fund for the reservation
-            $fundName = generateFundName($res);
-            $fund = $res->fund()->create([
+            $fundName = generateFundName($reservation);
+            $fund = $reservation->fund()->create([
                 'name' => $fundName,
                 'slug' => generate_fund_slug($fundName),
                 'balance' => 0,
-                'class' => generateQbClassName($res),
+                'class' => generateQbClassName($reservation),
                 'item' => 'Missionary Donation'
             ]);
-
             // apply trip costs to the reservation
             $costs = $this->get_reservation_costs($r, $trip);
-            $res->costs()->attach($costs);
-
+            $reservation->costs()->attach($costs);
             // add transactions and update balances
-            $transactions = $this->get_transactions($r->id, 'Reservation');
+            $transactions = $this->get_transactions($r->id, 'Reservation', $userIndex);
             $fund->transactions()->saveMany($transactions);
             $fund->reconcile();
-            $res->payments()->sync();
-
+            $reservation->payments()->sync();
             // create a fundraiser for the reservation's fund
             $fundraiser = $fund->fundraisers()->save(new Fundraiser([
-                'name' => generateFundraiserName($res),
+                'name' => generateFundraiserName($reservation),
                 'url' => $r->slug ?: generate_fundraiser_slug(
                     country($trip->country_code).'-'.$trip->started_at->format('Y')
                 ),
                 'description' => strip_tags($r->support_description) ?: file_get_contents(resource_path('assets/sample_fundraiser.md')),
                 'sponsor_type' => 'users',
-                'sponsor_id' => $res->user_id,
-                'goal_amount' => $res->getTotalCost(),
-                'started_at' => $res->created_at,
+                'sponsor_id' => $reservation->user_id,
+                'goal_amount' => $reservation->getTotalCost(),
+                'started_at' => $reservation->created_at,
                 'ended_at' => $trip->started_at,
                 'public' => $r->public ? true : false,
             ]));
             // add video to fundraiser
-            $fundraiser->uploads()->create([
-                'name' => strtolower($r->video_type).'_'.time(),
-                'type' => 'video',
-                'source' => $r->video_type == 'YouTube' ? '//www.youtube.com/watch?'.$r->video : '//vimeo.com/'.$r->video,
-                'meta' => ['format' => strtolower($r->video_type)]
-            ]);
+            if($r->video_type && $r->video) {
+                $fundraiser->uploads()->create([
+                    'name' => strtolower($r->video_type).'_'.time(),
+                    'type' => 'video',
+                    'source' => $r->video_type == 'YouTube' ? '//www.youtube.com/watch?'.$r->video : '//vimeo.com/'.$r->video,
+                    'meta' => ['format' => strtolower($r->video_type)]
+                ]);
+            }
             // add photos if they exist
             if($r->photos) {
                 $this->add_uploads_to_fundraiser($fundraiser, $r->photos);
             }
-
             // add requirements, deadlines, and todos
-            $res->syncRequirements($trip->requirements);
-            $res->syncDeadlines($trip->deadlines);
-            $res->addTodos($trip->todos);
+            $reservation->syncRequirements($trip->requirements);
+            $reservation->syncDeadlines($trip->deadlines);
+            $reservation->addTodos($trip->todos);
+            if($r->notes && ($reservation->rep_id ?: $reservation->trip->rep_id)) {
+                $reservation->notes()->create([
+                    'subject' => 'Imported Notes',
+                    'content' => $r->notes,
+                    'user_id' => $reservation->rep_id ?: $reservation->trip->rep_id
+                ]);
+            }
+            $bar->advance();
         });
+        $bar->finish();
+        $this->info("\n" . 'Reservations imported.');
+    }
+
+    /**
+     * Import companions
+     * 
+     * @param  Collection $reservationIndex
+     * @return void
+     */
+    private function import_companions($reservationIndex)
+    {
+        $companions = $this->companions();
+        $this->line('Importing travel companions...' ."\n");
+        $bar = $this->output->createProgressBar($companions->count());
+        $companions->map(function($comp) use($bar, $reservationIndex) {
+            $companion = Companion::create([
+                'reservation_id' => $reservationIndex->get($comp->reservation_id),
+                'companion_id' => $reservationIndex->get($comp->co_reservation_id),
+                'group_key' => $comp->group_key,
+                'relationship' => strtolower($comp->relationship)
+            ]);
+            $bar->advance();
+            return $companion;
+        })->all();
+        $bar->finish();
+        $this->info("\n" . 'Companions imported.');
+    }
+
+    private function update_reservation_requirements($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex)
+    {
+        $this->line("\n" . 'Updating reservation requirements...' . "\n");
+        $this->reservation_requirements()->map(function($req) use($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex) {
+            $doc_type = $this->get_document_type($req->formable_type);
+            $doc_id = null;
+
+            if ($req->formable_id) {
+                switch ($doc_type) {
+                    case 'passports':
+                        $doc_id = $passportIndex->get($req->formable_id);
+                        break;
+                    case 'visas':
+                        $doc_id = $visaIndex->get($req->formable_id);
+                        break;
+                    case 'referrals':
+                        $doc_id = $referralIndex->get($req->formable_id);
+                        break;
+                    case 'medical_releases':
+                        $doc_id = $medicalIndex->get($req->formable_id);
+                        break;
+                    case 'essays':
+                        $doc_id = $essayIndex->get($req->formable_id);
+                        break;
+                    default:
+                        $doc_id = null;
+                        break;
+                }
+            }
+
+            $requirement = ReservationRequirement::where('reservation_id', $reservationIndex->get($req->reservation_id))
+                ->where('requirement_id', $requirementIndex->get($req->requirement_id))
+                ->update([
+                    'status' => $req->status == 2 ? 'reviewing' : ($req->status == 1 ? 'complete' : 'incomplete'),
+                    'document_id' => $doc_id
+                ]);
+        });
+        $this->info("\n" . 'Reservation requirements updated.');
+    }
+
+    private function import_causes($causeIndex, $initiativeIndex)
+    {
+        $this->line('Importing causes and initiatives...' ."\n");
+        $causes = $this->causes();
+        $bar = $this->output->createProgressBar($causes->count());
+        $causes->map(function($c) use($bar, $causeIndex, $initiativeIndex) {
+            $cause = ProjectCause::create([
+                'name' => $c->name,
+                'countries' => explode(',', strtolower($c->countries)),
+                'short_desc' => $c->short_desc,
+                'upload_id' => $c->thumb_src ? $this->get_avatar_id($c->thumb_src, $c->name) : null,
+                'short_desc' => $c->short_desc,
+                'created_at' => $c->created_at,
+                'updated_at' => $c->updated_at
+            ]);
+            $causeIndex->put($c->id, $cause->id);
+            
+            $this->initiatives($c->id)->map(function($i) use($cause, $initiativeIndex) {
+                $initiative = $cause->initiatives()->create([
+                    'type' => $i->name,
+                    'country_code' => strtolower($i->country_code),
+                    'upload_id' => $i->thumb_src ? $this->get_avatar_id($i->thumb_src, $i->name) : null,
+                    'short_desc' => $i->short_desc,
+                    'created_at' => $i->created_at,
+                    'started_at' => $i->started_at,
+                    'ended_at' => $i->ended_at,
+                    'updated_at' => $i->updated_at,
+                    'deleted_at' => null
+                ]);
+                $initiativeIndex->put($i->id, $initiative->id);
+
+                // add available deadlines
+                if($i->launch_dates) {
+                    $deadlines = collect(explode(',', $i->launch_dates))->map(function($date) {
+                        return new Deadline([
+                            'name' => 'Launch Date',
+                            'date' => $date,
+                            'grace_period' => 0,
+                            'enforced' => false
+                        ]);
+                    });
+                    $initiative->deadlines()->saveMany($deadlines);
+                }
+            });
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Causes and initiatives imported.');
+    }
+
+    private function import_projects($initiativeIndex, $userIndex, $groupIndex)
+    {
+        $this->line('Importing projects...' ."\n");
+        $projects = $this->projects();
+        $bar = $this->output->createProgressBar($projects->count());
+        $projects->map(function($proj) use($bar, $initiativeIndex, $userIndex, $groupIndex) {
+            $project = new Project([
+                'name' => trim($proj->name),
+                'project_initiative_id' => $initiativeIndex->get($proj->initiative_id),
+                'plaque_prefix' => $proj->prefix,
+                'plaque_message' => $proj->plaque_msg,
+                'funded_at' => null,
+                'created_at' => $proj->created_at,
+                'updated_at' => $proj->updated_at,
+                'deleted_at' => $proj->deleted_at
+            ]);
+
+            if($proj->sponsorable_type == 'Group') {
+                $project->sponsor_id = $groupIndex->get($proj->sponsorable_id);
+                $project->sponsor_type = 'groups';
+            } else {
+                $project->sponsor_id = $userIndex->get($proj->sponsorable_id);
+                $project->sponsor_type = 'users';
+            }
+
+            $project->save();
+            // add costs & payments
+            $cost = $project->costs()->create([
+                'name' => 'Standard Project Cost',
+                'description' => null,
+                'amount' => $proj->amount,
+                'type' => 'Static',
+                'active_at' => Carbon::parse($proj->launch_date)->subYear()
+            ]);
+            $cost->payments()->saveMany([
+                new Payment([
+                    'amount_owed' => $proj->amount/2,
+                    'percent_owed' => 50,
+                    'due_at' => Carbon::parse($proj->launch_date)->subdays($proj->half_due_days)
+                ]),
+                new Payment([
+                    'amount_owed' => $proj->amount/2,
+                    'percent_owed' => 50,
+                    'due_at' => Carbon::parse($proj->launch_date)->subdays($proj->full_due_days)
+                ])
+            ]);
+            $this->project_optional_costs($proj->id)->map(function($c) use($project, $proj) {
+                $cost = $project->costs()->create([
+                    'name' => $c->name,
+                    'description' => $c->short_desc,
+                    'amount' => $c->amount,
+                    'type' => 'optional',
+                    'active_at' => $proj->created_at
+                ]);
+                $cost->payments()->saveMany([
+                    new Payment([
+                        'amount_owed' => $c->amount/2,
+                        'percent_owed' => 50,
+                        'due_at' => Carbon::parse($proj->launch_date)->subdays($proj->half_due_days)
+                    ]),
+                    new Payment([
+                        'amount_owed' => $c->amount/2,
+                        'percent_owed' => 50,
+                        'due_at' => Carbon::parse($proj->launch_date)->subdays($proj->full_due_days)
+                    ])
+                ]);
+            });
+            // add deadlines
+
+            $transactions = $this->get_transactions($proj->id, 'SponsoredProject', $userIndex);
+            $fund = $project->fund;
+
+            $fund->transactions()->saveMany($transactions);
+            $fund->reconcile();
+            $project->payments()->sync();
+            // create a fundraiser for the project's fund
+            $fundraiser_name = $proj->fundraiser_name ?: generateFundraiserName($project);
+            $fundraiser = $fund->fundraisers()->save(new Fundraiser([
+                'name' => trim($fundraiser_name),
+                'url' => $proj->slug ?: generate_fundraiser_slug($fundraiser_name),
+                'description' => strip_tags($proj->support_msg) ?: file_get_contents(resource_path('assets/sample_fundraiser.md')),
+                'sponsor_type' => $project->sponsor_type,
+                'sponsor_id' => $project->sponsor_id,
+                'goal_amount' => $project->goal,
+                'started_at' => $project->created_at,
+                'ended_at' => $proj->deadline,
+                'public' => $proj->public ? true : false,
+                'created_at' => $proj->fundraiser_created ?: Carbon::now(),
+                'updated_at' => $proj->fundraiser_updated ?: Carbon::now(),
+                'deleted_at' => $proj->fundraiser_deleted ?: Carbon::now()
+            ]));
+            // add video to fundraiser
+            if($proj->video_type && $proj->video_id) {
+                $fundraiser->uploads()->create([
+                    'name' => strtolower($proj->video_type).'_'.time(),
+                    'type' => 'video',
+                    'source' => $proj->video_type == 'YouTube' ? '//www.youtube.com/watch?'.$proj->video_id : '//vimeo.com/'.$proj->video_id,
+                    'meta' => ['format' => strtolower($proj->video_type)]
+                ]);
+            }
+            // add photos if they exist
+            if($proj->photos) {
+                $this->add_uploads_to_fundraiser($fundraiser, $proj->photos);
+            }
+
+            $bar->advance();
+        });
+        $bar->finish();
+        $this->info("\n" . 'Projects imported.');
     }
 
     /**
@@ -430,15 +1059,16 @@ class TransferData extends Command
      * @param  Integer $reservation_id Old sys reservation Id
      * @return Collection New sys transactions
      */
-    private function get_transactions($id, $type)
+    private function get_transactions($id, $type, $userIndex)
     {
         // get old sys transactions, map to new format and save
-        return $this->transactions($id, $type)->map(function($trans) {
+        return $this->transactions($id, $type)->map(function($trans) use($userIndex) {
+            $user_id = $userIndex->get($trans->user_id);
             $transaction = new Transaction([
                 'amount' => $trans->amount,
                 'type' => $trans->payment_method_type == 'Credit' ? 'credit' : 'donation',
                 'details' => $this->get_transaction_details($trans),
-                'donor_id' => $trans->donor ? $this->get_donor_id($trans) : null,
+                'donor_id' => $trans->donor ? $this->get_donor_id($trans, $user_id) : null,
                 'anonymous' => $trans->anonymous,
                 'created_at' => $trans->created_at,
                 'updated_at' => $trans->updated_at,
@@ -487,9 +1117,8 @@ class TransferData extends Command
         }
     }
 
-    private function get_donor_id($trans) {
-        if ($trans->user_id) {
-            $user_id = $this->get_new_user_ids([$trans->user_id])[0];
+    private function get_donor_id($trans, $user_id = null) {
+        if ($user_id) {
             $user = User::findOrFail($user_id);
 
             $donor = Donor::firstOrNew([
@@ -687,33 +1316,32 @@ class TransferData extends Command
      * @param Collection $item
      * @param Collection $trip
      */
-    private function add_trip_requirements($item, $trip)
+    private function add_trip_requirements($item, $trip, $requirementIndex)
     {
         $requirements = $this->trip_requirements($item->id)
             ->reject(function($requirement) {
-                return is_null($this->get_document_type($requirement));
+                return is_null($this->get_document_type($requirement->formable));
             })
-            ->map(function($requirement) use($item) {
-                return new Requirement([
+            ->map(function($requirement) use($item, $trip, $requirementIndex) {
+                $req = $trip->requirements()->create([
                     'name' => $requirement->name,
                     'short_desc' => $requirement->description,
-                    'document_type' => $this->get_document_type($requirement),
+                    'document_type' => $this->get_document_type($requirement->formable),
                     'due_at' => $item->requirements ?: Carbon::parse($item->start_date)->subDays(82),
                     'grace_period' => 3
                 ]);
-            })->all();
-
-        $trip->requirements()->saveMany($requirements);
+                $requirementIndex->put($requirement->id, $req->id);
+            });
     }
 
     /**
      * Get the document type
-     * @param  Collection $requirement
+     * @param  String $type
      * @return String
      */
-    private function get_document_type($requirement)
+    private function get_document_type($type)
     {
-        switch ($requirement->formable) {
+        switch ($type) {
             case 'MedicalRelease':
                 return 'medical_releases';
                 break;
@@ -776,7 +1404,7 @@ class TransferData extends Command
      * @param  Collection $item
      * @return Object
      */
-    private function get_new_or_existing_group($item)
+    private function get_new_or_existing_group($item, $groupIndex, $userIndex)
     {
         $group = Group::firstOrNew([
                 'name' => ucwords($item->name),
@@ -814,9 +1442,14 @@ class TransferData extends Command
                $group->links()->saveMany($links);
 
                // add managers
-               if ($item->manager_ids)
-                    $group->managers()->sync($this->get_new_user_ids($item->manager_ids));
+               if ($item->manager_ids) {
+                    $managers = collect(explode(',', $item->manager_ids))->map(function($manager_id) use($userIndex) {
+                        return $userIndex->get($manager_id);
+                    })->all();
+                    $group->managers()->sync($managers);
+               }
 
+                $groupIndex->push([$item->id => $group->id]);
             }
 
             return $group;
@@ -838,6 +1471,21 @@ class TransferData extends Command
         if (! $upload->id) {
             $upload->name = str_slug($name);
             $upload->type = 'avatar';
+            $upload->save();
+        }
+
+        return $upload->id;
+    }
+
+    private function get_upload_id($source, $name)
+    {
+        $upload = Upload::firstOrNew([
+            'source' => 'images/other/'.$source
+        ]);
+
+        if (! $upload->id) {
+            $upload->name = str_slug($name);
+            $upload->type = 'other';
             $upload->save();
         }
 
@@ -885,7 +1533,7 @@ class TransferData extends Command
      * @param  Collection $item
      * @return Object
      */
-    private function get_new_or_existing_user($item)
+    private function get_new_or_existing_user($item, $userIndex)
     {
         $user = User::firstOrNew([
             'email' => $item->email
@@ -933,6 +1581,7 @@ class TransferData extends Command
                  ]);
             })->all();
             $user->links()->saveMany($links);
+            $userIndex->push([$item->id => $user->id]);
         }
 
         return $user;
@@ -995,7 +1644,7 @@ class TransferData extends Command
             ->select(
                 'campaigns.id', 'campaigns.name', 'abbr AS country_code',
                 'campaigns.created_at', 'campaigns.updated_at', 'slug',
-                'public', 'start_date', 'end_date'
+                'public', 'start_date', 'end_date', 'image'
             )
             ->get());
     }
@@ -1006,7 +1655,7 @@ class TransferData extends Command
      * @param Integer $campaign_id
      * @return Collection 
      */
-    private function trips($campaign_id)
+    private function trips()
     {
         return collect($this->connection()
             ->table('trips')
@@ -1020,7 +1669,7 @@ class TransferData extends Command
             ->leftJoin('travelers', 'travelers.id', '=', 'travelerables.traveler_id')
             ->leftJoin('role_trip', 'role_trip.trip_id', '=', 'trips.id')
             ->leftJoin('roles', 'role_trip.role_id', '=', 'roles.id')
-            ->where('campaign_id', $campaign_id)
+            ->leftJoin('reps', 'reps.id', '=', 'trips.rep_id')
             ->groupBy('trips.id')
             ->select(
                 'trips.id', 'group_id', 'start_date', 'end_date',
@@ -1036,22 +1685,15 @@ class TransferData extends Command
                 'trip_deadlines.regular_cost_full',
                 'trip_deadlines.late_fee',
                 'trip_deadlines.requirements',
-                'trip_deadlines.companions'
+                'trip_deadlines.companions',
+                'trips.campaign_id',
+                'reps.user_id AS rep_id'
             )->addSelect(
                DB::raw('GROUP_CONCAT(DISTINCT travelers.traveler) AS prospects')
             )->addSelect(
                DB::raw('GROUP_CONCAT(DISTINCT roles.name) AS team_roles')
             )->addSelect(
-               DB::raw("CONCAT('###WHAT TO EXPECT', '
-                        ', trip_pages.what_to_expect, '
-                        ###WHAT\'S INCLUDED IN MY TRIP REGISTRATION?
-                        ', trip_pages.included, '
-                        ###WHAT\'S NOT INCLUDED IN MY TRIP REGISTRATION?
-                        ', trip_pages.not_included, '
-                        ###PRE-TRIP TRAINING
-                        ', trip_pages.training, '
-                        ###HOW YOU WILL GET THERE
-                        ', trip_pages.flight_information) AS description")
+               DB::raw("CONCAT('###WHAT TO EXPECT', '', trip_pages.what_to_expect, '###WHAT\'S INCLUDED IN MY TRIP REGISTRATION?', trip_pages.included, '###WHAT\'S NOT INCLUDED IN MY TRIP REGISTRATION?', trip_pages.not_included, '###PRE-TRIP TRAINING', trip_pages.training, '###HOW YOU WILL GET THERE', trip_pages.flight_information) AS description")
             )
             ->get());
     }
@@ -1188,7 +1830,19 @@ class TransferData extends Command
             ->where('requireable_id', $trip_id)
             ->where('requireable_type', 'Trip')
             ->join('requirements', 'requireables.requirement_id', '=', 'requirements.id')
-            ->select('name', 'description', 'formable')
+            ->select('name', 'description', 'formable', 'requirements.id')
+            ->get());
+    }
+
+    private function reservation_requirements()
+    {
+        return collect($this->connection()
+            ->table('requireable_reservation AS rr')
+            ->join('requireables', 'rr.requireable_id', '=', 'requireables.id')
+            ->select(
+                'rr.reservation_id', 'rr.formable_type', 'rr.formable_id', 'rr.status', 
+                'requireables.requirement_id'
+            )
             ->get());
     }
 
@@ -1198,11 +1852,10 @@ class TransferData extends Command
      * @param  Integer $trip_id 
      * @return Collection          
      */
-    private function reservations($trip_id)
+    private function reservations()
     {
         return collect($this->connection()
             ->table('reservations')
-            ->where('reservations.trip_id', $trip_id)
             ->leftJoin('reservation_pages', 'reservation_pages.reservation_id', '=', 'reservations.id')
             ->join('users', 'users.id', '=', 'reservations.user_id')
             ->join('roles', 'roles.id', '=', 'reservations.role_id')
@@ -1211,13 +1864,14 @@ class TransferData extends Command
                 $join->on('reservation_pages.id', '=', 'uploads.uploadable_id')
                      ->where('uploads.uploadable_type', '=', 'ReservationPage');
             })
+            ->leftJoin('reps', 'reps.id', '=', 'reservations.rep_id')
             ->select(
                 'first_name', 'middle_name', 'last_name', 'reservations.user_id', 'roles.name AS role',
                 'dropped', 'shirt_sent', 'launch_guide_sent', 'luggage_tag_sent',
-                'sent_to_lgl', 'rep_id', 'reservations.created_at', 'reservations.updated_at',
+                'sent_to_lgl', 'reps.user_id AS rep_id', 'reservations.created_at', 'reservations.updated_at',
                 'support_description', 'reservation_pages.slug', 'reservation_pages.public',
                 'reservations.status_id AS payment_status', 'reservations.id',
-                'video', 'video_type'
+                'reservation_pages.video', 'reservation_pages.video_type', 'notes', 'reservations.trip_id'
             )
             ->addSelect(
                 DB::raw('GROUP_CONCAT(DISTINCT uploads.uuid) AS photos')
@@ -1317,6 +1971,202 @@ class TransferData extends Command
                     ELSE null 
                 END AS country_code
             '))
+            ->get());
+    }
+
+    /**
+     * Get Passports
+     * 
+     * @return Collection
+     */
+    private function passports()
+    {
+        return collect($this->connection()
+            ->table('passports')
+            ->join('countries AS nationality', 'nationality.id', '=', 'passports.birth_country_id')
+            ->join('countries AS citizenship', 'citizenship.id', '=', 'passports.citizenship_country_id')
+            ->select(
+                'given_names', 'surname', 'number', 'expiration', 'nationality.abbr AS birth_country',
+                'citizenship.abbr AS citizenship', 'image_scan', 'passports.created_at', 'passports.updated_at',
+                'user_id', 'passports.id'
+            )
+            ->get());
+    }
+
+    private function visas()
+    {
+        return collect($this->connection()
+            ->table('visas')
+            ->join('users', 'visas.user_id', '=', 'users.id')
+            ->select(
+                'number', 'expiration', 'issued', 'image', 
+                'visas.created_at', 'visas.updated_at', 'user_id', 'visas.id',
+                'first_name AS given_names', 'last_name AS surname'
+            )
+            ->get());
+    }
+
+    /**
+     * Get testimonies
+     * 
+     * @return Collection
+     */
+    private function testimonies()
+    {
+        return collect($this->connection()
+            ->table('testimonies')
+            ->join('users', 'users.id', '=', 'testimonies.id')
+            ->select(
+                'user_id', 'decision', 'church', 'walk', 'missions_experience', 
+                'testimonies.created_at', 'testimonies.updated_at', 'testimonies.id'
+            )
+            ->addSelect(DB::raw('CONCAT(users.first_name, " ", users.last_name) AS name'))
+            ->get());
+    }
+
+    /**
+     * Get recommendations.
+     * 
+     * @return Collection
+     */
+    private function recommendations()
+    {
+        return collect($this->connection()
+            ->table('recommendation_requests AS requests')
+            ->join('recommendation_responses AS responses', 'responses.request_id', '=', 'requests.id')
+            ->join('users', 'requests.user_id', '=', 'users.id')
+            ->join('countries', 'requests.country_id', '=', 'countries.id')
+            ->select(
+                'requests.name', 'org_name', 'address', 'city', 'state', 'zip', 'countries.name AS country', 'phone',
+                'requests.email', 'requests.created_at', 'requests.updated_at', 'responses.created_at AS responded_at',
+                'offical_title', 'known_applicant', 'applicant_roles', 'applicant_walk', 'concerns',
+                'applicant_strength', 'applicant_weakness', 'leadership_recommendation', 'user_id',
+                'requests.id'
+            )
+            ->addSelect(DB::raw('CONCAT(users.first_name, " ", users.last_name) AS user_name'))
+            ->get());
+    }
+
+    private function medicalReleases()
+    {
+        return collect($this->connection()
+            ->table('medical_releases')
+            ->join('users', 'medical_releases.user_id', '=', 'users.id')
+            ->select(
+                'provider', 'policy_number', 'emergency_name', 'emergency_email',
+                'emergency_phone', 'other', 'allergies', 'medications', 'medical_releases.created_at',
+                'medical_releases.updated_at', 'user_id', 'medical_releases.id'
+            )
+            ->addSelect(DB::raw('CONCAT(users.first_name, " ", users.last_name) AS name'))
+            ->get());
+    }
+
+    private function conditions($id)
+    {
+        return collect($this->connection()
+            ->table('medical_release_condition')
+            ->where('release_id', $id)
+            ->join('conditions', 'medical_release_condition.condition_id', '=', 'conditions.id')
+            ->select('name')
+            ->get());
+    }
+
+    private function companions()
+    {
+        return collect($this->connection()
+            ->table('companions')
+            ->join('relationships', 'companions.relationship_id', '=', 'relationships.id')
+            ->select('name AS relationship', 'reservation_id', 'co_reservation_id', 'group_key')
+            ->get());
+    }
+
+    private function causes()
+    {
+        return collect($this->connection()
+            ->table('project_causes AS causes')
+            ->join('project_initiatives AS initiatives', 'initiatives.project_cause_id', '=', 'causes.id')
+            ->join('countries', 'initiatives.country_id', '=', 'countries.id')
+            ->groupBy('causes.id')
+            ->select('causes.name', 'causes.short_desc', 'causes.thumb_src', 'causes.created_at', 'causes.updated_at', 'causes.id')
+            ->addSelect(
+                DB::raw('GROUP_CONCAT(DISTINCT countries.abbr) AS countries')
+            )
+            ->get());
+    }
+
+    private function initiatives($cause_id)
+    {
+        return collect($this->connection()
+            ->table('project_initiative_types')
+            ->join(
+                'project_initiatives AS initiatives', 'initiatives.id', '=', 'project_initiative_types.project_initiative_id'
+            )
+            ->join('countries', 'initiatives.country_id', '=', 'countries.id')
+            ->join(
+                'project_types AS types', 'types.id', '=', 'project_initiative_types.project_type_id'
+            )
+            ->leftJoin('project_launch_dates', 'project_launch_dates.project_initiative_id', '=', 'initiatives.id')
+            ->groupBy('project_initiative_types.id')
+            ->where('initiatives.project_cause_id', $cause_id)
+            ->select(
+                'types.name', 'types.short_desc', 'types.thumb_src',
+                'initiatives.created_at', 'initiatives.updated_at', 'initiatives.started_at',
+                'initiatives.ended_at', 'countries.abbr AS country_code', 'project_initiative_types.id'
+            )
+            ->addSelect(
+                DB::raw('GROUP_CONCAT(DISTINCT project_launch_dates.launch_date) AS launch_dates')
+            )
+            ->get());
+    }
+
+    private function projects()
+    {
+        return collect($this->connection()
+            ->table('sponsored_projects')
+            ->join('project_initiatives', 'sponsored_projects.project_initiative_id', '=', 'project_initiatives.id')
+            ->join('project_types', 'sponsored_projects.project_type_id', '=', 'project_types.id')
+            ->join('project_initiative_types', function($join) {
+                $join->on('project_initiative_types.project_initiative_id', '=', 'project_initiatives.id')
+                     ->on('project_initiative_types.project_type_id', '=', 'project_types.id');
+            })
+            ->join('project_launch_dates', 'sponsored_projects.project_launch_date_id', '=', 'project_launch_dates.id')
+            ->join('plaque_msg_prefixes', 'sponsored_projects.plaque_msg_prefix_id', '=', 'plaque_msg_prefixes.id')
+            ->leftJoin('fundraisers', function($join) {
+                $join->on('fundraisers.fundable_id', '=', 'sponsored_projects.id')
+                     ->where('fundraisers.fundable_type', '=', 'SponsoredProject');
+            })
+            ->leftJoin('slugs', function($join) {
+                $join->on('slugs.slugable_id', '=', 'sponsored_projects.id')
+                     ->where('slugs.slugable_type', '=', 'Fundraiser');
+            })
+            ->leftJoin('uploads', function($join) {
+                $join->on('fundraisers.id', '=', 'uploads.uploadable_id')
+                     ->where('uploads.uploadable_type', '=', 'Fundraiser');
+            })
+            ->groupBy('sponsored_projects.id')
+            ->select(
+                'sponsored_projects.name', 'project_initiative_types.id AS initiative_id', 'sponsored_projects.id',
+                'sponsored_projects.plaque_msg', 'sponsored_projects.created_at', 'sponsored_projects.updated_at',
+                'project_initiative_types.amount', 'project_launch_dates.launch_date', 'project_launch_dates.half_due_days',
+                'project_launch_dates.full_due_days', 'plaque_msg_prefixes.prefix', 'sponsored_projects.completed',
+                'sponsored_projects.sponsorable_id', 'sponsored_projects.sponsorable_type', 'sponsored_projects.deleted_at',
+                'fundraisers.name AS fundraiser_name', 'fundraisers.deadline', 'fundraisers.video_id', 'fundraisers.video_type',
+                'fundraisers.support_msg', 'fundraisers.public', 'fundraisers.created_at AS fundraiser_created',
+                'fundraisers.updated_at AS fundraiser_updated', 'fundraisers.deleted_at AS fundraiser_deleted', 'slugs.name AS slug'
+            )
+            ->addSelect(
+                DB::raw('GROUP_CONCAT(DISTINCT uploads.uuid) AS photos')
+            )
+            ->get());
+    }
+
+    private function project_optional_costs($projectId)
+    {
+        return collect($this->connection()
+            ->table('sponsored_project_enhancements AS spe')
+            ->join('project_enhancements AS pe', 'spe.project_enhancement_id', '=', 'pe.id')
+            ->where('sponsored_project_id', $projectId)
+            ->select('pe.name', 'pe.short_desc', 'spe.amount')
             ->get());
     }
 

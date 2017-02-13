@@ -96,8 +96,8 @@
         </form>
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>Profile updated!</p>
+            <strong>Good job!</strong>
+            <p>Profile updated</p>
         </alert>
         <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
             <span class="icon-info-circled alert-icon-float-left"></span>

@@ -7,7 +7,7 @@
            width="400px"
            dismissable>
         <span class="icon-ok-circled alert-icon-float-left"></span>
-        <strong>Well Done!</strong>
+        <strong>Good job!</strong>
         <p>{{ message }}</p>
     </alert>
 
@@ -107,7 +107,7 @@
     <p class="text-center"><small class="text-muted">Double-click to edit a todo.</small></p>
 
     <modal class="text-center" :show.sync="deleteModal" title="Delete Todo" small="true">
-        <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Todo?</div>
+        <div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedTodo)'>Confirm</button>

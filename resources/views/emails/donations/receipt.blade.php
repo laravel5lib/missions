@@ -18,7 +18,7 @@
         </tbody>
     </table></p>
 
-    <p style="font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;line-height:18px;">Please let us know if you would like more information about the innovative international outreaches of Missions.Me. We pray you and your family will be blessed because of your generous giving.</p>
+    <p style="font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;line-height:18px;">Please contact us for more information about the innovative international outreaches of Missions.Me. We pray you and your family will be blessed because of your generous giving.</p>
     <p style="font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;line-height:18px;">- Missions Me Team</p>
 
 @stop

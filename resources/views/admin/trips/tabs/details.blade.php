@@ -32,32 +32,47 @@
                 </div>
                 <hr class="divider">
                 <div class="row">
-                    <div class="col-sm-4 text-center">
+                    <div class="col-sm-6 text-center">
                         <label>Start Date</label>
                         <p>{{ $trip->started_at->format('F d, Y') }}</p>
                     </div>
-                    <div class="col-sm-4 text-center">
+                    <div class="col-sm-6 text-center">
                         <label>End Date</label>
                         <p>{{ $trip->ended_at->format('F d, Y') }}</p>
                     </div>
-                    <div class="col-sm-4 text-center">
-                        <label>Updated Date</label>
+                </div>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-6 text-center">
+                        <label>Updated</label>
                         <p>{{ $trip->updated_at->format('F d, Y') }}</p>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <label>Created</label>
+                        <p>{{ $trip->created_at->format('F d, Y') }}</p>
                     </div>
                 </div>
                 <hr class="divider">
                 <label>Perfect For</label>
+                @if($trip->prospects)
                 <ul class="list-unstyled">
                     @foreach($trip->prospects as $prospect)
                         <li class="badge">{{ $prospect }}</li>
                     @endforeach
                 </ul>
+                @else
+                <p>None listed</p>
+                @endif
                 <label>Team Roles</label>
+                 @if($trip->team_roles)
                 <ul class="list-unstyled">
-                    {{-- @foreach($trip->team_roles as $role)
+                    @foreach($trip->team_roles as $role)
                         <li class="badge">{{ teamRole($role) }}</li>
-                    @endforeach --}}
+                    @endforeach
                 </ul>
+                @else
+                <p>None listed</p>
+                @endif
             </div>
             <div class="col-sm-12 col-md-4 text-center">
                 <div class="panel panel-default">

@@ -15,15 +15,13 @@ class ExportReferrals extends Exporter
 
     public function columns($referral)
     {
-        return [
+        $data = [
             'id' => $referral->id,
-            'name' => $referral->name,
+            'applicant_name' => $referral->applicant_name,
             'type' => $referral->type,
-            'referral_name' => $referral->referral_name,
-            'referral_email' => $referral->referral_email,
-            'referral_phone' => $referral->referral_phone,
             'status' => $referral->status,
-            'sent_at' => $referral->sent_at->toDateTimeString(),
+            'sent_at' => $referral->sent_at ? $referral->sent_at->toDateTimeString() : null,
+            'responded_at' => $referral->responded_at ? $referral->responded_at->toDateTimeString() : null,
             'user_id' => $referral->user_id,
             'user_name' => $referral->user->name,
             'user_email' => $referral->user->email,
@@ -31,5 +29,7 @@ class ExportReferrals extends Exporter
             'created_at' => $referral->created_at->toDateTimeString(),
             'updated_at' => $referral->updated_at->toDateTimeString(),
         ];
+
+        return $data;
     }
 }

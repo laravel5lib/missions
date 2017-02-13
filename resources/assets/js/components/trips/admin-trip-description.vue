@@ -28,7 +28,7 @@
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
+            <strong>Good job!</strong>
             <p>Trip Description Updated!</p>
         </alert>
     </div>

@@ -47,30 +47,11 @@ class ProjectTablesSeeder extends Seeder
         $causes->each(function($cause) {
 
             $cause->initiatives->each(function($initiative) {
-                $staticCost = $initiative->costs()->save(factory(App\Models\v1\Cost::class, 'static')->make());
-
-                $staticCost->payments()->save(
-                    factory(App\Models\v1\Payment::class)->make([
-                        'amount_owed' => $staticCost->amount / 2,
-                        'percent_owed' => 50,
-                        'upfront' => false
-                    ])
-                );
-
-                $staticCost->payments()->save(
-                    factory(App\Models\v1\Payment::class)->make([
-
-                        'amount_owed' => $staticCost->amount / 2,
-                        'percent_owed' => 50,
-                        'upfront' => false
-                    ])
-                );
-
                 factory(App\Models\v1\Project::class, 5)
-                    ->create(['project_initiative_id' => $initiative->id])
-                    ->each(function($project) use($staticCost) {
-                        $project->costs()->sync([$staticCost->id => ['quantity' => 1]]);
-                    });
+                    ->create(['project_initiative_id' => $initiative->id]);
+                    // ->each(function($project) use($staticCost) {
+                    //     $project->costs()->sync([$staticCost->id => ['quantity' => 1]]);
+                    // });
             });
 
         });

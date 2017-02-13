@@ -467,7 +467,6 @@ $factory->define(App\Models\v1\Passport::class, function (Faker\Generator $faker
         'given_names'   => $faker->firstName,
         'surname'       => $faker->lastName,
         'number'        => $faker->randomNumber(9),
-        'issued_at'     => $faker->dateTimeThisYear,
         'expires_at'    => $faker->dateTimeThisDecade,
         'birth_country' => $faker->randomElement(['us', 'ca', 'gb', 'hn']),
         'citizenship'   => $faker->randomElement(['us', 'ca', 'gb', 'hn']),
@@ -560,12 +559,15 @@ $factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator 
 $factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker)
 {
     return [
-        'name' => $faker->firstName,
+        'applicant_name' => $faker->firstName,
         'type' => 'pastoral',
-        'referral_name' => $faker->name,
-        'referral_phone' => $faker->phoneNumber,
-        'referral_email' => $faker->email,
-        'status' => 'sent',
+        'attention_to' => $faker->name,
+        'recipient_email' => $faker->email,
+        'referrer' => [
+            'title' => $faker->title,
+            'name' => $faker->name,
+            'phone' => $faker->phoneNumber,
+        ],
         'response' => [
             [
                 'q' => 'How Long have you known the applicant?',

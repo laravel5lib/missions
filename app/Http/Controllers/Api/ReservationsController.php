@@ -58,7 +58,7 @@ class ReservationsController extends Controller
      */
     public function show($id)
     {
-        $reservation = $this->reservation->findOrFail($id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

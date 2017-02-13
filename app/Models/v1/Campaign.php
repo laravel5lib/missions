@@ -27,7 +27,8 @@ class Campaign extends Model
     protected $fillable = [
         'name', 'country_code', 'short_desc',
         'started_at', 'ended_at', 'published_at', 
-        'page_src', 'created_at', 'updated_at', 'deleted_at'
+        'page_src', 'created_at', 'updated_at', 'deleted_at',
+        'avatar_upload_id'
     ];
 
     /**

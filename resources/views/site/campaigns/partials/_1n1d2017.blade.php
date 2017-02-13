@@ -35,7 +35,7 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
 				<h1 class="text-center text-uppercase" style="color:#E4E837;" data-aos="fade-up">This Is How Change Begins</h1>
-				<p class="text-center" data-aos="fade-up">1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.</p>
+				<p class="text-center" data-aos="fade-up">1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t only about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.</p>
 			</div><!-- end col -->
 		</div><!-- end row -->
 	</div>

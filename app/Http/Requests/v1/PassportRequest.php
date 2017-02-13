@@ -27,7 +27,6 @@ class PassportRequest extends FormRequest
             'given_names' => 'required|string',
             'surname' => 'required|string',
             'number' => 'required|string|min:9',
-            'issued_at' => 'required|date|before:now',
             'expires_at' => 'required|date|after:now',
             'birth_country' => 'required|string',
             'citizenship' => 'required|string',

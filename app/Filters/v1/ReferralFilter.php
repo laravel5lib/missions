@@ -18,9 +18,9 @@ class ReferralFilter extends Filter
      * @var array
      */
     public $sortable = [
-        'name', 'referral_name', 'referral_email',
-        'referral_phone', 'status', 'sent_at',
-        'created_at', 'updated_at', 'type'
+        'applicant_name', 'attention_to', 'recipient_email',
+        'sent_at', 'responded_at', 'created_at', 
+        'updated_at', 'type'
     ];
 
     /**
@@ -29,7 +29,7 @@ class ReferralFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'name', 'referral_name', 'referral_email', 'referral_phone'
+        'applicant_name', 'attention_to', 'recipient_email', 'referrer->name'
     ];
 
     /**
@@ -40,7 +40,9 @@ class ReferralFilter extends Filter
      */
     public function status($status)
     {
-        return $this->where('status', $status);
+        if (! in_array($status, ['draft', 'sent', 'received'])) return $this;
+
+        return $this->{$status}();
     }
 
     /**

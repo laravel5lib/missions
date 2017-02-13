@@ -68,16 +68,17 @@ class ReferralsController extends Controller
     {
         $referral = Referral::create([
             'user_id' => $request->get('user_id'),
-            'name' => $request->get('name'),
+            'applicant_name' => $request->get('applicant_name'),
+            'attention_to' => $request->get('attention_to'),
+            'recipient_email' => $request->get('recpient_email'),
             'type' => $request->get('type'),
-            'referral_name' => $request->get('referral_name'),
-            'referral_email' => $request->get('referral_email'),
-            'referral_phone' => $request->get('referral_phone'),
-            'status' => 'sent',
+            'referrer' => $request->get('referrer'),
             'sent_at' => Carbon::now()
         ]);
 
         $location = url('/referrals/' . $referral->id);
+
+        dispatch(new SendReferralRequestEmail($referral));
 
         return $this->response->created($location);
     }
@@ -95,13 +96,13 @@ class ReferralsController extends Controller
 
         $referral->update([
             'user_id' => $request->get('user_id', $referral->user_id),
-            'name' => $request->get('name', $referral->name),
+            'applicant_name' => $request->get('applicant_name', $referral->applicant_name),
+            'attention_to' => $request->get('attention_to', $referral->attention_to),
+            'recipient_email' => $request->get('recpient_email', $referral->recipient_email),
             'type' => $request->get('type', $referral->type),
-            'referral_name' => $request->get('referral_name', $referral->referral_name),
-            'referral_email' => $request->get('referral_email', $referral->referral_email),
-            'referral_phone' => $request->get('referral_phone', $referral->referral_phone),
-            'status' => $request->get('status', $referral->status),
+            'referrer' => $request->get('referrer', $referral->referrer),
             'sent_at' => $request->get('sent_at', $referral->sent_at),
+            'responded_at' => $request->get('responded_at', $referral->responded_at),
             'response' => $request->get('response', $referral->response)
         ]);
 

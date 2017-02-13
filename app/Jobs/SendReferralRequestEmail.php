@@ -37,7 +37,7 @@ class SendReferralRequestEmail extends Job implements ShouldQueue
         $referral = $this->referral;
 
         $mailer->send('emails.referrals.request', ['referral' => $referral], function ($m) use ($referral) {
-            $m->to($referral->referral_email, $referral->referral_name)
+            $m->to($referral->recipient_email, $referral->referral_name)
                 ->subject('Your referral is needed to send ' . $referral->name . ' on a mission trip.');
         });
     }

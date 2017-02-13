@@ -33,7 +33,7 @@
                 <div class="panel-body">
                     <a role="button" :href="'/'+ firstUrlSegment +'/records/referrals/' + referral.id">
                         <h5 class="text-primary text-capitalize" style="margin-top:0px;margin-bottom:5px;">
-                            {{referral.name}}
+                            {{referral.applicant_name}}
                         </h5>
                     </a>
                     <div style="position:absolute;right:20px;top:5px;">
@@ -49,8 +49,8 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <label>REFERRAL:</label>
-                            <p class="small">{{referral.referral_name}}</p>
+                            <label>ATTENTION:</label>
+                            <p class="small">{{referral.attention_to}}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -116,13 +116,14 @@
                 deleteModal: false,
                 exportOptions: {
                     id: 'ID',
-                    name: 'name',
+                    applicant_name: 'Applicant Name',
+                    recipient_email: 'Recipient Email',
+                    attention_to: 'Attention to',
                     type: 'Type',
-                    referral_name: 'Referral Name',
-                    referral_phone: 'Referral Phone',
-                    referral_email: 'Referral Email',
+                    referrer: 'Referrer Details',
                     status: 'Status',
                     sent_at: 'Sent On',
+                    responded_at: 'Received On',
                     created_at: 'Created On',
                     updated_at: 'Last Updated',
                     user_name: 'User Name',
@@ -131,10 +132,10 @@
                 },
                 exportFilters: {},
                 importRequiredFields: [
-                    'name', 'user_email', 'referral_name', 'referral_email', 'referral_phone'
+                    'applicant_name', 'user_email', 'attention_to', 'recipient_email'
                 ],
                 importOptionalFields: [
-                    'sent_at', 'created_at', 'updated_at'
+                    'sent_at', 'responded_at', 'created_at', 'updated_at'
                 ],
             }
         },

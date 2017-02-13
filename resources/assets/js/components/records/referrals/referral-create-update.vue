@@ -4,29 +4,51 @@
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
-                    <label for="author" class="control-label">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" v-model="name"
+                    <label for="author" class="control-label">Applicant Name</label>
+                    <input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
                        placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('referralemail') }">
-                    <label for="author" class="control-label">Referral Email</label>
-                    <input type="text" class="form-control" name="referral_email" id="referral_email" v-model="referral_email"
-                           placeholder="Referral Email" v-validate:referralemail="{ required: true, minlength:1, maxlength:100 }"
+            </div>
+            <div class="row">
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('attentionto') }">
+                    <label for="author" class="control-label">Attention to</label>
+                    <input type="text" class="form-control" name="attention_to" id="attention_to" v-model="attention_to"
+                           placeholder="Attention to" v-validate:attentionto="{ required: true, minlength:1, maxlength:100 }"
+                           maxlength="150" minlength="1" required>
+                </div>
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('recipientemail') }">
+                    <label for="author" class="control-label">Recipient Email</label>
+                    <input type="text" class="form-control" name="recipient_email" id="recipient_email" v-model="recipient_email"
+                           placeholder="Recipient Email" v-validate:recipientemail="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
             </div>
 
             <div class="row">
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('referreraltitle') }">
+                    <label for="author" class="control-label">Referral Title/Position</label>
+                    <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
+                       placeholder="Referral Phone" v-validate:referraltitle="{ required: true, minlength:1, maxlength:100 }"
+                       maxlength="150" minlength="1" required>
+                </div>
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('referralname') }">
                     <label for="author" class="control-label">Referral Name</label>
-                    <input type="text" class="form-control" name="referral_name" id="referral_name" v-model="referral_name"
+                    <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referral_name"
                        placeholder="Referral Name" v-validate:referralname="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('referralphone') }">
+            </div>
+            <div class="row">
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('referralorg') }">
+                    <label for="author" class="control-label">Referral Organization</label>
+                    <input type="text" class="form-control" name="referral_organization" id="referral_organization" v-model="referrer.organization"
+                       placeholder="Referral Name" v-validate:referralorg="{ required: true, minlength:1, maxlength:100 }"
+                       maxlength="150" minlength="1" required>
+                </div>
+                <div class="col-sm-3" :class="{ 'has-error': checkForError('referralphone') }">
                     <label for="author" class="control-label">Referral Phone</label>
-                    <input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referral_phone|phone"
+                    <input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referrer.phone|phone"
                        placeholder="Referral Phone" v-validate:referralphone="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
@@ -78,18 +100,22 @@
         data(){
             return {
                 type: 'pastoral',
-                referral_email: '',
-                referral_name: '',
-                referral_phone: '',
-                name: '',
+                referrer: {
+                    title: null,
+                    name: null,
+                    organization: null,
+                    phone: null
+                },
+                applicant_name: '',
+                attention_to: '',
                 response: [
                     { q: 'How Long have you known the applicant?', a: ''},
                     { q: 'Please list any current roles the applicant serves in at your church:', a: ''},
                     { q: 'To the best of your knowledge, what is the current state of the applicant\'s spiritual walk?', a: ''},
-                    { q: 'Do you have any reservations about sending this applicant into a foreign nation where spiritual, physical, and social endurance is tested?', a: ''},
-                    { q: 'What are the applicant\'s significant strengths?', a: ''},
-                    { q: 'What are the applicant\'s significant weaknesses?', a: ''},
-                    { q: 'Would you recommend this applicant for a leadership role with Missions.me? If so, why?', a: ''},
+                    { q: 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation? Please explain.', a: ''},
+                    { q: 'Please list the applicant\'s significant strengths:', a: ''},
+                    { q: 'Please list the applicant\'s significant weaknesses:', a: ''},
+                    { q: 'Would you recommend this applicant for a leadership role on the trip? Please explain.', a: ''},
                 ],
                 user_id: this.userId,
 
@@ -123,10 +149,9 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.save({
-                        name: this.name,
-                        referral_email: this.referral_email,
-                        referral_name: this.referral_name,
-                        referral_phone: this.referral_phone,
+                        applicant_name: this.applicant_name,
+                        recipient_email: this.recipient_email,
+                        referrer: this.referrer,
                         type: this.type,
                         response: this.response,
                         user_id: this.user_id,
@@ -146,10 +171,9 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.update({id: this.id}, {
-                        name: this.name,
-                        referral_email: this.referral_email,
-                        referral_name: this.referral_name,
-                        referral_phone: this.referral_phone,
+                        applicant_name: this.applicant_name,
+                        recipient_email: this.recipient_email,
+                        referrer: this.referrer,
                         type: this.type,
                         response: this.response,
                         user_id: this.user_id,

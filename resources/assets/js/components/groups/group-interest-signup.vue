@@ -4,7 +4,7 @@
         <form novalidate id="TripInterestSignupForm">
             <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Awesome!</strong>
+                <strong>Done</strong>
                 <p>Trip interest sent.</p>
             </alert>
             <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Saving"></spinner>

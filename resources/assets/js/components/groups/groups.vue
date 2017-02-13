@@ -148,7 +148,7 @@
         </div><!-- end row -->
       <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
           <span class="icon-ok-circled alert-icon-float-left"></span>
-          <strong>Awesome!</strong>
+          <strong>Done</strong>
           <p>Group request sent</p>
       </alert>
 
@@ -221,7 +221,7 @@
                     <img class="img-responsive" src="../images/groups/groups-slide-3.jpg">
                     <div class="carousel-caption">
                       <h3 class="dash-trailing">Trip Management Made Easy</h3>
-                        <p>See who's coming and track their fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
+                        <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
                     </div>
                 </div><!-- end item -->
                 <div class="item">
@@ -283,7 +283,7 @@
               </div><!-- end col -->
               <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
                 <h3 class="dash-trailing">Trip Management Made Easy</h3>
-                <p>See who's coming and track their fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
+                <p>See who's coming and track his or her fundraising progress. Monitor or directly assist in completing a missionary's travel requirements - even contact them directly.</p>
               </div><!-- end col -->
             </div><!-- end row -->
           </div><!-- end content-section -->
@@ -390,7 +390,7 @@
                 </div>
                 <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                   <div class="panel-body">
-                    <p>It is the vision of Missions.Me to always give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available "higher standard" accommodations become.</p>
+                    <p>It is the vision of Missions.Me to give our best to the people we're ministering to. To achieve that, our missionaries need to be well rested and well fed. The conditions will vary from state to state, but keep in mind that the farther your team travels from a major city, the less available "higher standard" accommodations become.</p>
 
                     <p>HOTEL: Every hotel we stay in is inspected by a staff member prior to the trip. We guarantee that your hotel will be equipped with air conditioning and high speed internet.</p>
 

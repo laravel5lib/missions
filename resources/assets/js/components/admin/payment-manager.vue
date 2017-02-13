@@ -143,7 +143,7 @@
 
     </modal>
     <modal class="text-center" :show.sync="deletePaymentModal" title="Delete Payment" small="true">
-        <div slot="modal-body" class="modal-body text-center" v-if="selectedPayment">Are you sure you want to delete {{ selectedPayment.name }}?</div>
+        <div slot="modal-body" class="modal-body text-center" v-if="selectedPayment">Delete {{ selectedPayment.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='deletePaymentModal = false'>Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" @click='deletePaymentModal = false,remove(selectedPayment)'>Confirm</button>

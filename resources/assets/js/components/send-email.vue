@@ -3,9 +3,9 @@
   <a :class="class" @click="confirm = true">
     <i :class="icon" v-if="icon"></i> {{ label }}
   </a>
-  <modal :title="label" :show.sync="confirm" effect="fade" small="true" ok-text="Yes" :callback="fire">
+  <modal :title="label" :show.sync="confirm" effect="fade" small="true" ok-text="Send" :callback="fire">
     <div slot="modal-body" class="modal-body text-center">
-      <h5>Are you sure you want to proceed?</h5>
+      <h5>Send Email?</h5>
       <hr class="divider inv">
       <label>Recipient Email Address</label>
       <input type="text" class="form-control" v-model="parameters.email" />

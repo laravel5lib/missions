@@ -60,7 +60,7 @@
         </modal>
 
         <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete {{ selectedCost.name }}?</div>
+            <div slot="modal-body" class="modal-body text-center">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Confirm</button>
@@ -69,7 +69,7 @@
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
+            <strong>Done</strong>
             <p>{{successMessage}}</p>
         </alert>
     </div>

@@ -101,7 +101,7 @@
 
         <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Awesome!</strong>
+            <strong>Done</strong>
             <p>{{ message }}</p>
         </alert>
 
@@ -140,7 +140,7 @@
             save() {
                 // this.$refs.spinner.show();
                 this.$http.put('interests/' + this.id, this.interest).then(function (response) {
-                    this.message = 'Trip interest has been updated!';
+                    this.message = 'Trip interest updated';
                     this.showSuccess = true;
                     this.editMode = false;
                     this.fetch();

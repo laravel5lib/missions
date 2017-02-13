@@ -34,14 +34,14 @@
 	            <img class="img-responsive" src="../images/fundraising/fund-slide-4.jpg">
 	            <div class="carousel-caption">
 	            	<h3 class="dash-trailing">View Donors & Donation Amounts</h3>
-	                <p>It’s always fun to see who’s supporting you. View each donor by name as well as the amount donated to your cause.</p>
+	                <p>It’s fun to see who’s supporting you. View each donor by name as well as the amount donated to your cause.</p>
 	            </div>
 	        </div><!-- end item --> 
 	        <div class="item">
 	            <img class="img-responsive" src="../images/fundraising/fund-slide-5.jpg">
 	            <div class="carousel-caption">
 	            	<h3 class="dash-trailing">Track Progress</h3>
-	                <p>View your progress by dollar amount raised, percent, and how much you have to go until you’ve reached your goal. Fundrasing has never been this easy or fun!</p>
+	                <p>View your progress by dollar amount raised, percent, and how much you have to go until you’ve reached your goal. Fundrasing made easy and fun!</p>
 	            </div>
 	        </div><!-- end item -->   
           </div>
@@ -112,7 +112,7 @@
 	    		</div><!-- end col -->
 	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
 					<h3 class="dash-trailing">View Donors & Donation Amounts</h3>
-	                <p>It’s always fun to see who’s supporting you. View each donor by name as well as the amount donated to your cause.</p>
+	                <p>It’s fun to see who’s supporting you. View each donor by name as well as the amount donated to your cause.</p>
 	            </div><!-- end col -->
 	        </div><!-- end row -->
 	    </div><!-- end content-section -->
@@ -128,7 +128,7 @@
 		    	</div><!-- end col -->
 	    		<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-0">
 					<h3 class="dash-trailing">Track Progress</h3>
-	                <p>View your progress by dollar amount raised, percent, and how much you have to go until you’ve reached your goal. Fundrasing has never been this easy or fun!</p>
+	                <p>View your progress by dollar amount raised, percent, and how much you have to go until you’ve reached your goal. Fundrasing made easy and fun!</p>
 	            </div><!-- end col -->
 	        </div><!-- end row -->
 	    </div><!-- end content-section -->
@@ -140,7 +140,7 @@
     	<div class="content-section">
 	    	<div class="row">
 	    		<div class="col-sm-12 col-sm-offset-0 col-xs-10 col-xs-offset-1">
-					<h2 class="text-center">Fundraising has never been this easy, or fun!</h2>
+					<h2 class="text-center">Fundraising made easy and fun!</h2>
 	    		</div><!-- end col -->
 	    	</div><!-- end row -->
 	    </div><!-- end content-section -->
@@ -254,7 +254,7 @@
 				        	<div class="panel panel-default">
 								<div class="panel-body">
 									<h4>The Promise</h4>
-									<p class="small">The heartbeat of Missions.Me is to empower people to change the world. In order to accomplish this purpose, Missions.Me meticulously manages each contribution so that more lives can be transformed. Missions.Me is committed to maintaining a very low administrative burden in order to ensure the highest-level return on investment for all donated funds.</p>
+									<p class="small">The heartbeat of Missions.Me is to empower people to change the world. In order to accomplish this purpose, Missions.Me meticulously manages each contribution so that more lives can be transformed. Missions.Me is committed to maintaining a low administrative burden in order to ensure the highest-level return on investment for all donated funds.</p>
 								</div>
 				        	</div><!-- end panel -->
 				        </div><!-- end col -->

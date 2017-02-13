@@ -8,7 +8,7 @@ WHEN
 
 HOW
 + Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.
-+ Travel across your state and experience new cities, villages, neighborhoods and amazing culture.
++ Travel across your state and experience new cities, villages, neighborhoods and culture.
 + At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.
 
 ROLES

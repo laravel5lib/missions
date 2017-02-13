@@ -103,7 +103,7 @@
                         self.$refs.spinner.show();
                         self.$http.put('funds/' + self.id, self.fund).then(function (response) {
                             self.$refs.spinner.hide();
-                            self.$root.$emit('showSuccess', 'Fund has been updated!');
+                            self.$root.$emit('showSuccess', 'Fund updated');
                             self.editMode = false;
                             self.fetch();
                         }).error(function (response) {
@@ -115,7 +115,7 @@
             },
             reconcile() {
                 this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
-                    this.$root.$emit('showSuccess', 'Fund has been reconciled!');
+                    this.$root.$emit('showSuccess', 'Fund reconciled');
                     this.fetch();
                 });
             }

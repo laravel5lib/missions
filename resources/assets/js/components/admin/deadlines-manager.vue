@@ -126,7 +126,7 @@
         </div>
     </modal>
     <modal class="text-center" :show.sync="showDeleteModal" title="Delete Deadline" small="true">
-        <div slot="modal-body" class="modal-body text-center" v-if="selectedDeadline">Are you sure you want to delete {{ selectedDeadline.name }}?</div>
+        <div slot="modal-body" class="modal-body text-center" v-if="selectedDeadline">Delete {{ selectedDeadline.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedDeadline)'>Confirm</button>

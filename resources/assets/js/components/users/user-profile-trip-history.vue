@@ -53,7 +53,7 @@
 		</modal>
 
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Remove Trip Visited" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to remove {{ selectedTripRemove.name|capitalize }} from your list?</div>
+            <div slot="modal-body" class="modal-body text-center">Remove {{ selectedTripRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedTripRemove)'>Confirm</button>

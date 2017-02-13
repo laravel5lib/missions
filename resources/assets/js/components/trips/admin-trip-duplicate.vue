@@ -7,7 +7,7 @@
                         <h4 class="modal-title" id="myModalLabel">Duplicate Trip</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to duplicate this trip?</p>
+                        <p>Duplicate this trip?</p>
                         <hr>
                         <validator name="TripDuplication">
                             <form class="form-horizontal" novalidate>

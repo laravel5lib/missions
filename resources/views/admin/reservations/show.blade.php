@@ -30,7 +30,7 @@
         <div class="col-sm-8 text-center">
             <hr class="divider inv sm">
             {{-- <hr class="divider inv sm"> --}}
-            <h5>This reservation has been dropped and is no longer active.</h5>
+            <h5>This reservation was dropped and is no longer active.</h5>
             <hr class="divider inv sm">
             {{-- <hr class="divider inv sm hidden-xs"> --}}
         </div>

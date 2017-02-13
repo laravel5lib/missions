@@ -59,8 +59,8 @@
                             </div>
                         </modal>
 
-                        <modal title="Delete Upload" small :show.sync="showDelete" ok-text="Delete" cancel-text="Cancel" :callback="doDelete">
-                            <div slot="modal-body" class="modal-body">Are you show that you want to delete this upload?</div>
+                        <modal title="Delete Upload" small :show.sync="showDelete" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
+                            <div slot="modal-body" class="modal-body">Delete this upload?</div>
                         </modal>
                     </div>
                     <div class="tab-pane fade" id="tab2">

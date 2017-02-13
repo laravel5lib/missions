@@ -77,7 +77,7 @@
             <pagination :pagination.sync="pagination" :callback="searchReferrals"></pagination>
         </div>
         <modal :show.sync="deleteModal" title="Remove Referral" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Referral?</div>
+            <div slot="modal-body" class="modal-body text-center">Delete this Referral?</div>
             <div slot="modal-footer" claass="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeReferral(selectedReferral)'>Confirm</button>

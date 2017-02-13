@@ -151,7 +151,7 @@
 		<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
 			<strong>Well Done!</strong>
-			<p>Profile updated!</p>
+			<p>Profile updated</p>
 		</alert>
 		<alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
@@ -171,10 +171,10 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
 								aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title text-center" id="myModalLabel">Are You Sure?</h4>
+						<h4 class="modal-title text-center" id="myModalLabel">Delete Campaign</h4>
 					</div>
 					<div class="modal-body">
-						<p class="text-center">Are you sure you want to delete this campaign?</p>
+						<p class="text-center">Delete this campaign?</p>
 						<div class="row">
 							<div class="col-sm-12 text-center">
 								<a class="btn btn-sm btn-default" data-dismiss="modal">No</a>

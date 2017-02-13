@@ -285,7 +285,7 @@
           </div>
           <div class="col-md-6">
             <h4 class="bold uppercaseit ways-to-give">Workplace Giving</h4>
-            <p>Some corporations will match financial donations to qualified non-profits. Find out if your workplace will be proud to support the generosity of their employee.</p>
+            <p>Some corporations will match financial donations to qualified non-profits. Find out if your workplace will be proud to support the generosity of its employee.</p>
           </div>
         </div>
         <hr class="divider inv">

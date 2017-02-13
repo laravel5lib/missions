@@ -4,7 +4,7 @@
         <template v-if="isManager()">
             <div class="row hidden-xs">
                 <div class="col-sm-8">
-                    <h5>Share your amazing stories with the world!</h5>
+                    <h5>Share your stories with the world</h5>
                 </div>
                 <div class="col-sm-4 text-right">
                     <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
@@ -12,7 +12,7 @@
             </div>
             <div class="row visible-xs">
                 <div class="col-sm-12 text-center">
-                    <h5>Share your amazing stories with the world!</h5>
+                    <h5>Share your stories with the world</h5>
                 </div>
                 <div class="col-sm-12 text-center">
                     <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
@@ -112,7 +112,7 @@
         </div>
 
         <modal class="text-center" v-if="isManager()" :show.sync="deleteModal" title="Delete Story" small="true">
-            <div slot="modal-body" class="modal-body text-center">Are you sure you want to delete this Story?</div>
+            <div slot="modal-body" class="modal-body text-center">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Confirm</button>

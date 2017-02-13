@@ -39,7 +39,13 @@
 		</template>
 		<template v-else>
 			<div class="container text-center">
-				<p class="lead text-muted"><em>Sorry, we couldn't find any participating groups.</em></p>
+				<p class="lead text-muted">
+				<em>We did not find any participating groups.</em>
+				<br />
+				<a class="text-primary small" href="/groups">
+					<i class="fa fa-arrow-circle-o-right"></i>  Consider taking your own group.
+				</a>
+				</p>
 			</div>
 		</template>
 

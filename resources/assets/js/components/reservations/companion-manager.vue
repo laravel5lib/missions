@@ -72,7 +72,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Leave Companions</h4></div>
                     <div class="modal-body">
-                        <p class="text-center">Are you sure you want to leave your companions? This action cannot be undone.</p>
+                        <p class="text-center">Leave your companions? This action cannot be undone.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>

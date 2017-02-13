@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
 				<h1 class="text-primary text-center">Serving The Local Church</h1>
-				<p class="text-center">At Missions.Me, we believe the local church is the hope of the world. All of the Missions.Me speakers are passionate about serving the local church and its specific vision to impact their community. Our speakers are known for bringing life-changing messages that awaken destiny, passion, and deep spiritual commitment. If you are interested in having one of our speakers come serve your church, school, or conference, simply fill out the form below and we'll get back to you within 5 business days to start the conversation.</p>
+				<p class="text-center">At Missions.Me, we believe the local church is the hope of the world. All of the Missions.Me speakers are passionate about serving the local church and its specific vision to impact its community. Our speakers are known for bringing life-changing messages that awaken destiny, passion, and deep spiritual commitment. If you are interested in having one of our speakers come serve your church, school, or conference, simply fill out the form below and we'll get back to you within 5 business days to start the conversation.</p>
 				<hr class="divider inv">
 				<div class="row">
 					<div class="col-xs-6 col-sm-4 text-center">

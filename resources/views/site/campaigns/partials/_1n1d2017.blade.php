@@ -46,7 +46,7 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h1 class="text-center text-uppercase" data-aos="fade-up">You've Never Been On A Missions Trip Like This</h1>
+				<h1 class="text-center text-uppercase" data-aos="fade-up">Experience an Unforgettable Missions Trip</h1>
 				<p class="text-center" data-aos="fade-up">This isn't a normal missions trip - it’s 1Nation1Day. 3,000 passionate missionaries, 1 huge day on South Beach, over 120 teams holding over 2,400 outreaches, 17 stadium events in every state capital - we’d like to call it epic, but this is so much bigger.</p>
 			</div><!-- end col -->
 		</div><!-- end row -->

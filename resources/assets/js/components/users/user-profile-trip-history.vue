@@ -13,12 +13,13 @@
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-                <p style="display:inline-block;margin-bottom:3px;" v-for="accolade in accolades.items">
-                    <span class="label label-default">
+                <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
+                    <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
                     </span>
                 </p>
-				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Add trips you've visited or sign up for a trip to get started!</em></p>
+				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Go on a trip with us or add past trips you've traveled on!</em></p>
+                <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 

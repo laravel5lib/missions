@@ -21,6 +21,7 @@
 					</p>
 
 					<p class="text-muted text-center small" v-if="accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
+					<p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
 				</template>
             </div><!-- end panel-body -->
         </div><!-- end panel -->

@@ -25,7 +25,7 @@
 			<hr class="divider sm inv">
 		</div>
 		<div class="col-sm-12" v-if="loaded && !medical_releases.length">
-			<p class="text-center text-muted" role="alert"><em>No records found</em></p>
+			<p class="text-center text-muted" role="alert"><em>Add and manage your medical records here!</em></p>
 		</div>
 
 		<div class="col-sm-6 col-md-4" v-for="medical_release in medical_releases">

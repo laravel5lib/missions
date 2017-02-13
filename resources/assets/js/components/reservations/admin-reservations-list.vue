@@ -433,7 +433,7 @@
 				<tbody v-else>
 				<tr>
 					<td colspan="10" class="text-center text-muted">
-						No reservations found.
+						Sign missionaries up for trips and view their reservations here!
 					</td>
 				</tr>
 				</tbody>

@@ -6,7 +6,7 @@
                 <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-default-hollow">View All</a></h3>
             </div>
             <div class="col-sm-12" v-if="loaded && !passports.length">
-                <p class="text-muted text-center" role="alert"><em>No records found</em></p>
+                <p class="text-muted text-center" role="alert"><em>Add and manage your records here!</em></p>
             </div>
 
             <div class="col-md-4 col-sm-6" v-for="passport in passports">

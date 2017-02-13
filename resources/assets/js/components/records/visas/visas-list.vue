@@ -27,7 +27,7 @@
         </div>
 
         <div class="col-sm-12" v-if="loaded && !visas.length">
-            <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
+            <div role="alert"><p class="text-center text-muted"><em>Add and manage your visas here!</em></p></div>
         </div>
 
         <div class="col-sm-12" style="display:flex; flex-wrap: wrap;">

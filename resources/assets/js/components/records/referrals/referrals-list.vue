@@ -25,7 +25,7 @@
             <hr class="divider sm inv">
         </div>
         <div class="col-sm-12" v-if="loaded && !referrals.length">
-            <p class="text-center text-muted" role="alert"><em>No records found</em></p>
+            <p class="text-center text-muted" role="alert"><em>Add and manage your referrals here!</em></p>
         </div>
 
         <div class="col-md-4 col-sm-6" v-for="referral in referrals">

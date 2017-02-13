@@ -393,39 +393,39 @@
                         </div>
                             <div class="panel-body">
                                 <div class="row form-group">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="facebook">Facebook</label>
                                         <input type="text" class="form-control" v-model="facebook" id="facebook" placeholder="Facebook Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="twitter">Twitter</label>
                                         <input type="text" class="form-control" v-model="twitter" id="twitter" placeholder="Twitter Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="instagram">Instagram</label>
                                         <input type="text" class="form-control" v-model="instagram" id="instagram" placeholder="Instagram Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="linkedIn">LinkedIn</label>
                                         <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="LinkedIn Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="pintrest">Pinterest</label>
-                                        <input type="text" class="form-control" v-model="pinterest" id="pinterest" placeholder="Printerest Profile">
+                                        <input type="text" class="form-control" v-model="pinterest" id="pinterest" placeholder="Pinterest Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="google-plus">Google +</label>
                                         <input type="text" class="form-control" v-model="google" id="google" placeholder="Googe + Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="vimeo">Vimeo</label>
                                         <input type="text" class="form-control" v-model="vimeo" id="vimeo" placeholder="Vimeo Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="youtube">YouTube</label>
                                         <input type="text" class="form-control" v-model="youtube" id="youtube" placeholder="YouTube Profile">
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-6">
                                         <label class="control-label" for="website">Website</label>
                                         <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
                                     </div>

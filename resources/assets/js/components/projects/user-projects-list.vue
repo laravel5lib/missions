@@ -82,7 +82,8 @@
             </template>
             </div>
             <div class="col-xs-12" v-if="projects.length < 1">
-                <p class="text-muted text-center"><em>No projects found</em></p>
+                <p class="text-muted text-center"><em>Sponsor a project and view details here!</em></p>
+                <p class="text-center"><a class="btn btn-link btn-sm" href="/sponsor-a-project">Sponsor A Project</a></p>
             </div>
         </div>
     </div>

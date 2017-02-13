@@ -156,7 +156,8 @@
                 </template>
             </div>
     <div class="col-xs-12" v-if="reservations.length < 1">
-        <p class="text-muted text-center"><em>No reservations found</em></p>
+        <p class="text-muted text-center"><em>Register for a trip to view your reservation details here!</em></p>
+        <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
     </div>
 </div>
 </template>

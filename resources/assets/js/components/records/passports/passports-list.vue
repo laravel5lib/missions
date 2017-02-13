@@ -52,7 +52,7 @@
             <hr class="divider sm inv">
         </div>
         <div class="col-sm-12" v-if="loaded && !passports.length">
-            <p class="text-center text-muted" role="alert"><em>No records found</em></p>
+            <p class="text-center text-muted" role="alert"><em>Add and manage your passports here!</em></p>
         </div>
 
         <div class="col-sm-12" style="display:flex; flex-wrap: wrap;">

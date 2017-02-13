@@ -19,6 +19,7 @@
                 <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
             </div>
         </div>
+        <hr class="divider lg">
         <hr class="divider inv">
         </template>
         <div class="panel panel-default" v-if="newMode">
@@ -48,7 +49,9 @@
             </div>
         </div>
         <div class="text-center text-muted" v-if="! stories.length">
-            <p><em>You haven't posted any stories yet. New stories will appear here.</em></p>
+            <img class="visible-lg" style="width:40px;height:52px;position:absolute;right:60px;top:40px;" src="../images/onboard/drawn-arrow-up.png">
+            <em><h4>You haven't posted any stories yet.</h4>
+            <p>Post your first story and let your friends know what's up!</p></em>
         </div>
         <div class="panel panel-default" v-for="story in stories">
             <div class="panel-heading" role="tab" id="heading-{{ story.id }}">

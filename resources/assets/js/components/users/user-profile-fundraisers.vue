@@ -1,7 +1,11 @@
 <template>
 	<div style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<p class="text-muted text-center" v-if="fundraisers.length < 1"><em>No fundraisers found.</em></p>
+		<div class="text-muted text-center" v-if="fundraisers.length < 1">
+			<em><h4>Start Fundraising</h4>
+			<p>Join a trip or sponsor a project to start fundraising.</p></em>
+			<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a> <a class="btn btn-default" href="/sponsor-a-project">Sponsor A Project</a></p>
+		</div>
 		<div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
 			<div class="panel panel-default" v-if="isVisible(fundraiser)">
 				<div class="panel-heading">

@@ -98,6 +98,11 @@
 					for (let i in trips.data.data) {
 						arr.push(trips.data.data[i].group.data)
 					}
+
+					arr = _.uniq(arr, function(item, key, id) { 
+    					return item.id;
+					});
+
 					this.groups = _.filter(arr, function(group) {
 						return group['public'] == true;
 					});

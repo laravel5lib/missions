@@ -56,39 +56,6 @@ class CreateProjectsTables extends Migration
                 ->references('id')->on('users')
                 ->onDelete('set null');
         });
-
-        Schema::create('project_costs', function (Blueprint $table) {
-            $table->uuid('cost_id')->index();
-            $table->uuid('project_id')->index();
-            $table->integer('quantity')->unsigned()->default(1);
-            $table->timestamps();
-
-            $table->foreign('cost_id')
-                ->references('id')->on('costs')
-                ->onDelete('cascade');
-
-            $table->foreign('project_id')
-                ->references('id')->on('projects')
-                ->onDelete('cascade');
-
-            $table->primary(['project_id', 'cost_id']);
-        });
-
-        Schema::create('project_deadlines', function (Blueprint $table) {
-            $table->uuid('project_id')->index();
-            $table->uuid('deadline_id')->index();
-            $table->timestamps();
-
-            $table->foreign('deadline_id')
-                ->references('id')->on('deadlines')
-                ->onDelete('cascade');
-
-            $table->foreign('project_id')
-                ->references('id')->on('projects')
-                ->onDelete('cascade');
-
-            $table->primary(['project_id', 'deadline_id']);
-        });
     }
 
     /**

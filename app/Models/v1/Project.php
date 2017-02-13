@@ -100,26 +100,23 @@ class Project extends Model
     }
 
     /**
-     * The costs associated with the project.
+     * Get the project's costs.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function costs()
     {
-        return $this->belongsToMany(Cost::class, 'project_costs')
-                    ->withPivot('quantity')
-                    ->withTimestamps();
+        return $this->morphMany(Cost::class, 'cost_assignable');
     }
 
     /**
-     * The deadlines associated with the project.
+     * Get the project's deadlines.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function deadlines()
     {
-        return $this->belongsToMany(Deadline::class, 'project_deadlines')
-            ->withTimestamps();
+        return $this->morphMany(Deadline::class, 'deadline_assignable');
     }
 
     /**

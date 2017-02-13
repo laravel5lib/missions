@@ -116,7 +116,10 @@
 					}
 				});
 				return lowest;
-			}
+			},
+            restartView() {
+			    this.$parent.restartView();
+            }
 		},
 		ready(){
 			if (this.id && this.campaignId && this.id.length>0 && !this.$parent.currentView) {

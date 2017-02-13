@@ -104,8 +104,7 @@ class Group extends Model
     public function managers()
     {
         return $this->belongsToMany(User::class, 'managers')
-                    ->withTimestamps()
-                    ->withPivot('permissions');
+                    ->withTimestamps();
     }
 
     /**

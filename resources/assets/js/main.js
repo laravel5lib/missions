@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import tourGuide from './components/tour-guide.vue';
 import contactForm from './components/contact-form.vue';
 import speakerForm from './components/speaker-form.vue';
 import sponsorProjectForm from './components/sponsor-project-form.vue';
@@ -131,9 +132,11 @@ require('videojs-youtube');
 // require('videojs-vimeo');
 require('jquery.cookie');
 require('bootstrap-sass');
+window.Tour = require('bootstrap-tour');
+
 window.AOS = require('aos');
 AOS.init();
-$( document ).ready(function() {
+$(document).ready(function () {
     console.log($.fn.tooltip.Constructor.VERSION);
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active')
@@ -144,6 +147,7 @@ $( document ).ready(function() {
 
 // Global Components
 import VueStrap from 'vue-strap/dist/vue-strap.min';
+// Vue.component('tour-guide', tourGuide);
 Vue.component('pagination', pagination);
 Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
@@ -190,7 +194,7 @@ Vue.http.interceptors.push({
 
         // Show Spinners in all components where they exist
         if (_.contains(['GET', 'POST', 'PUT'], request.method.toUpperCase())) {
-            if (this.$refs.spinner && !request.data.hideLoader ) {
+            if (this.$refs.spinner && !request.data.hideLoader) {
                 switch (request.method.toUpperCase()) {
                     case 'GET':
                         this.$refs.spinner.show({text: 'Loading'});
@@ -206,7 +210,7 @@ Vue.http.interceptors.push({
         }
 
         // Only POST and PUT Requests to our API
-        if (_.contains(['POST', 'PUT'],request.method) && request.root === '/api') {
+        if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
             console.log(this);
             console.log(request);
 
@@ -284,32 +288,32 @@ Vue.validator('datetime ', function (val) {
 });
 
 Vue.filter('phone', {
-    read:function (phone) {
-        phone = phone||'';
+    read: function (phone) {
+        phone = phone || '';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     },
-    write: function(phone, phoneVal) {
-        phone = phone||'';
+    write: function (phone, phoneVal) {
+        phone = phone || '';
         return phone.replace(/[^0-9]/g, '')
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     }
 });
 
 Vue.filter('number', {
-    read:function (number, decimals) {
+    read: function (number, decimals) {
         return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
     },
-    write: function(number, numberVal, decimals) {
+    write: function (number, numberVal, decimals) {
         return number;
     }
 });
 
 Vue.filter('percentage', {
-    read:function (number, decimals) {
+    read: function (number, decimals) {
         return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
     },
-    write: function(number, numberVal, decimals) {
+    write: function (number, numberVal, decimals) {
         return number + '%';
     }
 });
@@ -319,56 +323,56 @@ Vue.filter('percentage', {
 // This filter should convert date assigned property from UTC to local when being displayed -> read()
 // This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
 Vue.filter('moment', {
-    read: function(val, format, diff = false) {
+    read: function (val, format, diff = false) {
         // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format||'LL');
+        var date = moment.utc(val).local().format(format || 'LL');
 
-        if(diff) {
+        if (diff) {
             date = moment.utc(val).local().fromNow();
         }
         // console.log('after: ', date);
 
         return date;
     },
-    write: function(val, oldVal) {
+    write: function (val, oldVal) {
         let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return   moment(val).local().utc().format(format);
+        return moment(val).local().utc().format(format);
     }
 });
 
 Vue.filter('mDateToDatetime', {
-    read: function(value) {
-        return moment.utc(value).local().format(format||'LL');
+    read: function (value) {
+        return moment.utc(value).local().format(format || 'LL');
     },
-    write: function(value, oldVal) {
+    write: function (value, oldVal) {
         return moment(value).utc();
     }
 });
 
 Vue.filter('mUTC', {
-    read: function(value) {
+    read: function (value) {
         return moment.utc(value);
     },
-    write: function(value, oldVal) {
+    write: function (value, oldVal) {
         return moment.utc(value);
     }
 });
 
 Vue.filter('mLocal', {
-    read: function(value) {
+    read: function (value) {
         return moment.isMoment(value) ? value.local() : null;
     },
-    write: function(value, oldVal) {
+    write: function (value, oldVal) {
         return moment.isMoment(value) ? value.local() : null;
     }
 });
 
 Vue.filter('mFormat', {
-    read: function(value, format) {
+    read: function (value, format) {
         return moment(value).format(format);
     },
-    write: function(value, oldVal) {
+    write: function (value, oldVal) {
         return value;
     }
 });
@@ -393,7 +397,7 @@ Vue.directive('crop', {
 
     acceptStatement: true,
 
-    bind: function() {
+    bind: function () {
         var event = this.arg;
 
         if ($.inArray(event, VueCropEvents) == -1) {
@@ -410,11 +414,11 @@ Vue.directive('crop', {
         this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
     },
 
-    update: function(callback) {
+    update: function (callback) {
         this.vm.jcrop.container.on('crop' + this.arg, callback)
     },
 
-    unbind: function() {
+    unbind: function () {
         this.vm.jcrop.container.off('crop' + this.arg);
 
         if (this._watcher.id != 1) return;
@@ -424,26 +428,65 @@ Vue.directive('crop', {
     }
 });
 
+var TourSteps = [
+    {
+        orphan: true,
+        element: "#my-element",
+        title: "Here we go!",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat lorem sit amet tempus feugiat. In gravida elit ligula, consectetur laoreet arcu accumsan ac. Pellentesque vulputate efficitur turpis, eget molestie mi."
+    },
+    {
+        orphan: true,
+        element: "#my-element",
+        title: "Second Step, maybe a third?",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat lorem sit amet tempus feugiat. In gravida elit ligula, consectetur laoreet arcu accumsan ac. Pellentesque vulputate efficitur turpis, eget molestie mi."
+    },
+];
+
+Vue.directive('tour-guide', {
+    bind: function () {
+        // Initialize the tour
+        if (!localStorage.getItem('TourComplete')) {
+            window.tour = new Tour({
+                backdrop: true,
+                steps: TourSteps
+            });
+
+            tour.init();
+
+            // Start the tour
+            // pass true to force start
+            tour.start(true);
+        }
+    },
+    update: function () {
+        // debugger
+    },
+    unbind: function () {
+    }
+});
+
 Vue.mixin({
     methods: {
         /*showSpinner(){
-            this.$refs.spinner.show();
-        },
-        hideSpinner(){
-            this.$refs.spinner.hide();
-        },*/
+         this.$refs.spinner.show();
+         },
+         hideSpinner(){
+         this.$refs.spinner.hide();
+         },*/
     },
     computed: {
         firstUrlSegment: function () {
-            return document.location.pathname.split("/").slice(1,2).toString();
+            return document.location.pathname.split("/").slice(1, 2).toString();
         }
     },
     ready() {
-        function isTouchDevice(){
+        function isTouchDevice() {
             return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
         }
+
         // Disable tooltips on all components on mobile
-        if(isTouchDevice()) {
+        if (isTouchDevice()) {
             $("[rel='tooltip']").tooltip('destroy');
         }
 
@@ -458,8 +501,8 @@ new Vue({
             week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
             month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             format: 'YYYY-MM-DD HH:mm:ss',
-            inputStyle: { width: '100%', border: 'none'},
-            color: { header: '#F74451'}
+            inputStyle: {width: '100%', border: 'none'},
+            color: {header: '#F74451'}
         },
         showSuccess: false,
         showError: false,
@@ -601,9 +644,9 @@ new Vue({
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     },
-    ready: function() {
+    ready: function () {
         // Track window resizing
-        $(window).on('resize', function(){
+        $(window).on('resize', function () {
             this.$emit('Window:resize');
         }.bind(this));
 
@@ -637,9 +680,9 @@ new Vue({
     },
     methods: {
         setUser: function (user) {
-          // Save user info
-          this.user = user;
-          this.authenticated = true;
+            // Save user info
+            this.user = user;
+            this.authenticated = true;
         },
         getImpersonatedUser: function () {
             if (this.impersonatedUser !== null) {

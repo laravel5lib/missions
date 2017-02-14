@@ -18,8 +18,8 @@
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
                     </span>
                 </p>
-				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Go on a trip with us or add past trips you've traveled on!</em></p>
-                <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
+				<div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><p><em>Go on a trip with us or add past trips you've traveled on!</em></p>
+                </div>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 

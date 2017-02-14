@@ -41,7 +41,7 @@
             </tbody>
         </table>
     </div>
-    <div class="panel-footer text-center text-muted small" style="padding:10px;">
+    <div class="panel-footer text-center text-muted small" style="padding:13px 0 10px;">
         Showing {{ auth()->user()->upcomingPayments()->count() }} Payments
     </div>
 </div>

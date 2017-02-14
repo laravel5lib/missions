@@ -14,14 +14,14 @@
             </div><!-- end panel-heading -->
             <div class="panel-body">
 				<template v-if="accolades">
-					<p style="display:inline-block;margin-bottom:3px;" v-for="accolade in accolades.items">
-                    <span class="label label-default">
+					<p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
+                    <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
                     </span>
 					</p>
 
-					<p class="text-muted text-center small" v-if="accolades.items.length < 1"><em>Add countries you've visited or sign up for a trip to get started!</em></p>
-					<p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
+					<div class="text-muted text-center small" v-if="accolades.items.length < 1"><p><em>Add countries you've visited or sign up for a trip to get started!</em></p>
+					</div>
 				</template>
             </div><!-- end panel-body -->
         </div><!-- end panel -->

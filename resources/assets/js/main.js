@@ -456,7 +456,7 @@ Vue.directive('tour-guide', {
 
             // Start the tour
             // pass true to force start
-            tour.start(true);
+            // tour.start(true);
         }
     },
     update: function () {
@@ -700,6 +700,10 @@ new Vue({
         hasAbility(ability) {
             let abilities = _.pluck(this.user.abilities.data, 'name');
             return !!this.user ? _.contains(abilities, ability) : false;
+        },
+
+        startTour(){
+            window.tour.restart();
         },
 
     },

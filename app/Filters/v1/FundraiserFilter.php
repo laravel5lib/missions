@@ -33,7 +33,7 @@ class FundraiserFilter extends Filter
      */
     public function isPublic()
     {
-        return $this->where('public', true);
+        return $this->public();
     }
 
     /**

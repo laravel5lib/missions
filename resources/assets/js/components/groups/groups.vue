@@ -189,7 +189,14 @@
         </div><!-- end col -->
         <div class="col-xs-12" v-if=" ! groups.length">
             <hr class="divider inv">
-            <p class="text-muted text-center"><em>Hmmm...We couldn't find any groups matching your search.</em></p>
+            <p class="text-muted text-center">
+              <em>We didn't find groups matching your search.</em>
+              <br />
+              Are you a group?
+              <a class="text-primary small" href="/groups">
+                <i class="fa fa-arrow-circle-o-right"></i>  Partner with us.
+              </a>
+            </p>
             <hr class="divider inv">
         </div>
         <div class="col-xs-12 text-center" v-if="groups.length">

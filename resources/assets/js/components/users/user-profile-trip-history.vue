@@ -8,7 +8,12 @@
 						<h5>Trip History</h5>
 					</div>
 					<div class="col-xs-4 text-right" v-if="isUser()">
-						<h5><a class="text-muted" @click="manageModal = true"><i class="fa fa-edit"></i></a></h5>
+						<h5>
+                        <a class="text-muted" @click="manageModal = true">
+                            <i class="fa fa-plus" v-if="! accolades.items || accolades.items.length < 1"></i>
+                            <i class="fa fa-cog" v-else></i>
+                        </a>
+                        </h5>
 					</div>
 				</div>
             </div><!-- end panel-heading -->
@@ -18,8 +23,10 @@
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
                     </span>
                 </p>
-				<p class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><em>Go on a trip with us or add past trips you've traveled on!</em></p>
-                <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
+				<div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1">
+                <p><em>Go on a trip with us or add past trips you've traveled on!</em></p>
+                <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a>
+                </div>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -56,8 +63,8 @@
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Remove Trip Visited" small="true">
             <div slot="modal-body" class="modal-body text-center">Remove {{ selectedTripRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedTripRemove)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedTripRemove)'>Delete</button>
             </div>
         </modal>
 

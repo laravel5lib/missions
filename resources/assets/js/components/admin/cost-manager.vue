@@ -214,8 +214,8 @@
                 <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
             </div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Delete</button>
             </div>
         </modal>
 
@@ -230,8 +230,8 @@
                         <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Confirm</button>
+                        <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false,selectedCost = null'>Keep</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click='doRemove(selectedCost)'>Delete</button>
                     </div>
                 </div>&lt;!&ndash; /.modal-content &ndash;&gt;
             </div>&lt;!&ndash; /.modal-dialog &ndash;&gt;

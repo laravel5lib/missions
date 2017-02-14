@@ -634,7 +634,7 @@ class User extends Authenticatable implements JWTSubject
     {
         $dues = Due::whereIn(
             'payable_id',
-            $this->reservations()->pluck('id')->toArray()
+            $this->reservations()->current()->pluck('id')->toArray()
         )->where('payable_type', 'reservations')
          ->withBalance()
          ->sortRecent()
@@ -646,6 +646,7 @@ class User extends Authenticatable implements JWTSubject
     public function outstandingRequirements()
     {
         $requirements = $this->reservations()
+             ->current()
              ->with('requirements')
              ->get()
              ->pluck('requirements')
@@ -661,6 +662,7 @@ class User extends Authenticatable implements JWTSubject
     public function recentDonations()
     {
         $donations = $this->reservations()
+            ->current()
             ->with('fund.donations')
             ->get()
             ->pluck('donations')

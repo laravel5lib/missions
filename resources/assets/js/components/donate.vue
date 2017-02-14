@@ -196,7 +196,7 @@
             <div class="" v-show="donationState === 'confirmation'">
                 <div class="text-center">
                     <img class="img-md" src="/images/donate/donation-check.png" alt="Donation Confirmed">
-                    <h3 style="color:#808080;margin-bottom:0;">Donation Confirmed</h3>
+                    <h3 style="color:#808080;margin-bottom:0;">Donation Sent</h3>
                     <h5 style="color:#808080;margin-bottom:25px;">Thank you for your generosity!</h5>
                 </div>
                 <!--<div class="panel-footer" v-if="!child">

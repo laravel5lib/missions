@@ -6,7 +6,7 @@
 			<p>Join a trip or sponsor a project to start fundraising.</p></em>
 			<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a> <a class="btn btn-default" href="/sponsor-a-project">Sponsor A Project</a></p>
 		</div>
-		<div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers">
+		<div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers" style="min-height: 350px;">
 			<div class="panel panel-default" v-if="isVisible(fundraiser)">
 				<div class="panel-heading">
 					<h6 class="text-center">{{ fundraiser.name }}</h6>
@@ -15,8 +15,8 @@
 					<div class="row">
 						<div class="col-xs-6 col-sm-12 col-md-6">
 							<label>Raised</label>
-							<h4 class="text-success" style="margin-top:0;">{{ fundraiser.raised_amount | currency
-								}}</h4>
+							<h4 class="text-success" style="margin-top:0;">
+							${{ fundraiser.raised_amount }}</h4>
 						</div>
 						<div class="col-xs-6 col-sm-12 col-md-6">
 							<label>Expires</label>
@@ -25,7 +25,7 @@
 							</p>
 						</div>
 					</div><!-- end row -->
-					<label><span>{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100)|number 1 }}</span>%
+					<label><span>{{ fundraiser.raised_percent }}</span>%
 						<small>Funded</small>
 						/ <span>{{ fundraiser.donors_count }}</span>
 						<small>Donors</small>
@@ -33,8 +33,8 @@
 					<div class="progress">
 						<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40"
 							 aria-valuemin="0" aria-valuemax="100"
-							 :style="{ width: (fundraiser.raised_amount/fundraiser.goal_amount * 100) + '%'}">
-							<span class="sr-only">{{ (fundraiser.raised_amount/fundraiser.goal_amount * 100) }}% Complete (success)</span>
+							 :style="{ width: fundraiser.raised_percent + '%'}">
+							<span class="sr-only">{{ fundraiser.raised_percent }}% Complete (success)</span>
 						</div>
 					</div>
 					<p class="small text-center text-info" v-if="!fundraiser.public">Private
@@ -56,7 +56,7 @@
 			</div>
 		</div>
 		<div v-if="oldFundraisers.length > 0">
-			<div class="col-xs-6 col-sm-4" v-for="fundraiser in oldFundraisers">
+			<div class="col-xs-12 col-sm-6 col-md-4" v-for="fundraiser in oldFundraisers" style="min-height: 300px;">
 				<div class="panel panel-default">
 					<div class="panel-heading text-center">
 						<h6>{{ fundraiser.name }}</h6>
@@ -64,7 +64,7 @@
 					<div class="panel-body text-center">
 							<label>Closed</label>
 							<p class="small">{{ fundraiser.ended_at | moment 'll' }}</p>
-							<label><span class="text-success">{{ fundraiser.raised_amount | currency }}</span>
+							<label><span class="text-success">${{ fundraiser.raised_amount }}</span>
 								<small>Raised / {{ fundraiser.donors_count }} Donors</small>
 							</label>
 						<p class="smalltext-info" v-if="!fundraiser.public">Private</p>

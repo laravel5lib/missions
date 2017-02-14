@@ -5,7 +5,7 @@
         <p v-if="trips.length < 1" class="text-center text-muted">
             This group does not have any trips yet. Please check back soon!
         </p>
-        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips" style="display:flex; flex-direction:column;">
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips" style="min-height: 500px;">
             <div class="panel panel-default">
                 <div class="panel-heading" :class="'panel-' + trip.type">
                     <h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>

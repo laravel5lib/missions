@@ -5,7 +5,7 @@
         <p v-if="trips.length < 1" class="text-center text-muted">
             This group does not have any trips yet. Please check back soon!
         </p>
-        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
+        <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div class="panel-heading" :class="'panel-' + trip.type">
                     <h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
@@ -17,9 +17,9 @@
                     <label>Travel Dates</label>
                     <p class="small">{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</p>
                     <label>Perfect For</label>
-                    <p class="small"><span v-for="prospect in trip.prospects">
-                        {{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
-                    </span></p>
+                    <p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
+                                {{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
+                    </span><span v-show="trip.prospects.length > 3">...</span></p>
                     <label>Spots Available</label>
                     <p>{{ trip.spots }}</p>
                     <p class="text-left" data-toggle="tooltip" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
@@ -37,7 +37,7 @@
         data(){
             return{
                 trips:[],
-                resource: this.$resource('trips?include=campaign&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
+                resource: this.$resource('trips?include=campaign&status=current&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
             }
         },
         ready(){

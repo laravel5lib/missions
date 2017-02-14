@@ -29,9 +29,9 @@
             <div class="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h1 class="text-center text-success">${{ $fundraiser->raised() ? $fundraiser->raised() : 0 }} <span style="font-size: 18px;">Raised</span></h1>
+                        <h1 class="text-center text-success">${{ $fundraiser->raisedAsDollars() }} <span style="font-size: 18px;">Raised</span></h1>
                         @unless($fundraiser->ended_at->isPast())
-                        <h4 class="text-center">${{ $fundraiser->goal_amount }} <span style="font-size: 14px;">Goal</span></h4>
+                        <h4 class="text-center">${{ $fundraiser->goalAmountAsDollars() }} <span style="font-size: 14px;">Goal</span></h4>
                         <div class="panel panel-default" style="background-color: #f7f7f7">
                             <div class="panel-body">
                                 <user-profile-fundraisers-progress :now="{{ $fundraiser->getPercentRaised() }}"></user-profile-fundraisers-progress>

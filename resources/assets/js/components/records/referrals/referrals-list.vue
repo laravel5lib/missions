@@ -79,8 +79,8 @@
         <modal :show.sync="deleteModal" title="Remove Referral" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Referral?</div>
             <div slot="modal-footer" claass="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeReferral(selectedReferral)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeReferral(selectedReferral)'>Delete</button>
             </div>
         </modal>
     </div>

@@ -19,7 +19,7 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
         <template v-if="fundraisers.length">
-            <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex; flex-direction:column;">
+            <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex; flex-direction:column;">
                 <div class="panel panel-default">
                     <!--<img :src="fundraiser.banner||'images/india-prof-pic.jpg'" alt="India" class="img-responsive">-->
                     <div class="panel-body">
@@ -50,7 +50,9 @@
         </template>
         <template v-else>
             <div class="col-xs-12 text-center">
-                <p class="text-muted"><em>Hmmmm. We couldn't find any fundraisers matching your search.</em></p>
+                <p class="text-muted"><em>We didn't find fundraisers matching your search. Please modify your search terms.</em></p>
+                <hr class="divider inv">
+                <hr class="divider inv">
             </div>
         </template>
     </div>
@@ -63,7 +65,7 @@
             return{
                 featuredFundraisers: [],
                 fundraisers: [],
-                fundraisersLimit: 8,
+                fundraisersLimit: 9,
 
                 // pagination vars
                 search: '',

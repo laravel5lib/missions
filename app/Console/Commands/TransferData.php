@@ -597,23 +597,7 @@ class TransferData extends Command
                 ],
                 'prospects' => $item->prospects ? explode(',', $item->prospects) : null,
                 'team_roles' => $this->get_team_role_codes($item->team_roles),
-                'description' => '### What to Expect 
-
-                '.trim(strip_tags($item->what_to_expect)). '
-
-                ### What\'s Included in my Trip Registraion?
-
-                '.trim(strip_tags($item->included)). '
-
-                ### What\'s not Included in my Trip Registration?
-
-                '.trim(strip_tags($item->not_included)). '
-
-                ### Pre-trip Training\n\n'.trim(strip_tags($item->training)). '
-
-                ### How You\'ll Get There
-
-                '.trim(strip_tags($item->flight_information)),
+                'description' => '### What to Expect'."\n\n".trim(strip_tags($item->what_to_expect))."\n\n".'### What\'s Included in my Trip Registraion?'."\n\n".trim(strip_tags($item->included))."\n\n".'### What\'s not Included in my Trip Registration?'."\n\n".trim(strip_tags($item->not_included))."\n\n".'### Pre-trip Training'."\n\n".trim(strip_tags($item->training))."\n\n".'### How You\'ll Get There'."\n\n".trim(strip_tags($item->flight_information)),
                 'public' => true,
                 'published_at' => Carbon::now(),
                 'closed_at' => $item->registration ? 
@@ -774,6 +758,7 @@ class TransferData extends Command
     private function update_reservation_requirements($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex)
     {
         $this->line("\n" . 'Updating reservation requirements...' . "\n");
+
         $this->reservation_requirements()->map(function($req) use($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex) {
             $doc_type = $this->get_document_type($req->formable_type);
             $doc_id = null;
@@ -801,8 +786,8 @@ class TransferData extends Command
                 }
             }
 
-            $requirement = ReservationRequirement::where('reservation_id', $reservationIndex->get($req->reservation_id))
-                ->where('requirement_id', $requirementIndex->get($req->requirement_id))
+            $requirement = ReservationRequirement::where('reservation_id', '=', $reservationIndex->get($req->reservation_id))
+                ->where('requirement_id', '=', $requirementIndex->get($req->requireable_id))
                 ->update([
                     'status' => $req->status == 2 ? 'reviewing' : ($req->status == 1 ? 'complete' : 'incomplete'),
                     'document_id' => $doc_id
@@ -1795,13 +1780,8 @@ class TransferData extends Command
      */
     private function users($ids = [])
     {
-        $users = $this->connection()->table('users');
-
-        if ($ids <> []) {
-            $users = $users->whereIn('users.id', $ids);
-        }
-        
-        $users = $users->leftJoin('timezones', 'users.timezone_id', '=', 'timezones.id')
+        return collect($this->connection()->table('users')
+            ->leftJoin('timezones', 'users.timezone_id', '=', 'timezones.id')
             ->leftJoin('shirt_sizes', 'shirt_sizes.id', '=', 'users.shirt_size_id')
             ->leftJoin('contacts', 'contacts.user_id', '=', 'users.id')
             ->leftJoin('countries', 'contacts.country_id', '=', 'countries.id')
@@ -1815,6 +1795,7 @@ class TransferData extends Command
                      ->where('socials.socialable_type', '=', 'User');
             })
             ->leftJoin('permissions', 'permissions.user_id', '=', 'users.id')
+            ->groupBy('users.id')
             ->select(
                 'users.id', 'email', 'password', 'address', 'city', 'state', 'zip', 
                 'abbr AS country_code', 'home_phone', 'cell_phone', 'gender', 
@@ -1834,11 +1815,7 @@ class TransferData extends Command
                 (CASE WHEN socials.google IS NOT NULL AND socials.google <> '' THEN CONCAT('https://plus.google.com/+',socials.google) ELSE NULL END) AS google_url, 
                 (CASE WHEN socials.vimeo IS NOT NULL AND socials.vimeo <> '' THEN CONCAT('https://vimeo.com/',socials.vimeo) ELSE NULL END) AS vimeo_url, 
                 (CASE WHEN socials.youtube IS NOT NULL AND socials.youtube <> '' THEN CONCAT('https://youtube.com/',socials.youtube) ELSE NULL END) AS youtube_url
-            "));
-
-            $users = $users->get();
-
-            return collect($users);
+            "))->get());
     }
 
     /**
@@ -1869,7 +1846,7 @@ class TransferData extends Command
             ->where('requireable_id', $trip_id)
             ->where('requireable_type', 'Trip')
             ->join('requirements', 'requireables.requirement_id', '=', 'requirements.id')
-            ->select('name', 'description', 'formable', 'requirements.id')
+            ->select('name', 'description', 'formable', 'requireables.id')
             ->get());
     }
 
@@ -1877,10 +1854,9 @@ class TransferData extends Command
     {
         return collect($this->connection()
             ->table('requireable_reservation AS rr')
-            ->join('requireables', 'rr.requireable_id', '=', 'requireables.id')
             ->select(
                 'rr.reservation_id', 'rr.formable_type', 'rr.formable_id', 'rr.status', 
-                'requireables.requirement_id'
+                'rr.requireable_id'
             )
             ->get());
     }

@@ -159,8 +159,8 @@
     <modal class="text-center" :show.sync="showDeleteModal" title="Delete Requirement" small="true">
         <div slot="modal-body" class="modal-body text-center" v-if="selectedRequirement">Delete {{ selectedRequirement.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedRequirement)'>Confirm</button>
+            <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Keep</button>
+            <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedRequirement)'>Delete</button>
         </div>
     </modal>
 

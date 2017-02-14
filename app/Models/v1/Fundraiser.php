@@ -107,6 +107,11 @@ class Fundraiser extends Model
         return $this->fund->donors();
     }
 
+    public function setGoalAmountAttribute($value)
+    {
+        $this->attributes['goal_amount'] = $value*100; // to cents
+    }
+
     /**
      * Get the fundraiser's total amount raised.
      *
@@ -114,7 +119,19 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        return $this->transactions()->sum('amount');
+        $amount = $this->transactions()->sum('amount'); // in cents
+
+        return $amount ? $amount : 0;
+    }
+
+    public function raisedAsDollars()
+    {
+        return number_format(($this->raised() / 100), 2);
+    }
+
+    public function goalAmountAsDollars()
+    {
+        return number_format(($this->goal_amount / 100), 2);
     }
 
     public function getPercentRaised()
@@ -135,6 +152,11 @@ class Fundraiser extends Model
     public function uploads()
     {
         return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
     }
 
 }

@@ -8,18 +8,33 @@
 						<h5>Trip History</h5>
 					</div>
 					<div class="col-xs-4 text-right" v-if="isUser()">
-						<h5><a class="text-muted" @click="manageModal = true"><i class="fa fa-edit"></i></a></h5>
+						<h5>
+                        <a class="text-muted" @click="manageModal = true">
+                            <i class="fa fa-plus" v-if="! accolades.items || accolades.items.length < 1"></i>
+                            <i class="fa fa-cog" v-else></i>
+                        </a>
+                        </h5>
 					</div>
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-                <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
+	            <template v-if="accolades.items && accolades.items.length < 1">
+		            <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
                     <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
                     </span>
-                </p>
-				<div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1"><p><em>Go on a trip with us or add past trips you've traveled on!</em></p>
-                </div>
+		            </p>
+	            </template>
+                <template v-else>
+	                <template v-if="isUser()">
+		                <div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1">
+                            <p><em>Add past trips you've traveled on!</em></p>
+                        </div>
+	                </template>
+	                <template v-else>
+                        
+	                </template>
+                </template>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -56,8 +71,8 @@
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Remove Trip Visited" small="true">
             <div slot="modal-body" class="modal-body text-center">Remove {{ selectedTripRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedTripRemove)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedTripRemove)'>Delete</button>
             </div>
         </modal>
 
@@ -84,7 +99,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.$root.user.id;
+                return this.$root.user && this.id === this.$root.user.id;
             },
             removeAccolade(trip){
 				this.deleteModal = true;

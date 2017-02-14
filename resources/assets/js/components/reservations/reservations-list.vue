@@ -90,7 +90,7 @@
                                     <label style="margin-bottom:2px;">Campaign</label>
                                     <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.campaign.data.name }}</p>
                                     <label style="margin-bottom:2px;font-size:10px;">Country</label>
-                                    <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.country_name }}</p>
+                                    <p class="text-capitalize small" style="margin-top:2px;">{{ reservation.trip.data.country_name }}</p>
                                     <hr class="divider inv sm">
                                     <a class="btn btn-sm btn-primary" :href="'/dashboard/reservations/' + reservation.id">View Reservation</a>
                                 </div>
@@ -117,7 +117,7 @@
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
                                             {{ reservation.trip.data.campaign.data.name | capitalize }}<br>
-                                            <label>{{ reservation.country_name | capitalize }}</label>
+                                            <label>{{ reservation.trip.data.country_name | capitalize }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">

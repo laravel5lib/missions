@@ -12,7 +12,7 @@
     </div>
   </div>
   <hr class="divider inv lg">
-  <div class="container">
+  <div class="container" v-tour-guide="">
     <div class="well well-default">
       {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> --}}
       <div class="row">
@@ -43,7 +43,7 @@
       </div><!-- end row -->
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-6" id="test-element">
         @include('dashboard._payments')
       </div>
 
@@ -62,4 +62,6 @@
     </div>
   </div>
   <hr class="divider inv xlg">
+
+  {{--<tour-guide></tour-guide>--}}
 @endsection

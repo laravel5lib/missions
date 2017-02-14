@@ -8,21 +8,33 @@
 						<h5>Countries Visited</h5>
 					</div>
 					<div class="col-xs-4 text-right" v-if="isUser()">
-						<h5><a class="text-muted" @click="manageModal = true"><i class="fa fa-edit"></i></a></h5>
+						<h5>
+                            <a class="text-muted" @click="manageModal = true">
+                                <i class="fa fa-plus" v-if="! accolades.items || accolades.items.length < 1"></i>
+                                <i class="fa fa-cog" v-else></i>
+                            </a>
+                        </h5>
 					</div>
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-				<template v-if="accolades">
-					<p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
-                    <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
+	            <template v-if="accolades.items && accolades.items.length < 1">
+		            <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
+                    <span class="label label-default">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
                     </span>
-					</p>
+		            </p>
+	            </template>
+	            <template v-else>
+		            <template v-if="isUser()">
+			            <div class="text-muted text-center small" v-if="accolades.items.length < 1">
+                       <p><em>Add countries you've visited!</em></p>
+                  </div>
+		            </template>
+		            <template v-else>
 
-					<div class="text-muted text-center small" v-if="accolades.items.length < 1"><p><em>Add countries you've visited or sign up for a trip to get started!</em></p>
-					</div>
-				</template>
+		            </template>
+	            </template>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -59,8 +71,8 @@
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Remove Country Visited" small="true">
             <div slot="modal-body" class="modal-body text-center">Remove {{ selectedCountryRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedCountryRemove)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedCountryRemove)'>Delete</button>
             </div>
         </modal>
 	</div>
@@ -87,7 +99,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.$root.user.id;
+                return this.$root.user && this.id === this.$root.user.id;
             },
             removeAccolade(country){
 				this.deleteModal = true;

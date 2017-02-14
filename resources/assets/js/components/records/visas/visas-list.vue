@@ -89,8 +89,8 @@
         <modal :show.sync="deleteModal" title="Remove Visa" small="true">
             <div slot="modal-body" class="modal-body">Delete this Visa?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeVisa(selectedVisa)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeVisa(selectedVisa)'>Delete</button>
             </div>
         </modal>
     </div>

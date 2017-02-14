@@ -116,8 +116,8 @@
         <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
             <div slot="modal-body" class="modal-body">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Delete</button>
             </div>
         </modal>
     </div>

@@ -59,6 +59,9 @@
                                 </p>
                             </div>
                         @endforeach
+                        @if(! $release->conditions->count())
+                            <p class="text-center">No conditions listed.</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -82,6 +85,9 @@
                                 </p>
                             </div>
                         @endforeach
+                        @if(! $release->allergies->count())
+                            <p class="text-center">No allergies listed.</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -99,7 +105,7 @@
                             @endforeach
                         </ul>
                     @else
-                        <p>No notes found</p>
+                        <p class="text-center">No notes found</p>
                     @endif
                 </div>
             </div>
@@ -111,22 +117,22 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Name</label>
-                            <p>{{ $release->emergency_contact['name'] }}</p>
+                            <p>{{ isset($release->emergency_contact['name']) ? $release->emergency_contact['name'] : 'n/a' }}</p>
                         </div>
                         <div class="col-sm-6">
                             <label>Email</label>
-                            <p>{{ $release->emergency_contact['email'] }}</p>
+                            <p>{{ isset($release->emergency_contact['email']) ? $release->emergency_contact['email'] : 'n/a' }}</p>
                         </div>
                     </div>
                     <hr class="divider">
                     <div class="row">
                         <div class="col-sm-6">
                             <label>Phone</label>
-                            <p>{{ $release->emergency_contact['phone'] }}</p>
+                            <p>{{ isset($release->emergency_contact['phone']) ? $release->emergency_contact['phone'] : 'n/a' }}</p>
                         </div>
                         <div class="col-sm-6">
                             <label>Relationship</label>
-                            <p>{{ $release->emergency_contact['relationship'] }}</p>
+                            <p>{{ isset($release->emergency_contact['relationship']) ? $release->emergency_contact['relationship'] : 'n/a' }}</p>
                         </div>
                     </div>
                 </div>

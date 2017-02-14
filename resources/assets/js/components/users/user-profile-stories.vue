@@ -49,9 +49,14 @@
             </div>
         </div>
         <div class="text-center text-muted" v-if="! stories.length">
-            <img class="visible-lg" style="width:40px;height:52px;position:absolute;right:60px;top:40px;" src="../images/onboard/drawn-arrow-up.png">
-            <em><h4>You haven't posted any stories yet.</h4>
-            <p>Post your first story and let your friends know what's up!</p></em>
+            <template v-if="isUser()">
+                <img class="visible-lg" style="width:40px;height:52px;position:absolute;right:60px;top:40px;" src="../images/onboard/drawn-arrow-up.png">
+                <em><h4>You haven't posted any stories yet.</h4>
+                    <p>Post your first story and let your friends know what's up!</p></em>
+            </template>
+            <template v-else>
+
+            </template>
         </div>
         <div class="panel panel-default" v-for="story in stories">
             <div class="panel-heading" role="tab" id="heading-{{ story.id }}">
@@ -122,8 +127,8 @@
         <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Delete Story" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Delete</button>
             </div>
         </modal>
     </div>
@@ -168,7 +173,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.$root.user.id;
+                return this.$root.user && this.id === this.$root.user.id;
             },
             removeStory(story){
                 if(story) {

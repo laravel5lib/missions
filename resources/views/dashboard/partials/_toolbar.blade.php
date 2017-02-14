@@ -21,7 +21,7 @@
       <a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;"></i></a>
     </li>
     <li style="padding:0;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
-      <a class="text-uppercase" style="text-align:center;font-weight:400;padding:10px 0px;" href="#"><i class="fa fa-question-circle-o" style="font-size:14px;display:block;"></i><span style="font-size:8px;margin-top:0;">Help</span></a>
+      <a class="text-uppercase" style="text-align:center;font-weight:400;padding:10px 0px;" v-on:click="startTour"><i class="fa fa-question-circle-o" style="font-size:14px;display:block;"></i><span style="font-size:8px;margin-top:0;">Tour</span></a>
     </li>
   </ul>
 </div>

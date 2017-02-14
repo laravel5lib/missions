@@ -18,15 +18,24 @@
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-                <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
+	            <template v-if="accolades.items && accolades.items.length < 1">
+		            <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
                     <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
                     </span>
-                </p>
-				<div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1">
-                <p><em>Go on a trip with us or add past trips you've traveled on!</em></p>
-                <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a>
-                </div>
+		            </p>
+	            </template>
+                <template v-else>
+	                <template v-if="isUser()">
+		                <div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1">
+                      <p><em>Go on a trip with us or add past trips you've traveled on!</em></p>
+                      <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a>
+                    </div>
+	                </template>
+	                <template v-else>
+
+	                </template>
+                </template>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
 
@@ -91,7 +100,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.$root.user.id;
+                return this.$root.user && this.id === this.$root.user.id;
             },
             removeAccolade(trip){
 				this.deleteModal = true;

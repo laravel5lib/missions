@@ -597,7 +597,23 @@ class TransferData extends Command
                 ],
                 'prospects' => $item->prospects ? explode(',', $item->prospects) : null,
                 'team_roles' => $this->get_team_role_codes($item->team_roles),
-                'description' => strip_tags($item->description),
+                'description' => '### What to Expect 
+
+                '.trim(strip_tags($item->what_to_expect)). '
+
+                ### What\'s Included in my Trip Registraion?
+
+                '.trim(strip_tags($item->included)). '
+
+                ### What\'s not Included in my Trip Registration?
+
+                '.trim(strip_tags($item->not_included)). '
+
+                ### Pre-trip Training\n\n'.trim(strip_tags($item->training)). '
+
+                ### How You\'ll Get There
+
+                '.trim(strip_tags($item->flight_information)),
                 'public' => true,
                 'published_at' => Carbon::now(),
                 'closed_at' => $item->registration ? 
@@ -1687,14 +1703,37 @@ class TransferData extends Command
                 'trip_deadlines.requirements',
                 'trip_deadlines.companions',
                 'trips.campaign_id',
-                'reps.user_id AS rep_id'
+                'reps.user_id AS rep_id',
+                'trip_pages.what_to_expect',
+                'trip_pages.included',
+                'trip_pages.not_included',
+                'trip_pages.training',
+                'trip_pages.flight_information'
             )->addSelect(
                DB::raw('GROUP_CONCAT(DISTINCT travelers.traveler) AS prospects')
             )->addSelect(
-               DB::raw('GROUP_CONCAT(DISTINCT roles.name) AS team_roles')
-            )->addSelect(
-               DB::raw("CONCAT('###WHAT TO EXPECT', '', trip_pages.what_to_expect, '###WHAT\'S INCLUDED IN MY TRIP REGISTRATION?', trip_pages.included, '###WHAT\'S NOT INCLUDED IN MY TRIP REGISTRATION?', trip_pages.not_included, '###PRE-TRIP TRAINING', trip_pages.training, '###HOW YOU WILL GET THERE', trip_pages.flight_information) AS description")
-            )
+               DB::raw('GROUP_CONCAT(DISTINCT roles.name) AS team_roles'))
+            // )->addSelect(
+            //    DB::raw("CONCAT('###WHAT TO EXPECT', '
+
+            //     ', trip_pages.what_to_expect, '
+
+            //     ', '### What\'s Included in my Trip Registration?', '
+
+            //     ', trip_pages.included, '
+
+            //     ', '### What\'s not Included in my Trip Registration?', '
+
+            //     ', trip_pages.not_included, '
+
+            //     ', '### Pre-trip Training', '
+
+            //     ', trip_pages.training, '
+
+            //     ', '### How You Will Get There', '
+
+            //     ', trip_pages.flight_information) AS description")
+            // )
             ->get());
     }
 

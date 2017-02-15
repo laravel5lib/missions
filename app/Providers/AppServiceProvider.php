@@ -123,6 +123,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Bugsnag
+        $this->app->singleton('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
+        $this->app->singleton('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+
         // register and configure the transaction handler.
         $this->app->singleton('App\TransactionHandler', function ($app) {
             return new TransactionHandler(

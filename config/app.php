@@ -171,6 +171,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Haleks\Markdown\MarkdownServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
 
     ],
 
@@ -222,6 +223,7 @@ return [
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'Markdown' => Haleks\Markdown\Facades\Markdown::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
 
     ],
 

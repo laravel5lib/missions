@@ -480,14 +480,14 @@ body:not(.modal-open) {
       display: inline;
       padding: 10px 10px;
       padding-left: 0px;
-      margin: 14.5px 15px 15.5px 0px;
+      margin: 10.5px 15px 15.5px 0px;
     }
 }
 @media screen and (max-width: 767px) { 
     .navbar-toggle {
       display: inline;
       padding: 9px 10px;
-      margin: 16.5px 5px;
+      margin: 12.5px 5px;
     }
 }
 li.av-nav > a {
@@ -503,6 +503,7 @@ li.av-nav > a {
     border-bottom: 1px solid #242424 !important;
     background: #242424 !important;
     color: #f5f5f5 !important;
+    padding:7px 15px !important;
 }
 .aside .aside-dialog .aside-body {
   padding: 0 !important;
@@ -514,8 +515,7 @@ li.av-nav > a {
       font-size: .8em;
       color: #e6e6e6;
       padding: 4px 20px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       &:hover, &:focus {
         color: #f6323e;
       }
@@ -543,47 +543,29 @@ li.av-nav > a {
 .navmenu-inverse .navmenu-nav > .active > a, .navmenu-inverse .navmenu-nav > .active > a:hover, .navmenu-inverse .navmenu-nav > .active > a:focus, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
   background-color: $brand-primary;
 }
-/* Tooltip container */
-.offcanvas-tooltip {
-    position: relative;
-    display: inline-block;
-}
-
-/* Tooltip text */
-.offcanvas-tooltip span {
-    visibility: hidden;
-    min-width: 120px;
-    background-color: $gray-darker;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 4px;
-    top: 17px;
-    left: 65px; 
- 
-    /* Position the tooltip text - see examples below! */
-    position: absolute;
-    z-index: 1 !important;
-    overflow: visible;
-    &::after {
-      content: " ";
-      position: absolute;
-      top: 50%;
-      right: 100%; /* To the left of the tooltip */
-      margin-top: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: transparent $gray-darker transparent transparent;
+#myNavmenu.navmenu {
+    -webkit-transition: width 0.3s;
+    -moz-transition: width 0.3s;
+    -ms-transition: width 0.3s;
+    -o-transition: width 0.3s;
+    transition: width 0.3s;
+    .menu-icon {
+      text-align:left;
+      display:inline-block;
+      margin-right:23px;
+      margin-top:3px;
+    }
+    &:hover {
+      width: 250px;
+    }
+    span {
+      opacity:1;
+      display:inline-block;
     }
 }
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.offcanvas-tooltip:hover span {
-    visibility: visible;
-}
-
 .offcanvas-sm .nav > li > a {
-  padding: 22px 20px;
+  display:flex;
+  padding: 23px 20px 24px;
 }
 .navmenu-fixed-left, .navbar-offcanvas.navmenu-fixed-left {
   border: none;

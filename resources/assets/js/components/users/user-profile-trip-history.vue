@@ -18,7 +18,7 @@
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-	            <template v-if="accolades.items && accolades.items.length < 1">
+	            <template v-if="accolades.items && accolades.items.length">
 		            <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
                     <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
                         <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
@@ -27,12 +27,12 @@
 	            </template>
                 <template v-else>
 	                <template v-if="isUser()">
-		                <div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length < 1">
+		                <div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length">
                             <p><em>Add past trips you've traveled on!</em></p>
                         </div>
 	                </template>
 	                <template v-else>
-                        
+                        <p><em>Add past trips you've traveled on!</em></p>
 	                </template>
                 </template>
             </div><!-- end panel-body -->

@@ -4,6 +4,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
+			<span style="color:#f6323e;font-size:7px;text-align:center;text-transform:uppercase;line-height:0em;margin-top:7px;display:block;">Menu</span>
 		</button>
 		<aside :show.sync="showRight" placement="right" :width="275">
 		<div slot="header" class="text-center">
@@ -31,26 +32,26 @@
 
 				<template v-if="isDashboard()">
 					<li class="navlabel">User</li>
-					<li><a href="/dashboard"><i class="fa fa-tachometer"></i> Dashboard</a></li>
-					<li><a href="/dashboard/settings"><i class="fa fa-cog"></i> Settings</a></li>
-					<li><a href="/dashboard/reservations"><i class="fa fa-ticket"></i> Reservations</a></li>
-					<li><a href="/dashboard/records"><i class="fa fa-archive"></i> Records</a></li>
-					<li v-if="managing"><a href="/dashboard/groups"><i class="fa fa-users"></i> Groups</a></li>
-					<li><a href="/dashboard/projects"><i class="fa fa-tint"></i> Projects</a></li>
+					<li><a href="/dashboard"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
+					<li><a href="/dashboard/settings"><i class="fa fa-cog" style="margin-left:1px;margin-right:8px;"></i> Settings</a></li>
+					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
+					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
+					<li v-if="managing"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
+					<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
 
 				</template>
 
 				<template v-if="isAdmin()">
 					<li class="navlabel">Admin</li>
-					<li><a href="/admin"><i class="fa fa-tachometer"></i> Dashboard</a></li>
-					<li><a href="/admin/campaigns"><i class="fa fa-globe"></i> Campaigns</a></li>
-					<li><a href="/admin/reservations/current"><i class="fa fa-ticket"></i> Reservations</a></li>
-					<li><a href="/admin/groups"><i class="fa fa-users"></i> Groups</a></li>
-					<li><a href="/admin/users"><i class="fa fa-user"></i> Users</a></li>
-					<li><a href="/admin/uploads"><i class="fa fa-picture-o"></i> Uploads</a></li>
-					<li><a href="/admin/funds"><i class="fa fa-usd"></i> Financials</a></li>
-					<li><a href="/admin/causes"><i class="fa fa-tint"></i> Projects</a></li>
-					<li><a href="/admin/records"><i class="fa fa-archive"></i> Records</a></li>
+					<li><a href="/admin"><i class="fa fa-tachometer" style="margin-right:7px;"></i> Dashboard</a></li>
+					<li><a href="/admin/campaigns"><i class="fa fa-globe" style="margin-left:1px;margin-right:7px;"></i> Campaigns</a></li>
+					<li><a href="/admin/reservations/current"><i class="fa fa-ticket" style="margin-right:6px;"></i> Reservations</a></li>
+					<li><a href="/admin/groups"><i class="fa fa-users" style="margin-right:5px;"></i> Groups</a></li>
+					<li><a href="/admin/users"><i class="fa fa-user" style="margin-left:1px;margin-right:8px;"></i> Users</a></li>
+					<li><a href="/admin/uploads"><i class="fa fa-picture-o" style="margin-right:5px;"></i> Uploads</a></li>
+					<li><a href="/admin/funds"><i class="fa fa-usd" style="margin-left:2px;margin-right:9px;"></i> Financials</a></li>
+					<li><a href="/admin/causes"><i class="fa fa-tint" style="margin-left:2px;margin-right:9px;"></i> Projects</a></li>
+					<li><a href="/admin/records"><i class="fa fa-archive" style="margin-right:6px;"></i> Records</a></li>
 				</template>
 				<!-- Get Started -->
 				<li class="navlabel">Get Started</li>

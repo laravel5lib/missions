@@ -13,7 +13,7 @@
     </p>
     
     <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;">Contribute to a fundraiser or sponsor your own.</p>
-    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;"><a href="http://missions.dev/donate" style="color:#fff;margin:0;padding:15px 25px;background:#f6323e;display:inline-block;text-decoration:none;border-radius:4px;font-weight:bold;margin-bottom:15px;">Support a Cause</a>
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;"><a href="http://missions.dev/fundraisers" style="color:#fff;margin:0;padding:15px 25px;background:#f6323e;display:inline-block;text-decoration:none;border-radius:4px;font-weight:bold;margin-bottom:15px;">Support a Cause</a>
     </p>
 	
     <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;">Make sure your account looks sharp.</p>

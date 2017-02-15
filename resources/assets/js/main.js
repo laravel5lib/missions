@@ -132,7 +132,8 @@ require('videojs-youtube');
 // require('videojs-vimeo');
 require('jquery.cookie');
 require('bootstrap-sass');
-window.Tour = require('bootstrap-tour');
+// require('tether');
+window.Shepherd = require('tether-shepherd');
 
 window.AOS = require('aos');
 AOS.init();
@@ -448,16 +449,34 @@ Vue.directive('tour-guide', {
     bind: function () {
         // Initialize the tour
         if (!localStorage.getItem('TourComplete')) {
-            window.tour = new Tour({
-                backdrop: true,
-                steps: TourSteps
+            window.tour = new Shepherd.Tour({
+                defaults: {
+                    classes: 'shepherd-theme-arrows',
+                    scrollTo: true
+                },
+                /*steps: [
+                    {
+                        title: 'Example Shepherd',
+                        text: 'Creating a Shepherd is easy too! Just create ...',
+                        attachTo: '.hero-example bottom',
+                        advanceOn: '.docs-link click'
+                    }
+                ]*/
             });
 
-            tour.init();
+            tour.addStep('example-step', {
+                text: 'This step is attached to the bottom of the <code>.tour-step-element</code> element.',
+                attachTo: '.tour-step-element',
+                classes: 'step-class',
+                buttons: [
+                    {
+                        text: 'Next',
+                        action: tour.next
+                    }
+                ]
+            });
 
-            // Start the tour
-            // pass true to force start
-            // tour.start(true);
+            tour.start();
         }
     },
     update: function () {

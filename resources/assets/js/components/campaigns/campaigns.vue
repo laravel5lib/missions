@@ -7,7 +7,7 @@
 					<h6 class="text-uppercase">Nicaragua</h6>
 					<h3>1Nation1Day 2017</h3>
 					<p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
-					<a href="#" class="btn btn-primary btn-sm">More Details</a>
+					<a href="/1n1d17" class="btn btn-primary btn-sm">More Details</a>
 				</div>
 			</div>
 		</div>
@@ -30,7 +30,7 @@
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
-					<img :src="campaign.avatar" :alt="campaign.name" class="img-responsive">
+					<img :src="campaign.avatar+'?w=400&h=400&fit=stretch'" :alt="campaign.name" class="img-responsive">
 				</a>
 				<div style="min-height:220px;" class="panel-body">
 					<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i

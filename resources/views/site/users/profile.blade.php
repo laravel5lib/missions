@@ -44,7 +44,7 @@
                                 <h6 class="small text-muted">/{{ $user->slug->url }}</h6>
                             </div>
                             <div class="col-xs-2">
-                                @if($user->id == (auth()->user() ? auth()->user()->id : null))
+                                @if($user->id == (auth()->check() ? auth()->user()->id : null))
                                 <h4>
                                     <a class="pull-right text-muted" href="{{ url('dashboard/settings') }}">
                                         <i class="fa fa-edit"></i>
@@ -72,7 +72,7 @@
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
                 @endif
-
+                    
                     <user-profile-countries id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-countries>
                     <user-profile-trip-history id="{{ $user->id }}" auth-id="{{ auth()->check() ? auth()->user()->id : null }}"></user-profile-trip-history>
 
@@ -95,7 +95,7 @@
                     </div><!-- end row tab -->
                     <div role="tabpanel" class="row tab-pane" id="fundraisers">
                         <user-profile-fundraisers id="{{ $user->id }}"></user-profile-fundraisers>
-                    </div><!-- end row -->
+                </div><!-- end row -->
                 </div><!-- end tab-content -->
             </div><!-- end col -->
         </div><!-- end row -->

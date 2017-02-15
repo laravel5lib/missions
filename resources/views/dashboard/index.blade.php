@@ -19,7 +19,7 @@
       <p class="small">Access the most important information about your account in one place</p>
     </div>
     <div class="row">
-      <div class="col-sm-6" id="test-element">
+      <div class="col-sm-6 tour-step-element">
         @include('dashboard._payments')
       </div>
 

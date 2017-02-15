@@ -8,7 +8,9 @@
 				<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a> <a class="btn btn-default" href="/sponsor-a-project">Sponsor A Project</a></p>
 			</template>
 			<template v-else>
-
+				<em><h4>Currently No Fundraisers</h4>
+					<p>This person hasn't added any fundraisers yet.</p>
+				</em>
 			</template>
 		</div>
 		<div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers" style="min-height: 350px;">

@@ -55,7 +55,9 @@
                     <p>Post your first story and let your friends know what's up!</p></em>
             </template>
             <template v-else>
-
+                <em><h4>Currently No Stories</h4>
+                    <p>This person hasn't added any stories yet.</p>
+                </em>
             </template>
         </div>
         <div class="panel panel-default" v-for="story in stories">

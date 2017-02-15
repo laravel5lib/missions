@@ -18,25 +18,23 @@
 				</div>
             </div><!-- end panel-heading -->
             <div class="panel-body">
-	            <template v-if="accolades.items && accolades.items.length">
-		            <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
-                    <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
-                        <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
-                    </span>
-		            </p>
-	            </template>
-                <template v-else>
-	                <template v-if="isUser()">
-		                <div class="text-muted text-center small" v-if="! accolades.items || accolades.items.length">
-                            <p><em>Add past trips you've traveled on!</em></p>
-                        </div>
-	                </template>
-	                <template v-else>
-                        <p><em>Add past trips you've traveled on!</em></p>
-	                </template>
-                </template>
-            </div><!-- end panel-body -->
-        </div><!-- end panel -->
+                        <template v-if="accolades.items && accolades.items.length">
+                            <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
+                                <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
+                                    <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
+                                </span>
+                            </p>
+                        </template>
+                        <template v-else>
+                            <template v-if="isUser()">
+                                <p class="small text-muted text-center"><em>Which Missions.Me trips have you been on? Add by clicking the <i style="margin-left:2px;" class="fa fa-plus"></i> icon.</em></p>
+                            </template>
+                            <template v-else>
+                                <p class="small text-muted text-center"><em>This person hasn't added any trips to their profile yet.</em></p>
+                            </template>
+                        </template>
+                </div><!-- end panel-body -->
+            </div><!-- end panel -->
 
         <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Trips" width="800" :callback="updateAccolades">
             <div slot="modal-body" class="modal-body text-center">

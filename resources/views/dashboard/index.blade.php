@@ -43,7 +43,7 @@
       </div><!-- end row -->
     </div>
     <div class="row">
-      <div class="col-sm-6" id="test-element">
+      <div class="col-sm-6 tour-step-element">
         @include('dashboard._payments')
       </div>
 

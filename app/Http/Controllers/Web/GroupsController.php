@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\v1\Slug;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class GroupsController extends Controller
@@ -27,8 +27,13 @@ class GroupsController extends Controller
         return view('site.groups.profile', compact('group'));
     }
 
-    public function signup($id)
+    public function signup($slug)
     {
+        $id = Slug::where('url', $slug)
+               ->where('slugable_type', 'groups')
+               ->pluck('slugable_id')
+               ->first();
+
         $group = $this->api->get('/groups/'.$id);
 
         return view('site.groups.signup', compact('group'));

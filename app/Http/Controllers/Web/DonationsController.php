@@ -18,7 +18,8 @@ class DonationsController extends Controller
         $recipient = $fund->name;
         $type = $fund->type;
         $slug = $fund->slug;
+        $id = $fund->id;
 
-        return view('site.donate', compact('recipient', 'type', 'slug'));
+        return view('site.donate', compact('recipient', 'type', 'slug', 'id'));
     }
 }

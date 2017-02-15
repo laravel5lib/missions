@@ -39,9 +39,15 @@ class UtilitiesController extends Controller
         return response()->json(compact('country'));
     }
 
-    public function getTimezones()
+    public function getTimezones($country_code = null)
     {
         $timezones = \DateTimeZone::listIdentifiers();
+        
+        if ($country_code)
+            $timezones = \DateTimeZone::listIdentifiers(\
+                DateTimeZone::PER_COUNTRY, strtoupper($country_code)
+            );
+
         return response()->json(compact('timezones'));
     }
 

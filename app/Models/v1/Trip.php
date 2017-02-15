@@ -170,8 +170,7 @@ class Trip extends Model
     public function facilitators()
     {
         return $this->belongsToMany(User::class, 'facilitators')
-                    ->withTimestamps()
-                    ->withPivot('permissions');
+                    ->withTimestamps();
     }
 
     /**

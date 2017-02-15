@@ -38,7 +38,7 @@
 
     <alert :show.sync="showError"
            placement="top-right"
-           :duration="6000"
+           :duration="0"
            type="danger"
            width="400px"
            dismissable>

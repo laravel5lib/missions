@@ -281,20 +281,20 @@
 				// add static costs if they exists
 				if(this.staticCosts && this.staticCosts.constructor === Array) {
 					this.staticCosts.forEach(function (cost) {
-						amount += cost.amount;
+						amount += parseFloat(cost.amount);
 					});
 				}
 				// add optional costs if they exists
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
 					this.selectedOptions.forEach(function (cost) {
-						amount += cost.amount;
+						amount += parseFloat(cost.amount);
 					});
 				}
 
 				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
 					this.incrementalCosts.forEach(function (cost) {
-						amount += cost.amount;
+						amount += parseFloat(cost.amount);
 					});
 				}
 
@@ -307,7 +307,7 @@
 					this.staticCosts.forEach(function (cost) {
 						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
-								amount += payment.amount_owed;
+								amount += parseFloat(payment.amount_owed);
 							}
 						});
 
@@ -318,7 +318,7 @@
 					this.selectedOptions.forEach(function (cost) {
 						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
-								amount += payment.amount_owed;
+								amount += parseFloat(payment.amount_owed);
 							}
 						});
 					});
@@ -329,7 +329,7 @@
 					this.incrementalCosts.forEach(function (cost) {
 						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
-								amount += payment.amount_owed;
+								amount += parseFloat(payment.amount_owed);
 							}
 						});
 					});
@@ -414,6 +414,7 @@
 					this.$http.post('donations/authorize', this.cardParams)
 							.then(this.createTokenCallback,
 									function (error) {
+										this.$dispatch('showError', error.data.message);
 										this.$parent.$refs.validationspinner.hide();
 									});
 				}

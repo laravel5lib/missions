@@ -2,11 +2,6 @@
     <div>
         <validator name="Interest">
         <form novalidate id="TripInterestSignupForm">
-            <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-                <span class="icon-ok-circled alert-icon-float-left"></span>
-                <strong>Done</strong>
-                <p>Trip interest sent.</p>
-            </alert>
             <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Saving"></spinner>
             <div class="row">
                 <div class="col-xs-12" :class="{ 'has-error': checkForError('campaign')}">
@@ -22,7 +17,7 @@
             <div class="row" v-if="campaign_id">
                 <div class="col-xs-12" :class="{ 'has-error': checkForError('trip')}">
                     <label>Trip Type</label>
-                    <select v-model="interest.trip_id" class="form-control" v-validate:trip="{required: true}">
+                    <select name="campaign" v-model="interest.trip_id" class="form-control" v-validate:trip="{required: true}">
                         <option v-for="trip in trips" :value="trip.id">
                             {{ trip.type | capitalize }} Trip
                         </option>
@@ -76,11 +71,6 @@
                     </div>
                 </div>
             </div>
-            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-                <span class="icon-info-circled alert-icon-float-left"></span>
-                <strong>Oh No!</strong>
-                <p>There are errors on the form.</p>
-            </alert>
 
         </form>
         </validator>
@@ -100,9 +90,7 @@
                 campaign_id: null,
                 campaigns: {},
                 allTrips: {},
-                attemptSubmit: false,
-                showSuccess: false,
-                showError: false
+                attemptSubmit: false
             }
         },
         computed: {
@@ -123,7 +111,7 @@
                     lookup[arr[i]['data'][prop]] = arr[i];
                 }
 
-                for (i in lookup) {
+                for (let i in lookup) {
                     new_arr.push(lookup[i]);
                 }
 
@@ -146,18 +134,18 @@
                     }).then(function (error) {
                         this.$refs.validationspinner.hide();
                         console.log(error);
-                        this.showError = true;
+                        this.$dispatch('showSuccess', 'Request sent')
                     });
                 } else {
-                    this.showError = true;
+                    this.$dispatch('showError', 'Please check the form for errors.')
                 }
             }
         },
         ready() {
-            this.$http.get('groups/' + this.id, {include: 'trips.campaign'}).then(function (response) {
-                this.group = response.data.data;
-                this.allTrips = response.data.data.trips.data;
-                let campaigns = _.mapObject(response.data.data.trips.data, 'campaign');
+            this.$http.get('trips?groups[]=' + this.id, {status: 'current', include: 'group,campaign'}).then(function (response) {
+                // this.group = response.data.data.group.data;
+                this.allTrips = response.data.data;
+                let campaigns = _.mapObject(response.data.data, 'campaign');
                 this.campaigns = this.removeDuplicates(campaigns, 'id');
                 console.log(this.campaigns);
             })

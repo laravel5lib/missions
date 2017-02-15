@@ -137,7 +137,8 @@ window.Tour = require('bootstrap-tour');
 window.AOS = require('aos');
 AOS.init();
 $(document).ready(function () {
-    console.log($.fn.tooltip.Constructor.VERSION);
+    console.log($.fn.popover.Constructor.VERSION);
+    console.log($.fn.jquery);
     $('[data-toggle="offcanvas"]').click(function () {
         $('.row-offcanvas').toggleClass('active')
     });

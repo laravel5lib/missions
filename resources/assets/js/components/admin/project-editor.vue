@@ -140,28 +140,6 @@
             <button class="btn btn-primary" @click="create" v-else>Create</button>
         </div>
 
-        <alert :show.sync="showSuccess"
-               placement="top-right"
-               :duration="3000"
-               type="success"
-               width="400px"
-               dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
     </div><!-- end panel -->
 </template>
 <script>
@@ -227,7 +205,7 @@
         },
         methods: {
             getInitiatives() {
-                this.$http.get('causes/' + this.cause.id + '/initiatives?include=costs.payments', {
+                this.$http.get('causes/' + this.cause.id + '/initiatives', {
                     country: this.initiative.country.code
                 }).then(function (response) {
                     this.availableInitiatives = response.data.data;

@@ -804,7 +804,7 @@ class TransferData extends Command
         $causes->map(function($c) use($bar, $causeIndex, $initiativeIndex) {
             $cause = ProjectCause::create([
                 'name' => $c->name,
-                'countries' => explode(',', strtolower($c->countries)),
+                'countries' => $this->get_countries($c->countries),
                 'short_desc' => $c->short_desc,
                 'upload_id' => $c->thumb_src ? $this->get_avatar_id($c->thumb_src, $c->name) : null,
                 'short_desc' => $c->short_desc,
@@ -844,6 +844,18 @@ class TransferData extends Command
         });
         $bar->finish();
         $this->info("\n" . 'Causes and initiatives imported.');
+    }
+
+    private function get_countries($list)
+    {
+        $countries = collect(explode(',', strtolower($list)));
+
+        return $countries->transform(function($country) {
+            return [
+                'code' => $country,
+                'name' => country($country)
+            ];
+        })->all();
     }
 
     private function import_projects($initiativeIndex, $userIndex, $groupIndex)

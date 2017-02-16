@@ -28,7 +28,7 @@ class CostTransformer extends TransformerAbstract
             'id'               => $cost->id,
             'name'             => $cost->name,
             'description'      => $cost->description,
-            'amount'           => $cost->amount,
+            'amount'           => $cost->amountInDollars(),
             'active_at'        => $cost->active_at->toDateTimeString(),
             'type'             => $cost->type,
         ];
@@ -39,7 +39,7 @@ class CostTransformer extends TransformerAbstract
                 'cost_id'          => $cost->id,
                 'name'             => $cost->name,
                 'description'      => $cost->description,
-                'amount'           => $cost->amount,
+                'amount'           => $cost->amountInDollars(),
                 'active_at'        => $cost->active_at->toDateTimeString(),
                 'type'             => $cost->type,
                 'updated_at'       => $cost->pivot->updated_at->toDateTimeString(),

@@ -139,7 +139,12 @@ class Trip extends Model
 
         $amount = $incremental ? $incremental->amount : 0;
 
-        return $amount + ($this->activeCosts()->type('static')->sum('amount')/100); // convert to dollars
+        return $amount + $this->activeCosts()->type('static')->sum('amount'); // convert to dollars
+    }
+
+    public function startingCostInDollars()
+    {
+        return number_format($this->starting_cost/100, 2, '.', '');
     }
 
     /**

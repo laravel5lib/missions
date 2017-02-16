@@ -42,7 +42,7 @@
                 dues:[],
                 selectedDues: [],
                 availableDues: [],
-                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative.costs.payments' }),
+                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative' }),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,
@@ -81,14 +81,19 @@
              this.setProjectData(response.data.data)
              });*/
 
-            //Listen to Event Bus
-            this.$root.$on('Project:CostsUpdated', function (data) {
-                this.setProjectData(data)
-            }.bind(this));
+            this.resource.get().then(function (response) {
+                this.setProjectData(response.data.data)
+                // this.$refs.spinner.hide();
+            });
 
-            this.$root.$on('Project:CostsReverted', function (data) {
-                this.setProjectData(data)
-            }.bind(this));
+            //Listen to Event Bus
+            // this.$root.$on('Project:CostsUpdated', function (data) {
+            //     this.setProjectData(data)
+            // }.bind(this));
+
+            // this.$root.$on('Project:CostsReverted', function (data) {
+            //     this.setProjectData(data)
+            // }.bind(this));
 
         }
     }

@@ -37,33 +37,11 @@
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#details" aria-controls="details" role="tab" data-toggle="tab">Overview</a></li>
-                    <li role="presentation"><a href="#reservations" aria-controls="reservations" role="tab" data-toggle="tab">Reservations</a></li>
-                </ul>
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                @include('admin.trips.tabs.nav')
             </div>
-        </div>
-        <div class="row">
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="details">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-4 col-md-3">
-                            @include('admin.trips.tabs.nav')
-                        </div>
-                        <div class="col-xs-12 col-sm-8 col-md-9">
-                            @include('admin.trips.tabs.'.$tab)
-                        </div>
-                    </div>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="reservations">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <admin-reservations-list trip-id="{{ $trip->id }}"></admin-reservations-list>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-xs-12 col-sm-8 col-md-9">
+                @include('admin.trips.tabs.'.$tab)
             </div>
         </div>
 

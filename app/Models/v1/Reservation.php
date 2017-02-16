@@ -259,6 +259,11 @@ class Reservation extends Model
         return $payments->sum('payment.amount_owed');
     }
 
+    public function totalCostInDollars()
+    {
+        return number_format($this->getTotalCost()/100, 2, '.', '');
+    }
+
     /**
      * Get the total of what was raised.
      *
@@ -266,7 +271,12 @@ class Reservation extends Model
      */
     public function getTotalRaised()
     {
-        return $this->fund->balance;
+        return $this->fund ? $this->fund->balance : 0;
+    }
+
+    public function totalRaisedInDollars()
+    {
+        return number_format($this->getTotalRaised()/100, 2, '.', '');
     }
 
     /**
@@ -290,6 +300,11 @@ class Reservation extends Model
     public function getTotalOwed()
     {
         return $this->getTotalCost() - $this->fund->balance;
+    }
+
+    public function totalOwedInDollars()
+    {
+        return number_format($this->getTotalCost()/100, 2 , '.', '');
     }
 
     /**

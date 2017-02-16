@@ -26,7 +26,7 @@ class PaymentTransformer extends TransformerAbstract
     {
         return [
             'id'           => $payment->id,
-            'amount_owed'  => $payment->amount_owed,
+            'amount_owed'  => $payment->amountOwedInDollars(),
             'percent_owed' => (int) $payment->percent_owed,
             'due_at'       => $payment->due_at ? $payment->due_at->toDateTimeString() : null,
             'grace_period' => (int) $payment->grace_period,

@@ -60,8 +60,8 @@ return [
                 'url' => 'details'
             ],
             [
-                'label' => 'Costs',
-                'url' => 'costs'
+                'label' => 'Payments',
+                'url' => 'payments'
             ],
             [
                 'label' => 'Funds',
@@ -78,6 +78,10 @@ return [
             [
                 'label' => 'Costs',
                 'url' => 'costs'
+            ],
+            [
+                'label' => 'Payments',
+                'url' => 'payments'
             ],
             [
                 'label' => 'Funds',

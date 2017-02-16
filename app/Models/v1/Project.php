@@ -146,7 +146,7 @@ class Project extends Model
      */
     public function getPercentRaisedAttribute()
     {
-        if ($this->amount_raised === 0 or $this->goal === 0) {
+        if ($this->amount_raised == 0 or $this->goal == 0) {
             return 0;
         }
 
@@ -165,6 +165,16 @@ class Project extends Model
         if ($difference < 0) return 0;
 
         return $difference;
+    }
+
+    public function goalInDollars()
+    {
+        return number_format($this->goal/100, 2);
+    }
+
+    public function amountRaisedInDollars()
+    {
+        return number_format($this->amount_raised/100, 2);
     }
 
     /**
@@ -245,5 +255,10 @@ class Project extends Model
     public function payments()
     {
         return new ProjectPayment($this);
+    }
+
+    public function rep()
+    {
+        return $this->belongsTo(User::class, 'rep_id');
     }
 }

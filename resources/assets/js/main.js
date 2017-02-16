@@ -476,7 +476,7 @@ Vue.directive('tour-guide', {
                 ]
             });
 
-            tour.start();
+            // tour.start();
         }
     },
     update: function () {

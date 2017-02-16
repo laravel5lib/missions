@@ -38,8 +38,8 @@ class ProjectTransformer extends Fractal\TransformerAbstract
             'sponsor_type'          => $project->sponsor_type,
             'plaque_prefix'         => $project->plaque_prefix,
             'plaque_message'        => $project->plaque_message,
-            'goal'                  => (int) $project->goal,
-            'amount_raised'         => (int) $project->amount_raised,
+            'goal'                  => $project->goalInDollars(),
+            'amount_raised'         => $project->amountRaisedInDollars(),
             'percent_raised'        => (int) $project->precent_raised,
             'funded_at'             => $project->funded_at ? $project->funded_at->toDateTimeString() : null,
             'created_at'            => $project->created_at->toDateTimeString(),
@@ -89,6 +89,8 @@ class ProjectTransformer extends Fractal\TransformerAbstract
      */
     public function includeRep(Project $project)
     {
+        if (! $project->rep) return null;
+
         return $this->item($project->rep, new UserTransformer);
     }
 

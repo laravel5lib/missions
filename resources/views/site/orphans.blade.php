@@ -150,7 +150,7 @@
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h2>Start funding a project to build an Angel House or donate towards an existing one.</h2>
 				<p><a class="btn btn-primary btn-lg" href="/sponsor-a-project">Sponsor An Angel House</a></p>
-				<p><a class="text-white" href="/donate/angel-house-cause">Donate To The Cause</a></p>
+				<p><a class="text-white" href="/donate/rescue-orphans-cause">Donate To The Cause</a></p>
 			</div>
 		</div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->

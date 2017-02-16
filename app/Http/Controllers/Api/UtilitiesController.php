@@ -96,8 +96,8 @@ class UtilitiesController extends Controller
             'phone_one' => $request->get('phone_one'),
             'project_name' => $request->get('project_name'),
             'complete_at' => $request->get('complete_at'),
-            'cause' => ProjectCause::find($request->get('causeId')),
-            'initiative' => ProjectInitiative::find($request->get('initiativeId')),
+            'cause' => ProjectCause::find($request->get('causeId'))->name,
+            'initiative' => ProjectInitiative::find($request->get('initiativeId'))->type,
             'total' => $request->get('total'),
         ];
 

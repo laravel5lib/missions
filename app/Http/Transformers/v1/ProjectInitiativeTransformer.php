@@ -17,7 +17,7 @@ class ProjectInitiativeTransformer extends Fractal\TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'costs', 'cause'
+        'cause'
     ];
 
     /**
@@ -61,51 +61,5 @@ class ProjectInitiativeTransformer extends Fractal\TransformerAbstract
         $cause = $initiative->cause;
 
         return $this->item($cause, new ProjectCauseTransformer);
-    }
-
-    /**
-     * Include Costs
-     *
-     * @param ProjectInitiative $initiative
-     * @param ParamBag $params
-     * @return Fractal\Resource\Collection
-     */
-    public function includeCosts(ProjectInitiative $initiative, ParamBag $params = null)
-    {
-
-        // Optional params validation
-        if ( ! is_null($params)) {
-            $this->validateParams($params);
-
-            $costs = [];
-
-            if (in_array('active', $params->get('status')))
-            {
-                $active = $initiative->activeCosts;
-
-                $maxDate = $active->where('type', 'incremental')->max('active_at');
-
-                $costs = $active->reject(function ($value, $key) use($maxDate) {
-                    return $value->type == 'incremental' && $value->active_at < $maxDate;
-                });
-            }
-
-        } else {
-            $costs = $initiative->costs;
-        }
-
-        return $this->collection($costs, new CostTransformer);
-    }
-
-    private function validateParams($params)
-    {
-        $usedParams = array_keys(iterator_to_array($params));
-        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
-            throw new \Exception(sprintf(
-                'Invalid param(s): "%s". Valid param(s): "%s"',
-                implode(',', $usedParams),
-                implode(',', $this->validParams)
-            ));
-        }
     }
 }

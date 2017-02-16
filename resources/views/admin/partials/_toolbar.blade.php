@@ -21,9 +21,9 @@
     <li @if(in_array(request()->segment(2), ['funds', 'transactions', 'donors']))class="active"@endif>
       <a href="/admin/funds"><i class="menu-icon fa fa-usd" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Fundraisers</span></a>
     </li>
-    {{-- <li @if(in_array(request()->segment(2), ['causes', 'projects', 'initiatives']))class="active"@endif>
+    <li @if(in_array(request()->segment(2), ['causes', 'projects', 'initiatives']))class="active"@endif>
         <a href="/admin/causes"><i class="menu-icon fa fa-tint" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Projects</span></a>
-    </li> --}}
+    </li>
     <li @if(request()->segment(2) == 'records')class="active"@endif>
       <a href="/admin/records"><i class="menu-icon fa fa-archive"></i><span class="text-label">Records</span></a>
     </li>

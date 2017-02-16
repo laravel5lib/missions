@@ -539,6 +539,32 @@ li.av-nav > a {
   padding-bottom: 4px;
 }
 
+.shepherd-active {
+  .navbar-fixed-top, .navmenu {
+    z-index: 998;
+  }
+
+  .shepherd-step {
+    z-index: 1001;
+  }
+  .shepherd-target.shepherd-enabled {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1000;
+  }
+  .shepherd-backdrop {
+    display: block;
+  }
+}
+.shepherd-backdrop {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: black;
+  opacity: .7;
+  filter: alpha(opacity=70);
+  z-index: 999;
+}
 .shepherd-step {
   width:300px;
   background: #fff;

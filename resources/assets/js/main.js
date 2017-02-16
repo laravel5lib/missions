@@ -502,6 +502,10 @@ Vue.directive('tour-guide', {
             });
 
             tour.start();
+
+            tour.on('complete', function () {
+                // localStorage.setItem('TourComplete', true)
+            })
         }
     },
     update: function () {

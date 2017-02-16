@@ -22,8 +22,8 @@
     @yield('styles')
 </head>
 <body id="app">
-    
     @yield('layout')
+    <div class="shepherd-backdrop"></div>
 
     <alert :show.sync="showSuccess"
            placement="top-right"

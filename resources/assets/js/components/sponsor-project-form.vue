@@ -32,22 +32,23 @@
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': checkForError('end') }">
 						<label for="name">Desired Completion Date</label>
-						<!--<date-picker class="form-control"-->
-									 <!--:time.sync="complete_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
-						<input type="text" class="form-control disabled" disabled readonly v-show="initiativeId" v-model="complete_at|moment 'MMMM YYYY'" id="complete_at"
-							   v-validate:end="['required']" required>
-
+						<select class="form-control" v-validate:end="['required']" v-model="complete_at" required>
+							<option value="June 2017">June 2017</option>
+							<option value="Dec. 2017">December 2017</option>
+							<option value="June 2018">June 2018</option>
+							<option value="Dec. 2018">December 2018</option>
+						</select>
 					</div>
 				</div>
 				<div class="form-group" v-if="initiativeId">
-					<div class="col-sm-6">
+					<div class="col-sm-12">
 						<label for="name">Project Description</label>
 						<p v-text="initiative.short_desc"></p>
 					</div>
-					<div class="col-sm-6 text-center">
+					<!-- <div class="col-sm-6 text-center">
 						<label for="name">Cost Starting At</label>
 						<h1 class="text-success" v-text="total|currency"></h1>
-					</div>
+					</div> -->
 				</div>
 
 				<div class="form-group">
@@ -169,8 +170,8 @@
 			},
 			'initiativeId': function (val) {
 				this.$nextTick(function () {
-					this.complete_at = this.initiative.ended_at;
-					this.calculateTotal();
+					// this.complete_at = this.initiative.ended_at;
+					// this.calculateTotal();
 				})
 			}
 		},
@@ -199,7 +200,7 @@
 			},
 			getInitiatives() {
 				this.intiativeResource
-						.get({causeId: this.causeId, include: 'costs'})
+						.get({causeId: this.causeId})
 						.then(function (response) {
 							this.initiatives = response.data.data;
 						}, function (error) {
@@ -210,7 +211,7 @@
 				let total = 0;
 				_.each(this.initiative.costs.data, function (cost) {
 					if (cost.type === 'static') {
-						total += cost.amount;
+						total += parseFloat(cost.amount);
 					}
 				});
 				this.total = total;

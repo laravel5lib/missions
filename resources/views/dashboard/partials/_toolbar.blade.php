@@ -17,11 +17,11 @@
       <a href="/dashboard/groups"><i class="menu-icon fa fa-users"></i><span class="text-label">Groups</span></a>
     </li>
     @endif
-    <li @if(request()->segment(2) == 'projects')class="active"@endif>
+    {{-- <li @if(request()->segment(2) == 'projects')class="active"@endif>
       <a href="/dashboard/projects"><i class="menu-icon fa fa-tint" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Projects</span></a>
-    </li>
-    <li style="padding:0;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
+    </li> --}}
+    {{-- <li style="padding:0;border-top:1px solid #1d1d1d;border-bottom:1px solid #1d1d1d;">
       <a class="text-uppercase" style="display:block;text-align:center;font-weight:400;padding:10px 0px;" v-on:click="startTour"><i class="fa fa-question-circle-o" style="font-size:14px;display:block;"></i><span style="font-size:8px;margin-top:0;">Tour</span></a>
-    </li>
+    </li> --}}
   </ul>
 </div>

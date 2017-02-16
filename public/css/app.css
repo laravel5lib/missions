@@ -14722,6 +14722,9 @@ body.vjs-full-window {
 .vjs-error .vjs-big-play-button {
   display: none; }
 
+.vjs-has-started.vjs-paused.vjs-show-big-play-button-on-pause .vjs-big-play-button {
+  display: block; }
+
 .video-js button {
   background: none;
   border: none;
@@ -15201,9 +15204,6 @@ body.vjs-full-window {
 
 .vjs-audio.vjs-has-started .vjs-poster {
   display: block; }
-
-.vjs-controls-disabled .vjs-poster {
-  display: none; }
 
 .vjs-using-native-controls .vjs-poster {
   display: none; }
@@ -16347,6 +16347,32 @@ li.av-nav > a {
   background: #242424;
   padding-top: 4px;
   padding-bottom: 4px; }
+
+.shepherd-active .navbar-fixed-top, .shepherd-active .navmenu {
+  z-index: 998; }
+
+.shepherd-active .shepherd-step {
+  z-index: 1001; }
+
+.shepherd-active .shepherd-target.shepherd-enabled {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1000; }
+
+.shepherd-active .shepherd-backdrop {
+  display: block; }
+
+.shepherd-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: .7;
+  filter: alpha(opacity=70);
+  z-index: 999; }
 
 .shepherd-step {
   width: 300px;

@@ -457,58 +457,12 @@ Vue.directive('tour-guide', {
                 }
             });
 
-            tour.addStep('intro', {
-                title: 'Welcome to the Dashboard',
-                text: 'It will only take a few seconds to walk through the features found here. <p>You can stop anytime or take this tour by clicking the <i class="fa fa-question-circle-o fa-2x"></i> icon in the menu.</p> <p><strong>Shall we begin?</strong></p>',
-                showCancelLink: false,
-                buttons: [
-                    {
-                        text: 'Not Now',
-                        action: tour.cancel,
-                        classes: 'shepherd-button-secondary'
-                    },
-                    {
-                        text: 'Let\'s Go',
-                        action: tour.next
-                    }
-                ]
-            });
-
-            tour.addStep('payments', {
-                title: 'Upcoming Payments',
-                text: 'See which payment deadlines are coming up and their statuses for reservations you are managing.',
-                attachTo: {
-                    element: '.tour-step-payments', 
-                    on: 'top'
+            // if pageSteps exists, add them to tour
+            if (window.pageSteps && window.pageSteps.length) {
+                for (let i in window.pageSteps) {
+                    tour.addStep(window.pageSteps[i]);
                 }
-            });
-
-            tour.addStep('requirements', {
-                title: 'Travel Requirements',
-                text: 'See which travel requirement deadlines are coming up and their statuses for reservations you are managing.',
-                attachTo: {
-                    element: '.tour-step-requirements', 
-                    on: 'top'
-                }
-            });
-
-            tour.addStep('requirements', {
-                title: 'Recent Donations',
-                text: 'See recent donations recieved. If you are managing a team, their donations will also show here.',
-                attachTo: {
-                    element: '.tour-step-donations', 
-                    on: 'top'
-                }
-            });
-
-            tour.addStep('news', {
-                title: 'Featured News',
-                text: 'Check this section periodically for important announcements from Missions.Me.',
-                attachTo: {
-                    element: '.tour-step-news', 
-                    on: 'top'
-                }
-            });
+            }
 
             tour.start();
 

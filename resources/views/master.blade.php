@@ -47,7 +47,8 @@
         <p>@{{ message }}</p>
     </alert>
 
-     <script src="{{ elixir('js/main.js') }}"></script>
+    @yield('tour')
+    <script src="{{ elixir('js/main.js') }}"></script>
     {{--<script src="/js/main.js"></script>--}}
     <script src="/js/vendor.js"></script>
     @yield('scripts')

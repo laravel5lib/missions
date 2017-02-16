@@ -11,7 +11,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="row form-group">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 tour-step-avatar">
                                     <label>Profile Photo (max file size:2mb)</label>
                                     <h5>
                                         <a href="#">
@@ -21,7 +21,7 @@
                                     </h5>
                                 </div>
                                 <hr class="divider inv visible-xs">
-                                <div class="col-sm-6">
+                                <div class="col-sm-6 tour-step-cover">
                                     <label>Cover Photo (max file size:2mb)</label>
                                     <h5>
                                         <a href="#">

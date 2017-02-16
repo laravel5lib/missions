@@ -455,51 +455,14 @@ Vue.directive('tour-guide', {
                     scrollTo: true,
                     showCancelLink: true
                 }
-                /*steps: [
-                    {
-                        title: 'Example Shepherd',
-                        text: 'Creating a Shepherd is easy too! Just create ...',
-                        attachTo: '.hero-example bottom',
-                        advanceOn: '.docs-link click'
-                    }
-                ]*/
             });
 
-            tour.addStep('payments', {
-                title: 'Upcoming Payments',
-                text: 'See which payment deadlines are coming up and their status for reservations you are managing.',
-                attachTo: {
-                    element: '.tour-step-payments', 
-                    on: 'top'
+            // if pageSteps exists, add them to tour
+            if (window.pageSteps && window.pageSteps.length) {
+                for (let i in window.pageSteps) {
+                    tour.addStep(window.pageSteps[i]);
                 }
-            });
-
-            tour.addStep('requirements', {
-                title: 'Upcoming Travel Requirements',
-                text: 'See which travel requirement deadlines are coming up and their status for reservations you are managing.',
-                attachTo: {
-                    element: '.tour-step-requirements', 
-                    on: 'top'
-                }
-            });
-
-            tour.addStep('requirements', {
-                title: 'Recent Donations',
-                text: 'See recent donations recieved. If you are managing a team, their donations will also show here.',
-                attachTo: {
-                    element: '.tour-step-donations', 
-                    on: 'top'
-                }
-            });
-
-            tour.addStep('news', {
-                title: 'Featured News',
-                text: 'Check this section periodically for important announcements from Missions.Me.',
-                attachTo: {
-                    element: '.tour-step-news', 
-                    on: 'top'
-                }
-            });
+            }
 
             tour.start();
 

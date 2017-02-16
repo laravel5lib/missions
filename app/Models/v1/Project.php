@@ -167,14 +167,19 @@ class Project extends Model
         return $difference;
     }
 
+    public function amountOutstandingInDollars()
+    {
+        return number_format($this->amount_outstanding/100, 2, '.', '');
+    }
+
     public function goalInDollars()
     {
-        return number_format($this->goal/100, 2);
+        return number_format($this->goal/100, 2, '.', '');
     }
 
     public function amountRaisedInDollars()
     {
-        return number_format($this->amount_raised/100, 2);
+        return number_format($this->amount_raised/100, 2, '.', '');
     }
 
     /**

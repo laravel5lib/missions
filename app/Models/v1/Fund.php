@@ -14,9 +14,9 @@ class Fund extends Model
 
     protected $guarded = [];
 
-    public function getBalanceAttribute($value)
+    public function balanceInDollars()
     {
-        return number_format($value/100, 2, '.', ''); // convert to dollars
+        return number_format($this->balance/100, 2, '.', ''); // convert to dollars
     }
 
     public function setBalanceAttribute($value)

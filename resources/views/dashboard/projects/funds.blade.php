@@ -13,16 +13,16 @@
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $project->percent_raised }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $project->percent_raised }}%;">
                         </div>
                     </div>
-                    <span class="text-success">{{ $project->percent_raised }}% of ${{ $project->goal }}</span> <small>Raised</small>
+                    <span class="text-success">{{ $project->percent_raised }}% of ${{ number_format($project->goalInDollars(),2) }}</span> <small>Raised</small>
                     <hr class="divider inv">
                 </div>
                 <div class="col-sm-6 col-md-4 text-center">
                     <label>Total In Fund</label>
-                    <h2 class="text-success" style="margin-top:0;">${{ number_format($project->amount_raised,2) }}</h2>
+                    <h2 class="text-success" style="margin-top:0;">${{ number_format($project->amountRaisedInDollars(),2) }}</h2>
                 </div>
                 <div class="col-sm-6 col-md-4 text-center">
                     <label>Remaining To Raise</label>
-                    <h2 class="text-info" style="margin-top:0;">${{ number_format($project->amount_outstanding,2) }}</h2>
+                    <h2 class="text-info" style="margin-top:0;">${{ number_format($project->amountOutstandingInDollars(),2) }}</h2>
                 </div>
             </div><!-- end row -->
             <div class="row">

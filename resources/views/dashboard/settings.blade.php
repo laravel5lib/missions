@@ -33,9 +33,34 @@
 <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12" v-tour-guide="">
                 <user-settings></user-settings>
             </div>
         </div>
     </div>
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'avatar',
+                title: 'Profile Avatar',
+                text: 'Upload a picture of yourself. Show us your humanity!',
+                attachTo: {
+                    element: '.tour-step-avatar',
+                    on: 'top'
+                },
+            } ,
+            {
+                id: 'cover',
+                title: 'Profile Cover',
+                text: 'Like they say, "A picture says a thousand words..." So, you don\'t have to :p',
+                attachTo: {
+                    element: '.tour-step-cover',
+                    on: 'top'
+                }
+            },
+        ];
+    </script>
 @endsection

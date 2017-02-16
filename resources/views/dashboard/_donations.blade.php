@@ -23,7 +23,7 @@
             </tbody>
         </table>
     </div>
-    <div class="panel-footer text-center" style="padding:10px;">
+    {{-- <div class="panel-footer text-center" style="padding:10px;">
         <a class="small" style="color:#bcbcbc;" href="#">View All Donations</a>
-    </div>
+    </div> --}}
 </div>

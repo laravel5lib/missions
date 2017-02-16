@@ -46,20 +46,20 @@
       </div><!-- end row -->
     </div>
     <div class="row">
-      <div class="col-sm-6 tour-step-element">
+      <div class="col-sm-6 tour-step-payments">
         @include('dashboard._payments')
       </div>
 
-      <div class="col-sm-6">
+      <div class="col-sm-6 tour-step-requirements">
         @include('dashboard._requirements')
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-6 tour-step-donations">
         @include('dashboard._donations')
       </div>
 
-      <div class="col-sm-6">
+      <div class="col-sm-6 tour-step-news">
         @include('dashboard._featurednews')
       </div>
     </div>

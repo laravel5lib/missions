@@ -20,7 +20,7 @@ class FundTransformer extends TransformerAbstract {
         $array = [
             'id'         => $fund->id,
             'name'       => $fund->name,
-            'balance'    => $fund->balance,
+            'balance'    => $fund->balanceInDollars(),
             'type'       => str_singular($fund->fundable_type),
             'class'      => $fund->class,
             'item'       => $fund->item,

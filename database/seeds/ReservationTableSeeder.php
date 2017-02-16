@@ -11,42 +11,94 @@ class ReservationTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r) {
+        factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r)
+        {
 
-            foreach($r->trip->deadlines as $deadline)
-            {
-                $r->deadlines()->attach($deadline->id, ['grace_period' => $deadline->grace_period + random_int(0, 3)]);
-            }
-
-            foreach($r->trip->requirements as $requirement)
-            {
-                $statuses = ['incomplete', 'reviewing', 'complete'];
-                $rand_key = array_rand($statuses);
-
-                $statuses[$rand_key] == 'complete' ? $completed_at = \Carbon\Carbon::now() : $completed_at = null;
-
-                $r->requirements()->attach($requirement->id, [
-                    'grace_period' => $requirement->grace_period + random_int(0, 3),
-                    'status' => $statuses[$rand_key],
-                    'completed_at' => $completed_at
-                ]);
-            }
-
-            foreach($r->trip->costs as $cost)
-            {
-                $r->costs()->attach($cost->id, ['grace_period' => $cost->grace_period + random_int(0, 3)]);
-            }
-
-            foreach($r->trip->todos as $todo)
-            {
-                $r->todos()->save(factory(App\Models\v1\Todo::class)->make([
-                    'task' => $todo
-                ]));
-            }
-
-            $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
+            // $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
+
+            $tags = collect(['vip', 'missionary', 'medical', 'international', 'media', 'short'])
+                ->random(2)->all();
+
+            $r->tag($tags);
+
+            $this->addDependencies($r);
         });
     }
+
+    private function addDependencies($res)
+    {
+        $active = $res->trip->activeCosts()->get();
+
+        $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+        $incrementalCosts = $active->filter(function ($value) use ($maxDate)
+        {
+            return $value->type == 'incremental' && $value->active_at == $maxDate;
+        });
+
+        $staticCosts = $active->filter(function ($value)
+        {
+            return $value->type == 'static';
+        });
+
+        $optionalCosts = $active->filter(function ($value)
+        {
+            return $value->type == 'optional';
+        })->random(1);
+
+        $costs = $incrementalCosts->merge($staticCosts)->push($optionalCosts);
+
+        $fund = $res->fund()->create([
+            'name' => generateFundName($res),
+            'slug' => str_slug(generateFundName($res)),
+            'balance' => 0,
+            'class' => generateQbClassName($res),
+            'item' => 'Missionary Donation'
+        ]);
+
+        $res->syncCosts($costs);
+        $res->syncRequirements($res->trip->requirements);
+        $res->syncDeadlines($res->trip->deadlines);
+        $res->addTodos($res->trip->todos);
+
+        $donor = factory(App\Models\v1\Donor::class)->create([
+            'account_id' => $res->user_id,
+            'account_type' => 'users',
+            'name' => $res->user->name
+        ]);
+
+        $transaction = factory(App\Models\v1\Transaction::class, 'donation')->create([
+            'amount' => 100,
+            'fund_id' => $fund->id,
+            'donor_id' => $donor->id
+        ]);
+
+        $balance = $transaction->fund->balance + $transaction->amount;
+        $transaction->fund->balance = $balance;
+        $transaction->fund->save();
+
+        $transaction->fund->fundable
+            ->payments()
+            ->updateBalances($transaction->amount);
+
+        $slug = str_slug(country($res->trip->country_code)).
+            '-'.
+            $res->trip->started_at->format('Y').
+            '-'.
+            str_random(4);
+
+        $res->fund->fundraisers()->create([
+            'name' => generateFundraiserName($res),
+            'url' => $slug,
+            'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
+            'sponsor_type' => 'users',
+            'sponsor_id' => $res->user_id,
+            'goal_amount' => $res->getTotalCost(),
+            'started_at' => $res->created_at,
+            'ended_at' => $res->trip->started_at
+        ]);
+    }
+
 }

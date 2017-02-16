@@ -5,9 +5,9 @@
 @endsection()
 
 @section('layout')
-  <div id="page-wrap"><!-- page-wrap important for sticky footer -->
-    @include('dashboard.partials._toolbar')
-    @include('_topnav')
+  @include('dashboard.partials._toolbar')
+  @include('_topnav')
+  <div id="dash-page-wrap"><!-- page-wrap important for sticky footer -->
     @yield('content')
   </div>
   @include('_footernav')

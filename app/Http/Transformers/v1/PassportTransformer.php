@@ -33,11 +33,11 @@ class PassportTransformer extends TransformerAbstract
             'birth_country_name' => country($passport->birth_country),
             'citizenship' => $passport->citizenship,
             'citizenship_name' => country($passport->citizenship),
-            'scan_src' => $passport->scan_src,
-            'issued_at' => $passport->issued_at->format('Y-m-d'),
+            'upload_id' => $passport->upload_id,
             'expires_at' => $passport->expires_at->format('Y-m-d'),
             'created_at' => $passport->created_at->toDateTimeString(),
             'updated_at' => $passport->updated_at->toDateTimeString(),
+            'expired' => $passport->expires_at->isPast() ? true : false,
             'links'        => [
                 [
                     'rel' => 'self',

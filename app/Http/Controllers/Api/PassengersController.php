@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\PassengerRequest;
 use App\Http\Transformers\v1\PassengerTransformer;
 use App\Models\v1\Passenger;
@@ -24,7 +25,7 @@ class PassengersController extends Controller
     public function __construct(Passenger $passenger)
     {
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
         $this->passenger = $passenger;
     }
 

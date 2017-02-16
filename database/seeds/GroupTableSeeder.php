@@ -12,7 +12,10 @@ class GroupTableSeeder extends Seeder
     public function run()
     {
         factory(App\Models\v1\Group::class, config('seeders.groups'))->create()->each(function($g) {
-            $g->managers()->save(factory(App\Models\v1\Manager::class)->make());
+            $g->slug()->save(factory(App\Models\v1\Slug::class)->make(['url' => generate_slug($g->name)]));
+            $g->managers()->attach(factory(App\Models\v1\Manager::class)->make());
+            $g->stories()->saveMany(factory(App\Models\v1\Story::class, 3)->make());
+            $g->notes()->saveMany(factory(App\Models\v1\Note::class, 5)->make());
         });
     }
 }

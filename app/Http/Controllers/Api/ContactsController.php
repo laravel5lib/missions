@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\v1\ContactRequest;
 use App\Http\Transformers\v1\ContactTransformer;
@@ -19,7 +20,7 @@ class ContactsController extends Controller
         $this->user = $user;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

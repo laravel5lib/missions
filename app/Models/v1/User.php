@@ -4,13 +4,16 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Support\Facades\Session;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities, CanResetPassword;
 
     /**
      * The table associated with the model.
@@ -27,8 +30,11 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'email', 'password', 'alt_email',
         'phone_one', 'phone_two', 'gender', 'status',
-        'birthday', 'street', 'city', 'zip', 'country_code',
-        'state', 'timezone', 'url', 'public', 'bio'
+        'birthday', 'address', 'city', 'zip', 'country_code',
+        'state', 'timezone', 'url', 'public', 'bio',
+        'avatar_upload_id', 'banner_upload_id',
+        'created_at', 'updated_at', 'shirt_size', 'height',
+        'weight'
     ];
 
     /**
@@ -88,10 +94,10 @@ class User extends Authenticatable implements JWTSubject
      *
      * @param $value
      */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
-    }
+    // public function setPasswordAttribute($value)
+    // {
+    //     $this->attributes['password'] = bcrypt($value);
+    // }
 
     /**
      * Set the user's name
@@ -335,6 +341,24 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get groups the user has traveled with.
+     *
+     * @return mixed
+     */
+    public function getGroups()
+    {
+        $groupIds = $this->reservations()
+                         ->with('trip')
+                         ->get()
+                         ->pluck('trip.group_id')
+                         ->unique();
+
+        $groups = Group::whereIn('id', $groupIds)->public()->get();
+
+        return $groups;
+    }
+
+    /**
      * Get all the user's assignments.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -347,7 +371,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all the groups the user manages.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function managing()
     {
@@ -357,7 +381,7 @@ class User extends Authenticatable implements JWTSubject
     /**
      * Get all the trips the user facilitates.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilitating()
     {
@@ -395,6 +419,26 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the user's medical releases.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function medicalReleases()
+    {
+        return $this->hasMany(MedicalRelease::class);
+    }
+
+    /**
+     * Get all the user's referrals.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function referrals()
+    {
+        return $this->hasMany(Referral::class);
+    }
+
+    /**
      * Get all the user's contacts.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -415,13 +459,219 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * Check if user is an admin.
+     * Get the user's avatar.
      *
-     * @return bool
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function isAdmin()
+    public function avatar()
     {
-        return $this->admin;
+        return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/user-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
+    }
+
+    /**
+     * Get the user's page banner.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function banner()
+    {
+        return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
+    /**
+     * Helper method to retrieve the user's banner
+     * 
+     * @return mixed
+     */
+    public function getBanner()
+    {
+        if( ! $this->banner) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'default',
+                'type' => 'banner',
+                'source' => 'images/banners/1n1d17-missionary-2560x800.jpg',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->banner;
+    }
+
+    /**
+     * Get the user's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
+    /**
+     * Get the user's links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function links()
+    {
+        return $this->morphMany(Link::class, 'linkable');
+    }
+
+    /**
+     * Get all the user's donations made.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function donations()
+    {
+        return $this->hasMany(Donation::class, 'donor_id');
+    }
+
+    /**
+     * Get all the user's stories.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function stories()
+    {
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the all the user's accolades.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function accolades()
+    {
+        return $this->morphMany(Accolade::class, 'recipient');
+    }
+
+    /**
+     * Get all the user's essays.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function essays()
+    {
+        return $this->hasMany(Essay::class);
+    }
+
+    /**
+     * Get the user's profile slug.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
+     * Synchronize User Profile Links.
+     *
+     * @param $links
+     */
+    public function syncLinks($links)
+    {
+        if ( ! $links) return;
+
+        $links = collect($links)->reject(function($link) {
+            return strlen($link['url']) < 1;
+        })->all();
+
+        $names = $this->links()->pluck('id', 'name');
+
+        foreach($links as $link)
+        {
+            array_forget($names, $link['name']);
+
+            $link['url'] = remove_http($link['url']);
+
+            $this->links()->updateOrCreate(['name' => $link['name']], $link);
+        }
+
+        if( ! $names->isEmpty()) Link::destroy(array_values($names->toArray()));
+    }
+
+    public function getCountriesVisited()
+    {
+        $this->load('accolades');
+
+        $accolade = $this->accolades()->where('name', 'countries_visited')->first();
+
+        return $accolade->items;
+    }
+
+    public function upcomingPayments()
+    {
+        $dues = Due::whereIn(
+            'payable_id',
+            $this->reservations()->current()->pluck('id')->toArray()
+        )->where('payable_type', 'reservations')
+         ->withBalance()
+         ->sortRecent()
+         ->get();
+
+        return $dues;
+    }
+
+    public function outstandingRequirements()
+    {
+        $requirements = $this->reservations()
+             ->current()
+             ->with('requirements')
+             ->get()
+             ->pluck('requirements')
+             ->flatten()
+             ->reject(function($item) {
+                 $item->status = 'incomplete' || 'attention';
+             })
+             ->sortBy('due_at');
+
+        return $requirements;
+    }
+
+    public function recentDonations()
+    {
+        $donations = $this->reservations()
+            ->current()
+            ->with('fund.donations')
+            ->get()
+            ->pluck('donations')
+            ->flatten()
+            ->sortBy('created_at')
+            ->take(5);
+
+
+        return $donations;
     }
 
     public function withAvailableRegions()
@@ -459,5 +709,20 @@ class User extends Authenticatable implements JWTSubject
         // team call sign
         // role name
         // available forms
+    }
+
+    public function setImpersonating($id)
+    {
+        Session::put('impersonate', $id);
+    }
+
+    public function stopImpersonating()
+    {
+        Session::forget('impersonate');
+    }
+
+    public function isImpersonating()
+    {
+        return Session::has('impersonate');
     }
 }

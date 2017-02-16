@@ -15,8 +15,14 @@ class CreateCampaignsTable extends Migration
         Schema::create('campaigns', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->json('countries');
-            $table->text('description')->nullable();
+            $table->string('country_code');
+            $table->string('short_desc')->nullable();
+            $table->string('page_src')->nullable();
+            $table->uuid('avatar_upload_id')->nullable();
+            $table->uuid('banner_upload_id')->nullable();
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('ended_at')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

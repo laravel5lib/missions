@@ -1,10 +1,8 @@
 <?php namespace App\Filters\v1;
 
 use Carbon\Carbon;
-use Dingo\Api\Auth\Auth;
-use EloquentFilter\ModelFilter;
 
-class TeamMemberFilter extends ModelFilter
+class TeamMemberFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -14,15 +12,26 @@ class TeamMemberFilter extends ModelFilter
     */
     public $relations = [];
 
-    public function setup()
-    {
-        if ( ! app(Auth::class)->user()->isAdmin())
-        {
-            $this->showOnlyPublishedTeams();
-        }
-    }
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = ['group', 'created_at', 'updated_at'];
 
-    public function showOnlyPublishedTeams()
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = ['reservations.given_names', 'reservations.surname'];
+
+    /**
+     * By published.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function published()
     {
         return $this->whereHas('team', function ($team)
         {
@@ -31,65 +40,49 @@ class TeamMemberFilter extends ModelFilter
         });
     }
 
+    /**
+     * By teams.
+     *
+     * @param $ids
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function teams($ids)
     {
         return $this->whereIn('team_id', $ids);
     }
 
+    /**
+     * By roles.
+     *
+     * @param $ids
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function roles($ids)
     {
         return $this->whereIn('role_id', $ids);
     }
 
+    /**
+     * By Groups.
+     *
+     * @param $groups
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function groups($groups)
     {
         return $this->whereIn('group', $groups);
     }
 
+    /**
+     * Is a leader.
+     *
+     * @param $leader
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function leader($leader)
     {
         return $leader == 'yes' ?
             $this->where('leader', true) :
             $this->where('leader', false);
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->whereHas('reservations', function($r) use($search)
-                 {
-                     return $r->where('given_names', 'LIKE', "%$search%")
-                              ->orWhere('surname', 'LIKE', "%$search%");
-                 });
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'group', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

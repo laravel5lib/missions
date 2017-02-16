@@ -1,9 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use Dingo\Api\Auth\Auth;
-use EloquentFilter\ModelFilter;
-
-class GroupFilter extends ModelFilter
+class GroupFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -14,14 +11,33 @@ class GroupFilter extends ModelFilter
     public $relations = [];
 
     /**
-     * Apply automatically.
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'name', 'type', 'email', 'zip',
+        'country_code', 'state', 'city', 'created_at',
+        'updated_at'
+    ];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'name', 'type', 'email', 'city', 'state',
+        'phone_one', 'phone_two', 'zip', 'slug.url'
+    ];
+
+    /**
+     * Automatically filter by approved unless
+     * pending parameter is present.
      */
     public function setup()
     {
-        if( ! app(Auth::class)->user() or ! app(Auth::class)->user()->isAdmin())
-        {
-            $this->onlyPublicGroups();
-        }
+        if ( ! $this->input('pending')) $this->approved();
     }
 
 
@@ -72,55 +88,42 @@ class GroupFilter extends ModelFilter
     }
 
     /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%")
-                ->orWhere('email', 'LIKE', "%$search%")
-                ->orWhere('city', 'LIKE', "%$search%")
-                ->orWhere('state', 'LIKE', "%$search%")
-                ->orWhere('phone_one', 'LIKE', "$search%")
-                ->orWhere('phone_two', 'LIKE', "$search%")
-                ->orWhere('zip', 'LIKE', "$search%");
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'name', 'type', 'email', 'zip',
-            'country_code', 'state', 'city', 'created_at',
-            'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
-    }
-
-    /**
      * Find only public groups
      */
     public function onlyPublicGroups()
     {
         $this->where('public', true);
+    }
+
+    /**
+     * Find by url slug.
+     *
+     * @param $url
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function url($url)
+    {
+        return $this->where('url', $url);
+    }
+
+    /**
+     * Find approved groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function approved()
+    {
+        return $this->orWhere('status', 'approved');
+    }
+
+    /**
+     * Find pending groups.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function pending()
+    {
+        return $this->orWhere('status', 'pending');
     }
 
 }

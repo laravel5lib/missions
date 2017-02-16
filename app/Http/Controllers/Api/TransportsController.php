@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\TransportRequest;
 use App\Http\Transformers\v1\TransportTransformer;
 use App\Models\v1\Transport;
@@ -25,7 +26,7 @@ class TransportsController extends Controller
     {
         $this->transport = $transport;
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

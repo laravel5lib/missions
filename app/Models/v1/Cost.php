@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,14 +19,11 @@ class Cost extends Model
     protected $table = 'costs';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'description', 'type',
-        'active_at', 'amount'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.
@@ -49,6 +47,16 @@ class Cost extends Model
      */
     public $timestamps = false;
 
+    public function getAmountAttribute($value)
+    {
+        return number_format($value/100, 2, '.', ''); // convert to dollars
+    }
+
+     public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value*100; // convert to cents
+    }
+
     /**
      * Get all of the owning cost assignable models.
      *
@@ -67,7 +75,7 @@ class Cost extends Model
     public function reservations()
     {
         return $this->belongsToMany(Reservation::class, 'reservation_costs')
-                    ->withPivot('grace_period')
+                    ->withPivot('locked')
                     ->withTimestamps();
     }
 
@@ -79,5 +87,44 @@ class Cost extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Get today's or the given date's balance due for the cost.
+     *
+     * @param null $date
+     * @return mixed
+     */
+    public function getBalanceDue($date = null)
+    {
+        is_null($date) ? $date = Carbon::now() : $date;
+
+        $this->load('payments');
+
+        return $this->payments()->where('due_at', '<=', $date)->sum('amount_owed');
+    }
+
+    /**
+     * Get only active costs.
+     *
+     * @param $query
+     * @return mixed
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereDate('active_at', '<=', Carbon::now())
+                     ->orderBy('active_at', 'desc');
+    }
+
+    /**
+     * Get only costs of the specified type.
+     *
+     * @param $query
+     * @param $type
+     * @return mixed
+     */
+    public function scopeType($query, $type)
+    {
+        return $query->whereType($type);
     }
 }

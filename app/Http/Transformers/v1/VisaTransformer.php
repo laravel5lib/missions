@@ -25,17 +25,18 @@ class VisaTransformer extends TransformerAbstract
     public function transform(Visa $visa)
     {
         $array = [
-            'id' => $visa->id,
-            'given_names' => $visa->given_names,
-            'surname' => $visa->surname,
-            'number' => $visa->number,
+            'id'           => $visa->id,
+            'given_names'  => $visa->given_names,
+            'surname'      => $visa->surname,
+            'number'       => $visa->number,
             'country_code' => $visa->country_code,
             'country_name' => country($visa->country_code),
-            'scan_src' => $visa->scan_src,
-            'issued_at' => $visa->issued_at->format('Y-m-d'),
-            'expires_at' => $visa->expires_at->format('Y-m-d'),
-            'created_at' => $visa->created_at->toDateTimeString(),
-            'updated_at' => $visa->updated_at->toDateTimeString(),
+            'upload_id'    => $visa->upload_id,
+            'issued_at'    => $visa->issued_at->format('Y-m-d'),
+            'expires_at'   => $visa->expires_at->format('Y-m-d'),
+            'created_at'   => $visa->created_at->toDateTimeString(),
+            'updated_at'   => $visa->updated_at->toDateTimeString(),
+            'expired'      => $visa->expires_at->isPast() ? true : false,
             'links'        => [
                 [
                     'rel' => 'self',

@@ -1,6 +1,10 @@
 /vendor
 /node_modules
 /public/storage
+/public/build
 Homestead.yaml
 Homestead.json
 .env
+
+#  jetbrains phpStorm IDE files
+.idea/

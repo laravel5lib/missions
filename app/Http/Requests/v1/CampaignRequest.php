@@ -13,7 +13,7 @@ class CampaignRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin();
+        return true;
     }
 
     /**
@@ -23,10 +23,35 @@ class CampaignRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|max:100',
-            'countries' => 'required|array',
-            'description' => 'string|max:120'
+        $required = [
+            'name'         => 'required|max:100',
+            'country_code' => 'required|string',
+            'started_at'   => 'required|date|before:ended_at',
+            'ended_at'     => 'required|date|after:started_at',
+            'page_src'     => 'required_with:published_at|string',
+            'page_url'     => 'required_with:published_at|string|unique:slugs,url'
         ];
+
+        if ($this->isMethod('put'))
+        {
+            $required = [
+                'name'         => 'sometimes|required|max:100',
+                'country_code' => 'sometimes|required|string',
+                'started_at'   => 'sometimes|required|date|before:ended_at',
+                'ended_at'     => 'sometimes|required|date|after:started_at',
+                'page_src'     => 'required_with:published_at|string',
+                'page_url'     => 'required_with:published_at|string|unique:slugs,url,'.$this->route('campaigns').',slugable_id'
+            ];
+        }
+
+        $optional = [
+            'avatar_upload_id' => 'string|exists:uploads,id,type,avatar',
+            'banner_upload_id' => 'string|exists:uploads,id,type,banner',
+            'description'      => 'string|max:120',
+            'published_at'     => 'date',
+            'tags'             => 'array',
+        ];
+
+        return $rules = $required + $optional;
     }
 }

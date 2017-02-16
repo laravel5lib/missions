@@ -4,36 +4,90 @@
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
 */
-$dispatcher = app('Dingo\Api\Dispatcher');
 
-Route::get('/admin/users', function () use ($dispatcher) {
-    Auth::loginUsingId('fc4b1442-3a03-4339-86e2-6ecbfc0e3e30');
-    try {
-        $users = $dispatcher->be(auth()->user())->get('users');
-    } catch (Dingo\Api\Exception\InternalHttpException $e) {
-        // We can get the response here to check the status code of the error or response body.
-        $response = $e->getResponse();
+/**
+ * Dashboard Routes
+ */
+$this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'dashboard' ], function ()
+{
+    $this->get('/', function () {
+        return view('dashboard.index');
+    });
 
-        return $response;
-    }
+    $this->get('settings', function() {
+        return view('dashboard.settings');
+    });
 
-    return View::make('admin.users')->with('users', $users);
+    // Group Routes...
+    $this->resource('groups', 'Dashboard\GroupsController', ['only' => ['index', 'show', 'edit']]);
+    $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trips');
+
+    // Records Routes...
+    $this->get('records/{tab?}', function($tab = 'passports') {
+        return view('dashboard.'.$tab.'.index', compact('tab'));
+    });
+    $this->resource('records/passports', 'Dashboard\PassportsController', [
+        'except' => ['index', 'destroy']
+    ]);
+    $this->resource('records/visas', 'Dashboard\VisasController', [
+        'except' => ['index', 'destroy']
+    ]);
+    $this->resource('records/medical-releases', 'Dashboard\MedicalReleasesController', [
+        'except' => ['index', 'destroy']
+    ]);
+    $this->resource('records/essays', 'Dashboard\EssaysController', [
+        'except' => ['index', 'destroy']
+    ]);
+    $this->resource('records/referrals', 'Dashboard\ReferralsController', [
+        'except' => ['index', 'destroy']
+    ]);
+
+    // Reservation Routes...
+    $this->get('reservations', 'Dashboard\ReservationsController@index');
+    $this->get('reservations/{id}/{tab?}', 'Dashboard\ReservationsController@show');
+
+    // Project Routes...
+    $this->get('projects', 'Dashboard\ProjectsController@index');
+    $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
-});
+/**
+ * Web Routes
+ */
+// Authentication and Registration Routes...
+$this->get('/login', 'Auth\AuthController@login');
+$this->post('/login', 'Auth\AuthController@authenticate');
+$this->get('/register', 'Auth\AuthController@create');
+$this->post('/register', 'Auth\AuthController@register');
+$this->get('/logout', 'Auth\AuthController@logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-});
+// Password Reset Routes...
+$this->get('/password/email', 'Auth\PasswordController@showLinkRequestForm');
+$this->get('/password/reset/{token?}', 'Auth\PasswordController@showResetForm');
+$this->post('/password/email', 'Auth\PasswordController@sendResetLinkEmail');
+$this->post('/password/reset', 'Auth\PasswordController@reset');
 
-Route::get('/', function () {
+// Donation Route...
+$this->get('/donate/{recipient?}', 'DonationsController@show');
+
+// Referral Form Route..
+$this->get('/referrals/{id}', 'ReferralsController@show');
+
+// Trip Routes...
+$this->get('/trips/{id}', 'TripsController@show');
+$this->get('/trips/{id}/register', 'TripsController@register');
+
+// Fundraisers, Groups, Campaigns, and Static Page Routes ...
+$this->get('/fundraisers', 'FundraisersController@index');
+$this->get('/groups', 'GroupsController@index');
+$this->get('/campaigns', 'CampaignsController@index');
+$this->get('/{slug}/signup', 'GroupsController@signup');
+$this->get('/{slug}/trips', 'CampaignsController@trips');
+$this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')->where('sponsor_slug', '.+');
+$this->get('/{slug}', 'PagesController@show');
+
+// Home Route ...
+$this->get('/', function () {
     return view('site.index');
 });

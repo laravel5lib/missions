@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class UploadFilter extends ModelFilter
+class UploadFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -11,4 +9,29 @@ class UploadFilter extends ModelFilter
     * @var array
     */
     public $relations = [];
+
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = ['name', 'type', 'created_at', 'updated_at'];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = ['name'];
+
+    /**
+     * Filter by type
+     *
+     * @param $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function type($type)
+    {
+        return $this->where('type', $type);
+    }
 }

@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class DecisionFilter extends ModelFilter
+class DecisionFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -11,6 +9,27 @@ class DecisionFilter extends ModelFilter
     * @var array
     */
     public $relations = [];
+
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'name', 'gender', 'age_group', 'phone',
+        'email', 'created_at', 'updated_at',
+        'lat', 'long'
+    ];
+
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'name', 'email', 'phone', 'lat', 'long', 'region.name',
+        'reservation.given_names', 'reservation.surname'
+    ];
 
     /**
      * Find by gender
@@ -45,55 +64,5 @@ class DecisionFilter extends ModelFilter
         return $decision == 'yes' ?
             $this->where('decision', true) :
             $this->where('decision', false);
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%")
-                ->orWhere('email', 'LIKE', "$search%")
-                ->orWhere('phone', 'LIKE', "$search%")
-                ->orWhere('lat', 'LIKE', "$search%")
-                ->orWhere('long', 'LIKE', "$search%")
-                ->orWhereHas('region', function($r) use($search)
-                {
-                    return $r->where('name', 'LIKE', "%$search%");
-                })
-                ->orWhereHas('reservation', function($r) use($search)
-                {
-                    return $r->where('given_names', 'LIKE', "%$search%")
-                             ->orWhere('surname', 'LIKE', "%$search%");
-                });
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'name', 'gender', 'age_group', 'phone',
-            'email', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

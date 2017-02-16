@@ -1,10 +1,8 @@
 <?php namespace App\Filters\v1;
 
 use Carbon\Carbon;
-use Dingo\Api\Auth\Auth;
-use EloquentFilter\ModelFilter;
 
-class TripFilter extends ModelFilter
+class TripFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -14,14 +12,30 @@ class TripFilter extends ModelFilter
     */
     public $relations = [];
 
-    public function setup()
-    {
-        if ( ! app(Auth::class)->user()->isAdmin())
-        {
-            $this->onlyPublished();
-        }
-    }
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at'
+    ];
 
+    /**
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'type', 'prospects', 'group.name', 'campaign.name', 'costs.name',
+        'deadlines.name', 'facilitators.name'
+    ];
+
+    /**
+     * Only published.
+     *
+     * @return mixed
+     */
     public function onlyPublished()
     {
         return $this->whereNotNull('published_at')
@@ -29,13 +43,36 @@ class TripFilter extends ModelFilter
     }
 
     /**
+     * Only public.
+     *
+     * @return mixed
+     */
+    public function onlyPublic()
+    {
+        return $this->public();
+    }
+
+    /**
+     * Only private.
+     *
+     * @return mixed
+     */
+    public function onlyPrivate()
+    {
+        return $this->private();
+    }
+
+
+    /**
      * Find by Groups.
      *
      * @param $ids
-     * @return mixed
+     * @return $this
      */
     public function groups($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('group_id', $ids);
     }
 
@@ -43,10 +80,12 @@ class TripFilter extends ModelFilter
      * Find by Campaign.
      *
      * @param $id
-     * @return mixed
+     * @return $this
      */
     public function campaign($id)
     {
+        if(!$id) return $this;
+
         return $this->where('campaign_id', $id);
     }
 
@@ -54,10 +93,12 @@ class TripFilter extends ModelFilter
      * Find by reps.
      *
      * @param $ids
-     * @return mixed
+     * @return $this
      */
     public function reps($ids)
     {
+        if($ids == []) return $this;
+
         return $this->whereIn('rep_id', $ids);
     }
 
@@ -65,32 +106,51 @@ class TripFilter extends ModelFilter
      * Find by countries.
      *
      * @param $codes
-     * @return mixed
+     * @return $this
      */
     public function countries($codes)
     {
+        if($codes == []) return $this;
+
         return $this->whereIn('country_code', $codes);
     }
 
     /**
-     * Find by types.
+     * Find by type.
      *
-     * @param $types
-     * @return mixed
+     * @param $type
+     * @return $this
      */
-    public function types($types)
+    public function type($type)
     {
-        return $this->whereIn('type', $types);
+        if(! $type) return $this;
+
+        return $this->where('type', $type);
+    }
+
+    /**
+     * Find by status.
+     *
+     * @param $status
+     * @return $this
+     */
+    public function status($status)
+    {
+        if(! $status) return $this;
+
+        return $this->{$status}();
     }
 
     /**
      * Find by difficulties.
      *
      * @param $difficulties
-     * @return mixed
+     * @return $this
      */
     public function difficulties($difficulties)
     {
+        if($difficulties == []) return $this;
+
         return $this->whereIn('difficulty', $difficulties);
     }
 
@@ -98,7 +158,7 @@ class TripFilter extends ModelFilter
      * Find by reservations.
      *
      * @param $reservations
-     * @return $this
+     * @return mixed
      */
     public function reservations($reservations)
     {
@@ -142,6 +202,8 @@ class TripFilter extends ModelFilter
      */
     public function hasFacilitators($hasFacilitators)
     {
+        if ($hasFacilitators == []) return $this;
+
         return $hasFacilitators == 'yes' ?
             $this->has('facilitators') :
             $this->has('facilitators', '<', 1);
@@ -155,6 +217,8 @@ class TripFilter extends ModelFilter
      */
     public function hasNotes($hasNotes)
     {
+        if ($hasNotes == []) return $this;
+
         return $hasNotes == 'yes' ?
             $this->has('notes') :
             $this->has('notes', '<', 1);
@@ -168,6 +232,8 @@ class TripFilter extends ModelFilter
      */
     public function published($published)
     {
+        if (! $published) return $this;
+
         return $published == 'yes' ?
             $this->where('published_at', '<=', Carbon::now()) :
             $this->where('published_at', '>=', Carbon::now());
@@ -177,12 +243,15 @@ class TripFilter extends ModelFilter
      * Find by requirements.
      *
      * @param $requirements
+     * @return $this
      */
     public function requirements($requirements)
     {
-        $this->whereHas('requirements', function ($r) use ($requirements)
+        if($requirements == []) return $this;
+
+        return $this->whereHas('requirements', function ($r) use ($requirements)
         {
-            return $r->whereIn('item', $requirements);
+            return $r->whereIn('name', $requirements);
         });
     }
 
@@ -190,12 +259,15 @@ class TripFilter extends ModelFilter
      * Find by cost types.
      *
      * @param $costs
+     * @return $this
      */
     public function costs($costs)
     {
-        $this->whereHas('costs', function ($c) use ($costs)
+        if ($costs == []) return $this;
+
+        return $this->whereHas('costs', function ($c) use ($costs)
         {
-            return $c->whereIn('type', $costs);
+            return $c->whereIn('name', $costs);
         });
     }
 
@@ -209,7 +281,7 @@ class TripFilter extends ModelFilter
     {
         if(count($amounts) < 2) return $this;
 
-        $this->whereHas('costs', function ($c) use ($amounts)
+        return $this->whereHas('costs', function ($c) use ($amounts)
         {
             return $c->whereBetween('amount', $amounts);
         });
@@ -239,68 +311,5 @@ class TripFilter extends ModelFilter
         if(count($endDates) < 2) return $this;
 
         return $this->whereBetween('ended_at', $endDates);
-    }
-
-    /**
-     * Find by search
-     *
-     * @param $search
-     * @return mixed
-     */
-    public function search($search)
-    {
-        return $this->where(function($q) use ($search)
-        {
-            // group name
-            $q->whereHas('group', function ($g) use ($search)
-            {
-                return $g->where('name', 'LIKE', "%$search%");
-            }
-            // campaign name
-            )->orWhereHas('campaign', function ($c) use ($search)
-            {
-                return $c->where('name', 'LIKE', "%$search%");
-            }
-            // cost name
-            )->orWhereHas('costs', function ($c) use ($search)
-            {
-                return $c->where('name', 'LIKE', "%$search%");
-            }
-            // deadline name
-            )->orWhereHas('deadlines', function ($c) use ($search)
-            {
-                return $c->where('name', 'LIKE', "%$search%");
-            }
-            // facilitator's name
-            )->orWhereHas('facilitators', function ($f) use ($search)
-            {
-                return $f->whereHas('user', function ($u) use ($search)
-                {
-                    return $u->where('name', 'LIKE', "%$search%");
-                });
-            });
-        });
-    }
-
-    /**
-     * Sort by fields
-     *
-     * @param $sort
-     * @return mixed
-     */
-    public function sort($sort)
-    {
-        $sortable = [
-            'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at'
-        ];
-
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
     }
 }

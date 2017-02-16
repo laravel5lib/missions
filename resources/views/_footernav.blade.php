@@ -5,21 +5,20 @@
         <hr class="divider">
         <h6 class="text-uppercase">Helpful Links</h6>
         <ul class="list-unstyled">
-          <li><a href="#">1Nation1Day</a></li>
-          <li><a href="#">Founders</a></li>
-          <li><a href="#">Giving</a></li>
-          <li><a href="#">Shop</a></li>
-          <li><a href="#">Jobs</a></li>
+          <li><a href="http://1nation1day.com" target="_blank">1Nation1Day</a></li>
+          <li><a href="/about-mm">Meet Our Team</a></li>
+          <li><a href="/support">Become A Partner</a></li>
+          <li><a href="http://shop.missions.me" target="_blank">Shop</a></li>
         </ul>
       </div><!-- end col -->
       <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1">
         <hr class="divider">
         <h6 class="text-uppercase">Connect</h6>
         <ul class="list-unstyled">
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="/contact">Contact Us</a></li>
           <li><a href="tel:8773694532">(877) 369-4532</a></li>
           <li><a href="mailto:go@missions.me">go@missions.me</a></li>
-          <li><a href="#">Our Offices</a></li>
+          <li><a href="https://goo.gl/maps/cEsKKBMA32B2" target="_blank">Our Offices</a></li>
         </ul>
         <ul class="list-inline">
           <li><a href="http://facebook.com/missionsme"><i class="fa fa-facebook"></i></a></li>
@@ -36,11 +35,23 @@
           </address>
         </ul>
       </div><!-- end col -->
-      <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1 text-center">
-        <div class="cta">
-          <h5>Take action and partner with us!</h5>
-          <a href="#" class="btn btn-primary">Donate</a>
-        </div><!-- end cta -->
+      <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1">
+        <hr class="divider">
+        <h6 class="text-uppercase" style="margin-bottom:18px;">Stay Updated</h6>
+        <p class="small text-muted">Subscribe to receive email updates about Missions.Me.</p>
+        <!-- Begin MailChimp Signup Form -->
+          <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
+          <div id="mc_embed_signup">
+            <form action="//missions.us6.list-manage.com/subscribe/post?u=f45300dcd54baa832da1ab52d&amp;id=83511388e2" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+              <div id="mc_embed_signup_scroll">
+                <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Email Address" required>
+                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_f45300dcd54baa832da1ab52d_83511388e2" tabindex="-1" value=""></div>
+                <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+              </div>
+            </form>
+          </div>
+        <!--End mc_embed_signup-->
       </div><!-- end col -->
     </div><!-- end row -->
   </div><!-- end container -->

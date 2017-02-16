@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1\Interaction;
+namespace App\Http\Controllers\Api\Interaction;
 
-use App\Http\Controllers\v1\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\Interaction\SiteRequest;
 use App\Http\Transformers\v1\Interaction\SiteTransformer;
 use App\Models\v1\Interaction\Site;
@@ -27,7 +27,7 @@ class SitesController extends Controller
         $this->site = $site;
 
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     public function index(Request $request)

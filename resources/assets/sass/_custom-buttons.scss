@@ -51,7 +51,12 @@
     @include opacity(.65);
     @include box-shadow(none);
   }
-
+  .fa {
+    &.icon-left {
+      margin-left: 0px;
+      margin-right: 4px;
+    }
+  }
   // [converter] extracted a& to a.btn
 }
 
@@ -72,6 +77,9 @@ a.btn {
 .btn-primary {
   @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
 }
+.btn-primary-darker {
+  @include button-variant($btn-primary-darker-color, $btn-primary-darker-bg, $btn-primary-darker-border);
+}
 // Success appears as green
 .btn-success {
   @include button-variant($btn-success-color, $btn-success-bg, $btn-success-border);
@@ -87,7 +95,86 @@ a.btn {
 // Danger and error appear as red
 .btn-danger {
   @include button-variant($btn-danger-color, $btn-danger-bg, $btn-danger-border);
+} 
+
+// Hollow buttons
+// -------------------------
+
+// Make a button that has a hollow background and border only
+.btn-white-hollow {
+  @include button-variant(#fff !important, transparent, #fff);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: darken(#fff, 10%) !important;
+    border-color: darken(#fff, 10%) !important;
+    text-decoration: none;
+  }
 }
+.btn-default-hollow {
+  @include button-variant($gray-base, transparent, $btn-default-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($gray-base, 10%) !important;
+    border-color: lighten($btn-default-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+.btn-primary-hollow {
+  @include button-variant($brand-primary, transparent, $btn-primary-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-primary, 10%) !important;
+    border-color: lighten($btn-primary-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Success appears as green
+.btn-success-hollow {
+  @include button-variant($brand-success, transparent, $btn-success-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-success, 10%) !important;
+    border-color: lighten($btn-success-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Info appears as blue-green
+.btn-info-hollow {
+  @include button-variant($brand-info, transparent, $btn-info-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-info, 10%) !important;
+    border-color: lighten($btn-info-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Warning appears as orange
+.btn-warning-hollow {
+  @include button-variant($brand-warning, transparent, $btn-warning-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-warning, 10%) !important;
+    border-color: lighten($btn-warning-border, 10%) !important;
+    text-decoration: none;
+  }
+}
+// Danger and error appear as red
+.btn-danger-hollow {
+  @include button-variant($brand-danger, transparent, $btn-danger-border);
+  &:hover,
+  &:focus,
+  &.focus {
+    color: lighten($brand-danger, 10%) !important;
+    border-color: lighten($btn-danger-border, 10%) !important;
+    text-decoration: none;
+  }
+} 
 
 
 // Link buttons
@@ -97,7 +184,7 @@ a.btn {
 .btn-link {
   color: $link-color;
   font-weight: 700;
-  border-radius: 0;
+  border-radius: 4px;
 
   &,
   &:active,
@@ -111,11 +198,11 @@ a.btn {
   &:hover,
   &:focus,
   &:active {
-    border-color: transparent;
+    border-color: $gray-light;
   }
   &:hover,
   &:focus {
-    color: $link-hover-color;
+    color: $link-hover-color !important;
     text-decoration: $link-hover-decoration;
     background-color: transparent;
   }
@@ -165,5 +252,39 @@ input[type="reset"],
 input[type="button"] {
   &.btn-block {
     width: 100%;
+  }
+}
+
+// Video Play button
+// --------------------------------------------------
+.btn-video-play {
+  height: 100px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 2px solid $brand-primary;
+  padding: 30px 40px;
+  margin: 0 auto;
+  border-radius: 50%;
+  -o-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  @include transition(all .1s ease-in-out);
+  &:after {
+    content: '';
+    position: absolute;
+    top: 93%;
+    left: 50%;
+    margin-top: -9.38462px;
+    margin-left: -6.5px;
+    width: 0px;
+    height: 0px;
+    border-top: 9.66667px solid transparent;
+    border-bottom: 9.66667px solid transparent;
+    border-left: 18.33333px solid $brand-primary;
+  }
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 4px solid darken($brand-primary, 10%);
   }
 }

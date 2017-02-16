@@ -25,14 +25,25 @@ class CampaignTransformer extends TransformerAbstract
      */
     public function transform(Campaign $campaign)
     {
+        $campaign->load('avatar', 'banner', 'groups');
+
         $array = [
-            'id'          => $campaign->id,
-            'name'        => $campaign->name,
-            'countries'   => $campaign->countries,
-            'description' => $campaign->description,
-            'created_at'  => $campaign->created_at->toDateTimeString(),
-            'updated_at'  => $campaign->updated_at->toDateTimeString(),
-            'links'       => [
+            'id'           => $campaign->id,
+            'name'         => $campaign->name,
+            'country'      => country($campaign->country_code),
+            'description'  => $campaign->short_desc,
+            'page_url'     => $campaign->slug ? $campaign->slug->url : null,
+            'page_src'     => $campaign->page_src,
+            'avatar'       => $campaign->avatar ? image($campaign->avatar->source) : url('/images/placeholders/campaign-placeholder.png'),
+            'banner'       => $campaign->banner ? image($campaign->banner->source) : null,
+            'started_at'   => $campaign->started_at->toDateTimeString(),
+            'ended_at'     => $campaign->ended_at->toDateTimeString(),
+            'status'       => $campaign->status,
+            'groups_count' => $campaign->groups->count(),
+            'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,
+            'created_at'   => $campaign->created_at->toDateTimeString(),
+            'updated_at'   => $campaign->updated_at->toDateTimeString(),
+            'links'        => [
                 [
                     'rel' => 'self',
                     'uri' => '/campaigns/' . $campaign->id,

@@ -25,32 +25,32 @@ class CostTransformer extends TransformerAbstract
     public function transform(Cost $cost)
     {
         $array = [
-            'id'          => $cost->id,
-            'name'        => $cost->name,
-            'description' => $cost->description,
-            'amount'      => $cost->amount,
-            'active_at'   => $cost->active_at->toDateTimeString(),
-            'type'        => $cost->type
+            'id'               => $cost->id,
+            'name'             => $cost->name,
+            'description'      => $cost->description,
+            'amount'           => $cost->amount,
+            'active_at'        => $cost->active_at->toDateTimeString(),
+            'type'             => $cost->type,
         ];
 
         if ($cost->pivot)
         {
             $array = [
-                'id'           => $cost->pivot->id,
-                'name'         => $cost->name,
-                'description'  => $cost->description,
-                'amount'       => $cost->amount,
-                'active_at'    => $cost->active_at->toDateTimeString(),
-                'grace_period' => (int) $cost->pivot->grace_period ? $cost->pivot->grace_period : $cost->grace_period,
-                'type'         => $cost->type,
-                'updated_at'   => $cost->pivot->updated_at->toDateTimeString()
+                'cost_id'          => $cost->id,
+                'name'             => $cost->name,
+                'description'      => $cost->description,
+                'amount'           => $cost->amount,
+                'active_at'        => $cost->active_at->toDateTimeString(),
+                'type'             => $cost->type,
+                'updated_at'       => $cost->pivot->updated_at->toDateTimeString(),
+                'locked'           => (boolean) $cost->pivot->locked
             ];
         }
 
         $array['links'] = [
             [
                 'rel' => 'self',
-                'uri' => '/costs/' . $cost->id,
+                'uri' => '/api/costs/' . $cost->id,
             ]
         ];
 

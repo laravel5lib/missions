@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\AccommodationRequest;
 use App\Http\Transformers\v1\AccommodationTransformer;
 use App\Models\v1\Accommodation;
@@ -25,7 +26,7 @@ class AccommodationsController extends Controller
     {
         $this->accommodation = $accommodation;
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
     }
 
     /**

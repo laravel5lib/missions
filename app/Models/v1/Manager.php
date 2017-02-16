@@ -2,10 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Manager extends Model
 {
+    use UuidForKey;
+
     /**
      * The table associated with the model.
      *

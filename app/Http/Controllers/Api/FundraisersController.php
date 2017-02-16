@@ -1,11 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 use App\Http\Requests;
+use App\Models\v1\Donor;
 use App\Models\v1\Fundraiser;
+use App\Http\Controllers\Controller;
+use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\FundraiserRequest;
+use App\Http\Transformers\v1\DonorTransformer;
+use App\Http\Transformers\v1\DonationTransformer;
 use App\Http\Transformers\v1\FundraiserTransformer;
+use App\Http\Transformers\v1\TransactionTransformer;
 
 class FundraisersController extends Controller
 {
@@ -20,18 +28,18 @@ class FundraisersController extends Controller
     {
         $this->fundraiser = $fundraiser;
 
-        $this->middleware('api.auth', ['except' => ['index','show']]);
-        $this->middleware('jwt.refresh', ['except' => ['index','show']]);
+//        $this->middleware('api.auth', ['only' => ['store','update','destroy']]);
     }
 
     /**
      * Get all fundraisers.
      *
+     * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $fundraisers = $this->fundraiser->paginate(25);
+        $fundraisers = $this->fundraiser->filter($request->all())->paginate($request->get('per_page', 25));
 
         return $this->response->paginator($fundraisers, new FundraiserTransformer);
     }
@@ -50,6 +58,83 @@ class FundraisersController extends Controller
     }
 
     /**
+     * Get a list of donors.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function donors($id, Request $request)
+    {
+        $per_page = $request->get('per_page', 10);
+        $page = $request->get('page', 1);
+
+        $fundraiser = $this->fundraiser->findOrFail($id);
+
+        $amountGivenAnonymously = $fundraiser->donations()->where('anonymous', true)->sum('amount');
+
+        $donors = $fundraiser->donations()
+                             ->where('anonymous', false)
+                             ->with('donor.account.slug')
+                             ->filter($request->all())
+                             ->get()
+                             ->groupBy('donor.id')
+                             ->map(function($donation) {
+                                return [
+                                    'name' => $donation->pluck('donor.name')->first(),
+                                    'total_donated' => $donation->sum('amount'),
+                                    'account_url' => $donation->pluck('donor.account.slug.url')->first()
+                                ];
+                             });
+
+        if ($amountGivenAnonymously > 0) {
+            $donors->put((string) Uuid::uuid4(), [
+                'name' => 'Anonymous',
+                'total_donated' => $amountGivenAnonymously,
+                'account_url' => null
+            ]);
+        }
+        
+        $donors->sortByDesc('total_donated');
+
+        $count = $donors->count();
+
+        $donors = $donors->forPage($page, $per_page)->all();
+
+       return [
+        'data' => $donors, 
+        'meta' => [
+                'pagination' => [
+                    "total" => (int) $count,
+                    "count" => (int) $count,
+                    "per_page" => (int) $per_page,
+                    "current_page" => (int) $page,
+                    "total_pages" => (int) ceil($count / $per_page),
+                    "links" => []
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Get a list of donations.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function donations($id, Request $request)
+    {
+        $fundraiser = $this->fundraiser->findOrFail($id);
+
+        $donations = $fundraiser->donations()
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
+
+        return $this->response->paginator($donations, new DonationTransformer);
+    }
+
+    /**
      * Create a new fundraiser and save in storage.
      *
      * @param FundraiserRequest $request
@@ -57,13 +142,17 @@ class FundraisersController extends Controller
      */
     public function store(FundraiserRequest $request)
     {
-        $fundraiser = new Fundraiser($request->all());
+        $fundraiser = $this->fundraiser->create($request->all());
 
-        $fundraiser->save();
+        if ($request->has('tags')) {
+            $fundraiser->tag($request->get('tags'));
+        }
 
-        $location = url('/fundraisers/' . $fundraiser->id);
+        if ($request->has('upload_ids')) {
+            $fundraiser->uploads()->attach($request->get('upload_ids'));
+        }
 
-        return $this->response->created($location);
+        return $this->response->item($fundraiser, new FundraiserTransformer);
     }
 
     /**
@@ -78,6 +167,14 @@ class FundraisersController extends Controller
         $fundraiser = $this->fundraiser->findOrFail($id);
 
         $fundraiser->update($request->all());
+
+        if ($request->has('tags')) {
+            $fundraiser->retag($request->get('tags'));
+        }
+
+        if ($request->has('upload_ids')) {
+            $fundraiser->uploads()->sync($request->get('upload_ids'));
+        }
 
         return $this->response->item($fundraiser, new FundraiserTransformer);
     }

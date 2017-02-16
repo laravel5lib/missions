@@ -3,17 +3,21 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Group;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class GroupTransformer extends TransformerAbstract
 {
+    private $validParams = ['public', 'private', 'status'];
+
     /**
      * List of resources available to include
      *
      * @var array
      */
     protected $availableIncludes = [
-        'trips', 'managers', 'facilitators', 'fundraisers'
+        'trips', 'managers', 'facilitators', 'fundraisers',
+        'uploads', 'social', 'notes'
     ];
 
     /**
@@ -24,24 +28,29 @@ class GroupTransformer extends TransformerAbstract
      */
     public function transform(Group $group)
     {
+        $group->load('avatar', 'banner');
+
         return [
             'id'           => $group->id,
+            'status'       => $group->status,
             'name'         => $group->name,
             'type'         => $group->type,
             'timezone'     => $group->timezone,
             'description'  => $group->description,
-            'url'          => $group->url,
+            'url'          => $group->slug ? $group->slug->url : null,
             'public'       => (bool) $group->public,
             'address_one'  => $group->address_one,
             'address_two'  => $group->address_two,
             'city'         => $group->city,
             'state'        => $group->state,
             'zip'          => $group->zip,
-            'country_code' => $group->country,
-            'country_name' => country($group->country),
+            'country_code' => $group->country_code,
+            'country_name' => country($group->country_code),
             'phone_one'    => $group->phone_one,
             'phone_two'    => $group->phone_two,
             'email'        => $group->email,
+            'avatar'       => $group->avatar ? image($group->avatar->source) : url('/images/placeholders/logo-placeholder.png'),
+            'banner'       => $group->banner ? image($group->banner->source) : null,
             'created_at'   => $group->created_at->toDateTimeString(),
             'updated_at'   => $group->updated_at->toDateTimeString(),
             'links'        => [
@@ -53,15 +62,42 @@ class GroupTransformer extends TransformerAbstract
         ];
     }
 
+    public function includeSocial(Group $group)
+    {
+        $links = $group->social;
+
+        return $this->collection($links, new LinkTransformer);
+    }
+
     /**
      * Include Trips
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @param ParamBag $params
+     * @return mixed
      */
-    public function includeTrips(Group $group)
+    public function includeTrips(Group $group, ParamBag $params = null)
     {
-        $trips = $group->trips;
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $trips = [];
+
+            if ($params->get('public')) {
+                $trips = $group->trips()->filter(['onlyPublic' => true])->get();
+            }
+
+            if ($params->get('private')) {
+                $trips = $group->trips()->filter(['onlyPrivate' => true])->get();
+            }
+
+            if ($params->get('status')) {
+                $trips = $group->trips()->filter(['status' => $params->get('status')[0]])->get();
+            }
+
+        } else {
+            $trips = $group->trips;
+        }
 
         return $this->collection($trips, new TripTransformer);
     }
@@ -70,20 +106,20 @@ class GroupTransformer extends TransformerAbstract
      * Include Managers
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeManagers(Group $group)
     {
         $managers = $group->managers;
 
-        return $this->collection($managers, new ManagerTransformer);
+        return $this->collection($managers, new UserTransformer);
     }
 
     /**
      * Include Facilitators
      *
      * @param Group $group
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeFacilitators(Group $group)
     {
@@ -105,4 +141,41 @@ class GroupTransformer extends TransformerAbstract
         return $this->collection($fundraisers, new FundraiserTransformer);
     }
 
+    /**
+     * Include Uploads
+     *
+     * @param Group $group
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(Group $group)
+    {
+        $uploads = $group->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
+    }
+
+    /**
+     * Include most recent notes.
+     *
+     * @param Group $group
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeNotes(Group $group)
+    {
+        $notes = $group->notes()->recent()->get();
+
+        return $this->collection($notes, new NoteTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
+                implode(',', $this->validParams)
+            ));
+        }
+    }
 }

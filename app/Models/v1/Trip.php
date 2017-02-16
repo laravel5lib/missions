@@ -4,13 +4,14 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use Carbon\Carbon;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey;
+    use SoftDeletes, Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -28,7 +29,9 @@ class Trip extends Model
         'group_id', 'campaign_id', 'rep_id', 'spots',
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
-        'companion_limit', 'published_at'
+        'companion_limit', 'published_at', 'closed_at',
+        'prospects', 'public', 'team_roles', 'country_code',
+        'created_at', 'updated_at'
     ];
 
     /**
@@ -38,7 +41,8 @@ class Trip extends Model
      */
     protected $dates = [
         'started_at', 'ended_at', 'created_at',
-        'updated_at', 'deleted_at', 'published_at'
+        'updated_at', 'deleted_at', 'published_at',
+        'closed_at'
     ];
 
     /**
@@ -55,8 +59,17 @@ class Trip extends Model
      * @var array
      */
     protected $casts = [
-        'todos' => 'array'
+        'todos' => 'array',
+        'prospects' => 'array',
+        'team_roles' => 'array'
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['status'];
 
     /**
      * Indicates if the model should be timestamped
@@ -86,16 +99,6 @@ class Trip extends Model
     }
 
     /**
-     * Get all the trip's prospects.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function prospects()
-    {
-        return $this->belongsToMany(Prospect::class);
-    }
-
-    /**
      * Get all the trip's costs.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -103,6 +106,40 @@ class Trip extends Model
     public function costs()
     {
         return $this->morphMany(Cost::class, 'cost_assignable');
+    }
+
+    /**
+     * Get all the trip's active costs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function activeCosts()
+    {
+        return $this->costs()->active();
+    }
+
+    /**
+     * Get the trip's user rep.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rep()
+    {
+        return $this->belongsTo(User::class, 'rep_id');
+    }
+
+    /**
+     * Get the current starting cost for the trip.
+     *
+     * @return int
+     */
+    public function getStartingCostAttribute()
+    {
+        $incremental = $this->activeCosts()->type('incremental')->first();
+
+        $amount = $incremental ? $incremental->amount : 0;
+
+        return $amount + ($this->activeCosts()->type('static')->sum('amount')/100); // convert to dollars
     }
 
     /**
@@ -122,17 +159,18 @@ class Trip extends Model
      */
     public function requirements()
     {
-        return $this->morphMany(Requirement::class, 'requirable');
+        return $this->morphMany(Requirement::class, 'requester');
     }
 
     /**
      * Get all the trip's facilitators
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilitators()
     {
-        return $this->hasMany(Facilitator::class);
+        return $this->belongsToMany(User::class, 'facilitators')
+                    ->withTimestamps();
     }
 
     /**
@@ -156,6 +194,26 @@ class Trip extends Model
     }
 
     /**
+     * Get the trip's fund.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
+    /**
+     * Get all the trip's interests.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function interests()
+    {
+        return $this->hasMany(TripInterest::class);
+    }
+
+    /**
      * Set the trip's todos list.
      *
      * @param $value
@@ -163,6 +221,16 @@ class Trip extends Model
     public function setTodosAttribute($value)
     {
         $this->attributes['todos'] = json_encode($value);
+    }
+
+    /**
+     * Set the trip's team roles list.
+     *
+     * @param $value
+     */
+    public function setTeamRolesAttribute($value)
+    {
+        $this->attributes['team_roles'] = json_encode($value);
     }
 
     /**
@@ -234,10 +302,117 @@ class Trip extends Model
         if( ! $ids->isEmpty()) Requirement::destroy($ids);
     }
 
+    /**
+     * Syncronize all the trip's facilitators.
+     *
+     * @param $user_ids
+     */
+    public function syncFacilitators($user_ids = null)
+    {
+        if ( is_null($user_ids)) return;
+
+        $this->facilitators()->sync($user_ids);
+    }
+
+    /**
+     * Check if trip is published.
+     *
+     * @return bool
+     */
     public function isPublished()
     {
         if (is_null($this->published_at)) return false;
-        
+
         return $this->published_at <= Carbon::now() ? true : false;
     }
+
+    /**
+     * Return the trip's difficulty.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function getDifficultyAttribute($value)
+    {
+        return str_replace('_', ' ', $value);
+    }
+
+    /**
+     * Get the status of the trip.
+     *
+     * @return string
+     */
+    public function getStatusAttribute()
+    {
+        // default status
+        $status = 'active';
+
+        // close it if past closing date
+        $status = $this->closed_at->isPast() ? 'closed' : $status;
+
+        // close it if no more spots are available
+        $status = $this->spots === 0 ? 'closed' : $status;
+
+        // a future published date means it's scheduled
+        $status = ! is_null($this->published_at) &&
+        $this->published_at->isFuture() ? 'scheduled' : $status;
+
+        // no published date indicates a draft status
+        $status = is_null($this->published_at) ? 'draft' : $status;
+
+        return $status;
+    }
+
+    public function updateSpots($number = -1)
+    {
+        $this->spots = $this->spots + $number;
+
+        $this->save();
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->where('ended_at', '>=', Carbon::now());
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('ended_at', '<', Carbon::now());
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('closed_at', '>', Carbon::now())
+                    ->where('spots', '>', 0)
+                    ->whereNotNull('published_at')
+                    ->where('published_at', '<=', Carbon::now());
+    }
+
+    public function scopeClosed($query)
+    {
+        return $query->where('closed_at', '<=', Carbon::now())
+                    ->orWhere('spots', 0);
+    }
+
+    public function scopeScheduled($query)
+    {
+        return $query->whereNotNull('published_at')
+                    ->where('published_at', '>', Carbon::now());
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->whereNull('published_at');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
+    public function scopePrivate($query)
+    {
+        return $query->where('public', false);
+    }
+
 }

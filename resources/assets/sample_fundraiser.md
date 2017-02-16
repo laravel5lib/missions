@@ -1,0 +1,5 @@
+I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.
+
+In preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?
+
+I sincerely appreciate your prayerful consideration in helping make this trip possible.

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\v1\User;
+use Dingo\Api\Contract\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\v1\UserRequest;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Http\Requests\v1\AuthenticationRequest;
 
-class AuthenticationController extends ApiController
+class AuthenticationController extends Controller
 {
     /**
      * Authenticate a user.
@@ -60,6 +62,13 @@ class AuthenticationController extends ApiController
         $user->save();
 
         $token = JWTAuth::fromUser($user);
+
+        return response()->json(compact('token'));
+    }
+
+    public function refresh()
+    {
+        $token = JWTAuth::parseToken()->refresh();
 
         return response()->json(compact('token'));
     }

@@ -3,10 +3,13 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Trip;
+use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class TripTransformer extends TransformerAbstract
 {
+
+    private $validParams = ['status'];
 
     /**
      * List of resources to automatically include
@@ -14,8 +17,7 @@ class TripTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'campaign', 'group', 'costs', 'deadlines', 'notes',
-        'reservations', 'requirements', 'facilitators'
+        'campaign', 'group', 'costs', 'deadlines', 'requirements', 'facilitators', 'rep'
     ];
 
     /**
@@ -26,16 +28,19 @@ class TripTransformer extends TransformerAbstract
      */
     public function transform(Trip $trip)
     {
-        $trip->load('reservations');
+        $trip->load('costs');
 
         return [
             'id'              => $trip->id,
             'group_id'        => $trip->group_id,
             'campaign_id'     => $trip->campaign_id,
             'rep_id'          => $trip->rep_id,
+            'rep'             => $trip->rep ? $trip->rep->name : null,
             'spots'           => (int) $trip->spots,
+            'status'          => $trip->status,
+            'starting_cost'   => (int) $trip->starting_cost,
             'companion_limit' => (int) $trip->companion_limit,
-            'reservations'    => (int) $trip->reservations()->count(),
+            'reservations'    => (int) $trip->reservations_count,
             'country_code'    => $trip->country_code,
             'country_name'    => country($trip->country_code),
             'type'            => $trip->type,
@@ -43,10 +48,15 @@ class TripTransformer extends TransformerAbstract
             'started_at'      => $trip->started_at->toDateString(),
             'ended_at'        => $trip->ended_at->toDateString(),
             'todos'           => $trip->todos,
+            'prospects'       => $trip->prospects,
+            'team_roles'       => $trip->team_roles,
             'description'     => $trip->description,
+            'public'          => (boolean) $trip->public,
             'published_at'    => $trip->published_at ? $trip->published_at->toDateTimeString() : null,
+            'closed_at'       => $trip->closed_at->toDateTimeString(),
             'created_at'      => $trip->created_at->toDateTimeString(),
             'updated_at'      => $trip->updated_at->toDateTimeString(),
+            'tags'            => $trip->tagNames(),
             'links'           => [
                 [
                     'rel' => 'self',
@@ -108,42 +118,34 @@ class TripTransformer extends TransformerAbstract
      * Include Costs
      *
      * @param Trip $trip
-     * @return \League\Fractal\Resource\Item
-     */
-    public function includeCosts(Trip $trip)
-    {
-        $costs = $trip->costs;
-
-        if($costs)
-            return $this->collection($costs, new CostTransformer);
-
-        return null;
-    }
-
-    /**
-     * Include Notes
-     *
-     * @param Trip $trip
+     * @param ParamBag $params
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeNotes(Trip $trip)
+    public function includeCosts(Trip $trip, ParamBag $params = null)
     {
-        $notes = $trip->notes;
 
-        return $this->collection($notes, new NoteTransformer);
-    }
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params); 
 
-    /**
-     * Include Reservations
-     *
-     * @param Trip $trip
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeReservations(Trip $trip)
-    {
-        $reservations = $trip->reservations;
+            $costs = [];
+            
+            if (in_array('active', $params->get('status')))
+            {
+                $active = $trip->activeCosts;
 
-        return $this->collection($reservations, new ReservationTransformer);
+                $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                    return $value->type == 'incremental' && $value->active_at < $maxDate;
+                });
+            }
+        
+        } else {
+            $costs = $trip->costs;
+        }
+
+        return $this->collection($costs, new CostTransformer);
     }
 
     /**
@@ -169,6 +171,33 @@ class TripTransformer extends TransformerAbstract
     {
         $facilitators = $trip->facilitators;
 
-        return $this->collection($facilitators, new FacilitatorTransformer);
+        return $this->collection($facilitators, new UserTransformer);
+    }
+
+    /**
+     * Include Rep
+     *
+     * @param Trip $trip
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeRep(Trip $trip)
+    {
+        $rep = $trip->rep;
+
+        if ( ! $rep) return null;
+
+        return $this->item($rep, new UserTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"', 
+                implode(',', $usedParams), 
+                implode(',', $this->validParams)
+            ));
+        }
     }
 }

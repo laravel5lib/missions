@@ -5,11 +5,11 @@
 @endsection()
 
 @section('layout')
-<div id="page-wrap"><!-- page-wrap important for sticky footer -->
   @include('admin.partials._toolbar')
   @include('_topnav')
-  @yield('content')
-</div>
+  <div id="admin-page-wrap"><!-- page-wrap important for sticky footer -->
+    @yield('content')
+  </div>
   @include('_footer')
 @endsection
 

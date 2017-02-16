@@ -14,7 +14,15 @@
         "tucker-eric/eloquentfilter": "^0.2.0",
         "intervention/image": "^2.3",
         "league/flysystem-aws-s3-v3": "~1.0",
-        "ramsey/uuid": "^3.4"
+        "ramsey/uuid": "^3.4",
+        "cartalyst/stripe-laravel": "4.0.*",
+        "rtconner/laravel-tagging": "~2.1",
+        "league/glide": "^1.0",
+        "silber/bouncer": "^0.1.7",
+        "barryvdh/laravel-cors": "^0.8.1",
+        "haleks/laravel-markdown": "^0.2.0",
+        "maatwebsite/excel": "~2.1.0",
+        "bugsnag/bugsnag-laravel": "^2.4"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

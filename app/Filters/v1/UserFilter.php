@@ -1,19 +1,28 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class UserFilter extends ModelFilter
+class UserFilter extends Filter
 {
 
-    // https://laravel.com/docs/5.2/queries#json-where-clauses
+    /**
+     * Fields that can be sorted.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'name', 'email', 'alt_email', 'zip',
+        'country_code', 'state', 'city', 'created_at',
+        'updated_at', 'birthday'
+    ];
 
     /**
-    * Related Models that have ModelFilters as well as the method on the ModelFilter
-    * As [relatedModel => [method1, method2]]
-    *
-    * @var array
-    */
-    public $relations = [];
+     * Fields that can be searched.
+     *
+     * @var array
+     */
+    public $searchable = [
+        'name', 'email', 'alt_email', 'city', 'state',
+        'phone_one', 'phone_two', 'zip'
+    ];
 
     /**
      * Find by public or private
@@ -23,69 +32,79 @@ class UserFilter extends ModelFilter
      */
     public function isPublic($isPublic)
     {
+        if( ! $isPublic) return $this;
+
         return $isPublic == 'yes' ?
             $this->where('public', true) :
             $this->where('public', false);
     }
 
+    /**
+     * By gender.
+     *
+     * @param $gender
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function gender($gender)
     {
+        if ( ! $gender) return $this;
+
         return $this->where('gender', $gender);
     }
 
+    /**
+     * By relationship status.
+     *
+     * @param $status
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function status($status)
     {
+        if ( ! $status) return $this;
+
         return $this->where('status', $status);
     }
 
+    /**
+     * By country code.
+     *
+     * @param $countries
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function country($countries)
     {
+        if ($countries = []) return $this;
+
         return $this->whereIn('country_code', $countries);
     }
 
     /**
-     * Find by search
+     * By url.
      *
-     * @param $search
-     * @return mixed
+     * @param $url
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function search($search)
+    public function url($url)
     {
-        return $this->where(function($q) use ($search)
-        {
-            return $q->where('name', 'LIKE', "%$search%")
-                ->orWhere('email', 'LIKE', "%$search%")
-                ->orWhere('alt_email', 'LIKE', "%$search%")
-                ->orWhere('city', 'LIKE', "%$search%")
-                ->orWhere('state', 'LIKE', "%$search%")
-                ->orWhere('phone_one', 'LIKE', "$search%")
-                ->orWhere('phone_two', 'LIKE', "$search%")
-                ->orWhere('zip', 'LIKE', "$search%")
-                ->orWhere('url', 'LIKE', "%$search%");
+        if ( ! $url) return $this;
+
+        return $this->whereHas('slug', function($slug) use($url) {
+            return $slug->where('url', $url);
         });
     }
 
     /**
-     * Sort by fields
+     * By fundraiser url.
      *
-     * @param $sort
-     * @return mixed
+     * @param $url
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function sort($sort)
+    public function fundraiser($url)
     {
-        $sortable = [
-            'name', 'email', 'alt_email', 'zip',
-            'country_code', 'state', 'city', 'created_at',
-            'updated_at', 'birthday'
-        ];
+        if ( ! $url) return $this;
 
-        $param = preg_split('/\|+/', $sort);
-        $field = $param[0];
-        $direction = isset($param[1]) ? $param[1] : 'asc';
-
-        if ( in_array($field, $sortable) )
-            return $this->orderBy($field, $direction);
-
-        return $this;
+        return $this->whereHas('fundraisers', function($fundraiser) use($url) {
+           $fundraiser->where('url', $url);
+        });
     }
 }

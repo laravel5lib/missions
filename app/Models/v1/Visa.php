@@ -25,7 +25,7 @@ class Visa extends Model
      */
     protected $fillable = [
         'given_names', 'surname', 'number', 'country_code',
-        'scan_src', 'issued_at', 'expires_at', 'user_id'
+        'upload_id', 'issued_at', 'expires_at', 'user_id'
     ];
 
     /**
@@ -72,6 +72,16 @@ class Visa extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the visa's photo copy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function upload()
+    {
+        return $this->belongsTo(Upload::class);
     }
 
     /**

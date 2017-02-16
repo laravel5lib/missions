@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\v1;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\OccupantRequest;
 use App\Http\Transformers\v1\OccupantTransformer;
 use App\Models\v1\Occupant;
@@ -24,7 +25,7 @@ class OccupantsController extends Controller
     public function __construct(Occupant $occupant)
     {
         $this->middleware('api.auth');
-        $this->middleware('jwt.refresh');
+//        $this->middleware('jwt.refresh');
         $this->occupant = $occupant;
     }
 

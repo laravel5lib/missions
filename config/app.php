@@ -165,6 +165,13 @@ return [
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         EloquentFilter\ServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
+        Conner\Tagging\Providers\TaggingServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
+        Haleks\Markdown\MarkdownServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
 
     ],
 
@@ -212,6 +219,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+        'Markdown' => Haleks\Markdown\Facades\Markdown::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
 
     ],
 

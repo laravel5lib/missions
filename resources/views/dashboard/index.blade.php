@@ -26,7 +26,10 @@
           <div class="row">
             <div class="col-sm-6">
               <ul class="list-unstyled">
-                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;" src="../images/onboard/cam-icon.png">Add profile photo</li>
+                <li style="margin-bottom:5px;">
+                  <!-- <img class="img-xs av-left" style="border:none;" src="../images/onboard/cam-icon.png"> -->
+                  <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                  Add profile photo</li>
                 <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;" src="../images/onboard/photo-icon.png">Add banner photo</li>
                 <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;" src="../images/onboard/bio-icon.png">Create a bio</li>
               </ul>

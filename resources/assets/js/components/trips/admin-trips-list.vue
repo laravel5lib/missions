@@ -54,11 +54,11 @@
                                     :options="exportOptions"
                                     :filters="exportFilters">
                     </export-utility>
-                    <import-utility title="Import trips List" 
+                    <!-- <import-utility title="Import trips List" 
                       url="trips/import"
                       :required-fields="importRequiredFields"
                       :optional-fields="importOptionalFields">
-                    </import-utility>
+                    </import-utility> -->
                     <a class="btn btn-primary btn-sm" href="trips/create"><i class="fa fa-plus icon-left"></i> New</a>
                 </form>
             </div>

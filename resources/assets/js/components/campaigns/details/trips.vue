@@ -145,12 +145,12 @@
                                             :options="exportOptions"
                                             :filters="exportFilters">
                             </export-utility>
-                            <import-utility title="Import trips List" 
+                            <!-- <import-utility title="Import trips List" 
                               url="trips/import"
                               :parent-id="campaignId"
                               :required-fields="importRequiredFields"
                               :optional-fields="importOptionalFields">
-                            </import-utility>
+                            </import-utility> -->
                         </form>
                     </div>
                 </div>

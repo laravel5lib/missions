@@ -16,11 +16,11 @@
                                 :options="exportOptions"
                                 :filters="exportFilters">
                 </export-utility>
-                <import-utility title="Import Essays List" 
+                <!-- <import-utility title="Import Essays List" 
                       url="essays/import" 
                       :required-fields="importRequiredFields" 
                       :optional-fields="importOptionalFields">
-                </import-utility>
+                </import-utility> -->
             </form>
             <hr class="divider sm inv">
         </div>

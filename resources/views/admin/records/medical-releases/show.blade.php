@@ -12,11 +12,11 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a href="{{ url('admin/records/medical-releases') }}" class="btn btn-primary-darker">
-                            <span class="fa fa-chevron-left icon-left"></span>
+                            <span class="fa fa-chevron-left icon-left"></span> Back
                         </a>
-                        <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">
+                        {{-- <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">
                             <i class="fa fa-edit icon-left"></i> Edit
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">

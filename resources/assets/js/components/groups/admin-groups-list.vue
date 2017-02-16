@@ -131,11 +131,11 @@
                                     :options="exportOptions"
                                     :filters="exportFilters">
                     </export-utility>
-                    <import-utility title="Import Groups List"
+                    <!-- <import-utility title="Import Groups List"
                               url="groups/import"
                               :required-fields="importRequiredFields"
                               :optional-fields="importOptionalFields">
-                    </import-utility>
+                    </import-utility> -->
                 </form>
             </div>
         </div>

@@ -177,11 +177,11 @@
                   :options="exportOptions"
                   :filters="exportFilters">
               </export-utility>
-              <import-utility title="Import Users List" 
+              <!-- <import-utility title="Import Users List" 
                               url="users/import" 
                               :required-fields="importRequiredFields" 
                               :optional-fields="importOptionalFields">
-              </import-utility>
+              </import-utility> -->
                     </div>
                 </form>
             </div>

@@ -451,9 +451,10 @@ Vue.directive('tour-guide', {
         if (!localStorage.getItem('TourComplete')) {
             window.tour = new Shepherd.Tour({
                 defaults: {
-                    classes: 'shepherd-element shepherd-open shepherd-theme-arrows',
-                    scrollTo: true
-                },
+                    classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
+                    scrollTo: true,
+                    showCancelLink: true
+                }
                 /*steps: [
                     {
                         title: 'Example Shepherd',
@@ -464,19 +465,43 @@ Vue.directive('tour-guide', {
                 ]*/
             });
 
-            tour.addStep('example-step', {
-                text: 'This step is attached to the bottom of the <code>.tour-step-element</code> element.',
-                attachTo: '.tour-step-element',
-                classes: 'step-class',
-                buttons: [
-                    {
-                        text: 'Next',
-                        action: tour.next
-                    }
-                ]
+            tour.addStep('payments', {
+                title: 'Upcoming Payments',
+                text: 'See which payment deadlines are coming up and their status for reservations you are managing.',
+                attachTo: {
+                    element: '.tour-step-payments', 
+                    on: 'top'
+                }
             });
 
-            // tour.start();
+            tour.addStep('requirements', {
+                title: 'Upcoming Travel Requirements',
+                text: 'See which travel requirement deadlines are coming up and their status for reservations you are managing.',
+                attachTo: {
+                    element: '.tour-step-requirements', 
+                    on: 'top'
+                }
+            });
+
+            tour.addStep('requirements', {
+                title: 'Recent Donations',
+                text: 'See recent donations recieved. If you are managing a team, their donations will also show here.',
+                attachTo: {
+                    element: '.tour-step-donations', 
+                    on: 'top'
+                }
+            });
+
+            tour.addStep('news', {
+                title: 'Featured News',
+                text: 'Check this section periodically for important announcements from Missions.Me.',
+                attachTo: {
+                    element: '.tour-step-news', 
+                    on: 'top'
+                }
+            });
+
+            tour.start();
         }
     },
     update: function () {

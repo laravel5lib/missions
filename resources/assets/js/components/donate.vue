@@ -592,8 +592,8 @@
         ready: function () {
             this.$dispatch('payment-complete', true);
             if (this.devMode) {
-                this.cardNumber = '4242424242424242';
-                this.cardCVC = '123';
+                this.cardNumber = '';
+                this.cardCVC = '';
                 this.cardYear = '2019';
                 this.cardMonth = '01';
             }

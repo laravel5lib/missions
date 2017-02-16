@@ -723,7 +723,7 @@ new Vue({
         },
 
         startTour(){
-            window.tour.restart();
+            window.tour.start();
         },
 
     },

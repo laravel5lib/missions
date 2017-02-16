@@ -38,7 +38,7 @@
       <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1">
         <hr class="divider">
         <h6 class="text-uppercase" style="margin-bottom:18px;">Stay Updated</h6>
-        <p class="small">Subscribe to receive email updates about Missions.Me.</p>
+        <p class="small text-muted">Subscribe to receive email updates about Missions.Me.</p>
         <!-- Begin MailChimp Signup Form -->
           <link href="//cdn-images.mailchimp.com/embedcode/slim-10_7.css" rel="stylesheet" type="text/css">
           <div id="mc_embed_signup">

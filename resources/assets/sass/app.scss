@@ -539,6 +539,43 @@ li.av-nav > a {
   padding-bottom: 4px;
 }
 
+.shepherd-step {
+  width:300px;
+  background: #fff;
+  border:1px solid $gray-light;
+  border-radius:4px;
+  -moz-border-radius:4px;
+  .shepherd-text {
+    padding:15px;
+  }
+  p {
+    font-size:11px;
+    margin:0;
+    padding:0;
+  }
+  footer {
+    padding:8px;
+    border-top:1px solid $gray-light;
+    text-align:right;
+  }
+  ul.shepherd-buttons {
+    padding:0;
+    list-style:none;
+    display:inline;
+    li {
+      display:inline;
+      a.shepherd-button {
+        color:#fff;
+        font-size:11px;
+        background:$brand-info;
+        padding: 5px 10px;
+        border-radius:4px;
+        -moz-border-radius:4px;
+      }
+    }
+  }
+}
+
 /* Offcanvas nav */
 .navmenu-inverse .navmenu-nav > .active > a, .navmenu-inverse .navmenu-nav > .active > a:hover, .navmenu-inverse .navmenu-nav > .active > a:focus, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {
   background-color: $brand-primary;

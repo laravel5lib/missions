@@ -12,11 +12,11 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a href="{{ url('admin/records/referrals') }}" class="btn btn-primary-darker">
-                            <span class="fa fa-chevron-left icon-left"></span>
+                            <span class="fa fa-chevron-left icon-left"></span> Back
                         </a>
-                        <a href="{{ url('admin/records/referrals/' . $referral->id . '/edit') }}" class="btn btn-primary">
+                        {{-- <a href="{{ url('admin/records/referrals/' . $referral->id . '/edit') }}" class="btn btn-primary">
                             Edit
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">

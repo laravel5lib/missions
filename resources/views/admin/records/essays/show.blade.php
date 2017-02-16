@@ -12,14 +12,14 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <button class="btn btn-primary-darker" onclick="window.history.back()">
-                            <span class="fa fa-chevron-left icon-left"></span>
+                            <span class="fa fa-chevron-left icon-left"></span> Back
                         </button>
                         {{-- <a href="{{ url('admin/records/essays') }}" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
                         </a> --}}
-                        <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
+                        {{-- <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
                             Edit
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">

@@ -451,7 +451,7 @@ Vue.directive('tour-guide', {
         if (!localStorage.getItem('TourComplete')) {
             window.tour = new Shepherd.Tour({
                 defaults: {
-                    classes: 'shepherd-theme-arrows',
+                    classes: 'shepherd-element shepherd-open shepherd-theme-arrows',
                     scrollTo: true
                 },
                 /*steps: [

@@ -19,11 +19,11 @@
               :options="exportOptions"
               :filters="exportFilters">
           </export-utility>
-          <import-utility title="Import Campaigns List" 
+          <!-- <import-utility title="Import Campaigns List" 
               url="campaigns/import" 
               :required-fields="importRequiredFields" 
               :optional-fields="importOptionalFields">
-          </import-utility>
+          </import-utility> -->
 				</form>
 			</div>
 		</div>

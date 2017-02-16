@@ -23,11 +23,11 @@
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
             </div>
             <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
-            <import-utility title="Import Costs" 
+            <!-- <import-utility title="Import Costs" 
               url="costs/import"
               :required-fields="importRequiredFields"
               :optional-fields="importOptionalFields">
-            </import-utility>
+            </import-utility> -->
             <a class="btn btn-primary btn-sm" @click="showAddModal=true">New <i class="fa fa-plus"></i></a>
         </form>
         <hr class="divider sm">

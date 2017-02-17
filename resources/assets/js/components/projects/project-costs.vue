@@ -94,7 +94,7 @@
                 selectedCosts: [],
                 availableCosts: [],
                 selectedCost: null,
-                resource: this.$resource('projects/' + this.id, {include: 'dues,costs.payments,initiative.costs.payments'}),
+                resource: this.$resource('projects/' + this.id, {include: 'dues,costs.payments'}),
                 showAddModal: false,
                 deleteModal: false,
                 showNewModal: false,

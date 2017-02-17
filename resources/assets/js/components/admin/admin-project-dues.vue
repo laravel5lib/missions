@@ -108,7 +108,7 @@
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative.costs.payments' }),
+                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative' }),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,

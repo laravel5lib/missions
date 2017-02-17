@@ -12,14 +12,14 @@
 								{{ message.message }}
 							</div>
 						</div><!-- end alert -->
-						<div class="form-group" :class="{ 'has-error': checkForLoginError('email') }">
+						<div class="form-group" style="margin-bottom:0;" :class="{ 'has-error': checkForLoginError('email') }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">E-Mail Address</label>
 								<input type="email" class="form-control" v-model="user.email"
 									   v-validate:email="['email', 'required']" required/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" :class="{ 'has-error': checkForLoginError('password') }">
+						<div class="form-group" style="margin-bottom:0;" :class="{ 'has-error': checkForLoginError('password') }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="user.password"

@@ -13,15 +13,15 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h3 class="text-primary">Greetings Legacy Partners,</h3>
+				<h3 class="text-primary">Legacy Partners,</h3>
 
-		        <p>Merry Christmas! We hope that this season has been filled with amazing amounts of blessing. As we wrap up the year we wanted to share some of the exciting things happening at Missions.Me. Our faith is at an all-time high as we are preparing for all that God has in store for 2017.</p>
+				<p>We are so excited to share some updates with you as we continue to carry the vision of 1Nation1Day to Nicaragua this summer.</p>
 
-				<p>None of this would be possible without your gracious support over the years. We are standing with you and your families during this season and believing for an amazing close to 2016 and a banner year as we move forward into 2017.</p>
+				<p>This month marked our first official 1Nation1Day State Leaders Conference and it was absolutely incredible! Check out what happened.</p>
 
-				<p>We love you all so much and wish you and your families the best Christmas and a Happy New Year.</p>
+				<p>We love each and every one of you very much and are so thankful for your continued support!</p>
 				<hr class="divider inv">
-		        <p>Sincerely,</p>
+		        <p>Blessings,</p>
 		        <h5 class="text-primary"><em>The Missions.Me Team</em></h5>
 			</div>
 		</div><!-- end row -->
@@ -37,7 +37,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="//player.vimeo.com/video/186029269?title=0&amp;byline=0&amp;portrait=0&amp;color=66a9b2" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/204082792?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

@@ -113,3 +113,37 @@
         </div>
     </div><!-- end panel -->
 @endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'rep',
+                title: 'Trip Rep',
+                text: 'A Mission.Me trip represenative is assigned to each reservaton. Find your rep\'s contact information here if you need help',
+                attachTo: {
+                    element: '.tour-step-rep',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'navigation',
+                title: 'Additional Details',
+                text: 'More details about your reservation can be found here. Details are seperated by category.',
+                attachTo: {
+                    element: '.tour-step-rep',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'avatar',
+                title: 'Attach a Picture',
+                text: 'Put a face to a name by uploading a picture of yourself.',
+                attachTo: {
+                    element: '.tour-step-avatar',
+                    on: 'top'
+                },
+            },
+        ];
+    </script>
+@endsection

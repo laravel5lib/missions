@@ -29,7 +29,7 @@
             </form>
         </aside>
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 tour-step-find">
                 <form>
                 <div class="row">
                     <div class="form-group col-lg-4 col-md-4 col-sm-12">
@@ -73,7 +73,7 @@
                 </form>
                 <hr class="divider sm inv">
             </div>
-            <div class="col-xs-12" style="position:relative">
+            <div class="col-xs-12 tour-step-list" style="position:relative">
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
                     <div class="row" v-if="layout == 'grid'">

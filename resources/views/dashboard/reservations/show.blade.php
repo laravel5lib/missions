@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="white-header-bg">
-    <div class="container">
+    <div class="container" v-tour-guide="">
         <div class="row">
             <div class="col-sm-8">
                 <h3 class="hidden-xs">
@@ -33,7 +33,7 @@
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-4 tour-step-rep">
                 @include('dashboard.reservations.layouts.menu', [
                 'links' => config('navigation.dashboard.reservation'),
                 'rep' => $rep

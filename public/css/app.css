@@ -14722,9 +14722,6 @@ body.vjs-full-window {
 .vjs-error .vjs-big-play-button {
   display: none; }
 
-.vjs-has-started.vjs-paused.vjs-show-big-play-button-on-pause .vjs-big-play-button {
-  display: block; }
-
 .video-js button {
   background: none;
   border: none;
@@ -15204,6 +15201,9 @@ body.vjs-full-window {
 
 .vjs-audio.vjs-has-started .vjs-poster {
   display: block; }
+
+.vjs-controls-disabled .vjs-poster {
+  display: none; }
 
 .vjs-using-native-controls .vjs-poster {
   display: none; }
@@ -16374,35 +16374,49 @@ li.av-nav > a {
   filter: alpha(opacity=70);
   z-index: 999; }
 
+.shepherd-element.shepherd-theme-arrows.shepherd-element-attached-top.shepherd-element-attached-center .shepherd-content {
+  margin-top: 0; }
+
+.shepherd-element.shepherd-theme-arrows.shepherd-element-attached-bottom.shepherd-element-attached-center .shepherd-content {
+  margin-bottom: 0; }
+
+.shepherd-element.shepherd-theme-arrows .shepherd-content header a.shepherd-cancel-link {
+  font-size: .8em !important; }
+
 .shepherd-step {
   width: 300px;
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 4px;
   -moz-border-radius: 4px; }
-  .shepherd-step .shepherd-text {
-    padding: 15px; }
-  .shepherd-step p {
-    font-size: 11px;
+  .shepherd-step .shepherd-content header h3 {
+    text-align: center;
+    font-size: 12px !important; }
+  .shepherd-step .shepherd-content .shepherd-text {
+    padding: 15px !important; }
+  .shepherd-step .shepherd-content p {
+    font-size: 14px !important;
     margin: 0;
     padding: 0; }
-  .shepherd-step footer {
-    padding: 8px;
+  .shepherd-step .shepherd-content footer {
+    padding: 8px !important;
     border-top: 1px solid #e6e6e6;
     text-align: right; }
-  .shepherd-step ul.shepherd-buttons {
+  .shepherd-step .shepherd-content ul.shepherd-buttons {
     padding: 0;
     list-style: none;
     display: inline; }
-    .shepherd-step ul.shepherd-buttons li {
+    .shepherd-step .shepherd-content ul.shepherd-buttons li {
       display: inline; }
-      .shepherd-step ul.shepherd-buttons li a.shepherd-button {
+      .shepherd-step .shepherd-content ul.shepherd-buttons li a.shepherd-button {
         color: #fff;
-        font-size: 11px;
-        background: #0097cd;
-        padding: 5px 10px;
+        font-size: 11px !important;
+        background: #0097cd !important;
+        padding: 8px 12px !important;
         border-radius: 4px;
         -moz-border-radius: 4px; }
+        .shepherd-step .shepherd-content ul.shepherd-buttons li a.shepherd-button.shepherd-button-secondary {
+          background-color: #bcbcbc !important; }
 
 /* Offcanvas nav */
 .navmenu-inverse .navmenu-nav > .active > a, .navmenu-inverse .navmenu-nav > .active > a:hover, .navmenu-inverse .navmenu-nav > .active > a:focus, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:hover, .navbar-inverse .navbar-offcanvas .navmenu-nav > .active > a:focus {

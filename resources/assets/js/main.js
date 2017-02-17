@@ -447,14 +447,44 @@ var TourSteps = [
 
 Vue.directive('tour-guide', {
     bind: function () {
+
+        var topScrollHandler = function(element){
+            var $element = window.jQuery(element);
+            var topOfElement = $element.offset().top;
+            var heightOfElement = $element.height();
+            window.jQuery('html, body').animate({
+                scrollTop: topOfElement - heightOfElement
+            },{
+                duration: 1000
+            });
+        };
+
         // Initialize the tour
         if (!localStorage.getItem('TourComplete')) {
             window.tour = new Shepherd.Tour({
                 defaults: {
                     classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
                     scrollTo: true,
+                    scrollToHandler: topScrollHandler,
                     showCancelLink: true
                 }
+            });
+
+            tour.addStep('intro', {
+                title: 'Hello!',
+                text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
+                showCancelLink: false,
+                buttons: [
+                    {
+                        text: 'Not Now',
+                        action: tour.cancel,
+                        classes: 'shepherd-button-secondary'
+                    },
+                    {
+                        text: 'Continue',
+                        action: tour.next
+                    }
+                ]
             });
 
             // if pageSteps exists, add them to tour

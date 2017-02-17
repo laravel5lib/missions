@@ -12,7 +12,7 @@
     </div>
 </div>
 <hr class="divider inv lg">
-    <div class="container">
+    <div class="container" v-tour-guide="">
         <div class="row">
             <div class="col-sm-12">
                 <ul class="nav nav-tabs">
@@ -40,4 +40,29 @@
         <hr class="divider inv lg">
     </div>
 
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'find',
+                title: 'Find Reservations',
+                text: 'Search, filter and sort to find what you need. Export the list or change the view from list to grid.',
+                attachTo: {
+                    element: '.tour-step-find',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'list',
+                title: 'At a Glance',
+                text: 'This list only gives a quick overveiw of reservations. Select a reservation to see more details.',
+                attachTo: {
+                    element: '.tour-step-list',
+                    on: 'top'
+                },
+            }
+        ];
+    </script>
 @endsection

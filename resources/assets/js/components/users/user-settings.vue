@@ -291,7 +291,7 @@
 
                                 <div class="row form-group">
                                     <label for="public" class="col-sm-2">Public</label>
-                                    <div class="col-sm-10">
+                                    <div class="col-sm-10 tour-step-privacy">
                                         <label class="radio-inline">
                                             <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                                         </label>
@@ -302,7 +302,7 @@
                                 </div>
 
                             <div class="form-group" :class="{ 'has-error': checkForError('url') || errors.url }" v-if="!!public">
-                                <div class="col-sm-12">
+                                <div class="col-sm-12 tour-step-url">
                                     <label for="url" class="control-label">Url Slug</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">www.missions.me/</span>
@@ -315,7 +315,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8">
+                <div class="col-sm-offset-2 col-sm-8 tour-step-contact">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5>Contact Info</h5>
@@ -386,7 +386,7 @@
                 </div><!-- end col -->
             </div>
             <div class="row">
-                <div class="col-sm-offset-2 col-sm-8">
+                <div class="col-sm-offset-2 col-sm-8 tour-step-social">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h5>Social Media</h5>
@@ -433,7 +433,7 @@
                             </div><!-- end panel-body -->
                         </div><!-- end panel -->
                     </div><!-- end col -->
-                    <div class="col-sm-12 text-center">
+                    <div class="col-sm-12 text-center tour-step-save">
                         <hr class="divider inv lg">
                         <a @click="back()" class="btn btn-primary">Cancel</a>
                         <a @click="submit()" class="btn btn-success">Update</a>

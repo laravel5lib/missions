@@ -2,7 +2,7 @@
     <div>
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
-            <div class="col-xs-4">
+            <div class="col-xs-4 tour-step-addons">
                 <button class="btn btn-primary btn-sm" @click="add">
                     <span class="fa fa-plus"></span> Add <span class="hidden-xs">Optional</span> Costs
                 </button>

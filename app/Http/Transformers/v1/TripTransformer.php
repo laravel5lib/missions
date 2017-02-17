@@ -38,7 +38,7 @@ class TripTransformer extends TransformerAbstract
             'rep'             => $trip->rep ? $trip->rep->name : null,
             'spots'           => (int) $trip->spots,
             'status'          => $trip->status,
-            'starting_cost'   => (int) $trip->starting_cost,
+            'starting_cost'   => $trip->startingCostInDollars(),
             'companion_limit' => (int) $trip->companion_limit,
             'reservations'    => (int) $trip->reservations_count,
             'country_code'    => $trip->country_code,

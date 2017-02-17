@@ -4,7 +4,7 @@
             <h5>Payments Due</h5>
         </div><!-- end panel-heading -->
         <div class="list-group" v-if="reservation">
-            <div class="list-group-item" v-for="due in reservation.dues.data" :class="{'list-group-item-default': due.unsaved}">
+            <div class="list-group-item tour-step-payment-details" v-for="due in reservation.dues.data" :class="{'list-group-item-default': due.unsaved}">
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>

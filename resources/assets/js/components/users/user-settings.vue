@@ -681,19 +681,21 @@
             }
         },
         ready(){
-            this.$http.get('utilities/countries').then(function (response) {
+            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
 
-            this.$http.get('utilities/timezones').then(function (response) {
+            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
                 this.timezones = response.data.timezones;
             });
 
-            this.resource.get().then(function (response) {
-                this.setUserData(response.data.data)
-            }, function (response) {
-                console.log('Update Failed! :(');
-                console.log(response);
+            Promise.all([countriesPromise, timezonesPromise], function (values) {
+                this.resource.get().then(function (response) {
+                    this.setUserData(response.data.data)
+                }, function (response) {
+                    console.log('Update Failed! :(');
+                    console.log(response);
+                });
             });
 
             this.$root.$on('save-settings', function () {

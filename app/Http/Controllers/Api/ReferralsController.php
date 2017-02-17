@@ -7,6 +7,7 @@ use App\Models\v1\Referral;
 use App\Jobs\ExportReferrals;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Jobs\SendReferralRequestEmail;
 use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\ImportRequest;
 use App\Http\Requests\v1\ReferralRequest;
@@ -70,7 +71,7 @@ class ReferralsController extends Controller
             'user_id' => $request->get('user_id'),
             'applicant_name' => $request->get('applicant_name'),
             'attention_to' => $request->get('attention_to'),
-            'recipient_email' => $request->get('recpient_email'),
+            'recipient_email' => $request->get('recipient_email'),
             'type' => $request->get('type'),
             'referrer' => $request->get('referrer'),
             'sent_at' => Carbon::now()

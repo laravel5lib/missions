@@ -462,40 +462,45 @@
             }
         },
         ready(){
-            this.$http.get('utilities/countries').then(function (response) {
+            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
 
-            this.$http.get('utilities/timezones').then(function (response) {
+            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
                 this.timezones = response.data.timezones;
             });
 
-            this.resource.get({id: this.userId}).then(function (response) {
-                var user = response.data.data;
-                this.name = user.name;
-                this.bio = user.bio;
-                this.type = user.type;
-                this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
-                this.country_code = user.country_code;
-                this.timezone = user.timezone;
-                this.phone_one = user.phone_one;
-                this.phone_two = user.phone_two;
-                this.address_one = user.address_one;
-                this.address_two = user.address_two;
-                this.city = user.city;
-                this.state = user.state;
-                this.zip = user.zip;
-                this.public = user.public;
-                this.url = user.url;
-                this.email = user.email;
-                this.alt_email = user.alt_email;
-                this.gender = user.gender;
-                this.status = user.status;
-                this.alt_email = user.alt_email;
-            }, function (response) {
-                console.log('Loading Failed! :(');
-                console.log(response);
-            });
+            Promise.all([countriesPromise, timezonesPromise], function (values) {
+                this.resource.get({id: this.userId}).then(function (response) {
+                    var user = response.data.data;
+                    this.name = user.name;
+                    this.bio = user.bio;
+                    this.type = user.type;
+                    this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                    this.country_code = user.country_code;
+                    this.timezone = user.timezone;
+                    this.phone_one = user.phone_one;
+                    this.phone_two = user.phone_two;
+                    this.address_one = user.address_one;
+                    this.address_two = user.address_two;
+                    this.city = user.city;
+                    this.state = user.state;
+                    this.zip = user.zip;
+                    this.public = user.public;
+                    this.url = user.url;
+                    this.email = user.email;
+                    this.alt_email = user.alt_email;
+                    this.gender = user.gender;
+                    this.status = user.status;
+                    this.alt_email = user.alt_email;
+                    this.dobDay = moment(user.birthday).format('DD');
+                    this.dobMonth = moment(user.birthday).format('MM');
+                    this.dobYear = moment(user.birthday).format('YYYY');
+                }, function (response) {
+                    console.log('Loading Failed! :(');
+                    console.log(response);
+                });
+            })
         }
     }
 </script> 

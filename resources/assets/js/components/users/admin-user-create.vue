@@ -453,11 +453,11 @@
             }
         },
         ready(){
-            this.$http.get('utilities/countries').then(function (response) {
+            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
 
-            this.$http.get('utilities/timezones').then(function (response) {
+            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
                 this.timezones = response.data.timezones;
             });
         }

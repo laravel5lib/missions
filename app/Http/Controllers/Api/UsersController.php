@@ -97,6 +97,10 @@ class UsersController extends Controller
         else
             $user = $this->auth()->user();
 
+        if ($request->get('password')) {
+            $request->merge(['password' => bcrypt($request->get('password'))]);
+        }
+        
         $user->update($request->except('url'));
 
         if ($request->has('links')) {

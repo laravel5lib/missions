@@ -29,8 +29,8 @@ class ReferralTransformer extends TransformerAbstract
             'user_id' => $referral->user_id,
             'applicant_name' => $referral->applicant_name,
             'type' => $referral->type,
-            'attention_to' => $referral_attention_to,
-            'recipient_email' => $referral_recipient_email,
+            'attention_to' => $referral->attention_to,
+            'recipient_email' => $referral->recipient_email,
             'referrer' => $referral->referrer,
             'response' => $referral->response,
             'status' => $referral->status,
@@ -41,7 +41,7 @@ class ReferralTransformer extends TransformerAbstract
             'links'        => [
                 [
                     'rel' => 'self',
-                    'uri' => '/referrals/' . $referral->id,
+                    'uri' => 'api/referrals/' . $referral->id,
                 ]
             ]
         ];

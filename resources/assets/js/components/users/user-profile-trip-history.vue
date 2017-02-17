@@ -21,7 +21,7 @@
                         <template v-if="accolades.items && accolades.items.length">
                             <p style="display:block;margin-bottom:3px;" v-for="accolade in accolades.items">
                                 <span class="label label-default" style="display:inline-block;text-align:left;padding:0.5em 0.6em;width:100%;">
-                                    <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade.name }}
+                                    <i class="fa fa-map-marker" style="margin-right:3px;"></i> {{ accolade }}
                                 </span>
                             </p>
                         </template>

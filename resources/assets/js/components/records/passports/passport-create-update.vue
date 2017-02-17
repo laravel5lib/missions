@@ -197,10 +197,7 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/passports';
-//                        this.showSuccess = true;
-//                        this.hasChanged = false;
+                        window.location.href = '/dashboard/records/passports';
                     }, function (error) {
                         this.showError = true;
                         debugger;

@@ -467,8 +467,8 @@ Vue.directive('tour-guide', {
                 showCancelLink: true
             }
         });
-
-        tour.addStep('intro', {
+      
+      tour.addStep('intro', {
             title: 'Hello!',
             text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
             showCancelLink: false,
@@ -485,10 +485,19 @@ Vue.directive('tour-guide', {
             ]
         });
 
-        // if pageSteps exists, add them to tour
-        if (window.pageSteps && window.pageSteps.length) {
-            for (let i in window.pageSteps) {
-                tour.addStep(window.pageSteps[i]);
+            // if pageSteps exists, add them to tour
+            if (window.pageSteps && window.pageSteps.length) {
+                _.each(window.pageSteps, function (step) {
+                    // if buttons are present
+                    if (step.buttons) {
+                        _.each(step.buttons, function (button) {
+                            // if action is present
+                            if (button.action && _.isString(button.action))
+                                button['action'] = tour[button.action];
+                        });
+                    }
+                    tour.addStep(step);
+                })
             }
         }
 

@@ -27,9 +27,9 @@ class DueTransformer extends TransformerAbstract
         return [
             'id'           => $due->id,
             'cost'         => $due->payment->cost->name,
-            'amount'       => $due->payment->amount_owed,
+            'amount'       => $due->payment->amountOwedInDollars(),
             'percent'      => (int) $due->payment->percent_owed,
-            'balance'      => $due->outstanding_balance,
+            'balance'      => $due->outstandingBalanceInDollars(),
             'due_at'       => $due->due_at->toDateTimeString(),
             'grace_period' => $due->grace_period,
             'status'       => $due->getStatus()

@@ -499,7 +499,6 @@ Vue.directive('tour-guide', {
                     tour.addStep(step);
                 })
             }
-        }
 
         // Initialize the tour
         if (!localStorage.getItem('TourComplete')) {

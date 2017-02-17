@@ -459,14 +459,23 @@ Vue.directive('tour-guide', {
 
             // if pageSteps exists, add them to tour
             if (window.pageSteps && window.pageSteps.length) {
-                for (let i in window.pageSteps) {
-                    tour.addStep(window.pageSteps[i]);
-                }
+                _.each(window.pageSteps, function (step) {
+                    // if buttons are present
+                    if (step.buttons) {
+                        _.each(step.buttons, function (button) {
+                            // if action is present
+                            if (button.action && _.isString(button.action))
+                                button['action'] = tour[button.action];
+                        });
+                    }
+                    tour.addStep(step);
+                })
             }
 
             tour.start();
 
             tour.on('complete', function () {
+                // wil probably use an array to mark complete tours for multiple pages
                 // localStorage.setItem('TourComplete', true)
             })
         }

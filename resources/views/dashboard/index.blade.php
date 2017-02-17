@@ -88,6 +88,23 @@
     <script>
         window.pageSteps = [
             {
+                id: 'intro',
+                title: 'Welcome to the Dashboard',
+                text: 'It will only take a few seconds to walk through the features found here. <p>You can stop anytime or take this tour by clicking the <i class="fa fa-question-circle-o fa-2x"></i> icon in the menu.</p> <p><strong>Shall we begin?</strong></p>',
+                showCancelLink: false,
+                buttons: [
+                    {
+                        text: 'Not Now',
+                        action: 'cancel',
+                        classes: 'shepherd-button-secondary'
+                    },
+                    {
+                        text: 'Let\'s Go',
+                        action: 'next'
+                    }
+                ]
+            },
+            {
                 id: 'payments',
                 title: 'Upcoming Payments',
                 text: 'See which payment deadlines are coming up and their status for reservations you are managing.',

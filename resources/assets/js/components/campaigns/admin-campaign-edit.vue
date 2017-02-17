@@ -142,8 +142,8 @@
 			<div class="form-group">
 				<div class="col-sm-12 text-center">
 					<!--<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default">Cancel</a>-->
+					<a @click="back()" class="btn btn-default">Cancel</a>
 					<a @click="update()" class="btn btn-primary">Update</a>
-					<a @click="back()" class="btn btn-success">Done</a>
 				</div>
 			</div>
 		</form>

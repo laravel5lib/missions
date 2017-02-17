@@ -435,8 +435,8 @@
                     </div><!-- end col -->
                     <div class="col-sm-12 text-center tour-step-save">
                         <hr class="divider inv lg">
-                        <a @click="back()" class="btn btn-primary">Cancel</a>
-                        <a @click="submit()" class="btn btn-success">Update</a>
+                            <a @click="back()" class="btn btn-default">Cancel</a>
+                        <a @click="submit()" class="btn btn-primary">Update</a>
                         <hr class="divider inv xlg">
                     </div><!-- end col -->
                 </div><!-- end row -->

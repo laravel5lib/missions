@@ -27,32 +27,32 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <ul class="list-unstyled">
-                                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;"
+                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
                                                                     src="../images/onboard/cam-icon.png">Add profile
-                                    photo
+                                    photo</a>
                                 </li>
-                                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;"
+                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
                                                                     src="../images/onboard/photo-icon.png">Add banner
-                                    photo
+                                    photo</a>
                                 </li>
-                                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/bio-icon.png">Create a bio
+                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
+                                                                    src="../images/onboard/bio-icon.png">Create a bio</a>
                                 </li>
                             </ul>
                         </div><!-- end col -->
                         <div class="col-sm-6">
                             <ul class="list-unstyled">
-                                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;"
+                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
                                                                     src="../images/onboard/social-icon.png">Add social
-                                    links
+                                    links</a>
                                 </li>
-                                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;"
+                                <li style="margin-bottom:5px;"><a href="{{ url(auth()->user()->slug->url) }}"><img class="img-xs av-left" style="border:none;"
                                                                     src="../images/onboard/globe-icon.png">Add countries
-                                    you've visited
+                                    you've visited</a>
                                 </li>
-                                <li style="margin-bottom:5px;"><img class="img-xs av-left" style="border:none;"
+                                <li style="margin-bottom:5px;"><a href="{{ url(auth()->user()->slug->url) }}"><img class="img-xs av-left" style="border:none;"
                                                                     src="../images/onboard/trips-icon.png">Add trips
-                                    you've been on
+                                    you've been on</a>
                                 </li>
                             </ul>
                         </div><!-- end col -->

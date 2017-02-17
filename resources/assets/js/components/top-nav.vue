@@ -16,7 +16,7 @@
 				<li class="navlabel">Account</li>
 				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
 					<a href="#">
-						<img class="img-xs img-circle av-left" :src="avatar" :alt="name"> {{ name }} <i class="fa fa-angle-down"></i>
+						<img class="img-xs img-circle av-left text-capitalize" :src="avatar" :alt="name"> {{ name }} <i class="fa fa-angle-down"></i>
 						</a>
 				</li>
 				<ul class="dropdown-menu offcanvas-dropdown">
@@ -84,6 +84,7 @@
 				<!-- M.Me -->
 				<li class="navlabel">About</li>
 				<li><a href="/about-mm">Missions.Me</a></li>
+				<li><a href="/support">Give To Missions.Me</a></li>
 				<li><a href="/contact">Contact Us</a></li>
 			</ul>
 		</aside>

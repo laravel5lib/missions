@@ -13,6 +13,7 @@
 						<iframe src="https://player.vimeo.com/video/187513568?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
+				<hr class="divider inv">
 				<hr data-aos="fade-up" class="divider red-small">
 				<hr class="divider inv">
 				<p data-aos="fade-up">Welcome to the other side of the earth. It's difficult to find a place further away from home before you start coming back. Submerge yourself in an incomparable culture, from the sites, sounds, smells, food, people and clothing - India is an amazing experience. Venture deep into southern India as together we rescue children in several villages in the state of Andhra Pradesh.</p>
@@ -31,7 +32,7 @@
 				<hr class="divider red-small">
 				<hr class="divider inv">
 				<p data-aos="fade-up">Participate in the emotional dedications of several orphanages, each permanently houses 12-50 orphans.</p>
-				<p>Spend the day at each "Angel House" loving on each kid who may have never been hugged or loved on in their entire lives.</p>
+				<p data-aos="fade-up">Spend the day at each "Angel House" loving on each kid who may have never been hugged or loved on in their entire lives.</p>
 			</div><!-- end col -->
 		</div><!-- end row -->
 	</div>

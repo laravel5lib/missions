@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="white-header-bg">
-    <div class="container">
+    <div class="container" v-tour-guide="">
         <div class="row">
             <div class="col-sm-8">
                 <h3 class="hidden-xs">
@@ -15,14 +15,14 @@
                     <label>Group</label>
                 </div>
             </div>
-            <div class="col-sm-4 hidden-xs">
+            <div class="col-sm-4 hidden-xs tour-step-settings">
                 <hr class="divider inv">
                 <hr class="divider inv sm">
                 <a href="{{ $group->id }}/edit" class="btn btn-primary pull-right">
                     Group Settings
                 </a>
             </div>
-            <div class="col-sm-4 visible-xs text-center">
+            <div class="col-sm-4 visible-xs text-center tour-step-settings">
                 <hr class="divider inv sm">
                 <a href="{{ $group->id }}/edit" class="btn btn-primary">
                     Group Settings
@@ -94,14 +94,48 @@
                 	  </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3 tour-step-managers">
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 tour-step-trips">
                 <dashboard-group-trips id="{{ $group->id }}"></dashboard-group-trips>
             </div>
         </div>
     </div>
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'settings',
+                title: 'Group Settings',
+                text: 'Change group settings and update the group profile page.',
+                attachTo: {
+                    element: '.tour-step-settings',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'managers',
+                title: 'Managers',
+                text: 'Add or remove group managers. Only a manager can edit group settings and add or remove other managers and team facilitators.',
+                attachTo: {
+                    element: '.tour-step-managers',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'trips',
+                title: 'Trips',
+                text: 'Any active trips the group is sponsoring will be listed here. Select a trip to see more details.',
+                attachTo: {
+                    element: '.tour-step-trips',
+                    on: 'top'
+                },
+            }
+        ];
+    </script>
 @endsection

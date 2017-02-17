@@ -51,11 +51,11 @@
             </form>
             <hr class="divider sm inv">
         </div>
-        <div class="col-sm-12" v-if="loaded && !passports.length">
+        <div class="col-sm-12 tour-step-view" v-if="loaded && !passports.length">
             <p class="text-center text-muted" role="alert"><em>Add and manage your passports here!</em></p>
         </div>
 
-        <div class="col-sm-12" style="display:flex; flex-wrap: wrap;">
+        <div class="col-sm-12 tour-step-view" style="display:flex; flex-wrap: wrap;">
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="passport in passports" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
                 <div class="panel-body">

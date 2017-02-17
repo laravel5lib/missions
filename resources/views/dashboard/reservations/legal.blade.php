@@ -26,3 +26,15 @@
         </div>
     </div>
     @endsection
+
+    @section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'legal',
+                title: 'Legal Agreements',
+                text: 'For your convience, you may review the terms of service and rules of conduct and other agreements here.'
+            }
+        ];
+    </script>
+@endsection

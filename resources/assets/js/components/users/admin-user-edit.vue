@@ -327,8 +327,8 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-12 text-center">
+                    <a @click="back()" class="btn btn-default">Cancel</a>
                     <a @click="submit()" class="btn btn-primary">Update</a>
-                    <a @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>

@@ -169,7 +169,7 @@
                 <div class="col-sm-12 text-center">
                     <br>
                     <a @click="update" class="btn btn-primary">Save</a>
-                    <a @click="back()" class="btn btn-success">Done</a>
+                    <a @click="back()" class="btn btn-default">Done</a>
                 </div>
             </div>
 

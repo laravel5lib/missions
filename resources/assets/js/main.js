@@ -460,7 +460,8 @@ Vue.directive('tour-guide', {
         };
 
         // Initialize the tour
-        if (!localStorage.getItem('TourComplete')) {
+        let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+        if (!_.contains(completed, location.pathname)) {
             window.tour = new Shepherd.Tour({
                 defaults: {
                     classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
@@ -484,7 +485,15 @@ Vue.directive('tour-guide', {
                         text: 'Continue',
                         action: tour.next
                     }
-                ]
+                ],
+                when: {
+                    cancel: function() {
+                        let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+                        completed.push(location.pathname);
+                        localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
+
+                    }
+                }
             });
 
             // if pageSteps exists, add them to tour

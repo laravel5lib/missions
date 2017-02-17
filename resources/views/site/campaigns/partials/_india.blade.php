@@ -1,5 +1,5 @@
 <div class="content-page-header">
-    <img class="img-responsive" src="../images/india/orphans-to-angels.jpg" alt="Orphans To Angels">
+    <img class="img-responsive" src="../images/india/orphans-to-angles.jpg" alt="Orphans To Angels">
     <div class="c-page-header-text">
     </div><!-- end c-page-header-content -->
 </div><!-- end c-page-header -->

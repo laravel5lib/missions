@@ -120,7 +120,7 @@
             {
                 id: 'rep',
                 title: 'Trip Rep',
-                text: 'A Mission.Me trip represenative is assigned to each reservaton. Find your rep\'s contact information here if you need help',
+                text: 'A Mission.Me trip representative is assigned to each reservation. Find your rep\'s contact information here if you need help.',
                 attachTo: {
                     element: '.tour-step-rep',
                     on: 'top'

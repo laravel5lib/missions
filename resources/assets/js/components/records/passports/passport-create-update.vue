@@ -66,8 +66,9 @@
             <div class="row">
                 <div class="col-sm-12">
                     <accordion :one-at-atime="true">
-                        <panel header="Upload Photo Copy" :is-open.sync="true">
+                        <panel header="Upload Photocopy" :is-open.sync="true">
                             <div class="panel-body">
+                                <p>Please upload a full-color photocopy of your passport. Please be sure that both the photo page and signed signiture page are both clearly visible and legible.</p>
                                 <div class="media" v-if="selectedAvatar">
                                     <div class="media-left">
                                         <a href="#">

@@ -57,7 +57,7 @@
             {
                 id: 'list',
                 title: 'At a Glance',
-                text: 'This list only gives a quick overveiw of reservations. Select a reservation to see more details.',
+                text: 'This list only gives a quick overview of reservations. Select a reservation to see more details.',
                 attachTo: {
                     element: '.tour-step-list',
                     on: 'top'

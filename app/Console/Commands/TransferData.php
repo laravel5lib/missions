@@ -84,6 +84,9 @@ class TransferData extends Command
             $this->callSilent('db:seed', [
                 '--class' => 'BouncerSeeder'
             ]);
+            $this->callSilent('db:seed', [
+                '--class' => 'UploadSeeder'
+            ]);
             $this->info("\n" . 'Database re-migrated and seeded with defaults.');
         }
 
@@ -166,6 +169,7 @@ class TransferData extends Command
         $bar = $this->output->createProgressBar($users->count());
 
         $newUsers = $users->map(function($item) use($userIndex, $bar) {
+            $banner = Upload::randomBanner()->first();
             $user = [
                 'email' => $item->email,
                 'name' => ucwords($item->name),
@@ -183,11 +187,12 @@ class TransferData extends Command
                 'state' => $item->state,
                 'zip' => $item->zip,
                 'country_code' => strtolower($item->country_code),
-                'timezone' => $item->timezone,
+                'timezone' => $item->timezone == 'US/Eastern' ? 'America/Detroit' : $item->timezone,
                 'bio' => $item->bio,
                 'public' => $item->public ? true : false,
                 'avatar_upload_id' => trim($item->profile_pic_src) ? 
                     $this->get_avatar_id($item->profile_pic_src, $item->name) : null,
+                'banner_upload_id' => $banner ? $banner->id : null,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at
             ];
@@ -597,7 +602,7 @@ class TransferData extends Command
                 ],
                 'prospects' => $item->prospects ? explode(',', $item->prospects) : null,
                 'team_roles' => $this->get_team_role_codes($item->team_roles),
-                'description' => '### What to Expect'."\n\n".trim(strip_tags($item->what_to_expect))."\n\n".'### What\'s Included in my Trip Registraion?'."\n\n".trim(strip_tags($item->included))."\n\n".'### What\'s not Included in my Trip Registration?'."\n\n".trim(strip_tags($item->not_included))."\n\n".'### Pre-trip Training'."\n\n".trim(strip_tags($item->training))."\n\n".'### How You\'ll Get There'."\n\n".trim(strip_tags($item->flight_information)),
+                'description' => '### What to Expect'."\n\n".trim(strip_tags($item->what_to_expect))."\n\n".'### What\'s Included in my Trip Registration?'."\n\n".trim(strip_tags($item->included))."\n\n".'### What\'s not Included in my Trip Registration?'."\n\n".trim(strip_tags($item->not_included))."\n\n".'### Pre-trip Training'."\n\n".trim(strip_tags($item->training))."\n\n".'### How You\'ll Get There'."\n\n".trim(strip_tags($item->flight_information)),
                 'public' => true,
                 'published_at' => Carbon::now(),
                 'closed_at' => $item->registration ? 

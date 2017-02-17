@@ -367,7 +367,7 @@
       <div class="content-section">
         <div class="row">
           <div class="col-xs-12 text-center">
-                <h1>Group Leader Or Youth Pastor</h1>
+                <h1>Group Leader Or Pastor</h1>
           </div><!-- end col -->
         </div><!-- end row -->
         <div class="row">
@@ -456,7 +456,7 @@
           <div class="col-md-6">
             <div class="video-outer">
               <div class="video-inner">
-                <iframe src="https://player.vimeo.com/video/109034302" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                <iframe src="https://player.vimeo.com/video/203848987?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
               </div>
             </div>
           </div>

@@ -231,7 +231,7 @@
 				<div class="row">
 					<div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
 						<h1 class="text-primary-darker dash-trailing-dark">Level Of Impact</h1>
-						<p class="large-type">We are interested in the transformation of individuals, communities, cities, and nations. individuals. Every outreach we produce is measured through the lens of measurable transformation.  In one week's time, you and your team will speak to entire schools, impact neighborhoods, empower churches, and even fill stadiums. We believe a short-term team must serve a long-term, sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted, so that we make disciples.</p>
+						<p class="large-type">We are interested in the transformation of individuals, communities, cities, and nations. Every outreach we produce is measured through the lens of measurable transformation.  In one week's time, you and your team will speak to entire schools, impact neighborhoods, empower churches, and even fill stadiums. We believe a short-term team must serve a long-term, sustainable goal. That’s why when your team leaves our international partners continue to serve the communities you impacted, so that we make disciples.</p>
 						<hr class="divider inv visible-xs visible-sm">
 					</div><!-- end col -->
 					<div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">

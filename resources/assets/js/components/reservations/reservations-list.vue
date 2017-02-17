@@ -176,7 +176,6 @@
                 includeManaging: false,
                 search: '',
                 showFilters: false,
-                isFacilitator: false,
                 groupsArr: [],
                 groupOptions: [],
                 campaignObj: null,
@@ -262,6 +261,11 @@
             'includeManaging': function (val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getReservations();
+            }
+        },
+        computed: {
+            isFacilitator() {
+                return this.trips.length > 0 ? true : false;
             }
         },
         methods: {

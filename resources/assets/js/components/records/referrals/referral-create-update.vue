@@ -29,7 +29,7 @@
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('referreraltitle') }">
                     <label for="author" class="control-label">Referral Title/Position</label>
                     <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
-                       placeholder="Referral Phone" v-validate:referraltitle="{ required: true, minlength:1, maxlength:100 }"
+                       placeholder="Referral title or position" v-validate:referraltitle="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('referralname') }">
@@ -59,8 +59,8 @@
                 <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/records/referrals" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
+                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>
@@ -155,6 +155,7 @@
                         type: this.type,
                         response: this.response,
                         user_id: this.user_id,
+                        attention_to: this.attention_to
                     }).then(function (resp) {
                         this.showSuccess = true;
                         // window.location.href = '/dashboard' + resp.data.data.links[0].uri;

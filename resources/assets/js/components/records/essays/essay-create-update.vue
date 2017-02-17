@@ -31,8 +31,8 @@
                 <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/records/essays" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
+                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>

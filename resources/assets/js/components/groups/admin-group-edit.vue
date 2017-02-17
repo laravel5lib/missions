@@ -167,8 +167,8 @@
 
                 <div class="form-group">
                     <div class="col-sm-12 text-center">
+                        <a @click="back()" class="btn btn-default">Cancel</a>
                         <a @click="submit()" class="btn btn-primary">Update</a>
-                        <a @click="back()" class="btn btn-success">Done</a>
                     </div>
                 </div>
 
@@ -314,43 +314,45 @@
         },
         ready() {
             // this.$refs.spinner.show();
-            this.$http.get('utilities/countries').then(function (response) {
+            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.data.countries;
             });
 
-            this.$http.get('utilities/timezones').then(function (response) {
+            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
                 this.timezones = response.data.timezones;
             });
 
-            this.resource.get({id: this.groupId}).then(function (response) {
-                let group = response.data.data;
-                this.name = group.name;
-                this.avatar = group.avatar;
-                this.avatar_upload_id = group.avatar_upload_id;
-                this.banner = group.banner;
-                this.banner_upload_id = group.banner_upload_id;
-                this.description = group.description;
-                this.type = group.type;
-                this.countryCodeObj = _.findWhere(this.countries, {code: group.country_code});
-                this.country_code = group.country_code;
-                this.timezone = group.timezone;
-                this.phone_one = group.phone_one;
-                this.phone_two = group.phone_two;
-                this.address_one = group.address_one;
-                this.address_two = group.address_two;
-                this.city = group.city;
-                this.state = group.state;
-                this.zip = group.zip;
-                this.public = group.public;
-                this.status = group.status;
-                this.url = group.url;
-                this.email = group.email;
-                // this.$refs.spinner.hide();
-            }, function (response) {
-                console.log('Update Failed! :(');
-                console.log(response);
-                // this.$refs.spinner.hide();
-                //TODO add error alert
+            Promise.all([countriesPromise, timezonesPromise], function (values) {
+                this.resource.get({id: this.groupId}).then(function (response) {
+                    let group = response.data.data;
+                    this.name = group.name;
+                    this.avatar = group.avatar;
+                    this.avatar_upload_id = group.avatar_upload_id;
+                    this.banner = group.banner;
+                    this.banner_upload_id = group.banner_upload_id;
+                    this.description = group.description;
+                    this.type = group.type;
+                    this.countryCodeObj = _.findWhere(this.countries, {code: group.country_code});
+                    this.country_code = group.country_code;
+                    this.timezone = group.timezone;
+                    this.phone_one = group.phone_one;
+                    this.phone_two = group.phone_two;
+                    this.address_one = group.address_one;
+                    this.address_two = group.address_two;
+                    this.city = group.city;
+                    this.state = group.state;
+                    this.zip = group.zip;
+                    this.public = group.public;
+                    this.status = group.status;
+                    this.url = group.url;
+                    this.email = group.email;
+                    // this.$refs.spinner.hide();
+                }, function (response) {
+                    console.log('Update Failed! :(');
+                    console.log(response);
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
+                });
             });
         }
     }

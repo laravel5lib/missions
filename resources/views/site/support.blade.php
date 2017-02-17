@@ -13,7 +13,7 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h3 class="text-center">Your monthly support helps meet the needs of the homeless, and the hurting around the world.</h3>
+				<h3 class="text-center">Your monthly support creates measurable change for communities, cities, and nations across the world.</h3>
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">

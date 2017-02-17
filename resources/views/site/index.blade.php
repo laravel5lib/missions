@@ -24,7 +24,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 @endsection
 @section('content')
 <div class="vid-bg">
-  <video muted autoplay loop poster="video/video-placeholder.jpg" class="vid-bg-video">
+  <video muted autoplay loop poster="video/video-placeholder.png" class="vid-bg-video">
     <source src="video/mm-homepage-bg.webm" type="video/webm">
     <source src="video/mm-homepage-bg.mp4" type="video/mp4">
     <source src="video/mm-homepage-bg.ogv" type="video/ogg">
@@ -95,9 +95,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
           </div><!-- end col -->
           <div class="col-sm-6 home-half-section">
             <h1 class="dash-trailing" data-aos="fade-left">1Nation1Day</h1>
-            <p class="large-line-height large-type" data-aos="fade-left">We are now living in a missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
+            <p class="large-line-height large-type" data-aos="fade-left">We are now living in a new missions era.  The vision of 1Nation1Day is to unite the global church for the salvation and transformation of nations.</p>
             <hr class="divider inv">
-            <a href="/orphans" class="btn btn-info" data-aos="fade-left">Learn More</a>
+            <a href="/1n1d17" class="btn btn-info" data-aos="fade-left">Learn More</a>
           </div><!-- end col -->
         </div><!-- end row -->
       </div><!-- end content-section -->

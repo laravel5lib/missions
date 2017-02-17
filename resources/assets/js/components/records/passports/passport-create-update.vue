@@ -90,8 +90,8 @@
                 <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" href="/dashboard/passports" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
+                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-success">Done</a>
                 </div>
             </div>
         </form>
@@ -197,10 +197,7 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/passports';
-//                        this.showSuccess = true;
-//                        this.hasChanged = false;
+                        window.location.href = '/dashboard/records/passports';
                     }, function (error) {
                         this.showError = true;
                         debugger;

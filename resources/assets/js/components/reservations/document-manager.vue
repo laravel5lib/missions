@@ -2,7 +2,7 @@
     <section>
     <div class="row" v-if="loaded" style="position:relative">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <div class="col-sm-12">
+        <div class="col-sm-12 tour-step-attach">
             <div class="text-center" v-if="list">
                 <form novalidate>
                     <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()">

@@ -1,6 +1,8 @@
 @extends('dashboard.reservations.show')
 
 @section('tab')
+<div class="row">    
+    <div class="col-xs-12 tour-step-fundraiser">
     
     @foreach($reservation->fundraisers as $fundraiser)
     <div class="panel panel-default">
@@ -30,6 +32,11 @@
         </div>
     </div>
     @endforeach
+
+    </div>
+</div>
+<div class="row">    
+    <div class="col-xs-12 tour-step-progress">
 
     <div class="panel panel-default">
             <div class="panel-heading">
@@ -71,4 +78,32 @@
                 </div>
             </div><!-- end panel-body -->
         </div><!-- end panel -->
+
+    </div>
+</div>
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'fundraiser',
+                title: 'Fundraiser',
+                text: 'A fundraising page is automatically created for each new reservation. You can manage this page by visiting it from your profile.',
+                attachTo: {
+                    element: '.tour-step-fundraiser',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'progress',
+                title: 'Track Progress',
+                text: 'Monitor your fundraising progress. See donors and donations.',
+                attachTo: {
+                    element: '.tour-step-progress',
+                    on: 'top'
+                },
+            }
+        ];
+    </script>
 @endsection

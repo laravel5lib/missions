@@ -9,18 +9,13 @@
                     Companions {{ $reservation->companionReservations->count() }} of {{ $reservation->companion_limit }}
                 </h5>
             </div>
-            <div class="col-xs-6 text-right">
+            <div class="col-xs-6 text-right tour-step-request">
                 <a class="btn btn-primary btn-xs" href="mailto:{{ $rep->email }}?subject=New Companion(s) Request&body=Please list the names, emails and your relationship to of those whom you'd like to be travel companions with. Please remember that you have a limited number of companions available. Thank you! Your trip rep will contact you soon.">
                     <span class="fa fa-group"></span> Request Companions
                 </a>
             </div>
         </div>
     </div>
-    <div class="panel-body">
-        <h5><i class="fa fa-question-circle"></i> What's this?</h5>
-        <p>When you choose to travel with a companion, it means that you’ll be BFF’s throughout your missions experience. You’ll fly on the same planes, ride on the same bus, and be assigned to the same team. You’ll even be placed in the same hotel room (if you’re married or of the same gender).</p>
-    </div>
-    <hr class="divider">
     <div class="panel-body">
         @if( ! $reservation->companionReservations->count())
             <p class="text-center text-muted">No companions found.</p>
@@ -49,4 +44,25 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'companions',
+                title: 'Travel Companions',
+                text: 'When you choose to travel with a companion, it means that you’ll be BFF’s throughout your missions experience. You’ll fly on the same planes, ride on the same bus, and be assigned to the same team. You’ll even be placed in the same hotel room (if you’re married or of the same gender).'
+            },
+            {
+                id: 'request',
+                title: 'Get Started',
+                text: 'Start adding companions by sending a request to your trip rep.',
+                attachTo: {
+                    element: '.tour-step-request',
+                    on: 'top'
+                },
+            }
+        ];
+    </script>
 @endsection

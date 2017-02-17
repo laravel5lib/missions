@@ -19,10 +19,10 @@ return [
                 'label' => 'Funding',
                 'url' => 'funding'
             ],
-            [
-                'label' => 'Deadlines',
-                'url' => 'deadlines'
-            ],
+            // [
+            //     'label' => 'Deadlines',
+            //     'url' => 'deadlines'
+            // ],
             [
                 'label' => 'Companions',
                 'url' => 'companions'

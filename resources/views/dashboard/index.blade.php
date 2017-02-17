@@ -98,7 +98,7 @@
             } ,
             {
                 id: 'requirements',
-                title: 'Upcoming Travel Requirements',
+                title: 'Travel Requirements',
                 text: 'See which travel requirement deadlines are coming up and their status for reservations you are managing.',
                 attachTo: {
                     element: '.tour-step-requirements',

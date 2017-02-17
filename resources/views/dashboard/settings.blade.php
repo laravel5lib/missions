@@ -46,7 +46,7 @@
             {
                 id: 'avatar',
                 title: 'Profile Avatar',
-                text: 'Upload a picture of yourself. Show us your humanity!',
+                text: 'Upload a picture of yourself. Show us your smile!',
                 attachTo: {
                     element: '.tour-step-avatar',
                     on: 'top'
@@ -55,7 +55,7 @@
             {
                 id: 'cover',
                 title: 'Profile Cover',
-                text: 'Choose a cover photo. Like they say, "A picture says a thousand words..." So, you don\'t have to :p',
+                text: 'Choose a cover photo. Like they say, "A picture says a thousand words.",
                 attachTo: {
                     element: '.tour-step-cover',
                     on: 'top'

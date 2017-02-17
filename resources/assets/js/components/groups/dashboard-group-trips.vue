@@ -35,7 +35,7 @@
         data(){
             return {
                 trips:[],
-                resource: this.$resource('trips?include=campaign&onlyPublished=true&groups[]=' + this.id),
+                resource: this.$resource('trips?include=campaign&status=current&onlyPublished=true&groups[]=' + this.id),
                 pagination: { current_page: 1 },
                 per_page: 3,
             }

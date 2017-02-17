@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default" v-tour-guide="">
     <div class="panel-heading">
         <h5>Other Deadlines</h5>
     </div>
@@ -18,3 +18,15 @@
         @endforeach
     </div>
 </div>
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'deadlines',
+                title: 'Other Deadlines',
+                text: 'Other important deadlines apart from payment due dates and travel requirement deadlines will be listed here.'
+            },
+        ];
+    </script>
+@endsection

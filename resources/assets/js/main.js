@@ -459,33 +459,31 @@ Vue.directive('tour-guide', {
             });
         };
 
-        // Initialize the tour
-        if (!localStorage.getItem('TourComplete')) {
-            window.tour = new Shepherd.Tour({
-                defaults: {
-                    classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
-                    scrollTo: true,
-                    scrollToHandler: topScrollHandler,
-                    showCancelLink: true
+        window.tour = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
+                scrollTo: true,
+                scrollToHandler: topScrollHandler,
+                showCancelLink: true
+            }
+        });
+      
+      tour.addStep('intro', {
+            title: 'Hello!',
+            text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
+            showCancelLink: false,
+            buttons: [
+                {
+                    text: 'Not Now',
+                    action: tour.cancel,
+                    classes: 'shepherd-button-secondary'
+                },
+                {
+                    text: 'Continue',
+                    action: tour.next
                 }
-            });
-
-            tour.addStep('intro', {
-                title: 'Hello!',
-                text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
-                showCancelLink: false,
-                buttons: [
-                    {
-                        text: 'Not Now',
-                        action: tour.cancel,
-                        classes: 'shepherd-button-secondary'
-                    },
-                    {
-                        text: 'Continue',
-                        action: tour.next
-                    }
-                ]
-            });
+            ]
+        });
 
             // if pageSteps exists, add them to tour
             if (window.pageSteps && window.pageSteps.length) {
@@ -501,14 +499,16 @@ Vue.directive('tour-guide', {
                     tour.addStep(step);
                 })
             }
-
-            tour.start();
-
-            tour.on('complete', function () {
-                // wil probably use an array to mark complete tours for multiple pages
-                // localStorage.setItem('TourComplete', true)
-            })
         }
+
+        // Initialize the tour
+        if (!localStorage.getItem('TourComplete')) {
+            tour.start();
+        }
+
+        tour.on('complete', function () {
+            localStorage.setItem('TourComplete', true)
+        })
     },
     update: function () {
         // debugger

@@ -9,7 +9,7 @@
                 <tr>
                     <td style="padding:10px 15px;">
                         <h4 style="margin:0px;">
-                            ${{ $payment->outstanding_balance }} &middot; 
+                            ${{ $payment->outstandingBalanceInDollars() }} &middot; 
                             <small>
                                 {{ $payment->payment->percent_owed }}% of {{ $payment->payment->cost->name }}
                             </small>

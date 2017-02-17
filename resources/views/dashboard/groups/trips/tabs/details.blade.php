@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default" v-tour-guide="">
     <div class="panel-heading">
         <h5 class="text-capitalize">{{ $trip->campaign->name }}</h5>
     </div>
@@ -42,12 +42,14 @@
                     </div>
                 </div>
                 <hr class="divider">
+                @if($trip->prospects)
                 <label>Perfect For</label>
                 <ul class="list-unstyled">
                     @foreach($trip->prospects as $prospect)
                         <li class="badge">{{ $prospect }}</li>
                     @endforeach
                 </ul>
+                @endif
             </div>
             <div class="col-sm-12 col-md-4 text-center">
                 <div class="panel panel-default">
@@ -79,4 +81,42 @@
     </div>
 </div>
 
-<admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
+<div class="row">
+    <div class="col-xs-12 tour-step-facilitators">
+        <admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>
+    </div>
+</div>
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'navigation',
+                title: 'Access Trip Details',
+                text: 'Navigate to import details about your trip in each section.',
+                attachTo: {
+                    element: '.tour-step-navigation',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'facilitators',
+                title: 'Team Facilitators',
+                text: 'As a group manager, you can assign individuals to facilitate your teams. Facilitators will have access to all the reservations and records belonging to their assigned trip.',
+                attachTo: {
+                    element: '.tour-step-facilitators',
+                    on: 'top'
+                },
+            },
+            // {
+            //     id: 'costs',
+            //     title: 'Trip Costs',
+            //     text: 'Most trips have costs assigned to them. There may be different kinds of costs associated with your trip.<hr class="divider"><strong>Incremental Costs</strong> are amounts that "increment" each time a traveler defaults on a payment deadline.<hr class="divider"><strong>Static costs</strong>',
+            //     attachTo: {
+            //         element: '.tour-step-costs',
+            //         on: 'top'
+            //     },
+            // },
+        ];
+    </script>
+@endsection

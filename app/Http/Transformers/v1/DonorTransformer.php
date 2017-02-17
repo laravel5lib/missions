@@ -48,7 +48,7 @@ class DonorTransformer extends TransformerAbstract
                 'name' => country($donor->country_code),
             ],
             // 'total_donated' => (int) $donor->donations($this->designation)->sum('amount'),
-            'total_donated' => (int) $donor->total_donated_amount,
+            'total_donated' => $donor->total_donated_amount,
             'account_id'    => $donor->account_id,
             'account_type'  => $donor->account_type,
             'account_name'  => $donor->account ? $donor->account->name : null,

@@ -18,14 +18,9 @@ class Due extends Model
 
     protected $dates = ['due_at'];
 
-    public function getOutstandingBalanceAttribute($value)
+    public function outstandingBalanceInDollars()
     {
-        return number_format($value/100, 2, '.', ''); // convert to dollars
-    }
-
-    public function setOutstandingBalanceAttribute($value)
-    {
-        $this->attributes['outstanding_balance'] = $value*100; // convert to cents
+        return number_format($this->outstanding_balance/100, 2, '.', ''); // convert to dollars
     }
 
     /**

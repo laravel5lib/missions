@@ -40,7 +40,7 @@
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="details">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-4 col-md-3">
+                        <div class="col-xs-12 col-sm-4 col-md-3 tour-step-navigation">
                             @include('dashboard.groups.trips.tabs.nav')
                         </div>
                         <div class="col-xs-12 col-sm-8 col-md-9">

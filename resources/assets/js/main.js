@@ -459,42 +459,39 @@ Vue.directive('tour-guide', {
             });
         };
 
-        // Initialize the tour
-        let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
-        if (!_.contains(completed, location.pathname)) {
-            window.tour = new Shepherd.Tour({
-                defaults: {
-                    classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
-                    scrollTo: true,
-                    scrollToHandler: topScrollHandler,
-                    showCancelLink: true
-                }
-            });
+        window.tour = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
+                scrollTo: true,
+                scrollToHandler: topScrollHandler,
+                showCancelLink: true
+            }
+        });
 
-            tour.addStep('intro', {
-                title: 'Hello!',
-                text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
-                showCancelLink: false,
-                buttons: [
-                    {
-                        text: 'Not Now',
-                        action: tour.cancel,
-                        classes: 'shepherd-button-secondary'
-                    },
-                    {
-                        text: 'Continue',
-                        action: tour.next
-                    }
-                ],
-                when: {
-                    cancel: function() {
-                        let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
-                        completed.push(location.pathname);
-                        localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
-
-                    }
+      tour.addStep('intro', {
+            title: 'Hello!',
+            text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
+            showCancelLink: false,
+            buttons: [
+                {
+                    text: 'Not Now',
+                    action: tour.cancel,
+                    classes: 'shepherd-button-secondary'
+                },
+                {
+                    text: 'Continue',
+                    action: tour.next
                 }
-            });
+            ],
+          when: {
+              cancel: function() {
+                  let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+                  completed.push(location.pathname);
+                  localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
+
+              }
+          }
+        });
 
             // if pageSteps exists, add them to tour
             if (window.pageSteps && window.pageSteps.length) {
@@ -511,13 +508,17 @@ Vue.directive('tour-guide', {
                 })
             }
 
+        // Initialize the tour
+        let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+        if (!_.contains(completed, location.pathname)) {
             tour.start();
-
-            tour.on('complete', function () {
-                // wil probably use an array to mark complete tours for multiple pages
-                // localStorage.setItem('TourComplete', true)
-            })
         }
+
+        tour.on('complete', function () {
+            let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+            completed.push(location.pathname);
+            localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
+        });
     },
     update: function () {
         // debugger

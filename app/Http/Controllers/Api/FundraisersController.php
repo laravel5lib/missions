@@ -90,7 +90,7 @@ class FundraisersController extends Controller
         if ($amountGivenAnonymously > 0) {
             $donors->put((string) Uuid::uuid4(), [
                 'name' => 'Anonymous',
-                'total_donated' => $amountGivenAnonymously,
+                'total_donated' => $amountGivenAnonymously > 0 ? $amountGivenAnonymously/100 : 0,
                 'account_url' => null
             ]);
         }

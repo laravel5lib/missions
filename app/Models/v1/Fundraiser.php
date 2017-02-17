@@ -107,11 +107,6 @@ class Fundraiser extends Model
         return $this->fund->donors();
     }
 
-    public function setGoalAmountAttribute($value)
-    {
-        $this->attributes['goal_amount'] = $value*100; // to cents
-    }
-
     /**
      * Get the fundraiser's total amount raised.
      *

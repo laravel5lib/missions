@@ -1,11 +1,11 @@
     @extends('dashboard.layouts.default')
 
-@section('styles')
-    <link rel="stylesheet" href="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/css/Jcrop.css" type="text/css">
-@endsection
-@section('scripts')
-    <script src="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/js/Jcrop.js"></script>
-@endsection
+    @section('styles')
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/css/Jcrop.css" type="text/css">
+    @endsection
+    @section('scripts')
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/js/Jcrop.min.js"></script>
+    @endsection
 
 @section('content')
 <div class="white-header-bg">

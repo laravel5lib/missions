@@ -14,14 +14,9 @@ class Fund extends Model
 
     protected $guarded = [];
 
-    public function getBalanceAttribute($value)
+    public function balanceInDollars()
     {
-        return number_format($value/100, 2, '.', ''); // convert to dollars
-    }
-
-    public function setBalanceAttribute($value)
-    {
-        $this->attributes['balance'] = $value*100; // convert to cents
+        return number_format($this->balance/100, 2, '.', ''); // convert to dollars
     }
 
     /**
@@ -94,7 +89,7 @@ class Fund extends Model
      */
     public function reconcile()
     {
-        $this->balance = (int) $this->transactions()->sum('amount') / 100; // convert to dollars
+        $this->balance = $this->transactions()->sum('amount');
 
         $this->save();
     }

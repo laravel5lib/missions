@@ -4,7 +4,7 @@
             <div class="col-xs-6">
                 <h5>Travel Requirements</h5>
             </div>
-            <div class="col-xs-6">
+            <div class="col-xs-6 tour-step-search">
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for requirements">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
@@ -17,7 +17,7 @@
                 <div class="panel panel-default" v-for="requirement in requirements">
                     <div class="panel-heading">
                         <div class="row">
-                            <div class="col-xs-8">
+                            <div class="col-xs-8 tour-step-status">
                                 <h5>
                                     <a class="text-muted" @click="edit(requirement)" v-if="canEdit">
                                         <i class="fa fa-cog"></i>

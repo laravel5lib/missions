@@ -66,8 +66,9 @@
             <div class="row">
                 <div class="col-sm-12">
                     <accordion :one-at-atime="true">
-                        <panel header="Upload Photo Copy" :is-open.sync="true">
+                        <panel header="Upload Photocopy" :is-open.sync="true">
                             <div class="panel-body">
+                                <p>Please upload a full-color photocopy of your passport. Please be sure that both the photo page and signed signiture page are both clearly visible and legible.</p>
                                 <div class="media" v-if="selectedAvatar">
                                     <div class="media-left">
                                         <a href="#">
@@ -152,7 +153,8 @@
                 showSuccess: false,
                 showError: false,
                 showSaveAlert: false,
-                hasChanged: false
+                hasChanged: false,
+                passportResource: this.$resource('passports{/id}')
             }
         },
         computed: {
@@ -185,8 +187,7 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdatePassport.valid) {
                     // this.$refs.spinner.show();
-                    let resource = this.$resource('passports{/id}');
-                    resource.save(null, {
+                    this.passportResource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -213,8 +214,7 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdatePassport.valid) {
                     // this.$refs.spinner.show();
-                    let resource = this.$resource('passports{/id}');
-                    resource.update({id:this.id}, {
+                    this.passportResource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -255,20 +255,18 @@
                 this.countries = response.data.countries;
             });
 
-            let fetchURL = this.isUpdate ? 'users/me?include=passports' : 'users/me';
-            this.$http(fetchURL).then(function (response) {
-                // this.user = response.data.data;
-                this.user_id = response.data.data.id;
+            this.user_id = this.$root.user.id;
 
-                if (this.isUpdate) {
-                    let passport = _.findWhere(response.data.data.passports.data, {id: this.id});
+            if (this.isUpdate) {
+                this.passportResource.get({ id: this.id }).then(function (response) {
+                    let passport = response.data.data;
                     $.extend(this, passport);
 
-                    this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country})
-                    this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship})
-                }
-                // this.$refs.spinner.hide();
-            });
+                    this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});
+                    this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship});
+                    // this.$refs.spinner.hide();
+                });
+            }
         }
 
     }

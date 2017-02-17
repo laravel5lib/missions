@@ -447,37 +447,67 @@ var TourSteps = [
 
 Vue.directive('tour-guide', {
     bind: function () {
+
+        var topScrollHandler = function(element){
+            var $element = window.jQuery(element);
+            var topOfElement = $element.offset().top;
+            var heightOfElement = $element.height();
+            window.jQuery('html, body').animate({
+                scrollTop: topOfElement - heightOfElement
+            },{
+                duration: 1000
+            });
+        };
+
+        window.tour = new Shepherd.Tour({
+            defaults: {
+                classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
+                scrollTo: true,
+                scrollToHandler: topScrollHandler,
+                showCancelLink: true
+            }
+        });
+      
+      tour.addStep('intro', {
+            title: 'Hello!',
+            text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
+            showCancelLink: false,
+            buttons: [
+                {
+                    text: 'Not Now',
+                    action: tour.cancel,
+                    classes: 'shepherd-button-secondary'
+                },
+                {
+                    text: 'Continue',
+                    action: tour.next
+                }
+            ]
+        });
+
+            // if pageSteps exists, add them to tour
+            if (window.pageSteps && window.pageSteps.length) {
+                _.each(window.pageSteps, function (step) {
+                    // if buttons are present
+                    if (step.buttons) {
+                        _.each(step.buttons, function (button) {
+                            // if action is present
+                            if (button.action && _.isString(button.action))
+                                button['action'] = tour[button.action];
+                        });
+                    }
+                    tour.addStep(step);
+                })
+            }
+
         // Initialize the tour
         if (!localStorage.getItem('TourComplete')) {
-            window.tour = new Shepherd.Tour({
-                defaults: {
-                    classes: 'shepherd-element shepherd-open shepherd-theme-arrows',
-                    scrollTo: true
-                },
-                /*steps: [
-                    {
-                        title: 'Example Shepherd',
-                        text: 'Creating a Shepherd is easy too! Just create ...',
-                        attachTo: '.hero-example bottom',
-                        advanceOn: '.docs-link click'
-                    }
-                ]*/
-            });
-
-            tour.addStep('example-step', {
-                text: 'This step is attached to the bottom of the <code>.tour-step-element</code> element.',
-                attachTo: '.tour-step-element',
-                classes: 'step-class',
-                buttons: [
-                    {
-                        text: 'Next',
-                        action: tour.next
-                    }
-                ]
-            });
-
-            // tour.start();
+            tour.start();
         }
+
+        tour.on('complete', function () {
+            localStorage.setItem('TourComplete', true)
+        })
     },
     update: function () {
         // debugger

@@ -19,10 +19,10 @@ return [
                 'label' => 'Funding',
                 'url' => 'funding'
             ],
-            [
-                'label' => 'Deadlines',
-                'url' => 'deadlines'
-            ],
+            // [
+            //     'label' => 'Deadlines',
+            //     'url' => 'deadlines'
+            // ],
             [
                 'label' => 'Companions',
                 'url' => 'companions'
@@ -60,8 +60,8 @@ return [
                 'url' => 'details'
             ],
             [
-                'label' => 'Costs',
-                'url' => 'costs'
+                'label' => 'Payments',
+                'url' => 'payments'
             ],
             [
                 'label' => 'Funds',
@@ -78,6 +78,10 @@ return [
             [
                 'label' => 'Costs',
                 'url' => 'costs'
+            ],
+            [
+                'label' => 'Payments',
+                'url' => 'payments'
             ],
             [
                 'label' => 'Funds',

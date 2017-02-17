@@ -10,18 +10,6 @@
                               placeholder="Filter by Cause"></v-select>
                 </div>
 
-                <!--<div class="form-group">
-                    <select  class="form-control input-sm" v-model="filters.type">
-                        <option value="">Any Type</option>
-                        <option value="ministry">Ministry</option>
-                        <option value="family">Family</option>
-                        <option value="international">International</option>
-                        <option value="media">Media</option>
-                        <option value="medical">Medical</option>
-                        <option value="leader">Leader</option>
-                    </select>
-                </div>-->
-
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>

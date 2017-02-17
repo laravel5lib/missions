@@ -38,7 +38,7 @@
                                  :class="{ 'has-error': checkForError('issued') }">
                                 <span class="input-group-addon">Issued</span>
                                 <date-picker class="form-control input-sms" :time.sync="issued_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-                                <input type="datetime" class="form-control hideen" v-model="issued_at" id="issued_at" :max="today"
+                                <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
                                        v-validate:issued="{ required: true }" required>
                             </div>
                             <br>
@@ -147,6 +147,7 @@
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
+                visasResource: this.$resource('visas{/id}')
             }
         },
         computed: {
@@ -176,8 +177,7 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateVisa.valid) {
                     // this.$refs.spinner.show();
-                    let resource = this.$resource('visas{/id}');
-                    resource.save(null, {
+                    this.visasResource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -203,8 +203,7 @@
                 this.attemptSubmit = true;
                 if (this.$CreateUpdateVisa.valid) {
                     // this.$refs.spinner.show();
-                    let resource = this.$resource('visas{/id}');
-                    resource.update({id:this.id}, {
+                    this.visasResource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -242,18 +241,15 @@
                 this.countries = response.data.countries;
             });
 
-            let fetchURL = this.isUpdate ? 'users/me?include=visas' : 'users/me';
-            this.$http(fetchURL).then(function (response) {
-                // this.user = response.data.data;
-                this.user_id = response.data.data.id;
+            this.user_id = this.$root.user.id;
 
-                if (this.isUpdate) {
-                    let visa = _.findWhere(response.data.data.visas.data, {id: this.id});
+            if (this.isUpdate) {
+                this.visasResource.get({ id: this.id }).then(function (response) {
+                    let visa = response.data.data;
                     $.extend(this, visa);
-
-                    this.countryObj = _.findWhere(this.countries, {code: visa.country_code})
-                }
-            });
+                    this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
+                });
+            }
         }
 
     }

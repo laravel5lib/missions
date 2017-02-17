@@ -199,7 +199,7 @@
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
-                        <td v-if="isActive('starting_cost')" v-text="trip.starting_cost"></td>
+                        <td v-if="isActive('starting_cost')" v-text="trip.starting_cost | currency"></td>
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
                         <td v-if="isActive('difficulty')" v-text="trip.difficulty|capitalize"></td>
                         <td v-if="isActive('created_at')" v-text="trip.created_at|moment 'll'"></td>

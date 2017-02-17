@@ -1,7 +1,7 @@
 <template>
     <div>
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <div class="media col-md-12">
+        <div class="media col-md-12 tour-step-avatar">
             <div class="media-left">
                 <a href="#">
                     <img class="media-object img-rounded" :src="avatar" :alt="name" width="64">

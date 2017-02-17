@@ -40,7 +40,7 @@ class ProjectTransformer extends Fractal\TransformerAbstract
             'plaque_message'        => $project->plaque_message,
             'goal'                  => $project->goalInDollars(),
             'amount_raised'         => $project->amountRaisedInDollars(),
-            'percent_raised'        => (int) $project->precent_raised,
+            'percent_raised'        => (int) $project->percent_raised,
             'funded_at'             => $project->funded_at ? $project->funded_at->toDateTimeString() : null,
             'created_at'            => $project->created_at->toDateTimeString(),
             'updated_at'            => $project->updated_at->toDateTimeString(),

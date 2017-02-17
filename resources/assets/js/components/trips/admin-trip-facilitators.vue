@@ -16,7 +16,7 @@
 			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" track-by="id">
 					<h5>
-					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" alt="{{ facilitator.name }}">
+					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ facilitator.name }}">
 					{{ facilitator.name }}
 					</h5>
 					<div style="position:absolute;right:25px;top:22px;">

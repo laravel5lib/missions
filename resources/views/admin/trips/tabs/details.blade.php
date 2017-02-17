@@ -123,7 +123,7 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Starting Cost</label>
-                <h4>${{ number_format($trip->starting_cost, 2, '.', ',') }}</h4>
+                <h4>${{ number_format($trip->startingCostInDollars(), 2, '.', ',') }}</h4>
             </div>
         </div>
     </div>

@@ -47,9 +47,9 @@ class Cost extends Model
      */
     public $timestamps = false;
 
-    public function getAmountAttribute($value)
+    public function amountInDollars()
     {
-        return number_format($value/100, 2, '.', ''); // convert to dollars
+        return number_format($this->amount/100, 2, '.', ''); // convert to dollars
     }
 
      public function setAmountAttribute($value)

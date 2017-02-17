@@ -21,14 +21,9 @@ class Payment extends Model
 
     public $timestamps = false;
 
-    public function getAmountOwedAttribute($value)
+    public function amountOwedInDollars()
     {
-        return number_format($value/100, 2, '.', ''); // convert to dollars
-    }
-
-    public function setAmountOwedAttribute($value)
-    {
-        $this->attributes['amount_owed'] = $value*100; // convert to cents
+        return number_format($this->amount_owed/100, 2, '.', '');
     }
 
     public function cost()

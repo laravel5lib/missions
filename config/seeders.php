@@ -13,7 +13,7 @@ return [
 
     'users' => 25,
     'groups' => 10,
-    'campaigns' => 1,
+    'campaigns' => 4,
     'trips' => 10,
     'reservations' => 20,
     'assignments' => 10,

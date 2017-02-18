@@ -21,20 +21,22 @@
 		<hr class="divider inv xlg">
 
 		<template v-if="groups.length > 0">
-			<div class="container">
+			<div class="container" style="display:flex;flex-wrap:wrap;justify-content:center;">
 				<!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
-				<div class="col-xs-12 col-sm-6 col-md-4" v-for="group in groups">
-					<div class="panel panel-default">
-						<div class="panel-body">
-						<a role="button" @click="selectGroup(group)">
-							<h5 style="margin:0px;">
-							<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
-							{{group.name | truncate 30 '...'}}
-							</h5>
-						</a>
-						</div><!-- end panel-body -->
-					</div><!-- end panel -->
-				</div><!-- end col -->
+					<div v-for="group in groups" style="flex:0 1 100%;width:100%;flex-basis:30%;">
+						<div style="flex-direction:column;height:100%;display:flex;margin-right:2%;margin-left:2%;align-content:center;">
+							<div class="panel panel-default" style="flex:0 1 100%;">
+								<div class="panel-body">
+								<a role="button" @click="selectGroup(group)">
+									<h5 style="margin:0px;">
+									<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
+									{{group.name | truncate 30 '...'}}
+									</h5>
+								</a>
+								</div><!-- end panel-body -->
+							</div><!-- end panel -->
+						</div>
+					</div><!-- end col -->
 			</div>
 		</template>
 		<template v-else>

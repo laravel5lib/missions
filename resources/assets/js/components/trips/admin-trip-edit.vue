@@ -21,7 +21,8 @@
 				<a class="btn btn-link" @click="back()">Cancel</a>
 				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep()">Back</a>
 				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep()">Continue</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
+				<a class="btn btn-success" v-if="wizardComplete" @click="finish()">Save</a>
+				<a class="btn btn-primary" v-if="wizardComplete" @click="back()">Finish</a>
 			</div>
 		</div>
 	</div>
@@ -37,12 +38,12 @@
 
 	.step1 {}
 </style>
-<script>
+<script type="text/javascript">
 	import details from './edit/details.vue';
 	import settings from './edit/settings.vue';
-	import pricing from './edit/pricing.vue';
-	import reqs from './edit/requirements.vue';
-	import deadlines from './edit/deadlines.vue';
+	// import pricing from './edit/pricing.vue';
+	// import reqs from './edit/requirements.vue';
+	// import deadlines from './edit/deadlines.vue';
 
 	export default{
 		name: 'campaign-trip-edit-wizard',
@@ -52,9 +53,9 @@
 				stepList:[
 					{name: 'Details', view: 'step1', form:'$TripDetails', valid: null, complete:false},
 					{name: 'Registration Settings', view: 'step2', form:'$TripSettings', valid: null, complete:false},
-					{name: 'Pricing', view: 'step3', form:'$TripPricing', valid: null, complete:false},
-					{name: 'Requirements', view: 'step4', form:'$TripReqs', valid: null, complete:false},
-					{name: 'Other Deadlines', view: 'step5', form:'$TripDeadlines', valid: null, complete:false},
+					// {name: 'Pricing', view: 'step3', form:'$TripPricing', valid: null, complete:false},
+					// {name: 'Requirements', view: 'step4', form:'$TripReqs', valid: null, complete:false},
+					// {name: 'Other Deadlines', view: 'step5', form:'$TripDeadlines', valid: null, complete:false},
 				],
 				currentStep: null,
 				canContinue: false,
@@ -73,9 +74,9 @@
 		components:{
 			'step1': details,
 			'step2': settings,
-			'step3': pricing,
-			'step4': reqs,
-			'step5': deadlines
+			// 'step3': pricing,
+			// 'step4': reqs,
+			// 'step5': deadlines
 		},
 		methods: {
 			back(){
@@ -125,17 +126,20 @@
 
 				var resource = this.$resource('trips{/id}');
 				resource.update({ id: this.tripId}, this.wizardData).then(function (resp) {
-					window.location.href = '/admin/campaigns/' + this.wizardData.campaign_id + resp.data.data.links[0].uri;
+
 				}, function (error) {
 					console.log(error);
 				});
+			},
+			back(){
+				window.location.href = '/admin/trips/' + this.tripId;
 			}
 		},
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (trip) {
-				var trip = trip.data.data;
+			this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (response) {
+				var trip = response.data.data;
 				$.extend(trip, {
 					type: this.type,
 					group_id: this.group_id
@@ -168,9 +172,9 @@
 				this.currentStep.complete = val;
 			},
 			'settings'(val){
-				this.currentStep.complete = val;
+				this.currentStep.complete = this.wizardComplete = val;
 			},
-			'pricing'(val){
+			/*'pricing'(val){
 				this.currentStep.complete = val;
 			},
 			'reqs'(val){
@@ -178,7 +182,7 @@
 			},
 			'deadlines'(val){
 				this.currentStep.complete = this.wizardComplete = val
-			}
+			}*/
 		}
 	}
 </script> 

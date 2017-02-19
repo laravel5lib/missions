@@ -1,75 +1,61 @@
-@extends('dashboard.layouts.default')
+@extends('dashboard.reservations.show')
 
 @section('styles')
-    <link rel="stylesheet" href="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/css/Jcrop.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/css/Jcrop.min.css" type="text/css">
 @endsection
 @section('scripts')
-    <script src="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/js/Jcrop.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/js/Jcrop.min.js"></script>
 @endsection
 
-@section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Reservations <small>Travel Documents</small></h3>
-            </div>
+@section('tab')
+    
+    <div class="row">
+        <div class="col-xs-12 tour-step-requirements">
+            <reservation-requirements id="{{ $reservation->id }}"></reservation-requirements>
         </div>
     </div>
-</div>
-<hr class="divider inv lg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                @include('dashboard.reservations.layouts.menu')
-            </div>
-            <div class="col-sm-8">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" style="width:100px; height:100px" src="{{ image($reservation->trip->campaign->avatar->source) }}" alt="{{ $reservation->trip->campaign->name }}">
-                    </a>
-                    <div class="media-body">
-                        <h3 class="media-heading">
-                            {{ $reservation->trip->campaign->name }}
-                            <small>{{ country($reservation->trip->campaign->country_code) }}</small>
-                        </h3>
-                        <h4>Travel Documents</h4>
 
-                    </div>
-                </div>
-                <br>
-                <ul class="list-group">
-                    @foreach($reservation->requirements as $requirement)
+@endsection
 
-                        <h4>
-                            {{ $requirement->item }} <small> Due: {{ carbon($requirement->due_at)->toFormattedDateString() }} <i class="fa fa-calendar"></i></small>
-                            @if($requirement->pivot->status == 'complete')
-                                <span class="badge {{ $requirement->pivot->status }} badge-success pull-right"><i class="fa fa-check"></i> Complete</span>
-                            @elseif($requirement->pivot->status == 'reviewing')
-                                <span class="badge {{ $requirement->pivot->status }} badge-info pull-right"><i class="fa fa-circle-o-notch fa-spin"></i> Reviewing</span>
-                            @elseif($requirement->pivot->status == 'incomplete')
-                                <span class="badge {{ $requirement->pivot->status }} badge-danger pull-right"><i class="fa fa-exclamation"></i> Incomplete</span>
-                            @endif
-                        </h4>
-
-                        @if($requirement->item === 'Passport')
-                        <reservations-passports-manager
-                                reservation-id="{{ $reservation->id }}"
-                                passport-id="{{ $reservation->passport_id }}">
-                        </reservations-passports-manager>
-                        @endif
-
-                        @if($requirement->item === 'Visa')
-                        <reservations-visas-manager
-                                reservation-id="{{ $reservation->id }}"
-                                visa-id="{{ $reservation->passport_id }}">
-                        </reservations-visas-manager>
-                        @endif
-
-                        <hr />
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'requirements',
+                title: 'Travel Requirements',
+                text: 'Every trip requires a certain set of documents and information to be submitted.',
+                attachTo: {
+                    element: '.tour-step-requirements',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'search',
+                title: 'Find Requirements',
+                text: 'Search or browse the list for a requirement to manage.',
+                attachTo: {
+                    element: '.tour-step-search',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'status',
+                title: 'Check the Status',
+                text: '<p>Requirements start as</p><p><span class="label label-danger small">incomplete</span></p><hr class="divider"><p>Submitted the required information and it will change to</p><p><span class="label label-default small">reviewing</span></p><hr class="divider"><p>Missions.Me staff will review your document and if everything is in order, the requirement will be statused as</p><p><span class="label label-success small">complete</span></p><hr class="divider"><p>If changes need to be made, look for a status of</p><p><span class="label label-info small">attention</span></p><hr class="divider"><p>You will need to achieve a complete status on all travel requirements to be travel ready.</p>',
+                attachTo: {
+                    element: '.tour-step-status',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'attach',
+                title: 'Attach Documents',
+                text: 'Attach an existing document from your records or create a new one.',
+                attachTo: {
+                    element: '.tour-step-attach',
+                    on: 'top'
+                },
+            },
+        ];
+    </script>
 @endsection

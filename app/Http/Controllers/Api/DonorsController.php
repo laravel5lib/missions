@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\v1\DonorRequest;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Transformers\v1\DonorTransformer;
+use App\Jobs\ExportDonors;
 use App\Models\v1\Donor;
+use App\Services\PaymentGateway;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -15,14 +18,20 @@ class DonorsController extends Controller
      * @var Donor
      */
     private $donor;
+    /**
+     * @var PaymentGateway
+     */
+    private $merchant;
 
     /**
      * DonorsController constructor.
      * @param Donor $donor
+     * @param PaymentGateway $merchant
      */
-    public function __construct(Donor $donor)
+    public function __construct(Donor $donor, PaymentGateway $merchant)
     {
         $this->donor = $donor;
+        $this->merchant = $merchant;
     }
 
     /**
@@ -61,10 +70,18 @@ class DonorsController extends Controller
      */
     public function store(DonorRequest $request)
     {
+        if ( ! $request->get('customer_id')) {
+            // create customer with donor details
+            $customer = $this->merchant->createCustomer($request->all());
+
+            // set the new customer id
+            $request['customer_id'] = $customer['id'];
+        }
+
         $donor = $this->donor->create($request->all());
 
-        if ($request->has('donation'))
-            $donor->donations()->save($request->get('donation'));
+        if ($request->has('tags'))
+            $donor->tag($request->get('tags'));
 
         return $this->response->item($donor, new DonorTransformer);
     }
@@ -81,6 +98,9 @@ class DonorsController extends Controller
         $donor = $this->donor->findOrFail($id);
 
         $donor->update($request->all());
+
+        if ($request->has('tags'))
+            $donor->retag($request->get('tags'));
 
         return $this->response->item($donor, new DonorTransformer);
     }
@@ -101,5 +121,20 @@ class DonorsController extends Controller
         });
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export donors.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportDonors($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 }

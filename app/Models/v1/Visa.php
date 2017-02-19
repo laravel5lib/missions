@@ -75,6 +75,16 @@ class Visa extends Model
     }
 
     /**
+     * Get the visa's photo copy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function upload()
+    {
+        return $this->belongsTo(Upload::class);
+    }
+
+    /**
      * Get all visa's reservations.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

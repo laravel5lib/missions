@@ -12,18 +12,75 @@ Route::get('/', function () {
     return view('admin.index');
 });
 
+Route::get('users/stop', 'UsersController@stopImpersonate');
+Route::get('users/{id}/impersonate', 'UsersController@impersonate');
+
 Route::resource('campaigns', 'CampaignsController');
 Route::resource('campaigns.trips', 'TripsController');
-Route::resource('campaigns.regions', 'RegionsController');
-Route::resource('campaigns.transports', 'TransportsController');
+// Route::resource('campaigns.regions', 'RegionsController');
+// Route::resource('campaigns.transports', 'TransportsController');
 
+Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::resource('trips', 'TripsController');
 
 Route::resource('groups', 'GroupsController');
+Route::resource('interests', 'TripInterestsController');
 
-Route::resource('reservations', 'ReservationsController');
+Route::get('reservations/{tab?}', 'ReservationsController@index')->where('tab', 'current|archived|dropped|prospects');
+Route::get('reservations/create', 'ReservationsController@create');
+Route::get('reservations/{id}/edit', 'ReservationsController@edit');
+Route::get('reservations/{id}/{tab?}', 'ReservationsController@show');
+
+Route::get('causes/{cause_id}/projects/create', 'ProjectsController@create');
+Route::get('causes/{cause_id}/initiatives/create', 'ProjectInitiativesController@create');
+Route::get('causes/{id}/{tab?}', 'ProjectCausesController@show')->where('tab', '.+');
+Route::resource('causes', 'ProjectCausesController');
+Route::get('initiatives/{id}', 'ProjectInitiativesController@show');
+Route::get('projects/{id}/{tab?}', 'ProjectsController@show');
 
 Route::resource('users', 'UsersController');
 
 Route::resource('uploads', 'UploadsController');
 
+Route::resource('donors', 'DonorsController');
+
+Route::resource('funds', 'FundsController');
+
+Route::resource('transactions', 'TransactionsController');
+
+Route::get('records/{tab?}', function($tab = 'passports') {
+    return view('admin.records.'.$tab.'.index', compact('tab'));
+});
+
+Route::get('records/passports/create', function () {
+    return view('admin.records.passports.create');
+});
+
+Route::get('records/passports/{id}', function ($id) use ($dispatcher) {
+    $passport = $dispatcher->get('passports/' . $id);
+    return view('admin.records.passports.show', compact('passport'));
+});
+
+Route::get('records/passports/{id}/edit', function ($id) {
+    return view('admin.records.passports.edit', compact('id'));
+});
+
+Route::get('records/visas/{id}', function ($id) use ($dispatcher) {
+    $visa = $dispatcher->get('visas/' . $id);
+    return view('admin.records.visas.show', compact('visa'));
+});
+
+Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
+    $essay = $dispatcher->get('essays/' . $id);
+    return view('admin.records.essays.show', compact('essay'));
+});
+
+Route::get('records/medical-releases/{id}', function ($id) use ($dispatcher) {
+    $release = $dispatcher->get('medical/releases/' . $id);
+    return view('admin.records.medical-releases.show', compact('release'));
+});
+
+Route::get('records/referrals/{id}', function ($id) use ($dispatcher) {
+    $referral = $dispatcher->get('referrals/' . $id);
+    return view('admin.records.referrals.show', compact('referral'));
+});

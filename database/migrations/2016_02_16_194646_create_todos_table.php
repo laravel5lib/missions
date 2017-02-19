@@ -16,6 +16,7 @@ class CreateTodosTable extends Migration
             $table->uuid('id')->primary();
             $table->string('task', 120);
             $table->timestamp('completed_at')->nullable();
+            $table->uuid('user_id')->index()->nullable();
             $table->uuid('todoable_id')->index();
             $table->string('todoable_type');
         });

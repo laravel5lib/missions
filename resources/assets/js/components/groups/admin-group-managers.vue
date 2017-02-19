@@ -1,24 +1,28 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
-				<h5>Managers
-				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
-						class="fa fa-plus"></span> New
-				</button></h5>
+			<div class="row">
+				<div class="col-xs-6">
+					<h5>Managers</h5>
+				</div>
+				<div class="col-xs-6 text-right">
+					<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddManagerModal"><span
+							class="fa fa-plus"></span> New
+					</button>
+				</div>
+			</div>
 		</div>
-		<div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="manager in managers" track-by="id">
-				<div class="thumbnail">
-					<img :src="manager.avatar" alt="{{ manager.name }}">
-					<div class="caption">
-						<h5 v-text="manager.name"></h5>
-
-						<p>
-							<a class="btn btn-xs btn-danger" @click="removeManager(manager)">
-								<i class="fa fa-times"></i> Remove
-							</a>
-						</p>
-					</div>
+		<div class="panel-body">
+			<div class="col-xs-12 panel panel-default" v-for="manager in managers" track-by="id">
+				<h5>
+					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ manager.name }}">
+					{{ manager.name }}
+				</h5>
+				<div style="position:absolute;right:25px;top:22px;">
+					<a @click="removeManager(manager)">
+						<i class="fa fa-times"></i>
+					</a>
 				</div>
 			</div>
 		</div>
@@ -49,9 +53,10 @@
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal --></div>
+		</div><!-- /.modal -->
+	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default {
 		name: 'admin-group-managers',
@@ -91,21 +96,22 @@
 				// Add Manager
 				this.attemptSubmit = true;
 				if (this.$AddManager.valid) {
-					var managersArr = this.managers;
-					managersArr.push({group_id: this.groupId, user_id: this.user_id});
-					this.group.managers = _.pluck(managersArr, 'user_id');
-					//this.group.managers = this.managers;
+					let managersArr = this.managers;
+					managersArr.push({id: this.user_id});
+					this.group.managers = _.pluck(managersArr, 'id');
 					this.updateGroup();
 				}
 			},
 			removeManager: function removeManager(manager) {
 				// Remove Manager
 				this.managers.$remove(manager);
-				this.group.managers = this.managers;
+				let managersArr = this.managers;
+				this.group.managers = _.pluck(managersArr, 'id');
 				this.updateGroup();
 			},
 			updateGroup: function updateGroup() {
 				// Update Group
+				// this.$refs.spinner.show();
 				this.resource.update({id: this.groupId}, this.group).then(function (response) {
 					this.group = response.data.data;
 					this.managers = this.group.managers.data;
@@ -113,19 +119,26 @@
 					this.userObj = null;
 					this.attemptSubmit = false;
 					$('#AddManagerModal').modal('hide');
+					// this.$refs.spinner.hide();
 				}, function (response) {
 					console.log(response);
+					// this.$refs.spinner.hide();
+					//TODO add error alert
 				});
 			}
 		},
 		ready: function ready() {
+			// this.$refs.spinner.show();
 			this.resource.get({id: this.groupId}).then(function (response) {
 				this.group = response.data.data;
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);
+				// this.$refs.spinner.hide();
 			}, function (response) {
 				console.log('Update Failed! :(');
 				console.log(response);
+				// this.$refs.spinner.hide();
+				//TODO add error alert
 			});
 		}
 	};

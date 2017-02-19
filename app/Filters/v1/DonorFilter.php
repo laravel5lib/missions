@@ -1,8 +1,6 @@
 <?php namespace App\Filters\v1;
 
-use EloquentFilter\ModelFilter;
-
-class DonorFilter extends ModelFilter
+class DonorFilter extends Filter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -10,7 +8,23 @@ class DonorFilter extends ModelFilter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'donations' => ['anonymous', 'undisclosed', 'fund']
+    ];
+
+    /**
+     * Default sortable fields.
+     *
+     * @var array
+     */
+    public $sortable = ['name'];
+
+    /**
+     * Default searchable fields.
+     *
+     * @var array
+     */
+    public $searchable = ['name'];
 
     /**
      * Filter by designated reservation.
@@ -21,6 +35,39 @@ class DonorFilter extends ModelFilter
     public function reservation($id)
     {
         return $this->byDesignation('reservations', $id);
+    }
+
+    /**
+     * Filter by designated group.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function group($id)
+    {
+        return $this->byDesignation('groups', $id);
+    }
+
+    /**
+     * Filter by designated campaign.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function campaign($id)
+    {
+        return $this->byDesignation('campaigns', $id);
+    }
+
+    /**
+     * Filter by designated reservation.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function cause($id)
+    {
+        return $this->byDesignation('causes', $id);
     }
 
     /**
@@ -54,9 +101,9 @@ class DonorFilter extends ModelFilter
      */
     protected function byDesignation($type, $id)
     {
-        return $this->whereHas('donations', function($donation) use($id, $type) {
-            $donation->where('designation_type', $type)
-                ->where('designation_id', $id);
+        return $this->whereHas('funds', function($donation) use($id, $type) {
+            $donation->where('fundable_type', $type)
+                ->where('fundable_id', $id);
         });
     }
 
@@ -66,7 +113,7 @@ class DonorFilter extends ModelFilter
      * @param $id
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function user($id)
+    public function userAccount($id)
     {
         return $this->byAccountHolder('users', $id);
     }
@@ -75,9 +122,9 @@ class DonorFilter extends ModelFilter
      * Filter by group.
      *
      * @param $id
-     * @return ModelFilter
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function group($id)
+    public function groupAccount($id)
     {
         return $this->byAccountHolder('groups', $id);
     }
@@ -91,8 +138,8 @@ class DonorFilter extends ModelFilter
      */
     protected function byAccountHolder($type, $id)
     {
-        return $this->where('account_holder_id', $id)
-            ->where('account_holder_type', $type);
+        return $this->where('account_id', $id)
+            ->where('account_type', $type);
     }
 
     /**

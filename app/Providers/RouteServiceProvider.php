@@ -57,7 +57,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes(Router $router)
     {
         $router->group([
-            'namespace' => $this->webNamespace, 'middleware' => 'web',
+            'namespace' => $this->webNamespace, 'middleware' => ['web', 'impersonate'],
         ], function ($router) {
             require app_path('Http/routes.php');
         });
@@ -75,7 +75,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $router->group([
             'prefix' => 'admin',
-            'namespace' => $this->adminNamespace, 'middleware' => ['web','auth', 'can:view-admin'],
+            'namespace' => $this->adminNamespace, 'middleware' => ['web','auth', 'can:access-admin', 'impersonate'],
         ], function ($router) {
             require app_path('Http/admin.php');
         });

@@ -59,6 +59,18 @@ class UploadsController extends Controller
      */
     public function store(UploadRequest $request)
     {
+        if ($request->get('type') == 'video') {
+            $upload = $this->saveVideo($request);
+
+            return $this->response->item($upload, new UploadTransformer);
+        }
+
+        if ($request->get('type') == 'file') {
+            $upload = $this->savePDF($request);
+
+            return $this->response->item($upload, new UploadTransformer);
+        }
+
         $stream = $this->process($request);
 
         $source = $this->upload($stream, $request->only('path', 'name', 'file'));
@@ -114,6 +126,8 @@ class UploadsController extends Controller
             if($source) {
                 // delete old file
                 Storage::disk('s3')->delete($upload->source);
+                // clear cache
+                $this->server->deleteCache($upload->source);
             }
         }
 
@@ -139,6 +153,8 @@ class UploadsController extends Controller
         $upload = $this->upload->findOrFail($id);
 
         Storage::disk('s3')->delete($upload->source);
+
+        $this->server->deleteCache($upload->source);
 
         $upload->delete();
 
@@ -221,5 +237,67 @@ class UploadsController extends Controller
             $new->tag($request->get('tags'));
 
         return $new;
+    }
+
+    /**
+     * Get video format from source url.
+     *
+     * @param $url
+     * @return string
+     */
+    private function getVideoFormat($url)
+    {
+        if (str_contains($url, 'youtube')) {
+            return 'youtube';
+        }
+
+        if (str_contains($url, 'vimeo')) {
+            return 'vimeo';
+        }
+
+        return 'other';
+    }
+
+    /**
+     * Save PDF.
+     *
+     * @param $request
+     * @return Upload
+     */
+    private function savePDF($request)
+    {
+        $file = $request->get('file');
+        $path = $request['path'];
+        $filename = isset($request['name']) ? snake_case(trim($request['name'])).'_'.time() : time();
+        $source = $path.'/'.$filename.'.pdf';
+
+        Storage::disk('s3')
+            ->put($source, fopen($file, 'r+'));
+
+        return $this->upload->create([
+            'name' => $request->get('name'),
+            'type' => 'file',
+            'source' => $source,
+            'meta' => [
+                'format' => 'pdf'
+            ]
+        ]);
+    }
+    /**
+     * Save Video.
+     *
+     * @param $request
+     * @return Upload
+     */
+    private function saveVideo($request)
+    {
+        return $this->upload->create([
+            'name' => $request->get('name'),
+            'type' => 'video',
+            'source' => $request->get('url'),
+            'meta' => [
+                'format' => $this->getVideoFormat($request->get('url'))
+            ]
+        ]);
     }
 }

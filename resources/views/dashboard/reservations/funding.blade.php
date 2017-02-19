@@ -1,169 +1,109 @@
-@extends('dashboard.layouts.default')
+@extends('dashboard.reservations.show')
 
-@section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Reservations <small>Funding</small></h3>
+@section('tab')
+<div class="row">    
+    <div class="col-xs-12 tour-step-fundraiser">
+    
+    @foreach($reservation->fundraisers as $fundraiser)
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6"><h5>Fundraiser</h5></div>
+                @if($fundraiser->url && $fundraiser->public)
+                <div class="col-xs-6"><a href="/{{ $fundraiser->sponsor->slug->url }}/{{ $fundraiser->url }}" class="btn btn-sm btn-primary pull-right" target="_blank">View Page</a></div>
+                @endif
             </div>
         </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Name</label>
+                    <p>{{ $fundraiser->name }}</p>
+                </div>
+                <div class="col-md-2">
+                    <label>Visibility</label>
+                    <p><span class="label label-default">{{ $fundraiser->public ? 'Public' : 'Private' }}</span></p>
+                </div>
+                <div class="col-md-4">
+                    <label>Expires</label>
+                    <p>{{ $fundraiser->ended_at->format('F j, Y h:i a') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
     </div>
 </div>
-<hr class="divider inv lg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                @include('dashboard.reservations.layouts.menu')
-            </div>
-            <div class="col-sm-8">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" style="width:100px; height:100px" src="{{ $reservation->trip->campaign->thumb_src }}" alt="{{ $reservation->trip->campaign->name }}">
-                    </a>
-                    <div class="media-body">
-                        <h3 class="media-heading">
-                            {{ $reservation->trip->campaign->name }}
-                            <small>{{ country($reservation->trip->campaign->country_code) }}</small>
-                        </h3>
-                        <h4>Funding</h4>
+<div class="row">    
+    <div class="col-xs-12 tour-step-progress">
+
+    <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h5>Funding</h5>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <a href="/donate/{{ $reservation->fund->slug }}" target="_blank" class="btn btn-sm btn-primary">
+                            Make Donation
+                        </a>
                     </div>
                 </div>
-                <br>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 text-center">
+                        <label>Funding Progress</label>
+                        <div class="progress" style="margin-bottom:5px;">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $reservation->getPercentRaised() }}%;">
+                            </div>
+                        </div>
+                        <span class="text-success">{{ $reservation->getPercentRaised() }}%</span> <small>of ${{ number_format($reservation->totalCostInDollars(), 2) }} Raised</small>
+                        <hr class="divider inv">
+                    </div>
+                    <div class="col-sm-6 col-md-4 text-center">
+                        <label>Total In Fund</label>
+                        <h2 class="text-success" style="margin-top:0;">${{ number_format($reservation->totalRaisedInDollars(),2) }}</h2>
+                    </div>
+                    <div class="col-sm-6 col-md-4 text-center">
+                        <label>Remaining To Raise</label>
+                        <h2 class="text-info" style="margin-top:0;">${{ number_format($reservation->totalOwedInDollars(),2) }}</h2>
+                    </div>
+                </div><!-- end row -->
                 <div class="row">
                     <div class="col-sm-12">
-                        <h4>
-                            Funding Progress
-                            {{--<span class="pull-right">${{ number_format($totalAmountDue,2) }}</span>--}}
-                        </h4>
-                        <div class="progress">
-                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{--{{ ($totalAmountRaised/$totalAmountDue) * 100 }}--}}%;">
-                                {{--{{ number_format(($totalAmountRaised/$totalAmountDue) * 100, 2) }}--}}% of ${{ number_format($totalAmountDue,2) }} Raised
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <table class="table table-striped table-hover">
-                                <caption>Breakdown</caption>
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Due Date</th>
-                                    <th>Amount</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($reservation->costs as $cost)
-                                    <tr style="border-top: 2px solid #cccccc">
-                                        <td>{{ $cost->name }}</td>
-                                        <td></td>
-                                        <td><b>${{ number_format($cost->amount, 2) }}</b></td>
-                                    </tr>
-                                    @foreach($cost->payments as $payment)
-                                        <tr class="@if($cost->type === 'incremental' && $payment->upfront){{'success'}}@endif">
-                                            <td>
-                                                @if($cost->type === 'incremental' && $payment->upfront)
-                                                    <small class="badge badge-success">Paid</small>
-                                                @endif
-                                                @if($cost->type === 'incremental' && !$payment->upfront && $payment->due_next)
-                                                    <small class="badge badge-danger">Next Defaulting Amount</small>
-                                                @endif
-                                                @if($cost->type === 'incremental' && $payment->due_at->between(now()->startOfMonth(), now()->endOfMonth()))
-                                                    <small class="badge badge-info">Due this month</small>
-                                                @endif
-                                                @if($cost->type === 'incremental' && $payment->due_at->between(now()->addMonth()->startOfMonth(),now()->addMonth()->endOfMonth()))
-                                                    <small class="badge badge-warning">Due next month</small>
-                                                @endif
-                                            </td>
-                                            <td>{{ carbon($payment->due_at)->toFormattedDateString() }}</td>
-                                            <td>${{ number_format($payment->amount_owed) }}</td>
-                                        </tr>
-                                        {{--<li class="list-group-item">{{ $payment->amount_owed }}</li>--}}
-                                    @endforeach
-                                @endforeach
-
-                                </tbody>
-                                <tfoot style="border-top: 2px solid #000000">
-                                <tr>
-                                    <th>Total Amount Due</th>
-                                    <th></th>
-                                    <th>${{ number_format($totalAmountDue, 2) }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Total Amount Raised</th>
-                                    <th></th>
-                                    <th>${{ number_format($totalAmountRaised, 2) }}</th>
-                                </tr>
-                                <tr>
-                                    <th>Total Amount Remaining</th>
-                                    <th></th>
-                                    <th>${{ number_format($totalAmountDue - $totalAmountRaised, 2) }}</th>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </div>
+                        <funding fund-id="{{ $reservation->fund->id }}"></funding>
                     </div>
-
-                    {{--<div class="col-sm-12">
-                        <h4>Costs</h4>
-                        <hr>
-                    </div>
-                    @foreach($reservation->costs as $cost)
-                    <div class="col-sm-12 col-md-6">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                {{ $cost->name }}
-                                <span class="pull-right">Ends: {{ carbon($cost->expires_at)->toFormattedDateString() }}</span>
-                            </div>
-                            <div class="panel-body">
-                                --}}{{--{{ $cost }}--}}{{--
-                                {{ $cost->description or 'No Description'}}
-                                <ul class="list-group">
-                                    @foreach($cost->payments as $payment)
-                                        <li class="list-group-item">{{ $payment->amount_owed }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            <div class="panel-footer">
-
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach--}}
-
-
-                    <div class="col-sm-12">
-                        <h4>Fundraisers</h4>
-                        <hr>
-                    </div>
-                    @foreach($reservation->fundraisers as $fundraiser)
-                        <div class="col-sm-12 col-md-6">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {{ $fundraiser->name }}
-                                    <span class="pull-right">Ends: {{ carbon($fundraiser->expires_at)->toFormattedDateString() }}</span>
-                                </div>
-                                <div class="panel-body">
-                                    <p>{{ $fundraiser->description or 'No Description'}}</p>
-                                    <h6>
-                                        Amount Raised
-                                        <span class="pull-right">Goal: ${{ number_format($fundraiser->goal_amount, 2) }}</span>
-                                    </h6>
-                                    <div class="progress">
-                                        <?php $fundraiser->raised_percent = (($fundraiser->raised() /100) > $fundraiser->goal_amount) ? 100 : $fundraiser->raised() /100 ?>
-                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{ $fundraiser->raised_percent }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{ $fundraiser->raised_percent }}%;">
-                                            ${{ number_format($fundraiser->raised() / 100, 2) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel-footer">
-                                    <a href="{{ url()->current() . '/' . $fundraiser->id . '/donations' }}" class="btn btn-sm btn-block btn-primary">View Donations</a>
-
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
                 </div>
-            </div>
-        </div>
+            </div><!-- end panel-body -->
+        </div><!-- end panel -->
+
     </div>
+</div>
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'fundraiser',
+                title: 'Fundraiser',
+                text: 'A fundraising page is automatically created for each new reservation. You can manage this page by visiting it from your profile.',
+                attachTo: {
+                    element: '.tour-step-fundraiser',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'progress',
+                title: 'Track Progress',
+                text: 'Monitor your fundraising progress. See donors and donations.',
+                attachTo: {
+                    element: '.tour-step-progress',
+                    on: 'top'
+                },
+            }
+        ];
+    </script>
 @endsection

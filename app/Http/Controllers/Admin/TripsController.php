@@ -18,17 +18,21 @@ class TripsController extends Controller
         return view('admin.trips.index')->with('trips', $trips);
     }
 
-    public function show($id)
+    public function show($id, $tab = 'details')
     {
+        if($tab === 'edit') {
+            return $this->edit($id);
+        }
+
         $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
 
-        return view('admin.trips.show')->with('trip', $trip);
+        return view('admin.trips.show', compact('trip', 'tab'));
     }
 
     public function edit($tripId)
     {
-
-        return view('admin.trips.edit')->with('tripId', $tripId);
+        $trip = $this->api->get('trips/'.$tripId, ['include' => 'campaign']);
+        return view('admin.trips.edit', compact('tripId', 'trip'));
     }
 
     public function create($campaignId)

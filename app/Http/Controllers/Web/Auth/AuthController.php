@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\v1\UserRequest;
+use App\Jobs\SendWelcomeEmail;
 
 class AuthController extends Controller
 {
@@ -27,10 +28,11 @@ class AuthController extends Controller
     use ThrottlesLogins;
 
     protected $user;
+    protected $redirectPath = '/dashboard';
 
     public function __construct(User $user)
     {
-        $this->middleware('guest', ['except' => ['logout']]);
+        $this->middleware('guest', ['except' => ['logout', 'loginAsUser']]);
         $this->user = $user;
     }
 
@@ -57,6 +59,7 @@ class AuthController extends Controller
     /**
      * Handle an authentication attempt.
      *
+     * @param Request $request
      * @return Response
      */
     public function authenticate(Request $request)
@@ -78,13 +81,14 @@ class AuthController extends Controller
             $cookie = $this->makeApiTokenCookie($token);
 
             if ($request->ajax() || $request->wantsJson()) {
-                return response()->json(['redirect_to' => '/dashboard'])
+                return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])
                                  ->withCookie($cookie);
             }
 
             return redirect()->intended('/dashboard')
                              ->withCookie($cookie);
         }
+        return response()->json(['error' => 'invalid_credentials'], 401);
     }
 
     /**
@@ -95,7 +99,13 @@ class AuthController extends Controller
      */
     public function register(UserRequest $request)
     {
+        $slug = generate_slug($request->get('name'));
+
+        $request->merge(['password' => bcrypt($request->get('password'))]);
+
         $user = $this->user->create($request->all());
+
+        $user->slug()->create(['url' => $slug]);
 
         Auth::login($user, true);
 
@@ -111,8 +121,10 @@ class AuthController extends Controller
 
         $cookie = $this->makeApiTokenCookie($token);
 
+        dispatch(new SendWelcomeEmail($user));
+
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['redirect_to' => '/dashboard'])
+            return response()->json(['redirect_to' => '/dashboard', 'token' => sprintf('Bearer %s', $token)])
                              ->withCookie($cookie);
         }
 

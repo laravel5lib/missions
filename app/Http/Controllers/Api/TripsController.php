@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\v1\Trip;
+use App\Jobs\ExportTrips;
+use App\Events\RegisteredForTrip;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\TripRequest;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\TripListImport;
 use App\Http\Transformers\v1\TripTransformer;
+use App\Http\Requests\v1\TripRegistrationRequest;
+use App\Http\Transformers\v1\ReservationTransformer;
 
 class TripsController extends Controller
 {
@@ -22,9 +29,6 @@ class TripsController extends Controller
      */
     public function __construct(Trip $trip)
     {
-        $this->middleware('internal', ['only' => ['store', 'update', 'destroy']]);
-        $this->middleware('api.auth', ['only' => ['store', 'update', 'destroy']]);
-//        $this->middleware('jwt.refresh', ['only' => ['store', 'update', 'destroy']]);
         $this->trip = $trip;
     }
 
@@ -37,6 +41,7 @@ class TripsController extends Controller
     public function index(Request $request)
     {
         $trips = $this->trip
+                      ->withCount('reservations')
                       ->filter($request->all())
                       ->paginate($request->get('per_page', 10));
 
@@ -51,7 +56,7 @@ class TripsController extends Controller
      */
     public function show($id)
     {
-        $trip = $this->trip->findOrFail($id);
+        $trip = $this->trip->withCount('reservations')->findOrFail($id);
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -120,4 +125,45 @@ class TripsController extends Controller
         if ($request->has('tags'))
             $trip->retag($request->get('tags'));
     }
+
+    public function register($id, TripRegistrationRequest $request)
+    {
+        $trip = $this->trip->findOrFail($id);
+
+        $reservation = $trip->reservations()
+            ->create($request->except('costs', 'donor', 'payment'));
+
+        event(new RegisteredForTrip($reservation, $request));
+
+        return $this->response->item($reservation, new ReservationTransformer);
+    }
+
+    /**
+     * Export trips.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportTrips($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of trips.
+     * 
+     * @param  TripListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, TripListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
+    }
+
 }

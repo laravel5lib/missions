@@ -19,14 +19,11 @@ class Cost extends Model
     protected $table = 'costs';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'description', 'type',
-        'active_at', 'amount'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.
@@ -49,6 +46,16 @@ class Cost extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function amountInDollars()
+    {
+        return number_format($this->amount/100, 2, '.', ''); // convert to dollars
+    }
+
+     public function setAmountAttribute($value)
+    {
+        $this->attributes['amount'] = $value*100; // convert to cents
+    }
 
     /**
      * Get all of the owning cost assignable models.

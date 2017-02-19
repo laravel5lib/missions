@@ -28,8 +28,7 @@ class CostTransformer extends TransformerAbstract
             'id'               => $cost->id,
             'name'             => $cost->name,
             'description'      => $cost->description,
-            'amount'           => $cost->amount,
-            'balance_due'      => (int) $cost->getBalanceDue(),
+            'amount'           => $cost->amountInDollars(),
             'active_at'        => $cost->active_at->toDateTimeString(),
             'type'             => $cost->type,
         ];
@@ -40,18 +39,18 @@ class CostTransformer extends TransformerAbstract
                 'cost_id'          => $cost->id,
                 'name'             => $cost->name,
                 'description'      => $cost->description,
-                'amount'           => $cost->amount,
-                'balance_due'      => (int) $cost->getBalanceDue(),
+                'amount'           => $cost->amountInDollars(),
                 'active_at'        => $cost->active_at->toDateTimeString(),
                 'type'             => $cost->type,
-                'updated_at'       => $cost->pivot->updated_at->toDateTimeString()
+                'updated_at'       => $cost->pivot->updated_at->toDateTimeString(),
+                'locked'           => (boolean) $cost->pivot->locked
             ];
         }
 
         $array['links'] = [
             [
                 'rel' => 'self',
-                'uri' => '/costs/' . $cost->id,
+                'uri' => '/api/costs/' . $cost->id,
             ]
         ];
 

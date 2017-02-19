@@ -1,16 +1,18 @@
 <template>
 	<div class="row">
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
-			<h4>Requirements</h4>
+			<h4>Travel Requirements</h4>
+			<p>The following items must be completed in order to travel. Your trip represenative will contact you soon regarding these necessary documents. These are NOT required to register or to begin fundraising.</p>
 			<div class="list-group">
-				<a href="#" class="list-group-item" v-for="requirement in requirements">
+				<div class="list-group-item" v-for="requirement in requirements | orderBy 'due_at'">
 					<h4 class="list-group-item-heading">
-						{{requirement.item}}
+						{{requirement.name}} <br />
+						<small>{{requirement.short_desc}}</small>
 					</h4>
 					<p class="list-group-item-text">
-						This {{requirement.enforced ? 'must' : 'should'}} be completed by {{ toDate(requirement.date) }}.
+						This {{requirement.enforced ? 'must' : 'should'}} be completed by {{ toDate(requirement.due_at) }}.
 					</p>
-				</a>
+				</div>
 			</div>
 			<hr>
 			<h4>Cost Deadlines</h4>
@@ -21,17 +23,16 @@
 					<span class="pull-right">{{cost.amount | currency}}</span>
 				</div>
 				<div class="panel-body">
-					<p>This cost is applied to registrants after {{ toDate(cost.activate_at) }}</p>
+					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
 					<div class="list-group">
-						<a href="#" class="list-group-item" v-for="payment in cost.payments.data">
+						<div class="list-group-item" v-for="payment in cost.payments.data">
 							<h4 class="list-group-item-heading">
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
-								If this amount is not received by deadline, the next is applied.
 							</p>
-						</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -42,7 +43,7 @@
 					<span class="pull-right">{{cost.amount | currency}}</span>
 				</div>
 				<div class="panel-body">
-					<p>This cost is applied to registrants after {{ toDate(cost.activate_at) }}</p>
+					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
 					<div class="list-group">
 						<a href="#" class="list-group-item" v-for="payment in cost.payments.data">
 							<h4 class="list-group-item-heading">
@@ -50,7 +51,7 @@
 							</h4>
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-								If this amount is not received by the deadline, the next is applied.
+								If this amount is not received by the deadline, additional costs may be applied.
 							</p>
 						</a>
 					</div>
@@ -63,7 +64,7 @@
 					<span class="pull-right">{{cost.amount | currency}}</span>
 				</div>
 				<div class="panel-body">
-					<p>This cost is applied to registrants after {{ toDate(cost.activate_at) }}</p>
+					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
 					<div class="list-group">
 						<a href="#" class="list-group-item" v-for="payment in cost.payments.data">
 							<h4 class="list-group-item-heading">
@@ -71,7 +72,6 @@
 							</h4>
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
-								If this amount is not received by the deadline, the next is applied.
 							</p>
 						</a>
 					</div>
@@ -101,7 +101,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'deadline-agreement',
 		data(){

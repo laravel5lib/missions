@@ -7,7 +7,7 @@
                         <h4 class="modal-title" id="myModalLabel">Duplicate Trip</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to duplicate this trip?</p>
+                        <p>Duplicate this trip?</p>
                         <hr>
                         <validator name="TripDuplication">
                             <form class="form-horizontal" novalidate>
@@ -28,10 +28,12 @@
                                         <select id="type" class="form-control input-sm" v-model="type"
                                                 v-validate:type="{ required: true }" required>
                                             <option value="">-- select --</option>
-                                            <option value="full">Full</option>
+                                            <option value="ministry">Ministry</option>
+                                            <option value="family">Family</option>
                                             <option value="media">Media</option>
                                             <option value="medical">Medical</option>
-                                            <option value="short">Short</option>
+                                            <option value="international">International</option>
+                                            <option value="leader">Leader</option>
                                         </select>
                                     </div>
                                 </div>
@@ -48,7 +50,7 @@
         </div>
 </template>
 
-<script>
+<script type="text/javascript">
     import vSelect from "vue-select"
     export default{
         name: 'admin-trip-duplicate',
@@ -86,36 +88,61 @@
                 this.attemptedContinue = true;
                 if (this.$TripDuplication.valid) {
                     this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (trip) {
+                        let payments = {};
                         this.trip = trip.data.data;
                         $.extend(this.trip, {
                             type: this.type,
-                            group_id: this.group_id
+                            group_id: this.group_id,
+                            difficulty: this.trip.difficulty.split(' ')[0] + '_' + this.trip.difficulty.split(' ')[1]
                         });
                         // trim costs
-                        _.each(this.trip.costs.data, function (cost) {
-                            cost.payments = cost.payments.data;
-                        });
                         this.trip.costs = this.trip.costs.data;
+                        _.each(this.trip.costs, function (cost) {
+                            payments[cost.id] = cost.payments.data;
+                            delete cost.payments;
+                            delete cost.links;
+                        });
                         // trim deadlines
                         this.trip.deadlines = this.trip.deadlines.data;
+                        _.each(this.trip.deadlines, function (deadline) {
+                            delete deadline.links;
+                        });
                         // trim requirements
                         this.trip.requirements = this.trip.requirements.data;
+                        _.each(this.trip.requirements, function (requirement) {
+                            delete requirement.links;
+                        });
                         // trim notes
-                        this.trip.notes = this.trip.notes.data;
+                        this.trip.notes = this.trip.hasOwnProperty('notes') ? this.trip.notes.data : undefined;
 
-                        // for now remove rep_id
+                        // for now remove rep_id and links
                         delete this.trip.rep_id;
+                        delete this.trip.links;
 
                         this.$http.post('trips', this.trip).then(function (response) {
                             console.log(response);
-                            window.location.href = window.location.href.split('/trips')[0] + response.data.data.links[0].uri;
+                            // we need to duplicate the payments after the costs are duplicated
+                            let promises = [];
+                            _.each(payments, function(costPayments, id){
+                                _.each(costPayments, function (payment) {
+                                    delete payment.id;
+                                    promises.push(this.$http.post('costs/' + id + '/payments', payment)
+                                            .then(function (res) {
+                                                console.log(res);
+                                            }, function (error) {
+                                                console.log(error);
+                                            }));
+                                }.bind(this));
+                            }.bind(this));
+                            Promise.all(promises).then(function (values) {
+                                window.location.href = '/admin' + response.data.data.links[0].uri;
+                            });
                         }, function (error) {
                             console.log(error);
                         });
                     });
                 }
             }
-
         }
     }
 </script>

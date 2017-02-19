@@ -2,15 +2,14 @@
 
 namespace App\Providers;
 
-use App\Models\v1\User;
+use League\Glide\Server;
+use App\TransactionHandler;
 use App\Models\v1\Reservation;
-use Illuminate\Support\Facades\Mail;
+use League\Glide\ServerFactory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use League\Glide\Server;
-use League\Glide\ServerFactory;
-use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,71 +20,99 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Morph Map
         Relation::morphMap([
-            'App\Models\v1\Fundraiser',
-            'App\Models\v1\Group',
-            'App\Models\v1\Trip',
-            'App\Models\v1\User',
-            'App\Models\v1\Reservation',
-            'App\Models\v1\Assignment',
-            'App\Models\v1\Campaign',
-            'App\Models\v1\Upload'
+            'fundraisers' => \App\Models\v1\Fundraiser::class,
+            'groups' => \App\Models\v1\Group::class,
+            'trips' => \App\Models\v1\Trip::class,
+            'users' => \App\Models\v1\User::class,
+            'reservations' => \App\Models\v1\Reservation::class,
+            'assignments' => \App\Models\v1\Assignment::class,
+            'campaigns' => \App\Models\v1\Campaign::class,
+            'uploads' => \App\Models\v1\Upload::class,
+            'project_initiatives' => \App\Models\v1\ProjectInitiative::class,
+            'project_causes' => \App\Models\v1\ProjectCause::class,
+            'projects' => \App\Models\v1\Project::class,
+            'transactions' => \App\Models\v1\Transaction::class,
+            'funds' => \App\Models\v1\Fund::class,
+            'donors' => \App\Models\v1\Donor::class,
+            'trip_interests' => \App\Models\v1\TripInterest::class,
+            'passports' => \App\Models\v1\Passport::class,
+            'visas' => \App\Models\v1\Visa::class,
+            'essays' => \App\Models\v1\Essay::class,
+            'medical_releases' => \App\Models\v1\MedicalRelease::class,
+            'referrals' => \App\Models\v1\Referral::class,
+            'questionnaires' => \App\Models\v1\Questionnaire::class,
+            'arrival_designations' => \App\Models\v1\Questionnaire::class,
+            'airport_preferences' => \App\Models\v1\Questionnaire::class,
+            'notes' => \App\Models\v1\Note::class,
+            'todos' => \App\Models\v1\Todo::class
         ]);
 
-        // Send welcome emails when user is created.
-//        User::created(function ($user) {
-//            Mail::queue('emails.welcome', $user->toArray(), function ($message) use($user) {
-//                $message->from('mail@missions.me', 'Missions.Me');
-//                $message->sender('mail@missions.me', 'Missions.Me');
-//                $message->to($user->email, $user->name);
-//                $message->replyTo('go@missions.me', 'Missions.Me');
-//                $message->subject('Welcome to Missions.Me');
-//            });
-//        });
+        Validator::extend('is_csv',function($attribute, $value, $params, $validator) {
+            $file = base64_decode($value);
+            $f = finfo_open();
+            $result = finfo_buffer($f, $file, FILEINFO_MIME_TYPE);
+            return $result == 'text/csv';
+        });
 
-        Reservation::created(function ($reservation) {
+        Validator::extend('is_compatable',function($attribute, $value, $params, $validator) {
 
-            $active = $reservation->trip->activeCosts()->with('payments')->get();
+            if (isset($params[0])) {
+                $reservation = Reservation::find($params[0]);
 
-            $maxDate = $active->where('type', 'incremental')->max('active_at');
+                return $reservation ? Reservation::whereHas('trip', function($trip) use($reservation) {
+                            return $trip->where('campaign_id', $reservation->trip->campaign_id)
+                                        ->where('group_id', $reservation->trip->group_id);
+                        })->where('id', $value)->first() : false;
+            }
+            
+            return false;
+        });
 
-            $dues = $active->reject(function ($value) use($maxDate) {
-                return $value->type == 'incremental' && $value->active_at < $maxDate;
-            })->flatMap(function ($cost) {
-                return $cost->payments->map(function ($payment) {
-                    return [
-                        'payment_id' => $payment->id,
-                        'due_at' => $payment->due_at,
-                        'grace_period' => $payment->grace_period,
-                        'outstanding_balance' => $payment->amount_owed,
-                    ];
-                })->all();
-            });
+        Validator::extend('within_companion_limit',function($attribute, $value, $params, $validator) {
+            
+            if (isset($params[0])) {
+                
+                $companion = Reservation::with('companionReservations')->find($value);
+                $reservation = Reservation::with('companionReservations')->find($params[0]);
 
-            $reservation->addDues($dues);
-            $reservation->syncRequirements($reservation->trip->requirements);
-            $reservation->syncDeadlines($reservation->trip->deadlines);
-            $reservation->addTodos($reservation->trip->todos);
+                if ($companion->companionReservations->count()) {
+                    $companion_limit = $companion->companionReservations->min('companion_limit');
+                    $companion_count = $companion->companionReservations->count();
+                } else {
+                    $companion_limit = $companion->companion_limit;
+                    $companion_count = 0;
+                }
 
-            $name = 'Send ' . $reservation->name . ' to ' . country($reservation->trip->country_code);
-            $reservation->fundraisers()->create([
-                'name' => $name,
-                'url' => str_slug(country($reservation->trip->country_code)).'-'.$reservation->trip->started_at->format('Y').'-'.str_random(4),
-                'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
-                'sponsor_type' => 'users',
-                'sponsor_id' => $reservation->user_id,
-                'goal_amount' => $reservation->getTotalCost(),
-                'started_at' => $reservation->created_at,
-                'ended_at' => $reservation->trip->started_at,
-                'banner_upload_id' => $reservation->trip->campaign->banner->id
-            ]);
+                if ($reservation->companionReservations->count()) {
+                    $reservation_limit = $reservation->companionReservations->min('companion_limit');
+                    $reservation_count = $reservation->companionReservations->count();
+                } else {
+                    $reservation_limit = $reservation->companion_limit;
+                    $reservation_count = 0;
+                }
 
-            $reservation->trip()->update([
-               'spots' => $reservation->trip->spots - 1
-            ]);
+                $limit = collect(
+                    ($companion_limit - $companion_count), 
+                    ($reservation_limit - $reservation_count)
+                )->min();
 
-            // todo: send confirmation email.
+                return $limit > 0;
+
+               //  $reservation = Reservation::find($params[0]);
+               //  $reservation_within_limit = $reservation ? 
+               //         $reservation->companions->count() < $reservation->companion_limit : 
+               //         false;
+
+               //  $companion = Reservation::find($value);
+               //  $companion_within_limit = $companion ? 
+               //     $companion->companions->count() < $companion->companion_limit :
+               //     false;
+
+               // return $reservation_within_limit && $companion_within_limit;
+            }
+
+            return false;
         });
     }
 
@@ -96,6 +123,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // Bugsnag
+        $this->app->singleton('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
+        $this->app->singleton('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+
+        // register and configure the transaction handler.
+        $this->app->singleton('App\TransactionHandler', function ($app) {
+            return new TransactionHandler(
+                $app->make('App\Models\v1\Transaction'),
+                $app->make('App\Services\PaymentGateway'),
+                $app->make('App\Models\v1\Donor'),
+                $app->make('App\Models\v1\Fund')
+            );
+        });
+
         // register and configure media server.
         $this->app->singleton(Server::class, function () {
 

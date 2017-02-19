@@ -14,7 +14,8 @@ class UserTransformer extends TransformerAbstract
      */
     protected $availableIncludes = [
         'reservations', 'notes', 'managing', 'facilitating',
-        'passports', 'visas', 'uploads', 'accolades', 'fundraisers'
+        'passports', 'visas', 'uploads', 'accolades', 'fundraisers',
+        'medical_releases', 'roles', 'links', 'abilities'
     ];
 
     /**
@@ -38,7 +39,7 @@ class UserTransformer extends TransformerAbstract
             'birthday'     => $user->birthday ? $user->birthday->toDateString() : null,
             'phone_one'    => $user->phone_one,
             'phone_two'    => $user->phone_two,
-            'street'       => $user->street,
+            'street'       => $user->address,
             'city'         => $user->city,
             'state'        => $user->state,
             'zip'          => $user->zip,
@@ -46,8 +47,8 @@ class UserTransformer extends TransformerAbstract
             'country_name' => country($user->country_code),
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
-            'url'          => $user->url,
-            'avatar'       => $user->avatar ? image($user->avatar->source) : null,
+            'url'          => $user->slug ? $user->slug->url : null,
+            'avatar'       => $user->avatar ? image($user->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'banner'       => $user->banner ? image($user->banner->source) : null,
             'public'       => (bool) $user->public,
             'created_at'   => $user->created_at->toDateTimeString(),
@@ -61,6 +62,32 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
+    public function includeAbilities(User $user)
+    {
+        $abilities = $user->getAbilities();
+
+        return $this->collection($abilities, new AbilityTransformer);
+    }
+
+    /**
+     * Include links.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeLinks(User $user)
+    {
+        $links = $user->links;
+
+        return $this->collection($links, new LinkTransformer);
+    }
+
+    /**
+     * Include accolades belonging to the user.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
     public function includeAccolades(User $user)
     {
         $accolades = $user->accolades;
@@ -68,6 +95,12 @@ class UserTransformer extends TransformerAbstract
         return $this->collection($accolades, new AccoladeTransformer);
     }
 
+    /**
+     * Include uploads managed by the user.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
     public function includeUploads(User $user)
     {
         $uploads = $user->uploads;
@@ -76,7 +109,7 @@ class UserTransformer extends TransformerAbstract
     }
 
     /**
-     * Include Reservations
+     * Include reservations managed by the user.
      *
      * @param User $user
      * @return \League\Fractal\Resource\Item
@@ -88,6 +121,12 @@ class UserTransformer extends TransformerAbstract
         return $this->collection($reservations, new ReservationTransformer);
     }
 
+    /**
+     * Include passports managed by the user.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
     public function includePassports(User $user)
     {
         $passports = $user->passports;
@@ -95,6 +134,25 @@ class UserTransformer extends TransformerAbstract
         return $this->collection($passports, new PassportTransformer);
     }
 
+    /**
+     * Include medical releases managed by the user.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeMedicalReleases(User $user)
+    {
+        $releases = $user->medicalReleases;
+
+        return $this->collection($releases, new MedicalReleaseTransformer);
+    }
+
+    /**
+     * Include visas managed by the user.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
     public function includeVisas(User $user)
     {
         $visas = $user->visas;
@@ -139,6 +197,19 @@ class UserTransformer extends TransformerAbstract
         $trips = $user->facilitating;
 
         return $this->collection($trips, new TripTransformer);
+    }
+
+    /**
+     * Include roles assigned to the user.
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeRoles(User $user)
+    {
+        $roles = $user->roles;
+
+        return $this->collection($roles, new RoleTransformer);
     }
 
 }

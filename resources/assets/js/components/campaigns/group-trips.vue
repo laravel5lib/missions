@@ -1,58 +1,79 @@
 <template>
-	<div class="dark-bg-primary">
-	<div class="container">
-		<hr class="divider inv xlg">
-		<div class="row">
-			<div class="col-sm-8 col-sm-offset-2 col-xs-12 col-xs-offset-0 text-center">
-				<a :href="'/groups/' + group.url"><img class="img-circle img-lg" src="{{ group.avatar }}"></a>
-				<h3>{{ group.name }}</h3>
+	<div>
+		<div class="white-header-bg">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-8">
+                		<h3 class="hidden-xs">
+                			<a :href="group.url"><img class="img-circle img-sm av-left" :src="group.avatar">
+							{{ group.name }}</a>
+						</h3>
+						<div class="visible-xs text-center">
+							<hr class="divider inv">
+							<a :href="group.url"><img class="img-circle img-md av-left" :src="group.avatar"></a>
+							<h4 style="margin-bottom:0;">{{ group.name }}</h4>
+						</div>
+					</div><!-- end col -->
+					<div class="col-sm-4 text-right hidden-xs">
+						<hr class="divider inv">
+                		<hr class="divider inv sm">
+						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
+						<hr class="divider inv">
+					</div><!-- end col -->
+					<div class="col-xs-12 text-center visible-xs">
+						<hr class="divider inv sm">
+						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
+						<hr class="divider inv">
+					</div><!-- end col -->
+				</div>
 			</div>
 		</div>
-		<hr class="divider inv lg">
-	</div>
-	</div>
-	<div class="container">
-		<hr class="divider inv lg">
-		<div class="row">
-			<div class="col-xs-12 text-center">
-				<h2>Choose A Trip</h2>
-				<hr class="divider red-small lg">
+		<div class="container">
+			<hr class="divider inv lg">
+			<div class="row">
+				<div class="col-xs-12 text-center">
+					<h2>Choose A Trip Type</h2>
+					<p>If you don't see the trip type you desire, try choosing a different group to travel with.</p>
+					<hr class="divider red-small lg">
+					<hr class="divider inv">
+				</div>
 			</div>
-			<div class="col-xs-12">
-			<table class="table table-hover">
-				<thead>
-				<tr>
-					<th>Type</th>
-					<th>Dates</th>
-					<th>Starting Cost</th>
-					<th>Spots Left</th>
-					<th>Ideal For</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr v-for="trip in trips" style="border-bottom: 1px solid #e6e6e6">
-					<td style="vertical-align:middle;">{{ trip.type | capitalize }}</td>
-					<td style="vertical-align:middle;">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</td>
-					<td style="vertical-align:middle;">{{ trip.starting_cost | currency }}</td>
-					<td style="vertical-align:middle;">{{ trip.spots }}</td>
-					<td style="vertical-align:middle;">
-						<span v-for="prospect in trip.prospects">
-							{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span> 
-						</span>
-					</td>
-					<td style="vertical-align:middle;">{{ trip.status | capitalize }}</td>
-					<td class="text-right"><a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a></td>
-				</tr>
-				</tbody>
-			</table>
-			</div>
-		</div><!-- end row -->
-		<hr class="divider inv xlg">
-	</div><!-- end container -->
+			<div class="row" style="display:flex;flex-wrap:wrap;justify-content:center;">
+				<div v-for="trip in trips" style="flex:0 1 100%;width:100%;flex-basis:22%;">
+					<div style="flex-direction:column;display:flex;height:100%;margin-right:3%;margin-left:3%;">
+						<div class="panel panel-default" style="flex:0 1 100%;">
+							<div class="panel-heading" :class="'panel-' + trip.type">
+								<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
+							</div>
+							<div class="panel-body text-center">
+								<p class="badge">{{ trip.status | capitalize }}</p><br>
+								<p class="small">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>
+								<label>Perfect For</label>
+								<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
+									{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
+							</span><span v-show="trip.prospects.length > 3">...</span></p>
+								<label>Spots Available</label>
+								<p>{{ trip.spots }}</p>
+								<label>Starting At</label>
+								<h3 style="margin-top:0px;" class="text-success">{{ trip.starting_cost | currency }}</h3>
+								<a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a>
+							</div>
+						</div>
+					</div><!-- end flex-direction -->
+				</div><!-- end flex -->
+			</div><!-- end row -->
+
+			<div class="container">
+				<div class="col-sm-12 text-center">
+					<pagination :pagination.sync="pagination" :callback="getTrips"></pagination>
+				</div>
+			</div><!-- end container -->
+			<hr class="divider inv xlg">
+		</div><!-- end container -->
+	</div>
+
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'group-trips',
 		props: ['id', 'campaignId'],
@@ -60,41 +81,47 @@
 			return {
 				group:{},
 				trips: [],
-				page: 1
+				page: 1,
+				pagination: { current_page: 1 }
 			}
 		},
 		methods: {
 			getTrips(){
-				var resource = this.$resource('groups{/id}', {
-					include: "trips.costs",
-					//campaign: this.id,
+				let resource = this.$resource('trips', {
+					include: "costs",
+					onlyPublished: true,
+					onlyPublic: true,
+					groups: new Array(this.id),
+					campaign: this.campaignId,
 					//per_page: 8,
 					//search: this.searchText,
-					page: this.page
+					page: this.pagination.current_page,
 				});
+				// this.$refs.spinner.show();
+				resource.query().then(function (response) {
+					this.pagination = response.data.meta.pagination;
+					this.trips = response.data.data;
 
-				resource.query({id: this.id}).then(function (group) {
-					this.group = group.data.data;
-					var t = this.group.trips.data, cId = this.campaignId, arr = [], calcLowest = this.calcStartingCost;
-					t.forEach(function (val, i) {
-						if( val.campaign_id === cId) {
-							val.lowest = calcLowest(val.costs.data);
-							arr.push(val);
-						}
-
+					let cId = this.campaignId, calcLowest = this.calcStartingCost;
+					_.each(this.trips, function (trip, index, list) {
+						list[index].lowest = calcLowest(trip.costs.data);
 					});
-					this.trips = arr;
+				}, function (error) {
+					// this.$refs.spinner.hide();
 				});
 			},
 			calcStartingCost(costs) {
-				var lowest;
+				let lowest;
 				costs.forEach(function(val, i) {
 					if (val.amount < lowest || isNaN(lowest) ) {
 						lowest = val.amount;
 					}
 				});
 				return lowest;
-			}
+			},
+            restartView() {
+			    this.$parent.restartView();
+            }
 		},
 		ready(){
 			if (this.id && this.campaignId && this.id.length>0 && !this.$parent.currentView) {
@@ -104,6 +131,9 @@
 		activate(done){
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
+			this.$http.get('groups/' + this.id).then(function (response) {
+				this.group = response.data.data;
+			});
 			this.getTrips();
 			done();
 		}

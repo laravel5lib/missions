@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,7 +16,7 @@
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
-//    'middleware' => 'api.throttle', 'limit' => 50, 'expires' => 1, DISABLE FOR DEVELOPMENT
+    'middleware' => 'api.throttle', 'limit' => 100, 'expires' => 1,
     'namespace' => 'App\Http\Controllers\Api'
 ], function($api)
 {
@@ -27,28 +30,60 @@ $api->version('v1', [
 
     $api->resource('uploads', 'UploadsController');
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
-    $api->post('/login', 'AuthenticationController@authenticate');
     $api->post('/register', 'AuthenticationController@register');
+    $api->post('/login', 'AuthenticationController@authenticate');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
     $api->post('/refresh', 'AuthenticationController@refresh');
     $api->get('/users/me', 'UsersController@show');
     $api->put('/users/me', 'UsersController@update');
     $api->resource('users', 'UsersController');
+    $api->post('users/export', 'UsersController@export');
+    $api->post('users/import', 'UsersController@import');
     $api->resource('users.contacts', 'ContactsController');
+    $api->post('users/{id}/roles', 'UserRolesController@store');
+    $api->delete('users/{id}/roles', 'UserRolesController@destroy');
+    $api->post('users/{id}/abilities', 'UserAbilitiesController@store');
+    $api->delete('users/{id}/abilities', 'UserAbilitiesController@destroy');
+    $api->get('{recipient}/{id}/accolades/{name}', 'AccoladesController@index');
+    $api->post('{recipient}/{id}/accolades', 'AccoladesController@store');
     $api->resource('groups', 'GroupsController');
+    $api->get('groups/{id}/notes', 'GroupsController@notes');
+    $api->post('groups/submit', 'GroupsController@submit');
+    $api->post('groups/export', 'GroupsController@export');
+    $api->post('groups/import', 'GroupsController@import');
     $api->resource('campaigns', 'CampaignsController');
+    $api->post('campaigns/export', 'CampaignsController@export');
+    $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
+    $api->post('trips/export', 'TripsController@export');
+    $api->post('trips/import', 'TripsController@import');
+    $api->get('trips/{id}/todos', 'TripTodosController@index');
+    $api->post('trips/{id}/todos', 'TripTodosController@store');
+    $api->post('trips/{id}/register', 'TripsController@register');
+    $api->resource('interests', 'TripInterestsController');
+    $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
-    $api->get('reservations/{id}/donors', 'ReservationsController@donors');
-    $api->resource('assignments', 'AssignmentsController');
+    $api->post('reservations/export', 'ReservationsController@export');
+    $api->resource('reservations.requirements', 'ReservationRequirementsController');
+    $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
+    $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
+    $api->delete('reservations/{reservations}/companions', 'CompanionsController@destroy');
     $api->resource('fundraisers', 'FundraisersController');
     $api->get('fundraisers/{id}/donors', 'FundraisersController@donors');
+    $api->get('fundraisers/{id}/donations', 'FundraisersController@donations');
     $api->resource('donors', 'DonorsController');
+    $api->post('donors/export', 'DonorsController@export');
     $api->resource('donations', 'DonationsController');
     $api->post('donations/authorize', 'DonationsController@authorizeCard');
     $api->resource('passports', 'PassportsController');
+    $api->post('passports/export', 'PassportsController@export');
+    $api->post('passports/import', 'PassportsController@import');
     $api->resource('visas', 'VisasController');
+    $api->resource('visas/export', 'VisasController@export');
+    $api->resource('visas/import', 'VisasController@import');
     $api->resource('referrals', 'ReferralsController');
+    $api->post('referrals/export', 'ReferralsController@export');
+    $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
     $api->resource('teams.members', 'TeamMembersController');
@@ -57,17 +92,66 @@ $api->version('v1', [
     $api->resource('accommodations', 'AccommodationsController');
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
+    $api->resource('funds', 'FundsController');
+    $api->post('funds/export', 'FundsController@export');
+    $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
+    $api->get('funds/{id}/donors', 'FundDonorsController@index');
+    $api->resource('transactions', 'TransactionsController');
+    $api->post('transactions/export', 'TransactionsController@export');
+    $api->resource('causes', 'ProjectCausesController');
+    $api->post('causes/export', 'ProjectCausesController@export');
+    $api->get('causes/{cause}/initiatives', 'ProjectInitiativesController@index');
+    $api->resource('initiatives', 'ProjectInitiativesController', ['except' => 'index']);
+    $api->post('initiatives/export', 'ProjectInitiativesController@export');
+    $api->resource('projects', 'ProjectsController');
+    $api->post('projects/export', 'ProjectsController@export');
+    $api->resource('notes', 'NotesController');
+    $api->resource('todos', 'TodosController');
+    $api->resource('essays', 'EssaysController');
+    $api->post('essays/export', 'EssaysController@export');
+    $api->post('essays/import', 'EssaysController@import');
+    $api->resource('costs', 'CostsController');
+    $api->resource('costs.payments', 'CostPaymentsController');
+    $api->resource('reservations.dues', 'ReservationDuesController');
+    $api->resource('requirements', 'RequirementsController');
+    $api->resource('deadlines', 'DeadlinesController');
+    $api->resource('questionnaires', 'QuestionnairesController');
+    $api->resource('permissions/roles', 'PermissionRolesController');
+    $api->resource('permissions/abilities', 'PermissionAbilitiesController');
 
     $api->group(['prefix' => 'medical'], function($api)
     {
         $api->resource('releases', 'Medical\ReleasesController');
+        $api->post('releases/export', 'Medical\ReleasesController@export');
+        $api->post('releases/import', 'Medical\ReleasesController@import');
+        $api->get('conditions', function() {
+           return ['data' => \App\Models\v1\MedicalCondition::available()];
+        });
+        $api->get('allergies', function() {
+            return ['data' => \App\Models\v1\MedicalAllergy::available()];
+        });
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {
+        $api->get('team-roles', 'UtilitiesController@getTeamRoles');
         $api->get('countries', 'UtilitiesController@getCountries');
-        $api->get('countries/{$code}', 'UtilitiesController@getCountry');
-        $api->get('timezones', 'UtilitiesController@getTimezones');
+        $api->get('countries/{code}', 'UtilitiesController@getCountry');
+        $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
+        $api->get('past-trips', 'UtilitiesController@getPastTrips');
+        $api->get('make-slug/{string}', function($string) {
+            return ['slug' => generate_slug($string) ];
+        });
+        $api->get('make-fundraiser-slug/{string}', function($string) {
+            return ['slug' => generate_fundraiser_slug($string) ];
+        });
+        $api->get('make-fund-slug/{string}', function($string) {
+            return ['slug' => generate_fundraiser_slug($string) ];
+        });
     });
+
+    $api->post('contact', 'UtilitiesController@sendContactEmail');
+    $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
+    $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
 
     /*
     |--------------------------------------------------------------------------
@@ -95,5 +179,15 @@ $api->version('v1', [
             $api->resource('sites', 'Interaction\SitesController');
             $api->resource('stats', 'Interaction\StatsController');
         });
+    });
+
+    $api->post('/commands', function (Request $request) {
+        
+        $command = $request->get('command');
+        $params = $request->get('parameters');
+
+        $exitCode = Artisan::call($command, $params);
+
+        return $exitCode;
     });
 });

@@ -1,4 +1,4 @@
-@extends('dashboard.layouts.default')
+@extends('dashboard.reservations.show')
 
 @section('styles')
     <style>
@@ -45,6 +45,7 @@
         }
 
         .timeline > li > .timeline-panel {
+            background-color: #fff;
             width: 46%;
             float: left;
             border: 1px solid #d4d4d4;
@@ -81,15 +82,15 @@
 
         .timeline > li > .timeline-badge {
             color: #fff;
-            width: 50px;
-            height: 50px;
-            line-height: 50px;
-            font-size: 1.4em;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 1em;
             text-align: center;
             position: absolute;
-            top: 16px;
-            left: 50%;
-            margin-left: -25px;
+            top: 27px;
+            left: 51%;
+            margin-left: -23px;
             background-color: #999999;
             z-index: 100;
             border-top-right-radius: 50%;
@@ -152,7 +153,7 @@
 
         @media (max-width: 767px) {
             ul.timeline:before {
-                left: 40px;
+                left: 30px;
             }
 
             ul.timeline > li > .timeline-panel {
@@ -164,11 +165,12 @@
             ul.timeline > li > .timeline-badge {
                 left: 15px;
                 margin-left: 0;
-                top: 16px;
+                top: 25px;
             }
 
             ul.timeline > li > .timeline-panel {
                 float: right;
+                margin-right: 10px;
             }
 
             ul.timeline > li > .timeline-panel:before {
@@ -188,39 +190,10 @@
     </style>
 @endsection
 
-@section('content')
-<div class="white-header-bg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <h3>Reservations <small>Deadlines</small></h3>
-            </div>
-        </div>
-    </div>
-</div>
-<hr class="divider inv lg">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                @include('dashboard.reservations.layouts.menu')
-            </div>
-            <div class="col-sm-8">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" style="width:100px; height:100px" src="{{ $reservation->trip->campaign->thumb_src }}" alt="{{ $reservation->trip->campaign->name }}">
-                    </a>
-                    <div class="media-body">
-                        <h3 class="media-heading">
-                            {{ $reservation->trip->campaign->name }}
-                            <small>{{ country($reservation->trip->campaign->country_code) }}</small>
-                        </h3>
-                        <h4>Fundraisers</h4>
-                    </div>
-                </div>
-                <br>
+@section('tab')
                 <div class="row">
                     <ul class="timeline">
-                        @foreach($all_deadlines as $key => $deadline)
+                        @foreach($reservation->deadlines as $key => $deadline)
                         <li class="{{ $key % 2 ? 'timeline-inverted' : '' }}">
                             <div class="timeline-badge  {{ now()->gt(carbon($deadline['due_at'])) ? 'danger' : 'warning' }}"><i class="fa {{ now()->gt(carbon($deadline['due_at'])) ? 'fa-times' : 'fa-exclamation' }}"></i></div>
                             <div class="timeline-panel">
@@ -244,7 +217,4 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
-        </div>
-    </div>
 @endsection

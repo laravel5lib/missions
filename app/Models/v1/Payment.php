@@ -21,6 +21,11 @@ class Payment extends Model
 
     public $timestamps = false;
 
+    public function amountOwedInDollars()
+    {
+        return number_format($this->amount_owed/100, 2, '.', '');
+    }
+
     public function cost()
     {
         return $this->belongsTo(Cost::class);
@@ -34,10 +39,5 @@ class Payment extends Model
     public function scopePast($query)
     {
         return $query->where('due_at', '<', Carbon::now());
-    }
-
-    public function getBalanceDue()
-    {
-        return $this->cost->getBalanceDue($this->due_at);
     }
 }

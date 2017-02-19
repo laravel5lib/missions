@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <div class="row">
+    <div style="position:relative;">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
                     <div class="form-inline" style="display: inline-block;">
@@ -172,13 +173,21 @@
 							<li role="separator" class="divider"></li>
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()">Reset Filters</button>
 						</ul>
+              <export-utility url="users/export"
+                  :options="exportOptions"
+                  :filters="exportFilters">
+              </export-utility>
+              <!-- <import-utility title="Import Users List" 
+                              url="users/import" 
+                              :required-fields="importRequiredFields" 
+                              :optional-fields="importOptionalFields">
+              </import-utility> -->
                     </div>
-                    <a class="btn btn-primary btn-sm" href="users/create">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
         <hr>
-        <table class="table table-hover">
+        <table class="table table-hover table-striped">
             <thead>
             <tr>
                 <th v-if="isActive('name')" :class="{'text-primary': orderByField === 'name'}">
@@ -275,21 +284,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="page=pagination.current_page-1">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                    <a aria-label="Next" @click="page=pagination.current_page+1">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
+						<pagination :pagination.sync="pagination" :callback="searchUsers"></pagination>
                     </div>
                 </td>
             </tr>
@@ -302,11 +297,13 @@
 		margin-bottom: 3px;
 	}
 </style>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
+  import exportUtility from '../export-utility.vue';
+  import importUtility from '../import-utility.vue';
 	export default{
         name: 'admin-users-list',
-		components: {vSelect},
+		components: {vSelect, exportUtility, importUtility},
 		data(){
             return{
                 users: [],
@@ -315,13 +312,43 @@
                 page: 1,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
-                pagination: {},
+                pagination: { current_page: 1 },
                 search: '',
 				activeFields: ['name', 'email', 'birthday', 'status', 'public', 'isAdmin'],
 				maxActiveFields: 6,
 				maxActiveFieldsOptions: [2, 3, 4, 5, 6, 7, 8, 9],
 				countriesArr: [],
 				countriesOptions: [],
+        exportOptions: {
+          name: 'Name',
+          email: 'Email',
+          alt_email: 'Alternate Email',
+          gender: 'Gender',
+          status: 'Marital Status',
+          birthday: 'Birthday',
+          phone_one: 'Primary Phone',
+          phone_two: 'Secondary Phone',
+          address: 'Street Address',
+          city: 'City',
+          state: 'State/Providence',
+          country_code: 'Country',
+          timezone: 'Timezone',
+          bio: 'Bio',
+          visibility: 'Visibility',
+          created_at: 'Created On',
+          updated_at: 'Last Updated'
+        },
+        exportFilters: {},
+        importRequiredFields: [
+          'name', 'email', 'country_code', 'timezone',
+        ],
+        importOptionalFields: [
+          'alt_email', 'password', 'gender', 'status', 'birthday',
+          'phone_one', 'phone_two', 'address', 'city', 'state', 'zip', 
+          'url', 'bio', 'visibility', 'avatar_source', 'banner_source',
+          'facebook_url', 'instagram_url', 'linkedin_url', 'twitter_url',
+          'pinterest_url', 'website_url', 'youtube_url', 'vimeo_url', 'google_url'
+        ],
 
 				// filter vars
 				filters: {
@@ -340,6 +367,7 @@
 			'filters': {
 				handler: function (val) {
 					// console.log(val);
+					this.pagination.current_page = 1;
 					this.searchUsers();
 				},
 				deep: true
@@ -358,6 +386,7 @@
 			},
             'search': function (val, oldVal) {
 				this.updateConfig();
+				this.pagination.current_page = 1;
 				this.page = 1;
                 this.searchUsers();
             },
@@ -440,10 +469,12 @@
 					include: '',
 					search: this.search,
 					per_page: this.per_page,
-					page: this.page,
+					page: this.pagination.current_page,
 				};
 
 				$.extend(params, this.filters);
+        this.exportFilters = params;
+
                 this.$http.get('users', params).then(function (response) {
                     var self = this;
                     this.users = response.data.data;
@@ -490,6 +521,12 @@
 				}
 				event.stopPropagation(); //Always stop propagation
 			});
+        },
+      events: {
+        'importComplete': function(msg) {
+          console.log(msg);
+          this.searchUsers();
         }
+      },
     }
 </script>

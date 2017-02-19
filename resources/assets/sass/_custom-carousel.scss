@@ -24,6 +24,24 @@
       @include img-responsive;
       line-height: 1;
     }
+    @media screen and (max-width: 991px) {
+      > img,
+      > a > img {
+        display: block;
+        max-width: none;
+        height: 450px;
+        line-height: 1;
+      }
+    }
+    @media screen and (max-width: 767px) {
+      > img,
+      > a > img {
+        display: block;
+        max-width: none;
+        height: 400px;
+        line-height: 1;
+      }
+    }
 
     // WebKit CSS3 transforms for supported devices
     @media all and (transform-3d), (-webkit-transform-3d) {
@@ -84,7 +102,13 @@
   > .active.right {
     left: 100%;
   }
-
+}
+@media screen and (max-width: 991px) {
+  .carousel-inner > .item > img, .carousel-inner > .item > a > img {  
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 1080px;
+  }
 }
 
 // Left/right controls for nav
@@ -152,7 +176,18 @@
     line-height: 1;
     font-family: serif;
   }
-
+  @media screen and (max-width: 767px) {
+    .icon-prev,
+    .fa-angle-left {
+      left: 50%;
+      margin-left: 0px;
+    }
+    .icon-next,
+    .fa-angle-right {
+      right: 50%;
+      margin-right: 0px;
+    }
+  }
 
   .icon-prev {
     &:before {
@@ -240,6 +275,9 @@
     margin-top: 5px;
     margin-bottom: 5px;
   }
+  p {
+    font-size: 1.5em;
+  }
 }
 
 
@@ -271,7 +309,7 @@
   .carousel-caption {
     left: 20%;
     right: 20%;
-    padding-bottom: 30px;
+    padding-bottom: 150px;
   }
 
   // Move up the indicators

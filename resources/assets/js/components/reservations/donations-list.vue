@@ -1,6 +1,7 @@
 <template>
     <div class="row">
-        <div class="col-sm-12">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="col-sm-12">
 			<form class="form-inline text-right" novalidate>
 				<div class="input-group input-group-sm">
 					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search (name, amount)">
@@ -39,7 +40,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/javascript">
     export default{
         name: 'donations-list',
         props: {
@@ -65,11 +66,13 @@
         },
         methods: {
             getDonations(){
-                this.$http.get('fundraisers.donations', {
+				// this.$refs.spinner.show();
+				this.$http.get('fundraisers.donations', {
 
                 }).then(function (response) {
-                    this.donations = response.data.data
-                })
+                    this.donations = response.data.data;
+					// this.$refs.spinner.hide();
+				})
             },
         },
         ready(){

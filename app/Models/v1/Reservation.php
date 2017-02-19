@@ -2,12 +2,14 @@
 
 namespace App\Models\v1;
 
+use Carbon\Carbon;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
@@ -27,9 +29,13 @@ class Reservation extends Model
      */
     protected $fillable = [
         'given_names', 'surname', 'gender', 'status',
-        'shirt_size', 'birthday', 'user_id',
-        'trip_id', 'rep_id', 'todos', 'companions', 'costs',
-        'passport_id'
+        'shirt_size', 'birthday', 'phone_one', 'phone_two',
+        'address', 'city', 'state', 'zip', 'country_code',
+        'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
+        'passport_id', 'user_id', 'email', 'avatar_upload_id',
+        'arrival_designation', 'testimony_id', 'desired_role',
+        'shirt_size', 'height', 'weight', 'created_at', 'updated_at',
+        'deleted_at'
     ];
 
     /**
@@ -67,6 +73,14 @@ class Reservation extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rep()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Get the trip that owns the reservation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -77,13 +91,24 @@ class Reservation extends Model
     }
 
     /**
-     * Get all of the reservation's companions
+     * Get all of the reservation's companion reservations
      *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function companionReservations()
+    {
+        return $this->belongsToMany(Reservation::class, 'companions', 'companion_id')
+                    ->withPivot('relationship');
+    }
+
+    /**
+     * Get the reservation's companions.
+     * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function companions()
     {
-        return $this->hasMany(Companion::class);
+        return $this->hasMany(Companion::class, 'reservation_id');
     }
 
     /**
@@ -98,6 +123,11 @@ class Reservation extends Model
                     ->withTimestamps();
     }
 
+    /**
+     * Get all of the reservation's active costs.
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function activeCosts()
     {
         return $this->belongsToMany(Cost::class, 'reservation_costs')
@@ -106,9 +136,14 @@ class Reservation extends Model
                     ->withTimestamps();
     }
 
+    /**
+     * Get all the reservation's payments due.
+     * 
+     * @return Illuminate\Database\Eloquent\Reservations\MorphMany
+     */
     public function dues()
     {
-        return $this->morphMany(Due::class, 'payable');
+        return $this->morphMany(Due::class, 'payable')->sortRecent();
     }
 
     /**
@@ -120,7 +155,8 @@ class Reservation extends Model
     {
         return $this->belongsToMany(Deadline::class, 'reservation_deadlines')
                     ->withPivot('grace_period')
-                    ->withTimestamps();
+                    ->withTimestamps()
+                    ->orderBy('date', 'desc');
     }
 
     /**
@@ -150,9 +186,7 @@ class Reservation extends Model
      */
     public function requirements()
     {
-        return $this->belongsToMany(Requirement::class, 'reservation_requirements')
-                    ->withPivot('grace_period', 'status', 'completed_at')
-                    ->withTimestamps();
+        return $this->hasMany(ReservationRequirement::class);
     }
 
     /**
@@ -162,47 +196,22 @@ class Reservation extends Model
      */
     public function fundraisers()
     {
-        return $this->morphMany(Fundraiser::class, 'fundable');
+        return $this->fund->fundraisers();
     }
 
-    /**
-     * Get all of the reservation's donations.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
     public function donations()
     {
-        return $this->morphMany(Donation::class, 'designation');
+        return $this->fund->donations();
     }
 
-    /**
-     * Get the reservation's passport.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function passport()
+    public function donors()
     {
-        return $this->belongsTo(Passport::class);
-    }
-
-    /**
-     * Get the reservation's visa.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function visa()
-    {
-        return $this->belongsTo(Visa::class);
-    }
-
-    /**
-     * Get the reservation's team member details
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function membership()
-    {
-        return $this->morphOne(TeamMember::class, 'assignable');
+        return $this->fund()->donors();
     }
 
     /**
@@ -250,14 +259,24 @@ class Reservation extends Model
         return $payments->sum('payment.amount_owed');
     }
 
+    public function totalCostInDollars()
+    {
+        return number_format($this->getTotalCost()/100, 2, '.', '');
+    }
+
     /**
-     * Get the total amount raised for the reservation.
+     * Get the total of what was raised.
      *
-     * @return mixed
+     * @return float
      */
     public function getTotalRaised()
     {
-        return $this->donations()->sum('amount');
+        return $this->fund ? $this->fund->balance : 0;
+    }
+
+    public function totalRaisedInDollars()
+    {
+        return number_format($this->getTotalRaised()/100, 2, '.', '');
     }
 
     /**
@@ -280,11 +299,16 @@ class Reservation extends Model
      */
     public function getTotalOwed()
     {
-        return $this->getTotalCost() - $this->getTotalRaised();
+        return $this->getTotalCost() - $this->fund->balance;
+    }
+
+    public function totalOwedInDollars()
+    {
+        return number_format($this->getTotalCost()/100, 2 , '.', '');
     }
 
     /**
-     * Syncronize all the trip's costs.
+     * Synchronize all the reservation's costs.
      *
      * @param $costs
      */
@@ -295,27 +319,29 @@ class Reservation extends Model
         if ( ! $costs instanceof Collection)
             $costs = collect($costs);
 
-        $data = $costs->pluck('id')->all();
+        $data = $costs->keyBy('id')->map(function($item) {
+            return [
+                'locked' => isset($item['locked']) and $item['locked'] ? true : false,
+            ];
+        })->toArray();
         
         $this->costs()->sync($data);
-    }
 
-    public function addDues($dues)
-    {
-        if ( ! $dues) return;
-
-        if ( ! $dues instanceof Collection)
-            $dues = collect($dues);
-
-        $data = $dues->map(function($due) {
-            return new Due($due);
-        })->all();
-
-        $this->dues()->saveMany($data);
+        dispatch(new SyncPaymentsDue($this));
     }
 
     /**
-     * Syncronize all the reservation's requirements.
+     * Manage a Reservation's Payments.
+     *
+     * @return ReservationPayment
+     */
+    public function payments()
+    {
+        return new ReservationPayment($this);
+    }
+
+    /**
+     * Synchronize all the reservation's requirements.
      *
      * @param $requirements
      */
@@ -326,19 +352,21 @@ class Reservation extends Model
         if ( ! $requirements instanceof Collection)
             $requirements = collect($requirements);
 
-        $data = $requirements->keyBy('id')->map(function($item, $key) {
+        $requirements->map(function($item, $key) {
             return [
+                'requirement_id' => $item->id,
+                'document_type' => $item->document_type,
                 'grace_period' => $item->grace_period,
                 'status' => $item->status ? $item->status : 'incomplete',
                 'completed_at' => $item->completed_at ? $item->completed_at : null
             ];
-        })->toArray();
-
-        $this->requirements()->sync($data);
+        })->each(function($requirement) {
+            $this->requirements()->create($requirement);
+        });
     }
 
     /**
-     * Syncronize all the reservation's deadlines.
+     * Synchronize all the reservation's deadlines.
      *
      * @param $deadlines
      */
@@ -351,7 +379,7 @@ class Reservation extends Model
 
         $data = $deadlines->keyBy('id')->map(function($item, $key) {
             return [
-                'grace_period' => $item->grace_period
+                'grace_period' => $item['grace_period']
             ];
         })->toArray();
 
@@ -375,7 +403,7 @@ class Reservation extends Model
     }
 
     /**
-     * Syncronize all the reservation's todos.
+     * Synchronize all the reservation's todos.
      *
      * @param $todos
      */
@@ -395,5 +423,34 @@ class Reservation extends Model
         }
 
         if( ! $ids->isEmpty()) $this->todos()->delete($ids);
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->whereHas('trip', function($trip) {
+            return $trip->where('ended_at', '>', Carbon::now());
+        });
+    }
+
+    /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/user-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
     }
 }

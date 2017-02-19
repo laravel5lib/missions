@@ -2,9 +2,11 @@
 
 namespace App\Http\Transformers\v1;
 
+use Carbon\Carbon;
+use App\Models\v1\User;
+use League\Fractal\ParamBag;
 use App\Models\v1\Reservation;
 use App\Utilities\v1\ShirtSize;
-use League\Fractal\ParamBag;
 use League\Fractal\TransformerAbstract;
 
 class ReservationTransformer extends TransformerAbstract
@@ -19,7 +21,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'member', 'passport', 'visa', 'dues'
+        'fundraisers', 'dues', 'fund'
     ];
 
     /**
@@ -30,32 +32,54 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function transform(Reservation $reservation)
     {
-        $reservation->load('tagged', 'avatar');
+        $reservation->load('tagged', 'avatar', 'fund');
 
-        return [
-            'id'              => $reservation->id,
-            'given_names'     => $reservation->given_names,
-            'surname'         => $reservation->surname,
-            'gender'          => $reservation->gender,
-            'status'          => $reservation->status,
-            'shirt_size'      => $reservation->shirt_size,
-            'shirt_size_name' => implode(array_values(ShirtSize::get($reservation->shirt_size)), ''),
-            'birthday'        => $reservation->birthday->toDateString(),
-            'companion_limit' => (int) $reservation->companions_limit,
-            'avatar'          => $reservation->avatar ? image($reservation->avatar->source) : null,
-            'total_cost'      => (int) $reservation->getTotalCost(),
-            'total_raised'    => (int) $reservation->getTotalRaised(),
-            'total_owed'      => (int) $reservation->getTotalOwed(),
-            'created_at'      => $reservation->created_at->toDateTimeString(),
-            'updated_at'      => $reservation->updated_at->toDateTimeString(),
-            'tags'            => $reservation->tagNames(),
-            'links'           => [
+        $data = [
+            'id'                  => $reservation->id,
+            'given_names'         => $reservation->given_names,
+            'surname'             => $reservation->surname,
+            'gender'              => $reservation->gender,
+            'status'              => $reservation->status,
+            'shirt_size'          => $reservation->shirt_size,
+            'shirt_size_name'     => shirtSize($reservation->shirt_size),
+            'age'                 => $reservation->age,
+            'birthday'            => $reservation->birthday->toDateString(),
+            'email'               => $reservation->email,
+            'phone_one'           => $reservation->phone_one,
+            'phone_two'           => $reservation->phone_two,
+            'address'             => $reservation->address,
+            'city'                => $reservation->city,
+            'state'               => $reservation->state,
+            'zip'                 => $reservation->zip,
+            'country_code'        => $reservation->country_code,
+            'country_name'        => country($reservation->country_code),
+            'companion_limit'     => (int) $reservation->companion_limit,
+            // 'arrival_designation' => $reservation->arrival_designation,
+            'avatar'              => $reservation->avatar ? image($reservation->avatar->source) : url('/images/placeholders/user-placeholder.png'),
+            'desired_role'        => [ 
+                                        'code' => $reservation->desired_role, 
+                                        'name' => teamRole($reservation->desired_role) 
+                                     ],
+            'total_cost'          => $reservation->totalCostInDollars(),
+            'total_raised'        => $reservation->fund->balanceInDollars(),
+            'percent_raised'      => (int) $reservation->getPercentRaised(),
+            'total_owed'          => $reservation->totalOwedInDollars(),
+            'created_at'          => $reservation->created_at->toDateTimeString(),
+            'updated_at'          => $reservation->updated_at->toDateTimeString(),
+            'tags'                => $reservation->tagSlugs(),
+            'links'               => [
                 [
                     'rel' => 'self',
-                    'uri' => '/reservations/' . $reservation->id,
+                    'uri' => '/api/reservations/' . $reservation->id,
                 ]
             ],
         ];
+
+        if($reservation->pivot) {
+            $data['relationship'] = $reservation->pivot->relationship;
+        }
+
+        return $data;
     }
 
     /**
@@ -80,6 +104,19 @@ class ReservationTransformer extends TransformerAbstract
         }
 
         return $this->collection($dues, new DueTransformer);
+    }
+
+    /**
+     * Include Fund
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeFund(Reservation $reservation)
+    {
+        $fund = $reservation->fund;
+
+        return $this->item($fund, new FundTransformer);
     }
 
     /**
@@ -118,7 +155,13 @@ class ReservationTransformer extends TransformerAbstract
     {
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        return $this->item($rep, new RepTransformer);
+        if ( ! $rep) $rep = new User([
+            'name' => 'none',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+
+        return $this->item($rep, new UserTransformer);
     }
 
     /**
@@ -177,7 +220,7 @@ class ReservationTransformer extends TransformerAbstract
     {
         $requirements = $reservation->requirements;
 
-        return $this->collection($requirements, new RequirementTransformer);
+        return $this->collection($requirements, new ReservationRequirementTransformer);
     }
 
     /**
@@ -214,9 +257,9 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function includeCompanions(Reservation $reservation)
     {
-        $companions = $reservation->companions;
+        $companions = $reservation->companionReservations;
 
-        return $this->collection($companions, new CompanionTransformer);
+        return $this->collection($companions, new ReservationTransformer);
     }
 
     /**
@@ -227,36 +270,9 @@ class ReservationTransformer extends TransformerAbstract
      */
     public function includeFundraisers(Reservation $reservation)
     {
-        $fundraisers = $reservation->fundraisers;
+        $fundraisers = $reservation->fundraisers()->get();
 
         return $this->collection($fundraisers, new FundraiserTransformer);
-    }
-
-    /**
-     * Include Member
-     *
-     * @param Reservation $reservation
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeMember(Reservation $reservation)
-    {
-        $member = $reservation->member;
-
-        return $this->item($member, new TeamMemberTransformer);
-    }
-
-    public function includePassport(Reservation $reservation)
-    {
-        $passport = $reservation->passport;
-
-        return $this->item($passport, new PassportTransformer);
-    }
-
-    public function includeVisa(Reservation $reservation)
-    {
-        $visa = $reservation->visa;
-
-        return $this->item($visa, new VisaTransformer);
     }
 
     private function validateParams($params)

@@ -26,9 +26,9 @@
 												<div class="col-sm-12">
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('item')}">
-																<label for="item">Item</label>
-																<select id="item" class="form-control input-sm" v-model="newReq.item" v-validate:item="{ required: true }">
+															<div class="form-group" :class="{'has-error': checkForError('name')}">
+																<label for="name">Name</label>
+																<select id="name" class="form-control input-sm" v-model="newReq.name" v-validate:name="{ required: true }">
 																	<option value="">-- select --</option>
 																	<option :value="option" v-for="option in resources">{{option}}</option>
 																</select>
@@ -36,8 +36,8 @@
 														</div>
 														<div class="col-sm-6">
 															<div class="form-group">
-																<label for="type">Item Type</label>
-																<select id="type" class="form-control input-sm" v-model="newReq.item_type">
+																<label for="type">Document Type</label>
+																<select id="type" class="form-control input-sm" v-model="newReq.document_type">
 																	<option value="">-- select --</option>
 																</select>
 															</div>
@@ -58,7 +58,8 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': checkForError('due')}">
 																<label for="due_at">Due</label>
-																<input type="date" id="due_at" class="form-control input-sm"
+																<date-picker class="form-control input-sm" :time.sync="newReq.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+																<input type="datetime" id="due_at" class="form-control input-sm hidden"
 																	   v-model="newReq.due_at" v-validate:due="{required: true}">
 															</div>
 
@@ -66,12 +67,12 @@
 													</div>
 
 													<br>
-													<div class="checkbox">
+													<!--<div class="checkbox">
 														<label>
 															<input type="checkbox" v-model="newReq.enforced">
 															Enforced?
 														</label>
-													</div>
+													</div>-->
 												</div>
 											</div>
 										</form>
@@ -88,25 +89,25 @@
 							<table class="table table-striped table-hover">
 								<thead>
 								<tr>
-									<th>Item</th>
+									<th>Name</th>
 									<th>Type</th>
 									<th>Due</th>
 									<th>Grace</th>
-									<th>Enforced</th>
+									<!--<th>Enforced</th>-->
 									<th>Actions</th>
 								</tr>
 								</thead>
 								<tbody>
 								<tr v-for="requirement in requirements|orderBy 'due_at'">
-									<td>{{requirement.item}}</td>
-									<td>{{requirement.item_type}}</td>
+									<td>{{requirement.name}}</td>
+									<td>{{requirement.document_type}}</td>
 									<td>
 										{{requirement.due_at|moment}}
 									</td>
 									<td>
 										{{requirement.grace_period}} {{requirement.amount_owed|pluralize 'day'}}
 									</td>
-									<td>{{requirement.enforced}}</td>
+									<!--<td>{{requirement.enforced}}</td>-->
 									<td>
 										<!--<a @click="editPayment(payment, cost)"><i class="fa fa-pencil"></i></a>-->
 										<a @click="requirements.$remove(requirement)"><i class="fa fa-times"></i></a>
@@ -121,7 +122,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'trip-requirement',
 		data(){
@@ -143,11 +144,11 @@
 				// requirements data
 				requirements:[],
 				newReq: {
-					item: '',
-					item_type: '',
+					name: '',
+					document_type: '',
 					due_at: null,
 					grace_period: 0,
-					enforced: false,
+					// enforced: false,
 				}
 			}
 		},
@@ -171,11 +172,11 @@
 			},
 			resetRequirement(){
 				this.newReq = {
-					item: '',
-					item_type: '',
+					name: '',
+					document_type: '',
 					due_at: null,
 					grace_period: 0,
-					enforced: false,
+					// enforced: false,
 				};
 			},
 			addRequirement(){

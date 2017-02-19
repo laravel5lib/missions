@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\v1\User;
+use App\Jobs\ExportUsers;
+use App\Jobs\SendWelcomeEmail;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\UserRequest;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\UserListImport;
 use App\Http\Transformers\v1\UserTransformer;
 
 class UsersController extends Controller
@@ -17,8 +22,6 @@ class UsersController extends Controller
      */
     public function __construct(User $user)
     {
-        $this->middleware('api.auth', ['only' => ['update', 'destroy']]);
-//        $this->middleware('jwt.refresh', ['except' => ['show']]);
         $this->user = $user;
     }
 
@@ -30,8 +33,6 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        // if ( ! $this->auth->user()->isAdmin()) abort(403);
-
         $users = $this->user
                       ->filter($request->all())
                       ->paginate($request->get('per_page', 25));
@@ -50,14 +51,6 @@ class UsersController extends Controller
         if($id)
         {
             $user = $this->user->findOrFail($id);
-
-//            if ( ! $user->public)
-//            {
-//                if ($user->id !== $this->auth->user()->id and ! $this->auth->user()->isAdmin())
-//                {
-//                    abort(403);
-//                }
-//            }
         }
         else
         {
@@ -75,12 +68,17 @@ class UsersController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function store(UserRequest $request)
-    {
-        if ( ! $this->auth->user()->isAdmin()) abort(403);
+    {   
+        $request->merge(['password' => bcrypt($request->get('password'))]);
 
-        $user = new User($request->all());
-        $user->url = $request->get('url', str_random(10));
+        $user = new User($request->except('url'));
         $user->save();
+
+        $user->slug()->create([
+            'url' => $request->get('url', generate_slug( $request->get('name') ))
+        ]);
+
+        dispatch(new SendWelcomeEmail($user));
 
         return $this->response->item($user, new UserTransformer);
     }
@@ -99,7 +97,17 @@ class UsersController extends Controller
         else
             $user = $this->auth()->user();
 
-        $user->update($request->all());
+        if ($request->get('password')) {
+            $request->merge(['password' => bcrypt($request->get('password'))]);
+        }
+        
+        $user->update($request->except('url'));
+
+        if ($request->has('links')) {
+            $user->syncLinks($request->get('links'));
+        }
+
+        $user->slug()->update(['url' => $request->get('url', $user->slug->url)]);
 
         return $this->response->item($user, new UserTransformer);
     }
@@ -112,12 +120,38 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        if ( ! $this->auth->user()->isAdmin()) abort(403);
-
         $user = $this->user->findOrFail($id);
 
         $user->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export users.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportUsers($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of users.
+     * 
+     * @param  UserListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, UserListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

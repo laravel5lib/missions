@@ -1,6 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpload">
-        <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
+        <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
+            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="form-group" :class="{ 'has-error': checkForError('name') }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
@@ -92,11 +93,10 @@
                     <a @click="submit()" class="btn btn-primary">Update</a>
                 </div>
             </div>
-
         </form>
     </validator>
 </template>
-<script>
+<script type="text/javascript">
     import vSelect from 'vue-select'
     export default{
         name: 'upload-edit',

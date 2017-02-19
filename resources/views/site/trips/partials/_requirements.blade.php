@@ -5,7 +5,7 @@
     <div class="panel-body">
         <ul class="">
             @foreach($trip->requirements as $req)
-                <li class="">{{ $req->item }}</li>
+                <li class="">{{ $req->name }}</li>
             @endforeach
         </ul>
     </div>

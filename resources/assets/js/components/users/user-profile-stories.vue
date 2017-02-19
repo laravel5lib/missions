@@ -1,9 +1,11 @@
 <template>
-    <div>
+    <div style="position:relative;">
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+
         <template v-if="isUser()">
         <div class="row hidden-xs">
             <div class="col-sm-8">
-                <h5>Share your amazing stories with the world!</h5>
+                <h5>Share your stories with the world</h5>
             </div>
             <div class="col-sm-4 text-right">
                 <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
@@ -11,12 +13,13 @@
         </div>
         <div class="row visible-xs">
             <div class="col-sm-12 text-center">
-                <h5>Share your amazing stories with the world!</h5>
+                <h5>Share your stories with the world</h5>
             </div>
             <div class="col-sm-12 text-center">
                 <button class="btn btn-primary btn-sm" @click="newMode=!newMode">Post Story <i class="fa fa-plus"></i></button>
             </div>
         </div>
+        <hr class="divider lg">
         <hr class="divider inv">
         </template>
         <div class="panel panel-default" v-if="newMode">
@@ -45,21 +48,41 @@
                 </form>
             </div>
         </div>
+        <div class="text-center text-muted" v-if="! stories.length">
+            <template v-if="isUser()">
+                <img class="visible-lg" style="width:40px;height:52px;position:absolute;right:60px;top:40px;" src="../images/onboard/drawn-arrow-up.png">
+                <em><h4>You haven't posted any stories yet.</h4>
+                    <p>Post your first story and let your friends know what's up!</p></em>
+            </template>
+            <template v-else>
+                <em><h4>Currently No Stories</h4>
+                    <p>This person hasn't added any stories yet.</p>
+                </em>
+            </template>
+        </div>
         <div class="panel panel-default" v-for="story in stories">
             <div class="panel-heading" role="tab" id="heading-{{ story.id }}">
                 <h5>
                     <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ story.id }}" aria-expanded="true" aria-controls="collapseOne">
                         {{ story.title }}
-                    </a>
+                    <i class="fa fa-chevron-down pull-right"></i></a>
                 </h5>
             </div>
-            <div id="collapse-{{ story.id }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
+            <div id="collapse-{{ story.id }}" class="panel-collapse collapse {{ $index == 0 ? 'in' : '' }}" role="tabpanel" aria-labelledby="heading-{{ story.id }}">
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">
                         <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 text-right hidden-xs">
+                        <div style="padding: 0;" v-if="isUser()">
+                            <div role="group" aria-label="...">
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,deleteModal = true"><i class="fa fa-trash"></i> Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-center visible-xs">
                         <div style="padding: 0;" v-if="isUser()">
                             <div role="group" aria-label="...">
                                 <a class="btn btn-xs btn-default-hollow small" @click="selectedStory = story,editMode = story.id"><i class="fa fa-pencil"></i> Edit</a>
@@ -68,7 +91,8 @@
                         </div>
                     </div>
                 </div>
-                    {{{ story.content | marked }}}
+                <hr class="divider inv">
+                    <p class="small">{{{ story.content | marked }}}</p>
                 </div>
                 <div class="panel-body" v-if="editMode === story.id">
                     <form>
@@ -98,55 +122,46 @@
             </div>
         </div>
         <div class="col-sm-12 text-center">
-            <nav>
-                <ul class="pagination pagination-sm">
-                    <li :class="{ 'disabled': pagination.current_page == 1 }">
-                        <a aria-label="Previous" @click="page=pagination.current_page-1">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-                    <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                        <a aria-label="Next" @click="page=pagination.current_page+1">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <hr class="divider inv">
+            <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 
-        <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
-            <div slot="modal-body" class="modal-body">Are you sure you want to delete this Story?</div>
+        <modal class="text-center" v-if="isUser()" :show.sync="deleteModal" title="Delete Story" small="true">
+            <div slot="modal-body" class="modal-body text-center">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
-                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Exit</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Confirm</button>
+                <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Delete</button>
             </div>
         </modal>
     </div>
 </template>
-<script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min'
+<script type="text/javascript">
     var marked = require('marked');
     export default{
         name: 'user-profile-stories',
-        components: {'modal': VueStrap.modal},
-        props:['id', 'authId'],
+        props:['id'],
         data(){
             return{
                 stories: [],
                 deleteModal: false,
                 selectedStory: {
                     title: '',
-                    content:''
+                    content:'',
+                    publications: [
+                        { type: 'users', id: this.id },
+                    ]
                 },
                 editMode: false,
                 editMarkedContentToggle: false,
+
                 newMode: false,
                 newMarkedContentToggle: false,
+                includeProfile: false,
+
                 // pagination vars
                 page: 1,
                 per_page: 5,
-                pagination: {},
+                pagination: { current_page: 1 },
 
             }
         },
@@ -160,7 +175,7 @@
         },
         methods:{
             isUser(){
-                return this.id === this.authId;
+                return this.$root.user && this.id === this.$root.user.id;
             },
             removeStory(story){
                 if(story) {
@@ -175,11 +190,15 @@
             },
             updateStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
+                    story.publications = [{ type: 'users', id: this.id }];
+
+                    // this.$refs.spinner.show();
                     this.$http.put('stories/' + story.id, story).then(function (response) {
                         this.editMode = false;
                         this.resetData();
+                        // this.$refs.spinner.show();
                         return response.data.data;
                         //this.searchStories();
                     });
@@ -187,7 +206,7 @@
             },
             createStory(story){
                 if(story) {
-                    story.author_id = this.authId;
+                    story.author_id = this.$root.user.id;
                     story.author_type = 'users';
 
                     this.$http.post('stories', story).then(function (response) {
@@ -200,8 +219,9 @@
                 }
             },
             searchStories(){
-                this.$http.get('stories?user=' + this.id, {
-                    page: this.page,
+                this.$http.get('stories', {
+                    user: this.id,
+                    page: this.pagination.current_page,
                     per_page: this.per_page,
                 }).then(function(response) {
                     this.stories = response.data.data;

@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Create Your Group</h3>
+                <h3>Group <small>&middot; Create</small></h3>
             </div>
         </div>
     </div>
@@ -16,7 +16,7 @@
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             	<div class="panel panel-default">
             		<div class="panel-body">
-                		<group-create></group-create>
+                		<admin-group-create></admin-group-create>
                 	</div>
                 </div>
             </div>

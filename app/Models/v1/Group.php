@@ -28,9 +28,11 @@ class Group extends Model
     protected $fillable = [
         'name', 'type', 'timezone', 'url', 'public',
         'address_one', 'address_two',
-        'city', 'state', 'zip', 'country', 'phone_one',
+        'city', 'state', 'zip', 'country_code', 'phone_one',
         'phone_two', 'email', 'description',
-        'stripe_id', 'card_brand', 'card_last_four'
+        'stripe_id', 'card_brand', 'card_last_four',
+        'status', 'avatar_upload_id', 'banner_upload_id',
+        'created_at', 'updated_at'
     ];
 
     /**
@@ -56,6 +58,23 @@ class Group extends Model
      * @var array
      */
     protected $casts = [];
+
+    /**
+     * Set default values.
+     *
+     * @var array
+     */
+    protected $attributes = ['status' => 'approved'];
+
+    /**
+     * Set the status attribute.
+     *
+     * @param $value
+     */
+    public function setStatusAttribute($value)
+    {
+        $this->attributes['status'] = strtolower(trim($value));
+    }
 
     /**
      * Get all the group's trips.
@@ -85,8 +104,7 @@ class Group extends Model
     public function managers()
     {
         return $this->belongsToMany(User::class, 'managers')
-                    ->withTimestamps()
-                    ->withPivot('permissions');
+                    ->withTimestamps();
     }
 
     /**
@@ -140,6 +158,50 @@ class Group extends Model
     }
 
     /**
+     * Helper method to retrieve the user's avatar
+     * 
+     * @return mixed
+     */
+    public function getAvatar()
+    {
+        if( ! $this->avatar) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'placeholder',
+                'type' => 'avatar',
+                'source' => 'images/placeholders/logo-placeholder.png',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->avatar;
+    }
+
+    /**
+     * Helper method to retrieve the group's banner
+     * 
+     * @return mixed
+     */
+    public function getBanner()
+    {
+        if( ! $this->banner) {
+            return new Upload([
+                'id' => \Ramsey\Uuid\Uuid::uuid4(),
+                'name' => 'default',
+                'type' => 'banner',
+                'source' => 'images/banners/1n1d17-vision3-2560x800.jpg',
+                'meta' => null,
+                'created_at' => \Carbon\Carbon::now(),
+                'updated_at' => \Carbon\Carbon::now()
+            ]);
+        }
+
+        return $this->banner;
+    }
+
+    /**
      * Get the group's social links.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -166,7 +228,39 @@ class Group extends Model
      */
     public function stories()
     {
-        return $this->morphMany(Story::class, 'author');
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the group's notes.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
+    /**
+     * Get the group's slug.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function slug()
+    {
+        return $this->morphOne(Slug::class, 'slugable');
+    }
+
+    /**
+     * Get the group's links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function links()
+    {
+        return $this->morphMany(Link::class, 'linkable');
     }
 
     /**

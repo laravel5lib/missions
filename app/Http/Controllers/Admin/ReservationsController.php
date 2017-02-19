@@ -27,33 +27,36 @@ class ReservationsController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index($tab = null)
     {
         $this->authorize('view', $this->reservation);
 
-        return view('admin.reservations.index');
+        return view('admin.reservations.index', compact('tab'));
     }
 
     /**
      * Get the specified reservation.
      *
      * @param $id
+     * @param string $tab
      * @return $this
      */
-    public function show($id)
+    public function show($id, $tab = "details")
     {
         $this->authorize('view', $this->reservation);
 
-        $reservation = $this->api->get('reservations/'.$id, ['include' => '']);
+        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments']);
 
-        return view('admin.reservations.show')->with('reservation', $reservation);
+        $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
+
+        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab'));
     }
 
     /**
      * Edit the specified reservation
      *
      * @param $reservationId
-     * @return $this
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($reservationId)
     {
@@ -64,14 +67,8 @@ class ReservationsController extends Controller
 
     /**
      * Create a new reservation.
-     *
-     * @param $campaignId
      */
-    public function create($campaignId)
+    public function create()
     {
         $this->authorize('create', $this->reservation);
-
-        // $campaign = Reservation::whereId($campaignId)->orWhere('page_url', $campaignId)->first();
-        // $this->api->get('campaigns/'.$campaignId);
-        // return view('admin.reservations.create')->with('campaign', $campaign);
     }}

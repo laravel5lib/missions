@@ -9,17 +9,23 @@ $bootstrap-sass-asset-helper: false;
 //## Gray and brand colors for use across Bootstrap.
 
 $gray-base:              #242424;
-$gray-darker:            #3e3e3e; // #222
-$gray-dark:              #808080;   // #333
-$gray:                   #bcbcbc; // #555
-$gray-light:             #e6e6e6; // #777
-$gray-lighter:           #f5f5f5; // #eee
+$gray-darker:            #3e3e3e;
+$gray-dark:              #808080;
+$gray:                   #bcbcbc;
+$gray-light:             #e6e6e6;
+$gray-lighter:           #f5f5f5;
 
 $brand-primary:         #f6323e;
 $brand-success:         #05ce7b;
 $brand-info:            #0097cd;
 $brand-warning:         #ffe000;
 $brand-danger:          #d8262e;
+
+$brand-ministry: #2a2a2a;
+$brand-family: #3291C6;
+$brand-medical: #f6323e;
+$brand-international: #7A32C6;
+$brand-leader: #32C682;
 
 $text-primary-darker: darken($brand-primary, 30%);
 $text-primary-dark: darken($brand-primary, 20%);
@@ -162,7 +168,7 @@ $btn-primary-bg:                 $brand-primary;
 $btn-primary-border:             $btn-primary-bg;
 
 $btn-primary-darker-color:              #fff !important;
-$btn-primary-darker-bg:                 $text-primary-darker;
+$btn-primary-darker-bg:                 lighten($text-primary-darker, 20%);
 $btn-primary-darker-border:             $btn-primary-darker-bg;
 
 $btn-success-color:              #fff !important;
@@ -508,21 +514,37 @@ $jumbotron-heading-font-size:    ceil(($font-size-base * 4.5));
 //== Form states and alerts
 //
 //## Define colors for form feedback states and, by default, alerts.
+$alert-success-text:             $brand-success;
+$alert-success-bg:               transparent;
+$alert-success-border:           darken(adjust-hue($alert-success-text, -10), 5%);
 
-$state-success-text:             $brand-success;
-$state-success-bg:               transparent;
+$alert-info-text:                $brand-info;
+$alert-info-bg:                  transparent;
+$alert-info-border:              darken(adjust-hue($alert-info-text, -10), 7%);
+
+$alert-warning-text:             darken(adjust-hue($brand-warning, -10), 10%);;
+$alert-warning-bg:               transparent;
+$alert-warning-border:           darken(adjust-hue($brand-warning, -10), 5%);
+
+$alert-danger-text:              $brand-danger;
+$alert-danger-bg:                transparent;
+$alert-danger-border:            darken(adjust-hue($alert-danger-text, -10), 5%);
+
+
+$state-success-text:             #fff;
+$state-success-bg:               $brand-success;
 $state-success-border:           darken(adjust-hue($state-success-text, -10), 5%);
 
-$state-info-text:                $brand-info;
-$state-info-bg:                  transparent;
+$state-info-text:                #fff;
+$state-info-bg:                  $brand-info;
 $state-info-border:              darken(adjust-hue($state-info-text, -10), 7%);
 
-$state-warning-text:             darken(adjust-hue($brand-warning, -10), 5%);;
-$state-warning-bg:               transparent;
+$state-warning-text:             darken(adjust-hue($brand-warning, -10), 10%);;
+$state-warning-bg:               $brand-warning;
 $state-warning-border:           darken(adjust-hue($brand-warning, -10), 5%);
 
-$state-danger-text:              $brand-danger;
-$state-danger-bg:                transparent;
+$state-danger-text:              #fff;
+$state-danger-bg:                $brand-danger;
 $state-danger-border:            darken(adjust-hue($state-danger-text, -10), 5%);
 
 
@@ -819,7 +841,7 @@ $breadcrumb-separator:          "/";
 $carousel-text-shadow:                        none;
 
 $carousel-control-color:                      #fff;
-$carousel-control-width:                      15%;
+$carousel-control-width:                      3%;
 $carousel-control-opacity:                    .5;
 $carousel-control-font-size:                  20px;
 

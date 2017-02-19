@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
-	<div>
+	<div style="position:relative">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
@@ -14,83 +15,66 @@
 			<hr v-if="uiSelector!==0">
 		</form>
 		<div v-if="isChild && uiSelector==1">
-			<form class="form-inline text-right" novalidate>
+			<!--<form class="form-inline text-right" novalidate>
 				<div class="input-group input-group-sm">
 					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-			</form>
+			</form>-->
 			<br>
-			<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-				<div class="col-sm-2 col-md-2" v-for="upload in uploads" style="display:flex">
+			<div class="" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+				<div class="" :class="columnCLasses" v-for="upload in uploads" style="display:flex;flex: 1">
 					<div class="panel panel-default">
 
-							<a @click="selectExisting(upload)" role="button">
-								<tooltip effect="scale" placement="top" :content="upload.name">
-									<img :src="upload.source + '?w=100&q=50'" :alt="upload.name" class="img-responsive">
+							<a @click="preview(upload)" role="button">
+								<tooltip effect="scale" placement="top" content="Preview">
+									<img :src="upload.source + '?w=100&h=100&fit=crop-center&q=50'" :alt="upload.name" class="img-responsive">
 								</tooltip>
 							</a>
-
-						<!--<div class="panel-body">
-							<h6 class="text-uppercase">{{upload.name}}</h6>
-						</div>--><!-- end panel-body -->
 						<div class="panel-footer">
 							<button type="button" class="btn btn-xs btn-block btn-primary" @click="selectExisting(upload)">Select</button>
 						</div>
 					</div><!-- end panel -->
 				</div><!-- end col -->
 				<div class="col-xs-12 text-center">
-					<nav>
-						<ul class="pagination pagination-sm">
-							<li :class="{ 'disabled': pagination.current_page == 1 }">
-								<a aria-label="Previous" @click="page=pagination.current_page-1">
-									<span aria-hidden="true">&laquo;</span>
-								</a>
-							</li>
-							<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>
-							<li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-								<a aria-label="Next" @click="page=pagination.current_page+1">
-									<span aria-hidden="true">&raquo;</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+					<pagination :pagination.sync="pagination" :callback="searchUploads"></pagination>
 				</div>
 			</div>
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
-			<form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent">
+			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
 				<div class="form-group" :class="{ 'has-error': checkForError('name') }" v-show="!uiLocked">
-					<label for="name" class="col-sm-2 control-label">Name</label>
-					<div class="col-sm-10">
+					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
 							   maxlength="100" minlength="1" required>
-					</div>
 				</div>
 				<div class="form-group" :class="{ 'has-error': checkForError('tags') }" v-show="!uiLocked" >
-					<label for="tags" class="col-sm-2 control-label">Tags</label>
-					<div class="col-sm-10">
+					<label for="tags" class="control-label">Tags</label>
 						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
 						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>
-					</div>
 				</div>
 				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked" >
-					<label for="type" class="col-sm-2 control-label">Type</label>
-					<div class="col-sm-10">
-						<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
-							<option :value="">-- select type --</option>
-							<option value="avatar">Image (Avatar) - 1280 x 1280</option>
-							<option value="banner">Image (Banner) - 1300 x 500</option>
-							<option value="other">Image (other) - no set dimensions</option>
-							<option value="file">File</option>
-						</select>
+					<label for="type" class="control-label">Type</label>
+					<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
+						<option :value="">-- select type --</option>
+						<option value="avatar">Image (Avatar) - 1280 x 1280</option>
+						<option value="banner">Image (Banner) - 1300 x 500</option>
+						<option value="other">Image (other) - no set dimensions</option>
+						<option value="video">Video</option>
+						<option value="file">File</option>
+					</select>
+				</div>
+
+				<div class="row" v-if="isUpdate">
+					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other'">
+						<img :src="src" class="img-responsive">
 					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type === 'other'">
+				<div class="row" v-if="type && type === 'other' && !uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -118,15 +102,23 @@
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label for="file" class="col-sm-2 control-label">File</label>
-					<div class="col-sm-10">
-						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
-						<!--<h5>Coords: {{coords|json}}</h5>-->
+				<div class="row" v-if="type && type === 'video'">
+					<div class="col-xs-12">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="fa fa-play-circle"></i></span>
+							<input type="url" class="form-control" v-model="url" placeholder="https://vimeo.com/168118606">
+						</div>
+						<span class="help-block">Copy &amp; Paste a YouTube or Vimeo URL.</span>
 					</div>
 				</div>
 
-				<div class="row col-sm-offset-2" v-if="type && type !== 'file' && file && isSmall()">
+				<div class="form-group" v-if="type && type !== 'video'">
+					<label for="file" class="control-label">File</label>
+						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
+						<!--<h5>Coords: {{coords|json}}</h5>-->
+				</div>
+
+				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
 						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
 						The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
@@ -134,8 +126,8 @@
 				</div>
 
 				<div class="form-group" v-if="file" v-show="type !== 'file'">
-					<label for="file" class="col-sm-2 control-label">Crop Image</label>
-					<div id="crop-wrapper" class="col-sm-10">
+					<label for="file" class="control-label">Crop Image</label>
+					<div id="crop-wrapper" class="col-sm-12">
 						<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
 							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
 						<!--<hr>-->
@@ -146,24 +138,28 @@
 				<br>
 
 				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Create</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Update</a>
-					</div>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Save</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Save</a>
 				</div>
 
 			</form>
 		</validator>
 
+		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400" ok-text="Select" :callback="selectExistingPreview">
+			<div slot="modal-body" class="modal-body" v-if="previewUpload">
+				<h5 class="text-center">{{previewUpload.name}}</h5>
+				<img :src="previewUpload.source + '?w=720&fit=max&q=65'" :alt="previewUpload.name" class="img-responsive">
+			</div>
+		</modal>
+
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from 'vue-select'
-	import VueStrap from 'vue-strap/dist/vue-strap.min'
 	export default{
         name: 'upload-create-update',
-		components: {vSelect, 'tooltip': VueStrap.tooltip},
+		components: {vSelect},
 		props:{
 			uploadId: {
 				type: String,
@@ -204,32 +200,41 @@
 			name: {
 				type: String,
 				default: ''
-			}
+			},
+			perPage: {
+				type: Number,
+				default: 6
+			},
+			width: {
+				type: Number,
+				default: 100
+			},
+			height: {
+				type: Number,
+				default: 100
+			},
 		},
         data(){
             return {
-//				showRight: false,
-
-//                name: '',
-//                type: null,
+                url: '',
                 path: '',
                 file: null,
                 x_axis: null,
                 y_axis: null,
-                width: 100,
-				height: 100,
 
 				// logic variables
+				previewModal: false,
+				previewUpload: null,
 				attemptSubmit: false,
 				coords: 'Try to move/resize the selection',
 				constrained: true,
 				vueCropApi: null,
-				scaledWidth: 600,
-				scaledHeight: 600,
-				imageMaxWidth: 600,
-				imageMaxHeight: 600,
-				imageWidth: 600,
-				imageHeight: 600,
+				scaledWidth: 400,
+				scaledHeight: 400,
+				imageMaxWidth: 400,
+				imageMaxHeight: 400,
+				imageWidth: 400,
+				imageHeight: 400,
 				imageAspectRatio: null,
 				aspectRatio: this.width/this.height,
 				fileA: null,
@@ -237,16 +242,16 @@
 				typePaths: [
 					{type: 'avatar', path: 'images/avatars', width: 1280, height: 1280},
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
-					{type: 'other', path: 'images/other'},
+					{type: 'video'},
+					{type: 'other', path: 'images/other', width: this.width, height: this.height},
 					{type: 'file', path: 'resources/documents'},
 				],
 				typeObj: null,
 				resource: this.$resource('uploads{/id}'),
 				uploads: [],
 				page: 1,
-				per_page: 6,
 				search: '',
-				pagination: {},
+				pagination: { current_page: 1 },
             }
         },
 		computed:{
@@ -258,12 +263,20 @@
 				if (this.type === 'file') {
 					return 'application/pdf';
 				}
+			},
+			columnClasses() {
+			    if (this.isChild && this.perPage !== 6) {
+			        let col = 12 / this.perPage;
+			        return 'col-sm-' + col.toString() + ' col-md-' + col.toString()
+				} else {
+			        return 'col-sm-2 col-md-2';
+				}
 			}
 		},
 		watch:{
         	'type': function (val, oldVal) {
         		this.typeObj = _.findWhere(this.typePaths, {type: val});
-				if (this.typeObj) {
+				if (this.typeObj && val !== 'video') {
 					this.path = this.typeObj.path;
 					if (this.file)
 						this.adjustSelectByType();
@@ -278,11 +291,7 @@
 					this.searchUploads();
 				}
 			},
-			// Search Functionality
-			'search': function (val, oldVal) {
-				this.page = 1;
-				this.searchUploads();
-			},
+			// Pagination Functionality
 			'orderByField': function (val, oldVal) {
 				this.searchUploads();
 			},
@@ -292,24 +301,86 @@
 			'page': function (val, oldVal) {
 				this.searchUploads();
 			},
-			'per_page': function (val, oldVal) {
+			'perPage': function (val, oldVal) {
 				this.searchUploads();
 			},
-
-
 		},
 		events:{
 			'vueCrop-api':function (api) {
 				// make api available on scope
 				window.vueCropApi = this.vueCropApi = api;
+			},
+			'uploads-complete'(data){
+				switch(data.type){
+					case 'avatar':
+						this.selectedAvatar = data;
+						this.avatar_upload_id = data.id;
+						jQuery('#avatarCollapse').collapse('hide');
+						break;
+					case 'banner':
+						this.selectedBanner = data;
+						this.banner_upload_id = data.id;
+						jQuery('#bannerCollapse').collapse('hide');
+						break;
+				}
+				this.reset();
 			}
 		},
         methods: {
+			reset(){
+				_.extend(this, {
+					url: '',
+					path: '',
+					src: '',
+					file: null,
+					x_axis: null,
+					y_axis: null,
+					width: 100,
+					height: 100,
+
+					// logic variables
+					previewModal: false,
+					previewUpload: null,
+					attemptSubmit: false,
+					constrained: true,
+					scaledWidth: 400,
+					scaledHeight: 400,
+					imageMaxWidth: 400,
+					imageMaxHeight: 400,
+					imageWidth: 400,
+					imageHeight: 400,
+					imageAspectRatio: null,
+					aspectRatio: this.width/this.height,
+					fileA: null,
+					resultImage: null,
+					page: 1,
+					search: '',
+				});
+
+				if (this.isUpdate) {
+					this.resource.get({id: this.uploadId}).then(function (response) {
+						let upload = response.data.data;
+						this.name = upload.name;
+						this.tags = upload.tags;
+						this.type = upload.type;
+						this.src = upload.source;
+					});
+				}
+
+				if(this.isChild){
+					this.typeObj = _.findWhere(this.typePaths, {type: this.type});
+					if (this.typeObj) {
+						this.path = this.typeObj.path;
+						if (this.file)
+							this.adjustSelectByType();
+					}
+				}
+			},
 			isSmall(){
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar'], this.typeObj.type)) {
+				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
@@ -324,8 +395,8 @@
 				this.width = this.scaledWidth * this.imageAspectRatio;
 				this.height = this.scaledHeight * this.imageAspectRatio;
 
-				var w = this.width;
-				var h = this.height;
+				let w = this.width;
+				let h = this.height;
 				// always go with the width when constrained
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
@@ -342,19 +413,31 @@
                 return this.$CreateUpload[field].invalid && this.attemptSubmit;
             },
             submit(){
-                this.attemptSubmit = true;
+				this.attemptSubmit = true;
                 if (this.$CreateUpload.valid) {
-                    this.resource.save(null, {
-                        name: this.name,
-						tags: this.tags,
-						type: this.type,
-                        path: this.path,
-						file: this.file,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio),
-                        width: parseInt(this.coords.w / this.imageAspectRatio),
-                        height: parseInt(this.coords.h / this.imageAspectRatio),
-                    }).then(function (resp) {
+					let params;
+					if (this.type === 'video') {
+						params = {
+							name: this.name,
+							tags: this.tags,
+							type: this.type,
+							url: this.url
+						};
+					} else {
+						params = {
+							name: this.name,
+							tags: this.tags,
+							type: this.type,
+							file: this.file,
+							path: this.path,
+							x_axis: parseInt(this.x_axis / this.imageAspectRatio),
+							y_axis: parseInt(this.y_axis / this.imageAspectRatio),
+							width: parseInt(this.coords.w / this.imageAspectRatio),
+							height: parseInt(this.coords.h / this.imageAspectRatio),
+						};
+					}
+
+                    this.resource.save(null, params).then(function (resp) {
 						this.handleSuccess(resp)
                     }, function (error) {
                         console.log(error);
@@ -403,7 +486,7 @@
 
 						// adjust container
 						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type) ) {
+						if (self.typeObj && _.contains(['banner', 'avatar', 'other'], self.typeObj.type) ) {
 							self.adjustSelectByType()
 						} else {
 							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
@@ -423,11 +506,10 @@
 				}
 			},
 			searchUploads(){
-				var params = {
+				let params = {
 					include: '',
-					search: this.search,
-					per_page: this.per_page,
-					page: this.page,
+					per_page: this.perPage,
+					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction?'asc':'desc'),
 					type: this.type,
 					tags: this.tags
@@ -441,15 +523,24 @@
 			selectExisting(upload){
 				// Assumes this is a child component
 				this.$dispatch('uploads-complete', upload);
+			},
+			selectExistingPreview(){
+				// Assumes this is a child component
+				this.$dispatch('uploads-complete', this.previewUpload);
+			},
+			preview(upload){
+			    this.previewModal = true;
+			    this.previewUpload = upload;
 			}
         },
 		ready(){
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
-					var upload = response.data.data;
+					let upload = response.data.data;
 					this.name = upload.name;
 					this.tags = upload.tags;
 					this.type = upload.type;
+					this.src = upload.source;
 				});
 			}
 
@@ -461,6 +552,8 @@
 						this.adjustSelectByType();
 				}
 			}
+
+			this.searchUploads();
 
         }
     }

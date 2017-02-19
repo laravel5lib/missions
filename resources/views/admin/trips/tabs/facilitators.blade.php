@@ -1,0 +1,1 @@
+<admin-trip-facilitators trip-id="{{ $trip->id }}"></admin-trip-facilitators>

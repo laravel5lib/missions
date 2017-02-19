@@ -13,7 +13,12 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        // Commands\Inspire::class,
+        Commands\SendEmails::class,
+        Commands\SendWelcomeEmails::class,
+        Commands\SendReservationConfirmationEmail::class,
+        Commands\SendReceiptEmail::class,
+        Commands\HandleLatePayments::class,
+        Commands\TransferData::class
     ];
 
     /**
@@ -24,7 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+         $schedule->command('payments:penalize')
+                  ->daily()
+                  ->timezone('America/Detroit')
+                  ->withoutOverlapping();
     }
 }

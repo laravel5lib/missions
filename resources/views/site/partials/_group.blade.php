@@ -1,14 +1,14 @@
 <div class="media">
     <div class="media-left">
         <a href="/groups/{{ $group->url }}">
-            <img class="media-object img-rounded img-xs" src="{{ image($group->avatar->source) }}" alt="{{ $group->name }}">
+            <img class="media-object img-rounded img-xs" src="{{ image($group->getAvatar()->source) }}" alt="{{ $group->name }}">
         </a>
     </div>
     <div class="media-body">
-        <h5 class="media-heading">{{ $group->name }}</h5>
+        <h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a href="{{ $group->slug->url }}">{{ $group->name }}</a></h6>
         @unless(! $group->city and ! $group->state)
-            <small>{{ $group->city }} @if($group->city), @endif {{ $group->state }}</small> <br />
+            <p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ $group->city }} @if($group->city), @endif {{ $group->state }}</p>
         @endunless
-        <small>{{ country($group->country_code) }}</small>
+        <p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ country($group->country_code) }}</p>
     </div><!-- end media-body -->
 </div><!-- end media -->

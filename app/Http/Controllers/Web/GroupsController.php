@@ -2,29 +2,40 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
+use App\Models\v1\Slug;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class GroupsController extends Controller
 {
-    public function profile($slug)
+    public function index()
     {
-//        $response = $this->api->raw()->get('/groups', [
-//            'include' => 'social',
-//            'url' => $slug
-//        ]);
-//
-//        $group = collect(json_decode($response->getContent())->data)->shift();
+        return view('site.groups.index');
+    }
 
-        $response = $this->api->get('/groups', [
-            'include' => 'social',
-            'url' => $slug
+    public function show($id)
+    {
+        $group = $this->api->get('/groups/'.$id, [
+            'include' => 'social,managers'
         ]);
 
-        $group = $response->shift();
+        $authId = auth()->user() ? auth()->user()->id : null;
+
+        if ( !$group->public && ! $group->managers->pluck('id')->contains($authId) ) abort(403);
 
         return view('site.groups.profile', compact('group'));
+    }
+
+    public function signup($slug)
+    {
+        $id = Slug::where('url', $slug)
+               ->where('slugable_type', 'groups')
+               ->pluck('slugable_id')
+               ->first();
+
+        $group = $this->api->get('/groups/'.$id);
+
+        return view('site.groups.signup', compact('group'));
     }
 }

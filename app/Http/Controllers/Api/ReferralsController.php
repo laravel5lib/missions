@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Http\Requests\v1\ReferralRequest;
-use App\Http\Transformers\v1\ReferralTransformer;
-use App\Models\v1\Referral;
 use Carbon\Carbon;
+use App\Models\v1\Referral;
+use App\Jobs\ExportReferrals;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Jobs\SendReferralRequestEmail;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\ImportRequest;
+use App\Http\Requests\v1\ReferralRequest;
+use App\Services\Importers\ReferralListImport;
+use App\Http\Transformers\v1\ReferralTransformer;
 
 class ReferralsController extends Controller
 {
@@ -24,8 +28,6 @@ class ReferralsController extends Controller
      */
     public function __construct(Referral $referral)
     {
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
         $this->referral = $referral;
     }
 
@@ -37,12 +39,9 @@ class ReferralsController extends Controller
      */
     public function index(Request $request)
     {
-        $referrals = $this->referral;
-
-        if($request->has('user_id'))
-            $referrals = $referrals->where('user_id', $request->get('user_id'));
-
-        $referrals = $referrals->paginate($request->get('per_page', 25));
+        $referrals = $this->referral
+                        ->filter($request->all())
+                        ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($referrals, new ReferralTransformer);
     }
@@ -68,14 +67,19 @@ class ReferralsController extends Controller
      */
     public function store(ReferralRequest $request)
     {
-        $referral = new Referral($request->all);
-        $referral->sent_at = Carbon::now();
-        $referral->save();
-
-        // generate a url to response form
-        // email url to referral_email
+        $referral = Referral::create([
+            'user_id' => $request->get('user_id'),
+            'applicant_name' => $request->get('applicant_name'),
+            'attention_to' => $request->get('attention_to'),
+            'recipient_email' => $request->get('recipient_email'),
+            'type' => $request->get('type'),
+            'referrer' => $request->get('referrer'),
+            'sent_at' => Carbon::now()
+        ]);
 
         $location = url('/referrals/' . $referral->id);
+
+        dispatch(new SendReferralRequestEmail($referral));
 
         return $this->response->created($location);
     }
@@ -91,7 +95,17 @@ class ReferralsController extends Controller
     {
         $referral = $this->referral->findOrFail($id);
 
-        $referral->update($request->all());
+        $referral->update([
+            'user_id' => $request->get('user_id', $referral->user_id),
+            'applicant_name' => $request->get('applicant_name', $referral->applicant_name),
+            'attention_to' => $request->get('attention_to', $referral->attention_to),
+            'recipient_email' => $request->get('recpient_email', $referral->recipient_email),
+            'type' => $request->get('type', $referral->type),
+            'referrer' => $request->get('referrer', $referral->referrer),
+            'sent_at' => $request->get('sent_at', $referral->sent_at),
+            'responded_at' => $request->get('responded_at', $referral->responded_at),
+            'response' => $request->get('response', $referral->response)
+        ]);
 
         return $this->response->item($referral, new ReferralTransformer);
     }
@@ -110,4 +124,34 @@ class ReferralsController extends Controller
 
         return $this->response->noContent();
     }
+
+    /**
+     * Export referrals.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportReferrals($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import Referrals.
+     * 
+     * @param  ImportRequest      $request 
+     * @param  ReferralListImport $import  
+     * @return response                      
+     */
+    public function import(ImportRequest $request, ReferralListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
+    }
+
 }

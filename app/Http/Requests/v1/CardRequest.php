@@ -25,8 +25,9 @@ class CardRequest extends FormRequest
     {
         $required = [
             'card_id'   => 'required_without:number',
+            'cardholder' => 'required_without:card_id|string',
             'number'    => 'required_without:card_id|string',
-            'exp_month' => 'required_with:number|digits:2',
+            'exp_month' => 'required_with:string',
             'exp_year'  => 'required_with:number|digits:4',
             'cvc'       => 'required_with:number|digits_between:3,4',
         ];
@@ -34,11 +35,12 @@ class CardRequest extends FormRequest
         if ($this->isMethod('put'))
         {
             $required = [
-                'card_id'   => 'sometimes|required_without:number',
-                'number'    => 'sometimes|required_without:card_id|string',
-                'exp_month' => 'sometimes|required_with:number|digits:2',
-                'exp_year'  => 'sometimes|required_with:number|digits:4',
-                'cvc'       => 'sometimes|required_with:number|digits_between:3,4',
+                'card_id'    => 'sometimes|required_without:number',
+                'cardholder' => 'sometimes|required_without:card_id|string',
+                'number'     => 'sometimes|required_without:card_id|string',
+                'exp_month'  => 'sometimes|required_with:number|string',
+                'exp_year'   => 'sometimes|required_with:number|digits:4',
+                'cvc'        => 'sometimes|required_with:number|digits_between:3,4'
             ];
         }
 

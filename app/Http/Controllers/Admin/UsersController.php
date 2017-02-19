@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\v1\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Session;
 
 class UsersController extends Controller
 {
@@ -44,5 +47,21 @@ class UsersController extends Controller
          $this->authorize('create', $this->user);
 
          return view('admin.users.create');
+    }
+
+    public function impersonate($id)
+    {
+        $user = User::find($id);
+
+        return redirect()->to('/dashboard')->withCookie('impersonate', $user->id, 60, null, null, false, false);
+    }
+
+    public function stopImpersonate()
+    {
+        $id = Cookie::get('impersonate');
+
+        $cookie = Cookie::forget('impersonate');
+
+        return redirect()->to('/admin/users/'.$id)->withCookie($cookie);
     }
 }

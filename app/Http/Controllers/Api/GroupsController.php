@@ -4,10 +4,17 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\v1\GroupSubmissionRequest;
+use App\Http\Transformers\v1\NoteTransformer;
 use App\Models\v1\Group;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\GroupRequest;
 use App\Http\Transformers\v1\GroupTransformer;
+use Ramsey\Uuid\Uuid;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportGroups;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\GroupListImport;
 
 class GroupsController extends Controller
 {
@@ -23,8 +30,6 @@ class GroupsController extends Controller
      */
     public function __construct(Group $group)
     {
-         $this->middleware('api.auth', ['except' => ['index','show']]);
-        // $this->middleware('jwt.refresh', ['except' => ['index','show']]);
         $this->group = $group;
     }
 
@@ -56,6 +61,22 @@ class GroupsController extends Controller
     }
 
     /**
+     * Get all the group's notes.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function notes($id, Request $request)
+    {
+        $group = $this->group->findOrFail($id);
+
+        $notes = $group->notes()->paginate($request->get('per_page', 25));
+
+        return $this->response->paginator($notes, new NoteTransformer);
+    }
+
+    /**
      * Store a group.
      *
      * @param GroupRequest $request
@@ -63,9 +84,37 @@ class GroupsController extends Controller
      */
     public function store(GroupRequest $request)
     {
-        $group = $this->group->create($request->all());
+        $group = $this->group->create($request->except('url'));
+
+        $url = $request->get('url') ? $request->get('url') : generate_slug($group->name);
+
+        $group->slug()->create(['url' => $url]);
 
         $group->syncmanagers($request->get('managers'));
+
+        return $this->response->item($group, new GroupTransformer);
+    }
+
+    /**
+     * Submit a new group for approval.
+     *
+     * @param GroupSubmissionRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function submit(GroupSubmissionRequest $request)
+    {
+        $request->merge(['status' => 'pending']);
+
+        $group = $this->group->create($request->all());
+
+        $group->notes()->create([
+            'user_id' => Uuid::uuid4(),
+            'subject' => 'New Group Submission',
+            'content' => 'Contact: ' . $request->get('contact') .
+                ', Position: ' . $request->get('position') .
+                ', Spoken with MM Rep: ' . $request->get('spoke_to_rep') .
+                ', Campaign of Interest: ' . $request->get('campaign')
+        ]);
 
         return $this->response->item($group, new GroupTransformer);
     }
@@ -81,7 +130,9 @@ class GroupsController extends Controller
     {
         $group = $this->group->findOrFail($id);
 
-        $group->update($request->all());
+        $group->update($request->except('url'));
+
+        $group->slug()->update(['url' => $request->get('url')]);
 
         $group->syncmanagers($request->get('managers'));
 
@@ -101,5 +152,33 @@ class GroupsController extends Controller
         $group->delete();
 
         return $this->response->noContent();
+    }
+
+     /**
+     * Export Groups.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportGroups($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of Groups.
+     * 
+     * @param  GroupListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, GroupListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

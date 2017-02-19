@@ -1,21 +1,25 @@
 <template>
-    <div class="row">
-        <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View All</a></h3>
+    <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="row">
+            <div class="col-sm-12">
+                <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-default-hollow">View All</a></h3>
+            </div>
             <div class="col-sm-12" v-if="loaded && !passports.length">
-                <div class="alert alert-info" role="alert">No records found</div>
+                <p class="text-muted text-center" role="alert"><em>Add and manage your records here!</em></p>
             </div>
 
-            <div class="col-sm-4" v-for="passport in passports">
+            <div class="col-md-4 col-sm-6" v-for="passport in passports">
                 <div class="panel panel-default">
-                    <div style="min-height:220px;" class="panel-body">
+                    <div class="panel-heading">
                         <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{passport.citizenship_name}}</h6>
                         <a role="button" :href="'/dashboard' + passport.links[0].uri">
-                            <h5 style="text-transform:capitalize;" class="text-primary">
+                            <h4 style="text-transform:capitalize;" class="text-primary">
                                 {{passport.given_names}} {{passport.surname}}
-                            </h5>
+                            </h4>
                         </a>
-                        <hr class="divider lg">
+                    </div>
+                    <div class="panel-body">
                         <p class="small">
                             <b>ID:</b> {{passport.number}}
                             <br>
@@ -29,22 +33,23 @@
                 </div>
             </div>
         </div>
-
-        <hr>
-        <h3>Visas <a href="/dashboard/visas" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i> View All</a></h3>
+        <hr class="divider">
         <div class="row">
+            <div class="col-sm-12">
+                <h3>Visas <a href="/dashboard/visas" class="btn btn-xs btn-default-hollow">View All</a></h3>
+            </div>
             <div class="col-sm-12" v-if="loaded && !visas.length">
-                <div class="alert alert-info" role="alert">No records found</div>
+                <div role="alert"><p class="text-center text-muted"><em>No records found</em></p></div>
             </div>
 
-            <div class="col-sm-4" v-for="visa in visas">
+            <div class="col-md-4 col-sm-6" v-for="visa in visas">
                 <div class="panel panel-default">
                     <div style="min-height:220px;" class="panel-body">
                         <h6 class="text-uppercase"><i class="fa fa-map-marker"></i> {{visa.country_name}}</h6>
                         <a role="button" :href="'/dashboard' + visa.links[0].uri">
-                            <h5 style="text-transform:capitalize;" class="text-primary">
+                            <h4 style="text-transform:capitalize;" class="text-primary">
                                 {{visa.given_names}} {{visa.surname}}
-                            </h5>
+                            </h4>
                         </a>
                         <hr class="divider lg">
                         <p class="small">
@@ -58,11 +63,10 @@
                 </div>
             </div>
         </div>
-
-
     </div>
+    <hr class="divider inv lg">
 </template>
-<script>
+<script type="text/javascript">
     export default{
         name: 'records-list',
         data(){
@@ -75,10 +79,12 @@
             }
         },
         ready(){
+            // this.$refs.spinner.show();
             this.$http('users/me?include=passports,visas').then(function (response) {
                 this.visas = response.data.data.visas.data;
                 this.passports = response.data.data.passports.data;
                 this.loaded = true;
+                // this.$refs.spinner.hide();
             });
         }
     }

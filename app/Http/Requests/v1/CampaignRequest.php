@@ -13,7 +13,7 @@ class CampaignRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin();
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class CampaignRequest extends FormRequest
             'started_at'   => 'required|date|before:ended_at',
             'ended_at'     => 'required|date|after:started_at',
             'page_src'     => 'required_with:published_at|string',
-            'page_url'     => 'required_with:published_at|string|unique:campaigns,page_url'
+            'page_url'     => 'required_with:published_at|string|unique:slugs,url'
         ];
 
         if ($this->isMethod('put'))
@@ -40,7 +40,7 @@ class CampaignRequest extends FormRequest
                 'started_at'   => 'sometimes|required|date|before:ended_at',
                 'ended_at'     => 'sometimes|required|date|after:started_at',
                 'page_src'     => 'required_with:published_at|string',
-                'page_url'     => 'required_with:published_at|string|unique:campaigns,id,' . $this->route('campaigns')
+                'page_url'     => 'required_with:published_at|string|unique:slugs,url,'.$this->route('campaigns').',slugable_id'
             ];
         }
 

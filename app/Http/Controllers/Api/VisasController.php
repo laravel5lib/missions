@@ -8,6 +8,10 @@ use App\Models\v1\Visa;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\VisaRequest;
 use App\Http\Transformers\v1\VisaTransformer;
+use App\Http\Requests\v1\ExportRequest;
+use App\Jobs\ExportVisas;
+use App\Http\Requests\v1\ImportRequest;
+use App\Services\Importers\VisaListImport;
 
 class VisasController extends Controller
 {
@@ -24,9 +28,6 @@ class VisasController extends Controller
     public function __construct(Visa $visa)
     {
         $this->visa = $visa;
-
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -37,12 +38,9 @@ class VisasController extends Controller
      */
     public function index(Request $request)
     {
-        $visas = $this->visa;
-
-        if($request->has('user_id'))
-            $visas = $visas->where('user_id', $request->get('user_id'));
-
-        $visas = $visas->paginate(25);
+        $visas = $this->visa
+                    ->filter($request->all())
+                    ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($visas, new VisaTransformer);
     }
@@ -102,5 +100,33 @@ class VisasController extends Controller
         $visa->delete();
 
         return $this->response->noContent();
+    }
+
+    /**
+     * Export Visas.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportVisas($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
+    }
+
+    /**
+     * Import a list of Visas.
+     * 
+     * @param  VisaListImport $import
+     * @return response
+     */
+    public function import(ImportRequest $request, VisaListImport $import)
+    {
+        $response = $import->handleImport();
+
+        return $this->response()->created(null, $response);
     }
 }

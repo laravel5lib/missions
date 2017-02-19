@@ -24,7 +24,7 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'subject', 'content', 'user_id'
+        'subject', 'content', 'user_id', 'noteable_id', 'noteable_type'
     ];
 
     /**
@@ -109,5 +109,17 @@ class Note extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get most recent notes.
+     *
+     * @param $query
+     * @param int $number
+     * @return mixed
+     */
+    public function scopeRecent($query, $number = 3)
+    {
+        return $query->latest()->limit($number);
     }
 }

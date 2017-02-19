@@ -14,7 +14,7 @@ class FundraiserTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = ['sponsor'];
+    protected $availableIncludes = ['sponsor', 'fund', 'uploads'];
 
     /**
      * Turn this item object into a generic array
@@ -24,27 +24,38 @@ class FundraiserTransformer extends TransformerAbstract
      */
     public function transform(Fundraiser $fundraiser)
     {
-        $fundraiser->load('banner');
-
         $array = [
             'id'             => $fundraiser->id,
             'name'           => $fundraiser->name,
             'type'           => $fundraiser->type,
-            'goal_amount'    => (int) $fundraiser->goal_amount,
-            'raised_amount'  => (int) $fundraiser->raised(),
-            'raised_percent' => (int) $fundraiser->fundable->getPercentRaised(),
-            'donors_count'   => (int) $fundraiser->countDonors(),
-            'banner'         => $fundraiser->banner ? image($fundraiser->banner->source) : null,
+            'fund_id'        => $fundraiser->fund_id,
+            'goal_amount'    => $fundraiser->goalAmountAsDollars(),
+            'raised_amount'  => $fundraiser->raisedAsDollars(),
+            'raised_percent' => (int) $fundraiser->getPercentRaised(),
+            'donors_count'   => (int) count($fundraiser->donors),
+            'sponsor_id'     => $fundraiser->sponsor_id,
+            'sponsor_type'   => $fundraiser->sponsor_type,
             'url'            => $fundraiser->url,
+            'public'         => (bool) $fundraiser->public,
+            'show_donors'    => (bool) $fundraiser->show_donors,
             'description'    => $fundraiser->description,
             'started_at'     => $fundraiser->started_at->toDateTimeString(),
             'ended_at'       => $fundraiser->ended_at->toDateTimeString(),
             'created_at'     => $fundraiser->created_at->toDateTimeString(),
             'updated_at'     => $fundraiser->updated_at->toDateTimeString(),
+            'tags'           => $fundraiser->tagSlugs(),
             'links'          => [
                 [
                     'rel' => 'self',
-                    'uri' => '/fundraisers/' . $fundraiser->id,
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id),
+                ],
+                [
+                    'rel' => 'donors',
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donors'),
+                ],
+                [
+                    'rel' => 'donations',
+                    'uri' => url('/api/fundraisers/' . $fundraiser->id . '/donations'),
                 ]
             ]
         ];
@@ -52,6 +63,12 @@ class FundraiserTransformer extends TransformerAbstract
         return $array;
     }
 
+    /**
+     * Include the fundraiser's sponsor.
+     *
+     * @param Fundraiser $fundraiser
+     * @return \League\Fractal\Resource\Item|null
+     */
     public function includeSponsor(Fundraiser $fundraiser)
     {
         $sponsor = $fundraiser->sponsor;
@@ -63,6 +80,32 @@ class FundraiserTransformer extends TransformerAbstract
             return $this->item($sponsor, new GroupTransformer);
 
         return null;
+    }
+
+    /**
+     * Include the fund associated with the fundraiser.
+     *
+     * @param Fundraiser $fundraiser
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeFund(Fundraiser $fundraiser)
+    {
+        $fund = $fundraiser->fund;
+
+        return $this->item($fund, new FundTransformer);
+    }
+
+    /**
+     * Include the uploads associated with the fundraiser.
+     *
+     * @param Fundraiser $fundraiser
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(Fundraiser $fundraiser)
+    {
+        $uploads = $fundraiser->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 
 }

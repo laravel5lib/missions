@@ -49,10 +49,12 @@
 							<select id="type" class="form-control input-sm" v-model="type"
 									v-validate:type="{ required: true }" required>
 								<option value="">-- select --</option>
-								<option value="full">Full</option>
+								<option value="ministry">Ministry</option>
+								<option value="family">Family</option>
 								<option value="media">Media</option>
 								<option value="medical">Medical</option>
-								<option value="short">Short</option>
+								<option value="international">International</option>
+								<option value="leader">Leader</option>
 							</select>
 						</div>
 					</div>
@@ -104,7 +106,8 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
-										<input type="date" class="form-control" v-model="started_at" id="started_at"
+										<date-picker class="form-control input-sms" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 											   v-validate:start="{ required: true }" required>
 									</div>
 								</div>
@@ -112,7 +115,8 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('end') }">
 										<span class="input-group-addon">End</span>
-										<input type="date" class="form-control" v-model="ended_at" id="ended_at"
+										<date-picker class="form-control input-sms" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 											   v-validate:end="{ required: true }" required>
 									</div>
 								</div>
@@ -137,7 +141,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	var marked = require('marked');
 
 	import vSelect from "vue-select"
@@ -263,7 +267,7 @@
 					group_id: val.group_id,
 					description: val.description,
 					type: val.type,
-					difficulty: val.difficulty,
+					difficulty: val.difficulty.split(' ')[0] + '_' + val.difficulty.split(' ')[1],
 					companion_limit: val.companion_limit,
 					prospects: val.prospects,
 					started_at: val.started_at,

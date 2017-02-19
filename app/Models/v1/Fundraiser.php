@@ -3,13 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fundraiser extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, Taggable;
 
     /**
      * The table associated with the model.
@@ -25,7 +25,8 @@ class Fundraiser extends Model
      */
     protected $fillable = [
         'name', 'started_at', 'ended_at', 'goal_amount', 'description',
-        'sponsor_id', 'sponsor_type', 'url', 'type'
+        'sponsor_id', 'sponsor_type', 'url', 'type', 'public', 'show_donors',
+        'created_at', 'updated_at'
     ];
 
     /**
@@ -55,29 +56,55 @@ class Fundraiser extends Model
     }
 
     /**
-     * Get all of the owning fundable models.
+     * Get the fund the fundraiser belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function fundable()
+    public function fund()
     {
-        return $this->morphTo();
+        return $this->belongsTo(Fund::class);
     }
 
+    /**
+     * Get all the fundraiser's stories.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function stories()
+    {
+        return $this->morphToMany(Story::class, 'publication', 'published_stories')
+            ->withPivot('published_at')
+            ->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Get the donations made through the fundraiser.
+     *
+     * @return mixed
+     */
     public function donations()
     {
-        return $this->fundable->donations();
+        return $this->fund->donations();
     }
 
-    public function countDonors()
+    /**
+     * Get all the transactions related to the fundraiser.
+     *
+     * @return mixed
+     */
+    public function transactions()
     {
-        $filters = [
-            str_singular($this->fundable_type) => $this->fundable_id,
-            'starts'                           => $this->started_at,
-            'ends'                             => $this->ended_at
-        ];
+        return $this->fund->transactions();
+    }
 
-        return Donor::filter($filters)->count();
+    /**
+     * Get the donors who gave through the fundraiser.
+     *
+     * @return mixed
+     */
+    public function donors()
+    {
+        return $this->fund->donors();
     }
 
     /**
@@ -87,20 +114,44 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        return $this->donations()
-            ->whereBetween('created_at', [
-                $this->started_at, $this->ended_at
-            ])
-            ->sum('amount');
+        $amount = $this->transactions()->sum('amount'); // in cents
+
+        return $amount ? $amount : 0;
+    }
+
+    public function raisedAsDollars()
+    {
+        return number_format(($this->raised() / 100), 2);
+    }
+
+    public function goalAmountAsDollars()
+    {
+        return number_format(($this->goal_amount / 100), 2);
+    }
+
+    public function getPercentRaised()
+    {
+        // check for 0 values first,
+        // because division by zero is not possible
+        if( $this->raised() === 0 or $this->goal_amount === 0 )
+            return 0;
+
+        return round(($this->raised()/$this->goal_amount) * 100);
     }
 
     /**
-     * Get the fundraiser's page banner.
+     * Get the fundraiser's uploads.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
-    public function banner()
+    public function uploads()
     {
-        return $this->belongsTo(Upload::class, 'banner_upload_id');
+        return $this->morphToMany(Upload::class, 'uploadable');
     }
+
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
 }

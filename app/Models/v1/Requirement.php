@@ -18,13 +18,11 @@ class Requirement extends Model
     protected $table = 'requirements';
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are not mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'item', 'due_at', 'grace_period', 'enforced'
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.
@@ -55,7 +53,7 @@ class Requirement extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function requirable()
+    public function requester()
     {
         return $this->morphTo();
     }
@@ -67,6 +65,8 @@ class Requirement extends Model
      */
     public function reservations()
     {
-        return $this->belongsToMany(Reservation::class, 'reservation_requirements');
+        return $this->belongsToMany(Reservation::class, 'reservation_requirements')
+                    ->withPivot('grace_period', 'status', 'completed_at')
+                    ->withTimestamps();
     }
 }

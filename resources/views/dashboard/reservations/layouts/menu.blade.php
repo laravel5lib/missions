@@ -1,13 +1,23 @@
 <div class="panel panel-default">
+	@if($rep)
 	<div class="panel-heading">
-		<a href="{{ url('dashboard/reservations') }}" class="btn btn-block btn-default"><span class="fa fa-chevron-left icon-left"></span> My Reservations</a>
-	</div>
-	<ul class="list-group">
-		<a class="list-group-item {{ $active == 'details' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id]) }}">Details</a>
-	    <a class="list-group-item {{ $active == 'requirements' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id, 'requirements']) }}">Travel Documents</a>
-		{{--    <a class="list-group-item {{ $active == 'donations' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id, 'donations']) }}">Donations</a>--}}
-		{{--    <a class="list-group-item {{ $active == 'fundraisers' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id, 'fundraisers']) }}">Fundraisers</a>--}}
-	    <a class="list-group-item {{ $active == 'funding' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id, 'funding']) }}">Funding</a>
-	    <a class="list-group-item {{ $active == 'deadlines' ? 'active' : '' }}" href="{{ url('dashboard/reservations', [$reservation->id, 'deadlines']) }}">Due Dates</a>
+		<div style="display:inline-block;">
+			<img class="img-circle img-sm" src="{{ image($rep->getAvatar()->source.'?w=50&h=50') }}">
+		</div>
+		<div style="display:inline-block;vertical-align:middle;margin:0 0 0 10px;">
+			<label style="margin-bottom:0px;font-size:10px;">Your Trip Rep</label>
+			<h5 style="margin:3px 0 6px;">{{ $rep->name }}</h5>
+			<p style="font-size:10px;margin-top:3px;"><i class="fa fa-phone"></i> <a href="tel:{{ $rep->phone_one }}">{{ $rep->phone_one }}</a> / <i class="fa fa-envelope"></i> <a href="mailto:{{ $rep->email }}">{{ $rep->email }}</a></p>
+		</div>
+	</div><!-- end panel-heading -->
+	@endif
+	<ul class="nav nav-pills nav-stacked">
+		@foreach($links as $link)
+		<li class="{{ $tab == $link['url'] ? 'active' : '' }}">
+			<a href="{{ url('dashboard/reservations', [$reservation->id, $link['url']]) }}">
+				{{ $link['label'] }}
+			</a>
+		</li>
+		@endforeach
 	</ul>
 </div><!-- end panel -->

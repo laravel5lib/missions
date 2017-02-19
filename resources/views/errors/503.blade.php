@@ -1,47 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Be right back.</title>
+@extends('site.layouts.default')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                color: #B0BEC5;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 72px;
-                margin-bottom: 40px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Be right back.</div>
-            </div>
-        </div>
-    </body>
-</html>
+@section('content')
+    <div class="container">
+        <div class="content-section">
+            <div class="row">
+                <div class="col-sm-5 col-sm-offset-1">
+                    <h1 class="text-hero">BRB, Hold Tight!</h1>
+                    <h3>Service is temporarily unavailable but we're working on it and we'll be right back.</h3>
+                    <p>Error code 503</p>
+                </div><!-- end col -->
+            </div><!-- end row -->
+        </div><!-- end content-section -->
+    </div><!-- end container -->
+@endsection

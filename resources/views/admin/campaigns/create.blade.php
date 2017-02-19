@@ -1,10 +1,10 @@
 @extends('admin.layouts.default')
 
 @section('styles')
-    <link rel="stylesheet" href="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/css/Jcrop.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/css/Jcrop.min.css" type="text/css">
 @endsection
 @section('scripts')
-    <script src="http://jcrop-cdn.tapmodo.com/v2.0.0-RC1/js/Jcrop.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/js/Jcrop.min.js"></script>
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Create Your Campaign</h3>
+                <h3>Campaign <small>&middot; Create</small></h3>
             </div>
         </div>
     </div>

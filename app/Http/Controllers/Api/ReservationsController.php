@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ReservationWasCreated;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
-use App\Http\Transformers\v1\DonationTransformer;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Transformers\v1\DonorTransformer;
+use App\Http\Transformers\v1\RequirementTransformer;
+use App\Jobs\ExportReservations;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
+use Carbon\Carbon;
 use Dingo\Api\Contract\Http\Request;
 use App\Http\Requests\v1\ReservationRequest;
 use App\Http\Transformers\v1\ReservationTransformer;
@@ -54,7 +58,7 @@ class ReservationsController extends Controller
      */
     public function show($id)
     {
-        $reservation = $this->reservation->findOrFail($id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -66,18 +70,18 @@ class ReservationsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function donors($id, Request $request)
-    {
-        // Filter donors by reservation
-        $request->merge(['reservation' => $id]);
-
-        $donors = Donor::filter($request->all())
-            ->paginate($request->get('per_page'));
-
-        // Pass the reservation to the transformer to filter
-        // embedded relationships by designation.
-        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
-    }
+//    public function donors($id, Request $request)
+//    {
+//        // Filter donors by reservation
+//        $request->merge(['reservation' => $id]);
+//
+//        $donors = Donor::filter($request->all())
+//            ->paginate($request->get('per_page'));
+//
+//        // Pass the reservation to the transformer to filter
+//        // embedded relationships by designation.
+//        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
+//    }
 
     /**
      * Store a reservation.
@@ -87,13 +91,9 @@ class ReservationsController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $reservation = Reservation::create($request->all());
+        $reservation = $this->reservation->create($request->except('costs', 'donor', 'payment'));
 
-        // Eager load trip relationships for sync
-        $reservation->load('trip.costs', 'trip.requirements', 'trip.deadlines');
-
-        if ($request->has('tags'))
-            $reservation->tag($request->get('tags'));
+        event(new ReservationWasCreated($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -114,7 +114,6 @@ class ReservationsController extends Controller
         $reservation->syncCosts($request->get('costs'));
         $reservation->syncRequirements($request->get('requirements'));
         $reservation->syncDeadlines($request->get('deadlines'));
-        $reservation->syncTodos($request->get('todos'));
 
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));
@@ -135,5 +134,54 @@ class ReservationsController extends Controller
         $reservation->delete();
 
         return $this->response->noContent();
+    }
+
+    public function reconcile($id)
+    {
+        $reservation = $this->reservation->findOrFail($id);
+
+        $reservation->payments()->reconcile();
+
+        return $this->response->item($reservation, new ReservationTransformer, ['include' => 'dues']);
+    }
+
+    /**
+     * Update an existing requirement.
+     *
+     * @param $reservation_id
+     * @param $requirement_id
+     * @param RequirementRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function updateRequirement($reservation_id, $requirement_id, RequirementRequest $request)
+    {
+        $reservation = $this->reservation->findOrFail($reservation_id);
+
+        $attributes = [
+            'status' => $request->get('status', 'incomplete'),
+            'grace_period' => $request->get('grace_period', null)
+        ];
+
+        $reservation->requirements()->updateExistingPivot($requirement_id, $attributes);
+
+        return $this->response->item($reservation->requirements()
+            ->where('requirement_id', $requirement_id)
+            ->first(),
+            new RequirementTransformer);
+    }
+
+    /**
+     * Export reservations.
+     *
+     * @param ExportRequest $request
+     * @return mixed
+     */
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportReservations($request->all()));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 }

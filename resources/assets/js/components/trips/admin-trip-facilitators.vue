@@ -1,27 +1,47 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h5>Facilitators
-				<button class="btn btn-default btn-xs pull-right" data-toggle="modal" data-target="#AddFacilitatorModal">
-						Add New <i class="fa fa-plus"></i> 
+			<div class="row">
+			<div class="col-xs-6">
+				<h5>Facilitators</h5>
+			</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal">
+					<i class="fa fa-plus icon-left"></i> Add
 				</button>
-			</h5>
-		</div>
-		<div>
-			<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">
-				<div class="thumbnail">
-					<img :src="user.avatar" alt="{{ user.name }}">
-					<div class="caption">
-						<h5 v-text="facilitator.name"></h5>
-						<p>
-							<a class="btn btn-xs btn-danger" @click="removeFacilitator(facilitator)">
-								<i class="fa fa-times"></i> Remove
-							</a>
-						</p>
+			</div>
+			</div>
+		</div><!-- end panel-heading -->
+		<div class="panel-body" style="position:relative">
+			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" track-by="id">
+					<h5>
+					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ facilitator.name }}">
+					{{ facilitator.name }}
+					</h5>
+					<div style="position:absolute;right:25px;top:22px;">
+					<a @click="removeFacilitator(facilitator)">
+							<i class="fa fa-times"></i>
+						</a>
 					</div>
 				</div>
+				<hr class="divider inv" />
 			</div>
-		</div>
+
+			<!--<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">-->
+				<!--<div class="panel panel-default">-->
+					<!--<img class="img-responsive" :src="facilitator.avatar" alt="{{ facilitator.name }}">-->
+					<!--<div class="panel-body">-->
+						<!--<h5 class="text-center" v-text="facilitator.name"></h5>-->
+						<!--<p class="text-center">-->
+							<!--<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">-->
+								<!--<i class="fa fa-times"></i> Remove-->
+							<!--</a>-->
+						<!--</p>-->
+					<!--</div>&lt;!&ndash; end panel-body &ndash;&gt;-->
+				<!--</div>&lt;!&ndash; end panel &ndash;&gt;-->
+			<!--</div>-->
+		</div><!-- end panel-body -->
 		<div class="modal fade" id="AddFacilitatorModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -60,7 +80,7 @@
 		</div><!-- /.modal -->
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
 	export default {
 		name: 'admin-trip-facilitators',
@@ -101,8 +121,8 @@
 				this.attemptSubmit = true;
 				if (this.$AddFacilitator.valid) {
 					var facilitatorsArr = this.facilitators;
-					facilitatorsArr.push({trip_id: this.tripId, user_id: this.user_id});
-					this.trip.facilitators = _.pluck(facilitatorsArr, 'user_id');
+					facilitatorsArr.push({trip_id: this.tripId, id: this.user_id});
+					this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 					//this.trip.facilitators = this.facilitators;
 					this.updateTrip();
 				}
@@ -110,11 +130,13 @@
 			removeFacilitator: function removeFacilitator(facilitator) {
 				// Remove Facilitator
 				this.facilitators.$remove(facilitator);
-				this.trip.facilitators = this.facilitators;
+				var facilitatorsArr = this.facilitators;
+				this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 				this.updateTrip();
 			},
 			updateTrip: function updateTrip() {
 				delete this.trip.rep_id;
+				this.trip.difficulty = this.trip.difficulty.split(' ').join('_');
 				// Update Trip
 				this.resource.update({id: this.tripId}, this.trip).then(function (response) {
 					this.trip = response.data.data;

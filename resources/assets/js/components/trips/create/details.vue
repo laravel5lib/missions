@@ -20,30 +20,6 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('description') }">
-						<label for="description" class="col-sm-2 control-label">
-							Description
-							<button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#markdownPrev" aria-expanded="false" aria-controls="markdownPrev">
-								Preview
-							</button>
-
-						</label>
-						<div class="col-sm-10">
-							<div class="row">
-								<div class="col-sm-12">
-									<textarea name="description" id="description" rows="5" v-model="description"
-											  class="form-control"
-											  v-validate:description="{ required: true}"></textarea>
-								</div>
-								<div class="col-sm-12 collapse" id="markdownPrev">
-									<br>
-									<div class="well" v-html="description | marked"></div>
-								</div>
-							</div>
-
-						</div>
-					</div>
-
 					<div class="form-group" :class="{ 'has-error': checkForError('type') }">
 						<label for="type" class="col-sm-2 control-label">Type</label>
 						<div class="col-sm-10">
@@ -105,7 +81,8 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
-										<input type="date" class="form-control" v-model="started_at" id="started_at"
+										<date-picker class="form-control input-sms" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 											   v-validate:start="{ required: true }" required>
 									</div>
 								</div>
@@ -113,7 +90,8 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('end') }">
 										<span class="input-group-addon">End</span>
-										<input type="date" class="form-control" v-model="ended_at" id="ended_at"
+										<date-picker class="form-control input-sms" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 											   v-validate:end="{ required: true }" required>
 									</div>
 								</div>
@@ -144,7 +122,7 @@
 		padding-top: 0;
 	}
 </style>
-<script>
+<script type="text/javascript">
 	var marked = require('marked');
 	import vSelect from "vue-select"
 	export default{

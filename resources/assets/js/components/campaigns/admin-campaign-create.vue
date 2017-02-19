@@ -1,10 +1,11 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<validator name="CreateCampaign">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form id="CreateCampaignForm" class="form-horizontal" novalidate>
 			<div class="form-group" :class="{ 'has-error': checkForError('name') }">
 				<div class="col-sm-12">
 					<label for="name">Name</label>
-					<input type="text" class="form-control" name="name" id="name" v-model="name"
+					<input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
 						   placeholder="Campaign Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
 						   maxlength="100" minlength="1" required>
 				</div>
@@ -12,8 +13,10 @@
 			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-					<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
+					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+							  label="name"></v-select>
+					<select hidden name="country" id="country" class="hidden" v-model="country_code"
+							v-validate:country="{ required: true }">
 						<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 					</select>
 
@@ -36,7 +39,8 @@
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('start') }">
 								<span class="input-group-addon">Start</span>
-								<input type="date" class="form-control" v-model="started_at" id="started_at"
+								<date-picker class="form-control" :time.sync="started_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+								<input type="datetime" class="form-control hidden" v-model="started_at|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
 									   v-validate:start="{ required: true }" required>
 							</div>
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
@@ -44,7 +48,9 @@
 						<div class="col-sm-6">
 							<div class="input-group" :class="{ 'has-error': checkForError('end') }">
 								<span class="input-group-addon">End</span>
-								<input type="date" class="form-control" v-model="ended_at" id="ended_at" :min="started_at"
+								<date-picker class="form-control" :time.sync="ended_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+								<input type="datetime" class="form-control hidden" v-model="ended_at|moment 'MM-DD-YYYY HH:mm:ss'" id="ended_at"
+									   :min="started_at"
 									   v-validate:end="{ required: true }" required>
 							</div>
 							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
@@ -56,7 +62,13 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published</label>
-					<input type="datetime-local" class="form-control" v-model="published_at" id="published_at">
+					<div class="input-group">
+						<date-picker class="form-control" :time.sync="published_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
+						</span>
+					</div>
+					<input type="datetime" class="form-control hidden" v-model="published_at|moment 'MM-DD-YYYY HH:mm:ss'" id="published_at">
 				</div>
 			</div>
 
@@ -67,7 +79,7 @@
 						<div class="input-group">
 							<span class="input-group-addon">www.missions.me/campaigns/</span>
 							<input type="text" id="page_url" v-model="page_url" class="form-control"
-								   v-validate:url="{ required: false }" />
+								   v-validate:url="{ required: false }"/>
 						</div>
 						<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>
 					</div>
@@ -79,7 +91,7 @@
 						<div class="input-group">
 							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 							<input type="text" id="page_src" v-model="page_src" class="form-control"
-								   v-validate:src="{ required: false,  }" />
+								   v-validate:src="{ required: false,  }"/>
 							<span class="input-group-addon">.blade.php</span>
 						</div>
 					</div>
@@ -87,45 +99,40 @@
 			</template>
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="media">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" :src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : ''" width="100" :alt="selectedAvatar ? selectedAvatar.name : ''">
-							</a>
-						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedAvatar ? selectedAvatar.name : ''}}</h4>
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
-								Set Avatar
-							</button>
-						</div>
-					</div>
-					<div class="collapse" id="avatarCollapse">
-						<div class="well">
-							<upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
-						</div>
-					</div>
+					<h5>
+						<img class="av-left img-circle img-md"
+							:src="selectedAvatar ? (selectedAvatar.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
+							:alt="selectedAvatar ? selectedAvatar.name : ''">
+						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+								data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse">
+							<i class="fa fa-camera icon-left"></i> Set Avatar
+						</button>
+					</h5>
 				</div><!-- end col -->
 				<div class="col-sm-6">
-					<div class="media">
-						<div class="media-left">
-							<a href="#">
-								<img class="media-object" :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : ''" width="100" :alt="selectedBanner ? selectedBanner.name : ''">
-							</a>
+					<h5>
+						<img class="av-left img-rounded img-lg"
+								 :src="selectedBanner ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100"
+								 :alt="selectedBanner ? selectedBanner.name : ''">
+						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+								data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
+							<i class="fa fa-camera icon-left"></i> Set Banner
+						</button>
+					</h5>
+				</div><!-- end col -->
+				<div class="col-xs-12">
+					<div class="collapse" id="avatarCollapse">
+						<div class="well">
+							<upload-create-update type="avatar" :lock-type="true" :is-child="true"
+													  :tags="['campaign']"></upload-create-update>
 						</div>
-						<div class="media-body">
-							<h4 class="media-heading">{{selectedBanner ? selectedBanner.name : ''}}</h4>
-							<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
-								Set Banner
-							</button>
-						</div>
-					</div>
-
+					</div><!-- end collapse -->
 					<div class="collapse" id="bannerCollapse">
 						<div class="well">
-							<upload-create-update type="banner" :lock-type="true" :is-child="true" :tags="['campaign']"></upload-create-update>
+							<upload-create-update type="banner" :lock-type="true" :is-child="true"
+												  :tags="['campaign']"></upload-create-update>
 						</div>
-					</div>
+					</div><!-- end collapse -->
 				</div><!-- end col -->
 			</div><!-- end row -->
 			<hr class="divider inv lg">
@@ -136,16 +143,21 @@
 				</div>
 			</div>
 		</form>
+		<alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+			<span class="icon-info-circled alert-icon-float-left"></span>
+			<strong>Oh No!</strong>
+			<p>There are errors on the form.</p>
+		</alert>
+
 	</validator>
 </template>
-<script>
+<script type="text/javascript">
 	import vSelect from "vue-select";
-	import VueStrap from 'vue-strap/dist/vue-strap.min';
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
 
 	export default{
 		name: 'campaign-create',
-		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate, 'accordion': VueStrap.accordion, 'panel': VueStrap.panel},
+		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate},
 		data(){
 			return {
 				countries: [],
@@ -166,17 +178,22 @@
 				avatar_upload_id: null,
 				selectedBanner: null,
 				banner_upload_id: null,
+				showError: false
 			}
 		},
-		computed:{
+		computed: {
 			country_code(){
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			},
 		},
-		watch:{
+		watch: {
 			'name': function (val) {
-				if(typeof val === 'string') {
-					this.page_url = this.convertToSlug(val);
+				if (typeof val === 'string') {
+					// pre-populate slug
+					this.$http.get('utilities/make-slug{/string}', { string: val, hideLoader: true })
+							.then(function (response) {
+								this.page_url = response.data.slug;
+							});
 				}
 			}
 		},
@@ -186,11 +203,12 @@
 				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
 			},
 			convertToSlug(text){
-				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
+				return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 			},
 			submit(){
 				this.attemptSubmit = true;
 				if (this.$CreateCampaign.valid) {
+					// this.$refs.spinner.show();
 					var resource = this.$resource('campaigns');
 					resource.save(null, {
 						name: this.name,
@@ -208,13 +226,17 @@
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
 					}, function (error) {
 						this.errors = error.data.errors;
+						this.showError = true;
+						// this.$refs.spinner.hide();
 					});
+				} else {
+					this.showError = true;
 				}
 			}
 		},
-		events:{
+		events: {
 			'uploads-complete'(data){
-				switch(data.type){
+				switch (data.type) {
 					case 'avatar':
 						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
@@ -229,8 +251,10 @@
 			}
 		},
 		ready(){
+			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.data.countries;
+				// this.$refs.spinner.hide();
 			});
 		}
 	}

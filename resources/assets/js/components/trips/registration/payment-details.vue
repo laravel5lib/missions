@@ -14,6 +14,8 @@
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
 								<span class="pull-right">{{cost.amount | currency}}</span>
+								<hr class="divider sm inv">
+								<p class="small">{{cost.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -21,7 +23,7 @@
 							<table class="table">
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{toDate(p.due_at)}}</td>
+										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
@@ -31,6 +33,8 @@
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
 								<span class="pull-right">{{cost.amount | currency}}</span>
+								<hr class="divider sm inv">
+								<p class="small">{{cost.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -38,7 +42,7 @@
 							<table class="table">
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{toDate(p.due_at)}}</td>
+										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
@@ -48,6 +52,8 @@
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
 								<span class="pull-right">{{cost.amount | currency}}</span>
+								<hr class="divider sm inv">
+								<p class="small">{{cost.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
@@ -55,7 +61,7 @@
 							<table class="table">
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
-										<td>{{toDate(p.due_at)}}</td>
+										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
 								</tbody>
@@ -153,13 +159,13 @@
 											<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
 										</div>
 									</div>
-									<div class="col-sm-12">
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="cardSave">Save payment details for next time.
-											</label>
-										</div>
-									</div>
+									<!--<div class="col-sm-12">-->
+										<!--<div class="checkbox">-->
+											<!--<label>-->
+												<!--<input type="checkbox" v-model="cardSave">Save payment details for next time.-->
+											<!--</label>-->
+										<!--</div>-->
+									<!--</div>-->
 								</div>
 
 								<p class="help-block text-success">Your card will be charged for the upfront fees
@@ -172,7 +178,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script type="text/javascript">
 	export default{
 		name: 'payment-details',
 		data(){
@@ -234,9 +240,9 @@
 		ready: function () {
 			this.$dispatch('payment-complete', true);
 			if (this.devMode) {
-				this.cardNumber = '4242424242424242';
-				this.cardCVC = '123';
-				this.cardYear = '19';
+				this.cardNumber = '';
+				this.cardCVC = '';
+				this.cardYear = '2019';
 				return this.cardMonth = '1';
 			}
 		},
@@ -275,20 +281,20 @@
 				// add static costs if they exists
 				if(this.staticCosts && this.staticCosts.constructor === Array) {
 					this.staticCosts.forEach(function (cost) {
-						amount += cost.amount;
+						amount += parseFloat(cost.amount);
 					});
 				}
 				// add optional costs if they exists
 				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
 					this.selectedOptions.forEach(function (cost) {
-						amount += cost.amount;
+						amount += parseFloat(cost.amount);
 					});
 				}
 
 				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {
 					this.incrementalCosts.forEach(function (cost) {
-						amount += cost.amount;
+						amount += parseFloat(cost.amount);
 					});
 				}
 
@@ -301,7 +307,7 @@
 					this.staticCosts.forEach(function (cost) {
 						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
-								amount += payment.amount_owed;
+								amount += parseFloat(payment.amount_owed);
 							}
 						});
 
@@ -312,7 +318,7 @@
 					this.selectedOptions.forEach(function (cost) {
 						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
-								amount += payment.amount_owed;
+								amount += parseFloat(payment.amount_owed);
 							}
 						});
 					});
@@ -323,7 +329,7 @@
 					this.incrementalCosts.forEach(function (cost) {
 						cost.payments.data.forEach(function (payment) {
 							if (payment.upfront) {
-								amount += payment.amount_owed;
+								amount += parseFloat(payment.amount_owed);
 							}
 						});
 					});
@@ -339,7 +345,7 @@
 					var i, ref, ref1, results;
 					results = [];
 					for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
-						results.push(num.toString().substr(2, 2));
+						results.push(num);
 					}
 					return results;
 				})();
@@ -347,12 +353,11 @@
 			},
 			cardParams() {
 				return {
-					name: this.cardHolderName,
+					cardholder: this.cardHolderName,
 					number: this.cardNumber,
-					expMonth: this.cardMonth,
-					expYear: this.cardYear,
+					exp_month: this.cardMonth,
+					exp_year: this.cardYear,
 					cvc: this.cardCVC,
-					address_zip: this.cardZip,
 				};
 			}
 		},
@@ -365,7 +370,11 @@
 				//this.$dispatch('payment-complete', true)
 			},
 			toDate(date){
-				return moment(date).format('LL');
+				if(date) {
+					return moment(date).format('LL');
+				} else {
+					return 'Now';
+				}
 			},
 			resetCaching() {
 				console.log('resetting');
@@ -398,13 +407,21 @@
 					this.attemptedCreateToken = true;
 					this.stripeDeferred.reject(false);
 				} else {
-					Stripe.setPublishableKey(this.stripeKey);
-					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+//					Stripe.setPublishableKey(this.stripeKey);
+//					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
+					this.$parent.$refs.validationspinner.show();
+
+					this.$http.post('donations/authorize', this.cardParams)
+							.then(this.createTokenCallback,
+									function (error) {
+										this.$dispatch('showError', error.data.message);
+										this.$parent.$refs.validationspinner.hide();
+									});
 				}
 				return this.stripeDeferred.promise();
 			},
-			createTokenCallback(status, resp) {
-				console.log(status);
+			createTokenCallback(resp) {
+				//console.log(status);
 				console.log(resp);
 				this.validationErrors = {
 					cardNumber: '',
@@ -428,13 +445,15 @@
 					}
 					this.stripeDeferred.reject(false);
 				}
-				if (status === 200) {
-					this.card = resp;
+				if (resp.status === 200) {
+					this.card = this.cardParams;
 					// send payment data to parent
 					this.$parent.paymentInfo = {
-						token: resp,
+						token: resp.data,
+						card: this.cardParams,
 						save: this.cardSave,
-						email: this.cardEmail
+						email: this.cardEmail,
+						address_zip: this.cardZip
 					};
 					this.$parent.upfrontTotal = this.upfrontTotal;
 					this.$parent.fundraisingGoal = this.fundraisingGoal;

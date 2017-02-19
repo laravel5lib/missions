@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <h3>Edit Your Group</h3>
+                <h3>Group <small>&middot; Edit</small></h3>
             </div>
         </div>
     </div>
@@ -16,9 +16,10 @@
             <div class="col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
             	<div class="panel panel-default">
             		<div class="panel-body">
-		               <group-edit group-id="{{ $id }}"></group-edit>
+		               <admin-group-edit group-id="{{ $id }}"></admin-group-edit>
 		            </div>
             </div>
         </div>
     </div>
+<hr class="divider inv xlg">    
 @endsection

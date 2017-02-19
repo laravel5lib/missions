@@ -32,7 +32,7 @@
 @import "custom-badges";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
+@import "custom-alerts";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/media";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/list-group";
@@ -42,7 +42,7 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
 
 // Components w/ JavaScript
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
+@import "custom-modals";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap/popovers";
 @import "custom-carousel";

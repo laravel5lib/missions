@@ -30,7 +30,8 @@ class Trip extends Model
         'country', 'type', 'difficulty', 'thumb_src',
         'started_at', 'ended_at', 'description', 'todos',
         'companion_limit', 'published_at', 'closed_at',
-        'prospects'
+        'prospects', 'public', 'team_roles', 'country_code',
+        'created_at', 'updated_at'
     ];
 
     /**
@@ -59,7 +60,8 @@ class Trip extends Model
      */
     protected $casts = [
         'todos' => 'array',
-        'prospects' => 'array'
+        'prospects' => 'array',
+        'team_roles' => 'array'
     ];
 
     /**
@@ -137,7 +139,12 @@ class Trip extends Model
 
         $amount = $incremental ? $incremental->amount : 0;
 
-        return $amount + $this->activeCosts()->type('static')->sum('amount');
+        return $amount + $this->activeCosts()->type('static')->sum('amount'); // convert to dollars
+    }
+
+    public function startingCostInDollars()
+    {
+        return number_format($this->starting_cost/100, 2, '.', '');
     }
 
     /**
@@ -157,19 +164,18 @@ class Trip extends Model
      */
     public function requirements()
     {
-        return $this->morphMany(Requirement::class, 'requirable');
+        return $this->morphMany(Requirement::class, 'requester');
     }
 
     /**
      * Get all the trip's facilitators
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function facilitators()
     {
         return $this->belongsToMany(User::class, 'facilitators')
-                    ->withTimestamps()
-                    ->withPivot('permissions');
+                    ->withTimestamps();
     }
 
     /**
@@ -193,6 +199,26 @@ class Trip extends Model
     }
 
     /**
+     * Get the trip's fund.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function fund()
+    {
+        return $this->morphOne(Fund::class, 'fundable');
+    }
+
+    /**
+     * Get all the trip's interests.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function interests()
+    {
+        return $this->hasMany(TripInterest::class);
+    }
+
+    /**
      * Set the trip's todos list.
      *
      * @param $value
@@ -200,6 +226,16 @@ class Trip extends Model
     public function setTodosAttribute($value)
     {
         $this->attributes['todos'] = json_encode($value);
+    }
+
+    /**
+     * Set the trip's team roles list.
+     *
+     * @param $value
+     */
+    public function setTeamRolesAttribute($value)
+    {
+        $this->attributes['team_roles'] = json_encode($value);
     }
 
     /**
@@ -331,4 +367,57 @@ class Trip extends Model
 
         return $status;
     }
+
+    public function updateSpots($number = -1)
+    {
+        $this->spots = $this->spots + $number;
+
+        $this->save();
+    }
+
+    public function scopeCurrent($query)
+    {
+        return $query->where('ended_at', '>=', Carbon::now());
+    }
+
+    public function scopePast($query)
+    {
+        return $query->where('ended_at', '<', Carbon::now());
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('closed_at', '>', Carbon::now())
+                    ->where('spots', '>', 0)
+                    ->whereNotNull('published_at')
+                    ->where('published_at', '<=', Carbon::now());
+    }
+
+    public function scopeClosed($query)
+    {
+        return $query->where('closed_at', '<=', Carbon::now())
+                    ->orWhere('spots', 0);
+    }
+
+    public function scopeScheduled($query)
+    {
+        return $query->whereNotNull('published_at')
+                    ->where('published_at', '>', Carbon::now());
+    }
+
+    public function scopeDraft($query)
+    {
+        return $query->whereNull('published_at');
+    }
+
+    public function scopePublic($query)
+    {
+        return $query->where('public', true);
+    }
+
+    public function scopePrivate($query)
+    {
+        return $query->where('public', false);
+    }
+
 }

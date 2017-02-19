@@ -28,20 +28,21 @@ class GroupRequest extends FormRequest {
     {
         $required = [
             'name'         => 'required|max:100',
-            'url'          => 'required_if:public,true',
-            'type'         => 'required|in:church,business,nonprofit,youth,other',
+            'url'          => 'required_if:public,true|unique:slugs,url',
+            'type'         => 'required|in:church,business,nonprofit,youth,school,independent,other',
             'timezone'     => 'required|timezone',
-            'country_code' => 'required|in:' . Country::codes()
+            'country_code' => 'required|in:' . Country::codes(),
         ];
 
         if ($this->isMethod('put'))
         {
             $required = [
                 'name'         => 'sometimes|required|max:100',
-                'url'          => 'sometimes|required_if:public,true',
+                'url'          => 'sometimes|required_if:public,true|unique:slugs,url,'.$this->route('groups').',slugable_id',
                 'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
                 'timezone'     => 'sometimes|required|timezone',
-                'country_code' => 'sometimes|required|in:' . Country::codes()
+                'country_code' => 'sometimes|required|in:' . Country::codes(),
+                'status'       => 'required|in:pending,approved'
             ];
         }
 
@@ -58,8 +59,9 @@ class GroupRequest extends FormRequest {
             'public'           => 'boolean',
             'managers'         => 'array',
             'tags'             => 'array',
-            'avatar_upload_id' => 'string|exists:uploads',
-            'banner_upload_id' => 'string|exists:uploads'
+            'avatar_upload_id' => 'string|exists:uploads,id',
+            'banner_upload_id' => 'string|exists:uploads,id',
+            'status'           => 'in:pending,approved'
         ];
 
         return $rules = $required + $optional;

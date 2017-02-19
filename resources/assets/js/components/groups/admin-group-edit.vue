@@ -353,7 +353,7 @@
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
-            });
+            }.bind(this));
         }
     }
 </script> 

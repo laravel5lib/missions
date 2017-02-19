@@ -543,15 +543,52 @@ Vue.directive('error-handler', {
             this.handleClass(this.storage);
         }.bind(this));
 
+        this.vm.$on('errors', function (val) {
+            // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
+            // the directive we want to watch it using the error-handler mixin
+            this.handleClass(this.storage);
+            this.handleMessages(this.storage, val);
+        }.bind(this));
+
         this.handleClass = function (value) {
+            // $nextTick is necessary for the component values to update first
             this.vm.$nextTick(function () {
-                let classTest = !!this.vm.checkForError(value.client) || !!this.vm.errors[value.server];
+                let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
                 if (classTest) {
                     $(this.el).addClass('has-error');
                 } else {
                     $(this.el).removeClass('has-error');
                 }
-                console.log(this.arg);
+            }.bind(this));
+        };
+
+        this.messages = [];
+        this.handleMessages = function (value, errors) {
+            // $nextTick is necessary for the component values to update first
+            this.vm.$nextTick(function () {
+                if (errors[value.server]) {
+                    // Lets first package errors to simply iterate
+                    let newMessages = [];
+                    _.each(errors[value.server], function(error, index) {
+                        newMessages.push("<div class='help-block server-validation-error'>" + error + "</div>");
+                    });
+                    this.messages = newMessages;
+
+                    // We want to keep track of listed errors and specify their location when displayed
+                    // Search for an '.errors-block' element as child to display messages in
+                    // If it does not exist we will place the error message after the input element
+                    let errorsBlock = $(this.el).find('.errors-block') || false;
+                    if (errorsBlock) {
+                        errorsBlock.find('.server-validation-error').remove();
+                        errorsBlock.append(this.messages);
+                        // debugger
+                    } else {
+                        let inputEl = $(this.el).find('input');
+                        $(this.el).find('.server-validation-error').remove();
+                        inputEl.after(this.messages);
+                        // debugger
+                    }
+                }
             }.bind(this));
         }
     },
@@ -560,6 +597,7 @@ Vue.directive('error-handler', {
         this.storage = value;
         // Handle error class on element
         this.handleClass(value);
+        this.handleMessages(value, this.vm.errors);
     }
 });
 

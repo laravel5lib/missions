@@ -11,13 +11,24 @@ export default {
     watch: {
         attemptSubmit(val) {
             this.$emit('attemptSubmit', val);
-        }
+        },
+        errors: {
+            handler: function(val){
+                this.$emit('errors', val);
+            },
+            deep: true
+        },
     },
     methods: {
         checkForError(field){
             // if user clicked submit button while the field is invalid trigger error styles 
-            return this['$' + this.validatorHandle][field].invalid && this.attemptSubmit;
-        }
+
+            return _.isString(field) && this['$' + this.validatorHandle][field].invalid && this.attemptSubmit;
+        },
+        resetErrors(){
+            this.errors = {};
+            this.attemptSubmit = true;
+        },
     }, ready(){
         if (!this.validatorHandle) {
             console.log('Please set validatorHandle to validator name');

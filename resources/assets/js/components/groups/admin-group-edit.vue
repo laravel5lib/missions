@@ -322,7 +322,7 @@
                 this.timezones = response.data.timezones;
             });
 
-            Promise.all([countriesPromise, timezonesPromise], function (values) {
+            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get({id: this.groupId}).then(function (response) {
                     let group = response.data.data;
                     this.name = group.name;

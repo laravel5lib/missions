@@ -349,10 +349,12 @@
 </template>
 <script>
     import vSelect from "vue-select";
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'user-edit',
         props: ['userId'],
         components: {vSelect},
+        mixins: [errorHandler],
         data(){
             return {
                 name: '',

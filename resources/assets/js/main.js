@@ -527,6 +527,42 @@ Vue.directive('tour-guide', {
     }
 });
 
+Vue.directive('error-handler', {
+    // This directive handles client-side and server-side errors.
+    // It expects an object expression with three values:  { value: fieldValue, client: 'clientSideField', server: 'serverSideField' }
+    // The value property expects the actual field value to stay reactive.
+    // The client property expects the handle that the validator plugin uses for validation.
+    // The server property expects the handle that the server request rules use for validation.
+    // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
+    // for the field
+    deep: true,
+    bind: function () {
+        this.vm.$on('attemptSubmit', function (val) {
+            // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
+            // the directive we want to watch it using the error-handler mixin
+            this.handleClass(this.storage);
+        }.bind(this));
+
+        this.handleClass = function (value) {
+            this.vm.$nextTick(function () {
+                let classTest = !!this.vm.checkForError(value.client) || !!this.vm.errors[value.server];
+                if (classTest) {
+                    $(this.el).addClass('has-error');
+                } else {
+                    $(this.el).removeClass('has-error');
+                }
+                console.log(this.arg);
+            }.bind(this));
+        }
+    },
+    update: function (value) {
+        // Store the value within the directive to be used outside the update function
+        this.storage = value;
+        // Handle error class on element
+        this.handleClass(value);
+    }
+});
+
 Vue.mixin({
     methods: {
         /*showSpinner(){

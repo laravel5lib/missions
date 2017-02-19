@@ -472,7 +472,7 @@
                 this.timezones = response.data.timezones;
             });
 
-            Promise.all([countriesPromise, timezonesPromise], function (values) {
+            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get({id: this.userId}).then(function (response) {
                     var user = response.data.data;
                     this.name = user.name;
@@ -502,7 +502,7 @@
                     console.log('Loading Failed! :(');
                     console.log(response);
                 });
-            })
+            }.bind(this))
         }
     }
 </script> 

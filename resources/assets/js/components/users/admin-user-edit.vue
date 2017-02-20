@@ -2,7 +2,7 @@
     <validator name="EditUser" @touched="onTouched">
         <form id="EditUserForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
+            <div class="form-group" v-error-handler="{ value: name, client: 'name', server: 'name' }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -12,7 +12,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('email') }">
+                    <div v-error-handler="{ value: email, client: 'email', server: 'email' }">
                     <label for="name" class="control-label">Email</label>
                     <input type="email" class="form-control" name="email" id="email" v-model="email"
                            v-validate:email="{ required: true, minlength:1, maxlength:100 }">
@@ -24,7 +24,7 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
+            <div class="form-group":class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Password</label>
                     <div class="checkbox">
@@ -33,7 +33,7 @@
                             Change Password
                         </label>
                     </div>
-                    <div v-if="changePassword" class="row">
+                    <div v-if="changePassword" class="row" v-error-handler="{ value: password, client: 'password', server: 'password' }" >
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
@@ -58,8 +58,11 @@
                                 </span>
                             </div>
                         </div>
+                        <div class="col-sm-12 errors-block">
+                            <span v-if="changePassword" class="help-block">Password must be at least 8 characters long</span>
+                        </div>
                     </div>
-                    <div v-if="changePassword" class="help-block">Password must be at least 8 characters long</div>
+
                 </div>
             </div>
 
@@ -332,16 +335,6 @@
                 </div>
             </div>
         </form>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Good job!</strong>
-            <p>User updated</p>
-        </alert>
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>There are errors on the form.</p>
-        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -349,10 +342,12 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'admin-user-edit',
         props: ['userId'],
         components: {vSelect},
+        mixins: [errorHandler],
         data(){
             return {
                 name: '',
@@ -379,7 +374,7 @@
 
                 // logic variables
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
@@ -390,10 +385,11 @@
                 dobDay: null,
                 dobYear: null,
                 resource: this.$resource('users{/id}'),
-                showSuccess: false,
-                showError: false,
                 showSaveAlert: false,
                 hasChanged: false,
+
+	            // mixin settings
+                validatorHandle: 'EditUser',
             }
         },
         computed: {
@@ -407,10 +403,10 @@
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$EditUser[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -425,7 +421,7 @@
                 return this.back(true);
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$EditUser.valid) {
                     this.resource.update({id: this.userId}, {
                         name: this.name,
@@ -450,11 +446,12 @@
                         url: this.public ? this.url : undefined,
                     }).then(function (resp) {
                         // window.location.href = '/admin' + resp.data.data.links[0].uri;
-                        this.showSuccess = true;
+                        this.$root.$emit('showSuccess', 'User updated.');
                         this.hasChanged = false;
                     }, function (error) {
-                        this.showError = true;
+                        this.$root.$emit('showError', 'There are errors on the form.');
                         console.log(error);
+                        this.errors = error.data.errors;
                     });
                 } else {
                     this.showError = true;
@@ -470,9 +467,9 @@
                 this.timezones = response.data.timezones;
             });
 
-            Promise.all([countriesPromise, timezonesPromise], function (values) {
+            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get({id: this.userId}).then(function (response) {
-                    var user = response.data.data;
+                    let user = response.data.data;
                     this.name = user.name;
                     this.bio = user.bio;
                     this.type = user.type;
@@ -500,7 +497,7 @@
                     console.log('Loading Failed! :(');
                     console.log(response);
                 });
-            })
+            }.bind(this))
         }
     }
 </script> 

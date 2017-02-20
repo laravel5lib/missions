@@ -8,7 +8,7 @@
                     <h1 class="text-hero">Yikes!</h1>
                     <h3>There seems to be an internal server error.</h3>
                     <p>Error code 500</p>
-                    <p class="small">Please contact the server administrator and inform them of the time the error occured, and anything you might have done that may have caused the error.</p>
+                    <p class="small">Please contact the server administrator and inform them of the time the error occured. If possible, please explain the steps you took leading up to the error. We apologize for any inconvience.</p>
                 </div><!-- end col -->
             </div><!-- end row -->
         </div><!-- end content-section -->

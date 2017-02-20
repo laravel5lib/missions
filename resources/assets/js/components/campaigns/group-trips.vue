@@ -38,27 +38,29 @@
 					<hr class="divider inv">
 				</div>
 			</div>
-			<div class="row">
-				<div v-for="trip in trips" class="col-xs-12 col-sm-6 col-md-3">
-					<div class="panel panel-default">
-						<div class="panel-heading" :class="'panel-' + trip.type">
-							<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
+			<div class="row" style="display:flex;flex-wrap:wrap;justify-content:center;">
+				<div v-for="trip in trips" style="flex:0 1 100%;width:100%;flex-basis:22%;">
+					<div style="flex-direction:column;display:flex;height:100%;margin-right:3%;margin-left:3%;">
+						<div class="panel panel-default" style="flex:0 1 100%;">
+							<div class="panel-heading" :class="'panel-' + trip.type">
+								<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
+							</div>
+							<div class="panel-body text-center">
+								<p class="badge">{{ trip.status | capitalize }}</p><br>
+								<p class="small">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>
+								<label>Perfect For</label>
+								<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
+									{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
+							</span><span v-show="trip.prospects.length > 3">...</span></p>
+								<label>Spots Available</label>
+								<p>{{ trip.spots }}</p>
+								<label>Starting At</label>
+								<h3 style="margin-top:0px;" class="text-success">{{ trip.starting_cost | currency }}</h3>
+								<a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a>
+							</div>
 						</div>
-						<div class="panel-body text-center">
-							<p class="badge">{{ trip.status | capitalize }}</p><br>
-							<p class="small">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>
-							<label>Perfect For</label>
-							<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
-								{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
-						</span><span v-show="trip.prospects.length > 3">...</span></p>
-							<label>Spots Available</label>
-							<p>{{ trip.spots }}</p>
-							<label>Starting At</label>
-							<h3 style="margin-top:0px;" class="text-success">{{ trip.starting_cost | currency }}</h3>
-							<a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a>
-						</div>
-					</div>
-				</div>
+					</div><!-- end flex-direction -->
+				</div><!-- end flex -->
 			</div><!-- end row -->
 
 			<div class="container">
@@ -91,6 +93,7 @@
 					onlyPublic: true,
 					groups: new Array(this.id),
 					campaign: this.campaignId,
+					sort: 'spots|desc',
 					//per_page: 8,
 					//search: this.searchText,
 					page: this.pagination.current_page,

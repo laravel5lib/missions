@@ -47,14 +47,26 @@ class Cost extends Model
      */
     public $timestamps = false;
 
+    /**
+     * Get the amount in dollars
+     * 
+     * @return string
+     */
     public function amountInDollars()
     {
-        return number_format($this->amount/100, 2, '.', ''); // convert to dollars
+        $dollars = bcdiv($this->amount, 100, 2); // convert to dollars
+
+        return number_format($dollars, 2, '.', '');
     }
 
-     public function setAmountAttribute($value)
+    /**
+     * Set the amount attribute
+     * 
+     * @param integer $value
+     */
+    public function setAmountAttribute($value)
     {
-        $this->attributes['amount'] = $value*100; // convert to cents
+        $this->attributes['amount'] = (int) bcmul($value, 100); // convert to cents
     }
 
     /**

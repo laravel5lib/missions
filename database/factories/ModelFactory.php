@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\Utilities\v1\Country;
 
 /**
  * Slug Factory
@@ -15,7 +16,7 @@ $factory->define(App\Models\v1\Slug::class, function (Faker\Generator $faker)
  */
 $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 {
-    $name = $faker->name;
+    $name = $faker->firstName. ' '.$faker->lastName;
 
     return [
         'name'             => $name,
@@ -25,14 +26,14 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'gender'           => $faker->randomElement(['male', 'female']),
         'status'           => $faker->randomElement(['single', 'married']),
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
-        'phone_one'        => $faker->optional(0.5)->phoneNumber,
-        'phone_two'        => $faker->optional(0.5)->phoneNumber,
+        'phone_one'        => stripPhone($faker->optional(0.5)->phoneNumber),
+        'phone_two'        => stripPhone($faker->optional(0.5)->phoneNumber),
         'address'          => $faker->optional(0.5)->streetAddress,
         'city'             => $faker->optional(0.5)->city,
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
-        'country_code'     => strtolower($faker->countryCode),
-        'timezone'         => $faker->timezone,
+        'country_code'     => $faker->randomElement(explode(',', Country::codes())),
+        'timezone'         => $faker->randomElement(\DateTimeZone::listIdentifiers()),
         'bio'              => $faker->optional(0.5)->realText(120),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
@@ -56,20 +57,6 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
 });
 
 /**
- * Joe User Factory
- */
-$factory->defineAs(App\Models\v1\User::class, 'joe', function (Faker\Generator $faker) use ($factory)
-{
-    $user = $factory->raw(App\Models\v1\User::class);
-
-    return array_merge($user, [
-        'name'     => 'Joe',
-        'email'    => 'joe@example.com',
-        'password' => 'secret'
-    ]);
-});
-
-/**
  * Reservation Factory
  */
 $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $faker)
@@ -88,8 +75,8 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'zip'                => $faker->postcode,
         'country_code'       => $faker->countryCode,
         'email'              => $faker->safeEmail,
-        'phone_one'          => $faker->phoneNumber,
-        'phone_two'          => $faker->phoneNumber,
+        'phone_one'          => stripPhone($faker->phoneNumber),
+        'phone_two'          => stripPhone($faker->phoneNumber),
         'trip_id'            => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
         'companion_limit'    => random_int(0, 3),
         'avatar_upload_id'   => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray())
@@ -103,12 +90,12 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 {
     $campaign = new App\Models\v1\Campaign;
 
-    $campaign = $campaign->find($campaign->lists('id')->random());
+    $campaign = $campaign->find($campaign->pluck('id')->random());
 
     return [
         'group_id'        => $faker->randomElement(App\Models\v1\Group::pluck('id')->toArray()),
         'campaign_id'     => $campaign->id,
-        'spots'           => random_int(0, 500),
+        'spots'           => random_int(10, 500),
         'companion_limit' => random_int(0, 3),
         'country_code'    => $campaign->country_code,
         'type'            => $faker->randomElement(['ministry', 'family', 'international', 'leader', 'medical', 'media']),
@@ -121,10 +108,10 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
             'adults', 'teens', 'men', 'women', 'medical professionals',
             'media professionals', 'business professionals', 'pastors',
             'families'], 4),
-        'rep_id'          => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+        'rep_id'           => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
         'description'      => file_get_contents(resource_path('assets/sample_trip.md')),
-        'public'          => $faker->boolean(),
-        'published_at'     => $faker->optional(0.9)->dateTimeInInterval($campaign->published_at, '+ 1 month'),
+        'public'           => $faker->boolean(95),
+        'published_at'     => $faker->dateTimeInInterval($campaign->published_at, '+ 1 month'),
         'closed_at'        => $faker->dateTimeInInterval($campaign->started_at, '- 7 days')
     ];
 });
@@ -135,7 +122,7 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Generator $faker)
 {
     return [
-        'name'             => 'One Nation One Day 2017',
+        'name'             => '1Nation1Day 2017',
         'country_code'     => 'ni',
         'short_desc'       => '1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn’t just about numbers; it\'s about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.',
         'page_src'         => '_1n1d2017',
@@ -150,13 +137,13 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
 $factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Generator $faker)
 {
     return [
-        'name'             => 'Christmas in India 2016',
+        'name'             => 'Orphans to Angels',
         'country_code'     => 'in',
-        'short_desc'       => 'Venture deep into southern India as together we Rescue EVERY Child in several villages in the state of Andhra Pradesh. Watch as they enjoy their first Christmas and shower them with more Christmas gifts than their little arms can hold.',
+        'short_desc'       => 'Participate in the emotional dedications of several orphanages, each permanently houses 12-50 orphans. Spend the day at each "Angel House" loving on each kid who may have never been hugged or loved on in their entire lives.',
         'page_src'         => '_india',
-        'started_at'       => Carbon::parse('2016-12-03 00:00:00'),
-        'ended_at'         => Carbon::parse('2016-12-11 22:59:59'),
-        'published_at'     => Carbon::parse('2016-01-01 00:00:00'),
+        'started_at'       => Carbon::parse('2017-06-03 00:00:00'),
+        'ended_at'         => Carbon::parse('2017-06-11 22:59:59'),
+        'published_at'     => Carbon::parse('2017-01-01 00:00:00'),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
@@ -174,17 +161,17 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'name'             => $company,
         'type'             => $faker->randomElement(['church', 'business', 'youth', 'nonprofit', 'other']),
         'description'      => $faker->realText(120),
-        'timezone'         => $faker->timezone,
+        'timezone'         => $faker->randomElement(\DateTimeZone::listIdentifiers()),
         'address_one'      => $faker->optional(0.5)->streetAddress,
         'address_two'      => $faker->optional(0.5)->buildingNumber,
         'city'             => $faker->optional(0.5)->city,
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
         'country_code'     => strtolower($faker->countryCode),
-        'phone_one'        => $faker->optional(0.5)->phoneNumber,
-        'phone_two'        => $faker->optional(0.5)->phoneNumber,
+        'phone_one'        => stripPhone($faker->optional(0.5)->phoneNumber),
+        'phone_two'        => stripPhone($faker->optional(0.5)->phoneNumber),
         'email'            => $faker->safeEmail,
-        'public'           => $faker->boolean(75),
+        'public'           => $faker->boolean(95),
         'avatar_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'avatar')->lists('id')->toArray()),
         'banner_upload_id' => $faker->randomElement(\App\Models\v1\Upload::where('type', 'banner')->lists('id')->toArray())
     ];
@@ -217,13 +204,19 @@ $factory->define(App\Models\v1\Facilitator::class, function (Faker\Generator $fa
  */
 $factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker)
 {
+    $trip = App\Models\v1\Trip::inRandomOrder()->first();
+
     return [
-        'name'                     => $faker->bs,
-        'date'                     => $faker->dateTimeThisYear('+ 6 months'),
+        'name'                     => $faker->randomElement([
+                                        'Last day to add companions', 
+                                        'Team training meetup', 
+                                        'Arrive in Miami'
+                                      ]),
+        'date'                     => $trip->started_at->subDays(random_int(7, 30)),
         'grace_period'             => random_int(0, 10),
         'enforced'                 => $faker->boolean(50),
         'deadline_assignable_type' => 'trips',
-        'deadline_assignable_id'   => $faker->randomElement(App\Models\v1\Trip::lists('id')->toArray()),
+        'deadline_assignable_id'   => $trip->id,
     ];
 });
 

@@ -76,7 +76,9 @@ class TripTableSeeder extends Seeder
                 );
             });
 
-            $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make());
+            $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make([
+                    'date' => $t->started_at->subDays(random_int(7, 30))
+                ]));
 
             $t->requirements()->saveMany([
                 factory(App\Models\v1\Requirement::class)->make(['name' => 'Visa', 'document_type' => 'visas']),

@@ -19,7 +19,7 @@ class CampaignTableSeeder extends Seeder
         
         factory(App\Models\v1\Campaign::class, 'india')->create()->each(function($campaign) {
             $campaign->slug()->save(factory(App\Models\v1\Slug::class)->make([
-                'url' => 'christmas-india-2017'
+                'url' => 'orphans2angels'
             ]));
         });
     }

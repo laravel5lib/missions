@@ -11,16 +11,16 @@ return [
     |
     */
 
-    'users' => 25,
-    'groups' => 10,
-    'campaigns' => 4,
+    'users' => 50,
+    'groups' => 25,
+    'campaigns' => 3,
     'trips' => 10,
-    'reservations' => 20,
+    'reservations' => 100,
     'assignments' => 10,
-    'passports' => 15,
-    'visas' => 10,
+    'passports' => 50,
+    'visas' => 20,
     'contacts' => 10,
-    'medical_releases' => 10,
+    'medical_releases' => 50,
     'decisions' => 50,
     'exams' => 50,
     'sites' => 10,

@@ -689,14 +689,14 @@
                 this.timezones = response.data.timezones;
             });
 
-            Promise.all([countriesPromise, timezonesPromise], function (values) {
+            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get().then(function (response) {
                     this.setUserData(response.data.data)
                 }, function (response) {
                     console.log('Update Failed! :(');
                     console.log(response);
                 });
-            });
+            }.bind(this));
 
             this.$root.$on('save-settings', function () {
                 this.submit();

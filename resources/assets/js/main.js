@@ -533,6 +533,7 @@ Vue.directive('error-handler', {
     // The value property expects the actual field value to stay reactive.
     // The client property expects the handle that the validator plugin uses for validation.
     // The server property expects the handle that the server request rules use for validation.
+    // If the handle property is present, client and server properties will be set to this.
     // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
     // for the field
     deep: true,
@@ -597,9 +598,15 @@ Vue.directive('error-handler', {
         }
     },
     update: function (value) {
+        // If server value is identical to client, use 'handle' property for simplicity
+        if(value.handle) {
+            value.client = value.server = value.handle;
+        }
+
         // Store the value within the directive to be used outside the update function
         this.storage = value;
-        // Handle error class on element
+
+        // Handle error class and messages on element
         this.handleClass(value);
         this.handleMessages(value, this.vm.errors);
     }

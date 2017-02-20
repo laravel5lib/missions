@@ -6,11 +6,11 @@
         <div class="row">
             <div class="col-sm-8">
                 <h3 class="hidden-xs text-capitalize">
-                    <img class="img-circle img-sm av-left" src="{{ image($trip->group->avatar->source . '?w=100') }}">{{ $trip->group->name }} <small>&middot; {{ $trip->type }}</small>
+                    <img class="img-circle img-sm av-left" src="{{ image($trip->group->getAvatar()->source . '?w=100') }}">{{ $trip->group->name }} <small>&middot; {{ $trip->type }}</small>
                 </h3>
                 <div class="visible-xs text-center text-capitalize">
                     <hr class="divider inv">
-                    <img class="img-circle img-sm" src="{{ image($trip->group->avatar->source . '?w=100') }}">
+                    <img class="img-circle img-sm" src="{{ image($trip->group->getAvatar()->source . '?w=100') }}">
                     <h4 style="margin-bottom:0;">{{ $trip->group->name }}</h4>
                     <label>{{ $trip->type }}</label>
                     <hr class="divider inv">
@@ -44,11 +44,6 @@
                 <div class="col-xs-12">
                     {% $trip->description %}
                     <hr class="divider inv" />
-                    {{-- <h4>Missionaries Registered</h4>
-                    <hr class="divider">
-                    <div class="row">
-                        @each('site.trips.partials._missionaries', $trip->reservations, 'res', 'site.trips.partials._no_missionaries')
-                    </div> --}}
                 </div><!-- end col -->
             </div><!-- end collapse -->
         </div><!-- end visible-xs -->
@@ -58,12 +53,6 @@
 
             <hr class="divider inv" />
 
-            {{--<h4>Missionaries Registered</h4>--}}
-            {{--<hr class="divider">--}}
-            {{--<div class="row">--}}
-                {{--<trip-details-missionaries :reservations="{{ json_encode($trip->reservations) }}"></trip-details-missionaries>--}}
-{{--                @each('site.trips.partials._missionaries', $trip->reservations, 'res', 'site.trips.partials._no_missionaries')--}}
-            {{--</div>--}}
         </div>
         <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4">
             <div class="panel panel-default">
@@ -83,10 +72,10 @@
 
                     <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Start Date</h6>
-                    <h4 class="text-center">{{ date('F d, Y', strtotime($trip->started_at)) }}</h4>
+                    <h4 class="text-center">{{ $trip->started_at->format('F d, Y') }}</h4>
                     <hr class="divider inv">
                     <h6 class="text-center text-uppercase small text-muted">End Date</h6>
-                    <h4 class="text-center">{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
+                    <h4 class="text-center">{{ $trip->ended_at->format('F d, Y') }}</h4>
                     <hr class="divider lg">
 
                     <h6 class="text-uppercase text-center">
@@ -98,7 +87,7 @@
                     </h6>
                     <hr class="divider lg">
                     <h6 class="text-center text-uppercase small text-muted">Starts At</h6>
-                    <h4 class="text-center">${{  number_format($trip->starting_cost, 2, '.', ',') }}</h4>
+                    <h4 class="text-center">${{  number_format($trip->startingCostInDollars(), 2, '.', ',') }}</h4>
             	</div>
             </div>
             @if($trip->requirements->count())

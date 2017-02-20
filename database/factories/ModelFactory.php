@@ -1039,3 +1039,24 @@ $factory->define(App\Models\v1\Essay::class, function(Faker\Generator $faker) {
         'content' => json_decode(file_get_contents(resource_path('assets/sample_testimony.json')))
     ];
 });
+
+/*
+ * Todo Factory
+ */
+$factory->define(App\Models\v1\Todo::class, function(Faker\Generator $faker) {
+    return [
+        'task' => 'Random Task',
+        'todoable_id' => $faker->randomElement(App\Models\v1\Reservation::pluck('id')->toArray()),
+        'todoable_type' => 'reservations'
+    ];
+});
+
+$factory->defineAs(App\Models\v1\Todo::class, 'completed', function(Faker\Generator $faker) use($factory) {
+    
+    $todo = $factory->raw(App\Models\v1\Todo::class);
+
+    return array_merge($todo, [
+        'completed_at' => \Carbon\Carbon::now(),
+        'user_id'      => $faker->randomElement(App\Models\v1\User::pluck('id')->toArray()),
+    ]);
+});

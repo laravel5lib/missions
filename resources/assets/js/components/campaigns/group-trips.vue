@@ -93,6 +93,7 @@
 					onlyPublic: true,
 					groups: new Array(this.id),
 					campaign: this.campaignId,
+					sort: 'spots|desc',
 					//per_page: 8,
 					//search: this.searchText,
 					page: this.pagination.current_page,

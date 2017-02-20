@@ -4,7 +4,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class RequirementTest extends TestCase
+class RequirementEndpointTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -17,7 +17,7 @@ class RequirementTest extends TestCase
 
         $trip->requirements()->saveMany(factory(\App\Models\v1\Requirement::class, 4)->make());
 
-        $this->get('/api/trips/'. $trip->id . '/requirements')
+        $this->get('/api/requirements?requester=trips|'.$trip->id)
             ->seeJsonStructure([
                 'data' => [
                     '*' => [

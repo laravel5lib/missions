@@ -20,6 +20,8 @@ class TripsController extends Controller
             return $response;
         }
 
+        if( ! $trip->public) abort(403);
+
         return view('site.trips.show')->with('trip', $trip);
     }
 

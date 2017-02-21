@@ -7,6 +7,7 @@
 					<div class="col-sm-6 col-sm-offset-3 col-xs-12 col-xs-offset-0">
 						<hr class="divider inv">
 						<h3 class="text-center">First, find a group to travel with.</h3>
+						<p class="small">If you don't have a group, choose Missions.Me and we'll help place you on a team.</p>
 						<input type="text" class="form-control" v-model="searchText" debounce="500"
 							   placeholder="Search anything (i.e. medical, teens, church name)">
 						<hr class="divider inv sm">

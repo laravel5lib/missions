@@ -202,7 +202,7 @@
 	</div>
 	</div><!-- end container -->
 </div><!-- end c-page-header -->
-<div class="content-page-bg">
+<div class="content-page-bg proj-bg-section">
 	<img class="img-responsive" src="images/medical/medical-bg.jpg" alt="Medical">
 		<div class="c-page-bg-text">
 			<div class="col-sm-8 col-sm-offset-2 text-center">

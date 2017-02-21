@@ -22,20 +22,20 @@
             <validator name="CreateGroup">
               <form id="CreateGroupForm" class="form-horizontal" novalidate>
                   <div class="form-group">
-                      <div class="col-sm-6" :class="{ 'has-error': checkForError('name') || errors.name }">
+                      <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
                           <label for="name">Name</label>
                           <input type="text" class="form-control" name="name" id="name" v-model="name"
                                  placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
                                  maxlength="100" minlength="1" required>
-                          <p class="help-block" v-if="errors.name" v-text="errors.name"></p>
+                          <!--<p class="help-block" v-if="errors.name" v-text="errors.name"></p>-->
                       </div>
-                      <div class="col-sm-6" :class="{ 'has-error': checkForError('campaign') || errors.campaign }">
+                      <div class="col-sm-6" v-error-handler="{ value: campaign, handle: 'campaign' }">
                           <label for="campaign">Which Campaign are you interested in?</label>
                           <select name="type" id="campaign" class="form-control" v-model="campaign" v-validate:campaign="{ required: true }" required>
                               <option value="">-- please select --</option>
                               <option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
                           </select>
-                          <p class="help-block" v-if="errors.campaign" v-text="errors.campaign"></p>
+                          <!--<p class="help-block" v-if="errors.campaign" v-text="errors.campaign"></p>-->
                       </div>
                   </div>
                   <div class="form-group">
@@ -69,7 +69,7 @@
 
                   <div class="row form-group col-sm-offset-2">
                       <div class="col-sm-6">
-                          <div :class="{ 'has-error': checkForError('country') }">
+                          <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                               <label for="country">Country</label>
                               <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                               <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
@@ -77,7 +77,7 @@
                               </select>
                           </div>
                       </div>
-                      <div class="col-sm-6" :class="{ 'has-error': checkForError('type') || errors.type }">
+                      <div class="col-sm-6" v-error-handler="{ value: type, handle: 'type' }">
                           <label for="type">Type</label>
                           <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
                               <option value="">-- please select --</option>
@@ -87,14 +87,14 @@
                   </div>
 
                   <div class="form-group">
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('timezone') || errors.timezone }">
+                      <div class="col-sm-4" v-error-handler="{ value: timezone, handle: 'timezone' }">
                           <label for="timezone">Timezone</label>
                           <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                           <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                               <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                           </select>
                       </div>
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('phone') || errors.phone_one }">
+                      <div class="col-sm-4" v-error-handler="{ value: phone_one, client: 'phone', server: 'phone_one' }">
                           <label for="infoPhone">Phone 1</label>
                           <input type="text" class="form-control" v-model="phone_one | phone" v-validate:phone="{ require: true, minlength:9 }" id="infoPhone" placeholder="123-456-7890">
                           <p class="help-block" v-if="errors.phone_one" v-text="errors.phone_one"></p>
@@ -106,26 +106,26 @@
                   </div>
 
                   <div class="form-group">
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('contact') || errors.contact }">
+                      <div class="col-sm-4" v-error-handler="{ value: contact, handle: 'contact' }">
                           <label for="contact">Your Name</label>
                           <input type="text" class="form-control" name="contact" id="contact" v-model="contact"
                                  placeholder="John Smith" v-validate:contact="{ required: true, minlength:1, maxlength:100 }"
                                  maxlength="100" minlength="1" required>
                           <p class="help-block" v-if="errors.contact" v-text="errors.contact"></p>
                       </div>
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('email') || errors.email }">
+                      <div class="col-sm-4" v-error-handler="{ value: email, handle: 'email' }">
                           <label for="email">Email</label>
                           <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate:email="['email','require']">
                           <p class="help-block" v-if="errors.email" v-text="errors.email"></p>
                       </div>
-                      <div class="col-sm-4" :class="{ 'has-error': checkForError('position') || errors.position }">
+                      <div class="col-sm-4" v-error-handler="{ value: position, handle: 'position' }">
                           <label for="position">Your Position</label>
                           <input type="text" class="form-control" name="position" id="position" v-model="position" v-validate:position="{ require: true, minlength:1 }">
                           <p class="help-block" v-if="errors.position" v-text="errors.position"></p>
                       </div>
                   </div>
 
-                  <div class="form-group" :class="{ 'has-error': checkForError('spoken') || errors.spoke_to_rep }">
+                  <div class="form-group" v-error-handler="{ value: spode_to_rep, client: 'spoken', server: 'spoke_to_rep' }">
                       <label for="status" class="col-sm-8 control-label">Have you spoken with a Missions.Me representative?</label>
                       <div class="col-sm-4">
                           <label class="radio-inline">
@@ -173,11 +173,12 @@
     </div>
     <div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <div class="col-xs-6 col-sm-3 col-md-2" v-for="group in groups|limitBy groupsLimit" v-if="groups.length" style="display:flex">
-            <div class="panel panel-default">
-                <a :href="group.url" role="button">
-                    <img :src="group.avatar" :alt="group.name" class="img-responsive">
-                </a>
+        <template v-if="groups.length">
+            <div class="col-xs-6 col-sm-3 col-md-2" v-for="group in groups|limitBy groupsLimit" style="display:flex">
+                <div class="panel panel-default">
+                    <a :href="group.url" role="button">
+                        <img :src="group.avatar" :alt="group.name" class="img-responsive">
+                    </a>
                     <div class="panel-body text-center">
                         <!--<h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;"><i class="fa fa-users"></i> {{group.type}} Group</h6>-->
                         <a :href="group.url" role="button">
@@ -185,23 +186,27 @@
                         </a>
                         <label>{{group.type}} Group</label>
                     </div><!-- end panel-body -->
-            </div><!-- end panel -->
-        </div><!-- end col -->
-        <div class="col-xs-12" v-if=" ! groups.length">
-            <hr class="divider inv">
-            <p class="text-muted text-center">
-              <em>We didn't find groups matching your search.</em>
-              <br />
-              Are you a group?
-              <a class="text-primary small" href="/groups">
-                <i class="fa fa-arrow-circle-o-right"></i>  Partner with us.
-              </a>
-            </p>
-            <hr class="divider inv">
-        </div>
-        <div class="col-xs-12 text-center" v-if="groups.length">
-            <pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
-        </div>
+                </div><!-- end panel -->
+            </div><!-- end col -->
+            <div class="col-xs-12 text-center" v-if="groups.length">
+                <pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
+            </div>
+        </template>
+        <template v-else>
+            <div class="col-xs-12">
+                <hr class="divider inv">
+                <p class="text-muted text-center">
+                    <em>We didn't find groups matching your search.</em>
+                    <br />
+                    Are you a group?
+                    <a class="text-primary small" href="/groups">
+                        <i class="fa fa-arrow-circle-o-right"></i>  Partner with us.
+                    </a>
+                </p>
+                <hr class="divider inv">
+            </div>
+
+        </template>
     </div>
     <hr class="divider hidden-xs" style="margin-top:0;margin-bottom:0;">
         <div id="carousel-fundraising-platform" class="carousel slide hidden-sm hidden-xs" data-ride="carousel">
@@ -468,22 +473,24 @@
 
 <script type="text/javascript">
     import vSelect from 'vue-select';
+    import errorHandler from'../error-handler.mixin';
     export default{
 		name: 'groups',
         components: { vSelect },
+        mixins: [errorHandler],
         data(){
             return{
                 // logic vars
                 campaigns:[],
                 groups:[],
                 groupsLimit: 12,
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 resource: this.$resource('groups?isPublic=yes'),
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
-                errors: {},
+//                errors: {},
                 showSuccess: false,
 
                 // form vars
@@ -510,6 +517,8 @@
                 search: '',
                 per_page: 12,
                 pagination: { current_page: 1 },
+                // mixin settings
+                validatorHandle: 'CreateGroup',
             }
         },
         computed: {
@@ -523,10 +532,10 @@
             }
         },
         methods:{
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateGroup[field].invalid && this.attemptSubmit;
-            },
+            },*/
             /*seeAll(){
 					this.groupsLimit = this.groups.length
 				},*/
@@ -571,7 +580,7 @@
                 $('#collapseGroupForm').collapse('hide');
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateGroup.valid) {
                     // this.$refs.spinner.show();
                     this.$http.post('groups/submit', {
@@ -600,7 +609,7 @@
                         this.resetForm();
                         // this.$refs.spinner.hide();
                     }, function (error) {
-                        this.errors = error.data.errors
+                        this.errors = error.data.errors;
                         // this.$refs.spinner.hide();
                     });
                 }

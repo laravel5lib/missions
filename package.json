@@ -2,10 +2,12 @@
   "private": true,
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch"
+    "dev": "gulp watch",
+    "test": "ava"
   },
   "devDependencies": {
     "aos": "^2.1.1",
+    "ava": "^0.18.2",
     "babel-preset-stage-2": "^6.5.0",
     "bootstrap-sass": "^3.3.0",
     "font-awesome": "^4.6.3",

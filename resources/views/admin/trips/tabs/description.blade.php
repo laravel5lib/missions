@@ -11,4 +11,5 @@
         </div>
     </div>
     <admin-trip-description id="{{ $trip->id }}"></admin-trip-description>
+    <markdown-example-modal></markdown-example-modal>
 </div>

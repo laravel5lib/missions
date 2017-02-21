@@ -4,7 +4,7 @@
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('givennames') }">
+                    <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('surname') }">
+                    <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                                placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div><!-- end row -->
-            <div class="form-group" :class="{ 'has-error': checkForError('number') }">
+            <div class="form-group" v-error-handler="{ value: number, handle: 'number' }">
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Passport Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="row" :class="{ 'has-error': checkForError('expires')) }">
+            <div class="row" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
                 <div class="col-sm-12">
                     <label class="control-label">Expires On</label>
                     <div class="row">
@@ -45,7 +45,7 @@
                 </div>
             </div>
             
-            <div class="form-group" :class="{ 'has-error': checkForError('birth') }">
+            <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country' }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
                     <v-select class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
@@ -54,7 +54,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('citizenship') }">
+            <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship' }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
@@ -117,9 +117,11 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
+    import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'passport-create-update',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
+        mixins: [errorHandler],
         props: {
             isUpdate: {
                 type:Boolean,
@@ -132,6 +134,9 @@
         },
         data(){
             return{
+                // mixin settings
+                validatorHandle: 'CreateUpdatePassport',
+
                 given_names: '',
                 surname: '',
                 number: '',
@@ -145,7 +150,7 @@
                 countries: [],
                 birthCountryObj: null,
                 citizenshipObj: null,
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 selectedAvatar: null,
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
@@ -166,10 +171,10 @@
             },
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -184,7 +189,7 @@
                 return this.back(true);
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
                     // this.$refs.spinner.show();
                     this.passportResource.save(null, {
@@ -199,8 +204,9 @@
                     }).then(function (resp) {
                         window.location.href = '/dashboard/records/passports';
                     }, function (error) {
+                        this.errors = error.data.errors;
                         this.showError = true;
-                        debugger;
+//                        debugger;
                         // this.$refs.spinner.hide();
                     });
                 } else {
@@ -208,7 +214,7 @@
                 }
             },
             update(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
                     // this.$refs.spinner.show();
                     this.passportResource.update({id:this.id}, {
@@ -227,8 +233,9 @@
                         this.hasChanged = false;
                         // this.$refs.spinner.hide();
                     }, function (error) {
+                        this.errors = error.data.errors;
                         // this.$refs.spinner.hide();
-                        debugger;
+//                        debugger;
                     });
                 }
             },

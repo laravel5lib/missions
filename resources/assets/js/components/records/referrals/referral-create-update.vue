@@ -3,7 +3,7 @@
         <form id="CreateUpdateReferral" class="form-horizontal" novalidate style="postition:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
+                <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
                     <label for="author" class="control-label">Applicant Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
                        placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
@@ -11,13 +11,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('attentionto') }">
+                <div class="col-sm-6" v-error-handler="{ value: attention_to, client: 'attentionto', server: 'attention_to' }">
                     <label for="author" class="control-label">Attention to</label>
                     <input type="text" class="form-control" name="attention_to" id="attention_to" v-model="attention_to"
                            placeholder="Attention to" v-validate:attentionto="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('recipientemail') }">
+                <div class="col-sm-6" v-error-handler="{ value: recipient_email, client: 'recipientemail', server: 'recipient_email' }">
                     <label for="author" class="control-label">Recipient Email</label>
                     <input type="text" class="form-control" name="recipient_email" id="recipient_email" v-model="recipient_email"
                            placeholder="Recipient Email" v-validate:recipientemail="{ required: true, minlength:1, maxlength:100 }"
@@ -81,8 +81,10 @@
     </validator>
 </template>
 <script type="text/javascript">
+    import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'referral-create-update',
+        mixins: [errorHandler],
         props: {
             isUpdate: {
                 type: Boolean,
@@ -99,6 +101,9 @@
         },
         data(){
             return {
+                // mixin settings
+                validatorHandle: 'CreateUpdateReferral',
+
                 type: 'pastoral',
                 referrer: {
                     title: null,
@@ -124,14 +129,14 @@
                 showSuccess: false,
                 showError: false,
                 hasChanged: false,
-                attemptSubmit: false,
+//                attemptSubmit: false,
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpdateReferral[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -146,7 +151,7 @@
                 return this.back(true);
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.save({
                         applicant_name: this.applicant_name,
@@ -161,6 +166,7 @@
                         // window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         window.location.href = '/dashboard/records/referrals';
                     }, function (error) {
+                        this.errors = error.data.errors;
                         this.showError = true;
                         console.log(error);
                     });
@@ -169,7 +175,7 @@
                 }
             },
             update(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.update({id: this.id}, {
                         applicant_name: this.applicant_name,
@@ -181,7 +187,8 @@
                     }).then(function (resp) {
                         this.showSuccess = true;
                     }, function (error) {
-                        debugger;
+                        this.errors = error.data.errors;
+//                        debugger;
                     });
                 }
             },

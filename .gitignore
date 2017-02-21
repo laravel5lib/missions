@@ -7,3 +7,5 @@ Homestead.json
 
 #  jetbrains phpStorm IDE files
 .idea/
+
+*.csv

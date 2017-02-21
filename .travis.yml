@@ -1,0 +1,21 @@
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+dist: trusty
+sudo: required
+
+before_install:
+  -  chmod +x ./script/* #thanks https://medium.com/@psaunders
+  - ./script/travis_mysql_5.7.sh
+  - ./script/mysql-reset-root-password.sh
+
+services:
+  - mysql
+
+before_script:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
+  - composer install --dev --prefer-source --no-interaction
+  - php artisan migrate:refresh --seed --force

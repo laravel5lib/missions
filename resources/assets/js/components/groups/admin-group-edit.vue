@@ -40,7 +40,7 @@
                     </div>
                 </div><!-- end row -->
 
-                <div class="row form-group" :class="{ 'has-error': checkForError('name') }">
+                <div class="row form-group" v-error-handler="{ value: name, handle: 'name' }">
                     <div class="col-sm-12">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -83,7 +83,7 @@
                         <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                     </div>
                     <div class="col-sm-8">
-                        <div :class="{ 'has-error': checkForError('country') }">
+                        <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                             <label for="country">Country</label>
                             <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                             <select hidden name="country" id="country" class="" v-model="country_code" v-validate:country="{ required: true }" >
@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <div class="row" :class="{ 'has-error': checkForError('type') }">
+                <div class="row" v-error-handler="{ value: type, handle: 'type' }">
                     <div class="col-sm-6">
                         <label for="country">Type</label>
                         <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
@@ -101,7 +101,7 @@
                             <option :value="option" v-for="option in typeOptions">{{option|capitalize}}</option>
                         </select>
                     </div>
-                    <div :class="{ 'has-error': checkForError('timezone') }">
+                    <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <div class="col-sm-6">
                             <label for="country">Timezone</label>
                             <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
@@ -153,14 +153,14 @@
                 </div>
 
                 <template v-if="!!public">
-                    <div class="form-group" :class="{ 'has-error': checkForError('url') || errors.url }">
+                    <div class="form-group" v-error-handler="{ value: url, handle: 'url' }">
                         <div class="col-sm-12">
                             <label for="url" class="control-label">Url Slug</label>
                             <div class="input-group">
                                 <span class="input-group-addon">www.missions.me/</span>
                                 <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>
                             </div>
-                            <span class="help-block" v-if="errors.url" v-text="errors.url"></span>
+                            <!--<span class="help-block" v-if="errors.url" v-text="errors.url"></span>-->
                         </div>
                     </div>
                 </template>
@@ -182,9 +182,11 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'group-edit',
         components: { vSelect, 'upload-create-update': uploadCreateUpdate},
+        mixins: [errorHandler],
         props: ['groupId', 'managing'],
         data(){
             return {
@@ -209,7 +211,7 @@
 
                 // logic variables
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 resource: this.$resource('groups{/id}'),
                 countries: [],
                 countryCodeObj: null,
@@ -224,7 +226,9 @@
                 avatar_upload_id: null,
                 selectedBanner: null,
                 banner_upload_id: null,
-                errors: [],
+//                errors: [],
+                // mixin settings
+                validatorHandle: 'UpdateGroup',
             }
         },
         computed: {
@@ -255,10 +259,10 @@
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UpdateGroup[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -274,7 +278,7 @@
             },
             submit(){
                 this.errors = [];
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$UpdateGroup.valid) {
                     let formData = this.data;
                     // this.$refs.spinner.show();

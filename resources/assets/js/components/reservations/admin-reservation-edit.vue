@@ -19,7 +19,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('givennames') }">
+                    <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names">Given Names</label>
                         <input type=    "text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('surname')  }">
+                    <div v-error-handler="{ value: surname, handle: 'surname' }">
                     <label for="surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                            placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -42,7 +42,7 @@
                     <date-picker v-if="loaded" class="form-control" :time.sync="birthday|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('size') }">
+                    <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">
                         <label for="infoShirtSize">Shirt Sizes</label>
                         <select class="form-control" v-model="shirt_size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
                                 id="infoShirtSize">
@@ -59,13 +59,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Gender</label>
-                    <div class="radios" :class="{ 'has-error': checkForError('gender') }">
+                    <div class="radios" v-error-handler="{ value: gender, handle: 'gender' }">
                         <label>
                             <input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
                                    value="male"> Male
                         </label>
                     </div>
-                    <div class="radios" :class="{ 'has-error': checkForError('gender') }">
+                    <div class="radios" v-error-handler="{ value: gender, handle: 'gender' }">
                         <label>
                             <input type="radio" v-model="gender" v-validate:gender value="female"> Female
                         </label>
@@ -73,7 +73,7 @@
                     <span class="help-block" v-show="checkForError('gender')">Select a gender</span>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('status') }">
+                    <div v-error-handler="{ value: status, handle: 'status' }">
                         <label for="infoRelStatus">Relationship Status</label>
                         <select class="form-control" v-model="status"
                                 v-validate:status="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
@@ -98,7 +98,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('email') }">
+                <div class="col-sm-6" v-error-handler="{ value: email, handle: 'email' }">
                     <label for="infoEmail">Email</label>
                     <input type="email" class="form-control" v-model="email" id="infoEmail" v-validate:email="['email']" placeholder="Email˚">
                 </div>
@@ -137,7 +137,7 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('user') }">
+                    <div v-error-handler="{ value: user_id, client: 'user', server; 'user_id' }">
                         <label for="manager">Managing User</label>
                         <v-select class="form-control" :value.sync="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('companions') }">
+                    <div v-error-handler="{ value: companion_limit, client: 'companions', server; 'companion_limit' }">
                         <label for="companions">Companions</label>
                         <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
@@ -182,12 +182,17 @@
 <script type="text/javascript">
     import vSelect from 'vue-select';
     import uploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'admin-reservation-edit',
         props: ['id'],
         components: { vSelect, 'upload-create-update': uploadCreateUpdate },
+        mixins: [errorHandler],
         data(){
             return{
+                // mixin settings
+                validatorHandle: 'UpdateReservation',
+
                 given_names: '',
                 surname: '',
                 gender: '',
@@ -208,7 +213,7 @@
                 email: '',
 
                 // logic vars
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 loaded: false,
                 resource: this.$resource('reservations{/id}', {id: this.id, include: 'user'}),
                 users: [],
@@ -216,7 +221,7 @@
                 avatar_upload_id: null,
                 countryCodeObj: null,
                 userObj: null,
-                errors: [],
+//                errors: [],
                 countries: [],
                 roles: [],
 				showSuccess: false,
@@ -236,10 +241,10 @@
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$UpdateReservation[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -255,7 +260,7 @@
                 if ( _.isFunction(this.$validate) )
                     this.$validate(true);
 
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$UpdateReservation.valid) {
                     this.resource.update({id: this.id}, {
                         given_names: this.given_names,

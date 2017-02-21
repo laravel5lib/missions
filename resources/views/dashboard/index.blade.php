@@ -27,32 +27,70 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <ul class="list-unstyled">
-                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/cam-icon.png">Add profile
-                                    photo</a>
+                                <li style="margin-bottom:5px;">
+{{--                                    @if( auth()->user() )--}}
+                                    <a href="/dashboard/settings">
+                                        @if( empty(auth()->user()->avatar) )
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/cam-icon.png">
+                                        @else
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                                        @endif
+                                        Add profile photo
+                                    </a>
                                 </li>
-                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/photo-icon.png">Add banner
-                                    photo</a>
+                                <li style="margin-bottom:5px;">
+                                    <a href="/dashboard/settings">
+                                        @if( empty(auth()->user()->cover) )
+                                        <img class="img-xs av-left" style="border:none;" src="../images/onboard/photo-icon.png">
+                                        @else
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                                        @endif
+                                        Add banner photo
+                                    </a>
                                 </li>
-                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/bio-icon.png">Create a bio</a>
+                                <li style="margin-bottom:5px;">
+                                    <a href="/dashboard/settings">
+                                        @if( strlen(auth()->user()->bio) < 1 )
+                                        <img class="img-xs av-left" style="border:none;" src="../images/onboard/bio-icon.png">
+                                        @else
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                                        @endif
+                                        Create a bio
+                                    </a>
                                 </li>
                             </ul>
                         </div><!-- end col -->
                         <div class="col-sm-6">
                             <ul class="list-unstyled">
-                                <li style="margin-bottom:5px;"><a href="/dashboard/settings"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/social-icon.png">Add social
-                                    links</a>
+                                <li style="margin-bottom:5px;">
+                                    <a href="/dashboard/settings">
+                                        @if( empty(auth()->user()->links) )
+                                        <img class="img-xs av-left" style="border:none;" src="../images/onboard/social-icon.png">
+                                        @else
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                                        @endif
+                                        Add social links
+                                    </a>
                                 </li>
-                                <li style="margin-bottom:5px;"><a href="{{ url(auth()->user()->slug->url) }}"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/globe-icon.png">Add countries
-                                    you've visited</a>
+                                <li style="margin-bottom:5px;">
+                                    <a href="{{ url(auth()->user()->slug->url) }}">
+                                        @if( empty(auth()->user()->accolades[0]["items"]) )
+                                        <img class="img-xs av-left" style="border:none;" src="../images/onboard/globe-icon.png">
+                                        @else
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                                        @endif
+                                        Add countries you've visited
+                                    </a>
                                 </li>
-                                <li style="margin-bottom:5px;"><a href="{{ url(auth()->user()->slug->url) }}"><img class="img-xs av-left" style="border:none;"
-                                                                    src="../images/onboard/trips-icon.png">Add trips
-                                    you've been on</a>
+                                <li style="margin-bottom:5px;">
+                                    <a href="{{ url(auth()->user()->slug->url) }}">
+                                        @if( empty(auth()->user()->accolades[1]["items"]) )
+                                        <img class="img-xs av-left" style="border:none;" src="../images/onboard/trips-icon.png">
+                                        @else
+                                            <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
+                                        @endif
+                                        Add trips you've been on
+                                    </a>
                                 </li>
                             </ul>
                         </div><!-- end col -->
@@ -112,7 +150,7 @@
                     element: '.tour-step-payments',
                     on: 'top'
                 },
-            } ,
+            },
             {
                 id: 'requirements',
                 title: 'Travel Requirements',

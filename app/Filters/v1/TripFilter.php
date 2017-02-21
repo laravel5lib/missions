@@ -18,7 +18,7 @@ class TripFilter extends Filter
      * @var array
      */
     public $sortable = [
-        'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at'
+        'started_at', 'ended_at', 'published_at', 'created_at', 'updated_at', 'spots'
     ];
 
     /**

@@ -55,7 +55,7 @@
             {
                 id: 'cover',
                 title: 'Profile Cover',
-                text: 'Choose a cover photo. Like they say, "A picture says a thousand words.",
+                text: 'Choose a cover photo. Like they say, "A picture says a thousand words."',
                 attachTo: {
                     element: '.tour-step-cover',
                     on: 'top'

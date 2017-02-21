@@ -7,14 +7,68 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				</div>
 				<div class="modal-body">
-					<tabs>
-						<tab header="Syntax">
-							<textarea class="form-control" id="exampleContent" v-model="content" rows="20"></textarea>
-						</tab>
-						<tab header="Preview">
-							<div v-html="content | marked"></div>
-						</tab>
-					</tabs>
+					<div class="row hidden-xs">
+						<div class="col-sm-6">
+							<h5>Syntax (What you type)</h5>
+						</div>
+						<div class="col-sm-6">
+							<h5>Preview</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Syntax (What you type)</h5>
+							<div class="well">
+								#### Heading
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Preview</h5>
+							<div v-html="'#### Heading' | marked"></div>
+						</div>
+					</div>
+					<hr class="visible-xs">
+					<div class="row">
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Syntax (What you type)</h5>
+							<div class="well">
+								Emphasize in *Italics* and **Bold**
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Preview</h5>
+							<div v-html="'Emphasize in *Italics* and **Bold**' | marked"></div>
+						</div>
+					</div>
+					<hr class="visible-xs">
+					<div class="row">
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Syntax (What you type)</h5>
+							<div class="well">
+								* Unordered list can use asterisks <br>
+								* List Item 2 <br>
+								* List Item 3
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Preview</h5>
+							<div v-html="'* Unordered list can use asterisks\n* List Item 2\n* List Item 3' | marked"></div>
+						</div>
+					</div>
+					<hr class="visible-xs">
+					<div class="row">
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Syntax (What you type)</h5>
+							<div class="well">
+								> Blockquotes are a great way to make an important statement stand out. <br>
+								> This line is part of the same quote.
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<h5 class="visible-xs">Preview</h5>
+								<div v-html="'> Blockquotes are a great way to make an important statement stand out.\n> This line is part of the same quote.' | marked"></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -450,14 +450,16 @@ Vue.directive('tour-guide', {
     bind: function () {
 
         this.topScrollHandler = function(element){
-            var $element = window.jQuery(element);
-            var topOfElement = $element.offset().top;
-            var heightOfElement = $element.height();
-            window.jQuery('html, body').animate({
-                scrollTop: topOfElement - heightOfElement
-            },{
-                duration: 1000
-            });
+            if (element) {
+                var $element = window.jQuery(element);
+                var topOfElement = $element.offset().top;
+                var heightOfElement = $element.height();
+                window.jQuery('html, body').animate({
+                    scrollTop: topOfElement - heightOfElement
+                }, {
+                    duration: 1000
+                });
+            }
         };
 
         this.tour = window.tour = new Shepherd.Tour({

@@ -4,6 +4,14 @@ php:
   - 7.0
   - 7.1
 
+dist: trusty
+sudo: required
+
+before_install:
+  -  chmod +x ./scripts/* #thanks https://medium.com/@psaunders
+  - ./script/travis_mysql_5.7.sh
+  - ./script/mysql-reset-root-password.sh
+
 services:
   - mysql
 

@@ -1,10 +1,8 @@
 language: php
 
 php:
-  - 5.6
   - 7.0
   - 7.1
-  - hhvm
 
 services:
   - mysql
@@ -14,3 +12,4 @@ before_install:
 
 before_script:
   - composer install --dev --prefer-source --no-interaction
+  - php artisan migrate:refresh --seed --force

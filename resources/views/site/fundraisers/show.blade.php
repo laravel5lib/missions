@@ -7,7 +7,7 @@
 @section('scripts')
     @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/js/Jcrop.min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
         <script>
             // init controller
             var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
@@ -79,4 +79,5 @@
         </div><!-- end row -->
         <hr class="divider inv xlg">
     </div><!-- end container -->
+    <markdown-example-modal></markdown-example-modal>
 @stop

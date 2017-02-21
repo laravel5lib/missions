@@ -2,7 +2,7 @@
     <validator name="CreateUpdateEssay" @touched="onTouched">
         <form id="CreateUpdateEssay" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="row" :class="{ 'has-error': checkForError('author') }">
+            <div class="row" v-error-handler="{ value: author, handle: 'author' }">
                 <div class="col-sm-12">
                     <label for="author" class="control-label">Author Name</label>
                     <input type="text" class="form-control" name="author" id="author" v-model="author_name"
@@ -53,8 +53,10 @@
     </validator>
 </template>
 <script type="text/javascript">
+    import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'essay-create-update',
+        mixins: [errorHandler],
         props: {
             isUpdate: {
                 type: Boolean,
@@ -71,6 +73,9 @@
         },
         data(){
             return {
+                // mixin settings
+                validatorHandle: 'CreateUpdateEssay',
+
                 author_name: '',
                 subject: 'Testimony',
                 content: [
@@ -86,14 +91,14 @@
                 showSuccess: false,
                 showError: false,
                 hasChanged: false,
-                attemptSubmit: false,
+//                attemptSubmit: false,
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpdateEssay[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -108,7 +113,7 @@
                 return this.back(true);
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateEssay.valid) {
                     // this.$refs.spinner.show();
                     this.resource.save({
@@ -121,6 +126,7 @@
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         window.location.href = '/dashboard/records/essays';
                     }, function (error) {
+                        this.errors = error.data.errors;
                         this.showError = true;
                         console.log(error);
                         // this.$refs.spinner.hide();
@@ -130,7 +136,7 @@
                 }
             },
             update(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateEssay.valid) {
                     // this.$refs.spinner.show();
                     this.resource.update({id: this.id}, {
@@ -142,8 +148,9 @@
                         this.showSuccess = true;
                         // this.$refs.spinner.hide();
                     }, function (error) {
+                        this.errors = error.data.errors;
                         // this.$refs.spinner.hide();
-                        debugger;
+//                        debugger;
                     });
                 }
             },

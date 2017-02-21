@@ -53,7 +53,7 @@
 							<div class="col-sm-12 text-center">
 								<validator name="AddFacilitator">
 									<form class="form-horizontal" novalidate>
-										<div class="form-trip" :class="{ 'has-error': checkForError('user') }"><label
+										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', 'server: 'user_id' }"><label
 												class="col-sm-2 control-label">User</label>
 											<div class="col-sm-10">
 												<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
@@ -82,19 +82,24 @@
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";
-	export default {
+    import errorHandler from'../error-handler.mixin';
+    export default {
 		name: 'admin-trip-facilitators',
 		components: {vSelect},
-		props: ['tripId'],
+        mixins: [errorHandler],
+        props: ['tripId'],
 		data: function data() {
 			return {
-				user_id: null,
+                // mixin settings
+                validatorHandle: 'AddFacilitator',
+
+                user_id: null,
 				facilitators: [],
 				users: [],
 				trip: null,
 				userObj: null,
 				resource: this.$resource('trips{/id}', {include: 'facilitators.user'}),
-				attemptSubmit: false
+//				attemptSubmit: false
 			};
 		},
 
@@ -104,11 +109,11 @@
 			}
 		},
 		methods: {
-			checkForError: function checkForError(field) {
+			/*checkForError: function checkForError(field) {
 				// if user clicked submit button while the field is invalid trigger error styles
 
 				return this.$AddFacilitator[field].invalid && this.attemptSubmit;
-			},
+			},*/
 			getUsers: function getUsers(search, loading) {
 				loading(true);
 				this.$http.get('users', {search: search}).then(function (response) {
@@ -118,7 +123,7 @@
 			},
 			addFacilitator: function addFacilitator() {
 				// Add Facilitator
-				this.attemptSubmit = true;
+				this.resetErrors();
 				if (this.$AddFacilitator.valid) {
 					var facilitatorsArr = this.facilitators;
 					facilitatorsArr.push({trip_id: this.tripId, id: this.user_id});
@@ -146,8 +151,9 @@
 					this.userObj = null;
 					this.attemptSubmit = false;
 					$('#AddFacilitatorModal').modal('hide');
-				}, function (response) {
-					console.log(response);
+				}, function (error) {
+                    this.errors = error.data.errors;
+                    console.log(error);
 				});
 			}
 		},

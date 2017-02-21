@@ -35,7 +35,7 @@
 					<div class="modal-body">
 						<validator name="AddManager">
 							<form class="form-horizontal" novalidate>
-								<div class="form-group" :class="{ 'has-error': checkForError('user') }"><label
+								<div class="form-group" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
 										<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
@@ -58,10 +58,12 @@
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";
+    import errorHandler from'../error-handler.mixin';
 	export default {
 		name: 'admin-group-managers',
 		components: {vSelect},
-		props: ['groupId'],
+        mixins: [errorHandler],
+        props: ['groupId'],
 		data: function data() {
 			return {
 				user_id: null,
@@ -70,8 +72,10 @@
 				group: null,
 				userObj: null,
 				resource: this.$resource('groups{/id}', {include: 'managers'}),
-				attemptSubmit: false
-			};
+//				attemptSubmit: false,
+                // mixin settings
+                validatorHandle: 'AddManager',
+            };
 		},
 
 		computed: {
@@ -80,11 +84,11 @@
 			}
 		},
 		methods: {
-			checkForError: function checkForError(field) {
+			/*checkForError: function checkForError(field) {
 				// if user clicked submit button while the field is invalid trigger error styles
 
 				return this.$AddManager[field].invalid && this.attemptSubmit;
-			},
+			},*/
 			getUsers: function getUsers(search, loading) {
 				loading(true);
 				this.$http.get('users', {search: search}).then(function (response) {
@@ -94,7 +98,7 @@
 			},
 			addManager: function addManager() {
 				// Add Manager
-				this.attemptSubmit = true;
+				this.resetErrors();
 				if (this.$AddManager.valid) {
 					let managersArr = this.managers;
 					managersArr.push({id: this.user_id});
@@ -121,7 +125,8 @@
 					$('#AddManagerModal').modal('hide');
 					// this.$refs.spinner.hide();
 				}, function (response) {
-					console.log(response);
+                    this.errors = error.data.errors;
+                    console.log(response);
 					// this.$refs.spinner.hide();
 					//TODO add error alert
 				});

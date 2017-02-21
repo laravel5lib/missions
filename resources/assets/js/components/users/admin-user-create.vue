@@ -2,7 +2,7 @@
     <validator name="CreateUser" :groups="['passwordGroup']">
         <form id="CreateUserForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
+            <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
@@ -12,7 +12,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('email') }">
+                    <div v-error-handler="{ value: email, handle: 'email' }">
                         <label for="name" class="control-label">Email</label>
                         <input type="email" class="form-control" name="email" id="email" v-model="email"
                            v-validate:email="{ required: true, minlength:1, maxlength:100 }">
@@ -27,7 +27,7 @@
             <div class="row" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Password</label>
-                    <div class="row">
+                    <div class="row" v-error-handler="{ value: password, handle: 'password' }">
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
@@ -212,7 +212,7 @@
                 </div><!-- end col -->
             </div><!-- end form-group -->
             <div class="row">
-                <div :class="{ 'has-error': checkForError('gender') }">
+                <div v-error-handler="{ value: gender, handle: 'gender' }">
                     <div class="col-sm-6">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
@@ -223,7 +223,7 @@
                         </label>
                     </div>
                 </div>
-                <div :class="{ 'has-error': checkForError('status') }">
+                <div v-error-handler="{ value: status, handle: 'status' }">
                     <div class="col-sm-6">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
@@ -277,7 +277,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div :class="{ 'has-error': checkForError('country') }">
+                    <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
                         <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
@@ -286,7 +286,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div :class="{ 'has-error': checkForError('timezone') }">
+                    <div  v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
                         <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
@@ -323,7 +323,7 @@
                 </div>
             </div>
             <div class="row" v-if="!!public">
-                <div class="col-sm-12">
+                <div class="col-sm-12" v-error-handler="{ value: url, handle: 'url' }">
                     <label for="url" class="control-label">Url Slug</label>
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/users/</span>
@@ -348,9 +348,11 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'admin-user-create',
         components: {vSelect},
+        mixins: [errorHandler],
         data(){
             return {
                 name: '',
@@ -388,6 +390,8 @@
                 dobDay: null,
                 dobYear: null,
 
+                // mixin settings
+                validatorHandle: 'CreateUser',
             }
         },
         watch: {
@@ -416,7 +420,7 @@
                 return this.$CreateUser[field].invalid && this.attemptSubmit;
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUser.valid) {
                     let resource = this.$resource('users');
 
@@ -444,6 +448,7 @@
                     }).then(function (resp) {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
                     }, function (error) {
+                        this.errors = error.data.errors
                         this.showError = true;
                         console.log(error);
                     });

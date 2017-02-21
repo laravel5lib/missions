@@ -13,7 +13,7 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('name') }">
+                            <div v-error-handler="{ value: name, handle: 'name' }">
                                 <label for="name" class="control-label">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" v-model="name"
                                        placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('provider') }">
+                            <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider' }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
                                 <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
                                        placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
@@ -31,7 +31,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('policy') }">
+                            <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no' }">
                                 <label for="ins_policy_no" class=control-label">Insurance Policy Number</label>
                                 <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
                                        placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
@@ -305,9 +305,11 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
+    import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'medical-create-update',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
+        mixins: [errorHandler],
         props: {
             isUpdate: {
                 type:Boolean,
@@ -320,6 +322,9 @@
         },
         data(){
             return{
+                // mixin settings
+                validatorHandle: 'CreateUpdateMedicalRelease',
+
                 user_id: null,
                 name:'',
                 ins_provider:'',
@@ -357,7 +362,7 @@
                 additionalAllergiesList: [],
                 countries: [],
                 countryObj: null,
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 showSuccess: false,
                 showError: false,
                 selectedAvatar: null,
@@ -373,10 +378,10 @@
             },
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpdateMedicalRelease[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -427,7 +432,7 @@
                 this.allergies = _.where(_.union(this.allergiesList, this.additionalAllergiesList), { selected: true });
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
                     this.resource.save(null, {
@@ -443,6 +448,7 @@
                     }).then(function (resp) {
                         window.location.href = '/dashboard/records/medical-releases';
                     }, function (error) {
+                        this.errors = error.data.errors;
                         this.showError = true;
                         // this.$refs.spinner.hide();
                     });
@@ -451,7 +457,7 @@
                 }
             },
             update(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
                     this.resource.update({id:this.id, include: 'uploads'}, {
@@ -468,6 +474,7 @@
                         this.showSuccess = true;
                         // this.$refs.spinner.hide();
                     }, function (error) {
+                        this.errors = error.data.errors;
                         // this.$refs.spinner.hide();
                         console.log(error);
                     });

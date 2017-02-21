@@ -19,6 +19,10 @@
                                                 <span v-show="newMarkedContentToggle"><i class="fa fa-pencil"></i> Edit</span>
 
                                             </a>
+                                            <button class="btn btn-default-hollow btn-xs" type="button" data-toggle="modal" data-target="#markdownExamplesModal">
+                                                Examples
+                                            </button>
+
                                             <span class="form-group" v-if="fundraiser" v-show="description !== fundraiser.description">
                                                 <button class="btn btn-xs btn-default-hollow small" type="button" @click="reset">Cancel</button>
                                                 <button class="btn btn-xs btn-info" type="button" @click="saveDescription">Publish</button>
@@ -85,11 +89,16 @@
                 <strong>Good job!</strong>
                 <p>Settings updated</p>
             </alert>
+
+            <markdown-example-modal></markdown-example-modal>
+
         </template>
 
         <template v-else>
             <div v-html="fundraiser.description | marked"></div>
         </template>
+
+
     </div>
 </template>
 <script type="text/javascript">
@@ -133,7 +142,7 @@
         },
         methods: {
             isUser(){
-                return this.sponsorId === this.$root.user.id;
+                return this.$root.user && this.sponsorId === this.$root.user.id;
             },
             reset(){
                 this.description = this.fundraiser.description;

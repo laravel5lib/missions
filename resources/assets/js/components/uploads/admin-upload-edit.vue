@@ -2,7 +2,7 @@
     <validator name="CreateUpload">
         <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
+            <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -10,7 +10,7 @@
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('tags') }">
+            <div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
                     <v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
@@ -19,7 +19,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('type') }">
+            <div class="form-group" v-error-handler="{ value: type, handle: 'type' }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" disabled>
@@ -98,9 +98,11 @@
 </template>
 <script type="text/javascript">
     import vSelect from 'vue-select'
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'upload-edit',
         props:['uploadId'],
+        mixins: [errorHandler],
         components: {vSelect},
         data(){
             return {
@@ -139,7 +141,10 @@
                     {type: 'file', path: 'resources/documents'},
                 ],
                 resource: this.$resource('uploads{/id}'),
-                tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser']
+                tagOptions: ['Campaign', 'User', 'Group', 'Fundraiser'],
+                // mixin settings
+                validatorHandle: 'EditUser',
+
             }
         },
         watch: {
@@ -192,12 +197,12 @@
             prevent(e){
                 e.preventDefault();
             },
-            checkForError(field){
+            /*checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpload[field].invalid && this.attemptSubmit;
-            },
+            },*/
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpload.valid) {
                     this.resource.update({id:this.uploadId}, {
                         name: this.name,

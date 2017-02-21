@@ -8,7 +8,7 @@
 							class="fa fa-trash"></i> Delete</h6></a>
 				</div>
 			</div>
-			<div class="form-group" :class="{ 'has-error': checkForError('name') }">
+			<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
 				<div class="col-sm-12">
 					<label for="name">Name</label>
 					<input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -16,7 +16,7 @@
 						   maxlength="100" minlength="1" required>
 				</div>
 			</div>
-			<div class="form-group" :class="{ 'has-error': checkForError('country') }">
+			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
 					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
@@ -27,7 +27,7 @@
 					</select>
 				</div>
 			</div>
-			<div class="form-group" :class="{ 'has-error': checkForError('description') }">
+			<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
 				<div class="col-sm-12">
 					<label for="description">Description</label>
 					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
@@ -41,7 +41,7 @@
 					<label for="started_at">Dates</label>
 					<div class="row">
 						<div class="col-sm-6">
-							<div class="input-group" :class="{ 'has-error': checkForError('start') || errors.started_at }">
+							<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
 								<span class="input-group-addon">Start</span>
 								<date-picker class="form-control" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'" :option="{ type: 'day' }"></date-picker>
 								<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
@@ -50,7 +50,7 @@
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
-							<div class="input-group" :class="{ 'has-error': checkForError('end') || errors.ended_at}">
+							<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
 								<span class="input-group-addon">End</span>
 								<date-picker class="form-control" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 								<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
@@ -77,7 +77,7 @@
 			</div>
 
 			<template v-if="published_at">
-				<div class="form-group" :class="{ 'has-error': checkForError('url') || errors.page_url }">
+				<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
 					<div class="col-sm-12">
 						<label for="description">Page Url</label>
 						<div class="input-group">
@@ -85,11 +85,11 @@
 							<input type="text" id="page_url" v-model="page_url" class="form-control"
 								   v-validate:url="{ required: false }"/>
 						</div>
-						<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>
+						<!--<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>-->
 					</div>
 				</div>
 
-				<div class="form-group" :class="{ 'has-error': checkForError('src') }">
+				<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
 					<div class="col-sm-12">
 						<label for="description">Page Source</label>
 						<div class="input-group">
@@ -192,15 +192,17 @@
 <script type="text/javascript">
 	import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+    import errorHandler from'../error-handler.mixin';
 	export default{
 		name: 'campaign-edit',
 		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate},
+        mixins: [errorHandler],
 		props: ['campaignId'],
 		data(){
 			return {
 				countries: [],
 				countryCodeObj: null,
-				errors: [],
+//				errors: [],
 
 				name: null,
 				country_code: null,
@@ -212,7 +214,7 @@
 				published_at_time: null,
 				page_url: null,
 				page_src: null,
-				attemptSubmit: false,
+//				attemptSubmit: false,
 				selectedAvatar: { source: null },
 				avatar_upload_id: null,
 				selectedBanner: { source: null },
@@ -222,7 +224,9 @@
 				showError: false,
 				showSaveAlert: false,
 				hasChanged: false,
-			}
+                // mixin settings
+                validatorHandle: 'UpdateCampaign',
+            }
 		},
 		computed:{
 			country_code(){
@@ -262,7 +266,7 @@
 				if ( _.isFunction(this.$validate) )
 					this.$validate(true);
 
-				this.attemptSubmit = true;
+				this.resetErrors();
 				if (this.$UpdateCampaign.valid) {
 					// this.$refs.spinner.show();
 					this.resource.update({id: this.campaignId}, {

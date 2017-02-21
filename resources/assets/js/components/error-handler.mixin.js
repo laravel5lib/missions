@@ -22,16 +22,15 @@ export default {
     methods: {
         checkForError(field){
             // if user clicked submit button while the field is invalid trigger error styles 
-
             return _.isString(field) && this['$' + this.validatorHandle][field].invalid && this.attemptSubmit;
         },
         resetErrors(){
             this.errors = {};
-            this.attemptSubmit = true;
+            this.attemptSubmit = false;
         },
     }, ready(){
         if (!this.validatorHandle) {
-            console.log('Please set validatorHandle to validator name');
+            console.error('Please set validatorHandle to validator name');
         }
     }
 }

@@ -43,20 +43,20 @@
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
 			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
-				<div class="form-group" :class="{ 'has-error': checkForError('name') }" v-show="!uiLocked">
+				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
 							   maxlength="100" minlength="1" required>
 				</div>
-				<div class="form-group" :class="{ 'has-error': checkForError('tags') }" v-show="!uiLocked" >
+				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
 					<label for="tags" class="control-label">Tags</label>
 						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
 						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>
 				</div>
-				<div class="form-group" :class="{ 'has-error': checkForError('type') }" v-show="!uiLocked" >
+				<div class="form-group" v-error-handler="{ value: type, handle: 'type' }" v-show="!uiLocked" >
 					<label for="type" class="control-label">Type</label>
 					<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
 						<option :value="">-- select type --</option>
@@ -157,10 +157,12 @@
 </template>
 <script type="text/javascript">
 	import vSelect from 'vue-select'
-	export default{
+    import errorHandler from'../error-handler.mixin';
+    export default{
         name: 'upload-create-update',
 		components: {vSelect},
-		props:{
+        mixins: [errorHandler],
+        props:{
 			uploadId: {
 				type: String,
 				default: null
@@ -252,6 +254,8 @@
 				page: 1,
 				search: '',
 				pagination: { current_page: 1 },
+                // mixin settings
+                validatorHandle: 'CreateUpload',
             }
         },
 		computed:{
@@ -408,12 +412,12 @@
 			prevent(e){
 				e.preventDefault();
 			},
-            checkForError(field){
+            /*checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpload[field].invalid && this.attemptSubmit;
-            },
+            },*/
             submit(){
-				this.attemptSubmit = true;
+				this.resetErrors();
                 if (this.$CreateUpload.valid) {
 					let params;
 					if (this.type === 'video') {
@@ -440,12 +444,13 @@
                     this.resource.save(null, params).then(function (resp) {
 						this.handleSuccess(resp)
                     }, function (error) {
+                        this.errors = error.data.errors;
                         console.log(error);
                     });
                 }
             },
             update(){
-				this.attemptSubmit = true;
+				this.resetErrors();
 				if (this.$CreateUpload.valid) {
 					this.resource.update({id:this.uploadId}, {
 						name: this.name,
@@ -460,7 +465,8 @@
 					}).then(function (resp) {
 						this.handleSuccess(resp)
 					}, function (error) {
-						console.log(error);
+                        this.errors = error.data.errors;
+                        console.log(error);
 					});
 				}
             },

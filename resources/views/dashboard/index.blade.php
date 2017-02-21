@@ -30,7 +30,7 @@
                                 <li style="margin-bottom:5px;">
 {{--                                    @if( auth()->user() )--}}
                                     <a href="/dashboard/settings">
-                                        @if( empty(auth()->user()->avatar) )
+                                        @if( empty(auth()->user()->avatar_upload_id) )
                                             <img class="img-xs av-left" style="border:none;" src="../images/onboard/cam-icon.png">
                                         @else
                                             <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">
@@ -40,7 +40,7 @@
                                 </li>
                                 <li style="margin-bottom:5px;">
                                     <a href="/dashboard/settings">
-                                        @if( empty(auth()->user()->cover) )
+                                        @if( empty(auth()->user()->banner_upload_id) )
                                         <img class="img-xs av-left" style="border:none;" src="../images/onboard/photo-icon.png">
                                         @else
                                             <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">

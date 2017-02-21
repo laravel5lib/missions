@@ -1,9 +1,5 @@
-# Missions.Me
+# Missions.Me Staging
 
-**Local Development:**
+[![Build Status](https://travis-ci.org/missions-me/missions.svg?branch=staging)](https://travis-ci.org/missions-me/missions)
 
-1) Clone the repo
-2) run `composer install`
-3) run `npm install`
-4) Modify `.env` file to match environment
-5) Build something amazing!
+Pushes to this repo deploy on [dev.missions.me](https://dev.missions.me "Missions.Me Staging").

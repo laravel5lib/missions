@@ -253,6 +253,22 @@ body:not(.modal-open) {
         font-size: 1.3em;
       }
     }
+    h2 {
+      @media screen and (max-width: 991px) {
+        font-size: 1.5em;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 1em;
+      }
+    }
+    p {
+      @media screen and (max-width: 991px) {
+        font-size: 14px;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 12px;
+      }
+    }
     @media screen and (max-width: 767px) {
       left: 5%;
       right: 5%;

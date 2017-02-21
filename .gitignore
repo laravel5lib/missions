@@ -3,6 +3,7 @@
 /public/storage
 Homestead.yaml
 Homestead.json
+readme.md
 .env
 
 #  jetbrains phpStorm IDE files

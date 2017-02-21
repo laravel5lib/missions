@@ -16,7 +16,6 @@ services:
   - mysql
 
 before_script:
-  - mysql -v
   - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
   - composer install --dev --prefer-source --no-interaction
   - php artisan migrate:refresh --seed --force

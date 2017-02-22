@@ -1,9 +1,14 @@
 /vendor
 /node_modules
-/public/storage
+/public/build
+/storage
 Homestead.yaml
 Homestead.json
+readme.md
 .env
+.travis.yml
 
 #  jetbrains phpStorm IDE files
 .idea/
+
+*.csv

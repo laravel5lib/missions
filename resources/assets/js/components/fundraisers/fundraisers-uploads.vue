@@ -1,112 +1,114 @@
 <template>
-    <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-    <template v-if="isUser()">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="panel panel-default panel-body">
-                    Add photos and videos!
-                    <button class="btn btn-default-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
-                        <i class="fa fa-picture-o icon-left"></i> Manage Media
-                    </button>
+    <div>
+        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <template v-if="isUser()">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-default panel-body">
+                        Add photos and videos!
+                        <button class="btn btn-default-hollow btn-xs pull-right" data-toggle="collapse" data-target="#mediaCollapse" aria-expanded="false" aria-controls="mediaCollapse">
+                            <i class="fa fa-picture-o icon-left"></i> Manage Media
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="collapse" id="mediaCollapse">
-            <div class="panel panel-default"><div class="panel-body">
-                <!-- TAB NAVIGATION -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#tab1" role="tab" data-toggle="tab">All Media</a></li>
-                    <li><a href="#tab2" role="tab" data-toggle="tab">Add Picture</a></li>
-                    <li><a href="#tab3" role="tab" data-toggle="tab">Add Video</a></li>
-                </ul>
-                <!-- TAB CONTENT -->
-                <div class="tab-content">
-                    <div class="active tab-pane fade in" id="tab1">
-                        <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
-                            <p class="text-center text-muted" v-if="fundraiser.uploads.data.length < 1"><em>
-                                No media found. Add a video or picture.</em>
-                            </p>
-                            <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
-                                <div class="panel panel-default">
-                                    <img :src="upload.type === 'video' ? 'https://placehold.it/155x87?text=Video' : upload.source" :alt="upload.name" class="img-responsive">
-                                    <div class="panel-body">
-                                        <p style="font-size:8px;" class="text-center text-muted">{{ upload.name }}</p>
-                                        <div class="btn-group btn-group-xs btn-group-justified" role="group" aria-label="...">
-                                            <a @click="viewUpload(upload)" class="btn btn-xs btn-primary-hollow" role="button"><i class="fa fa-eye"></i></a>
-                                            <a @click="deleteUpload(upload)" class="btn btn-xs btn-default-hollow" role="button"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div><!-- end panel-body -->
-                                </div><!-- end panel -->
+            <div class="collapse" id="mediaCollapse">
+                <div class="panel panel-default"><div class="panel-body">
+                    <!-- TAB NAVIGATION -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#tab1" role="tab" data-toggle="tab">All Media</a></li>
+                        <li><a href="#tab2" role="tab" data-toggle="tab">Add Picture</a></li>
+                        <li><a href="#tab3" role="tab" data-toggle="tab">Add Video</a></li>
+                    </ul>
+                    <!-- TAB CONTENT -->
+                    <div class="tab-content">
+                        <div class="active tab-pane fade in" id="tab1">
+                            <div class="row" v-if="fundraiser.hasOwnProperty('uploads')">
+                                <p class="text-center text-muted" v-if="fundraiser.uploads.data.length < 1"><em>
+                                    No media found. Add a video or picture.</em>
+                                </p>
+                                <div class="col-sm-4 col-md-3" v-for="upload in fundraiser.uploads.data">
+                                    <div class="panel panel-default">
+                                        <img :src="upload.type === 'video' ? 'https://placehold.it/155x87?text=Video' : upload.source" :alt="upload.name" class="img-responsive">
+                                        <div class="panel-body">
+                                            <p style="font-size:8px;" class="text-center text-muted">{{ upload.name }}</p>
+                                            <div class="btn-group btn-group-xs btn-group-justified" role="group" aria-label="...">
+                                                <a @click="viewUpload(upload)" class="btn btn-xs btn-primary-hollow" role="button"><i class="fa fa-eye"></i></a>
+                                                <a @click="deleteUpload(upload)" class="btn btn-xs btn-default-hollow" role="button"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div><!-- end panel-body -->
+                                    </div><!-- end panel -->
+                                </div>
                             </div>
+
+                            <modal title="View Upload" :show.sync="showView">
+                                <div slot="modal-body" class="modal-body" v-if="selectedUpload && selectedUpload.hasOwnProperty('type')">
+                                    <template v-if="selectedUpload.type === 'video'">
+                                        <video id="preview" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
+                                            <p class="vjs-no-js">
+                                                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                            </p>
+                                        </video>
+                                    </template>
+                                    <template v-else>
+                                        <img :src="selectedUpload.source" class="img-responsive">
+                                    </template>
+                                </div>
+                                <div slot="modal-footer" class="modal-footer">
+                                    <button type="button" class="btn btn-default" @click="closeView">Close</button>
+                                </div>
+                            </modal>
+
+                            <modal title="Delete Upload" small :show.sync="showDelete" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
+                                <div slot="modal-body" class="modal-body">Delete this upload?</div>
+                            </modal>
                         </div>
-
-                        <modal title="View Upload" :show.sync="showView">
-                            <div slot="modal-body" class="modal-body" v-if="selectedUpload && selectedUpload.hasOwnProperty('type')">
-                                <template v-if="selectedUpload.type === 'video'">
-                                    <video id="preview" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
-                                        <p class="vjs-no-js">
-                                            To view this video please enable JavaScript, and consider upgrading to a web browser that
-                                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                                        </p>
-                                    </video>
-                                </template>
-                                <template v-else>
-                                    <img :src="selectedUpload.source" class="img-responsive">
-                                </template>
-                            </div>
-                            <div slot="modal-footer" class="modal-footer">
-                                <button type="button" class="btn btn-default" @click="closeView">Close</button>
-                            </div>
-                        </modal>
-
-                        <modal title="Delete Upload" small :show.sync="showDelete" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
-                            <div slot="modal-body" class="modal-body">Delete this upload?</div>
-                        </modal>
+                        <div class="tab-pane fade" id="tab2">
+                            <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']" :width="1920" :height="1080"></upload-create-update>
+                        </div>
+                        <div class="tab-pane fade" id="tab3">
+                            <upload-create-update type="video" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
+                        </div>
                     </div>
-                    <div class="tab-pane fade" id="tab2">
-                        <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']" :width="1920" :height="1080"></upload-create-update>
-                    </div>
-                    <div class="tab-pane fade" id="tab3">
-                        <upload-create-update type="video" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
-                    </div>
-                </div>
 
-            </div></div>
-        </div>
-    </template>
-
-    <div id="uploads-carousel" class="carousel slide" data-ride="carousel" data-interval="false" v-if="fundraiser.hasOwnProperty('uploads')">
-        <!-- Indicators -->
-        <ol class="carousel-indicators">
-            <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
-            <li data-target="#uploads-carousel" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="upload in fundraiser.uploads.data"></li>
-        </ol>
-        <!-- Wrapper for slides -->
-        <div class="carousel-inner" role="listbox">
-            <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="upload in fundraiser.uploads.data">
-                <template v-if="upload.type === 'video'">
-                    <video :id="upload.id" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
-                        <p class="vjs-no-js">
-                            To view this video please enable JavaScript, and consider upgrading to a web browser that
-                            <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                        </p>
-                    </video>
-                </template>
-                <template v-else>
-                    <img :src="upload.source">
-                </template>
+                </div></div>
             </div>
-        </div>
-        <!-- Controls -->
-        <a class="left carousel-control" href="#uploads-carousel" role="button" data-slide="prev">
-            <span class="fa fa-angle-left" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="right carousel-control" href="#uploads-carousel" role="button" data-slide="next">
-            <span class="fa fa-angle-right" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div><!-- end carousel -->
+        </template>
+
+        <div id="uploads-carousel" class="carousel slide" data-ride="carousel" data-interval="false" v-if="fundraiser.hasOwnProperty('uploads')">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
+                <li data-target="#uploads-carousel" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="upload in fundraiser.uploads.data"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="upload in fundraiser.uploads.data">
+                    <template v-if="upload.type === 'video'">
+                        <video :id="upload.id" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
+                            <p class="vjs-no-js">
+                                To view this video please enable JavaScript, and consider upgrading to a web browser that
+                                <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                            </p>
+                        </video>
+                    </template>
+                    <template v-else>
+                        <img :src="upload.source">
+                    </template>
+                </div>
+            </div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#uploads-carousel" role="button" data-slide="prev">
+                <span class="fa fa-angle-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#uploads-carousel" role="button" data-slide="next">
+                <span class="fa fa-angle-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div><!-- end carousel -->
+    </div>
 </template>
 <style>
     video {
@@ -176,7 +178,7 @@
         },
         methods:{
             isUser(){
-                return this.sponsorId && this.$root.user.id && this.sponsorId === this.$root.user.id;
+                return this.sponsorId && this.$root.user && this.sponsorId === this.$root.user.id;
             },
             viewUpload(upload){
                 this.selectedUpload = upload;

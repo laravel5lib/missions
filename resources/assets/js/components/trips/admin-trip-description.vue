@@ -10,6 +10,9 @@
                                 <button class="btn btn-primary btn-xs" type="button" @click="update">
                                     Update
                                 </button>
+                                <button class="btn btn-default-hollow btn-xs" type="button" data-toggle="modal" data-target="#markdownExamplesModal">
+                                    Examples
+                                </button>
                                 <hr class="divider inv sm">
                             </div>
                             <div class="col-sm-12">

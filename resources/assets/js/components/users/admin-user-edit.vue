@@ -2,7 +2,7 @@
     <validator name="EditUser" @touched="onTouched">
         <form id="EditUserForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <div class="form-group" v-error-handler="{ value: name, client: 'name', server: 'name' }">
+            <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -12,19 +12,19 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <div v-error-handler="{ value: email, client: 'email', server: 'email' }">
+                    <div v-error-handler="{ value: email, handle: 'email' }">
                     <label for="name" class="control-label">Email</label>
                     <input type="email" class="form-control" name="email" id="email" v-model="email"
                            v-validate:email="{ required: true, minlength:1, maxlength:100 }">
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" v-error-handler="{ value: alt_email, server: 'alt_email' }">
                     <label for="name" class="control-label">Alt. Email</label>
                     <input type="email" class="form-control" name="alt_email" id="alt_email" v-model="alt_email">
                 </div>
             </div>
 
-            <div class="form-group":class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
+            <div class="form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Password</label>
                     <div class="checkbox">
@@ -33,7 +33,7 @@
                             Change Password
                         </label>
                     </div>
-                    <div v-if="changePassword" class="row" v-error-handler="{ value: password, client: 'password', server: 'password' }" >
+                    <div v-if="changePassword" class="row" v-error-handler="{ value: password, handle: 'password' }" >
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': checkForError('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
@@ -220,7 +220,7 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('gender') }">
+                    <div v-error-handler="{ value: gender, handle: 'gender' }">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
                             <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
@@ -231,7 +231,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('status') }">
+                    <div v-error-handler="{ value: gender, handle: 'status' }">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
                             <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
@@ -278,7 +278,7 @@
                         <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                 </div>
                 <div class="col-sm-4">
-                    <div :class="{ 'has-error': checkForError('country') }">
+                    <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
                         <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
@@ -287,7 +287,7 @@
                     </div>
                 </div>
                 <div class="col-sm-4">
-                    <div :class="{ 'has-error': checkForError('timezone') }">
+                    <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
                         <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
@@ -372,9 +372,6 @@
                 gender: false,
                 admin: false,
 
-                // logic variables
-//                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-//                attemptSubmit: false,
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],

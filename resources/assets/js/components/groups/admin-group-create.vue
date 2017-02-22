@@ -2,7 +2,7 @@
     <validator name="CreateGroup">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <form id="CreateGroupForm" class="form-horizontal" novalidate>
-            <div class="form-group" :class="{ 'has-error': checkForError('name') }">
+            <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <div class="col-sm-12">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
@@ -45,7 +45,7 @@
                         <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                 </div>
                 <div class="col-sm-8">
-                    <div :class="{ 'has-error': checkForError('country') }">
+                    <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
                         <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('type') }">
+            <div class="form-group" v-error-handler="{ value: type, handle: 'type' }">
                 <div class="col-sm-12">
                     <label for="type">Type</label>
                     <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
@@ -65,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="form-group" :class="{ 'has-error': checkForError('timezone') }">
+            <div class="form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                 <div class="col-sm-12">
                     <label for="timezone">Timezone</label>
                     <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
@@ -106,7 +106,7 @@
             </div>
             <div class="form-group" v-if="!!public">
                 <label for="url" class="col-sm-2 control-label">Url Slug</label>
-                <div class="col-sm-10">
+                <div class="col-sm-10" v-error-handler="{ value: url, handle: 'url' }">
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/groups/</span>
                         <input type="text" id="url" v-model="url" class="form-control" required v-validate:="{ required: !!public }"/>
@@ -130,9 +130,11 @@
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'group-create',
         components: {vSelect},
+        mixins: [errorHandler],
         data(){
             return {
                 name: '',
@@ -153,12 +155,14 @@
 
                 // logic variables
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 showError: false,
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
                 //timezoneObj: null,
+                // mixin settings
+                validatorHandle: 'CreateGroup',
             }
         },
         watch: {
@@ -177,12 +181,12 @@
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateGroup[field].invalid && this.attemptSubmit;
-            },
+            },*/
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateGroup.valid) {
                     let resource = this.$resource('groups');
 
@@ -208,11 +212,12 @@
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
                         // this.$refs.spinner.hide();
                     }, function (error) {
+                        this.errors = error.data.errors;
                         console.log(error);
                         this.showError = true;
                         // this.$refs.spinner.hide();
                         //TODO add error alert
-                        debugger;
+//                        debugger;
                     });
                 } else {
                     this.showError = true;

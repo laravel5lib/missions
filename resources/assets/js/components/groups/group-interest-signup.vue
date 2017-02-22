@@ -4,7 +4,7 @@
         <form novalidate id="TripInterestSignupForm">
             <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Saving"></spinner>
             <div class="row">
-                <div class="col-xs-12" :class="{ 'has-error': checkForError('campaign')}">
+                <div class="col-xs-12" v-error-handler="{ value: campaign, handle: 'campaign' }">
                     <label>Campaign of Interest</label>
                     <select v-model="campaign_id" class="form-control" v-validate:campaign="{required: true}">
                         <option v-for="campaign in campaigns" :value="campaign.data.id">
@@ -15,7 +15,7 @@
             </div>
             <hr class="divider inv sm">
             <div class="row" v-if="campaign_id">
-                <div class="col-xs-12" :class="{ 'has-error': checkForError('trip')}">
+                <div class="col-xs-12" v-error-handler="{ value: trip, handle: 'trip' }">
                     <label>Trip Type</label>
                     <select name="campaign" v-model="interest.trip_id" class="form-control" v-validate:trip="{required: true}">
                         <option v-for="trip in trips" :value="trip.id">
@@ -26,14 +26,14 @@
             </div>
             <hr class="divider inv sm">
             <div class="row">
-                <div class="col-xs-12" :class="{ 'has-error': checkForError('name')}">
+                <div class="col-xs-12" v-error-handler="{ value: name, handle: 'name' }">
                     <label>Name</label>
                     <input type="text" class="form-control" v-model="interest.name" v-validate:name="{required: true}">
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row">
-                <div class="col-xs-12" :class="{ 'has-error': checkForError('email')}">
+                <div class="col-xs-12" v-error-handler="{ value: email, handle: 'email' }">
                     <label>Email</label>
                     <input type="text" class="form-control" v-model="interest.email" v-validate:email="{required: true, email: true}">
                 </div>
@@ -77,8 +77,10 @@
     </div>
 </template>
 <script type="text/javascript">
+    import errorHandler from'../error-handler.mixin';
     export default{
         name: 'group-interest-signup',
+        mixins: [errorHandler],
         props: ['id'],
         data(){
             return{
@@ -90,7 +92,9 @@
                 campaign_id: null,
                 campaigns: {},
                 allTrips: {},
-                attemptSubmit: false
+//                attemptSubmit: false
+                // mixin settings
+                validatorHandle: 'Interest',
             }
         },
         computed: {
@@ -99,10 +103,10 @@
             }
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$Interest[field].invalid && this.attemptSubmit;
-            },
+            },*/
             removeDuplicates(arr, prop) {
                 let new_arr = [];
                 let lookup  = {};
@@ -118,7 +122,7 @@
                 return new_arr;
             },
             save() {
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$Interest.valid) {
                     this.$refs.validationspinner.show();
                     this.$http.post('interests', this.interest).then(function (response) {
@@ -132,6 +136,7 @@
                         this.campaign_id = '';
                         console.log(response);
                     }).then(function (error) {
+                        this.errors = error.data.errors;
                         this.$refs.validationspinner.hide();
                         console.log(error);
                         this.$dispatch('showSuccess', 'Request sent')

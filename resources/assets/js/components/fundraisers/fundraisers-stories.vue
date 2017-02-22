@@ -26,6 +26,9 @@
                                 <span v-show="!newMarkedContentToggle">Preview</span>
                                 <span v-show="newMarkedContentToggle">Edit</span>
                             </button>
+                            <button class="btn btn-default-hollow btn-xs" type="button" data-toggle="modal" data-target="#markdownExamplesModal">
+                                Examples
+                            </button>
                         </label>
                         <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="selectedStory.content" minlength="1" rows="10"></textarea>
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
@@ -95,6 +98,9 @@
                                     <span v-show="!editMarkedContentToggle">Preview</span>
                                     <span v-show="editMarkedContentToggle">Edit</span>
                                 </button>
+                                <button class="btn btn-default-hollow btn-xs" type="button" data-toggle="modal" data-target="#markdownExamplesModal">
+                                    Examples
+                                </button>
                             </label>
                             <textarea v-show="!editMarkedContentToggle" class="form-control" id="selectedStoryContent" v-model="selectedStory.content" minlength="1" rows="20"></textarea>
                             <div class="collapse" :class="{ 'in': editMarkedContentToggle }">
@@ -120,6 +126,7 @@
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeStory(selectedStory)'>Delete</button>
             </div>
         </modal>
+
     </div>
 </template>
 <script type="text/javascript">
@@ -158,7 +165,7 @@
         },
         methods:{
             isUser(){
-                return this.sponsorId === this.$root.user.id;
+                return this.$root.user && this.sponsorId === this.$root.user.id;
             },
             removeStory(story){
                 if(story) {

@@ -4,7 +4,7 @@
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('givennames') }">
+                    <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div :class="{ 'has-error': checkForError('surname') }">
+                    <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                                placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group" :class="{ 'has-error': checkForError('number') }">
+            <div class="form-group" v-error-handler="{ value: number, handle: 'number' }">
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Visa Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
@@ -35,7 +35,7 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group input-group-sms"
-                                 :class="{ 'has-error': checkForError('issued') }">
+                                 v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
                                 <span class="input-group-addon">Issued</span>
                                 <date-picker class="form-control input-sms" :time.sync="issued_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
@@ -45,7 +45,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="input-group input-group-sms"
-                                 :class="{ 'has-error': checkForError('expires') }">
+                                 v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
                                 <span class="input-group-addon">Expires</span>
                                 <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
@@ -56,7 +56,7 @@
                 </div>
             </div>
             
-            <div class="form-group" :class="{ 'has-error': checkForError('country') }">
+            <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
                     <v-select class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
@@ -113,9 +113,11 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
+    import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'visa-create-update',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
+        mixins: [errorHandler],
         props: {
             isUpdate: {
                 type:Boolean,
@@ -128,6 +130,9 @@
         },
         data(){
             return{
+                // mixin settings
+                validatorHandle: 'CreateUpdateVisa',
+
                 given_names: '',
                 surname: '',
                 number: '',
@@ -140,7 +145,7 @@
                 // logic vars
                 countries: [],
                 countryObj: null,
-                attemptSubmit: false,
+//                attemptSubmit: false,
                 showSuccess: false,
                 showError: false,
                 selectedAvatar: null,
@@ -156,10 +161,10 @@
             },
         },
         methods: {
-            checkForError(field){
+            /*checkForError(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUpdateVisa[field].invalid && this.attemptSubmit;
-            },
+            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -174,7 +179,7 @@
                 return this.back(true);
             },
             submit(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateVisa.valid) {
                     // this.$refs.spinner.show();
                     this.visasResource.save(null, {
@@ -191,6 +196,7 @@
 //                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
                         window.location.href = '/dashboard/records/visas';
                     }, function (error) {
+                        this.errors = error.data.errors;
                         this.showError = true;
                         // this.$refs.spinner.hide();
                         debugger;
@@ -200,7 +206,7 @@
                 }
             },
             update(){
-                this.attemptSubmit = true;
+                this.resetErrors();
                 if (this.$CreateUpdateVisa.valid) {
                     // this.$refs.spinner.show();
                     this.visasResource.update({id:this.id}, {
@@ -217,8 +223,9 @@
                         // window.location.href = '/dashboard/visas';
                         // this.$refs.spinner.hide();
                     }, function (error) {
+                        this.errors = error.data.errors;
                         // this.$refs.spinner.hide();
-                        debugger;
+//                        debugger;
                     });
                 }
             },

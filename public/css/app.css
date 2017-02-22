@@ -16087,6 +16087,18 @@ body:not(.modal-open) {
       @media screen and (max-width: 767px) {
         .content-page-bg .c-page-bg-text h1 {
           font-size: 1.3em; } }
+    @media screen and (max-width: 991px) {
+      .content-page-bg .c-page-bg-text h2 {
+        font-size: 1.5em; } }
+    @media screen and (max-width: 767px) {
+      .content-page-bg .c-page-bg-text h2 {
+        font-size: 1em; } }
+    @media screen and (max-width: 991px) {
+      .content-page-bg .c-page-bg-text p {
+        font-size: 14px; } }
+    @media screen and (max-width: 767px) {
+      .content-page-bg .c-page-bg-text p {
+        font-size: 12px; } }
     @media screen and (max-width: 767px) {
       .content-page-bg .c-page-bg-text {
         left: 5%;

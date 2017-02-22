@@ -94,7 +94,6 @@ class NoteEndpointTest extends TestCase
         $note = factory(\App\Models\v1\Note::class)->make()->toArray();
 
         $this->post('/api/notes', $note)
-            ->seeInDatabase('notes', $note)
             ->assertResponseOk()
             ->seeJson(
                 array_except($note, ['noteable_type', 'noteable_id', 'user_id'])

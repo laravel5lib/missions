@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import markdownExampleModal from './components/markdown-example-modal.vue';
 import tourGuide from './components/tour-guide.vue';
 import contactForm from './components/contact-form.vue';
 import speakerForm from './components/speaker-form.vue';
@@ -159,7 +160,7 @@ Vue.component('panel', VueStrap.panel);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
-Vue.component('tabs', VueStrap.tabs);
+Vue.component('tabs', VueStrap.tabset);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
@@ -448,77 +449,79 @@ var TourSteps = [
 Vue.directive('tour-guide', {
     bind: function () {
 
-        var topScrollHandler = function(element){
-            var $element = window.jQuery(element);
-            var topOfElement = $element.offset().top;
-            var heightOfElement = $element.height();
-            window.jQuery('html, body').animate({
-                scrollTop: topOfElement - heightOfElement
-            },{
-                duration: 1000
-            });
+        this.topScrollHandler = function(element){
+            if (element) {
+                var $element = window.jQuery(element);
+                var topOfElement = $element.offset().top;
+                var heightOfElement = $element.height();
+                window.jQuery('html, body').animate({
+                    scrollTop: topOfElement - heightOfElement
+                }, {
+                    duration: 1000
+                });
+            }
         };
 
-        window.tour = new Shepherd.Tour({
+        this.tour = window.tour = new Shepherd.Tour({
             defaults: {
                 classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
                 scrollTo: true,
-                scrollToHandler: topScrollHandler,
+                scrollToHandler: this.topScrollHandler,
                 showCancelLink: true
             }
         });
 
-      tour.addStep('intro', {
+        this.tour.addStep('intro', {
             title: 'Hello!',
             text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
             showCancelLink: false,
             buttons: [
                 {
                     text: 'Not Now',
-                    action: tour.cancel,
+                    action: this.tour.cancel,
                     classes: 'shepherd-button-secondary'
                 },
                 {
                     text: 'Continue',
-                    action: tour.next
+                    action: this.tour.next
                 }
-            ],
-          when: {
-              cancel: function() {
-                  let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
-                  completed.push(location.pathname);
-                  localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
-
-              }
-          }
+            ]
         });
 
-            // if pageSteps exists, add them to tour
-            if (window.pageSteps && window.pageSteps.length) {
-                _.each(window.pageSteps, function (step) {
-                    // if buttons are present
-                    if (step.buttons) {
-                        _.each(step.buttons, function (button) {
-                            // if action is present
-                            if (button.action && _.isString(button.action))
-                                button['action'] = tour[button.action];
-                        });
-                    }
-                    tour.addStep(step);
-                })
-            }
+        // if pageSteps exists, add them to tour
+        if (window.pageSteps && window.pageSteps.length) {
+            _.each(window.pageSteps, function (step) {
+                // if buttons are present
+                if (step.buttons) {
+                    _.each(step.buttons, function (button) {
+                        // if action is present
+                        if (button.action && _.isString(button.action))
+                            button['action'] = this.tour[button.action];
+                    }.bind(this));
+                }
+                tour.addStep(step);
+            }.bind(this))
+        }
 
         // Initialize the tour
         let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
         if (!_.contains(completed, location.pathname)) {
-            tour.start();
+            this.tour.start();
         }
 
-        tour.on('complete', function () {
+        this.tour.on('cancel', function () {
+            this.storeTourRecord();
+        }.bind(this));
+
+        this.tour.on('complete', function () {
+            this.storeTourRecord();
+        }.bind(this));
+
+        this.storeTourRecord = function () {
             let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
             completed.push(location.pathname);
             localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
-        });
+        }
     },
     update: function () {
         // debugger
@@ -533,6 +536,7 @@ Vue.directive('error-handler', {
     // The value property expects the actual field value to stay reactive.
     // The client property expects the handle that the validator plugin uses for validation.
     // The server property expects the handle that the server request rules use for validation.
+    // If the handle property is present, client and server properties will be set to this.
     // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
     // for the field
     deep: true,
@@ -586,9 +590,15 @@ Vue.directive('error-handler', {
                             errorsBlock.append(this.messages);
                             // debugger
                         } else {
+                            let inputGroup = $(this.el).find('input-group');
                             let inputEl = $(this.el).find('input');
-                            $(this.el).find('.server-validation-error').remove();
-                            inputEl.after(this.messages);
+                            if (inputGroup) {
+                                $(this.el).find('.server-validation-error').remove();
+                                inputGroup.after(this.messages);
+                            } else {
+                                $(this.el).find('.server-validation-error').remove();
+                                inputEl.after(this.messages);
+                            }
                             // debugger
                         }
                     }
@@ -597,9 +607,16 @@ Vue.directive('error-handler', {
         }
     },
     update: function (value) {
+        // If server value is identical to client, use 'handle' property for simplicity
+        if(value.handle) {
+            value.client = value.server = value.handle;
+        }
+
+
         // Store the value within the directive to be used outside the update function
         this.storage = value;
-        // Handle error class on element
+
+        // Handle error class and messages on element
         this.handleClass(value);
         this.handleMessages(value, this.vm.errors);
     }
@@ -660,6 +677,7 @@ new Vue({
     },
     components: {
         login,
+        markdownExampleModal,
         contactForm,
         speakerForm,
         sponsorProjectForm,

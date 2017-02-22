@@ -120,9 +120,12 @@
 						<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
+									<div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+										<a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-one"><i class="fa fa-play"></i></a>
+									</div>
 									<img class="img-responsive" src="images/why-mm/missionary.jpg" alt="">
 									<div class="panel-body">
-										<h4>Missionary</h4>
+										<h5>Missionary</h5>
 										<p class="small">Anyone age 13+ can be an M.M missionary. Set out on the journey
 											with your friend or family to bring a message of love and hope along with an
 											unforgettable cultural experience.</p>
@@ -131,9 +134,12 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
+									<div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+										<a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-two"><i class="fa fa-play"></i></a>
+									</div>
 									<img class="img-responsive" src="images/why-mm/medical-missionary.jpg" alt="">
 									<div class="panel-body">
-										<h4>Medical Missionary</h4>
+										<h5>Medical Missionary</h5>
 										<p class="small">Treat, diagnose, prescribe, and share the love of Jesus. Anyone
 											in a medical field can serve, including students currently enrolled in
 											school. Physicians, Dentists, Nurses, and all assistants needed.</p>
@@ -142,12 +148,13 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
-									<img class="img-responsive" src="images/why-mm/group-leader.jpg" alt="">
+									<div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+										<a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-three"><i class="fa fa-play"></i></a>
+									</div>
+									<img class="img-responsive" src="images/why-mm/influencer.jpg" alt="">
 									<div class="panel-body">
-										<h4>Group Leader</h4>
-										<p class="small">M.M specializes in organizing and creating turn-key group
-											missions experiences for youth groups, college groups, and business groups.
-											You bring passion; we take care of the rest.</p>
+										<h5>Influencer</h5>
+										<p class="small">Missionaries with extensive ministry experience, ready to share their gifts of leadership and influence one on one with school faculty, at university forums, or in local churches.</p>
 									</div>
 								</div>
 							</div><!-- end col -->
@@ -155,9 +162,12 @@
 						<div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
+									<div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+										<a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-four"><i class="fa fa-play"></i></a>
+									</div>
 									<img class="img-responsive" src="images/why-mm/speaker.jpg" alt="">
 									<div class="panel-body">
-										<h4>Pastor/Speaker</h4>
+										<h5>Pastor/Speaker</h5>
 										<p class="small">Share your gift of leadership with the team by leading a
 											morning devo then impart spiritual wisdom into local church leadership. Let
 											us create a custom schedule that makes the most of your valuable time.</p>
@@ -166,9 +176,12 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
+									<div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+										<a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-five"><i class="fa fa-play"></i></a>
+									</div>
 									<img class="img-responsive" src="images/why-mm/business-person.jpg" alt="">
 									<div class="panel-body">
-										<h4>Business Leader</h4>
+										<h5>Business Leader</h5>
 										<p class="small">A shortened “Business Class” trip is available on select trips.
 											You will experience conferences, stadium outreaches, street ministry, and
 											connect with God in a whole new way. All trips will have you back on Sunday
@@ -178,9 +191,12 @@
 							</div><!-- end col -->
 							<div class="col-sm-4 col-xs-12" style="display:flex">
 								<div class="panel">
+									<div style="position: absolute;left: 25px;top: 15px;z-index: 999;">
+										<a class="btn btn-primary-hollow btn-sm launch-modal pull-right" data-toggle="modal" data-target="#video-modal-six"><i class="fa fa-play"></i></a>
+									</div>
 									<img class="img-responsive" src="images/why-mm/media-missionary.jpg" alt="">
 									<div class="panel-body">
-										<h4>Media Missionary</h4>
+										<h5>Media Missionary</h5>
 										<p class="small">Tell the story of life change! M.M needs you to film, shoot,
 											interview, edit, export, and be creative! Experience a whole new world
 											through the lens of a camera while capturing the most exciting moments of
@@ -299,6 +315,132 @@
 			</div><!-- end content-section -->
 		</div><!-- end container -->
 	</div><!-- end dark-bg-primary -->
+	<!-- MISSIONARY MODAL -->
+	<div class="modal video-modal fade" id="video-modal-one" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="modal-video">
+	                    <div class="video-outer">
+	                      <div class="video-inner">
+	                        <iframe src="https://player.vimeo.com/video/187239218?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	                      </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- end modal -->
+	<!-- MEDICAL MODAL -->
+	<div class="modal video-modal fade" id="video-modal-two" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="modal-video">
+	                    <div class="video-outer">
+	                      <div class="video-inner">
+	                        <iframe src="https://player.vimeo.com/video/185716159?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	                      </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- end modal -->
+	<!-- INFLUENCER MODAL -->
+	<div class="modal video-modal fade" id="video-modal-three" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="modal-video">
+	                    <div class="video-outer">
+	                      <div class="video-inner">
+	                        <iframe src="https://player.vimeo.com/video/185972725?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	                      </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- end modal -->
+	<!-- PASTOR MODAL -->
+	<div class="modal video-modal fade" id="video-modal-four" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="modal-video">
+	                    <div class="video-outer">
+	                      <div class="video-inner">
+	                        <iframe src="https://player.vimeo.com/video/187199738?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	                      </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- end modal -->
+	<!-- BUSINESS PERSON MODAL -->
+	<div class="modal video-modal fade" id="video-modal-five" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="modal-video">
+	                    <div class="video-outer">
+	                      <div class="video-inner">
+	                        <iframe src="https://player.vimeo.com/video/187199859?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	                      </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- end modal -->
+	<!-- MEDIA MODAL -->
+	<div class="modal video-modal fade" id="video-modal-six" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+	    <div class="modal-dialog modal-lg" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <div class="modal-video">
+	                    <div class="video-outer">
+	                      <div class="video-inner">
+	                        <iframe src="https://player.vimeo.com/video/185716158?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+	                      </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div><!-- end modal -->
 </template>
 <script type="text/javascript">
 	export default{
@@ -325,6 +467,16 @@
 				//TODO error alert message
 			}).then(function () {
 
+			});
+			$('.launch-modal').on('click', function(e){
+			    e.preventDefault();
+			    $( '#' + $(this).data('video-modal') ).modal();
+			});
+			$('.video-modal').on('hide.bs.modal', function(e) {    
+			    var $if = $(e.delegateTarget).find('iframe');
+			    var src = $if.attr("src");
+			    $if.attr("src", '/empty.html');
+			    $if.attr("src", src);
 			});
 		}
 	}

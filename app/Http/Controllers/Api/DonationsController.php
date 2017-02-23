@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\v1\Fund;
+use App\Models\v1\Donor;
+use App\Models\v1\Transaction;
 use App\Events\DonationWasMade;
-use App\Events\TransactionWasCreated;
+use App\Services\PaymentGateway;
 use App\Http\Controllers\Controller;
+use Dingo\Api\Contract\Http\Request;
+use App\Events\TransactionWasCreated;
 use App\Http\Requests\v1\CardRequest;
 use App\Http\Requests\v1\DonationRequest;
 use App\Http\Transformers\v1\DonationTransformer;
-use App\Models\v1\Transaction;
 use App\Http\Transformers\v1\TransactionTransformer;
-use App\Models\v1\Donor;
-use App\Services\PaymentGateway;
-use Dingo\Api\Contract\Http\Request;
 
 class DonationsController extends Controller
 {
@@ -98,6 +99,18 @@ class DonationsController extends Controller
         // merge the customer id with donor details
         $request['donor'] = $request->get('donor') + ['customer_id' => $customer['id']];
 
+        // merge description with request
+        $fund = Fund::find($request->get('fund_id'));
+        $request['description'] = 'Donation' . $fund ? 'toward '.$fund->name : null;
+
+        // add metadata
+        $request->merge(['metadata' => [
+            'donor_name' => $request->get('donor')['name'],
+            'donor_email' => isset($request->get('donor')['email']) ? $request->get('donor')['email'] : null,
+            'donor_phone' => isset($request->get('donor')['phone']) ? $request->get('donor')['phone'] : null,
+            'fund' => $request->get('fund_id')
+        ]]);
+
         // create the charge with customer id, token, and donation details
         $charge = $this->payment->createCharge(
             $request->all(),
@@ -109,7 +122,7 @@ class DonationsController extends Controller
         $this->payment->captureCharge($charge['id']);
 
         // rebuild the payment array with new details
-        $request['payment'] = [
+        $request['details'] = [
             'type' => 'card',
             'charge_id' => $charge['id'],
             'brand' => $charge['source']['brand'],

@@ -516,7 +516,7 @@
                         this.$dispatch('showError', 'Please check the form.');
                     });
                 } else {
-                    this.showError = true;
+                    this.$dispatch('showError', 'Please check the form.');
                 }
             },
             back(force){

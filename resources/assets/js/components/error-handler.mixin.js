@@ -26,7 +26,7 @@ export default {
         },
         resetErrors(){
             this.errors = {};
-            this.attemptSubmit = false;
+            this.attemptSubmit = true;
         },
     }, ready(){
         if (!this.validatorHandle) {

@@ -438,7 +438,8 @@
 						this.state = user.state;
 						this.zipCode = user.zip;
 						this.country = user.country_code;
-						break;
+                        this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                        break;
 				}
 
 			}

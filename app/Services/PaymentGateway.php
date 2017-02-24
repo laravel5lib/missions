@@ -127,7 +127,8 @@ class PaymentGateway {
             'currency'    => 'usd',
             'amount'      => $params['amount'],
             'source'      => $card_id,
-//            'description' => $params['description'],
+            'description' => isset($params['description']) ? $params['description'] : null,
+            'metadata'    => isset($params['metadata']) ? $params['metadata'] : null,
             'capture'     => false
         ]);
 

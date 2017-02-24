@@ -17,7 +17,7 @@
 
         <div class="row">
 
-            <div class="col-xs-12 text-right">
+            <div class="col-xs-12 text-right tour-step-find">
                 <form class="form-inline">
                     <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                         <label>

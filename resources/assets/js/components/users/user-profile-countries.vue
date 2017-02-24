@@ -149,17 +149,19 @@
 				});
 			},
             searchCountries() {
-				this.$http.get('utilities/countries').then(function(response) {
+				return this.$http.get('utilities/countries').then(function(response) {
 					this.countries = response.data.countries;
 				});
             }
         },
         ready(){
 			if (this.isUser()) {
-				this.searchCountries();
-			}
-
-			this.getAccolades();
+				this.searchCountries().then(function () {
+                    this.getAccolades();
+                });
+			} else {
+                this.getAccolades();
+            }
 
         }
     }

@@ -1,9 +1,10 @@
 <?php
 namespace App;
 
+use App\Models\v1\Fund;
+use Dingo\Api\Contract\Http\Request;
 use App\Events\TransactionWasCreated;
 use App\Http\Requests\v1\DonationRequest;
-use Dingo\Api\Contract\Http\Request;
 
 class DonationTransaction extends TransactionHandler
 {
@@ -27,8 +28,20 @@ class DonationTransaction extends TransactionHandler
             // create the charge with token, and donation details
             $charge = $this->merchant->createCharge($request->all(), $token);
 
+            // merge description with request
+            $fund = Fund::find($request->get('fund_id'));
+            $request['description'] = 'Donation' . $fund ? 'toward '.$fund->name : null;
+
+            // add metadata
+            $request->merge(['metadata' => [
+                'donor_name' => $request->get('donor')['name'],
+                'donor_email' => isset($request->get('donor')['email']) ? $request->get('donor')['email'] : null,
+                'donor_phone' => isset($request->get('donor')['phone']) ? $request->get('donor')['phone'] : null,
+                'fund' => $request->get('fund_id')
+            ]]);
+
             // capture the charge
-            $this->merchant->captureCharge($charge['id']);
+            $this->merchant->captureCharge($charge['id'], $request->all());
 
             // rebuild the payment array with new details
             $request->merge(['details' => [

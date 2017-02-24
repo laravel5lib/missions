@@ -16,4 +16,3 @@ before_script:
 - php artisan migrate:refresh --seed --force
 notifications:
   email: false
-  

@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Generic User
+ */
+$factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
+{
+    return [
+        'name'             => $faker->firstName. ' '.$faker->lastName,
+        'email'            => $faker->unique()->safeEmail,
+        'alt_email'        => $faker->optional(0.5)->safeEmail,
+        'password'         => bcrypt(str_random(10)),
+        'gender'           => $faker->randomElement(['male', 'female']),
+        'status'           => $faker->randomElement(['single', 'married']),
+        'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
+        'phone_one'        => stripPhone($faker->optional(0.5)->phoneNumber),
+        'phone_two'        => stripPhone($faker->optional(0.5)->phoneNumber),
+        'address'          => $faker->optional(0.5)->streetAddress,
+        'city'             => $faker->optional(0.5)->city,
+        'state'            => $faker->optional(0.5)->state,
+        'zip'              => $faker->optional(0.5)->postcode,
+        'country_code'     => $faker->randomElement(explode(',', App\Utilities\v1\Country::codes())),
+        'timezone'         => $faker->randomElement(\DateTimeZone::listIdentifiers()),
+        'bio'              => $faker->optional(0.5)->realText(120),
+        'public'           => $faker->boolean(50),
+        'remember_token'   => str_random(10),
+        'avatar_upload_id' => function() {
+            return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
+        },
+        'banner_upload_id' => function() {
+            return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
+        },
+    ];
+});
+
+/**
+ * Admin User
+ */
+$factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator $faker) use ($factory)
+{
+    $user = $factory->raw(App\Models\v1\User::class);
+
+    return array_merge($user, [
+        'email'    => 'admin@admin.com',
+        'password' => bcrypt('secret')
+    ]);
+});

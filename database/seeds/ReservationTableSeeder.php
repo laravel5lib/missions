@@ -14,7 +14,7 @@ class ReservationTableSeeder extends Seeder
         factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create()->each(function($r)
         {
 
-            // $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
+            $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
             $r->notes()->save(factory(App\Models\v1\Note::class)->make());
 

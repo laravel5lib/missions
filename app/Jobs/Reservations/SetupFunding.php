@@ -8,9 +8,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SetupFunding extends Job implements ShouldQueue
+class SetupFunding extends Job
 {
-    use InteractsWithQueue, SerializesModels;
+    use SerializesModels;
     /**
      * @var Reservation
      */

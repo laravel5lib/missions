@@ -10,9 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MakeDeposit extends Job implements ShouldQueue
+class MakeDeposit extends Job
 {
-    use InteractsWithQueue, SerializesModels;
+    use SerializesModels;
     /**
      * @var array
      */

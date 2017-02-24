@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker)
 {
     return [
+        'id'            => $faker->unique()->uuid,
         'subject'       => $faker->catchPhrase,
         'content'       => $faker->realText(120),
         'user_id'       => function () {
@@ -14,7 +15,9 @@ $factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker)
         'noteable_type' => 'reservations',
         'noteable_id'   => function () {
             return factory(App\Models\v1\Reservation::class)->create()->id;
-        }
+        },
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 

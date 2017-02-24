@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $faker)
 {
     return [
+        'id'              => $faker->unique()->uuid,
         'name'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral', 'Testimony']),
         'document_type'   => $faker->randomElement(['passports', 'releases', 'visas', 'referrals', 'essays']),
         'short_desc'      => $faker->realText(120),
@@ -14,7 +15,9 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
         'requester_type' => 'trips',
         'requester_id'   => function () {
             return factory(App\Models\v1\Trip::class)->create()->id;
-        }
+        },
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 
@@ -80,6 +83,32 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'testimony', function (Fake
     return array_merge($requirement, [
         'name'            => 'Testimony',
         'document_type'   => 'essays',
+    ]);
+});
+
+/**
+ * Airport Preference Requirement
+ */
+$factory->defineAs(App\Models\v1\Requirement::class, 'airport', function (Faker\Generator $faker) use ($factory)
+{
+    $requirement = $factory->raw(App\Models\v1\Requirement::class);
+
+    return array_merge($requirement, [
+        'name'            => 'Airport Preference',
+        'document_type'   => 'airport_preferences',
+    ]);
+});
+
+/**
+ * Arrival Designation Requirement
+ */
+$factory->defineAs(App\Models\v1\Requirement::class, 'arrival', function (Faker\Generator $faker) use ($factory)
+{
+    $requirement = $factory->raw(App\Models\v1\Requirement::class);
+
+    return array_merge($requirement, [
+        'name'            => 'Arrival Designation',
+        'document_type'   => 'arrival_designations',
     ]);
 });
 

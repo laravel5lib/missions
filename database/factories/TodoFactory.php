@@ -5,7 +5,6 @@
  */
 $factory->define(App\Models\v1\Todo::class, function(Faker\Generator $faker) {
     return [
-        'id' => $faker->unique()->uuid,
         'task' => $faker->sentence(4),
         'todoable_id' => function () {
             return factory(App\Models\v1\Reservation::class)->create()->id;

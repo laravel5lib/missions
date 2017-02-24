@@ -440,11 +440,7 @@
 			registerUser: function (e) {
 				e.preventDefault();
 				$.extend(this.newUser, {
-					birthday: moment().set({
-						year: this.newUser.dobYear,
-						month: this.newUser.dobMonth,
-						day: this.newUser.dobDay
-					}).format('YYYY-MM-DD')
+					birthday: moment(this.newUser.dobYear+'-'+this.newUser.dobMonth+'-'+this.newUser.dobDay).format('YYYY-MM-DD')
 				});
 
 				this.attemptRegister = true;

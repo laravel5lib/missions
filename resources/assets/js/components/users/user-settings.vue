@@ -159,14 +159,14 @@
                                     </div>
                                 </div>
 
-                                <div class="row form-group" v-error-handler="{ value: status, handle: 'status' }">
+                                <div class="row form-group">
                                     <label for="status" class="col-sm-2">Status</label>
                                     <div class="col-sm-10">
                                         <label class="radio-inline">
-                                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
+                                            <input type="radio" name="status" id="status" value="Single" v-model="status"> Single
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
+                                            <input type="radio" name="status2" id="status2" value="Married" v-model="status"> Married
                                         </label>
                                     </div>
                                 </div>
@@ -474,8 +474,7 @@
                         timezone: this.timezone,
                         phone_one: this.phone_one,
                         phone_two: this.phone_two,
-                        address_one: this.address_one,
-                        address_two: this.address_two,
+                        address: this.address,
                         city: this.city,
                         state: this.state,
                         zip: this.zip,

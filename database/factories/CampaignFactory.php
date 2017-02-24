@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker)
 {
     return [
+        'id'               => $faker->unique()->uuid,
         'name'             => $faker->catchPhrase,
         'country_code'     => strtolower($faker->countryCode),
         'short_desc'       => $faker->realText(120),
@@ -22,7 +23,9 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
         },
         'banner_upload_id' => function () {
             return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
-        }
+        },
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 

@@ -429,11 +429,12 @@
 
 						this.email = user.email;
 						this.gender = user.gender.toLowerCase();
-						this.address = user.street;
+						this.address = user.address;
 						this.relationshipStatus = user.status.toLowerCase();
 						this.phone = user.phone_one;
 						this.mobile = user.phone_two;
-						this.address = user.street;
+						this.address = user.address;
+						this.city = user.city;
 						this.state = user.state;
 						this.zipCode = user.zip;
 						this.country = user.country_code;
@@ -461,7 +462,7 @@
 			});
 
 			this.$dispatch('basic-info', true);
-			$('html, body').animate({scrollTop: 0}, 300);
+			$('html, body').animate({scrollTop: 200}, 300);
 			done();
 		}
 	}

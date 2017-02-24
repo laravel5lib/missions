@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker)
 {
     return [
+        'id'           => $faker->unique()->uuid,
         'cost_id'      => function () {
             return factory(App\Models\v1\Cost::class)->create()->id;
         },

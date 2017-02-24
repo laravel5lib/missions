@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Transaction::class, function(Faker\Generator $faker)
 {
     return [
+        'id' => $faker->unique()->uuid,
         'fund_id' => function () {
             return factory(App\Models\v1\Fund::class)->create()->id;
         },
@@ -24,6 +25,7 @@ $factory->define(App\Models\v1\Transaction::class, function(Faker\Generator $fak
             'charge_id' => 'ch_' . str_random(30)
         ],
         'created_at' => $faker->dateTimeThisMonth,
+        'updated_at' => $faker->dateTimeThisMonth
     ];
 });
 

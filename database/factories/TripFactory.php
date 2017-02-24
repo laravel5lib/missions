@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
 {
     return [
+        'id'              => $faker->unique()->uuid,
         'group_id'        => function() {
             return factory(App\Models\v1\Group::class)->create()->id;
         },
@@ -42,6 +43,8 @@ $factory->define(App\Models\v1\Trip::class, function (Faker\Generator $faker)
         'closed_at'        => function (array $trip) {
             return App\Models\v1\Campaign::find($trip['campaign_id'])->started_at->subDays(7);
         },
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 

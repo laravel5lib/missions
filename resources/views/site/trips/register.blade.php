@@ -3,7 +3,7 @@
 @section('content')
 <div class="dark-bg-primary">
 <div class="container">
-	<div class="col-md-10 col-md-offset-1 col-sm-12 col-sm-0">
+	<div class="col-sm-12 col-sm-0">
 		<hr class="divider inv xlg">
 		<h1 class="text-center">Let's Go!</h1>
 		<h4 class="text-center">Register to start changing the world!</h4>

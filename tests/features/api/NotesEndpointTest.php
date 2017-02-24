@@ -1,18 +1,22 @@
 <?php
 
+use App\Models\v1\Note;
+use App\Models\v1\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class NoteEndpointTest extends TestCase
+class NotesEndpointTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations, DatabaseTransactions;
 
     /**
      * @test
      */
     public function fetches_notes_from_url()
     {
+        factory(Note::class, 2)->create();
+
         $this->get('/api/notes')
             ->seeJsonStructure([
                 'data' => [
@@ -30,15 +34,20 @@ class NoteEndpointTest extends TestCase
      */
     public function filters_fetched_notes()
     {
-        $reservation = factory(App\Models\v1\Reservation::class)->create();
+        $note = factory(Note::class)->create();
 
-        $reservation->notes()->save(factory(App\Models\v1\Note::class)->make());
+        factory(Note::class)->create([
+            'noteable_type' => 'users',
+            'noteable_id' => function () {
+                return factory(User::class)->create()->id;
+            }
+        ]);
 
-        $this->get('/api/notes?type=reservations|' . $reservation->id)
+        $this->get('/api/notes?type=reservations|' . $note->noteable->id)
             ->seeJson([
                 'source' => [
                     'type' => 'reservations',
-                    'id' => $reservation->id
+                    'id' => $note->noteable->id
                 ]
             ])->dontSeeJson([
                 'source' => [
@@ -53,6 +62,8 @@ class NoteEndpointTest extends TestCase
      */
     public function user_is_returned_with_note()
     {
+        factory(Note::class, 2)->create();
+
         $this->get('/api/notes?include=user')
             ->seeJsonStructure([
                 'data' => [

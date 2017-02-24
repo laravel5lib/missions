@@ -267,7 +267,7 @@ class TripTableSeeder extends Seeder
         ]);
 
         $transaction = factory(Transaction::class)->create([
-            'amount' => 10000,
+            'amount' => 100,
             'fund_id' => $fund->id,
             'donor_id' => $donor->id
         ]);

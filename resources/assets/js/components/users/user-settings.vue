@@ -277,39 +277,39 @@
                                 <div class="row form-group">
                                     <div class="col-sm-6">
                                         <label class="control-label" for="facebook">Facebook</label>
-                                        <input type="text" class="form-control" v-model="facebook" id="facebook" placeholder="Facebook Profile">
+                                        <input type="text" class="form-control" v-model="facebook" id="facebook" placeholder="facebook.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="twitter">Twitter</label>
-                                        <input type="text" class="form-control" v-model="twitter" id="twitter" placeholder="Twitter Profile">
+                                        <input type="text" class="form-control" v-model="twitter" id="twitter" placeholder="twitter.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="instagram">Instagram</label>
-                                        <input type="text" class="form-control" v-model="instagram" id="instagram" placeholder="Instagram Profile">
+                                        <input type="text" class="form-control" v-model="instagram" id="instagram" placeholder="instagram.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="linkedIn">LinkedIn</label>
-                                        <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="LinkedIn Profile">
+                                        <input type="text" class="form-control" v-model="linkedIn" id="linkedIn" placeholder="linkedin.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="pintrest">Pinterest</label>
-                                        <input type="text" class="form-control" v-model="pinterest" id="pinterest" placeholder="Pinterest Profile">
+                                        <input type="text" class="form-control" v-model="pinterest" id="pinterest" placeholder="pinterest.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="google-plus">Google +</label>
-                                        <input type="text" class="form-control" v-model="google" id="google" placeholder="Googe + Profile">
+                                        <input type="text" class="form-control" v-model="google" id="google" placeholder="plus.google.com/+/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="vimeo">Vimeo</label>
-                                        <input type="text" class="form-control" v-model="vimeo" id="vimeo" placeholder="Vimeo Profile">
+                                        <input type="text" class="form-control" v-model="vimeo" id="vimeo" placeholder="vimeo.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="youtube">YouTube</label>
-                                        <input type="text" class="form-control" v-model="youtube" id="youtube" placeholder="YouTube Profile">
+                                        <input type="text" class="form-control" v-model="youtube" id="youtube" placeholder="youtube.com/username">
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="website">Website</label>
-                                        <input type="text" class="form-control" v-model="website" id="website" placeholder="Website">
+                                        <input type="text" class="form-control" v-model="website" id="website" placeholder="wwww.my-website.com">
                                     </div>
                                 </div>
                             </div><!-- end panel-body -->

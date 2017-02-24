@@ -138,6 +138,10 @@
 			'review'(val, oldVal) {
 				this.$dispatch('review', val)
 			}
+		},
+		activate(done){
+			$('html, body').animate({scrollTop : 200},300);
+			done();
 		}
 
 	}

@@ -49,6 +49,10 @@
 		},
 		ready(){
 		    this.$dispatch('ato-complete', true);
+		},
+		activate(done){
+			$('html, body').animate({scrollTop : 200},300);
+			done();
 		}
 	}
 </script>

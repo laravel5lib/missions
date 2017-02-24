@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(TripTableSeeder::class);
-        // $this->call(ProjectTablesSeeder::class);
+        $this->call(ProjectTablesSeeder::class);
+        $this->call(FundTableSeeder::class);
 
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);

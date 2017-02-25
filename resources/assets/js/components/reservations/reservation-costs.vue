@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-xs-4 tour-step-addons">
                 <button class="btn btn-primary btn-sm" @click="add">
-                    <span class="fa fa-plus"></span> Add <span class="hidden-xs">Optional</span> Costs
+                    <span class="fa fa-plus"></span> Addons
                 </button>
             </div>
             <div class="col-xs-8 text-right" v-if="reservation && listedCosts !== reservation.costs.data">
@@ -20,7 +20,7 @@
         <hr class="divider inv sm">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>Applied Costs</h5>
+                <h5>Reservation Cost Breakdown</h5>
             </div><!-- end panel-heading -->
 
             <div class="list-group">
@@ -57,7 +57,12 @@
                 <validator name="AddCost">
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
-                            <label class="control-label">Available Costs</label>
+                            <label class="control-label">Available Addons or Requests</label>
+                            <p class="help-block" v-for="cost in selectedCosts">
+                                <strong>{{ cost.name }} - {{ cost.amount | currency }}</strong><br />
+                                {{ cost.description }}
+                                <hr class="divider">
+                            </p>
                             <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>

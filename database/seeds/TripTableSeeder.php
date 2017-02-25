@@ -39,6 +39,8 @@ class TripTableSeeder extends Seeder
 
             collect($trips)->each(function($t) use($g) {
 
+                $t->rep->slug()->create(['url' => generate_slug($t->rep->name)]);
+
                 $late = $this->add_incremental_costs($t);
                 $this->add_static_costs($t);
                 $this->add_optional_costs($t, $late);
@@ -78,18 +80,22 @@ class TripTableSeeder extends Seeder
                 }
             ]);
 
-        $campaign->slug()->save(
-            factory(Slug::class)->make(['url' => '1n1d2017'])
-        );
+        $campaign->slug()->create(['url' => '1n1d2017']);
 
         return $campaign;
     }
 
     private function seed_groups(int $number)
     {
-        $groups = factory(Group::class, $number)->make()->toArray();
+        $data = factory(Group::class, $number)->make();
 
-        Group::insert($groups);
+        Group::insert($data->toArray());
+
+        $groups = Group::whereIn('id', $data->pluck('id'))->get();
+
+        collect($groups)->each(function($g) {
+            $g->slug()->create(['url' => generate_slug($g->name)]);
+        });
 
         return collect($groups);
     }
@@ -203,6 +209,8 @@ class TripTableSeeder extends Seeder
         
         $reservations->each(function ($r) use ($reservations) {
             
+            $r->user->slug()->create(['url' => generate_slug($r->user->name)]);
+
             $companion = factory(Companion::class)->make([
                 'reservation_id' => $r->id,
                 'companion_id' => $reservations->random()->pluck('id')->first()
@@ -267,7 +275,7 @@ class TripTableSeeder extends Seeder
         ]);
 
         $transaction = factory(Transaction::class)->create([
-            'amount' => 10000,
+            'amount' => 100,
             'fund_id' => $fund->id,
             'donor_id' => $donor->id
         ]);

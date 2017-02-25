@@ -71,7 +71,7 @@
                 @foreach($reservation->dues as $payment)
                     <tr>
                         <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;">
-                            ${{ number_format($payment->outstanding_balance, 2) }} - {{ $payment->payment->percent_owed }}% {{ $payment->payment->cost->name }}
+                            ${{ number_format($payment->outstandingBalanceInDollars(), 2) }} - {{ $payment->payment->percent_owed }}% {{ $payment->payment->cost->name }}
                         </td>
                         <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;">
                             {{ $payment->due_at->format('F j, Y') }}

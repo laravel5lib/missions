@@ -315,7 +315,6 @@
 				city: null,
 				state: null,
 				zipCode: null,
-				country: 'us',
 				phone: '',
 				mobile: '',
 				firstName: null,
@@ -413,8 +412,8 @@
 						this.address = null;
 						this.state = null;
 						this.zipCode = null;
-						this.country = 'us';
-						break;
+                        this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                        break;
 					case false:
 						var user = this.forAdmin ? this.userObj : this.$parent.userData;
 						var names = user.name.split(' ');
@@ -437,7 +436,6 @@
 						this.city = user.city;
 						this.state = user.state;
 						this.zipCode = user.zip;
-						this.country = user.country_code;
                         this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
                         break;
 				}

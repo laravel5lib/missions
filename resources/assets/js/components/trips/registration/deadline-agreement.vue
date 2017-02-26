@@ -137,6 +137,10 @@
 			'deadlineAgree'(val, oldVal) {
 				this.$dispatch('deadline-agree', val)
 			}
+		},
+		activate(done){
+			$('html, body').animate({scrollTop : 200},300);
+			done();
 		}
 
 	}

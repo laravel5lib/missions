@@ -1,12 +1,11 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">
+<ul class="list-group">
+    <li class="list-group-item">
         <h5>Travel Requirements</h5>
-    </div>
-    <div class="panel-body">
-        <ul class="">
-            @foreach($trip->requirements as $req)
-                <li class="">{{ $req->name }}</li>
-            @endforeach
-        </ul>
-    </div>
-</div>
+    </li>
+    @foreach($trip->requirements as $req)
+        <li class="list-group-item">
+            <h5 class="list-group-item-heading">{{ $req->name }}</h5>
+            <p class="list-group-item-text">{{ $req->short_desc }}</p>
+        </li>
+    @endforeach
+</ul>

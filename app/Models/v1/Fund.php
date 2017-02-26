@@ -19,6 +19,11 @@ class Fund extends Model
         return number_format($this->balance/100, 2, '.', ''); // convert to dollars
     }
 
+    public function setBalanceAttribute($value)
+    {
+        $this->attributes['balance'] = $value*100;
+    }
+
     /**
      * Get all the fund's fundraisers.
      *
@@ -89,7 +94,7 @@ class Fund extends Model
      */
     public function reconcile()
     {
-        $this->balance = $this->transactions()->sum('amount');
+        $this->balance = $this->transactions()->sum('amount')/100;
 
         $this->save();
     }

@@ -53,7 +53,7 @@
 							<div class="col-sm-12 text-center">
 								<validator name="AddFacilitator">
 									<form class="form-horizontal" novalidate>
-										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', 'server: 'user_id' }"><label
+										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 												class="col-sm-2 control-label">User</label>
 											<div class="col-sm-10">
 												<v-select class="form-control" id="user" :value.sync="userObj" :options="users"

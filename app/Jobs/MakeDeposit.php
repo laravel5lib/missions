@@ -10,9 +10,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MakeDeposit extends Job implements ShouldQueue
+class MakeDeposit extends Job
 {
-    use InteractsWithQueue, SerializesModels;
+    use SerializesModels;
     /**
      * @var array
      */
@@ -54,7 +54,7 @@ class MakeDeposit extends Job implements ShouldQueue
         $gateway->captureCharge($charge['id']);
 
         // rebuild the payment array with new details
-        $request['payment'] = [
+        $request['details'] = [
             'type' => 'card',
             'charge_id' => $charge['id'],
             'brand' => $charge['source']['brand'],
@@ -73,8 +73,7 @@ class MakeDeposit extends Job implements ShouldQueue
 
         // Create the donation for the donor.
         $this->params = array_merge($this->params, [
-            'type' => 'donation',
-            'description' => 'Deposit toward ' . $this->params['fund_name']
+            'type' => 'donation'
         ]);
         $donation = $donor->donations()->create($this->params);
 

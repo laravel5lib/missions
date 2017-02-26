@@ -64,7 +64,7 @@
                             <ul class="list-unstyled">
                                 <li style="margin-bottom:5px;">
                                     <a href="/dashboard/settings">
-                                        @if( empty(auth()->user()->links) )
+                                        @if( empty(auth()->user()->links->first()) )
                                         <img class="img-xs av-left" style="border:none;" src="../images/onboard/social-icon.png">
                                         @else
                                             <img class="img-xs av-left" style="border:none;" src="../images/onboard/success-check-icon.png">

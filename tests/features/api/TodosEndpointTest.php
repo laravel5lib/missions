@@ -1,18 +1,23 @@
 <?php
 
+use App\Models\v1\Todo;
+use App\Models\v1\User;
+use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TodoTest extends TestCase
+class TodosEndpointTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations, DatabaseTransactions;
 
     /**
      * @test
      */
     public function fetches_todos_from_url()
     {
+        factory(Todo::class, 2)->create();
+
         $this->get('/api/todos')
             ->assertResponseOk()
             ->seeJsonStructure([
@@ -31,9 +36,9 @@ class TodoTest extends TestCase
      */
     public function filters_fetched_todos()
     {
-        $reservation = factory(App\Models\v1\Reservation::class)->create();
+        $reservation = factory(Reservation::class)->create();
 
-        $reservation->todos()->save(factory(App\Models\v1\Todo::class)->make());
+        $reservation->todos()->save(factory(Todo::class)->make());
 
         $this->get('/api/todos?type=reservations|' . $reservation->id)
             ->seeJson([
@@ -54,9 +59,7 @@ class TodoTest extends TestCase
      */
     public function user_is_returned_with_completed_todo()
     {
-        $reservation = factory(App\Models\v1\Reservation::class)->create();
-
-        $todo = $reservation->todos()->save(factory(App\Models\v1\Todo::class, 'completed')->make());
+        $todo = factory(Todo::class, 'completed')->create();
 
         $this->get('/api/todos/'.$todo->id.'?include=user')
             ->dontSeeJson([
@@ -95,13 +98,10 @@ class TodoTest extends TestCase
     /**
      * @test
      */
-    public function todo_completes()
+    public function mark_todo_complete()
     {
-        $reservation = factory(App\Models\v1\Reservation::class)->create();
-
-        $todo = $reservation->todos()->save(factory(App\Models\v1\Todo::class)->make());
-
-        $user = factory(App\Models\v1\User::class)->create();
+        $todo = factory(Todo::class)->create();
+        $user = factory(User::class)->create();
 
         $this->put('/api/todos/'.$todo->id, ['user_id' => $user->id, 'complete' => true])
             ->assertResponseOk()
@@ -114,11 +114,9 @@ class TodoTest extends TestCase
     /**
      * @test
      */
-    public function can_reverse_todo_completion()
+    public function mark_todo_incomplete()
     {
-        $reservation = factory(App\Models\v1\Reservation::class)->create();
-
-        $todo = $reservation->todos()->save(factory(App\Models\v1\Todo::class, 'completed')->make());
+        $todo = factory(Todo::class, 'completed')->create();
 
         $this->put('/api/todos/'.$todo->id, ['complete' => false])
             ->assertResponseOk()

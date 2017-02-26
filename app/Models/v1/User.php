@@ -117,7 +117,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getNameAttribute($value)
     {
-        return ucfirst($value);
+        return ucwords($value);
     }
 
     /**

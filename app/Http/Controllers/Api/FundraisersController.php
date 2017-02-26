@@ -82,7 +82,7 @@ class FundraisersController extends Controller
                              ->map(function($donation) {
                                 return [
                                     'name' => $donation->pluck('donor.name')->first(),
-                                    'total_donated' => $donation->sum('amount'),
+                                    'total_donated' => $donation->sum('amount')/100,
                                     'account_url' => $donation->pluck('donor.account.slug.url')->first()
                                 ];
                              });
@@ -166,7 +166,18 @@ class FundraisersController extends Controller
     {
         $fundraiser = $this->fundraiser->findOrFail($id);
 
-        $fundraiser->update($request->all());
+        $fundraiser->update([
+            'name'             => $request->get('name', $fundraiser->name),
+            'type'             => $request->get('type', $fundraiser->type),
+            'url'              => $request->get('url', $fundraiser->url),
+            'fund_id'          => $request->get('fund_id', $fundraiser->fund_id),
+            'goal_amount'      => $request->get('goal_amount', $fundraiser->goal_amount),
+            'public'           => $request->get('public', $fundraiser->public),
+            'description'      => $request->get('description', $fundraiser->description),
+            'show_donors'      => $request->get('show_donors', $fundraiser->show_donors),
+            'started_at'       => $request->get('started_at', $fundraiser->started_at),
+            'ended_at'         => $request->get('ended_at', $fundraiser->ended_at)
+        ]);
 
         if ($request->has('tags')) {
             $fundraiser->retag($request->get('tags'));

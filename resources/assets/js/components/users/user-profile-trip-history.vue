@@ -143,17 +143,19 @@
 				});
 			},
             searchTrips() {
-				this.$http.get('utilities/past-trips').then(function(response) {
+				return this.$http.get('utilities/past-trips').then(function(response) {
 					this.trips = response.data;
 				});
             }
         },
         ready(){
 			if (this.isUser()) {
-				this.searchTrips();
-			}
-
-			this.getAccolades();
+				this.searchTrips().then(function () {
+                    this.getAccolades();
+                });
+			} else {
+                this.getAccolades();
+            }
 
         }
     }

@@ -180,7 +180,13 @@
             },
             doUpdate(type){
                 // this.$refs.spinner.show();
-                this.resource.update({id: this.id}, this.fundraiser).then(function (response) {
+                this.resource.update({id: this.id}, {
+                    name: this.fundraiser.name,
+                    url: this.fundraiser.url,
+                    description: this.fundraiser.description,
+                    public: this.fundraiser.public,
+                    show_donors: this.fundraiser.show_donors
+                }).then(function (response) {
                     this.fundraiser = response.data.data;
                     this.newMarkedContentToggle = true;
                     if (type === 'description') {

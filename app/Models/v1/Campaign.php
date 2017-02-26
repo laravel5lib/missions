@@ -73,7 +73,7 @@ class Campaign extends Model
      */
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = trim(strtolower($value));
+        $this->attributes['name'] = trim($value);
     }
 
     /**

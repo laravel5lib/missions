@@ -8,9 +8,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SetupFunding extends Job implements ShouldQueue
+class SetupFunding extends Job
 {
-    use InteractsWithQueue, SerializesModels;
+    use SerializesModels;
     /**
      * @var Reservation
      */
@@ -43,17 +43,18 @@ class SetupFunding extends Job implements ShouldQueue
             'goal_amount' => $this->reservation->getTotalCost(),
             'started_at' => $this->reservation->created_at,
             'ended_at' => $this->reservation->trip->started_at,
-            'banner_upload_id' => $this->reservation->trip->campaign->banner->id
+            'banner_upload_id' => $this->reservation->trip->campaign->banner->id,
+            'public' => false // private by default
         ]);
     }
 
     protected function makeSlug()
     {
-        $slug = str_slug(country($this->reservation->trip->country_code)).
-                '-'.
-                $this->reservation->trip->started_at->format('Y').
-                '-'.
-                str_random(4);
+        $slug = generate_fundraiser_slug(
+                    country($this->reservation->trip->country_code)).
+                    '-'.
+                    $this->reservation->trip->started_at->format('Y')
+                )
 
         return $slug;
     }

@@ -24,7 +24,7 @@
     "scrollmagic": "^2.0.5",
     "tether-shepherd": "^1.8.1",
     "underscore": "^1.8.3",
-    "video.js": "^5.11.7",
+    "video.js": "5.11.7",
     "videojs-vimeo": "^2.0.2",
     "videojs-youtube": "^2.1.1",
     "vue-autosize": "^0.1.3",

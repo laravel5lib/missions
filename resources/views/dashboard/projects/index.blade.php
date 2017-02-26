@@ -12,9 +12,9 @@
         </div>
     </div>
     <hr class="divider inv lg">
-    <div class="container">
+    <div class="container" v-tour-guide="">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-12 tour-step-manage">
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active">
                         <a href="#active" data-toggle="pill"><i class="fa fa-bolt"></i> Active</a>
@@ -40,4 +40,29 @@
         <hr class="divider inv lg">
     </div>
 
+@endsection
+
+@section('tour')
+    <script>
+        window.pageSteps = [
+            {
+                id: 'manage',
+                title: 'Manage Projects',
+                text: 'Find current and past projects you are managing right here. Click on a project card to see more details about the project.',
+                attachTo: {
+                    element: '.tour-step-manage',
+                    on: 'top'
+                },
+            },
+            {
+                id: 'find',
+                title: 'Find Projects',
+                text: 'Search, filter and sort to find the project you are looking for.',
+                attachTo: {
+                    element: '.tour-step-find',
+                    on: 'top'
+                },
+            },
+        ];
+    </script>
 @endsection

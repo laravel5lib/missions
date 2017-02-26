@@ -3,7 +3,7 @@
 @section('content')
 	<h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;text-align:center;">Donation Receipt</h3>
 
-	<p style="color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;line-height:24px;">Hey <span style="font-weight:bold;text-transform:capitalize;">{{ $donation->donor->name }}</span>, thank you for your generous donation of <span style="color:#05ce7b;font-weight:bold;">${{ $donation->amount }}</span> to <span style="color:#3e3e3e;font-weight:bold;">{{ $donation->fund->name }}</span>. You're a direct part of changing lives around the world!</p>
+	<p style="color: #242424;font-family:Helvetica, Arial, sans-serif;text-align:center;line-height:24px;">Hey <span style="font-weight:bold;text-transform:capitalize;">{{ $donation->donor->name }}</span>, thank you for your generous donation of <span style="color:#05ce7b;font-weight:bold;">${{ $donation->amountInDollars() }}</span> to <span style="color:#3e3e3e;font-weight:bold;">{{ $donation->fund->name }}</span>. You're a direct part of changing lives around the world!</p>
 
 	<p style="text-align:center;"><table style="border-collapse: collapse;font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;border: 2px solid #e6e6e6;width:100%;">
         <tbody>
@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;font-weight:bold;"><span style="font-size:14px;color:#3e3e3e;font-weight:bold;">{{ $donation->fund->name }}</span></td>
-                <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;text-align:center;"><span style="font-size:20px;color:#05ce7b;font-weight:bold;">${{ $donation->amount }}</span></td>
+                <td style="border: 2px solid #e6e6e6;padding:8px;vertical-align:middle;text-align:center;"><span style="font-size:20px;color:#05ce7b;font-weight:bold;">${{ $donation->amountInDollars() }}</span></td>
             </tr>
         </tbody>
     </table></p>

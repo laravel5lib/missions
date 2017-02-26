@@ -119,14 +119,14 @@ class TripTableSeeder extends Seeder
                 factory(Payment::class)->make([
                     'cost_id' => $ic->id,
                     'due_at' => $ic->active_at->addMonths(6),
-                    'amount_owed' => $ic->amount/2,
+                    'amount_owed' => ($ic->amount/2)/100,
                     'percent_owed' => 50,
                     'upfront' => false
                 ]),
                 factory(Payment::class)->make([
                     'cost_id' => $ic->id,
                     'due_at' => $ic->active_at->addMonths(12),
-                    'amount_owed' => $ic->amount/2,
+                    'amount_owed' => ($ic->amount/2)/100,
                     'percent_owed' => 50,
                     'upfront' => false
                 ])
@@ -140,7 +140,7 @@ class TripTableSeeder extends Seeder
             factory(Payment::class)->make([
                 'cost_id' => $late->id,
                 'due_at' => $late->active_at,
-                'amount_owed' => $late->amount,
+                'amount_owed' => $late->amount/100,
                 'percent_owed' => 100,
                 'upfront' => false
             ])
@@ -158,7 +158,7 @@ class TripTableSeeder extends Seeder
             factory(Payment::class)->make([
                 'cost_id' => $deposit->id,
                 'due_at' => null,
-                'amount_owed' => $deposit->amount,
+                'amount_owed' => $deposit->amount/100,
                 'percent_owed' => 100,
                 'upfront' => true
             ])
@@ -177,7 +177,7 @@ class TripTableSeeder extends Seeder
                 factory(Payment::class)->make([
                     'cost_id' => $oc->id,
                     'due_at' => $late->active_at,
-                    'amount_owed' => $oc->amount,
+                    'amount_owed' => $oc->amount/100,
                     'percent_owed' => 100,
                     'upfront' => false
                 ])
@@ -281,7 +281,7 @@ class TripTableSeeder extends Seeder
         ]);
 
         $balance = $transaction->fund->balance + $transaction->amount;
-        $transaction->fund->balance = $balance;
+        $transaction->fund->balance = $balance/100;
         $transaction->fund->save();
 
         $transaction->fund->fundable

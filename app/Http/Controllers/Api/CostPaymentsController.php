@@ -72,7 +72,7 @@ class CostPaymentsController extends Controller
         $cost = $this->cost->findOrFail($costId);
 
         $payment = $cost->payments()->create([
-            'amount_owed' => $request->get('amount_owed')/100,
+            'amount_owed' => $request->get('amount_owed'),
             'percent_owed' => $request->get('percent_owed'),
             'due_at' => $request->get('due_at', null),
             'upfront' => $request->get('upfront', false),
@@ -96,7 +96,7 @@ class CostPaymentsController extends Controller
 
         $payment->update([
             'cost_id' => $request->get('cost_id', $costId),
-            'amount_owed' => $request->get('amount_owed')/100,
+            'amount_owed' => $request->get('amount_owed'),
             'percent_owed' => $request->get('percent_owed'),
             'due_at' => $request->get('due_at', null),
             'upfront' => $request->get('upfront', false),

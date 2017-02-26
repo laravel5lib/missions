@@ -329,7 +329,7 @@
                         // cost payments must total full amount owed and percent owed
                         var amount = 0;
                         cost.payments.forEach(function (payment, index) {
-                            amount += payment.amount_owed;
+                            amount += parseFloat(payment.amount_owed);
                         }, this);
                         // evaluate difference
                         if (amount != cost.amount) {
@@ -433,7 +433,7 @@
                 _.each(this.costs, function (cost) {
                     let t = 0;
                     _.each(cost.payments.data, function (payment) {
-                        t += payment.amount_owed;
+                        t += parseFloat(payment.amount_owed);
                     });
                     if (parseFloat(cost.amount) !== parseFloat(t)) {
                         this.unSyncedCosts.push(cost.id);

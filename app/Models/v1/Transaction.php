@@ -30,9 +30,9 @@ class Transaction extends Model
         'amount', 'type', 'details', 'fund_id', 'donor_id', 'anonymous', 'created_at', 'updated_at'
     ];
 
-    public function getAmountAttribute($value)
+    public function amountInDollars()
     {
-        return number_format($value/100, 2, '.', ''); // convert to dollars
+        return number_format($this->amount/100, 2, '.', ''); // convert to dollars
     }
 
     public function setAmountAttribute($value)

@@ -58,7 +58,7 @@
                                 <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
                             </div><!-- end col -->
                             <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.goal|currency}}</p>
+                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.amount_raised|currency}}</p>
                             <hr class="divider inv sm">
                             <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
                         </div>

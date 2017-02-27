@@ -121,7 +121,6 @@
 				availableCountries: [],
 				countries: [],
 				causes: [],
-				cause: null,
 				initiatives: [],
 				availableInitiatives: [],
 				countryCodeObj: null,
@@ -154,9 +153,9 @@
 				let allCodes = _.findWhere(this.causes, { id: val }).countries;
 				// filter selectable countries
 				this.availableCountries = [];
-				_.each(allCodes, function (code) {
+				_.each(allCodes, function (country) {
 					let test = undefined;
-					if (test = _.findWhere(this.countries, { code: code.toLowerCase()}))
+					if (test = _.findWhere(this.countries, { code: country.code.toLowerCase()}))
 					    this.availableCountries.push(test);
 				}.bind(this));
 				this.getInitiatives();

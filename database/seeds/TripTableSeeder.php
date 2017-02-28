@@ -1,8 +1,21 @@
 <?php
 
 use App\Models\v1\Cost;
-use App\Models\v1\Payment;
+use App\Models\v1\Note;
+use App\Models\v1\Slug;
+use App\Models\v1\Trip;
 use App\Models\v1\User;
+use App\Models\v1\Donor;
+use App\Models\v1\Group;
+use App\Models\v1\Upload;
+use App\Models\v1\Payment;
+use App\Models\v1\Campaign;
+use App\Models\v1\Deadline;
+use App\Models\v1\Companion;
+use App\Models\v1\Requirement;
+use App\Models\v1\Reservation;
+use App\Models\v1\Transaction;
+use App\Models\v1\TripInterest;
 use Illuminate\Database\Seeder;
 
 class TripTableSeeder extends Seeder
@@ -14,148 +27,208 @@ class TripTableSeeder extends Seeder
      */
     public function run()
     {
-        $oneNation = factory(App\Models\v1\Campaign::class, '1n1d2017')->create([
-                'avatar_upload_id' => function() {
-                    return factory(App\Models\v1\Upload::class, 'avatar')->create([
+        $campaign = $this->seed_campaign();
+        $groups = $this->seed_groups(10);
+
+        $groups->each(function($g) use($campaign) {
+
+            $trips = factory(Trip::class, 3)->create([
+                'campaign_id' => $campaign->id,
+                'group_id' => $g['id']
+            ]);
+
+            collect($trips)->each(function($t) use($g) {
+
+                $t->rep->slug()->create(['url' => generate_slug($t->rep->name)]);
+
+                $late = $this->add_incremental_costs($t);
+                $this->add_static_costs($t);
+                $this->add_optional_costs($t, $late);
+
+                $deadlines = factory(Deadline::class, 2)->make([
+                        'date' => $t->started_at->subDays(random_int(7, 30)),
+                        'deadline_assignable_id' => $t->id
+                    ])->toArray();
+                Deadline::insert($deadlines);
+
+                $this->add_trip_requirements($t);
+
+                factory(Note::class)->create([
+                    'noteable_type' => 'trips',
+                    'noteable_id' => $t->id
+                ]);
+
+                $t->facilitators()->attach(
+                    factory(User::class)->create()->id
+                );
+
+                $interests = factory(TripInterest::class, 10)->create(['trip_id' => $t->id]);
+
+                $this->add_reservations($t);
+            });
+        });
+    }
+
+    private function seed_campaign()
+    {
+        $campaign = factory(Campaign::class, '1n1d2017')->create([
+                'avatar_upload_id' => function () {
+                    return factory(Upload::class, 'avatar')->create([
                         'name' => '1n1d17_white',
                         'source' => 'images/avatars/1n1d17-white-400x400.jpg'
                     ])->id;
                 }
             ]);
 
-        $oneNation->slug()->save(factory(App\Models\v1\Slug::class)->make([
-                'url' => '1n1d2017'
-            ]));
+        $campaign->slug()->create(['url' => '1n1d2017']);
 
-        $groups = factory(App\Models\v1\Group::class, 10)->create();
+        return $campaign;
+    }
 
+    private function seed_groups(int $number)
+    {
+        $data = factory(Group::class, $number)->make();
+
+        Group::insert($data->toArray());
+
+        $groups = Group::whereIn('id', $data->pluck('id'))->get();
+
+        collect($groups)->each(function($g) {
+            $g->slug()->create(['url' => generate_slug($g->name)]);
+        });
+
+        return collect($groups);
+    }
+
+    private function add_incremental_costs($t)
+    {
+        $incrementalCosts = $t->costs()->saveMany([
+            factory(Cost::class, 'super')->make([
+                'cost_assignable_id' => $t->id
+            ]),
+            factory(App\Models\v1\Cost::class, 'early')->make([
+                'cost_assignable_id' => $t->id
+            ]),
+            factory(App\Models\v1\Cost::class, 'general')->make([
+                'cost_assignable_id' => $t->id
+            ])
+        ]);
+
+        collect($incrementalCosts)->each(function($ic) {
+            Cost::findOrFail($ic->id)->payments()->saveMany([
+                factory(Payment::class)->make([
+                    'cost_id' => $ic->id,
+                    'due_at' => $ic->active_at->addMonths(6),
+                    'amount_owed' => ($ic->amount/2)/100,
+                    'percent_owed' => 50,
+                    'upfront' => false
+                ]),
+                factory(Payment::class)->make([
+                    'cost_id' => $ic->id,
+                    'due_at' => $ic->active_at->addMonths(12),
+                    'amount_owed' => ($ic->amount/2)/100,
+                    'percent_owed' => 50,
+                    'upfront' => false
+                ])
+            ]);
+        });
+
+        $late = $t->costs()->save(factory(Cost::class, 'late')->make([
+            'cost_assignable_id' => $t->id
+        ]));
+        $late->payments()->save(
+            factory(Payment::class)->make([
+                'cost_id' => $late->id,
+                'due_at' => $late->active_at,
+                'amount_owed' => $late->amount/100,
+                'percent_owed' => 100,
+                'upfront' => false
+            ])
+        );
+
+        return $late;
+    }
+
+    private function add_static_costs($t)
+    {
+        $deposit = $t->costs()->save(factory(Cost::class, 'deposit')
+            ->make(['cost_assignable_id' => $t->id]));
+
+        $deposit->payments()->save(
+            factory(Payment::class)->make([
+                'cost_id' => $deposit->id,
+                'due_at' => null,
+                'amount_owed' => $deposit->amount/100,
+                'percent_owed' => 100,
+                'upfront' => true
+            ])
+        );
+    }
+
+    private function add_optional_costs($t, $late)
+    {
+        $optionalCosts = $t->costs()->saveMany([
+            factory(Cost::class, 'double')->make(['cost_assignable_id' => $t->id]),
+            factory(Cost::class, 'triple')->make(['cost_assignable_id' => $t->id]),
+        ]);
+
+        collect($optionalCosts)->each(function($oc) use($late) {
+            Cost::findOrFail($oc->id)->payments()->save(
+                factory(Payment::class)->make([
+                    'cost_id' => $oc->id,
+                    'due_at' => $late->active_at,
+                    'amount_owed' => $oc->amount/100,
+                    'percent_owed' => 100,
+                    'upfront' => false
+                ])
+            );
+        });
+    }
+
+    private function add_trip_requirements($t)
+    {
+        $requirements = collect([
+            factory(Requirement::class, 'visa')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'passport')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'medical')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'referral')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'testimony')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'arrival')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'airport')->make(['requester_id' => $t->id])
+        ])->toArray();
+
+        Requirement::insert($requirements);
+    }
+
+    private function add_reservations($t)
+    {
+        $data = factory(Reservation::class, 25)->make(['trip_id' => $t->id]);
+        Reservation::insert($data->toArray());
+
+        $reservations = Reservation::whereIn('id', $data->pluck('id'))->with('trip')->get();
         
+        $reservations->each(function ($r) use ($reservations) {
+            
+            $r->user->slug()->create(['url' => generate_slug($r->user->name)]);
 
+            $companion = factory(Companion::class)->make([
+                'reservation_id' => $r->id,
+                'companion_id' => $reservations->random()->pluck('id')->first()
+            ])->toArray();
+            Companion::insert($companion);
 
-        $groups->each(function($g) use($oneNation) {
+            $note = factory(Note::class)->make([
+                'noteable_id' => $r->id, 
+                'user_id' => $r->trip->rep_id
+            ])->toArray();
+            Note::insert($note);
 
-            factory(App\Models\v1\Trip::class, 3)->create([
-                    'campaign_id' => $oneNation->id,
-                    'group_id' => $g->id
-                ])->each(function($t) {
+            $tags = collect(['vip', 'missionary', 'medical', 'international', 'media', 'short'])
+                ->random(2)->all();
 
-                $incrementalCosts = $t->costs()->saveMany([
-                    factory(App\Models\v1\Cost::class, 'super')->make(['cost_assignable_id' => $t->id]),
-                    factory(App\Models\v1\Cost::class, 'early')->make(['cost_assignable_id' => $t->id]),
-                    factory(App\Models\v1\Cost::class, 'general')->make(['cost_assignable_id' => $t->id])
-                ]);
+            $r->tag($tags);
 
-                collect($incrementalCosts)->each(function($ic) {
-                    Cost::findOrFail($ic->id)->payments()->saveMany([
-                        factory(App\Models\v1\Payment::class)->make([
-                            'cost_id' => $ic->id,
-                            'due_at' => $ic->active_at->addMonths(6),
-                            'amount_owed' => $ic->amount/2,
-                            'percent_owed' => 50,
-                            'upfront' => false
-                        ]),
-                        factory(App\Models\v1\Payment::class)->make([
-                            'cost_id' => $ic->id,
-                            'due_at' => $ic->active_at->addMonths(12),
-                            'amount_owed' => $ic->amount/2,
-                            'percent_owed' => 50,
-                            'upfront' => false
-                        ])
-                    ]);
-                });
-
-                $late = $t->costs()->save(factory(App\Models\v1\Cost::class, 'late')->make(['cost_assignable_id' => $t->id]));
-                $late->payments()->save(
-                    factory(App\Models\v1\Payment::class)->make([
-                        'cost_id' => $late->id,
-                        'due_at' => $late->active_at,
-                        'amount_owed' => $late->amount,
-                        'percent_owed' => 100,
-                        'upfront' => false
-                    ])
-                );
-
-                $deposit = $t->costs()->save(factory(App\Models\v1\Cost::class, 'deposit')
-                    ->make(['cost_assignable_id' => $t->id]));
-
-                $deposit->payments()->save(
-                    factory(App\Models\v1\Payment::class)->make([
-                        'cost_id' => $deposit->id,
-                        'due_at' => null,
-                        'amount_owed' => $deposit->amount,
-                        'percent_owed' => 100,
-                        'upfront' => true
-                    ])
-                );
-
-                $optionalCosts = $t->costs()->saveMany([
-                    factory(App\Models\v1\Cost::class, 'double')->make(['cost_assignable_id' => $t->id]),
-                    factory(App\Models\v1\Cost::class, 'triple')->make(['cost_assignable_id' => $t->id]),
-                ]);
-
-                collect($optionalCosts)->each(function($oc) use($late) {
-                    Cost::findOrFail($oc->id)->payments()->save(
-                        factory(App\Models\v1\Payment::class)->make([
-                            'cost_id' => $oc->id,
-                            'due_at' => $late->active_at,
-                            'amount_owed' => $oc->amount,
-                            'percent_owed' => 100,
-                            'upfront' => false
-                        ])
-                    );
-                });
-
-                $t->deadlines()->saveMany(factory(App\Models\v1\Deadline::class, 2)->make([
-                        'date' => $t->started_at->subDays(random_int(7, 30)),
-                        'deadline_assignable_id' => $t->id
-                    ]));
-
-                $t->requirements()->saveMany([
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Visa', 'document_type' => 'visas', 'requester_id' => $t->id
-                    ]),
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Passport', 'document_type' => 'passports', 'requester_id' => $t->id
-                    ]),
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Medical Release', 'document_type' => 'medical_releases', 'requester_id' => $t->id
-                    ]),
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Arrival Designation', 'document_type' => 'arrival_designations', 'requester_id' => $t->id
-                    ]),
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Testimony', 'document_type' => 'essays', 'requester_id' => $t->id
-                    ]),
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Pastoral Referral', 'document_type' => 'referrals', 'requester_id' => $t->id
-                    ]),
-                    factory(App\Models\v1\Requirement::class)->make([
-                        'name' => 'Airport Preference', 'document_type' => 'airport_preferences', 'requester_id' => $t->id
-                    ])
-                ]);
-
-                $t->notes()->save(factory(App\Models\v1\Note::class)->make(['noteable_id' => $t->id]));
-
-                $t->facilitators()->attach(factory(App\Models\v1\User::class)->create()->id);
-
-                $t->interests()->saveMany(factory(App\Models\v1\TripInterest::class, 10)->make(['trip_id' => $t->id]));
-
-                factory(App\Models\v1\Reservation::class, 25)->create([
-                    'trip_id' => $t->id
-                ])->each(function($r) {
-                    // $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
-
-                    $r->notes()->save(factory(App\Models\v1\Note::class)->make(['noteable_id' => $r->id]));
-
-                    $tags = collect(['vip', 'missionary', 'medical', 'international', 'media', 'short'])
-                        ->random(2)->all();
-
-                    $r->tag($tags);
-
-                    $this->addDependencies($r);
-                });
-
-            }); // end trips
+            $this->addDependencies($r);
         });
     }
 
@@ -195,20 +268,20 @@ class TripTableSeeder extends Seeder
         $res->syncDeadlines($res->trip->deadlines);
         $res->addTodos($res->trip->todos);
 
-        $donor = factory(App\Models\v1\Donor::class)->create([
+        $donor = factory(Donor::class)->create([
             'account_id' => $res->user_id,
             'account_type' => 'users',
             'name' => $res->user->name
         ]);
 
-        $transaction = factory(App\Models\v1\Transaction::class)->create([
-            'amount' => 10000,
+        $transaction = factory(Transaction::class)->create([
+            'amount' => 100,
             'fund_id' => $fund->id,
             'donor_id' => $donor->id
         ]);
 
         $balance = $transaction->fund->balance + $transaction->amount;
-        $transaction->fund->balance = $balance;
+        $transaction->fund->balance = $balance/100;
         $transaction->fund->save();
 
         $transaction->fund->fundable

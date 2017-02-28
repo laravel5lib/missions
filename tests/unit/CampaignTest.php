@@ -2,8 +2,14 @@
 
 use Carbon\Carbon;
 
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 class CampaignTest extends TestCase
 {
+    use DatabaseMigrations, DatabaseTransactions;
+    
     /**
      * @test
      */

@@ -254,9 +254,7 @@ class Reservation extends Model
      */
     public function getTotalCost()
     {
-        $payments = $this->dues()->with('payment')->get();
-
-        return $payments->sum('payment.amount_owed');
+        return $this->costs()->sum('amount');
     }
 
     public function totalCostInDollars()

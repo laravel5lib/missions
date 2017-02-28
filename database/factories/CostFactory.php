@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
 {
     return [
+        'id'                   => $faker->unique()->uuid,
         'name'                 => $faker->catchPhrase,
         'description'          => $faker->sentence(10),
         'active_at'            => $faker->dateTimeThisYear('+ 6 months'),

@@ -30,7 +30,12 @@ class Donor extends Model
 
     public function getTotalDonatedAmountAttribute()
     {
-        return $this->donations()->sum('amount') / 100; //convert to dollars
+        return $this->donations()->sum('amount');
+    }
+
+    public function totalDonatedAmountInDollars()
+    {
+        return number_format($this->total_donated_amount/100, 2, '.', '');
     }
 
     public function account()

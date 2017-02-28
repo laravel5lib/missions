@@ -315,7 +315,6 @@
 				city: null,
 				state: null,
 				zipCode: null,
-				country: 'us',
 				phone: '',
 				mobile: '',
 				firstName: null,
@@ -413,8 +412,8 @@
 						this.address = null;
 						this.state = null;
 						this.zipCode = null;
-						this.country = 'us';
-						break;
+                        this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                        break;
 					case false:
 						var user = this.forAdmin ? this.userObj : this.$parent.userData;
 						var names = user.name.split(' ');
@@ -429,15 +428,16 @@
 
 						this.email = user.email;
 						this.gender = user.gender.toLowerCase();
-						this.address = user.street;
+						this.address = user.address;
 						this.relationshipStatus = user.status.toLowerCase();
 						this.phone = user.phone_one;
 						this.mobile = user.phone_two;
-						this.address = user.street;
+						this.address = user.address;
+						this.city = user.city;
 						this.state = user.state;
 						this.zipCode = user.zip;
-						this.country = user.country_code;
-						break;
+                        this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                        break;
 				}
 
 			}
@@ -460,7 +460,7 @@
 			});
 
 			this.$dispatch('basic-info', true);
-			$('html, body').animate({scrollTop: 0}, 300);
+			$('html, body').animate({scrollTop: 200}, 300);
 			done();
 		}
 	}

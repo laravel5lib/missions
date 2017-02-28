@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
 {
     return [
+        'id'               => $faker->unique()->uuid,
         'name'             => $faker->company,
         'type'             => $faker->randomElement(['church', 'business', 'youth', 'nonprofit', 'other']),
         'description'      => $faker->realText(120),
@@ -25,7 +26,9 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         },
         'banner_upload_id' => function() {
             return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
-        }
+        },
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 

@@ -12,12 +12,12 @@
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
-                        <label>Cost</label>
+                        <label>Applied to</label>
                         <p>{{ due.percent }}% of {{ due.cost }}<br />
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-3">
-                        <label>{{ due.due_at | moment 'll' }}</label>
+                        <label>Due {{ due.due_at | moment 'll' true }}</label>
                         <p>
                             <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status|capitalize}}</span>
                         </p>

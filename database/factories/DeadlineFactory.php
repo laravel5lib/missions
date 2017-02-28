@@ -8,6 +8,7 @@ $factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker
     $trip = App\Models\v1\Trip::inRandomOrder()->first();
 
     return [
+        'id'                       => $faker->unique()->uuid,
         'name'                     => $faker->catchPhrase,
         'grace_period'             => random_int(0, 10),
         'enforced'                 => $faker->boolean(50),

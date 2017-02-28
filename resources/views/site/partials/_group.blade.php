@@ -1,6 +1,6 @@
 <div class="media">
     <div class="media-left">
-        <a href="/groups/{{ $group->url }}">
+        <a href="{{ $group->slug->url }}">
             <img class="media-object img-rounded img-xs" src="{{ image($group->getAvatar()->source) }}" alt="{{ $group->name }}">
         </a>
     </div>

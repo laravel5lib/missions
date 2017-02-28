@@ -1,21 +1,26 @@
 <?php
 
+use App\Models\v1\Trip;
+use App\Models\v1\Requirement;
+use App\Models\v1\Reservation;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RequirementEndpointTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseMigrations, DatabaseTransactions;
 
     /**
      * @test
      */
     public function fetches_trip_requirements_from_url()
     {
-        $trip = factory(\App\Models\v1\Trip::class)->create();
+        $trip = factory(Trip::class)->create();
 
-        $trip->requirements()->saveMany(factory(\App\Models\v1\Requirement::class, 4)->make());
+        $trip->requirements()->saveMany(factory(Requirement::class, 4)->make([
+            'requester_id' => $trip->id
+        ]));
 
         $this->get('/api/requirements?requester=trips|'.$trip->id)
             ->seeJsonStructure([
@@ -33,7 +38,7 @@ class RequirementEndpointTest extends TestCase
      */
     public function fetches_reservation_requirements_from_url()
     {
-        $reservation = factory(\App\Models\v1\Reservation::class)->create();
+        $reservation = factory(Reservation::class)->create();
 
         $reservation->syncRequirements($reservation->trip->requirements);
 

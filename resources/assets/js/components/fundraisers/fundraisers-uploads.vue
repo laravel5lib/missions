@@ -251,7 +251,7 @@
             submit(){
                 console.log(this);
                 // this.$refs.spinner.show();
-                this.$http.put('fundraisers/' + this.id + '?include=uploads', this.fundraiser).then(function (response) {
+                this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then(function (response) {
                     this.fundraiser = response.data.data;
                     this.initVideoPlayers();
                     // this.$refs.spinner.hide();

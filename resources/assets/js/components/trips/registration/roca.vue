@@ -53,7 +53,7 @@
 			}
 		},
 		activate(done){
-			$('html, body').animate({scrollTop : 0},300);
+			$('html, body').animate({scrollTop : 200},300);
 			done();
 		}
 	}

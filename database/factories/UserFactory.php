@@ -5,11 +5,14 @@
  */
 $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 {
+    $password = bcrypt('secret');
+
     return [
+        'id'               => $faker->unique()->uuid,
         'name'             => $faker->firstName. ' '.$faker->lastName,
         'email'            => $faker->unique()->safeEmail,
         'alt_email'        => $faker->optional(0.5)->safeEmail,
-        'password'         => bcrypt(str_random(10)),
+        'password'         => $password,
         'gender'           => $faker->randomElement(['male', 'female']),
         'status'           => $faker->randomElement(['single', 'married']),
         'birthday'         => $faker->dateTimeBetween('-60 years', '-12 years'),
@@ -30,6 +33,8 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'banner_upload_id' => function() {
             return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
         },
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 
@@ -41,7 +46,6 @@ $factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator
     $user = $factory->raw(App\Models\v1\User::class);
 
     return array_merge($user, [
-        'email'    => 'admin@admin.com',
-        'password' => bcrypt('secret')
+        'email'    => 'admin@admin.com'
     ]);
 });

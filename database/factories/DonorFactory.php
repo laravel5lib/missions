@@ -6,6 +6,7 @@
 $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
 {
     return [
+        'id'           => $faker->unique()->uuid,
         'name'         => $faker->firstName . ' '. $faker->lastName,
         'email'        => $faker->safeEmail,
         'phone'        => stripPhone($faker->phoneNumber),
@@ -15,6 +16,8 @@ $factory->define(App\Models\v1\Donor::class, function (Faker\Generator $faker)
         'address'      => $faker->streetAddress,
         'city'         => $faker->city,
         'state'        => $faker->state,
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 

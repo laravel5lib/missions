@@ -5,6 +5,7 @@
  */
 $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $faker) {
     return [
+        'id' => $faker->unique()->uuid,
         'trip_id' => function () {
             return factory(App\Models\v1\Trip::class)->create()->id;
         },
@@ -12,7 +13,9 @@ $factory->define(App\Models\v1\TripInterest::class, function(Faker\Generator $fa
         'name' => $faker->firstName. ' ' .$faker->lastName,
         'email' => $faker->safeEmail,
         'phone' => $faker->optional(0.5)->phoneNumber,
-        'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2)
+        'communication_preferences' => $faker->randomElements(['email', 'phone', 'text'], 2),
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });
 

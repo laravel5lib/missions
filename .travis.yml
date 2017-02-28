@@ -16,14 +16,3 @@ before_script:
 - php artisan migrate:refresh --seed --force
 notifications:
   email: false
-  slack:
-    rooms:
-      secure: VCYayy1eqf/0TcCCgQ6M/QQf+gpagPktymX7nyOiemgjEUoXJX16whhgkDuZxBXq6rfs+QJROQUxbc6gl6aQuwrrptdXVu2XbSGFphbXh8gqd9lnqZd4vH+XQdJbuES6DhKHHEOZ+bcI+saoDUfhln9MGsR1D7KSvjbLnIyE6hWAnJ5hNC6PYusoR2nK5KSVvaraxHexcs3kp+upoKjrbnU2ApPFAvn7CUYCaMx37BW6amVnqMWqtsyhVAUO1yRzNkgHZUnHEm4qoVupQrqMKQktctUqjs81VqHmNfkhwTHn0a7XVmVdFOFkskaCjTKL4NUSKr2JCukUQT5MHwRWlxF5VHI+4Ttod91OlqPoYhD5FWqHN6cdX6Smtjq9MAbNM28J3foYYoXjB0PCE7BybeOn5ZU3snhoe7+K1vEQi0qAi2lPoxCO+nZZim2S3fsGcYSPO/teEGFXUzLtw7yrS/zpyqtyfitDLvp4rsCQYpp2UN+v5D5FuaRt9yj2Y5sj1Y3vRuGEckH65tuFxwStUiYGZxVoFvR4ATn8ViUnz5gVQpVzgR1YyCBdDHb2u+c2eRTpvoNOH4E1wsw9ByNI8LoPzf2MZupqYI5AEfsjnI/wA7pxXgumW5eybDTdW8CBajxpP2HrOvF0BSQYRRJ99HdyhddsBZ3C11zCwJdCLq0=
-    on_failure: always
-    on_success: change
-  webhooks:
-    # Deploy to staging
-    urls:
-      secure: RbskiX3QEmVMMGPv9rhCoIJIu7cIjU+nkCFp0UblywnLBuxpWLWqKpNllZZKjMRnIcai2VSuag85fgHlSw/0zef5uYmuvdxI2h+zTNcsb8WCCgdPw/Qhg+2+zrbovv8/qchmARxzMJ3qKBVgot430gMeksLyAqHW2ndh7pkhrWwivE4mIuHv6i/4m4wU+OIzR+qRvg1AczoUGefrxN97Ju9+11ThpYwWV5SAP/NGr21JrXwUyjdEgFl+JGXU2IDBbL22iyBUGoZ9ztm1mXFG158jM76gXurp98/2zw7FXCuaKffSMcESTWzhvsi98fO8bD+mNumQTOGmQdJsYwRXfcwNnX+6S04wEKLZ9WGDClyyS9GagmEUh+fVT1mxbjbtTpJuEYlPA31oNBwIfPjzi8LUzH6BwT8X/8gYTJn6KccUJSqKotvwKG+X/rRpA7TvPF3UsPNLrjtZqHhH2/Hx80M7szYNJgKlwyEPJyU4V6gZsQ6L9cm1oVGQOInPTzeudCVcLgE1fHasoSqkqh8RWyc/0DpdMuzVGyyZdf78JyiGdym27Umma/m++bQONiD91g817Yr1nDA3iahmT2sAlDVPscZ9MW1uFRdseM/hOTDOiF5/g53eLLdlxaybAAdhIeVmPrpO4sxenJJsOumbXlhEA1G6D9qHfgiFPm/q8do=
-    on_success: always
-    on_failure: never

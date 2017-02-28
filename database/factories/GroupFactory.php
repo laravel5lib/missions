@@ -17,7 +17,7 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'state'            => $faker->optional(0.5)->state,
         'zip'              => $faker->optional(0.5)->postcode,
         'country_code'     => strtolower($faker->countryCode),
-        'phone_one'        => stripPhone($faker->optional(0.5)->phoneNumber),
+        'phone_one'        => stripPhone($faker->phoneNumber),
         'phone_two'        => stripPhone($faker->optional(0.5)->phoneNumber),
         'email'            => $faker->safeEmail,
         'public'           => $faker->boolean(95),

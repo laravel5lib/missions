@@ -51,10 +51,10 @@ class SetupFunding extends Job
     protected function makeSlug()
     {
         $slug = generate_fundraiser_slug(
-                    country($this->reservation->trip->country_code)).
+                    country($this->reservation->trip->country_code).
                     '-'.
                     $this->reservation->trip->started_at->format('Y')
-                )
+                );
 
         return $slug;
     }

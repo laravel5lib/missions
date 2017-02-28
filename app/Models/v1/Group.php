@@ -26,7 +26,7 @@ class Group extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'type', 'timezone', 'url', 'public',
+        'name', 'type', 'timezone', 'public',
         'address_one', 'address_two',
         'city', 'state', 'zip', 'country_code', 'phone_one',
         'phone_two', 'email', 'description',

@@ -498,7 +498,7 @@
                 type: '',
                 country_code: null,
                 description: '',
-                timezone: null,
+                timezone: timezone.tz.guess(),
                 phone_one: '',
                 phone_two: '',
                 address_one: '',
@@ -506,7 +506,6 @@
                 city: '',
                 state: '',
                 zip: '',
-                url: '',
                 campaign: '',
                 contact: '',
                 position: '',
@@ -562,7 +561,7 @@
                 this.countryCodeObj = null;
                 this.country_code = null;
                 this.description ='';
-                this.timezone = null;
+                this.timezone = timezone.tz.guess();
                 this.phone_one ='';
                 this.phone_two ='';
                 this.address_one ='';
@@ -570,7 +569,6 @@
                 this.city ='';
                 this.state ='';
                 this.zip ='';
-                this.url ='';
                 this.campaign ='';
                 this.contact ='';
                 this.position ='';
@@ -596,7 +594,6 @@
                         city: this.city,
                         state: this.state,
                         zip: this.zip,
-                        url: this.url,
                         campaign: this.campaign,
                         contact: this.contact,
                         position: this.position,

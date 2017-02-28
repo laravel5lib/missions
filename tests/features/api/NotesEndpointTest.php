@@ -107,7 +107,7 @@ class NotesEndpointTest extends TestCase
         $this->post('/api/notes', $note)
             ->assertResponseOk()
             ->seeJson(
-                array_except($note, ['noteable_type', 'noteable_id', 'user_id'])
+                array_except($note, ['id', 'noteable_type', 'noteable_id', 'user_id'])
             );
     }
 

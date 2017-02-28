@@ -103,9 +103,23 @@ class GroupsController extends Controller
      */
     public function submit(GroupSubmissionRequest $request)
     {
-        $request->merge(['status' => 'pending']);
-
-        $group = $this->group->create($request->all());
+        $group = $this->group->create([
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
+            'timezone' => $request->get('timezone'),
+            'public' => $request->get('public'),
+            'address_one' => $request->get('address_one'),
+            'address_two' => $request->get('address_two'),
+            'city' => $request->get('city'),
+            'state' => $request->get('state'),
+            'zip' => $request->get('zip'),
+            'country_code' => $request->get('country_code'),
+            'phone_one' => $request->get('phone_two'),
+            'phone_two' => $request->get('phone_two'),
+            'email' => $request->get('email'),
+            'status' => 'pending',
+            'public' => false
+        ]);
 
         $group->notes()->create([
             'user_id' => Uuid::uuid4(),

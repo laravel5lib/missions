@@ -38,7 +38,10 @@ class RequirementEndpointTest extends TestCase
      */
     public function fetches_reservation_requirements_from_url()
     {
-        $reservation = factory(Reservation::class)->create();
+        $requirement = factory(Requirement::class)->create();
+        $reservation = factory(Reservation::class)->create([
+            'trip_id' => $requirement->requester_id
+        ]);
 
         $reservation->syncRequirements($reservation->trip->requirements);
 
@@ -46,7 +49,7 @@ class RequirementEndpointTest extends TestCase
             ->seeJsonStructure([
                 'data' => [
                     '*' => [
-                        'id', 'name', 'short_desc', 'document_type',
+                        'name', 'short_desc', 'document_type',
                         'grace_period', 'due_at', 'status', 'updated_at'
                     ]
                 ]

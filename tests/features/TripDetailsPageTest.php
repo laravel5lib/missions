@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Support\Facades\Session;
@@ -57,12 +58,13 @@ class TripDetailsPageTest extends TestCase
         $trip = factory(App\Models\v1\Trip::class)->create([
           'public' => true, 
           'spots' => 100,
-          'campaign_id' => $campaign->id
+          'campaign_id' => $campaign->id,
+          'published_at' => Carbon::yesterday()
         ]);
 
-        dd($this->visit('trips/'.$trip->id));
-             // ->click('Register Now')
-             // ->seePageIs('trips/'.$trip->id.'/register');
+        $this->visit('trips/'.$trip->id)
+             ->click('Register Now')
+             ->seePageIs('trips/'.$trip->id.'/register');
     }
 
     /**

@@ -8,7 +8,7 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
     return [
         'id'              => $faker->unique()->uuid,
         'name'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral', 'Testimony']),
-        'document_type'   => $faker->randomElement(['passports', 'releases', 'visas', 'referrals', 'essays']),
+        'document_type'   => $faker->randomElement(['passports', 'medical_releases', 'visas', 'referrals', 'essays']),
         'short_desc'      => $faker->realText(120),
         'due_at'          => $faker->dateTimeThisYear('+ 6 months'),
         'grace_period'    => random_int(0, 10),

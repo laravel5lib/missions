@@ -55,7 +55,6 @@ class SetupFunding extends Job
                     '-'.
                     $this->reservation->trip->started_at->format('Y')
                 );
-
         return $slug;
     }
 }

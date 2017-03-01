@@ -13,7 +13,7 @@ class DonationsController extends Controller
     {
         $fund = !is_null($recipient) ? 
                   $this->api->get('funds/' . $recipient) : 
-                  $this->api->get('funds/missions-me');
+                  $this->api->get('funds/general');
 
         $recipient = $fund->name;
         $type = $fund->type;

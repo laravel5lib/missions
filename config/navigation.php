@@ -87,6 +87,10 @@ return [
                 'label' => 'Funds',
                 'url' => 'funds'
             ],
+            [
+                'label' => 'Deadlines',
+                'url' => 'deadlines'
+            ],
         ],
         'records' => [
             [

@@ -262,4 +262,14 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'rep_id');
     }
+
+    /**
+     * Get all of the project's fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function fundraisers()
+    {
+        return $this->fund->fundraisers();
+    }
 }

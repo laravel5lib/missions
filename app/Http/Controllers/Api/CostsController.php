@@ -73,7 +73,7 @@ class CostsController extends Controller
 
         // Set one default payment
         $cost->payments()->create([
-            'amount_owed' => $cost->amount,
+            'amount_owed' => $cost->amount/100, // convert back to dollars
             'percent_owed' => 100,
             'due_at' => null,
             'upfront' => true,

@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class NotesEndpointTest extends TestCase
+class GroupsEndpointTest extends TestCase
 {
     use DatabaseMigrations, DatabaseTransactions;
 

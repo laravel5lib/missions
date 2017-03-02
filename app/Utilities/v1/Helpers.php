@@ -106,7 +106,7 @@ function generateFundraiserNameFromTrip($trip)
 
 function generateFundraiserNameFromProject($project)
 {
-    return $project->initiative->type.' '.'Project';
+    return $project->name.' '.'Project';
 }
 
 function set_active($path, $active = 'active')

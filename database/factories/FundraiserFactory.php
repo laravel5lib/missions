@@ -20,9 +20,9 @@ $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $fak
         'description'      => file_get_contents(resource_path('assets/sample_fundraiser.md')),
         'url'              => $faker->unique()->slug(3),
         'started_at'       => \Carbon\Carbon::now(),
-        // 'ended_at'         => function (array $fundraiser) {
-        //     return \Carbon\Carbon::parse($fundraiser['started_at'])->addYear;
-        // },
+        'ended_at'         => function (array $fundraiser) {
+            return \Carbon\Carbon::parse($fundraiser['started_at'])->addYear();
+        },
         'public'           => true
     ];
 });

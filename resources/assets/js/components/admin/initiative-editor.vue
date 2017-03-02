@@ -131,7 +131,7 @@
                     this.fetch();
                     this.editMode = false;
                 } else {
-                    window.location = '/admin/causes/' + causeId + '/current-initiatives';
+                    window.location = '/admin/causes/' + this.causeId + '/current-initiatives';
                 }
             }
         },

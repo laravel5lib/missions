@@ -82,12 +82,23 @@ class EventServiceProvider extends ServiceProvider
 
         Project::created(function ($project) {
             $name = $project->name . ' Project';
-            $project->fund()->create([
+            $fund = $project->fund()->create([
                 'name' => $name,
                 'slug' => generate_fund_slug($name),
                 'balance' => 0,
                 'class' => str_plural($project->initiative->cause->name),
                 'item' => $project->name .' - '. $project->initiative->cause->name
+            ]);
+            $fund->fundraisers()->create([
+                'name' => $name,
+                'url' => generate_fundraiser_slug($name),
+                'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
+                'sponsor_type' => $project->sponsor_type,
+                'sponsor_id' => $project->sponsor_id,
+                'goal_amount' => $project->goal ?: 0,
+                'started_at' => $project->created_at,
+                'ended_at' => $project->initiative->ended_at,
+                'public' => false // private by default
             ]);
         });
 
@@ -114,6 +125,12 @@ class EventServiceProvider extends ServiceProvider
             $banner = Upload::randomBanner(['group'])->first();
             $group->banner_upload_id = $banner ? $banner->id : null;
             $group->save();
+        });
+
+        Payment::created(function ($payment) {
+            if ($payment->cost->costAssignable instanceof Project) {
+                $payment->cost->costAssignable->payments()->sync();
+            }
         });
 
         Payment::updated(function ($payment) {

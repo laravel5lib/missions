@@ -15,7 +15,7 @@ return [
     'groups' => 25,
     'campaigns' => 2,
     'trips' => 3, // per campaign
-    'reservations' => 10, // per trip
+    'reservations' => 5, // per trip
     'passports' => 50,
     'visas' => 20,
     'uploads' => 25,

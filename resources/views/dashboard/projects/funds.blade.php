@@ -3,7 +3,16 @@
 @section('tab')
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5>Funding</h5>
+            <div class="row">
+                <div class="col-xs-6">
+                    <h5>Funding</h5>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <a href="/donate/{{ $project->fund->slug }}" target="_blank" class="btn btn-sm btn-primary">
+                        Make Donation
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="panel-body">
             <div class="row">

@@ -56,7 +56,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'medical', function (Faker\
 
     return array_merge($requirement, [
         'name'            => 'Medical Release',
-        'document_type'   => 'releases',
+        'document_type'   => 'medical_releases',
     ]);
 });
 

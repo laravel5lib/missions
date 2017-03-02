@@ -231,11 +231,7 @@ class Project extends Model
         if ( ! $costs instanceof Collection)
             $costs = collect($costs);
 
-        $data = $costs->keyBy('id')->map(function($item) {
-            return [
-//                'quantity' => $item['quantity'],
-            ];
-        })->toArray();
+        $data = $costs->keyBy('id')->toArray();
 
         $this->costs()->sync($data);
 

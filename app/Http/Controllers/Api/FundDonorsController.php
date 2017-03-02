@@ -50,7 +50,7 @@ class FundDonorsController extends Controller
                              ->map(function($donation) {
                                 return [
                                     'name' => $donation->pluck('donor.name')->first(),
-                                    'total_donated' => $donation->sum('amount'),
+                                    'total_donated' => $donation->sum('amount')/100,
                                     'account_url' => $donation->pluck('donor.account.slug.url')->first()
                                 ];
                              });

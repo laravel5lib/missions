@@ -37,7 +37,7 @@
                         </h5>
                     </a>
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
-                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/referrals/' + referral.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/referrals/' + referral.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedReferral = referral, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">

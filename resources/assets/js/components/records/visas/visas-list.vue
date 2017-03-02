@@ -40,7 +40,7 @@
                         </h5>
                     </a>
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/visas/' + visa.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedVisa = visa,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">

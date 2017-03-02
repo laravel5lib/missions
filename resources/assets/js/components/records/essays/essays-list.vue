@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
-                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>

@@ -36,9 +36,9 @@
 							{{medical_release.name}}
 						</h5>
 					</a>
-					<div v-if="!firstUrlSegment === 'admin'" style="position:absolute;right:25px;top:12px;">
-						<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id + '/edit'"><i
-								class="fa fa-pencil"></i></a>
+					<div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
+						<!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id + '/edit'"><i
+								class="fa fa-pencil"></i></a>-->
 						<a @click="selectedMedicalRelease = medical_release,deleteModal = true"><i
 								class="fa fa-times"></i></a>
 					</div>

@@ -34,7 +34,7 @@
                     <initiative-editor id="{{ $initiative->id }}"></initiative-editor>
                 </div>
             </div>
-            <div class="row">
+            {{--<div class="row">
                 <div class="col-md-offset-2 col-md-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -60,7 +60,7 @@
                         <deadlines-manager id="{{ $initiative->id }}" assignment="project_initiatives"></deadlines-manager>
                     </div>
                 </div>
-            </div>
+            </div>--}}
         </div>
     </div>
 @endsection

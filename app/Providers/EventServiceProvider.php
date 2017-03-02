@@ -116,6 +116,10 @@ class EventServiceProvider extends ServiceProvider
             $group->save();
         });
 
+        Payment::created(function ($payment) {
+            $payment->cost->costAssignable->payments()->sync();
+        });
+
         Payment::updated(function ($payment) {
             $payment->due->payable->payments()->sync();
         });

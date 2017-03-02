@@ -80,6 +80,10 @@ return [
                 'url' => 'details'
             ],
             [
+                'label' => 'Deadlines',
+                'url' => 'deadlines'
+            ],
+            [
                 'label' => 'Costs',
                 'url' => 'costs'
             ],

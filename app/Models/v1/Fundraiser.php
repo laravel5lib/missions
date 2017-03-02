@@ -110,25 +110,50 @@ class Fundraiser extends Model
     /**
      * Get the fundraiser's total amount raised.
      *
-     * @return mixed
+     * @return integer
      */
     public function raised()
     {
         $amount = $this->transactions()->sum('amount'); // in cents
 
-        return $amount ? $amount : 0;
+        return $amount ? (int) $amount : 0;
     }
 
+    /**
+     * Get the fundraiser's total amount raised in dollars.
+     * 
+     * @return string
+     */
     public function raisedAsDollars()
     {
         return number_format(($this->raised() / 100), 2);
     }
 
+    /**
+     * Set the fundraiser's goal amount in cents.
+     * 
+     * @param integet $value
+     */
+    public function setGoalAmountAttribute($value)
+    {
+        $this->attributes['goal_amount'] = $value*100; // convert to cents
+    }
+
+    /**
+     * Get the fundraiser's goal amount in dollars.
+     * 
+     * @return string
+     */
     public function goalAmountAsDollars()
     {
         return number_format(($this->goal_amount / 100), 2);
     }
 
+    /**
+     * Get the fundraiser's percentage raised.
+     * 
+     * @return integer
+     */
     public function getPercentRaised()
     {
         // check for 0 values first,
@@ -136,7 +161,7 @@ class Fundraiser extends Model
         if( $this->raised() === 0 or $this->goal_amount === 0 )
             return 0;
 
-        return round(($this->raised()/$this->goal_amount) * 100);
+        return (int) round(($this->raised()/$this->goal_amount) * 100);
     }
 
     /**
@@ -149,6 +174,12 @@ class Fundraiser extends Model
         return $this->morphToMany(Upload::class, 'uploadable');
     }
 
+    /**
+     * Get public fundraisers
+     * 
+     * @param  Builder $query
+     * @return Builder
+     */
     public function scopePublic($query)
     {
         return $query->where('public', true);

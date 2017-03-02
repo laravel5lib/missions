@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\v1\Cost;
+use App\Models\v1\Payment;
 use Illuminate\Database\Seeder;
 
 class ProjectTablesSeeder extends Seeder
@@ -55,7 +57,28 @@ class ProjectTablesSeeder extends Seeder
 
             $cause->initiatives->each(function($initiative) {
                 factory(App\Models\v1\Project::class, 5)
-                    ->create(['project_initiative_id' => $initiative->id]);
+                    ->create(['project_initiative_id' => $initiative->id])->each(function($project) {
+                        $project->sponsor->slug()->create(['url' => generate_slug($project->sponsor->name)]);
+                        
+                        $cost = factory(Cost::class, 'project')->create([
+                                    'cost_assignable_id' => $project->id
+                                ]);
+
+                        $cost->payments()->saveMany([
+                            factory(Payment::class)->make([
+                                'cost_id' => $cost->id,
+                                'amount_owed' => ($cost->amount/100)/2,
+                                'percent_owed' => 50,
+                                'upfront' => false,
+                            ]),
+                            factory(Payment::class)->make([
+                                'cost_id' => $cost->id,
+                                'amount_owed' => ($cost->amount/100)/2,
+                                'percent_owed' => 50,
+                                'upfront' => false,
+                            ])
+                        ]);
+                    });
             });
 
         });

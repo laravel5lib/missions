@@ -72,8 +72,6 @@ class ProjectsController extends Controller
             'plaque_message' => $request->get('plaque_message')
         ]);
 
-        $project->syncCosts($request->get('costs'));
-
         return $this->response->item($project, new ProjectTransformer);
     }
 
@@ -96,8 +94,6 @@ class ProjectsController extends Controller
             'plaque_prefix' => $request->get('plaque_prefix', $project->plaque_prefix),
             'plaque_message' => $request->get('plaque_message', $project->plaque_message),
         ]);
-
-        $project->syncCosts($request->get('costs'));
 
         return $this->response->item($project, new ProjectTransformer);
     }

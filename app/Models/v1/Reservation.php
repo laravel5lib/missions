@@ -254,9 +254,14 @@ class Reservation extends Model
      */
     public function getTotalCost()
     {
-        return $this->costs()->sum('amount');
+        return $this->costs ? (int) $this->costs()->sum('amount') : 0;
     }
 
+    /**
+     * Get reservation's total cost in dollars.
+     * 
+     * @return string
+     */
     public function totalCostInDollars()
     {
         return number_format($this->getTotalCost()/100, 2, '.', '');
@@ -287,7 +292,7 @@ class Reservation extends Model
         if( $this->getTotalRaised() === 0 or $this->getTotalCost() === 0 )
             return 0;
 
-        return round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
+        return (int) round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
     }
 
     /**

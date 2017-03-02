@@ -318,7 +318,6 @@
 				phone: '',
 				mobile: '',
 				firstName: null,
-				// middleName: null,
 				lastName: null,
 				email: null,
 				dobDay: '',
@@ -361,7 +360,6 @@
 					phone: this.phone,
 					mobile: this.mobile,
 					firstName: this.firstName,
-					// middleName: this.middleName,
 					lastName: this.lastName,
 					email: this.email,
 					dobDay: this.dobDay,
@@ -397,7 +395,6 @@
 				switch (this.onBehalf) {
 					case true:
 						this.firstName = null;
-						this.middleName = null;
 						this.lastName = null;
 						this.dobDay = '';
 						this.dobMonth = '';
@@ -418,7 +415,6 @@
 						var user = this.forAdmin ? this.userObj : this.$parent.userData;
 						var names = user.name.split(' ');
 						this.firstName = _.first(names);
-						this.middleName = _.without(names, _.first(names), _.last(names));
 						this.lastName = names.length>1 ? _.last(names) : null;
 
 						var birthdays = user.birthday.split('-');

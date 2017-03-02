@@ -302,7 +302,7 @@ class Reservation extends Model
 
     public function totalOwedInDollars()
     {
-        return number_format($this->getTotalCost()/100, 2 , '.', '');
+        return number_format($this->getTotalOwed()/100, 2 , '.', '');
     }
 
     /**

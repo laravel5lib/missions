@@ -8,7 +8,6 @@ $factory->define(App\Models\v1\Project::class, function(Faker\Generator $faker)
     return [
         'name' => $faker->sentence(3),
         'project_initiative_id' => $faker->uuid,
-        'rep_id' => $faker->uuid,
         'sponsor_id' => $faker->uuid,
         'sponsor_type' => 'users',
         'plaque_prefix' => $faker->randomElement(['in honor of', 'in memory of', 'sponsored by']),

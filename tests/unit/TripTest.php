@@ -7,8 +7,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TripTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
-
     /** 
      * @test
      */

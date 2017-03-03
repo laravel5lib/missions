@@ -94,7 +94,7 @@ class Fundraiser extends Model
      */
     public function transactions()
     {
-        return $this->fund->transactions();
+        return $this->fund->transactions;
     }
 
     /**

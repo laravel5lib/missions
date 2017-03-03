@@ -7,22 +7,16 @@ $factory->define(App\Models\v1\Fundraiser::class, function (Faker\Generator $fak
 {
     return [
         'id'               => $faker->unique()->uuid,
-        'fund_id'          => function () {
-            return factory(App\Models\v1\Fund::class)->create()->id;
-        },
+        'fund_id'          => $faker->uuid,
         'sponsor_type'     => 'users',
-        'sponsor_id'       => function () {
-            return factory(App\Models\v1\User::class)->create()->id;
-        },
+        'sponsor_id'       => $faker->uuid,
         'name'             => $faker->catchPhrase,
         'type'             => 'general',
         'goal_amount'      => $faker->numberBetween(1000, 3000),
         'description'      => file_get_contents(resource_path('assets/sample_fundraiser.md')),
         'url'              => $faker->unique()->slug(3),
         'started_at'       => \Carbon\Carbon::now(),
-        'ended_at'         => function (array $fundraiser) {
-            return \Carbon\Carbon::parse($fundraiser['started_at'])->addYear();
-        },
+        'ended_at'         => \Carbon\Carbon::now()->addYear(),
         'public'           => true
     ];
 });
@@ -36,9 +30,7 @@ $factory->defineAs(App\Models\v1\Fundraiser::class, 'group', function (Faker\Gen
 
     return array_merge($fundraiser, [
         'sponsor_type'     => 'groups',
-        'sponsor_id'       => function () {
-            return factory(App\Models\v1\Group::class)->create()->id;
-        }
+        'sponsor_id'       => $faker->uuid
     ]);
 });
 

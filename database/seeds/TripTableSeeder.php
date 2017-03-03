@@ -296,7 +296,7 @@ class TripTableSeeder extends Seeder
             'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
             'sponsor_type' => 'users',
             'sponsor_id' => $res->user_id,
-            'goal_amount' => $res->getTotalCost(),
+            'goal_amount' => $res->getTotalCost()/100,
             'started_at' => $res->created_at,
             'ended_at' => $res->trip->started_at
         ]);

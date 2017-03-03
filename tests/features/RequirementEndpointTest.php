@@ -3,14 +3,9 @@
 use App\Models\v1\Trip;
 use App\Models\v1\Requirement;
 use App\Models\v1\Reservation;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class RequirementEndpointTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
-
     /**
      * @test
      */

@@ -440,14 +440,6 @@ class TransferData extends Command
                         'a' => strip_tags(trim($rec->concerns))
                     ],
                     [
-                        'q' => 'Do you have any concerns about this individual living under an organized leadership structure with strict safety guidelines for 7-14 days? Please explain.',
-                        'a' => null
-                    ],
-                    [
-                        'q' => 'Do you have any concerns about this individual ministering to believers or sharing the gospel with non-believers? Please explain.',
-                        'a' => null
-                    ],
-                    [
                         'q' => 'Please list the applicant\'s significant strengths:',
                         'a' => strip_tags(trim($rec->applicant_strength))
                     ],

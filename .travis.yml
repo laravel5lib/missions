@@ -13,5 +13,7 @@ services:
 before_script:
 - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 - composer install --dev --prefer-source --no-interaction
+- npm install
+- gulp
 notifications:
   email: false

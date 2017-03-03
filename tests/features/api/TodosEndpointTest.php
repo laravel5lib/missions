@@ -3,14 +3,9 @@
 use App\Models\v1\Todo;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TodosEndpointTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
-
     /**
      * @test
      */

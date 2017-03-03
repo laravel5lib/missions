@@ -12,12 +12,8 @@ $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
         'slug' => str_slug($name),
         'balance' => $faker->randomNumber,
         'fundable_type' => 'reservations',
-        'fundable_id' => function () {
-            return factory(App\Models\v1\Reservation::class)->create()->id;
-        },
-        'class' => function (array $fund) {
-            return App\Models\v1\Reservation::find($fund['fundable_id'])->trip->campaign->name . ' - Team';
-        },
+        'fundable_id' => $faker->uuid,
+        'class' => $faker->catchPhrase,
         'item' => 'Missionary Donation'
     ];
 });
@@ -31,12 +27,8 @@ $factory->defineAs(App\Models\v1\Fund::class, 'trip', function(Faker\Generator $
     
     return array_merge($fund, [
         'fundable_type' => 'trips',
-        'fundable_id' => function () {
-            return factory(App\Models\v1\Trip::class)->create()->id;
-        },
-        'class' => function (array $fund) {
-            return App\Models\v1\Trip::find($fund['fundable_id'])->campaign->name . '- Team';
-        },
+        'fundable_id' => $faker->uuid,
+        'class' => $faker->catchPhrase,
         'item' => 'Missionary Donation'
     ]);
 });
@@ -50,12 +42,8 @@ $factory->defineAs(App\Models\v1\Fund::class, 'campaign', function(Faker\Generat
 
     return array_merge($fund, [
         'fundable_type' => 'campaigns',
-        'fundable_id' => function () {
-            return factory(App\Models\v1\Campaign::class)->create()->id;
-        },
-        'class' => function (array $fund) {
-            return App\Models\v1\Campaign::find($fund['fundable_id'])->name;
-        },
+        'fundable_id' => $faker->uuid,
+        'class' => $faker->catchPhrase,
         'item' => 'General Donation'
     ]);
 });
@@ -69,16 +57,9 @@ $factory->defineAs(App\Models\v1\Fund::class, 'project', function(Faker\Generato
 
     return array_merge($fund, [
         'fundable_type' => 'projects',
-        'fundable_id' => function () {
-            return factory(App\Models\v1\Project::class)->create()->id;
-        },
-        'class' => function (array $fund) {
-            return str_plural(App\Models\v1\Project::find($fund['fundable_id'])->initiative->cause->name);
-        },
-        'item' => function (array $fund) {
-            $project = App\Models\v1\Project::find($fund['fundable_id']);
-            return $project->name . ' - ' . $project->initiative->cause->name;
-        }
+        'fundable_id' => $faker->uuid,
+        'class' => $faker->catchPhrase,
+        'item' => $faker->catchPhrase
     ]);
 });
 
@@ -91,12 +72,8 @@ $factory->defineAs(App\Models\v1\Fund::class, 'cause', function(Faker\Generator 
 
     return array_merge($fund, [
         'fundable_type' => 'causes',
-        'fundable_id' => function () {
-            return factory(App\Models\v1\ProjectCause::class)->create()->id;
-        },
-        'class' => function (array $fund) {
-            return str_plural(App\Models\v1\ProjectCause::find($fund['fundable_id'])->name);
-        },
+        'fundable_id' => $faker->uuid,
+        'class' => $faker->catchPhrase,
         'item' => 'General Donation'
     ]);
 });

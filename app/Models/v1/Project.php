@@ -126,7 +126,7 @@ class Project extends Model
      */
     public function getGoalAttribute()
     {
-        return $this->costs ? $this->costs()->sum('amount') : 0;
+        return $this->costs ? (int) $this->costs()->sum('amount') : 0;
     }
 
     /**

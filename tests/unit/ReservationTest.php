@@ -3,6 +3,7 @@
 use App\Models\v1\Cost;
 use App\Models\v1\Fund;
 use App\Models\v1\Payment;
+use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -16,9 +17,13 @@ class ReservationTest extends TestCase
     function setup_reservation()
     {
         $reservation = factory(Reservation::class)->create();
-        factory(Fund::class)->create([
+        $fund = factory(Fund::class)->create([
             'fundable_type' => 'reservations', 'fundable_id' => $reservation->id,
             'balance' => 0
+        ]);
+        factory(Fundraiser::class)->create([
+            'fund_id' => $fund->id, 'sponsor_id' => $reservation->user->id,
+            'goal_amount' => 0
         ]);
         $general = factory(Cost::class, 'general')->create([
             'cost_assignable_id' => $reservation->trip->id,
@@ -63,6 +68,7 @@ class ReservationTest extends TestCase
 
         $this->assertSame(280000, $reservation->getTotalCost());
         $this->assertSame('2800.00', $reservation->totalCostInDollars());
+        $this->assertSame(280000, $reservation->fund->fundraisers()->first()->goal_amount);
     }
 
     /**

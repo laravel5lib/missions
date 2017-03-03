@@ -330,6 +330,11 @@ class Reservation extends Model
         
         $this->costs()->sync($data);
 
+        if ($this->fundraisers->count())
+            $this->fundraisers()->first()->update([
+                'goal_amount' => $this->getTotalCost()/100
+            ]);
+
         dispatch(new SyncPaymentsDue($this));
     }
 

@@ -34,7 +34,7 @@ class FundraiserTest extends TestCase
         $fund = factory(Fund::class)->create();
         $fundraiser = factory(Fundraiser::class)->create([
             'fund_id' => $fund->id,
-            'goal_amount' => 250000
+            'goal_amount' => 2500
         ]);
         $transactions = factory(Transaction::class, 10)->create(
             ['amount' => 10, 'fund_id' => $fund->id]

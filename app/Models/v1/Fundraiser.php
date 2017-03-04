@@ -115,7 +115,7 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        $amount = $this->transactions->sum('amount'); // in cents
+        $amount = $this->transactions()->sum('amount'); // in cents
 
         return $amount ? (int) $amount : 0;
     }
@@ -178,7 +178,6 @@ class Fundraiser extends Model
 
         if ($this->getPercentRaised() >= 100) {
             $this->ended_at = Carbon::now();
-            $this->save();
             
             return 'closed';
         }

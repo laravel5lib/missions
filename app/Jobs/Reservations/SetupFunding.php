@@ -43,7 +43,6 @@ class SetupFunding extends Job
             'goal_amount' => $this->reservation->getTotalCost(),
             'started_at' => $this->reservation->created_at,
             'ended_at' => $this->reservation->trip->started_at,
-            'banner_upload_id' => $this->reservation->trip->campaign->banner->id,
             'public' => false // private by default
         ]);
     }

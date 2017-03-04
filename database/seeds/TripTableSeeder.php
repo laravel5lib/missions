@@ -80,7 +80,7 @@ class TripTableSeeder extends Seeder
                 }
             ]);
 
-        $campaign->slug()->create(['url' => '1n1d2017']);
+        $campaign->slug()->create(['url' => '1n1d17']);
 
         return $campaign;
     }

@@ -178,7 +178,6 @@ class Fundraiser extends Model
 
         if ($this->getPercentRaised() >= 100) {
             $this->ended_at = Carbon::now();
-            $this->save();
             
             return 'closed';
         }

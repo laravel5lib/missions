@@ -126,7 +126,7 @@ class Fundraiser extends Model
      */
     public function raisedAsDollars()
     {
-        return number_format(($this->raised() / 100), 2);
+        return number_format(($this->raised() / 100), 2, '.', '');
     }
 
     /**
@@ -146,7 +146,7 @@ class Fundraiser extends Model
      */
     public function goalAmountAsDollars()
     {
-        return number_format(($this->goal_amount / 100), 2);
+        return number_format(($this->goal_amount / 100), 2, '.', '');
     }
 
     /**

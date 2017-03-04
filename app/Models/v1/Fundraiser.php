@@ -115,7 +115,7 @@ class Fundraiser extends Model
      */
     public function raised()
     {
-        $amount = $this->transactions()->sum('amount'); // in cents
+        $amount = $this->transactions->sum('amount'); // in cents
 
         return $amount ? (int) $amount : 0;
     }

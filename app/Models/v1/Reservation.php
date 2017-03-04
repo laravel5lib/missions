@@ -302,7 +302,9 @@ class Reservation extends Model
      */
     public function getTotalOwed()
     {
-        return $this->getTotalCost() - $this->fund->balance;
+        $total = $this->getTotalCost() - $this->fund->balance;
+
+        return $total > 0 ? $total : 0;
     }
 
     public function totalOwedInDollars()

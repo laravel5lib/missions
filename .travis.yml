@@ -13,5 +13,10 @@ services:
 before_script:
 - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 - composer install --dev --prefer-source --no-interaction
+- rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
+- yarn
+cache: yarn
+env:
+  - TRAVIS_NODE_VERSION="6"
 notifications:
   email: false

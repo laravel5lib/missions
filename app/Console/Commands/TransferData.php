@@ -1321,7 +1321,7 @@ class TransferData extends Command
     private function make_payment($amount, $percent, $due, $grace = 3)
     {
         return new Payment([
-            'amount_owed' => $amount, 
+            'amount_owed' => $amount/100, 
             'percent_owed' => $percent,
             'due_at' => $due,
             'grace_period' => $grace,

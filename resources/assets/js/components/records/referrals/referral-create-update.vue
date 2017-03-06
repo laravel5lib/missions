@@ -114,13 +114,11 @@
                 applicant_name: '',
                 attention_to: '',
                 response: [
-                    { q: 'How Long have you known the applicant?', a: ''},
-                    { q: 'Please list any current roles the applicant serves in at your church:', a: ''},
-                    { q: 'To the best of your knowledge, what is the current state of the applicant\'s spiritual walk?', a: ''},
-                    { q: 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation? Please explain.', a: ''},
-                    { q: 'Please list the applicant\'s significant strengths:', a: ''},
-                    { q: 'Please list the applicant\'s significant weaknesses:', a: ''},
-                    { q: 'Would you recommend this applicant for a leadership role on the trip? Please explain.', a: ''},
+                    { q: 'How Long have you known the applicant?', a: '', type: 'textarea'},
+                    { q: 'Does the applicant currently attend your church?', a: '', type: 'radio'},
+                    { q: 'Do you have any concerns about this applicant’s ability to honor authority or adhere to instruction?  Please explain.', a: '', type: 'textarea'},
+                    { q: 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation for 7-14 days? Please explain.', a: '', type: 'textarea'},
+                    { q: 'Do you recommend this applicant for missions service with Missions.Me?', a: '', type: 'radio'}
                 ],
                 user_id: this.userId,
 

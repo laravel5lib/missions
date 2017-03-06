@@ -302,7 +302,9 @@ class Reservation extends Model
      */
     public function getTotalOwed()
     {
-        return $this->getTotalCost() - $this->fund->balance;
+        $total = $this->getTotalCost() - $this->fund->balance;
+
+        return $total > 0 ? $total : 0;
     }
 
     public function totalOwedInDollars()
@@ -329,6 +331,11 @@ class Reservation extends Model
         })->toArray();
         
         $this->costs()->sync($data);
+
+        if ($this->fundraisers->count())
+            $this->fundraisers()->first()->update([
+                'goal_amount' => $this->getTotalCost()/100
+            ]);
 
         dispatch(new SyncPaymentsDue($this));
     }

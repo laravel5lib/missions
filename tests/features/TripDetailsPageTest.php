@@ -4,14 +4,9 @@ use Carbon\Carbon;
 use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TripDetailsPageTest extends TestCase
 {   
-    use DatabaseMigrations, DatabaseTransactions;
-
     /**
      * @test
      */

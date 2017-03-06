@@ -21,12 +21,8 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
         'phone_two'        => stripPhone($faker->optional(0.5)->phoneNumber),
         'email'            => $faker->safeEmail,
         'public'           => $faker->boolean(95),
-        'avatar_upload_id' => function() {
-            return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
-        },
-        'banner_upload_id' => function() {
-            return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
-        },
+        'avatar_upload_id' => $faker->uuid,
+        'banner_upload_id' => $faker->uuid,
         'created_at' => \Carbon\Carbon::now(),
         'updated_at' => \Carbon\Carbon::now()
     ];

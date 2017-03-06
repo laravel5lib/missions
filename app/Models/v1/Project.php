@@ -126,7 +126,7 @@ class Project extends Model
      */
     public function getGoalAttribute()
     {
-        return $this->costs ? $this->costs()->sum('amount') : 0;
+        return $this->costs ? (int) $this->costs()->sum('amount') : 0;
     }
 
     /**
@@ -261,5 +261,15 @@ class Project extends Model
     public function rep()
     {
         return $this->belongsTo(User::class, 'rep_id');
+    }
+
+    /**
+     * Get all of the project's fundraisers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function fundraisers()
+    {
+        return $this->fund->fundraisers();
     }
 }

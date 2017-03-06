@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\v1\Cost;
+use App\Models\v1\User;
 use App\Models\v1\Payment;
 use Illuminate\Database\Seeder;
 
@@ -57,7 +58,12 @@ class ProjectTablesSeeder extends Seeder
 
             $cause->initiatives->each(function($initiative) {
                 factory(App\Models\v1\Project::class, 5)
-                    ->create(['project_initiative_id' => $initiative->id])->each(function($project) {
+                    ->create([
+                        'project_initiative_id' => $initiative->id,
+                        'sponsor_id' => function () {
+                            return factory(User::class)->create()->id;
+                        }
+                    ])->each(function($project) {
                         $project->sponsor->slug()->create(['url' => generate_slug($project->sponsor->name)]);
                         
                         $cost = factory(Cost::class, 'project')->create([

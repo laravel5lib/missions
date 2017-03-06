@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Cost;
 use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Group;
@@ -130,6 +131,26 @@ class EventServiceProvider extends ServiceProvider
         Payment::created(function ($payment) {
             if ($payment->cost->costAssignable instanceof Project) {
                 $payment->cost->costAssignable->payments()->sync();
+            }
+        });
+
+        Cost::created(function ($cost) {
+            if ($cost->costAssignable instanceof Project) {
+                $cost->costAssignable
+                     ->fund
+                     ->fundraisers()
+                     ->first()
+                     ->update(['goal_amount' => $cost->costAssignable->goal/100]);
+            }
+        });
+
+        Cost::updated(function ($cost) {
+            if ($cost->costAssignable instanceof Project) {
+                $cost->costAssignable
+                     ->fund
+                     ->fundraisers()
+                     ->first()
+                     ->update(['goal_amount' => $cost->costAssignable->goal/100]);
             }
         });
 

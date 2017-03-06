@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use Carbon\Carbon;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
@@ -94,7 +95,7 @@ class Fundraiser extends Model
      */
     public function transactions()
     {
-        return $this->fund->transactions();
+        return $this->fund->transactions;
     }
 
     /**
@@ -126,7 +127,7 @@ class Fundraiser extends Model
      */
     public function raisedAsDollars()
     {
-        return number_format(($this->raised() / 100), 2);
+        return number_format(($this->raised() / 100), 2, '.', '');
     }
 
     /**
@@ -146,7 +147,7 @@ class Fundraiser extends Model
      */
     public function goalAmountAsDollars()
     {
-        return number_format(($this->goal_amount / 100), 2);
+        return number_format(($this->goal_amount / 100), 2, '.', '');
     }
 
     /**
@@ -162,6 +163,52 @@ class Fundraiser extends Model
             return 0;
 
         return (int) round(($this->raised()/$this->goal_amount) * 100);
+    }
+
+    /**
+     * Get the Fundraiser's Status.
+     * 
+     * @return string
+     */
+    public function getStatus()
+    {
+        if ($this->ended_at->isPast()) {
+            return 'closed';
+        }
+
+        if ($this->getPercentRaised() >= 100) {
+            $this->ended_at = Carbon::now();
+            
+            return 'closed';
+        }
+
+        return 'open';
+    }
+
+    /**
+     * Check if fundraiser is closed.
+     * 
+     * @return boolean
+     */
+    public function isClosed()
+    {
+        if ($this->getStatus() == 'closed')
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Check if fundraiser is closed.
+     * 
+     * @return boolean
+     */
+    public function isOpen()
+    {
+        if ($this->getStatus() == 'open')
+            return true;
+
+        return false;
     }
 
     /**

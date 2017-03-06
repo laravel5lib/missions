@@ -149,13 +149,13 @@
                         user_id: this.user_id,
                         attention_to: this.attention_to
                     }).then(function (resp) {
-                        this.showSuccess = true;
-                        // window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/records/referrals';
+                        this.$dispatch('showSuccess', 'Referral created and sent.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/referrals/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        console.log(error);
+                        this.$dispatch('showError', 'Unable to create referral.');
                     });
                 } else {
                     this.showError = true;
@@ -180,7 +180,7 @@
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showErrors', 'Unable to save changes.');
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },

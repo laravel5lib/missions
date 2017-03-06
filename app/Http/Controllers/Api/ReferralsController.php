@@ -79,11 +79,9 @@ class ReferralsController extends Controller
             'responded_at' => null
         ]);
 
-        $location = url('/referrals/' . $referral->id);
-
         dispatch(new SendReferralRequestEmail($referral));
 
-        return $this->response->created($location);
+        return $this->response->item($referral, new ReferralTransformer);
     }
 
     /**

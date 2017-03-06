@@ -472,6 +472,7 @@
                         upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
                         this.showSuccess = true;
+                        window.location.href = '/dashboard/records/medical-releases/'+this.id;
                         // this.$refs.spinner.hide();
                     }, function (error) {
                         this.errors = error.data.errors;

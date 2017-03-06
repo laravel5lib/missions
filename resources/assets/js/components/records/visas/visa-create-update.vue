@@ -192,14 +192,13 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.showSuccess = true;
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/records/visas';
+                        this.$dispatch('showSuccess', 'Visa created.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/visas/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        // this.$refs.spinner.hide();
-                        debugger;
+                        this.$dispatch('showError', 'Unable to create visa.');
                     });
                 } else {
                     this.showError = true;
@@ -219,13 +218,14 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        // window.location.href = '/dashboard/visas';
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showSuccess', 'Changes saved.');
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/visas/' + that.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        // this.$refs.spinner.hide();
-//                        debugger;
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },

@@ -63,8 +63,12 @@
                 <div class="panel-heading">
                     <h5>Photo Copy</h5>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body text-center">
+                    @if($visa->upload)
                     <img class="img-responsive" src="{{ image($visa->upload->source) }}" />
+                    @else
+                    <em class="text-muted">No photocopy found</em>
+                    @endif
                 </div>
             </div>
         </div>

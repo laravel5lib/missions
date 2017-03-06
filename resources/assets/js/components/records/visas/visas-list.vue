@@ -117,7 +117,6 @@
                 selectedVisa: null,
                 //logic vars
                 filters: {
-                    expired: false,
                     sort: 'surname'
                 },
                 showFilters: false,

@@ -139,8 +139,8 @@
 
 				<div class="form-group">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Save</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Save</a>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
 				</div>
 
 			</form>
@@ -215,6 +215,10 @@
 				type: Number,
 				default: 100
 			},
+            buttonText: {
+                type: String,
+                default: 'Save'
+            }
 		},
         data(){
             return {

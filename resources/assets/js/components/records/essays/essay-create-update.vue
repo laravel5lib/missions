@@ -133,7 +133,7 @@
         ready(){
             if (this.isUpdate) {
                 // this.$refs.spinner.show();
-                this.$http('essays/' + this.id).then(function (response) {
+                this.$http.get('essays/' + this.id).then(function (response) {
                 // this.user = response.body.data;
 
                     let essay = response.body.data;

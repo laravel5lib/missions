@@ -227,7 +227,7 @@
                                     <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
                                 </li>
                             </ul>
-                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'medical-release-'+today + '-' + uploadCounter"></upload-create-update>
+                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :name="'medical-release-'+ today + '-' + uploadCounter"></upload-create-update>
                         </div>
                     </div>
                 </div>
@@ -505,7 +505,7 @@
                     this.uploadCounter = medical_release.uploads.length + 1;
                     $.extend(this, medical_release);
 
-                    this.$http('medical/conditions').then(function (response) {
+                    this.$http.get('medical/conditions').then(function (response) {
                         // prepare conditions for UI
                         let med_conditions = medical_release.conditions.data;
                         _.each(response.body.data, function (condition) {
@@ -524,7 +524,7 @@
                         }.bind(this));
                         this.additionalConditionsList = med_conditions;
                     });
-                    this.$http('medical/allergies').then(function (response) {
+                    this.$http.get('medical/allergies').then(function (response) {
                     // prepare conditions for UI
                     let med_allergies = medical_release.allergies.data;
                     _.each(response.body.data, function (allergy) {
@@ -545,12 +545,12 @@
                 });
                 });
             } else {
-                this.$http('medical/conditions').then(function (response) {
+                this.$http.get('medical/conditions').then(function (response) {
                     _.each(response.body.data, function (condition) {
                         this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
                     }.bind(this));
                 });
-                this.$http('medical/allergies').then(function (response) {
+                this.$http.get('medical/allergies').then(function (response) {
                     _.each(response.body.data, function (allergy) {
                         this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
                     }.bind(this));

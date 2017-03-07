@@ -346,10 +346,10 @@
             searchFunds(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('funds', params).then(function (response) {
+                this.$http.get('funds', { params: params }).then(function (response) {
                     let self = this;
-                    this.funds = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.funds = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

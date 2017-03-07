@@ -192,24 +192,24 @@
             },
             searchDonors(){
                 // this.$refs.spinner.show();
-                this.$http.get('funds/'+ this.fundId +'/donors', {page: this.donorPagination.current_page}).then(function (response) {
-                    this.donors = _.toArray(response.data.data);
-                    this.donorPagination = response.data.meta.pagination;
+                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then(function (response) {
+                    this.donors = _.toArray(response.body.data);
+                    this.donorPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             searchTransactions(type){
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page}).then(function (response) {
-                    this.transactions = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('transactions', { params: {include: 'donor', type: type, fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then(function (response) {
+                    this.transactions = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             }
         },
         ready(){
             this.$http.get('funds/' + this.fundId).then(function (response) {
-                this.fund = response.data.data;
+                this.fund = response.body.data;
             });
 
 

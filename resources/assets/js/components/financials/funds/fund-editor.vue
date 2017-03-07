@@ -89,7 +89,7 @@
             fetch() {
                 // this.$refs.spinner.show();
                 this.$http.get('funds/' + this.id).then(function (response) {
-                    this.fund = response.data.data;
+                    this.fund = response.body.data;
                     // this.$refs.spinner.hide();
                 });
             },
@@ -106,7 +106,7 @@
                             self.$root.$emit('showSuccess', 'Fund updated');
                             self.editMode = false;
                             self.fetch();
-                        }).error(function (response) {
+                        },function (response) {
                             self.$refs.spinner.hide();
                             self.$root.$emit('showError', 'There are errors on the form');
                         });

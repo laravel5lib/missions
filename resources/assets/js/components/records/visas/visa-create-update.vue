@@ -37,9 +37,10 @@
                             <div class="input-group input-group-sms"
                                  v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
                                 <span class="input-group-addon">Issued</span>
-                                <date-picker class="form-control input-sms" :time.sync="issued_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <date-picker class="form-control input-sms" :time.sync="issued_at" :option="{ type: 'day', format: 'YYYY-MM-DD' }"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
                                        v-validate:issued="{ required: true }" required>
+
                             </div>
                             <br>
                         </div>
@@ -47,7 +48,7 @@
                             <div class="input-group input-group-sms"
                                  v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
                                 <span class="input-group-addon">Expires</span>
-                                <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <date-picker class="form-control input-sms" :time.sync="expires_at" :option="{ type: 'day', format: 'YYYY-MM-DD' }"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
                             </div>
@@ -245,14 +246,14 @@
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.visasResource.get({ id: this.id }).then(function (response) {
-                    let visa = response.data.data;
+                    let visa = response.body.data;
                     $.extend(this, visa);
                     this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
                 });

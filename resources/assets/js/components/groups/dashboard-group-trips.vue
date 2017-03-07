@@ -44,8 +44,8 @@
             searchTrips(){
                 // this.$refs.spinner.show();
                 this.resource.query().then(function(response){
-                    this.trips = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.trips = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

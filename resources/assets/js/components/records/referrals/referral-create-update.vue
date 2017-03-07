@@ -189,7 +189,7 @@
             if (this.isUpdate) {
                 this.$http('referrals/' + this.id).then(function (response) {
 
-                    let referral = response.data.data;
+                    let referral = response.body.data;
                     $.extend(this, referral);
                 });
             }

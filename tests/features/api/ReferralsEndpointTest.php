@@ -11,7 +11,11 @@ class ReferralsEndpointTest extends TestCase
      */
     public function returns_referrals()
     {
-        $referrals = factory(Referral::class, 2)->create();
+        $referrals = factory(Referral::class, 2)->create([
+                'user_id' => function () {
+                    return factory(User::class)->create()->id;
+                }
+            ]);
 
         $this->get('/api/referrals')
             ->assertResponseOk()

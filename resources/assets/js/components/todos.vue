@@ -206,7 +206,7 @@
                     this.message = 'Todo created successfully.';
                     this.showSuccess = true;
                     this.fetch();
-                }).error(function () {
+                },function () {
                     this.message = 'Unable to add the todo.';
                     this.showError = true;
                 });
@@ -220,7 +220,7 @@
                     this.completeMode = false;
                     this.selectedTodo = {};
                     this.fetch();
-                }).error(function () {
+                },function () {
                     this.message = 'Unable to update the todo.';
                     this.showError = true;
                 });
@@ -231,7 +231,7 @@
                     this.selectedTodo = {};
                     this.message = 'Todo deleted.';
                     this.showSuccess = true;
-                }).error(function () {
+                },function () {
                     this.message = 'Unable to delete todo.';
                     this.showError = true;
                 });
@@ -260,8 +260,8 @@
                 }
 
                 this.$http.get('todos' + params).then(function (response) {
-                    this.todos = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.todos = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 });
             }
         },

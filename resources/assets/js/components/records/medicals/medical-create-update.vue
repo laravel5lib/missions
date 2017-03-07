@@ -496,10 +496,10 @@
             // set user data
             this.user_id = this.$root.user.id;
             if (this.isUpdate) {
-                this.$http.get('medical/releases/' + this.id, { include: 'conditions,allergies,uploads'}).then(function (response) {
-                    // this.user = response.data.data;
-                    this.user_id = response.data.data.id;
-                    let medical_release = response.data.data;
+                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads'} }).then(function (response) {
+                    // this.user = response.body.data;
+                    this.user_id = response.body.data.id;
+                    let medical_release = response.body.data;
                     medical_release.uploads = medical_release.uploads.data;
                     this.upload_ids = _.pluck(medical_release.uploads, 'id');
                     this.uploadCounter = medical_release.uploads.length + 1;
@@ -508,7 +508,7 @@
                     this.$http('medical/conditions').then(function (response) {
                         // prepare conditions for UI
                         let med_conditions = medical_release.conditions.data;
-                        _.each(response.data.data, function (condition) {
+                        _.each(response.body.data, function (condition) {
                             let obj = { name: condition, medication: false, diagnosed: false, selected: false };
                             let match = _.find(med_conditions, function (c, i) {
                                 med_conditions[i].selected = true;
@@ -527,7 +527,7 @@
                     this.$http('medical/allergies').then(function (response) {
                     // prepare conditions for UI
                     let med_allergies = medical_release.allergies.data;
-                    _.each(response.data.data, function (allergy) {
+                    _.each(response.body.data, function (allergy) {
                         let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
                         let match = _.find(med_allergies, function (a, i) {
                             med_allergies[i].selected = true;
@@ -546,12 +546,12 @@
                 });
             } else {
                 this.$http('medical/conditions').then(function (response) {
-                    _.each(response.data.data, function (condition) {
+                    _.each(response.body.data, function (condition) {
                         this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
                     }.bind(this));
                 });
                 this.$http('medical/allergies').then(function (response) {
-                    _.each(response.data.data, function (allergy) {
+                    _.each(response.body.data, function (allergy) {
                         this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
                     }.bind(this));
                 });

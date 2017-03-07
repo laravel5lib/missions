@@ -212,8 +212,8 @@
                 }
 
                 this.$http.get('notes' + params).then(function (response) {
-                    this.notes = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.notes = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 });
             },
             save() {
@@ -230,7 +230,7 @@
                     this.fetch();
                     this.message = 'Note created successfully.';
                     this.showSuccess = true;
-                }).error(function () {
+                }, function () {
                     this.message = 'There are errors on the form.';
                     this.showError = true;
                 });
@@ -242,7 +242,7 @@
                     this.fetch();
                     this.message = 'Note saved successfully.';
                     this.showSuccess = true;
-                }).error(function () {
+                }, function () {
                     this.message = 'There are errors on the form.';
                     this.showError = true;
                 });
@@ -261,7 +261,7 @@
                     this.fetch();
                     this.message = 'Note deleted.';
                     this.showSuccess = true;
-                }).error(function () {
+                }, function () {
                     this.message = 'Unable to delete note.';
                     this.showError = true;
                 });

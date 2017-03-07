@@ -512,18 +512,18 @@
             },
             getDonors(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('donors', { search: search}).then(function (response) {
-                    this.donorsOptions = response.data.data;
+                this.$http.get('donors', { params: { search: search} }).then(function (response) {
+                    this.donorsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             searchTransactions(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', params).then(function (response) {
+                this.$http.get('transactions', { params: params }).then(function (response) {
                     let self = this;
-                    this.transactions = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.transactions = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

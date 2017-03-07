@@ -414,8 +414,8 @@
                         : null;
             },
             years() {
-                var currentYear = new moment().subtract(8, 'years').year(), years = [];
-                startYear = new moment().subtract(100, 'years').year();
+                let currentYear = new moment().subtract(8, 'years').year(), years = [];
+                let startYear = new moment().subtract(100, 'years').year();
 
                 while ( startYear <= currentYear ) {
                         years.push(startYear++);
@@ -450,10 +450,6 @@
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$UserSettings[field].invalid && this.attemptSubmit;
-            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -507,7 +503,7 @@
                             }
                         ]
                 }).then(function (response) {
-                        this.setUserData(response.data.data);
+                        this.setUserData(response.body.data);
                         this.$dispatch('showSuccess', 'Settings updated successfully.');
                         this.hasChanged = false;
                     }, function (error) {
@@ -567,16 +563,16 @@
         },
         ready(){
             let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
+                this.timezones = response.body.timezones;
             });
 
             Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get().then(function (response) {
-                    this.setUserData(response.data.data)
+                    this.setUserData(response.body.data)
                 }, function (response) {
                     console.log('Update Failed! :(');
                     console.log(response);

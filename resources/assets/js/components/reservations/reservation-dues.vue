@@ -80,7 +80,7 @@
         },
         ready(){
             /*this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data)
+                this.setReservationData(response.body.data)
             });*/
 
             //Listen to Event Bus

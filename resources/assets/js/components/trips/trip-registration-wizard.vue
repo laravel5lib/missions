@@ -234,7 +234,7 @@
 //					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
-					window.location.href = '/dashboard/reservations/' + response.data.data.id;
+					window.location.href = '/dashboard/reservations/' + response.body.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
 					console.log(response);

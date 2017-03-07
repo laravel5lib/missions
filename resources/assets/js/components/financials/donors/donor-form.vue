@@ -167,24 +167,24 @@
             },
             fetch() {
                 this.$http.get('donors/' + this.donorId).then(function (response) {
-                    this.donor.name = response.data.data.name;
-                    this.donor.company = response.data.data.company;
-                    this.donor.email = response.data.data.email;
-                    this.donor.phone = response.data.data.phone;
-                    this.donor.address = response.data.data.address;
-                    this.donor.city = response.data.data.city;
-                    this.donor.state = response.data.data.state;
-                    this.donor.zip = response.data.data.zip;
-                    this.donor.country_code = response.data.data.country.code;
-                    this.countryCodeObj = response.data.data.country;
-                    this.donor.account_type = response.data.data.account_type;
-                    this.donor.account_id = response.data.data.account_id;
-                    this.donor.customer_id = response.data.data.customer_id;
+                    this.donor.name = response.body.data.name;
+                    this.donor.company = response.body.data.company;
+                    this.donor.email = response.body.data.email;
+                    this.donor.phone = response.body.data.phone;
+                    this.donor.address = response.body.data.address;
+                    this.donor.city = response.body.data.city;
+                    this.donor.state = response.body.data.state;
+                    this.donor.zip = response.body.data.zip;
+                    this.donor.country_code = response.body.data.country.code;
+                    this.countryCodeObj = response.body.data.country;
+                    this.donor.account_type = response.body.data.account_type;
+                    this.donor.account_id = response.body.data.account_id;
+                    this.donor.customer_id = response.body.data.customer_id;
 
                     if(this.donor.account_type == 'users') {
-                        this.userObj = {'id': response.data.data.account_id, 'name': response.data.data.account_name}
+                        this.userObj = {'id': response.body.data.account_id, 'name': response.body.data.account_name}
                     } else {
-                        this.groupObj = {'id': response.data.data.account_id, 'name': response.data.data.account_name}
+                        this.groupObj = {'id': response.body.data.account_id, 'name': response.body.data.account_name}
                     }
 
                 });
@@ -200,8 +200,8 @@
                 this.$http.post('donors', this.donor).then(function (response) {
                     this.$refs.donorspinner.hide();
                     this.$dispatch('showSuccess', 'Donor created successfully.');
-                    this.$dispatch('donor-created', response.data.data.id);
-                }).error(function (response) {
+                    this.$dispatch('donor-created', response.body.data.id);
+                },function (response) {
                     this.$refs.donorspinner.hide();
                     this.$dispatch('showError', 'There are errors on the form');
                 });
@@ -212,7 +212,7 @@
                 this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
                     this.$dispatch('showSuccess', 'Donor updated successfully.');
                     // this.$refs.spinner.hide();
-                }).error(function (response) {
+                },function (response) {
                     if(_.contains(_.keys(response.errors), 'account_id')) {
                         this.accountError = true;
                     }
@@ -234,21 +234,21 @@
             getCountries() {
                 // this.$refs.spinner.show();
                 this.$http.get('utilities/countries').then(function (response) {
-                    this.countries = response.data.countries;
+                    this.countries = response.body.countries;
                     // this.$refs.spinner.hide();
                 });
             },
             getUsers(search) {
                 // this.$refs.spinner.show();
-                this.$http.get('users?per_page=10', {search: search}).then(function (response) {
-                    this.users = response.data.data;
+                this.$http.get('users?per_page=10', { params: {search: search} }).then(function (response) {
+                    this.users = response.body.data;
                     // this.$refs.spinner.hide();
                 });
             },
             getGroups(search) {
                 // this.$refs.spinner.show();
-                this.$http.get('groups?per_page=10', {search: search}).then(function (response) {
-                    this.groups = response.data.data;
+                this.$http.get('groups?per_page=10', { params: {search: search} }).then(function (response) {
+                    this.groups = response.body.data;
                     // this.$refs.spinner.hide();
                 });
             }

@@ -252,7 +252,7 @@
                 console.log(this);
                 // this.$refs.spinner.show();
                 this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then(function (response) {
-                    this.fundraiser = response.data.data;
+                    this.fundraiser = response.body.data;
                     this.initVideoPlayers();
                     // this.$refs.spinner.hide();
                 });
@@ -297,8 +297,8 @@
         },
         ready(){
             // this.$refs.spinner.show();
-            this.$http.get('fundraisers/' + this.id, { include: 'uploads'}).then(function (response) {
-                this.fundraiser = response.data.data;
+            this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then(function (response) {
+                this.fundraiser = response.body.data;
                 this.initVideoPlayers();
                 // this.$refs.spinner.hide();
             }, function (error) {

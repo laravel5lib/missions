@@ -116,8 +116,8 @@
 			},*/
 			getUsers: function getUsers(search, loading) {
 				loading(true);
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.users = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.users = response.body.data;
 					loading(false);
 				});
 			},
@@ -144,7 +144,7 @@
 				this.trip.difficulty = this.trip.difficulty.split(' ').join('_');
 				// Update Trip
 				this.resource.update({id: this.tripId}, this.trip).then(function (response) {
-					this.trip = response.data.data;
+					this.trip = response.body.data;
 					this.facilitators = this.trip.facilitators.data;
 
 					this.user_id = null;
@@ -159,9 +159,9 @@
 		},
 		ready: function ready() {
 			this.resource.get({id: this.tripId}).then(function (response) {
-				this.trip = response.data.data;
+				this.trip = response.body.data;
 				this.facilitators = this.trip.facilitators.data;
-				//                $.extend(this.$data, response.data.data);
+				//                $.extend(this.$data, response.body.data);
 			}, function (response) {
 				console.log('Update Failed! :(');
 				console.log(response);

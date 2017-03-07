@@ -363,7 +363,7 @@
 
 				if (this.isUpdate) {
 					this.resource.get({id: this.uploadId}).then(function (response) {
-						let upload = response.data.data;
+						let upload = response.body.data;
 						this.name = upload.name;
 						this.tags = upload.tags;
 						this.type = upload.type;
@@ -473,11 +473,11 @@
 			handleSuccess(response){
 				if(this.isChild) {
 					// send data to parent componant
-					this.$dispatch('uploads-complete', response.data.data);
+					this.$dispatch('uploads-complete', response.body.data);
 
 				} else {
 					window.location.href = '/admin/uploads';
-					// window.location.href = '/admin' + response.data.data.links[0].uri;
+					// window.location.href = '/admin' + response.body.data.links[0].uri;
 				}
 			},
 			handleImage(e){
@@ -521,9 +521,9 @@
 					tags: this.tags
 				};
 
-				this.$http.get('uploads', params).then(function (response) {
-					this.uploads = response.data.data;
-					this.pagination = response.data.meta.pagination;
+				this.$http.get('uploads', { params: params }).then(function (response) {
+					this.uploads = response.body.data;
+					this.pagination = response.body.meta.pagination;
 				})
 			},
 			selectExisting(upload){
@@ -542,7 +542,7 @@
 		ready(){
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
-					let upload = response.data.data;
+					let upload = response.body.data;
 					this.name = upload.name;
 					this.tags = upload.tags;
 					this.type = upload.type;

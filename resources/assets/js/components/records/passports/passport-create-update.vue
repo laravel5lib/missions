@@ -36,7 +36,7 @@
                         <div class="col-lg-6">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
-                                <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <date-picker class="form-control input-sms" :time.sync="expires_at" :option="{ type: 'day', format: 'YYYY-MM-DD' }"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
                             </div>
@@ -243,14 +243,14 @@
         ready(){
             // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.passportResource.get({ id: this.id }).then(function (response) {
-                    let passport = response.data.data;
+                    let passport = response.body.data;
                     $.extend(this, passport);
 
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});

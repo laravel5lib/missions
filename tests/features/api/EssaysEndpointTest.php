@@ -11,7 +11,11 @@ class EssaysEndpointTest extends TestCase
      */
     public function returns_essays()
     {
-        $essays = factory(Essay::class, 2)->create();
+        $essays = factory(Essay::class, 2)->create([
+                'user_id' => function () {
+                    return factory(User::class)->create()->id;
+                }
+            ]);
 
         $this->get('/api/essays')
             ->assertResponseOk()

@@ -137,7 +137,7 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <div v-error-handler="{ value: user_id, client: 'user', server; 'user_id' }">
+                    <div v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }">
                         <label for="manager">Managing User</label>
                         <v-select class="form-control" :value.sync="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div v-error-handler="{ value: companion_limit, client: 'companions', server; 'companion_limit' }">
+                    <div v-error-handler="{ value: companion_limit, client: 'companions', server: 'companion_limit' }">
                         <label for="companions">Companions</label>
                         <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
@@ -198,7 +198,7 @@
                 gender: '',
                 birthday: '',
                 shirt_size: '',
-                user_id: null,
+//                user_id: null,
                 desired_role: '',
                 status: '',
                 companion_limit: 0,

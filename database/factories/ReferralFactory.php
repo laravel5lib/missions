@@ -6,10 +6,12 @@
 $factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker)
 {
     return [
-        'applicant_name' => $faker->firstName,
+        'user_id' => $faker->uuid,
+        'applicant_name' => $faker->firstName. ' '. $faker->lastName,
         'type' => 'pastoral',
         'attention_to' => $faker->name,
         'recipient_email' => $faker->email,
+        'sent_at' => $faker->dateTimeThisYear(),
         'referrer' => [
             'title' => $faker->title,
             'name' => $faker->name,

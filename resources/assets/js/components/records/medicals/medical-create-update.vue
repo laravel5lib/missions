@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no' }">
-                                <label for="ins_policy_no" class=control-label">Insurance Policy Number</label>
+                                <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
                                 <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
                                        placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
                                        maxlength="100" minlength="1" required>
@@ -213,9 +213,9 @@
                             <h5>Start Here</h5>
                             <p>You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong> as certain conditions may be treated by different doctors.</p>
                             <p>
-                                <button class="btn btn-primary btn-md">
+                                <a class="btn btn-primary btn-md" href="/downloads/medication_condition_form2017.pdf" target="_blank">
                                     <i class="fa fa-file-pdf-o icon-left"></i> Download Permission Form
-                                </button>
+                                </a>
                             </p>
                         </div>
                         <div class="col-sm-6">
@@ -285,17 +285,6 @@
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
             </div>
         </modal>
-
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Good job!</strong>
-            <p>Medical Release updated</p>
-        </alert>
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>There are errors on the form.</p>
-        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -446,11 +435,13 @@
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        window.location.href = '/dashboard/records/medical-releases';
+                        this.$dispatch('showSuccess', 'Medical Release created.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/medical-releases/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showError', 'Unable to create medical release.');
                     });
                 } else {
                     this.showError = true;
@@ -471,12 +462,14 @@
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.showSuccess = true;
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showSuccess', 'Changes saved.');
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/medical-releases/' + that.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        // this.$refs.spinner.hide();
-                        console.log(error);
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },

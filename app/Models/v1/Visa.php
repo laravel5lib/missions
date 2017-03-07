@@ -101,18 +101,7 @@ class Visa extends Model
      */
     public function setGivenNamesAttribute($value)
     {
-        $this->attributes['given_names'] = trim(strtolower($value));
-    }
-
-    /**
-     * Get the visa's given names.
-     *
-     * @param $value
-     * @return string
-     */
-    public function getGivenNamesAttribute($value)
-    {
-        return ucwords($value);
+        $this->attributes['given_names'] = trim($value);
     }
 
     /**
@@ -122,18 +111,7 @@ class Visa extends Model
      */
     public function setSurnameAttribute($value)
     {
-        $this->attributes['surname'] = trim(strtolower($value));
-    }
-
-    /**
-     * Get the visa's surname.
-     *
-     * @param $value
-     * @return string
-     */
-    public function getSurnameAttribute($value)
-    {
-        return ucwords($value);
+        $this->attributes['surname'] = trim($value);
     }
 
     /**

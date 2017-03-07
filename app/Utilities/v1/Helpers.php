@@ -45,6 +45,11 @@ function image($source)
     return url('api/'.$source);
 }
 
+function display_file($source)
+{
+    return url('api/files/'.$source);
+}
+
 function generateFundName($data)
 {
     if ($data instanceof Reservation) {

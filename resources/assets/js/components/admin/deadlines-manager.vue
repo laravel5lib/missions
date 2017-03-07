@@ -185,7 +185,7 @@
                 if(this.$TripDeadlinesCreate.valid) {
                     // this.$refs.spinner.show();
                     this.resource.save({}, this.newDeadline).then(function (response) {
-                        this.deadlines.push(response.data.data);
+                        this.deadlines.push(response.body.data);
                         this.resetDeadline();
                         this.attemptedAddDeadline = false;
                         this.showAddModal = false;
@@ -228,7 +228,7 @@
                     search: this.search,
                     sort: this.sort + '|' + this.direction,
                 }).then(function (response) {
-                    this.deadlines = response.data.data;
+                    this.deadlines = response.body.data;
                     this.$refs.spinner.hide()
                 });
             },

@@ -174,9 +174,9 @@
                     //sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
                 };
 
-                this.$http.get('reservations/' + this.id + '/requirements', params).then(function (response) {
-                    this.requirements = response.data.data
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('reservations/' + this.id + '/requirements', { params: params }).then(function (response) {
+                    this.requirements = response.body.data
+                    this.pagination = response.body.meta.pagination;
                 });
             },
             edit(requirement) {
@@ -188,7 +188,7 @@
                     status: this.editedRequirement.status,
                     grace_period: this.editedRequirement.grace_period
                 }).then(function (response) {
-                    this.$emit('set-status', response.data.data);
+                    this.$emit('set-status', response.body.data);
                     this.$dispatch('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });

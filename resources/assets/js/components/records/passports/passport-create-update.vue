@@ -256,14 +256,14 @@
         ready(){
             // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.passportResource.get({ id: this.id }).then(function (response) {
-                    let passport = response.data.data;
+                    let passport = response.body.data;
                     $.extend(this, passport);
 
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});

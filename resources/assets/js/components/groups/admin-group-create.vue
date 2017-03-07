@@ -169,8 +169,8 @@
             'name': function (val) {
                 if (typeof val === 'string') {
                     // pre-populate slug
-                    this.$http.get('utilities/make-slug{/string}', { string: val, hideLoader: true }).then(function (response) {
-                        this.url = response.data.slug;
+                    this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then(function (response) {
+                        this.url = response.body.slug;
                     });
                 }
             }
@@ -227,11 +227,11 @@
         ready(){
             // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
+                this.timezones = response.body.timezones;
                 // this.$refs.spinner.hide();
             });
             //TODO use promises defers here

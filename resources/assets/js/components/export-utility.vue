@@ -104,7 +104,7 @@
                 $.extend(params, this.exportSettings);
 
                 this.$http.post(this.url, params).then(function (response) {
-                    this.$dispatch('showSuccess', response.data.message);
+                    this.$dispatch('showSuccess', response.body.message);
                 }, function (error) {
                     this.$dispatch('showError', 'Unable to export the list.');
                 })

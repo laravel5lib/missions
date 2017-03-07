@@ -192,7 +192,7 @@
 				this.causeResource
 						.get(null)
 						.then(function (response) {
-							this.causes = response.data.data;
+							this.causes = response.body.data;
 						}, function (error) {
 							console.log(error);
 						});
@@ -201,7 +201,7 @@
 				this.intiativeResource
 						.get({causeId: this.causeId})
 						.then(function (response) {
-							this.initiatives = response.data.data;
+							this.initiatives = response.body.data;
 						}, function (error) {
 							console.log(error);
 						});
@@ -245,7 +245,7 @@
 		ready(){
 			// Get Countries
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			}, function (error) {
 				console.log(error);
 			});

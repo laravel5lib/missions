@@ -39,8 +39,8 @@
         methods: {
             fetch() {
                 this.$http.get('referrals/' + this.id).then(function (response) {
-                    this.referral = response.data.data;
-                }).error(function () {
+                    this.referral = response.body.data;
+                },function () {
                     this.$dispatch('showError', 'Unable to retrieve the referral request!')
                 });
             },
@@ -59,7 +59,7 @@
                         self.referral.responded_at = moment().format('YYYY-MM-DD HH:MM:SS');
                         self.$http.put('referrals/' + self.id, self.referral).then(function (response) {
                             self.$dispatch('showSuccess', 'Thank you for submitting your response.');
-                        }).error(function () {
+                        },function () {
                             self.$dispatch('showError', 'Unable to retrieve the referral request!');
                         });
                     }

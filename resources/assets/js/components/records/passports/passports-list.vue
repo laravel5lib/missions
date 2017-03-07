@@ -100,7 +100,7 @@
         </div>
         </div>
 
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchPassports"></pagination>
 
         </div>
@@ -217,9 +217,9 @@
                     params.manager = this.userId;
                 this.exportFilters = params;
                 $.extend(params, this.filters);
-                this.$http.get('passports', params).then(function (response) {
-                    this.passports = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('passports', { params: params }).then(function (response) {
+                    this.passports = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     this.loaded = true;
                 });
             }

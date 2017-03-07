@@ -324,12 +324,12 @@
 		created(){
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			});
 
 			// get campaign data
 			this.resource.get({id: this.campaignId}).then(function(response) {
-				let campaign = response.data.data;
+				let campaign = response.body.data;
 				this.name = campaign.name;
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;

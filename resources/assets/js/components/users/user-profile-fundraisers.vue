@@ -109,20 +109,20 @@
 			}
 		},
 		ready(){
-			this.$http.get('fundraisers?active=true', {
+			this.$http.get('fundraisers?active=true', { params: {
 				sponsorId: this.id,
 				sponsorType: 'user',
 				per_page: 100
-			}).then(function (response) {
-				this.fundraisers = response.data.data;
+			}}).then(function (response) {
+				this.fundraisers = response.body.data;
 			});
 
-			this.$http.get('fundraisers?archived=true', {
+			this.$http.get('fundraisers?archived=true', { params: {
 				sponsorId: this.id,
 				sponsorType: 'user',
 				per_page: 100
-			}).then(function (response) {
-				this.oldFundraisers = response.data.data;
+			}}).then(function (response) {
+				this.oldFundraisers = response.body.data;
 			})
 		}
 

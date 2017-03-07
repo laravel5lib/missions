@@ -24,11 +24,11 @@
 			</form>
 			<hr class="divider sm inv">
 		</div>
-		<div class="col-sm-12" v-if="loaded && !medical_releases.length">
+		<div class="col-xs-12" v-if="loaded && !medical_releases.length">
 			<p class="text-center text-muted" role="alert"><em>Add and manage your medical records here!</em></p>
 		</div>
 
-		<div class="col-sm-6 col-md-4" v-for="medical_release in medical_releases">
+		<div class="col-xs-12 col-sm-6 col-md-4" v-for="medical_release in medical_releases">
 			<div class="panel panel-default">
 				<div class="panel-body">
 					<a role="button" :href="'/'+ firstUrlSegment +'/records/medical-releases/' + medical_release.id">
@@ -61,7 +61,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 text-center">
+		<div class="col-xs-12 text-center">
 			<pagination :pagination.sync="pagination" :callback="searchMedicals"></pagination>
 
 		</div>
@@ -165,9 +165,9 @@
 					params.manager = this.userId;
 					params.include = 'conditions,allergies,uploads';
 				$.extend(params, this.filters);
-				this.$http.get('medical/releases', params).then(function (response) {
-					this.medical_releases = response.data.data;
-					this.pagination = response.data.meta.pagination;
+				this.$http.get('medical/releases', { params: params }).then(function (response) {
+					this.medical_releases = response.body.data;
+					this.pagination = response.body.meta.pagination;
 					this.loaded = true;
 				});
 			},

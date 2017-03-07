@@ -325,19 +325,19 @@
                 $('#fundInfo').modal('toggle')
             },
             getFunds(search) {
-                this.$http.get('funds?per_page=10', {search: search}).then(function (response) {
-                    this.funds = response.data.data;
+                this.$http.get('funds?per_page=10', { params: {search: search} }).then(function (response) {
+                    this.funds = response.body.data;
                 });
             },
             getDonors(search) {
-                this.$http.get('donors?per_page=10', {search: search}).then(function (response) {
-                    this.donors = response.data.data;
+                this.$http.get('donors?per_page=10', { params: {search: search} }).then(function (response) {
+                    this.donors = response.body.data;
                 });
             },
             donorCreated(donor) {
                 $('#newDonor').modal('hide');
                 this.$http.get('donors/' + donor).then(function (response) {
-                    this.selectedDonor = response.data.data;
+                    this.selectedDonor = response.body.data;
                 });
             },
             reset() {
@@ -369,9 +369,9 @@
             fetch() {
                 this.$refs.transactionspinner.show();
 
-                this.$http.get('transactions/' + this.id, {include: 'donor,fund'}).then(function (response) {
+                this.$http.get('transactions/' + this.id, { params: {include: 'donor,fund'} }).then(function (response) {
                     this.$refs.transactionspinner.hide();
-                    this.transaction = response.data.data;
+                    this.transaction = response.body.data;
                     this.designatedFund = this.transaction.fund.data;
 
                     if (this.transaction.type == 'transfer') {
@@ -389,7 +389,7 @@
                         }
                     }
 
-                }).error(function (response) {
+                },function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'Unable to retrieve transaction.');
                 });
@@ -403,7 +403,7 @@
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
                     this.$dispatch('transactionCreated');
-                }).error(function (response) {
+                },function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });
@@ -416,7 +416,7 @@
                 this.$http.put('transactions/' + this.id, data).then(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction updated successfully.');
-                }).error(function (response) {
+                },function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });

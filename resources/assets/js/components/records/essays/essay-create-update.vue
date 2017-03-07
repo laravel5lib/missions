@@ -159,9 +159,9 @@
             if (this.isUpdate) {
                 // this.$refs.spinner.show();
                 this.$http('essays/' + this.id).then(function (response) {
-                // this.user = response.data.data;
+                // this.user = response.body.data;
 
-                    let essay = response.data.data;
+                    let essay = response.body.data;
                     this.author_name = essay.author_name;
                     this.subject = essay.subject;
                     this.content = essay.content;

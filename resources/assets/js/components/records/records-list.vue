@@ -81,8 +81,8 @@
         ready(){
             // this.$refs.spinner.show();
             this.$http('users/me?include=passports,visas').then(function (response) {
-                this.visas = response.data.data.visas.data;
-                this.passports = response.data.data.passports.data;
+                this.visas = response.body.data.visas.data;
+                this.passports = response.body.data.passports.data;
                 this.loaded = true;
                 // this.$refs.spinner.hide();
             });

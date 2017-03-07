@@ -303,15 +303,21 @@
 				<a v-if="currentState === 'reset' || currentState === 'create'"
 				  @click="currentState='login'">I Have An Account</a>
 			</p>
-			<p class="text-center"><a v-if="currentState === 'login' || currentState === 'reset'"
-									  @click="currentState='create'">Create A New Account</a></p>
+			<p class="text-center">
+				<a v-if="currentState === 'login' || currentState === 'reset'" @click="currentState='create'">
+					Create A New Account
+				</a>
+			</p>
 		</div>
 	</div><!-- end panel-body -->
 </template>
 
 <script type="text/javascript">
+	import $ from 'jquery';
+	import moment from 'moment';
+	import timezone from 'moment-timezone';
 	import vSelect from "vue-select";
-	module.exports = {
+    module.exports = {
 		name: 'login',
 		components: {vSelect},
 		data: function () {
@@ -379,15 +385,14 @@
 				if (this.$LoginForm.valid) {
 					that.$http.post('/login', this.user)
 						.then(function (response) {
-							console.log();
 							// set cookie - name, token
-							this.$cookie.set('api_token', response.data.token);
+							this.$cookie.set('api_token', response.body.token);
 							// reload to set cookie
 							/*if (this.isChildComponent) {
 							 window.location.reload();
 							 }*/
-							if (response.data.redirect_to)
-								that.getUserData(response.data.redirect_to);
+							if (response.body.redirect_to)
+								that.getUserData(response.body.redirect_to, response.body.ignore_redirect || false);
 						},
 						function (response) {
 							that.messages = [];
@@ -415,16 +420,14 @@
 
 			getUserData: function (redirectTo, ignoreRedirect) {
 				let that = this;
-				let deferred = $.Deferred();
-				that.$http.get('users/me?include=roles,abilities')
+				return that.$http.get('users/me?include=roles,abilities')
 					.then(function (response) {
-						console.log(response.data.data);
-						that.$root.$emit('userHasLoggedIn', response.data.data);
-						// that.$dispatch('userHasLoggedIn', response.data.data);
+						that.$root.$emit('userHasLoggedIn', response.body.data);
+						// that.$dispatch('userHasLoggedIn', response.body.data);
 
 						if (that.isChildComponent || ignoreRedirect) {
-							that.userData = response.data.data;
-							deferred.resolve(response.data.data);
+							that.userData = response.body.data;
+							 return response.body.data;
 						} else {
 							location.href = redirectTo;
 						}
@@ -432,9 +435,8 @@
 					},
 					function (response) {
 						console.log(response);
-						deferred.resolve(response.data.data);
+						return response.body.data;
 					});
-				return deferred.promise();
 			},
 
 			registerUser: function (e) {
@@ -446,18 +448,18 @@
 				this.attemptRegister = true;
 
 				this.$http.post('/register', this.newUser).then(function (response) {
-					// console.log(response.data.token);
+					// console.log(response.body.token);
 					// set cookie - name, token
-					this.$cookie.set('api_token', response.data.token);
+					this.$cookie.set('api_token', response.body.token);
 					// reload to set cookie
 					/*if (this.isChildComponent) {
 					 window.location.reload();
 					 }*/
-					this.getUserData(response.data.redirect_to);
+					this.getUserData(response.body.redirect_to);
 				}, function (response) {
 					// console.log(response);
 					let messages = [];
-					this.registerErrors = response.data;
+					this.registerErrors = response.body;
 					_.each(this.registerErrors, function (error) {
 						messages.push({
 							type: 'danger',
@@ -487,11 +489,11 @@
 			}
 
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			});
 
 			this.$http.get('utilities/timezones').then(function (response) {
-				this.timezones = response.data.timezones;
+				this.timezones = response.body.timezones;
 			});
 
 			if (this.isChildComponent) {

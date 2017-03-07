@@ -26,10 +26,9 @@
             <hr class="divider sm inv">
         </div>
 
-        <div class="col-sm-12" v-if="loaded && !visas.length">
+        <div class="col-xs-12" v-if="loaded && !visas.length">
             <div role="alert"><p class="text-center text-muted"><em>Add and manage your visas here!</em></p></div>
         </div>
-
         <div class="col-sm-12" style="display:flex; flex-wrap: wrap;">
         <div class="col-xs-12 col-sm-6 col-md-4" v-for="visa in visas" style="display:flex; flex-direction:column;">
             <div class="panel panel-default">
@@ -49,40 +48,46 @@
                             <label>ID</label>
                             <p class="small">{{visa.number}}</p>
                         </div>
-                        <div class="col-xs-6 text-right">
-                            <span class="label label-primary" v-if="visa.expired">
-                                <i class="fa fa-exclamation-triangle"></i> Expired
-                            </span>
+                        <hr class="divider">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label>ID</label>
+                                <p class="small">{{visa.number}}</p>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <span class="label label-primary" v-if="visa.expired">
+                                    <i class="fa fa-exclamation-triangle"></i> Expired
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <label>COUNTRY</label>
-                            <p class="small">{{visa.country_name}}</p>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label>COUNTRY</label>
+                                <p class="small">{{visa.country_name}}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label>ISSUED ON</label>
-                            <p class="small">{{visa.issued_at|moment 'll'}}</p>
-                        </div><!-- end col -->
-                        <div class="col-sm-6">
-                            <label>EXPIRES ON</label>
-                            <p class="small">{{visa.expires_at|moment 'll'}}</p>
-                        </div><!-- end col -->
-                    </div><!-- end row -->
-                </div><!-- end panel-body -->
-                <div class="panel-footer" style="padding: 0;" v-if="selector">
-                    <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
-                        <a class="btn btn-danger" @click="setVisa(visa)">
-                            Select
-                        </a>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>ISSUED ON</label>
+                                <p class="small">{{visa.issued_at|moment 'll'}}</p>
+                            </div><!-- end col -->
+                            <div class="col-sm-6">
+                                <label>EXPIRES ON</label>
+                                <p class="small">{{visa.expires_at|moment 'll'}}</p>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                    </div><!-- end panel-body -->
+                    <div class="panel-footer" style="padding: 0;" v-if="selector">
+                        <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
+                            <a class="btn btn-danger" @click="setVisa(visa)">
+                                Select
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchVisas"></pagination>
 
         </div>
@@ -182,9 +187,9 @@
                     params.manager = this.userId;
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('visas', params).then(function (response) {
-                    this.visas = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('visas', { params: params }).then(function (response) {
+                    this.visas = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });

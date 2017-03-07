@@ -100,8 +100,8 @@
 				});
 				// this.$refs.spinner.show();
 				resource.query().then(function (response) {
-					this.pagination = response.data.meta.pagination;
-					this.trips = response.data.data;
+					this.pagination = response.body.meta.pagination;
+					this.trips = response.body.data;
 
 					let cId = this.campaignId, calcLowest = this.calcStartingCost;
 					_.each(this.trips, function (trip, index, list) {
@@ -133,7 +133,7 @@
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
 			this.$http.get('groups/' + this.id).then(function (response) {
-				this.group = response.data.data;
+				this.group = response.body.data;
 			});
 			this.getTrips();
 			done();

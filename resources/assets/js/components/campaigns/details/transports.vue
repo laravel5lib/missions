@@ -31,7 +31,7 @@
             // this.$refs.spinner.show();
             let resource = this.$resource('transports', {'campaign_id': this.$parent.campaignId});
             resource.get().then(function(response) {
-                this.transports = response.data.data;
+                this.transports = response.body.data;
                 // this.$refs.spinner.hide();
             });
             done();

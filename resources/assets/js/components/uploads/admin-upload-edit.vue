@@ -258,7 +258,7 @@
         },
         ready(){
             this.resource.get({id:this.uploadId}).then(function (response) {
-                var upload = response.data.data;
+                var upload = response.body.data;
                 this.name = upload.name;
                 this.tags = upload.tags;
                 this.type = upload.type;

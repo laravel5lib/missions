@@ -84,7 +84,7 @@
 			// get campaign data
 			let resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
 			resource.get({id: this.campaignId}).then(function(response) {
-				this.campaign = response.data.data;
+				this.campaign = response.body.data;
 				// this.$refs.spinner.hide();
 			});
 		},

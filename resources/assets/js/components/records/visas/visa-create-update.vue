@@ -246,14 +246,14 @@
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.visasResource.get({ id: this.id }).then(function (response) {
-                    let visa = response.data.data;
+                    let visa = response.body.data;
                     $.extend(this, visa);
                     this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
                 });

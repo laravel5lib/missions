@@ -210,9 +210,9 @@
 				};
 
 				$.extend(params, this.filters);
-                this.$http.get('uploads', params).then(function (response) {
-                    this.uploads = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('uploads', { params: params }).then(function (response) {
+                    this.uploads = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 })
             },
         },

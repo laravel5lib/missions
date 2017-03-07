@@ -127,14 +127,14 @@
 				}).then(function(response) {
 					this.showSuccess = true;
 					this.$root.$emit('showSuccess', 'Countries Visited Updated!');
-					this.accolades = response.data.data;
+					this.accolades = response.body.data;
                     this.selectedCountries = [];
                     this.filterAccolades();
 				});
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'countries_visited'}).then(function (response) {
-                    this.accolades = response.data.data[0] || { items: [] };
+                    this.accolades = response.body.data[0] || { items: [] };
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
@@ -150,7 +150,7 @@
 			},
             searchCountries() {
 				return this.$http.get('utilities/countries').then(function(response) {
-					this.countries = response.data.countries;
+					this.countries = response.body.countries;
 				});
             }
         },

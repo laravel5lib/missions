@@ -247,7 +247,7 @@
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.successMessage = 'Costs updated Successfully';
@@ -286,14 +286,14 @@
             revert(){
                 this.temporaryCosts = [];
                 this.resource.get().then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                 });
             },
         },
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data);
+                this.setReservationData(response.body.data);
                 // this.$refs.spinner.hide();
             });
         }

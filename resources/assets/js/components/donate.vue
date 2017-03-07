@@ -600,12 +600,12 @@
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then(function (response) {
-                    this.donor = response.data.data.name;
-                    this.donor_id = response.data.data.donor_id || null;
-                    this.cardHolderName = response.data.data.name;
-                    this.cardEmail = response.data.data.email;
-                    this.cardPhone = response.data.data.phone_one;
-                    this.cardZip = response.data.data.zip
+                    this.donor = response.body.data.name;
+                    this.donor_id = response.body.data.donor_id || null;
+                    this.cardHolderName = response.body.data.name;
+                    this.cardEmail = response.body.data.email;
+                    this.cardPhone = response.body.data.phone_one;
+                    this.cardZip = response.body.data.zip
                 });
             }
 

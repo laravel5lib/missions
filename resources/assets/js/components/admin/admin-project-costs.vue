@@ -251,7 +251,7 @@
 
                 // this.$refs.spinner.show();
                 this.$http.put('initiatives/' + initiative.id, initiative).then(function (response) {
-                    let thisInitiative = response.data.data;
+                    let thisInitiative = response.body.data;
                     this.selectedcosts = new Array(this.newDeadline);
 
                     return this.addCosts();
@@ -267,9 +267,9 @@
 
                 // this.$refs.spinner.show();
                 return this.resource.update(project).then(function (response) {
-                    this.setProjectData(response.data.data);
+                    this.setProjectData(response.body.data);
                     this.selectedCosts = [];
-                    this.$root.$emit('AdminProject:CostsUpdated', response.data.data);
+                    this.$root.$emit('AdminProject:CostsUpdated', response.body.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
@@ -295,7 +295,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setProjectData(response.data.data);
+                this.setProjectData(response.body.data);
                 // this.$refs.spinner.hide();
             });
 

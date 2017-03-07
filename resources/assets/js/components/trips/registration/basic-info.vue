@@ -386,8 +386,8 @@
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { search: search}).then(function (response) {
-					this.usersArr = response.data.data;
+				this.$http.get('users', { params: { search: search} }).then(function (response) {
+					this.usersArr = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
@@ -444,12 +444,12 @@
 			}
 
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 				this.toggleUserData();
 			});
 
 			this.$http.get('utilities/team-roles').then(function (response) {
-				_.each(response.data.roles, function (name, key) {
+				_.each(response.body.roles, function (name, key) {
 				    if (_.contains(this.$parent.trip.team_roles, key))
 						this.roles.push({ value: key, name: name});
 				}.bind(this));

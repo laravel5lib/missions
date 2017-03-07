@@ -235,7 +235,7 @@
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
-                    this.setProjectData(response.data.data);
+                    this.setProjectData(response.body.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.$dispatch('showSuccess', 'Costs updated successfully.');
@@ -271,14 +271,14 @@
             revert(){
                 this.temporaryCosts = [];
                 this.resource.get().then(function (response) {
-                    this.setProjectData(response.data.data);
+                    this.setProjectData(response.body.data);
                 });
             },
         },
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setProjectData(response.data.data);
+                this.setProjectData(response.body.data);
                 // this.$refs.spinner.hide();
             });
         }

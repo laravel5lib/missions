@@ -231,7 +231,7 @@
 
                 // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    let thisTrip = response.data.data;
+                    let thisTrip = response.body.data;
                     this.selecteddues = new Array(this.newDeadline);
                     // this.$refs.spinner.hide();
                     return this.adddues();
@@ -246,7 +246,7 @@
             /*doUpdate(reservation){
                 // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
@@ -274,8 +274,8 @@
             }*/
             getDues(){
                 this.resource.get({ page: this.pagination.current_page }).then(function (response) {
-                    this.dues = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.dues = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 });
             }
         },

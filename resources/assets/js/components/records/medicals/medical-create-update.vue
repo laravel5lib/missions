@@ -227,7 +227,7 @@
                                     <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
                                 </li>
                             </ul>
-                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :name="'medical-release-'+ today + '-' + uploadCounter"></upload-create-update>
+                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="true" :name="'medical-release-'+ today + '-' + uploadCounter"></upload-create-update>
                         </div>
                     </div>
                 </div>

@@ -43,7 +43,7 @@
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
 			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
-				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked">
+				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
@@ -196,6 +196,10 @@
 				default: 0
 			},
 			uiLocked: {
+				type: Boolean,
+				default: false
+			},
+            allowName: {
 				type: Boolean,
 				default: false
 			},
@@ -443,6 +447,10 @@
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
 						};
+
+						if(this.allowName) {
+						    params.name = this.name + '_' + moment().unix();
+						}
 					}
 
                     this.resource.save(null, params).then(function (resp) {

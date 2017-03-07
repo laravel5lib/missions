@@ -213,9 +213,9 @@
                             <h5>Start Here</h5>
                             <p>You have indicated that you have one or more medical conditions or allergies. In order to be cleared for travel, you must download the form below and have it complete by your doctor.  You will need to supply <strong>one form per condition or allergy</strong> as certain conditions may be treated by different doctors.</p>
                             <p>
-                                <button class="btn btn-primary btn-md">
+                                <a class="btn btn-primary btn-md" href="/downloads/medication_condition_form2017.pdf" target="_blank">
                                     <i class="fa fa-file-pdf-o icon-left"></i> Download Permission Form
-                                </button>
+                                </a>
                             </p>
                         </div>
                         <div class="col-sm-6">

@@ -44,11 +44,6 @@
                     </div>
                     <hr class="divider">
                     <div class="row">
-                        <div class="col-xs-6">
-                            <label>ID</label>
-                            <p class="small">{{visa.number}}</p>
-                        </div>
-                        <hr class="divider">
                         <div class="row">
                             <div class="col-xs-6">
                                 <label>ID</label>

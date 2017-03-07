@@ -11,7 +11,11 @@ class PassportsEndpointTest extends TestCase
      */
     public function returns_passports()
     {
-        $passports = factory(Passport::class, 2)->create();
+        $passports = factory(Passport::class, 2)->create([
+                'user_id' => function () {
+                    return factory(User::class)->create()->id;
+                }
+            ]);
 
         $this->get('/api/passports')
             ->assertResponseOk()

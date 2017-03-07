@@ -11,7 +11,11 @@ class MedicalReleasesEndpointTest extends TestCase
      */
     public function returns_medical_releases()
     {
-        $essays = factory(MedicalRelease::class, 2)->create();
+        $essays = factory(MedicalRelease::class, 2)->create([
+                'user_id' => function () {
+                    return factory(User::class)->create()->id;
+                }
+            ]);
 
         $this->get('/api/medical/releases')
             ->assertResponseOk()

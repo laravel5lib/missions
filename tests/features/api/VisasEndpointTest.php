@@ -11,7 +11,11 @@ class VisasEndpointTest extends TestCase
      */
     public function returns_visas()
     {
-        $visas = factory(Visa::class, 2)->create();
+        $visas = factory(Visa::class, 2)->create([
+                'user_id' => function () {
+                    return factory(User::class)->create()->id;
+                }
+            ]);
 
         $this->get('/api/visas')
             ->assertResponseOk()

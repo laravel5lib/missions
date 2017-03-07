@@ -29,7 +29,7 @@
             <p class="text-center text-muted" role="alert"><em>Add and manage your essays here!</em></p>
         </div>
 
-        <div class="col-md-4 col-sm-6" v-for="essay in essays">
+        <div class="col-xs-12 col-md-4 col-sm-6" v-for="essay in essays">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <a role="button" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchEssays"></pagination>
         </div>
         <modal :show.sync="deleteModal" title="Remove Essay" small="true">
@@ -161,9 +161,9 @@
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;
-                this.$http.get('essays', params).then(function (response) {
-                    this.essays = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('essays', { params: params }).then(function (response) {
+                    this.essays = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });

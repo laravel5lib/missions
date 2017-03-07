@@ -91,8 +91,8 @@
 			},*/
 			getUsers: function getUsers(search, loading) {
 				loading(true);
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.users = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.users = response.body.data;
 					loading(false);
 				});
 			},
@@ -117,7 +117,7 @@
 				// Update Group
 				// this.$refs.spinner.show();
 				this.resource.update({id: this.groupId}, this.group).then(function (response) {
-					this.group = response.data.data;
+					this.group = response.body.data;
 					this.managers = this.group.managers.data;
 					this.user_id = null;
 					this.userObj = null;
@@ -135,9 +135,9 @@
 		ready: function ready() {
 			// this.$refs.spinner.show();
 			this.resource.get({id: this.groupId}).then(function (response) {
-				this.group = response.data.data;
+				this.group = response.body.data;
 				this.managers = this.group.managers.data;
-				//                $.extend(this.$data, response.data.data);
+				//                $.extend(this.$data, response.body.data);
 				// this.$refs.spinner.hide();
 			}, function (response) {
 				console.log('Update Failed! :(');

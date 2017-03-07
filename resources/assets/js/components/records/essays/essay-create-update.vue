@@ -11,19 +11,10 @@
                 </div>
             </div>
 
-            <!--<div class="row" :class="{ 'has-error': checkForError('subject') }">
-                <div class="col-sm-12">
-                <label for="subject" class="control-label">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" v-model="subject"
-                       placeholder="Subject" v-validate:subject="{ required: true, minlength:1, maxlength:100 }"
-                       maxlength="150" minlength="1" required>
-                </div>
-            </div>-->
-
             <div class="row" v-for="QA in content">
                 <div class="col-sm-12">
                 <label class="control-label" v-text="QA.q"></label>
-                <textarea class="form-control" v-model="QA.a"></textarea>
+                <textarea class="form-control" v-model="QA.a" rows="10"></textarea>
                 </div>
             </div>
             <hr class="divider inv">
@@ -36,16 +27,6 @@
                 </div>
             </div>
         </form>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Good job!</strong>
-            <p>Essay updated</p>
-        </alert>
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>There are errors on the form.</p>
-        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -88,17 +69,10 @@
 
                 // logic vars
                 resource: this.$resource('essays{/id}'),
-                showSuccess: false,
-                showError: false,
                 hasChanged: false,
-//                attemptSubmit: false,
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpdateEssay[field].invalid && this.attemptSubmit;
-            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -122,14 +96,13 @@
                         content: this.content,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.showSuccess = true;
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/records/essays';
+                        this.$dispatch('showSuccess', 'Essay created.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/essays/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        console.log(error);
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showError', 'Unable to create essay.')
                     });
                 } else {
                     this.showError = true;
@@ -145,12 +118,14 @@
                         content: this.content,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.showSuccess = true;
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showSuccess', 'Changes saved.');
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/essays/' + that.id; 
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        // this.$refs.spinner.hide();
-//                        debugger;
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -159,9 +134,9 @@
             if (this.isUpdate) {
                 // this.$refs.spinner.show();
                 this.$http('essays/' + this.id).then(function (response) {
-                // this.user = response.data.data;
+                // this.user = response.body.data;
 
-                    let essay = response.data.data;
+                    let essay = response.body.data;
                     this.author_name = essay.author_name;
                     this.subject = essay.subject;
                     this.content = essay.content;

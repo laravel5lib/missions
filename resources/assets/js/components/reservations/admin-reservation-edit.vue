@@ -250,8 +250,8 @@
             },
             searchUsers(search, loading){
                 loading(true);
-                this.$http.get('users', { search: search}).then(function (response) {
-                    this.users = response.data.data;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.users = response.body.data;
                     loading(false);
                 });
             },
@@ -282,10 +282,10 @@
                         user_id: this.user_id,
                         desired_role: this.desired_role,
                     }).then(function (response) {
-                        $.extend(this, response.data.data);
+                        $.extend(this, response.body.data);
                         this.$root.$emit('showSuccess', 'Reservation updated!');
 						this.hasChanged = false;
-                        this.desired_role = response.data.data.desired_role.code;
+                        this.desired_role = response.body.data.desired_role.code;
                     }, function (error) {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'There are errors on the form.');
@@ -319,17 +319,17 @@
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.$http.get('utilities/team-roles').then(function (response) {
-                _.each(response.data.roles, function (name, key) {
+                _.each(response.body.roles, function (name, key) {
                     this.roles.push({ value: key, name: name});
                 }.bind(this));
             });
 
             this.resource.get().then(function (response) {
-                var reservation = response.data.data;
+                var reservation = response.body.data;
                 this.given_names = reservation.given_names;
                 this.surname = reservation.surname;
                 this.gender = reservation.gender;

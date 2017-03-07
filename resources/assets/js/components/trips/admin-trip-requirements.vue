@@ -236,7 +236,7 @@
                 if(this.$TripRequirementsCreate.valid) {
                     // this.$refs.spinner.show();
                     this.resource.save({}, this.newRequirement).then(function (response) {
-                        this.requirements.push(response.data.data);
+                        this.requirements.push(response.body.data);
                         this.resetRequirement();
                         this.attemptedAddRequirement = false;
                         this.showAddModal = false;
@@ -279,7 +279,7 @@
                     search: this.search,
                     sort: this.sort + '|' + this.direction,
                 }).then(function (response) {
-                    this.requirements = response.data.data;
+                    this.requirements = response.body.data;
                     this.$refs.spinner.hide()
                 });
             },

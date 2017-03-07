@@ -73,11 +73,11 @@
                 }
             },
             getGroups(){
-                this.$http.get('users/' + this.$root.user.id, {
+                this.$http.get('users/' + this.$root.user.id, { params: {
                     include: 'managing',
                     user: new Array(this.$root.user.id)
-                }).then(function (response) {
-                    this.groups = response.data.data.managing.data;
+                }}).then(function (response) {
+                    this.groups = response.body.data.managing.data;
                 })
             },
         },

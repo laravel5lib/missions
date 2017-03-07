@@ -205,31 +205,31 @@
         },
         methods: {
             getInitiatives() {
-                this.$http.get('causes/' + this.cause.id + '/initiatives', {
+                this.$http.get('causes/' + this.cause.id + '/initiatives', { params: {
                     country: this.initiative.country.code
-                }).then(function (response) {
-                    this.availableInitiatives = response.data.data;
+                }}).then(function (response) {
+                    this.availableInitiatives = response.body.data;
                 });
             },
             getSponsors(search, loading) {
                 loading(true);
-                this.$http.get(this.project.sponsor_type, {search: search}).then(function (response) {
-                    this.sponsors = response.data.data;
+                this.$http.get(this.project.sponsor_type, { params: {search: search} }).then(function (response) {
+                    this.sponsors = response.body.data;
                     loading(false);
                 });
             },
             getCause() {
                 this.$refs.loader.show();
                 this.$http.get('causes/' + this.causeId).then(function (response) {
-                    this.cause  = response.data.data;
+                    this.cause  = response.body.data;
                     this.initiative.country = _.first(this.cause.countries);
                     this.$refs.loader.hide();
                 });
             },
             fetch() {
                 this.$refs.loader.show();
-                this.$http.get('projects/' + this.id, {include: 'initiative.cause,sponsor'}).then(function (response) {
-                    var arr = response.data.data;
+                this.$http.get('projects/' + this.id, { params: {include: 'initiative.cause,sponsor'} }).then(function (response) {
+                    var arr = response.body.data;
                     this.cause = _.omit(arr.initiative.data.cause.data, 'initiatives');
                     this.initiative = arr.initiative.data;
                     this.sponsor = arr.sponsor.data;
@@ -243,7 +243,7 @@
                     this.editMode = false;
                     this.$refs.loader.hide();
                     this.$dispatch('showSuccess', 'Your changes were saved successfully.');
-                }).error(function() {
+                },function() {
                     this.$refs.loader.hide();
                     this.$dispatch('showError', 'There are problems with the form.');
                 });
@@ -252,8 +252,8 @@
                 this.$refs.loader.show();
                 this.$http.post('projects', this.project).then(function (response) {
                     this.$refs.loader.hide();
-                    window.location = '/admin/projects/' + response.data.data.id;
-                }).error(function() {
+                    window.location = '/admin/projects/' + response.body.data.id;
+                },function() {
                     this.$refs.loader.hide();
                     this.$dispatch('showError', 'There are problems with the form.');
                 });

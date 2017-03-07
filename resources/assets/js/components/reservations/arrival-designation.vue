@@ -82,9 +82,9 @@
                     reservation_id: this.reservationId,
                     type: 'arrival_designation'
                 }).then(function (response) {
-                    this.designation = response.data.data;
+                    this.designation = response.body.data;
                     this.editMode = false;
-                    this.setDesignation(response.data.data);
+                    this.setDesignation(response.body.data);
                 });
             },
             setDesignation(designation) {

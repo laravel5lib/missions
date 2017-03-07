@@ -194,9 +194,9 @@
 			'name': function (val) {
 				if (typeof val === 'string') {
 					// pre-populate slug
-					this.$http.get('utilities/make-slug{/string}', { string: val, hideLoader: true })
+					this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } })
 							.then(function (response) {
-								this.page_url = response.data.slug;
+								this.page_url = response.body.slug;
 							});
 				}
 			}
@@ -257,7 +257,7 @@
 		ready(){
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 				// this.$refs.spinner.hide();
 			});
 		}

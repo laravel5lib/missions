@@ -196,7 +196,7 @@
                         this.resetData();
                         //this.searchStories();
                         // this.$refs.spinner.hide();
-                        return response.data.data;
+                        return response.body.data;
                     }, function (error) {
                         // this.$refs.spinner.hide();
                         //TODO add error alert
@@ -226,13 +226,13 @@
             },
             searchStories(){
                 // this.$refs.spinner.show();
-                this.$http.get('stories', {
+                this.$http.get('stories', { params: {
                     fundraiser: this.id,
                     page: this.pagination.current_page,
                     per_page: this.per_page,
-                }).then(function(response) {
-                    this.stories = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                }}).then(function(response) {
+                    this.stories = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

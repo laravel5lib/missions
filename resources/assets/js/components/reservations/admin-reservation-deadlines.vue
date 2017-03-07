@@ -257,8 +257,8 @@
 
                 // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
-                    let thisTrip = response.data.data;
-                    this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
+                    let thisTrip = response.body.data;
+                    this.selectedDeadlines = new Array(_.findWhere(response.body.data.deadlines.data, { name: this.newDeadline.name }));
 
                     return this.addDeadlines();
 
@@ -267,7 +267,7 @@
             doUpdate(reservation){
                 // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedDeadlines = [];
 
                     // close modals
@@ -304,7 +304,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data)
+                this.setReservationData(response.body.data)
                 // this.$refs.spinner.hide();
             });
 

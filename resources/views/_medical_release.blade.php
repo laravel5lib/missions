@@ -100,7 +100,9 @@
                         <ul class="list-group">
                             @foreach($release->uploads as $upload)
                             <li class="list-group-item">
-                                <i class="fa fa-file-pdf-o"></i> {{ $upload->name }}
+                                <a href="{{ display_file($upload->source) }}" target="_blank">
+                                    <i class="fa fa-file-pdf-o"></i> {{ $upload->name }}
+                                </a>
                             </li>
                             @endforeach
                         </ul>

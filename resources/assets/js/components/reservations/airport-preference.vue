@@ -89,9 +89,9 @@
                     reservation_id: this.reservationId,
                     type: 'airport_preference'
                 }).then(function (response) {
-                    this.preference = response.data.data;
+                    this.preference = response.body.data;
                     this.editMode = false;
-                    this.setPreference(response.data.data);
+                    this.setPreference(response.body.data);
                 });
             },
             setPreference(preference) {

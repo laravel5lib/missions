@@ -126,10 +126,10 @@
         methods: {
             fetch() {
                 // this.$refs.spinner.show();
-                this.$http.get('interests/' + this.id, {
+                this.$http.get('interests/' + this.id, { params: {
                     include: 'trip.campaign,trip.group'
-                }).then(function (response) {
-                    let interest = response.data.data;
+                }}).then(function (response) {
+                    let interest = response.body.data;
                     interest.trip = interest.trip.data;
                     interest.trip.campaign = interest.trip.campaign.data;
                     interest.trip.group = interest.trip.group.data;

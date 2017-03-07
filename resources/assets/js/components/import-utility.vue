@@ -112,9 +112,9 @@
                 });
 
                 this.$http.post(this.url, {file: this.file||undefined, required: this.requiredFields, email: this.$root.user.email, parent_id: this.parentId}).then(function (response) {
-                    this.totalRows = response.data.total_rows;
-                    this.totalImported = response.data.total_imported;
-                    this.$dispatch('showSuccess', response.data.message);
+                    this.totalRows = response.body.total_rows;
+                    this.totalImported = response.body.total_imported;
+                    this.$dispatch('showSuccess', response.body.message);
                     this.$dispatch('importComplete', true);
                     // this.showImportModal = false;
                     this.file = null;

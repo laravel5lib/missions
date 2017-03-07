@@ -78,11 +78,11 @@
         },
         ready(){
             /*this.resource.get().then(function (response) {
-             this.setProjectData(response.data.data)
+             this.setProjectData(response.body.data)
              });*/
 
             this.resource.get().then(function (response) {
-                this.setProjectData(response.data.data)
+                this.setProjectData(response.body.data)
                 // this.$refs.spinner.hide();
             });
 

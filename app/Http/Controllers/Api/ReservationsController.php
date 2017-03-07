@@ -129,12 +129,27 @@ class ReservationsController extends Controller
      */
     public function destroy($id)
     {
-        $reservation = $this->reseration->findOrFail($id);
+        $reservation = $this->reservation->findOrFail($id);
 
         $reservation->delete();
 
         return $this->response->noContent();
     }
+
+    /**
+     * Restore the specified reservation.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function restore($id)
+    {
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
+
+        $reservation->restore();
+    }
+
+      
 
     public function reconcile($id)
     {

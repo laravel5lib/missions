@@ -1201,7 +1201,7 @@ class TransferData extends Command
         $general_half_deadline = $item->regular_cost_half ?: Carbon::parse($item->start_date)->subDays(129);
         $general_full_deadline = $item->regular_cost_full ?: Carbon::parse($item->start_date)->subDays(64);
         $late_deadline = $item->late_fee ?: Carbon::parse($item->start_date)->subDays(48);
-        $addon_deadline = $item->regular_cost_full ? Carbon::parse($item->regular_cost_full)->subDays(30) : Carbon::parse($item->start_date)->subDays(94);
+        $addon_deadline = $item->regular_cost_full ? Carbon::parse($item->regular_cost_full)->subDays(30) : Carbon::parse($item->start_date)->subDays(60);
 
         // Set the deposit cost
         // if there is a deposit, we save the cost to the trip

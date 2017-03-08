@@ -30,7 +30,6 @@ class ReservationsController extends Controller
      */
     public function __construct(Reservation $reservation)
     {
-        $this->middleware('api.auth', ['only' => 'store', 'update', 'destroy']);
         $this->reservation = $reservation;
     }
 
@@ -64,26 +63,6 @@ class ReservationsController extends Controller
     }
 
     /**
-     * Show all the donors for the specified reservation.
-     *
-     * @param $id
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response
-     */
-//    public function donors($id, Request $request)
-//    {
-//        // Filter donors by reservation
-//        $request->merge(['reservation' => $id]);
-//
-//        $donors = Donor::filter($request->all())
-//            ->paginate($request->get('per_page'));
-//
-//        // Pass the reservation to the transformer to filter
-//        // embedded relationships by designation.
-//        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
-//    }
-
-    /**
      * Store a reservation.
      *
      * @param ReservationRequest $request
@@ -109,7 +88,7 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->findOrFail($id);
 
-        $reservation->update($request->except('costs', 'requirements', 'deadlines', 'todos'));
+        $reservation->update($request->except(['costs', 'requirements', 'deadlines', 'todos']));
 
         $reservation->syncCosts($request->get('costs'));
         $reservation->syncRequirements($request->get('requirements'));

@@ -23,7 +23,7 @@
                             Manage <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                            <li><a href="{{ url('admin/reservations/'.$reservation->id.'/edit') }}">Edit</a></li>
                             @unless($reservation->deleted_at)
                             <li role="separator" class="divider"></li>
                             <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Drop</a></li>

@@ -43,7 +43,7 @@
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
 			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
-				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked">
+				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
@@ -139,8 +139,8 @@
 
 				<div class="form-group">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Save</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Save</a>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
 				</div>
 
 			</form>
@@ -199,6 +199,10 @@
 				type: Boolean,
 				default: false
 			},
+            allowName: {
+				type: Boolean,
+				default: false
+			},
 			name: {
 				type: String,
 				default: ''
@@ -215,6 +219,10 @@
 				type: Number,
 				default: 100
 			},
+            buttonText: {
+                type: String,
+                default: 'Save'
+            }
 		},
         data(){
             return {
@@ -439,6 +447,10 @@
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
 						};
+
+						if(this.allowName) {
+						    params.name = this.name + '_' + moment().unix();
+						}
 					}
 
                     this.resource.save(null, params).then(function (resp) {

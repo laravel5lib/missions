@@ -456,7 +456,8 @@
 			});
 
 			this.$dispatch('basic-info', true);
-			$('html, body').animate({scrollTop: 200}, 300);
+			if (location.pathname.indexOf('admin') === -1)
+				$('html, body').animate({scrollTop: 200}, 300);
 			done();
 		}
 	}

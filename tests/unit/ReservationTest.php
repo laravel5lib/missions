@@ -54,9 +54,7 @@ class ReservationTest extends TestCase
         return $reservation;
     }
 
-    /** 
-     * @test
-     */
+    /** @test */
     function can_sync_costs_and_return_totals()
     {
         $reservation = $this->setup_reservation();
@@ -69,6 +67,47 @@ class ReservationTest extends TestCase
         $this->assertSame(7, $reservation->getPercentRaised());
         $this->assertSame(260000, $reservation->getTotalOwed());
         $this->assertSame('2600.00', $reservation->totalOwedInDollars());
+    }
+
+    /** @test */
+    function adds_todos()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $tasks = ['task 1', 'task 2'];
+
+        $reservation->addTodos($tasks);
+        $todos = $reservation->todos()->pluck('task')->toArray();
+
+        $this->assertContains('Task 1', $todos);
+        $this->assertContains('Task 2', $todos);
+    }
+
+    /** @test */
+    function remove_todos()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $tasks = ['task 1', 'task 2'];
+
+        $reservation->addTodos($tasks);
+        $reservation->removeTodos($tasks);
+        $todos = $reservation->todos()->pluck('task')->toArray();
+
+        $this->assertEmpty($todos);
+    }
+
+    /** @test */
+    function syncs_todos()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $tasks = ['task 1', 'task 2'];
+        $reservation->addTodos($tasks);
+
+        $reservation->syncTodos(['task 1', 'task 3']);
+        $todos = $reservation->todos()->pluck('task')->toArray();
+
+        $this->assertContains('Task 1', $todos);
+        $this->assertContains('Task 3', $todos);
+        $this->assertFalse(in_array('Task 2', $todos));
     }
 
 }

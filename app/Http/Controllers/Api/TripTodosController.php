@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\v1\Trip;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateReservationTodos;
 
 class TripTodosController extends Controller
 {
@@ -53,6 +54,8 @@ class TripTodosController extends Controller
 
         $trip->todos = $request->get('todos');
         $trip->save();
+
+        $this->dispatch(new UpdateReservationTodos($trip));
 
         return ['data' => $trip->todos];
     }

@@ -148,8 +148,8 @@
                                 </div><!-- end form-group -->
 
                                 <div class="row form-group" v-error-handler="{ value: gender, handle: 'gender' }">
-                                    <label for="gender" class="col-sm-2">Gender</label>
-                                    <div class="col-sm-10">
+                                    <label for="gender" class="col-sm-3">Gender</label>
+                                    <div class="col-sm-9">
                                         <label class="radio-inline">
                                             <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
                                         </label>
@@ -160,20 +160,21 @@
                                 </div>
 
                                 <div class="row form-group">
-                                    <label for="status" class="col-sm-2">Status</label>
-                                    <div class="col-sm-10">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="status" id="status" value="Single" v-model="status"> Single
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="status2" id="status2" value="Married" v-model="status"> Married
-                                        </label>
+                                    <label for="status" class="col-sm-3">Relationship Status</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control input-sm" v-model="status" id="status">
+                                            <option value="Single">Single</option>
+                                            <option value="Engaged">Engaged</option>
+                                            <option value="Married">Married</option>
+                                            <option value="Divorced">Divorced</option>
+                                            <option value="Widowed">Widowed</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="row form-group">
-                                    <label for="public" class="col-sm-2">Public</label>
-                                    <div class="col-sm-10 tour-step-privacy">
+                                    <label for="public" class="col-sm-3">Account Visibility</label>
+                                    <div class="col-sm-9 tour-step-privacy">
                                         <label class="radio-inline">
                                             <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                                         </label>

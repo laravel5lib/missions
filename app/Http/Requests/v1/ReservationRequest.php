@@ -29,7 +29,7 @@ class ReservationRequest extends FormRequest
             'given_names'        => 'required|max:100',
             'surname'            => 'required|max:60',
             'gender'             => 'required|in:male,female',
-            'status'             => 'required|in:single,married',
+            'status'             => 'required|string',
             'shirt_size'         => 'in:' . $this->getShirtSizes(),
             'birthday'           => 'required|date|before:' . Carbon::now()->subYears(12),
             'user_id'            => 'required|exists:users,id',

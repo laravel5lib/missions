@@ -853,10 +853,12 @@ new Vue({
     events: {
         'showSuccess': function (msg) {
             this.message = msg;
+            this.showError = false;
             this.showSuccess = true;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showSuccess = false;
             this.showError = true;
         },
         'userHasLoggedIn': function (user) {

@@ -51,14 +51,6 @@ class ReservationTest extends TestCase
 
         $reservation->syncCosts($costs);
 
-        // factory(Transaction::class, 2)->create([
-        //     'fund_id' => $reservation->fund->id,
-        //     'amount' => 100,
-        //     'donor_id' => $reservation->user->id
-        // ]);
-
-        // $reservation->fund->reconcile();
-
         return $reservation;
     }
 

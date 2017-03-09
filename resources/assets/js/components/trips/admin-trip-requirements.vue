@@ -223,7 +223,7 @@
             resetRequirement(){
                 this.newRequirement = {
                     requester_id: this.id,
-                    requester_type: 'trip',
+                    requester_type: 'trips',
                     name: '',
                     document_type: '',
                     due_at: null,

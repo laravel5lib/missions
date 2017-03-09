@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
+use Illuminate\Http\Request;
+use App\Models\v1\Requirement;
+use App\Http\Controllers\Controller;
+use App\Jobs\UpdateReservationRequirements;
 use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Transformers\v1\RequirementTransformer;
-use App\Models\v1\Requirement;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class RequirementsController extends Controller
 {
@@ -71,6 +72,8 @@ class RequirementsController extends Controller
             'grace_period' => $request->get('grace_period', 0)
         ]);
 
+        $this->dispatch(new UpdateReservationRequirements($requirement));
+
         return $this->response->item($requirement, new RequirementTransformer);
     }
 
@@ -94,6 +97,8 @@ class RequirementsController extends Controller
             'due_at' => $request->get('due_at'),
             'grace_period' => $request->get('grace_period', $requirement->grace_period)
         ]);
+
+        $this->dispatch(new UpdateReservationRequirements($requirement));
 
         return $this->response->item($requirement, new RequirementTransformer);
     }

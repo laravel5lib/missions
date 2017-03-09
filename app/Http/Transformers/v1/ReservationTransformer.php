@@ -61,7 +61,7 @@ class ReservationTransformer extends TransformerAbstract
                                         'name' => teamRole($reservation->desired_role) 
                                      ],
             'total_cost'          => $reservation->totalCostInDollars(),
-            'total_raised'        => $reservation->fund->balanceInDollars(),
+            'total_raised'        => $reservation->totalRaisedInDollars(),
             'percent_raised'      => (int) $reservation->getPercentRaised(),
             'total_owed'          => $reservation->totalOwedInDollars(),
             'created_at'          => $reservation->created_at->toDateTimeString(),

@@ -14,9 +14,9 @@
             <tr>
                 <th>Status</th>
                 <th>Cost Name</th>
-                <th>Outstanding Balance</th>
-                <th>Grace Period</th>
+                <th>Outstanding</th>
                 <th>Due</th>
+                <th>Grace Period</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -28,8 +28,8 @@
                     </td>
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>
-                    <td>{{ due.grace_period }}</td>
-                    <td>{{ due.due_at | moment 'll' }}</td>
+                    <td>{{ due.due_at | moment 'lll' }}</td>
+                    <td>{{ due.grace_period }} days</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
                         <!--<a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>-->

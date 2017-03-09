@@ -167,7 +167,7 @@
             },
         },
         ready(){
-            this.$http('users/me?include=visas').then(function (response) {
+            this.$http.get('users/me?include=visas').then(function (response) {
                 this.visas = response.body.data.visas.data;
                 this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
                 this.visa = _.findWhere(response.body.data.visas.data, {id: this.visaId});

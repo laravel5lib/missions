@@ -17,7 +17,7 @@
                 <h6><small>Type: {{ requirement.document_type }}</small></h6>
             </div>
             <div class="col-xs-4 text-right">
-                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'll' }} </h5>
+                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'lll' }} </h5>
                 <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
             </div>
         </div><!-- end row -->
@@ -223,7 +223,7 @@
             resetRequirement(){
                 this.newRequirement = {
                     requester_id: this.id,
-                    requester_type: 'trip',
+                    requester_type: 'trips',
                     name: '',
                     document_type: '',
                     due_at: null,

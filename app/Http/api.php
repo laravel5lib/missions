@@ -65,6 +65,7 @@ $api->version('v1', [
     $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
+    $api->put('reservations/{id}/restore', 'ReservationsController@restore');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
     $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
     $api->post('reservations/{reservations}/companions', 'CompanionsController@store');

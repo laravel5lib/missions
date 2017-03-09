@@ -46,7 +46,7 @@
         </div>
 
         <admin-trip-duplicate trip-id="{{ $trip->id }}"></admin-trip-duplicate>
-        <admin-trip-delete trip-id="{{ $trip->id }}"></admin-trip-delete>
+        <admin-delete-modal id="{{ $trip->id }}" resource="trip" label="Delete trip?"></admin-delete-modal>
         <div class="modal fade" id="addReservationModal" tabindex="-1" role="dialog" aria-labelledby="addReservationModal">
             <div class="modal-dialog">
                 <div class="modal-content">

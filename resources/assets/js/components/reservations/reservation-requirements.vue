@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-xs-4 text-right">
                                 <label style="margin:13px 0px;">
-                                    Due {{ requirement.due_at | moment }}
+                                    Due {{ requirement.due_at | moment 'lll' }}
                                 </label>
                             </div>
                         </div>

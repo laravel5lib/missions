@@ -128,12 +128,6 @@ class EventServiceProvider extends ServiceProvider
             $group->save();
         });
 
-        Payment::created(function ($payment) {
-            if ($payment->cost->costAssignable instanceof Project) {
-                $payment->cost->costAssignable->payments()->sync();
-            }
-        });
-
         Cost::created(function ($cost) {
             if ($cost->costAssignable instanceof Project) {
                 $cost->costAssignable
@@ -152,10 +146,6 @@ class EventServiceProvider extends ServiceProvider
                      ->first()
                      ->update(['goal_amount' => $cost->costAssignable->goal/100]);
             }
-        });
-
-        Payment::updated(function ($payment) {
-            $payment->due->payable->payments()->sync();
         });
     }
 }

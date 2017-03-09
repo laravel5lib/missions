@@ -25,6 +25,7 @@ import tripDetailsMissionaries from './components/trips/trip-details-missionarie
 import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
 import userProjectsList from './components/projects/user-projects-list.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
+import restoreReservation from './components/reservations/restore-reservation.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
 import groupsList from './components/groups/groups-list.vue';
@@ -73,7 +74,7 @@ import adminTripReservationsList from './components/trips/admin-trip-reservation
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
-import adminTripDelete from './components/trips/admin-trip-delete.vue';
+import adminDeleteModal from './components/admin-delete-modal.vue';
 import costManager from './components/admin/cost-manager.vue';
 import adminTripDescription from './components/trips/admin-trip-description.vue';
 import deadlinesManager from './components/admin/deadlines-manager.vue';
@@ -694,6 +695,7 @@ new Vue({
         reservationRequirements,
         referralResponse,
         sendEmail,
+        restoreReservation,
 
         //dashboard components
         recordsList,
@@ -735,7 +737,7 @@ new Vue({
         adminTripReservationsList,
         adminTripFacilitators,
         adminTripDuplicate,
-        adminTripDelete,
+        adminDeleteModal,
         costManager,
         adminTripDescription,
         deadlinesManager,
@@ -851,10 +853,12 @@ new Vue({
     events: {
         'showSuccess': function (msg) {
             this.message = msg;
+            this.showError = false;
             this.showSuccess = true;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showSuccess = false;
             this.showError = true;
         },
         'userHasLoggedIn': function (user) {

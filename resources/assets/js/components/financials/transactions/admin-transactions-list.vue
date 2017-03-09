@@ -293,7 +293,7 @@
                     <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
-                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'll'"></td>
+                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'lll'"></td>
                     <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>

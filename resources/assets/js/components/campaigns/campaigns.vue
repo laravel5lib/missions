@@ -221,7 +221,7 @@
 							care of all of your transportation, hotel, food, training, translators and ministry schedule
 							needs.</p>
 						<hr class="divider inv">
-						<a class="btn btn-primary" href="#">Speak To A Rep</a>
+						<a class="btn btn-primary" href="/contact">Speak To A Rep</a>
 						<hr class="divider inv visible-xs visible-sm">
 					</div><!-- end col -->
 					<div class="col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">

@@ -187,7 +187,7 @@
         },
         ready(){
             if (this.isUpdate) {
-                this.$http('referrals/' + this.id).then(function (response) {
+                this.$http.get('referrals/' + this.id).then(function (response) {
 
                     let referral = response.body.data;
                     $.extend(this, referral);

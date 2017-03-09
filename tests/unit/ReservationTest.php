@@ -3,6 +3,7 @@
 use App\Models\v1\Cost;
 use App\Models\v1\Fund;
 use App\Models\v1\Payment;
+use App\Models\v1\Deadline;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
@@ -51,20 +52,10 @@ class ReservationTest extends TestCase
 
         $reservation->syncCosts($costs);
 
-        // factory(Transaction::class, 2)->create([
-        //     'fund_id' => $reservation->fund->id,
-        //     'amount' => 100,
-        //     'donor_id' => $reservation->user->id
-        // ]);
-
-        // $reservation->fund->reconcile();
-
         return $reservation;
     }
 
-    /** 
-     * @test
-     */
+    /** @test */
     function can_sync_costs_and_return_totals()
     {
         $reservation = $this->setup_reservation();
@@ -77,6 +68,58 @@ class ReservationTest extends TestCase
         $this->assertSame(7, $reservation->getPercentRaised());
         $this->assertSame(260000, $reservation->getTotalOwed());
         $this->assertSame('2600.00', $reservation->totalOwedInDollars());
+    }
+
+    /** @test */
+    function adds_todos()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $tasks = ['task 1', 'task 2'];
+
+        $reservation->addTodos($tasks);
+        $todos = $reservation->todos()->pluck('task')->toArray();
+
+        $this->assertContains('Task 1', $todos);
+        $this->assertContains('Task 2', $todos);
+    }
+
+    /** @test */
+    function remove_todos()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $tasks = ['task 1', 'task 2'];
+
+        $reservation->addTodos($tasks);
+        $reservation->removeTodos($tasks);
+        $todos = $reservation->todos()->pluck('task')->toArray();
+
+        $this->assertEmpty($todos);
+    }
+
+    /** @test */
+    function syncs_todos()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $tasks = ['task 1', 'task 2'];
+        $reservation->addTodos($tasks);
+
+        $reservation->syncTodos(['task 1', 'task 3']);
+        $todos = $reservation->todos()->pluck('task')->toArray();
+
+        $this->assertContains('Task 1', $todos);
+        $this->assertContains('Task 3', $todos);
+        $this->assertFalse(in_array('Task 2', $todos));
+    }
+
+    /** @test */
+    function syncs_deadlines()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $deadline = factory(Deadline::class)->create();
+
+        $reservation->syncDeadlines([$deadline]);
+
+        $this->assertEquals($reservation->deadlines()->first()->id, $deadline->id);
     }
 
 }

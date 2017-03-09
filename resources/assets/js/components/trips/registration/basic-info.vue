@@ -456,7 +456,7 @@
 			});
 
 			this.$dispatch('basic-info', true);
-			$('html, body').animate({scrollTop: 200}, 300);
+				//$('html, body').animate({scrollTop: 200}, 300);
 			done();
 		}
 	}

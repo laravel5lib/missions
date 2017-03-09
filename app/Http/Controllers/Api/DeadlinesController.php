@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Requests\v1\DeadlineRequest;
-use App\Http\Transformers\v1\DeadlineTransformer;
+use App\Models\v1\Trip;
 use App\Models\v1\Deadline;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\UpdateReservationDeadlines;
+use App\Http\Requests\v1\DeadlineRequest;
+use App\Http\Transformers\v1\DeadlineTransformer;
 
 class DeadlinesController extends Controller
 {
@@ -69,6 +71,9 @@ class DeadlinesController extends Controller
             'grace_period'             => $request->get('grace_period', 0),
             'enforced'                 => $request->get('enforced', false)
         ]);
+
+        if ($deadline->deadlineAssignable instanceOf Trip)
+            $this->dispatch(new UpdateReservationDeadlines($deadline));
 
         return $this->response->item($deadline, new DeadlineTransformer);
     }

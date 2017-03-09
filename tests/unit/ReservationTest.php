@@ -3,6 +3,7 @@
 use App\Models\v1\Cost;
 use App\Models\v1\Fund;
 use App\Models\v1\Payment;
+use App\Models\v1\Deadline;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
@@ -108,6 +109,17 @@ class ReservationTest extends TestCase
         $this->assertContains('Task 1', $todos);
         $this->assertContains('Task 3', $todos);
         $this->assertFalse(in_array('Task 2', $todos));
+    }
+
+    /** @test */
+    function syncs_deadlines()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $deadline = factory(Deadline::class)->create();
+
+        $reservation->syncDeadlines([$deadline]);
+
+        $this->assertEquals($reservation->deadlines()->first()->id, $deadline->id);
     }
 
 }

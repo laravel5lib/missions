@@ -334,6 +334,9 @@
             updatePayment(){
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentEdit.valid) {
+                    if (this.selectedPayment.due_at === 'Invalid date') {
+                        this.selectedPayment.due_at = null;
+                    }
                     this.$root.$emit('SpinnerOn');
                     this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then(function (response) {
                         this.resetPayment();

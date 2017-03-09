@@ -390,6 +390,9 @@
             updateCost(){
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
+                    if (this.selectedCost.due_at === 'Invalid date') {
+                        this.selectedCost.due_at = null;
+                    }
                     this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then(function (response) {
                         this.showReminder = response.body.data.id;
                         $.extend(this.costs, this.selectedCost);

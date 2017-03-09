@@ -84,7 +84,7 @@
             </template>
             <template v-if="activeView !== 'donor'">
                 <div class="list-group">
-                    <div class="list-group-item text-center" v-if="pagination.total === 0">No {{activeView}}s found.</div>
+                    <div class="list-group-item text-center" v-if="pagination.total === 0">No transactions found.</div>
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
                         <h5>
                             <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span>
@@ -200,7 +200,7 @@
             },
             searchTransactions(type){
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', { params: {include: 'donor', type: type, fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then(function (response) {
+                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then(function (response) {
                     this.transactions = response.body.data;
                     this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();

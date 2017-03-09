@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Active Date</label>
-                        <p>{{ cost.active_at|moment 'll' }}</p>
+                        <p>{{ cost.active_at|moment 'lll' }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Cost</label>

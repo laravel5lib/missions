@@ -45,11 +45,11 @@
                 <div class="row">
                     <div class="col-sm-6 text-center">
                         <label>Updated</label>
-                        <p>{{ $trip->updated_at->format('F d, Y') }}</p>
+                        <p>{{ $trip->updated_at->format('F d, Y h:i a') }}</p>
                     </div>
                     <div class="col-sm-6 text-center">
                         <label>Created</label>
-                        <p>{{ $trip->created_at->format('F d, Y') }}</p>
+                        <p>{{ $trip->created_at->format('F d, Y h:i a') }}</p>
                     </div>
                 </div>
                 <hr class="divider">
@@ -119,7 +119,7 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Registration Closes</label>
-                <h4>{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
+                <h4>{{ date('F d, Y h:i a', strtotime($trip->ended_at)) }}</h4>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Starting Cost</label>

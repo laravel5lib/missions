@@ -1,3 +1,7 @@
+<div class="alert alert-warning">
+    <strong>Important:</strong> Making changes to requirements will affect existing reservation requirements.
+</div>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">

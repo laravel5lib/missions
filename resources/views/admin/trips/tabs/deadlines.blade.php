@@ -1,3 +1,7 @@
+<div class="alert alert-warning">
+    <strong>Important:</strong> New deadlines will be pushed to existing reservations. Removing a deadline will also remove it from reservations.
+</div>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">

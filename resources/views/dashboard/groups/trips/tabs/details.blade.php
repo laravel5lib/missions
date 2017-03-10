@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-6 text-center">
                         <label>Publish Date</label>
-                        <p>{{ date('F d, Y', strtotime($trip->updated_at)) }}</p>
+                        <p>{{ $trip->published_at->format('M j, Y h:i a') }}</p>
                     </div>
                 </div>
                 <hr class="divider">
@@ -37,8 +37,8 @@
                         <p>{{ $trip->ended_at->format('F d, Y') }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
-                        <label>Updated Date</label>
-                        <p>{{ $trip->updated_at->format('F d, Y') }}</p>
+                        <label>Last Updated</label>
+                        <p>{{ $trip->updated_at->format('M d, Y h:i a') }}</p>
                     </div>
                 </div>
                 <hr class="divider">

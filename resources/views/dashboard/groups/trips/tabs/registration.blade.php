@@ -10,7 +10,8 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Registration Closes</label>
-                <h4>{{ date('F d, Y', strtotime($trip->ended_at)) }}</h4>
+                <h4>{{ $trip->ended_at->diffForHumans() }}</h4>
+                <small>{{ $trip->ended_at->format('M j, Y h:i a') }}</small>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Starting Cost</label>

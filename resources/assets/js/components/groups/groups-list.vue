@@ -26,8 +26,12 @@
                 <h4>{{ group.name }}</h4>
                 <p class="small">{{ group.country }}</p>
                 <hr class="divider inv sm">
-                <a v-if="group.public" class="btn btn-sm btn-primary" href="/{{ group.url }}">View Group</a><br>
-                <label><a href="/dashboard/groups/{{ group.id }}"><i class="fa fa-pencil"></i> Manage</a></label>
+                <a href="/dashboard/groups/{{ group.id }}" class="btn btn-sm btn-primary">
+                    <i class="fa fa-pencil"></i> Manage
+                </a><br>
+                <label v-if="group.public">
+                    <a href="/{{ group.url }}">View Group</a>
+                </label>
             </div>
         </div>
     </div>

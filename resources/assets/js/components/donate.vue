@@ -16,6 +16,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
                                 <input style="font-size:22px;color:#05ce7b;" type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                                <span class="input-group-addon">USD</span>
                             </div>
                         </div>
                     </div>

@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
 			<h4>Travel Requirements</h4>
-			<p>The following items must be completed in order to travel. Your trip represenative will contact you soon regarding these necessary documents. These are NOT required to register or to begin fundraising.</p>
+			<p>The following items must be completed in order to travel. Your trip representative will contact you soon regarding these necessary documents. These are NOT required to register or to begin fundraising.</p>
 			<div class="list-group">
 				<div class="list-group-item" v-for="requirement in requirements | orderBy 'due_at'">
 					<h4 class="list-group-item-heading">

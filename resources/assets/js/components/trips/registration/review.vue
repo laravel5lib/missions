@@ -10,7 +10,7 @@
 				</div>
 				<div class="panel-body">
 					<address>
-						<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>
+						<strong>{{userInfo.firstName}} {{userInfo.lastName}}</strong><br>
 						{{userInfo.address}}<br>
 						{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>
 						{{userInfo.country | uppercase}}<br>

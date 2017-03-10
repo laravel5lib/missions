@@ -545,6 +545,8 @@
                 this.filters.maxDate = '';
 
                 let config = JSON.parse(localStorage[this.storageName]);
+                this.activeFields = config.activeFields;
+                this.maxActiveFields = config.maxActiveFields;
                 this.filters = config.filters;
             }
 

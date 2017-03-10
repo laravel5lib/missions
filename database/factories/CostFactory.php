@@ -13,9 +13,7 @@ $factory->define(App\Models\v1\Cost::class, function (Faker\Generator $faker)
         'amount'               => $faker->numberBetween($min = 1000, $max = 3000),
         'type'                 => $faker->randomElement(['incremental', 'static', 'optional']),
         'cost_assignable_type' => 'trips',
-        'cost_assignable_id'   => function () {
-            return factory(App\Models\v1\Trip::class)->create()->id;
-        }
+        'cost_assignable_id'   => $faker->uuid
     ];
 });
 
@@ -29,9 +27,6 @@ $factory->defineAs(App\Models\v1\Cost::class, 'project', function (Faker\Generat
     return array_merge($cost, [
         'type'                 => 'static',
         'cost_assignable_type' => 'projects',
-        'cost_assignable_id'   => function () {
-            return factory(App\Models\v1\Project::class)->create()->id;
-        }
     ]);
 });
 

@@ -199,7 +199,7 @@
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
                                     <h4 class="timeline-title">{{ !empty($deadline['name']) ? $deadline['name'] : (!empty($deadline['cost_name']) ? $deadline['cost_name'] : $deadline['item'] . ' Submission') }}</h4>
-                                    <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ carbon($deadline['due_at'])->toFormattedDateString() }}</small></p>
+                                    <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ carbon($deadline['due_at'])->format('F j, Y h:i a') }}</small></p>
                                 </div>
                                 <div class="timeline-body">
                                     <p>

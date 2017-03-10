@@ -428,7 +428,7 @@ class TransferData extends Command
                         'a' => strip_tags(trim($rec->known_applicant))
                     ],
                     [
-                        'q' => 'Please list any current roles the applicant serve in at your church:',
+                        'q' => 'Please list any current roles the applicant serves in at your church:',
                         'a' => strip_tags(trim($rec->applicant_roles))
                     ],
                     [
@@ -436,7 +436,7 @@ class TransferData extends Command
                         'a' => strip_tags(trim($rec->applicant_walk))
                     ],
                     [
-                        'q' => 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation? Please explain.',
+                        'q' => 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation for 7-14 days? Please explain.',
                         'a' => strip_tags(trim($rec->concerns))
                     ],
                     [
@@ -700,7 +700,7 @@ class TransferData extends Command
                 'description' => strip_tags($r->support_description) ?: file_get_contents(resource_path('assets/sample_fundraiser.md')),
                 'sponsor_type' => 'users',
                 'sponsor_id' => $reservation->user_id,
-                'goal_amount' => $reservation->getTotalCost(),
+                'goal_amount' => $reservation->getTotalCost()/100,
                 'started_at' => $reservation->created_at,
                 'ended_at' => $trip->started_at,
                 'public' => $r->public ? true : false,
@@ -946,7 +946,7 @@ class TransferData extends Command
                 'description' => strip_tags($proj->support_msg) ?: file_get_contents(resource_path('assets/sample_fundraiser.md')),
                 'sponsor_type' => $project->sponsor_type,
                 'sponsor_id' => $project->sponsor_id,
-                'goal_amount' => $project->goal,
+                'goal_amount' => $project->goal/100,
                 'started_at' => $project->created_at,
                 'ended_at' => $proj->deadline,
                 'public' => $proj->public ? true : false,
@@ -1201,7 +1201,7 @@ class TransferData extends Command
         $general_half_deadline = $item->regular_cost_half ?: Carbon::parse($item->start_date)->subDays(129);
         $general_full_deadline = $item->regular_cost_full ?: Carbon::parse($item->start_date)->subDays(64);
         $late_deadline = $item->late_fee ?: Carbon::parse($item->start_date)->subDays(48);
-        $addon_deadline = $item->regular_cost_full ? Carbon::parse($item->regular_cost_full)->subDays(30) : Carbon::parse($item->start_date)->subDays(94);
+        $addon_deadline = $item->regular_cost_full ? Carbon::parse($item->regular_cost_full)->subDays(30) : Carbon::parse($item->start_date)->subDays(60);
 
         // Set the deposit cost
         // if there is a deposit, we save the cost to the trip
@@ -1321,7 +1321,7 @@ class TransferData extends Command
     private function make_payment($amount, $percent, $due, $grace = 3)
     {
         return new Payment([
-            'amount_owed' => $amount, 
+            'amount_owed' => $amount/100, 
             'percent_owed' => $percent,
             'due_at' => $due,
             'grace_period' => $grace,

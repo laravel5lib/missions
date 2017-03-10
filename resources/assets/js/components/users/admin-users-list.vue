@@ -475,16 +475,16 @@
 				$.extend(params, this.filters);
         this.exportFilters = params;
 
-                this.$http.get('users', params).then(function (response) {
+                this.$http.get('users', { params: params }).then(function (response) {
                     var self = this;
-                    this.users = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.users = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 })
             },
 			getCountries(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('utilities/countries', { search: search}).then(function (response) {
-					this.countriesOptions = response.data.countries;
+            	this.$http.get('utilities/countries', { params: { search: search} }).then(function (response) {
+					this.countriesOptions = response.body.countries;
 					loading ? loading(false) : void 0;
 				})
 			}

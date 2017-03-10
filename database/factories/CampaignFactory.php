@@ -18,12 +18,6 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
         'published_at'     => function(array $campaign) {
             return $campaign['started_at'];
         },
-        'avatar_upload_id' => function () {
-            return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
-        },
-        'banner_upload_id' => function () {
-            return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
-        },
         'created_at' => \Carbon\Carbon::now(),
         'updated_at' => \Carbon\Carbon::now()
     ];

@@ -184,7 +184,7 @@
 
 				var data = {
 					// reservation data
-					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+					given_names: this.userInfo.firstName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,
@@ -234,7 +234,7 @@
 //					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
-					window.location.href = '/dashboard/reservations/' + response.data.data.id;
+					window.location.href = '/dashboard/reservations/' + response.body.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
 					console.log(response);

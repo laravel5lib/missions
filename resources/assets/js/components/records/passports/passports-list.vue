@@ -64,8 +64,8 @@
                             {{passport.given_names}} {{passport.surname}}
                         </h5>
                     </a>
-                    <div v-if="!firstUrlSegment === 'admin'" style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                    <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
+                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -100,7 +100,7 @@
         </div>
         </div>
 
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchPassports"></pagination>
 
         </div>
@@ -217,9 +217,9 @@
                     params.manager = this.userId;
                 this.exportFilters = params;
                 $.extend(params, this.filters);
-                this.$http.get('passports', params).then(function (response) {
-                    this.passports = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('passports', { params: params }).then(function (response) {
+                    this.passports = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     this.loaded = true;
                 });
             }

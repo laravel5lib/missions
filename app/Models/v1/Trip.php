@@ -225,7 +225,11 @@ class Trip extends Model
      */
     public function setTodosAttribute($value)
     {
-        $this->attributes['todos'] = json_encode($value);
+        $todos = collect($value)->transform(function($item) {
+            return trim(strtolower($item));
+        });
+        
+        $this->attributes['todos'] = json_encode($todos);
     }
 
     /**

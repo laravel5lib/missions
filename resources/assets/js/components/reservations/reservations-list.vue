@@ -309,22 +309,22 @@
 
                 this.exportFilters = params;
 
-                this.$http.get('reservations', params).then(function (response) {
-                    this.reservations = response.data.data
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('reservations', {params: params}).then(function (response) {
+                    this.reservations = response.body.data
+                    this.pagination = response.body.meta.pagination;
                 });
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { search: search}).then(function (response) {
-                    this.groupOptions = response.data.data;
+                this.$http.get('groups', { params: { search: search} }).then(function (response) {
+                    this.groupOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { search: search}).then(function (response) {
-                    this.campaignOptions = response.data.data;
+                this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
+                    this.campaignOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -352,7 +352,7 @@
             }
 
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.data.data;
+                let user = response.body.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

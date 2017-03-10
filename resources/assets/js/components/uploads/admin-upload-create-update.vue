@@ -43,7 +43,7 @@
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
 			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
-				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked">
+				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
@@ -139,8 +139,8 @@
 
 				<div class="form-group">
 						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">Save</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">Save</a>
+						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
+						<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
 				</div>
 
 			</form>
@@ -199,6 +199,10 @@
 				type: Boolean,
 				default: false
 			},
+            allowName: {
+				type: Boolean,
+				default: false
+			},
 			name: {
 				type: String,
 				default: ''
@@ -215,6 +219,10 @@
 				type: Number,
 				default: 100
 			},
+            buttonText: {
+                type: String,
+                default: 'Save'
+            }
 		},
         data(){
             return {
@@ -363,7 +371,7 @@
 
 				if (this.isUpdate) {
 					this.resource.get({id: this.uploadId}).then(function (response) {
-						let upload = response.data.data;
+						let upload = response.body.data;
 						this.name = upload.name;
 						this.tags = upload.tags;
 						this.type = upload.type;
@@ -439,6 +447,10 @@
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
 						};
+
+						if(this.allowName) {
+						    params.name = this.name + '_' + moment().unix();
+						}
 					}
 
                     this.resource.save(null, params).then(function (resp) {
@@ -473,11 +485,11 @@
 			handleSuccess(response){
 				if(this.isChild) {
 					// send data to parent componant
-					this.$dispatch('uploads-complete', response.data.data);
+					this.$dispatch('uploads-complete', response.body.data);
 
 				} else {
 					window.location.href = '/admin/uploads';
-					// window.location.href = '/admin' + response.data.data.links[0].uri;
+					// window.location.href = '/admin' + response.body.data.links[0].uri;
 				}
 			},
 			handleImage(e){
@@ -521,9 +533,9 @@
 					tags: this.tags
 				};
 
-				this.$http.get('uploads', params).then(function (response) {
-					this.uploads = response.data.data;
-					this.pagination = response.data.meta.pagination;
+				this.$http.get('uploads', { params: params }).then(function (response) {
+					this.uploads = response.body.data;
+					this.pagination = response.body.meta.pagination;
 				})
 			},
 			selectExisting(upload){
@@ -542,7 +554,7 @@
 		ready(){
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
-					let upload = response.data.data;
+					let upload = response.body.data;
 					this.name = upload.name;
 					this.tags = upload.tags;
 					this.type = upload.type;

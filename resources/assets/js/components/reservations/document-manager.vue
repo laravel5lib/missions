@@ -7,13 +7,13 @@
                 <form novalidate>
                     <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()">
                         <span v-if="!changeState">
-                            <i class="fa fa-pencil icon-left"></i> Change
+                            <i class="fa fa-cog icon-left"></i> Manage
                         </span>
                         <span v-else>
                             <i class="fa fa-times"></i> Cancel
                         </span>
                     </a>
-                    <a v-if="! isAdmin()" class="btn btn-primary-hollow btn-sm" href="/dashboard/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Add New</a>
+                    <a v-if="! isAdmin()" class="btn btn-primary-hollow btn-sm" href="/dashboard/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
                     <a class="btn btn-default-hollow btn-sm" @click="removeDocument(document)" v-if="document">
                         <i class="fa fa-trash icon-left"></i> Remove
                     </a>
@@ -188,7 +188,7 @@
                         status: 'reviewing'
                     }).then(function (response) {
                         this.toggleChangeState();
-                        this.$dispatch('set-status', response.data.data);
+                        this.$dispatch('set-status', response.body.data);
                     });
                 }
             },
@@ -202,7 +202,7 @@
                         status: 'incomplete'
                     }).then(function (response) {
                         this.document = null;
-                        this.$dispatch('set-status', response.data.data);
+                        this.$dispatch('set-status', response.body.data);
                     });
                 }
             },
@@ -224,8 +224,8 @@
                     requirementId: this.requirementId,
                     include: 'document'
                 }).then(function (response) {
-                    this.requirement = response.data.data;
-                    this.document = response.data.data.document ? response.data.data.document.data : null;
+                    this.requirement = response.body.data;
+                    this.document = response.body.data.document ? response.body.data.document.data : null;
                     this.loaded = true;
                 });
             }

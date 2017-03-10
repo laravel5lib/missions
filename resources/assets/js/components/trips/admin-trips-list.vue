@@ -219,9 +219,9 @@
                 };
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('trips', params).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.trips = response.data.data;
+                this.$http.get('trips', { params: params }).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.trips = response.body.data;
                 })
             }
         },

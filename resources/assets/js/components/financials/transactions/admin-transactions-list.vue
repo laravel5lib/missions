@@ -293,7 +293,7 @@
                     <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
-                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'll'"></td>
+                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'lll'"></td>
                     <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>
@@ -512,18 +512,18 @@
             },
             getDonors(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('donors', { search: search}).then(function (response) {
-                    this.donorsOptions = response.data.data;
+                this.$http.get('donors', { params: { search: search} }).then(function (response) {
+                    this.donorsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             searchTransactions(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', params).then(function (response) {
+                this.$http.get('transactions', { params: params }).then(function (response) {
                     let self = this;
-                    this.transactions = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.transactions = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
@@ -545,6 +545,8 @@
                 this.filters.maxDate = '';
 
                 let config = JSON.parse(localStorage[this.storageName]);
+                this.activeFields = config.activeFields;
+                this.maxActiveFields = config.maxActiveFields;
                 this.filters = config.filters;
             }
 

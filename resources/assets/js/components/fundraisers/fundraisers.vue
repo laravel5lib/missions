@@ -96,17 +96,17 @@
             },
             searchFundraisers(){
                 // this.$refs.spinner.show();
-                this.$http.get('fundraisers', {
+                this.$http.get('fundraisers', { params: {
                     active: true,
                     include: 'sponsor',
                     search: this.search,
                     page: this.pagination.current_page,
                     per_page: this.per_page,
 					isPublic: true,
-				}).then(function (response) {
-                    this.fundraisers = response.data.data;
+				}}).then(function (response) {
+                    this.fundraisers = response.body.data;
                     this.featuredFundraisers = _.first(this.fundraisers, 5);
-                    this.pagination = response.data.meta.pagination;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

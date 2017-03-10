@@ -139,4 +139,21 @@ class Cost extends Model
     {
         return $query->whereType($type);
     }
+
+    /**
+     * Create a default payment for the cost
+     * @return Payment
+     */
+    public function createDefaultPayment()
+    {
+        $payment = $this->payments()->create([
+            'amount_owed' => $this->amount/100, // convert back to dollars
+            'percent_owed' => 100,
+            'due_at' => null,
+            'upfront' => true,
+            'grace_period' => 0
+        ]);
+
+        return $payment;
+    }
 }

@@ -36,7 +36,7 @@
                         <div class="col-lg-6">
                             <div class="input-group input-group-sms"
                                  :class="{ 'has-error': checkForError('expires') }">
-                                <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <date-picker class="form-control input-sms" :time.sync="expires_at" :option="{ type: 'day', format: 'YYYY-MM-DD' }"></date-picker>
                                 <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                        v-validate:expires="{ required: true }" required>
                             </div>
@@ -96,18 +96,6 @@
             </div>
         </form>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Done</strong>
-            <p>Reservation updated!</p>
-        </alert>
-
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>There are errors on the form.</p>
-        </alert>
-
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -155,8 +143,6 @@
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
-                showSuccess: false,
-                showError: false,
                 showSaveAlert: false,
                 hasChanged: false,
                 passportResource: this.$resource('passports{/id}')
@@ -202,12 +188,13 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        window.location.href = '/dashboard/records/passports';
+                        this.$dispatch('showSuccess', 'Passport created.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/passports/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-//                        debugger;
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showError', 'Unable to create passport.');
                     });
                 } else {
                     this.showError = true;
@@ -227,15 +214,15 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-//                        window.location.href = '/dashboard/passports';
-                        this.showSuccess = true;
+                        this.$dispatch('showSuccess', 'Changes saved.');
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/passports/' + that.id;
+                        }, 1000);
                         this.hasChanged = false;
-                        // this.$refs.spinner.hide();
                     }, function (error) {
                         this.errors = error.data.errors;
-                        // this.$refs.spinner.hide();
-//                        debugger;
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -256,14 +243,14 @@
         ready(){
             // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.passportResource.get({ id: this.id }).then(function (response) {
-                    let passport = response.data.data;
+                    let passport = response.body.data;
                     $.extend(this, passport);
 
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});

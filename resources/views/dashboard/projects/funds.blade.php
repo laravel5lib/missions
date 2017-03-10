@@ -1,9 +1,47 @@
 @extends('dashboard.projects.show')
 
 @section('tab')
+    @foreach($project->fundraisers as $fundraiser)
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h5>Funding</h5>
+            <div class="row">
+                <div class="col-xs-6"><h5>Fundraiser</h5></div>
+                @if($fundraiser->url && $fundraiser->public)
+                <div class="col-xs-6"><a href="/{{ $fundraiser->sponsor->slug->url }}/{{ $fundraiser->url }}" class="btn btn-sm btn-primary pull-right" target="_blank">View Page</a></div>
+                @endif
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Name</label>
+                    <p>{{ $fundraiser->name }}</p>
+                </div>
+                <div class="col-md-2">
+                    <label>Visibility</label>
+                    <p><span class="label label-default">{{ $fundraiser->public ? 'Public' : 'Private' }}</span></p>
+                </div>
+                <div class="col-md-4">
+                    <label>Expires</label>
+                    <p>{{ $fundraiser->ended_at->format('F j, Y h:i a') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endforeach
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-6">
+                    <h5>Funding</h5>
+                </div>
+                <div class="col-xs-6 text-right">
+                    <a href="/donate/{{ $project->fund->slug }}" target="_blank" class="btn btn-sm btn-primary">
+                        Make Donation
+                    </a>
+                </div>
+            </div>
         </div>
         <div class="panel-body">
             <div class="row">

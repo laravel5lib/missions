@@ -24,7 +24,7 @@ class StoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string',
+            'title' => 'required|string|max:120',
             'content' => 'required|string',
             'author_id' => 'required|string',
             'author_type' => 'required|string|in:users,groups,fundraisers',

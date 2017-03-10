@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Models\v1\Cost;
+use App\Models\v1\Trip;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Jobs\UpdateReservationCosts;
 use App\Http\Requests\v1\CostRequest;
 use App\Http\Transformers\v1\CostTransformer;
-use App\Models\v1\Cost;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 
 class CostsController extends Controller
 {
@@ -71,14 +73,11 @@ class CostsController extends Controller
             'active_at' => $request->get('active_at')
         ]);
 
-        // Set one default payment
-        $cost->payments()->create([
-            'amount_owed' => $cost->amount/100, // convert back to dollars
-            'percent_owed' => 100,
-            'due_at' => null,
-            'upfront' => true,
-            'grace_period' => 0
-        ]);
+        $cost->createDefaultPayment();
+
+        if ($cost->costAssignable instanceOf Trip) {
+            $this->dispatch(new UpdateReservationCosts($cost));
+        }
 
         return $this->response->item($cost, new CostTransformer);
     }
@@ -103,6 +102,10 @@ class CostsController extends Controller
             'type' => $request->get('type'),
             'active_at' => $request->get('active_at')
         ]);
+
+        if ($cost->costAssignable instanceOf Trip) {
+            $this->dispatch(new UpdateReservationCosts($cost));
+        }
 
         return $this->response->item($cost, new CostTransformer);
     }

@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-sm-4 text-center">
                     <label>Active Date</label>
-                    <p>{{ date('F d, Y', strtotime($cost->active_at)) }}</p>
+                    <p>{{ $cost->active_at->format('M j, Y h:i a') }}</p>
                 </div>
                 <div class="col-sm-4 text-center">
                     <label>Cost</label>
@@ -45,7 +45,7 @@
                     <tr>
                         <td>${{ number_format($payment->amountOwedInDollars(), 2) }}</td>
                         <td>{{ number_format($payment->percent_owed, 2) }}%</td>
-                        <td>{{ $payment->upfront ? 'Upfront' : date('F d, Y', strtotime($payment->due_at)) }}</td>
+                        <td>{{ $payment->upfront ? 'Upfront' : $payment->due_at->format('M j, Y h:i a') }}</td>
                         <td>{{ $payment->upfront ? 'N/A' : $payment->grace_period }} {{ $payment->upfront ? '' : ($payment->grace_period > 1 ? 'days' : 'day') }}</td>
                     </tr>
                 @endforeach

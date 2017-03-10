@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import markdownExampleModal from './components/markdown-example-modal.vue';
-import tourGuide from './components/tour-guide.vue';
 import contactForm from './components/contact-form.vue';
 import speakerForm from './components/speaker-form.vue';
 import sponsorProjectForm from './components/sponsor-project-form.vue';
@@ -26,6 +25,7 @@ import tripDetailsMissionaries from './components/trips/trip-details-missionarie
 import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
 import userProjectsList from './components/projects/user-projects-list.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
+import restoreReservation from './components/reservations/restore-reservation.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
 import groupsList from './components/groups/groups-list.vue';
@@ -74,7 +74,7 @@ import adminTripReservationsList from './components/trips/admin-trip-reservation
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
-import adminTripDelete from './components/trips/admin-trip-delete.vue';
+import adminDeleteModal from './components/admin-delete-modal.vue';
 import costManager from './components/admin/cost-manager.vue';
 import adminTripDescription from './components/trips/admin-trip-description.vue';
 import deadlinesManager from './components/admin/deadlines-manager.vue';
@@ -181,82 +181,82 @@ Vue.use(VueAutosize);
 Vue.use(require('vue-truncate'));
 
 Vue.http.options.root = '/api';
-Vue.http.interceptors.push({
+Vue.http.interceptors.push(function(request, next) {
 
-    request: function (request) {
-        var token, headers;
+    // modify request
+    var token, headers;
 
-        token = 'Bearer ' + $.cookie('api_token');
+    token = 'Bearer ' + $.cookie('api_token');
 
-        headers = request.headers || (request.headers = {});
+    headers = request.headers || (request.headers = {});
 
-        if (token !== null && token !== 'undefined') {
-            headers.Authorization = token
+    if (token !== null && token !== 'undefined') {
+        headers.set('Authorization', token);
+    }
+
+
+    // Show Spinners in all components where they exist
+    if (_.contains(['GET', 'POST', 'PUT'], request.method.toUpperCase())) {
+        if (this.$refs.spinner && !request.params.hideLoader) {
+            switch (request.method.toUpperCase()) {
+                case 'GET':
+                    this.$refs.spinner.show({text: 'Loading'});
+                    break;
+                case 'POST':
+                    this.$refs.spinner.show({text: 'Saving'});
+                    break;
+                case 'PUT':
+                    this.$refs.spinner.show({text: 'Updating'});
+                    break;
+            }
         }
+    }
+
+    // Only POST and PUT Requests to our API
+    if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
+        console.log(this);
+        console.log(request);
+
+        /*
+         * Date Conversion: Local to UTC
+         */
+        // search nested objects/arrays for dates to convert
+        // YYYY-MM-DD
+        let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+        // YYYY-MM-DD HH:MM:SS
+        let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
+        searchObjAndConvertDates(request.data);
+
+        function searchObjAndConvertDates(obj) {
+            _.each(obj, function (value, key) {
+                // nested search
+                if (_.isObject(value) || _.isArray(value))
+                    searchObjAndConvertDates(value);
+
+                let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
+                let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
 
 
-        // Show Spinners in all components where they exist
-        if (_.contains(['GET', 'POST', 'PUT'], request.method.toUpperCase())) {
-            if (this.$refs.spinner && !request.data.hideLoader) {
-                switch (request.method.toUpperCase()) {
-                    case 'GET':
-                        this.$refs.spinner.show({text: 'Loading'});
-                        break;
-                    case 'POST':
-                        this.$refs.spinner.show({text: 'Saving'});
-                        break;
-                    case 'PUT':
-                        this.$refs.spinner.show({text: 'Updating'});
-                        break;
+                if (testDate) {
+                    // console.log('then: ', value);
+                    obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
+                    // console.log('now: ', value);
                 }
-            }
+
+                if (testDateTime) {
+                    // console.log('then: ', value);
+                    obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
+                    // console.log('now: ', value);
+                }
+
+
+            });
         }
+    }
 
-        // Only POST and PUT Requests to our API
-        if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
-            console.log(this);
-            console.log(request);
+    // continue to next interceptor
+    next(function(response) {
 
-            /*
-             * Date Conversion: Local to UTC
-             */
-            // search nested objects/arrays for dates to convert
-            // YYYY-MM-DD
-            let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
-            // YYYY-MM-DD HH:MM:SS
-            let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
-            searchObjAndConvertDates(request.data);
-
-            function searchObjAndConvertDates(obj) {
-                _.each(obj, function (value, key) {
-                    // nested search
-                    if (_.isObject(value) || _.isArray(value))
-                        searchObjAndConvertDates(value);
-
-                    let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
-                    let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
-
-
-                    if (testDate) {
-                        // console.log('then: ', value);
-                        obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
-                        // console.log('now: ', value);
-                    }
-
-                    if (testDateTime) {
-                        // console.log('then: ', value);
-                        obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
-                        // console.log('now: ', value);
-                    }
-
-
-                });
-            }
-        }
-        return request
-    },
-
-    response: function (response) {
         // Hide Spinners in all components where they exist
         if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
             this.$refs.spinner.hide();
@@ -270,16 +270,16 @@ Vue.http.interceptors.push({
         if (response.status && response.status === 500) {
             console.log('Oops! Something went wrong with the server.')
         }
-        if (response.headers && response.headers('Authorization')) {
-            $.cookie('api_token', response.headers('Authorization'));
+        if (response.headers && response.headers.has('Authorization')) {
+            $.cookie('api_token', response.headers.get('Authorization'));
         }
         if (response.data && response.data.token && response.data.token.length > 10) {
             $.cookie('api_token', response.data.token);
         }
 
-        return response
-    }
+    });
 });
+
 
 // Register email validator function.
 Vue.validator('email', function (val) {
@@ -430,21 +430,6 @@ Vue.directive('crop', {
         this.vm.jcrop = null
     }
 });
-
-var TourSteps = [
-    {
-        orphan: true,
-        element: "#my-element",
-        title: "Here we go!",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat lorem sit amet tempus feugiat. In gravida elit ligula, consectetur laoreet arcu accumsan ac. Pellentesque vulputate efficitur turpis, eget molestie mi."
-    },
-    {
-        orphan: true,
-        element: "#my-element",
-        title: "Second Step, maybe a third?",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc placerat lorem sit amet tempus feugiat. In gravida elit ligula, consectetur laoreet arcu accumsan ac. Pellentesque vulputate efficitur turpis, eget molestie mi."
-    },
-];
 
 Vue.directive('tour-guide', {
     bind: function () {
@@ -710,6 +695,7 @@ new Vue({
         reservationRequirements,
         referralResponse,
         sendEmail,
+        restoreReservation,
 
         //dashboard components
         recordsList,
@@ -751,7 +737,7 @@ new Vue({
         adminTripReservationsList,
         adminTripFacilitators,
         adminTripDuplicate,
-        adminTripDelete,
+        adminDeleteModal,
         costManager,
         adminTripDescription,
         deadlinesManager,
@@ -856,7 +842,7 @@ new Vue({
         },
         hasAbility(ability) {
             let abilities = _.pluck(this.user.abilities.data, 'name');
-            return !!this.user ? _.contains(abilities, ability) : false;
+            return this.user ? _.contains(abilities, ability) : false;
         },
 
         startTour(){
@@ -867,10 +853,12 @@ new Vue({
     events: {
         'showSuccess': function (msg) {
             this.message = msg;
+            this.showError = false;
             this.showSuccess = true;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showSuccess = false;
             this.showError = true;
         },
         'userHasLoggedIn': function (user) {

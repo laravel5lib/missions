@@ -121,14 +121,14 @@
 					items: allCodes
 				}).then(function(response) {
 				    this.$root.$emit('showSuccess', 'Trips History Updated!');
-                    this.accolades = response.data.data;
+                    this.accolades = response.body.data;
                     this.selectedTrips = [];
                     this.filterAccolades();
 				});
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
-                    this.accolades = response.data.data[0] || { items: [] };
+                    this.accolades = response.body.data[0] || { items: [] };
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
@@ -144,7 +144,7 @@
 			},
             searchTrips() {
 				return this.$http.get('utilities/past-trips').then(function(response) {
-					this.trips = response.data;
+					this.trips = response.body;
 				});
             }
         },

@@ -229,8 +229,8 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', { search: search }).then(function (response) {
-					this.groups = response.data.data;
+				this.$http.get('groups', { params: { search: search } }).then(function (response) {
+					this.groups = response.body.data;
 					loading(false);
 				});
 			},
@@ -248,14 +248,14 @@
 
 			// get some groups
 			this.$http.get('groups').then(function (response) {
-				this.groups = response.data.data;
+				this.groups = response.body.data;
 			});
 			done();
 		},
 		events: {
 			'trip'(val){
 				this.$http.get('groups/' + val.group_id).then(function (response) {
-					this.groupObj = response.data.data;
+					this.groupObj = response.body.data;
 				});
 				var arr = [];
 				_.forEach(this.prospectsList, function (prospect) {

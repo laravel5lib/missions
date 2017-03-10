@@ -137,7 +137,7 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <div v-error-handler="{ value: user_id, client: 'user', server; 'user_id' }">
+                    <div v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }">
                         <label for="manager">Managing User</label>
                         <v-select class="form-control" :value.sync="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div v-error-handler="{ value: companion_limit, client: 'companions', server; 'companion_limit' }">
+                    <div v-error-handler="{ value: companion_limit, client: 'companions', server: 'companion_limit' }">
                         <label for="companions">Companions</label>
                         <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
                     </div>
@@ -198,7 +198,7 @@
                 gender: '',
                 birthday: '',
                 shirt_size: '',
-                user_id: null,
+//                user_id: null,
                 desired_role: '',
                 status: '',
                 companion_limit: 0,
@@ -250,8 +250,8 @@
             },
             searchUsers(search, loading){
                 loading(true);
-                this.$http.get('users', { search: search}).then(function (response) {
-                    this.users = response.data.data;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.users = response.body.data;
                     loading(false);
                 });
             },
@@ -282,10 +282,10 @@
                         user_id: this.user_id,
                         desired_role: this.desired_role,
                     }).then(function (response) {
-                        $.extend(this, response.data.data);
+                        $.extend(this, response.body.data);
                         this.$root.$emit('showSuccess', 'Reservation updated!');
 						this.hasChanged = false;
-                        this.desired_role = response.data.data.desired_role.code;
+                        this.desired_role = response.body.data.desired_role.code;
                     }, function (error) {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'There are errors on the form.');
@@ -319,17 +319,17 @@
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.$http.get('utilities/team-roles').then(function (response) {
-                _.each(response.data.roles, function (name, key) {
+                _.each(response.body.roles, function (name, key) {
                     this.roles.push({ value: key, name: name});
                 }.bind(this));
             });
 
             this.resource.get().then(function (response) {
-                var reservation = response.data.data;
+                var reservation = response.body.data;
                 this.given_names = reservation.given_names;
                 this.surname = reservation.surname;
                 this.gender = reservation.gender;

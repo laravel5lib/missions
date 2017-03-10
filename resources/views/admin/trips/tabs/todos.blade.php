@@ -1,3 +1,7 @@
+<div class="alert alert-warning">
+    <strong>Important:</strong> Adding or removing tasks will overwrite <em>incomplete</em> tasks on reservations.
+</div>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         <div class="row">

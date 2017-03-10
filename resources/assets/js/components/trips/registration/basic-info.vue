@@ -213,6 +213,7 @@
 									<label for="infoShirtSize">Shirt Sizes</label>
 									<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
 											id="infoShirtSize">
+										<option value="XS">XS (Extra Small)</option>
 										<option value="S">S (Small)</option>
 										<option value="M">M (Medium)</option>
 										<option value="L">L (Large)</option>
@@ -318,7 +319,6 @@
 				phone: '',
 				mobile: '',
 				firstName: null,
-				// middleName: null,
 				lastName: null,
 				email: null,
 				dobDay: '',
@@ -361,7 +361,6 @@
 					phone: this.phone,
 					mobile: this.mobile,
 					firstName: this.firstName,
-					// middleName: this.middleName,
 					lastName: this.lastName,
 					email: this.email,
 					dobDay: this.dobDay,
@@ -388,8 +387,8 @@
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { search: search}).then(function (response) {
-					this.usersArr = response.data.data;
+				this.$http.get('users', { params: { search: search} }).then(function (response) {
+					this.usersArr = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
@@ -397,7 +396,6 @@
 				switch (this.onBehalf) {
 					case true:
 						this.firstName = null;
-						this.middleName = null;
 						this.lastName = null;
 						this.dobDay = '';
 						this.dobMonth = '';
@@ -418,7 +416,6 @@
 						var user = this.forAdmin ? this.userObj : this.$parent.userData;
 						var names = user.name.split(' ');
 						this.firstName = _.first(names);
-						this.middleName = _.without(names, _.first(names), _.last(names));
 						this.lastName = names.length>1 ? _.last(names) : null;
 
 						var birthdays = user.birthday.split('-');
@@ -448,19 +445,20 @@
 			}
 
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 				this.toggleUserData();
 			});
 
 			this.$http.get('utilities/team-roles').then(function (response) {
-				_.each(response.data.roles, function (name, key) {
+				_.each(response.body.roles, function (name, key) {
 				    if (_.contains(this.$parent.trip.team_roles, key))
 						this.roles.push({ value: key, name: name});
 				}.bind(this));
 			});
 
 			this.$dispatch('basic-info', true);
-			$('html, body').animate({scrollTop: 200}, 300);
+			if (location.pathname.indexOf('admin') === -1)
+				$('html, body').animate({scrollTop: 200}, 300);
 			done();
 		}
 	}

@@ -10,7 +10,7 @@
                     <p>{{ $requirement->short_desc }}</p>
                 </div>
                 <div class="col-xs-4 text-right">
-                    <h5><i class="fa fa-calendar"></i> {{ date('F d, Y', strtotime($requirement->due_at)) }}</h5>
+                    <h5><i class="fa fa-calendar"></i> {{ $requirement->due_at->format('M j, Y h:i a') }}</h5>
                     <h6><small>Grace Period: {{ $requirement->grace_period }} {{ $requirement->grace_period > 1 ? 'days' : 'day' }}</small></h6>
                 </div>
             </div><!-- end row -->

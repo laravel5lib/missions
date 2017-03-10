@@ -14,9 +14,9 @@
             <tr>
                 <th>Status</th>
                 <th>Cost Name</th>
-                <th>Outstanding Balance</th>
-                <th>Grace Period</th>
+                <th>Outstanding</th>
                 <th>Due</th>
+                <th>Grace Period</th>
                 <th><i class="fa fa-cog"></i></th>
             </tr>
             </thead>
@@ -28,8 +28,8 @@
                     </td>
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>
-                    <td>{{ due.grace_period }}</td>
-                    <td>{{ due.due_at | moment 'll' }}</td>
+                    <td>{{ due.due_at | moment 'lll' }}</td>
+                    <td>{{ due.grace_period }} days</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
                         <!--<a class="btn btn-danger btn-xs" @click="remove(due)"><i class="fa fa-times"></i></a>-->
@@ -231,7 +231,7 @@
 
                 // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    let thisTrip = response.data.data;
+                    let thisTrip = response.body.data;
                     this.selecteddues = new Array(this.newDeadline);
                     // this.$refs.spinner.hide();
                     return this.adddues();
@@ -246,7 +246,7 @@
             /*doUpdate(reservation){
                 // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
@@ -274,8 +274,8 @@
             }*/
             getDues(){
                 this.resource.get({ page: this.pagination.current_page }).then(function (response) {
-                    this.dues = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.dues = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 });
             }
         },

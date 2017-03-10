@@ -60,7 +60,7 @@
                 // this.$refs.spinner.show();
                 this.reservation.avatar_upload_id = this.avatar_upload_id;
                 this.resource.update({id: this.id}, this.reservation).then(function(response) {
-                    this.reservation = response.data.data;
+                    this.reservation = response.body.data;
                     this.avatar = this.reservation.avatar;
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
@@ -70,7 +70,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.get({id: this.id}).then(function(response) {
-                this.reservation = response.data.data;
+                this.reservation = response.body.data;
                 this.avatar = this.reservation.avatar
                 // this.$refs.spinner.hide();
             });

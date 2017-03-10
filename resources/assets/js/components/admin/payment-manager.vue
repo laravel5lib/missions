@@ -14,7 +14,7 @@
         <tr v-for="payment in payments|orderBy 'due_at'">
             <td>{{ payment.amount_owed|currency }}</td>
             <td>{{ payment.percent_owed|number }}%</td>
-            <td v-if="payment.due_at">{{ payment.due_at|moment 'll' }}</td>
+            <td v-if="payment.due_at">{{ payment.due_at|moment 'lll' }}</td>
             <td v-else>Upfront</td>
             <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
             <td>
@@ -334,6 +334,9 @@
             updatePayment(){
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentEdit.valid) {
+                    if (this.selectedPayment.due_at === 'Invalid date') {
+                        this.selectedPayment.due_at = null;
+                    }
                     this.$root.$emit('SpinnerOn');
                     this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then(function (response) {
                         this.resetPayment();

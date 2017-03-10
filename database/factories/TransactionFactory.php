@@ -6,13 +6,8 @@
 $factory->define(App\Models\v1\Transaction::class, function(Faker\Generator $faker)
 {
     return [
-        'id' => $faker->unique()->uuid,
-        'fund_id' => function () {
-            return factory(App\Models\v1\Fund::class)->create()->id;
-        },
-        'donor_id' => function () {
-            return factory(App\Models\v1\Donor::class)->create()->id;
-        },
+        'fund_id' => $faker->uuid,
+        'donor_id' => $faker->uuid,
         'type' => 'donation',
         'amount' => $faker->randomNumber(2),
         'anonymous' => $faker->boolean(25),

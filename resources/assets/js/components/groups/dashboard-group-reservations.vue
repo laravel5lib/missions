@@ -398,14 +398,14 @@
 					age: [ this.ageMin, this.ageMax]
 				});
 				// this.$refs.spinner.show();
-				this.$http.get('reservations', params).then(function (response) {
+				this.$http.get('reservations', { params: params }).then(function (response) {
                     let self = this;
-                    _.each(response.data.data, function (reservation) {
+                    _.each(response.body.data, function (reservation) {
                         reservation.amount_raised = this.totalAmountRaised(reservation);
                         reservation.percent_raised = this.totalPercentRaised(reservation);
                     }, this);
-                    this.reservations = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.reservations = response.body.data;
+                    this.pagination = response.body.meta.pagination;
 					// this.$refs.spinner.hide();
 				}, function (error) {
 					// this.$refs.spinner.hide();
@@ -414,22 +414,22 @@
             },
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('groups', { search: search}).then(function (response) {
-					this.groupsOptions = response.data.data;
+            	this.$http.get('groups', { params: { search: search} }).then(function (response) {
+					this.groupsOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', { search: search}).then(function (response) {
-					this.campaignOptions = response.data.data;
+				this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
+					this.campaignOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { search: search}).then(function (response) {
-					this.usersOptions = response.data.data;
+				this.$http.get('users', { params: { search: search} }).then(function (response) {
+					this.usersOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},

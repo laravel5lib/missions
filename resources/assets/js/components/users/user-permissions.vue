@@ -111,16 +111,16 @@
             },
             getAbilities() {
                 this.$http.get('permissions/abilities').then(function (response) {
-                    this.availableAbilities = response.data.data;
+                    this.availableAbilities = response.body.data;
                 });
             },
             fetch() {
                 this.$http.get('permissions/roles').then(function (response) {
-                    this.availableRoles = response.data.data;
+                    this.availableRoles = response.body.data;
                 });
                 this.$http.get('users/' + this.user_id + '?include=roles.abilities,abilities').then(function (response) {
-                    this.selectedRoles = response.data.data.roles.data;
-                    this.selectedAbilities = response.data.data.abilities.data;
+                    this.selectedRoles = response.body.data.roles.data;
+                    this.selectedAbilities = response.body.data.abilities.data;
                 });
             },
             assign(role) {

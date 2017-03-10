@@ -119,15 +119,15 @@
                 this.search = null;
             },
             searchReservations(){
-                this.$http.get('reservations', {
+                this.$http.get('reservations', { params: {
                     trip_id: new Array(this.tripId),
                     include:'user',
                     search: this.searchText,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                }).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.reservations = response.data.data;
+                }}).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.reservations = response.body.data;
                 })
             }
         },

@@ -6,13 +6,17 @@
 $factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator $faker)
 {
     return [
-        'user_id'       => function () {
-            return factory(App\Models\v1\User::class)->create()->id;
-        },
+        'user_id'       => $faker->uuid,
         'name'          => $faker->firstName . ' ' . $faker->lastName,
         'ins_provider'  => $faker->company,
         'ins_policy_no' => $faker->ean8,
-        'is_risk'       => $faker->boolean(50)
+        'is_risk'       => $faker->boolean(50),
+        'emergency_contact' => [
+            'name' => $faker->name,
+            'email' => $faker->email,
+            'phone' => $faker->phoneNumber,
+            'relationship' => $faker->randomElement(['friend', 'spouse', 'family', 'guardian', 'other'])
+        ]
     ];
 });
 

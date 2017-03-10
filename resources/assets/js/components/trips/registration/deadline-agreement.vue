@@ -73,7 +73,7 @@
 							<p class="list-group-item-text">
 								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
 							</p>
-						</div>>
+						</div>
 					</div>
 				</div>
 			</div>

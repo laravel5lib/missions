@@ -310,7 +310,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="website">Website</label>
-                                        <input type="text" class="form-control" v-model="website" id="website" placeholder="wwww.my-website.com">
+                                        <input type="text" class="form-control" v-model="website" id="website" placeholder="www.my-website.com">
                                     </div>
                                 </div>
                             </div><!-- end panel-body -->

@@ -25,7 +25,7 @@
                 <form>
                     <div class="form-group">
                         <label for="newStoryTitle">Story Title</label>
-                        <input type="text" class="form-control" id="newStoryTitle" v-model="selectedStory.title">
+                        <input type="text" class="form-control" id="newStoryTitle" v-model="selectedStory.title" maxlength="60">
                     </div>
                     <div class="form-group">
                         <label for="newStoryContent">Content
@@ -84,7 +84,7 @@
                     <form>
                         <div class="form-group">
                             <label for="selectedStoryTitle">Title</label>
-                            <input type="text" class="form-control" id="selectedStoryTitle" v-model="selectedStory.title">
+                            <input type="text" class="form-control" id="selectedStoryTitle" v-model="selectedStory.title" maxlength="60">
                         </div>
                         <div class="form-group">
                             <label for="selectedStoryContent">Content

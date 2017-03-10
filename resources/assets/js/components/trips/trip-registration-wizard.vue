@@ -184,7 +184,7 @@
 
 				var data = {
 					// reservation data
-					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+					given_names: this.userInfo.firstName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,

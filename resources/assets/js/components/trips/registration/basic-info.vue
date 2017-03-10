@@ -213,6 +213,7 @@
 									<label for="infoShirtSize">Shirt Sizes</label>
 									<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
 											id="infoShirtSize">
+										<option value="XS">XS (Extra Small)</option>
 										<option value="S">S (Small)</option>
 										<option value="M">M (Medium)</option>
 										<option value="L">L (Large)</option>

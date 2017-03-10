@@ -3,12 +3,12 @@
         <h5 class="panel-header">Recent Donations</h5>
     </div>
     <div style="height:250px;overflow:scroll;margin-top:-1px;">
-        <table class="table table-hover table-responsive">
+        <table class="table table-hover table-responsive" style="cursor: pointer">
             <tbody>
             @forelse(auth()->user()->recentDonations() as $donation)
-                <tr>
+                <tr onclick="location.href='{{ url('/dashboard/reservations/'.$donation->fund->fundable->id.'/funding') }}'">
                     <td style="padding:5px 15px;vertical-align:middle;">
-                        <h4 class="text-success" style="margin:0px;">${{ number_format($donation->amount, 2) }} <small> from {{ $donation->donor->name }}</h4>
+                        <h4 class="text-success" style="margin:0px;">${{ number_format($donation->amountInDollars(), 2) }} <small> from {{ $donation->donor->name }}</h4>
                         <span class="small">{{ $donation->description }}</span class="small">
                         {{-- <span class="small">from {{ $donation->donor->name }}</span></td> --}}
                     <td class="text-right text-muted" style="vertical-align:middle;font-size:10px;">{{ $donation->created_at->diffForHumans() }}</td>

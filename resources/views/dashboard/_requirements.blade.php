@@ -3,10 +3,10 @@
         <h5 class="panel-header">Outstanding Requirements</h5>
     </div>
     <div style="height:250px;overflow:scroll;margin-top:-1px;">
-        <table class="table table-hover table-responsive">
+        <table class="table table-hover table-responsive" style="cursor: pointer">
             <tbody>
             @forelse(auth()->user()->outstandingRequirements() as $requirement)
-                <tr>
+                <tr onclick="location.href='{{ url('/dashboard/reservations/'.$requirement->reservation->id.'/requirements') }}'">
                     <td style="padding:10px 15px;">
                         <h4 style="margin:0px;">{{ $requirement->requirement->name }}</h4>
                         <span class="small">{{ $requirement->reservation->name }}'s trip to 

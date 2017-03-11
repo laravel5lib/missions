@@ -509,9 +509,9 @@
                         this.hasChanged = false;
 
                         if (this.public) {
-                            let myProfileButton = $('#settings-profile-link');
+                            let myProfileButton = document.getElementById('settings-profile-link');
                             if (myProfileButton)
-                                myProfileButton[0].attributes.href.value = response.body.data.url;
+                                myProfileButton.attributes.href.value = '/' + response.body.data.url;
                         }
 
                     }, function (error) {

@@ -269,7 +269,7 @@
 					<div class="form-group" :class="{ 'has-error': registerErrors.country_code }">
 						<div class="col-xs-10 col-xs-offset-1">
 							<label for="country" class="control-label">Country</label>
-							<v-select class="form-control" id="country" :value.sync="countryCodeObj"
+							<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj"
 									  :options="countries" label="name"></v-select>
 							<select hidden name="country" id="country" class="hidden" v-model="newUser.country_code"
 									required>
@@ -280,7 +280,7 @@
 					<div class="form-group">
 						<div class="col-xs-10 col-xs-offset-1">
 							<label for="timezone" class="control-label">Timezone</label>
-							<v-select class="form-control" id="timezone" :value.sync="newUser.timezone"
+							<v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="newUser.timezone"
 									  :options="timezones"></v-select>
 							<select hidden name="timezone" id="timezone" class="hidden" v-model="newUser.timezone"
 									required>

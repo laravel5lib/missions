@@ -48,7 +48,7 @@
             <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country' }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
-                    <v-select class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
@@ -57,7 +57,7 @@
             <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship' }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
-                    <v-select class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
                     <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate:citizenship="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>

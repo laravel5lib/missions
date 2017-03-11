@@ -60,7 +60,7 @@
             <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
-                    <v-select class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
                     <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>

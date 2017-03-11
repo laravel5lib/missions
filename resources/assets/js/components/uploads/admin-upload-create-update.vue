@@ -51,7 +51,7 @@
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
 					<label for="tags" class="control-label">Tags</label>
-						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+						<v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
 						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>

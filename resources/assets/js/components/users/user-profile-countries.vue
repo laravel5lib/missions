@@ -39,10 +39,10 @@
         <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Countries" width="800" :callback="updateAccolades">
             <div slot="modal-body" class="modal-body text-center">
 				<validator name="AddCountry">
-					<form class="for" novalidate>
+					<form class="for" @submit.prevent="" novalidate>
 						<div class="form-group" :class="">
 							<label class="control-label">Countries</label>
-							<v-select class="form-control" multiple :value.sync="selectedCountries" :options="availableCountries"
+							<v-select @keydown.enter.prevent="" class="form-control" multiple :value.sync="selectedCountries" :options="availableCountries"
 									  label="name"></v-select>
 							<select hidden="" v-model="selectedCodes" multiple v-validate:code="{ required: true }">
 								<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>

@@ -29,7 +29,7 @@
             <input class="form-control" v-model="cause.name" v-if="editMode" />
             <p v-else>{{ cause.name }}</p>
             <label>Countries</label>
-            <v-select class="form-control"
+            <v-select @keydown.enter.prevent=""  class="form-control"
                       multiple
                       id="country"
                       :value.sync="cause.countries"

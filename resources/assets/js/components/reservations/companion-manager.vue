@@ -49,7 +49,7 @@
                                 <div class="form-group" :class="{ 'has-error': checkForError('reservation') }">
                                     <label class="control-label">Reservation</label>
                                     <span class="help-block" v-show="reservations.length < 1"><i class="fa fa-warning"></i> If your search yields no options it could mean (1) the reservation does not exist or (2) the reservation belongs to another group or campaign.</span>
-                                    <v-select class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
+                                    <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
                                     <!-- <select hidden="" v-model="newCompanion.companion_reservation_id" v-validate:reservation="{ required: true}">
                                         <option :value="reservation.id" v-for="reservation in reservations">{{reservation.name}}</option>
                                     </select> -->

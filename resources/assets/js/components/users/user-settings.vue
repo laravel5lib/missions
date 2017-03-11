@@ -507,6 +507,13 @@
                         this.setUserData(response.body.data);
                         this.$dispatch('showSuccess', 'Settings updated successfully.');
                         this.hasChanged = false;
+
+                        if (this.public) {
+                            let myProfileButton = $('#settings-profile-link');
+                            if (myProfileButton)
+                                myProfileButton[0].attributes.href.value = response.body.data.url;
+                        }
+
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;

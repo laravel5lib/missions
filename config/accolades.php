@@ -42,6 +42,15 @@ return [
         '2014 Roatan, Honduras',
         '2014 Kumasi, Ghana',
         '2014 Lima, Peru',
-        '2014 Kathmandu, Nepal'
+        '2014 Kathmandu, Nepal',
+        '2015 India',
+        '2015 1Nation1Day Dominican Republic',
+        '2015 Christmas in India',
+        '2016 India',
+        '2016 Ecuador',
+        '2016 Nicaragua',
+        '2016 Honduras 1N1D Follow up',
+        '2016 Nepal',
+        '2016 Christmas in India'
     ]
 ];

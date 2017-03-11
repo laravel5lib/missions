@@ -7,13 +7,13 @@
                 <form novalidate>
                     <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()">
                         <span v-if="!changeState">
-                            <i class="fa fa-pencil icon-left"></i> Change
+                            <i class="fa fa-cog icon-left"></i> Manage
                         </span>
                         <span v-else>
                             <i class="fa fa-times"></i> Cancel
                         </span>
                     </a>
-                    <a v-if="! isAdmin()" class="btn btn-primary-hollow btn-sm" href="/dashboard/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Add New</a>
+                    <a v-if="! isAdmin()" class="btn btn-primary-hollow btn-sm" href="/dashboard/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
                     <a class="btn btn-default-hollow btn-sm" @click="removeDocument(document)" v-if="document">
                         <i class="fa fa-trash icon-left"></i> Remove
                     </a>

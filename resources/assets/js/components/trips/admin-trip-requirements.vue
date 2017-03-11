@@ -193,21 +193,18 @@
                     'Passport',
                     'Visa',
                     'Referral',
-                    'Credentials',
-                    'Minor Release',
-                    'Immunization',
                     'Testimony',
                     'Arrival Designation',
-                    'Itinerary'
+                    'Airport Preference'
                 ],
                 documentTypes: [
                     'medical_releases',
                     'passports',
                     'visas',
                     'referrals',
-                    'credentials',
-                    'arrival_designation',
+                    'arrival_designations',
                     'essays',
+                    'airport_preferences'
                 ],
                 sort: 'due_at',
                 direction: 'asc'

@@ -8,6 +8,8 @@
                 </h6>
             </div>
             <div class="col-xs-12" v-else>
+                <div class="alert alert-warning"><i class="fa fa-warning icon-left"></i> Please verify your arrival designation with your team facilitator and travel companions <strong>before</strong> submitting a selection.</div>
+                
                 <h6 class="text-uppercase"><i class="fa fa-map-marker"></i>Select designation</h6>
                 <select v-model="designation.content" @change="updateInfo" class="form-control">
                     <option value="">Select</option>

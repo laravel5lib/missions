@@ -69,7 +69,7 @@
             </div>
 
             <accordion :one-at-atime="true">
-                <panel header="Avatar" :is-open.sync="true">
+                <panel header="Upload Photocopy" :is-open.sync="true">
                     <div class="media" v-if="selectedAvatar">
                         <div class="media-left">
                             <a href="#">

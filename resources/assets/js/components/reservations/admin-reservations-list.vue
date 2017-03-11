@@ -374,6 +374,8 @@
 					</th>
 					<th v-if="isActive('registered')">
 						Registered On
+						<i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
 					<th v-if="isActive('gender')">
 						Gender
@@ -386,6 +388,8 @@
 					</th>
 					<th v-if="isActive('email')">
 						Email
+						<i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
 					<th v-if="isActive('requirements')">
 						Requirements

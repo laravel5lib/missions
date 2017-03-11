@@ -23,6 +23,6 @@
 
 @section('tab')
 
-<visas-list user-id="{{ auth()->user()->id }}"></visas-list>
+<visas-list user-id="{{ auth()->user()->id }}" managing="{{ (auth()->user()->managing()->count()) or 0 }}"></visas-list>
 
 @endsection

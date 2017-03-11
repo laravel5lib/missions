@@ -4,7 +4,7 @@
 
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox" v-if="userId">
+                <div style="margin-right:5px;" class="checkbox" v-if="managing">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's visas
                     </label>
@@ -105,6 +105,13 @@
             'userId': {
                 type: String,
                 required: false
+            },
+            'managing': {
+                type: Boolean,
+                default: false,
+                coerce: function (val) {
+                    return parseInt(val) > 0;
+                }
             },
             'selector': {
                 type: Boolean,

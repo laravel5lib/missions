@@ -22,6 +22,6 @@
 @stop
 
 @section('tab')
-    <passports-list user-id="{{ auth()->user()->id }}"></passports-list>
+    <passports-list user-id="{{ auth()->user()->id }}" managing="{{ (auth()->user()->managing()->count()) or 0 }}"></passports-list>
     <hr class="divider inv lg">
 @stop

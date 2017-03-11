@@ -22,6 +22,6 @@
 @stop
 
 @section('tab')
-    <medicals-list user-id="{{ auth()->user()->id }}"></medicals-list>
+    <medicals-list user-id="{{ auth()->user()->id }}" managing="{{ (auth()->user()->managing()->count()) or 0 }}"></medicals-list>
     <hr class="divider inv xlg">
 @stop

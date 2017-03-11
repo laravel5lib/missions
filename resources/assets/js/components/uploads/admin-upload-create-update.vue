@@ -121,7 +121,7 @@
 				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
 						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
-						The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
+						The current size is <b>{{(coords.w / this.imageAspectRatio).toFixed(0)}}x{{(coords.h / this.imageAspectRatio).toFixed(0)}}</b>.
 					</div>
 				</div>
 

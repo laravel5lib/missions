@@ -59,6 +59,13 @@
             submit(){
                 // this.$refs.spinner.show();
                 this.reservation.avatar_upload_id = this.avatar_upload_id;
+
+                if(this.reservation.tags)
+                    delete this.reservation.tags;
+
+                if(_.isObject(this.reservation.desired_role))
+                    this.reservation.desired_role = this.reservation.desired_role.code;
+
                 this.resource.update({id: this.id}, this.reservation).then(function(response) {
                     this.reservation = response.body.data;
                     this.avatar = this.reservation.avatar;

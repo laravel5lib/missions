@@ -259,7 +259,7 @@
 						<div class="col-xs-10  col-xs-offset-1">
 							<label class="control-labal">Gender</label><br>
 							<label class="radio-inline lightcolor">
-								<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender">
+								<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender" required>
 									Male</label>
 							<label class="radio-inline lightcolor">
 								<input name="gender" type="radio" value="Female" id="gender"

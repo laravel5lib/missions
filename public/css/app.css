@@ -14773,8 +14773,8 @@ body.vjs-full-window {
   text-align: center;
   text-transform: lowercase; }
 
-.vjs-menu li.vjs-menu-item:focus,
-.vjs-menu li.vjs-menu-item:hover {
+.vjs-menu li:focus,
+.vjs-menu li:hover {
   outline: 0;
   background-color: #73859f;
   background-color: rgba(115, 133, 159, 0.5); }
@@ -14889,6 +14889,9 @@ body.vjs-full-window {
   visibility: visible;
   opacity: 0;
   transition: visibility 1s, opacity 1s; }
+  @media \0screen {
+    .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+      visibility: hidden; } }
 
 .vjs-controls-disabled .vjs-control-bar,
 .vjs-using-native-controls .vjs-control-bar,
@@ -14898,6 +14901,10 @@ body.vjs-full-window {
 .vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
   opacity: 1;
   visibility: visible; }
+
+@media \0screen {
+  .vjs-user-inactive.vjs-playing .vjs-control-bar :before {
+    content: ""; } }
 
 .vjs-has-started.vjs-no-flex .vjs-control-bar {
   display: table; }
@@ -17226,6 +17233,12 @@ a.socialIcon:hover, .socialHoverClass {
   .divider.sm {
     margin-top: 5px;
     margin-bottom: 5px; }
+
+@media screen and (max-width: 767px) {
+  .alert.top-right {
+    right: 0px !important; }
+  .alert.top, .alert.top-right {
+    top: 68px !important; } }
 
 [v-cloak] {
   display: none; }

@@ -81,10 +81,10 @@
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-3 col-md-4">
+				<div class="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-4 col-lg-offset-0">
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">About Dana Point, CA</h2>
 				</div>
-				<div class="col-sm-9 col-md-8">
+				<div class="col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
 					<h4 class="text-serif text-lightweight text-primary">Hike</h4>
 					<p class="small">Dana Point is surrounded by endless miles of walking trails of all intensity levels. At MMC we encourage an active lifestyle and we promise that Southern California will not disappoint.</p>
 

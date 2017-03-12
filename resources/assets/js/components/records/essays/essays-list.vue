@@ -100,6 +100,7 @@
             return{
                 essays: [],
                 selectedEssay: '',
+                trips: [],
                 //logic vars
                 includeManaging: false,
                 search: '',

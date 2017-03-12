@@ -98,6 +98,7 @@
             return {
                 medical_releases: [],
                 selectedMedicalRelease: null,
+                trips: [],
                 //logic vars
                 filters: {
                     expired: false,

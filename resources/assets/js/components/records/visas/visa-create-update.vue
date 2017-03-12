@@ -60,7 +60,7 @@
             <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
-                    <v-select class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
                     <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
+                        <upload-create-update type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
                     </div><!-- end panel-body -->
                 </panel>
             </accordion>

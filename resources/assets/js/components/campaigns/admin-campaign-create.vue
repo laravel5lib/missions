@@ -13,7 +13,7 @@
 			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 							  label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code"
 							v-validate:country="{ required: true }">

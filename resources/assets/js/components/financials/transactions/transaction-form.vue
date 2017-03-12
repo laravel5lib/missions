@@ -11,7 +11,7 @@
                 <div class="row" v-if="editing">
                     <div class="col-xs-12">
                         <label>Designated Fund</label>
-                        <v-select class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
                                   :value.sync="designatedFund" :options="funds" label="name"
                                   placeholder="Select a fund" v-if="!editing"></v-select>
                         <p v-else>{{ designatedFund.name }}</p>
@@ -53,7 +53,7 @@
                         </select>
                     </div>
                     <div class="col-xs-8">
-                        <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
                                   :value.sync="selectedFund" :options="funds" label="name"
                                   placeholder="Select a fund"></v-select>
                         <span class="help-block small" v-show="selectedFund">
@@ -65,7 +65,7 @@
                     <div class="row">
                         <div class="col-xs-6">
                             <label>Donor</label>
-                            <v-select class="form-control" id="selectedFund" :debounce="250" :on-search="getDonors"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="selectedFund" :debounce="250" :on-search="getDonors"
                                       :value.sync="selectedDonor" :options="donors" label="name"
                                       placeholder="Select a donor"></v-select>
                             <span class="help-block small">

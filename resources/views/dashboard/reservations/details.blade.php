@@ -23,7 +23,7 @@
             <h5>Details</h5>
         </div>
         <div class="panel-body">
-            <div class="col-md-7">
+            <div class="col-xs-12 col-lg-7">
                 <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
                 <hr class="divider">
                 <div class="row">
@@ -92,7 +92,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5 panel panel-default panel-body text-center">
+            <div class="col-xs-12 col-lg-5 panel panel-default panel-body text-center">
                 <label>Email</label>
                 <p>{{ $reservation->email }}</p>
                 <label>Home Phone</label>

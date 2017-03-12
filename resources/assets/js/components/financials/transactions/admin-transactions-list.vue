@@ -16,7 +16,7 @@
 
                 <div class="form-group" v-if="!donor">
                     <label>Donor</label>
-                    <v-select class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
                               :value.sync="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
                 </div>

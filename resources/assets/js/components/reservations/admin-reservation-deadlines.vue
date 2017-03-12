@@ -42,7 +42,7 @@
                         <div class="form-group" :class="{ 'has-error': checkForError('deadlines') }"><label
                                 class="col-sm-2 control-label">Available Deadlines</label>
                             <div class="col-sm-10">
-                                <v-select class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
+                                <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
                                           label="name"></v-select>
                                 <select hidden="" v-model="user_id" v-validate:deadlines="{ required: true }" multiple>
                                     <option :value="deadline.id" v-for="deadline in deadlines">{{deadline.name}}</option>

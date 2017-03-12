@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-sm btn-default" type="button" @click="newMode = false">Cancel</button>
+                        <button class="btn btn-sm btn-default" type="button" @click="newMode = false,resetData()">Cancel</button>
                         <button class="btn btn-sm btn-primary" type="button" @click="createStory(selectedStory)">Publish</button>
                     </div>
                 </form>

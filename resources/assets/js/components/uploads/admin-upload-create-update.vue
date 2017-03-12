@@ -51,7 +51,7 @@
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
 					<label for="tags" class="control-label">Tags</label>
-						<v-select id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+						<v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
 						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>
@@ -63,18 +63,19 @@
 						<option value="avatar">Image (Avatar) - 1280 x 1280</option>
 						<option value="banner">Image (Banner) - 1300 x 500</option>
 						<option value="other">Image (other) - no set dimensions</option>
+						<option value="passport">Image (Passport/Visa) - no set dimensions</option>
 						<option value="video">Video</option>
 						<option value="file">File</option>
 					</select>
 				</div>
 
 				<div class="row" v-if="isUpdate">
-					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other'">
+					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other' || type === 'passport'">
 						<img :src="src" class="img-responsive">
 					</div>
 				</div>
 
-				<div class="row" v-if="type && type === 'other' && !uiLocked">
+				<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -121,7 +122,7 @@
 				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
 						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
-						The current size is <b>{{coords.w / this.imageAspectRatio}}x{{coords.h / this.imageAspectRatio}}</b>.
+						The current size is <b>{{(coords.w / this.imageAspectRatio).toFixed(0)}}x{{(coords.h / this.imageAspectRatio).toFixed(0)}}</b>.
 					</div>
 				</div>
 
@@ -219,6 +220,10 @@
 				type: Number,
 				default: 100
 			},
+            constrained: {
+				type: Boolean,
+				default: true
+			},
             buttonText: {
                 type: String,
                 default: 'Save'
@@ -237,7 +242,7 @@
 				previewUpload: null,
 				attemptSubmit: false,
 				coords: 'Try to move/resize the selection',
-				constrained: true,
+				// constrained: true,
 				vueCropApi: null,
 				scaledWidth: 400,
 				scaledHeight: 400,
@@ -254,6 +259,7 @@
 					{type: 'banner', path: 'images/banners', width: 1300, height: 500},
 					{type: 'video'},
 					{type: 'other', path: 'images/other', width: this.width, height: this.height},
+					{type: 'passport', path: 'images/other', width: 300, height: 400},
 					{type: 'file', path: 'resources/documents'},
 				],
 				typeObj: null,
@@ -268,7 +274,7 @@
         },
 		computed:{
 			allowedTypes() {
-				if (_.contains(['avatar', 'banner', 'other'], this.type)) {
+				if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
 					return 'image/bmp, image/jpg, image/jpeg, image/png, image/gif';
 				}
 
@@ -315,7 +321,7 @@
 			},
 			'perPage': function (val, oldVal) {
 				this.searchUploads();
-			},
+			}
 		},
 		events:{
 			'vueCrop-api':function (api) {
@@ -392,7 +398,7 @@
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other'], this.typeObj.type)) {
+				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other', 'passport'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
@@ -453,6 +459,10 @@
 						}
 					}
 
+					if (this.type === 'passport') {
+					    params.type = 'other';
+					}
+
                     this.resource.save(null, params).then(function (resp) {
 						this.handleSuccess(resp)
                     }, function (error) {
@@ -464,17 +474,23 @@
             update(){
 				this.resetErrors();
 				if (this.$CreateUpload.valid) {
-					this.resource.update({id:this.uploadId}, {
-						name: this.name,
-						tags: this.tags,
-						type: this.type,
-						path: this.path,
-						file: this.file||undefined,
-						x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
-						y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
-						width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
-						height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
-					}).then(function (resp) {
+                    let params = {
+                        name: this.name,
+                        tags: this.tags,
+                        type: this.type,
+                        path: this.path,
+                        file: this.file||undefined,
+                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
+                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+                        width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
+                        height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
+                    };
+
+                    if (this.type === 'passport') {
+                        params.type = 'other';
+                    }
+
+                    this.resource.update({id:this.uploadId}, params).then(function (resp) {
 						this.handleSuccess(resp)
 					}, function (error) {
                         this.errors = error.data.errors;
@@ -504,7 +520,7 @@
 
 						// adjust container
 						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar', 'other'], self.typeObj.type) ) {
+						if (self.typeObj && _.contains(['banner', 'avatar', 'other', 'passport'], self.typeObj.type) ) {
 							self.adjustSelectByType()
 						} else {
 							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);

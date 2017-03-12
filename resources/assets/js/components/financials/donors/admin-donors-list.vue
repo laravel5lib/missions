@@ -11,44 +11,44 @@
 
                 <legend>By Designation</legend>
                 <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter by Group"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="reservationFilter" :debounce="250" :on-search="getReservations"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="reservationFilter" :debounce="250" :on-search="getReservations"
                               :value.sync="reservationObj" :options="reservationsOptions" label="given_names"
                               placeholder="Filter by Reservation"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignsOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="causesFilter" :debounce="250" :on-search="getCauses"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="causesFilter" :debounce="250" :on-search="getCauses"
                               :value.sync="causeObj" :options="causesOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="tripsFilter" :debounce="250" :on-search="getTrips"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="tripsFilter" :debounce="250" :on-search="getTrips"
                               :value.sync="tripObj" :options="tripsOptions" label="name"
                               placeholder="Filter by Trip"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="projectsFilter" :debounce="250" :on-search="getProjects"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="projectsFilter" :debounce="250" :on-search="getProjects"
                               :value.sync="projectObj" :options="projectsOptions" label="name"
                               placeholder="Filter by Project"></v-select>
                 </div>
 
                 <legend>By Account Holder</legend>
                 <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupAccountObj" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="userFilter" :debounce="250" :on-search="getUsers"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" :debounce="250" :on-search="getUsers"
                               :value.sync="userObj" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>

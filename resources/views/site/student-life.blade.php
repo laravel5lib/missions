@@ -98,7 +98,8 @@
 					<p class="small">If you need a change of pace, let’s say some snow that covers half of the US for 6 months a year, then hop in your car and drive a couple hours to beautiful Lake Tahoe or Big Bear for endless winter sports and activities.</p>
 
 					<h4 class="text-serif text-lightweight text-primary">Theme Parks</h4>
-					<p class="small">Disneyland: Want to unlock your inner-child let your imagination run free in Disney’s Magic Kingdom. 40 minute drive.</p>
+					<h5 class="text-serif text-lightweight">Disneyland:</h5>
+					<p class="small">Want to unlock your inner-child let your imagination run free in Disney’s Magic Kingdom. 40 minute drive.</p>
 
 					<h5 class="text-serif text-lightweight">Disney California Adventure:</h5>
 					<p class="small">Immerse yourself in a festival of shows, parades and attractions celebrating California's storied past and exciting future. From the gold rush and Hollywood's golden era to the timeless allure of the beach, discover the vast and diverse Golden State.</p>

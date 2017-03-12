@@ -86,7 +86,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">New Campus Location!</h6>
 								<p class="small">We're expanding to Dana Point, CA</p>
-								<a href="#" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
+								<a href="/student-life" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
 					</div><!-- end col -->
@@ -94,9 +94,9 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 						<div class="panel panel-default">
 							<a class="launch-modal" data-toggle="modal" data-target="#seuVid"><img class="img-responsive" src="/images/college/vid-thumbs/seu-partnership.jpg" /></a>
 							<div class="panel-body text-center">
-								<h6 class="text-uppercase">MMC + SEU</h6>
-								<p class="small">Learn about our partnership with SEU.</p>
-								<a href="#" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
+								<h6 class="text-uppercase">Southeastern University</h6>
+								<p class="small">Learn about MMC's partnership with SEU.</p>
+								<a href="/academics" class="btn btn-primary btn-sm">Learn More <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
 					</div><!-- end col -->
@@ -106,7 +106,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 							<div class="panel-body text-center">
 								<h6 class="text-uppercase">The Experience</h6>
 								<p class="small">Hear what former students have to say.</p>
-								<a href="#" class="btn btn-primary btn-sm">Student Life <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
+								<a href="/student-life" class="btn btn-primary btn-sm">Student Life <i style="margin-left:5px;" class="fa fa-angle-right"></i></a>
 							</div>
 						</div><!-- end panel -->
 					</div><!-- end col -->
@@ -143,7 +143,8 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 text-center">
 					<h2 class="text-serif text-lightweight" style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Location Matters</h2>
-					<p>Nestled in sunny Southern California, the Missions.Me College is an inspirational and disruptive environment that allows students to discover their divine design in beautiful natural surroundings and with friends that also want to change the world.</p>
+                    <p>The Missions.Me College will be kicking off it's Fall 2017 semester
+					{{-- <p>Nestled --}} in sunny Southern California, {{-- the Missions.Me College is --}} providing an inspirational and disruptive environment that allows students to discover their divine design in beautiful natural surroundings and with friends that also want to change the world.</p>
 				</div>
 				<div class="col-sm-4 col-sm-offset-2">
 						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">25</h1>
@@ -201,7 +202,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
                 <div class="modal-video">
                     <div class="video-outer">
                       <div class="video-inner">
-                        <iframe src="https://player.vimeo.com/video/89317516?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <iframe src="https://player.vimeo.com/video/200239351?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
                       </div>
                     </div>
                 </div>

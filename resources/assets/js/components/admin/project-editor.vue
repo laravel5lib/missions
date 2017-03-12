@@ -55,7 +55,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Sponsor Name</label>
-                        <v-select class="form-control"
+                        <v-select @keydown.enter.prevent=""  class="form-control"
                                   id="sponsor"
                                   :value.sync="selectedSponsor"
                                   :options="sponsors"

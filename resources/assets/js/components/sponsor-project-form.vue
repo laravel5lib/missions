@@ -12,7 +12,7 @@
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': checkForError('country') }">
 						<label for="name">Select a location</label>
-						<!--<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
 						<select name="country" id="country" class="form-control" v-model="country_code"
 								v-validate:country="{ required: true }">

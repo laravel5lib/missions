@@ -7,14 +7,6 @@
 @section('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/js/Jcrop.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.14.2/TweenMax.min.js"></script>
-    <script>
-        // init controller
-        var controller = new ScrollMagic.Controller({globalSceneOptions: {triggerHook: "onEnter", duration: "200%"}});
-        // build scenes
-        new ScrollMagic.Scene({triggerElement: "#parallax1"})
-                .setTween("#parallax1 > img", {y: "80%", ease: Linear.easeNone})
-                .addTo(controller);
-    </script>
 @endsection
 
 @section('tab')
@@ -23,8 +15,10 @@
             <h5>Details</h5>
         </div>
         <div class="panel-body">
-            <div class="col-md-7">
+            <div class="col-xs-12">
                 <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
+            </div>
+            <div class="col-xs-12 col-lg-7">
                 <hr class="divider">
                 <div class="row">
                     <div class="col-md-6">
@@ -92,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5 panel panel-default panel-body text-center">
+            <div class="col-xs-12 col-lg-5 panel panel-default panel-body text-center">
                 <label>Email</label>
                 <p>{{ $reservation->email }}</p>
                 <label>Home Phone</label>

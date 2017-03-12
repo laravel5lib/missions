@@ -9,7 +9,7 @@
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
 				</div>
 				<div class="form-group">
-					<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
 							  :value.sync="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="form-group">
-					<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 

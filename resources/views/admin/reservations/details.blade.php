@@ -6,6 +6,9 @@
         <h5>Details</h5>
     </div>
     <div class="panel-body">
+        <div class="col-xs-12">
+            <reservation-avatar id="{{ $reservation->id }}"></reservation-avatar>
+        </div>
         <div class="col-md-7">
             <label>Reservation ID</label>
             <p>{{ $reservation->id }}</p>

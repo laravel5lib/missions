@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-md-6" v-validate-class>
                         <label>Country</label>
-                        <v-select class="form-control" id="country" :debounce="250"
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
                                   :value.sync="countryCodeObj" :options="countries" label="name"
                                   placeholder="Select a country" initial="off"
                                   v-validate:country_code="{required: true}"></v-select>
@@ -86,10 +86,10 @@
                     </div>
                     <div class="col-md-6" v-if="donor.account_type" :class="{'has-error' : accountError}">
                         <label>Account Holder</label>
-                        <v-select class="form-control" id="accountHolder" :debounce="250" :on-search="getUsers"
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="accountHolder" :debounce="250" :on-search="getUsers"
                                   :value.sync="userObj" :options="users" label="name"
                                   placeholder="Select a user" v-if="donor.account_type == 'users'"></v-select>
-                        <v-select class="form-control" id="accountHolder" :debounce="250" :on-search="getGroups"
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="accountHolder" :debounce="250" :on-search="getGroups"
                                   :value.sync="groupObj" :options="groups" label="name"
                                   placeholder="Select a group" v-if="donor.account_type == 'groups'"></v-select>
                         <span v-if="accountError" class="text-danger">Account already in use.</span>

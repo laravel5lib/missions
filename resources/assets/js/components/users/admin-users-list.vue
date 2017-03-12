@@ -120,7 +120,7 @@
                         </button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;">
 							<li>
-								<v-select class="form-control" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
+								<v-select @keydown.enter.prevent=""  class="form-control" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
 										  :value.sync="countriesArr" :options="countriesOptions" label="name"
 										  placeholder="Filter Countries"></v-select>
 							</li>

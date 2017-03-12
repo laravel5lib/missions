@@ -5,7 +5,7 @@
             <form class="col-sm-12">
 
                 <div class="form-group">
-                    <v-select class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
                               :value.sync="causeObj" :options="causeOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>

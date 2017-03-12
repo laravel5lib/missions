@@ -17,7 +17,7 @@
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
                 {{-- <action-trigger text="Save Settings" event="save-settings"></action-trigger> --}}
-                <a class="btn btn-primary" href="{{ url(auth()->user()->slug->url) }}">
+                <a id="settings-profile-link" class="btn btn-primary" href="{{ url(auth()->user()->slug->url) }}">
                     My Profile
                 </a>
             </div>

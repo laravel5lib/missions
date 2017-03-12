@@ -79,7 +79,7 @@
                                         <h5 class="media-heading">{{selectedAvatar.name}}</h5>
                                     </div>
                                 </div>
-                                <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                                <upload-create-update type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
                             </div>
                         </panel>
                     </accordion>

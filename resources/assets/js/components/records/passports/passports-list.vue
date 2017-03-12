@@ -26,7 +26,7 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox" v-if="managing">
+                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's passports
                     </label>
@@ -124,13 +124,6 @@
                 type: String,
                 required: false
             },
-            'managing': {
-                type: Boolean,
-                default: false,
-                coerce: function (val) {
-                    return parseInt(val) > 0;
-                }
-            },
             'selector': {
                 type: Boolean,
                 default: false
@@ -178,6 +171,11 @@
                 importOptionalFields: [
                     'created_at', 'updated_at'
                 ],
+            }
+        },
+        computed: {
+            isFacilitator() {
+                return this.trips.length > 0 ? true : false;
             }
         },
         watch:{
@@ -233,6 +231,24 @@
 
         },
         ready(){
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+                let user = response.body.data;
+                let managing = [];
+
+                if (user.facilitating.data.length) {
+                    this.isFacilitator = true;
+                    let facilitating = _.pluck(user.facilitating.data, 'id');
+                    this.trips = _.union(this.trips, facilitating);
+                }
+
+                if (user.managing.data.length) {
+                    _.each(user.managing.data, function (group) {
+                        managing = _.union(managing, _.pluck(group.trips.data, 'id'));
+                    });
+                    this.trips = _.union(this.trips, managing);
+                }
+            });
+
             this.searchPassports();
         }
     }

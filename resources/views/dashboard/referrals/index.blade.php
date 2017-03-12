@@ -22,6 +22,6 @@
 @stop
 
 @section('tab')
-    <referrals-list user-id="{{ auth()->user()->id }}" managing="{{ (auth()->user()->managing()->count()) or 0 }}"></referrals-list>
+    <referrals-list user-id="{{ auth()->user()->id }}"></referrals-list>
     <hr class="divider inv lg">
 @stop

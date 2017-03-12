@@ -22,6 +22,6 @@
 @stop
 
 @section('tab')
-    <essays-list user-id="{{ auth()->user()->id }}" managing="{{ (auth()->user()->managing()->count()) or 0 }}"></essays-list>
+    <essays-list user-id="{{ auth()->user()->id }}"></essays-list>
     <hr class="divider inv xlg">
 @stop

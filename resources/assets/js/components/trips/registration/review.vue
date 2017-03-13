@@ -35,7 +35,7 @@
 								<label>Weight</label><p>{{userInfo.weight}} lbs.</p>
 							</div><!-- end col -->
 							<div class="col-sm-4">
-								<label>Role</label><p>{{userInfo.desired_role}}</p>
+								<label>Role</label><p>{{roleName}}</p>
 							</div><!-- end col -->
 						</div><!-- end row -->
 						<hr class="divider">
@@ -120,7 +120,8 @@
 		data(){
 			return {
 				title: 'Review',
-				review: false
+				review: false,
+				roles: [],
 			}
 		},
 		computed:{
@@ -132,6 +133,9 @@
 			},
 			upfrontTotal(){
 				return this.$parent.upfrontTotal;
+			},
+			roleName(){
+			    return _.findWhere(this.roles, { key: this.userInfo.desired_role }).name
 			}
 		},
 		watch:{
@@ -141,6 +145,13 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop : 200},300);
+
+            this.$http.get('utilities/team-roles').then(function (response) {
+                _.each(response.body.roles, function (name, key) {
+                    this.roles.push({ value: key, name: name});
+                }.bind(this));
+            });
+
 			done();
 		}
 

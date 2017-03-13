@@ -109,6 +109,9 @@ class UsersController extends Controller
 
         $user->slug()->update(['url' => $request->get('url', $user->slug->url)]);
 
+        // immedately update on user object
+        $user->slug->url = $request->get('url', $user->slug->url);
+
         return $this->response->item($user, new UserTransformer);
     }
 

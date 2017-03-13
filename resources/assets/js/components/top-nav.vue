@@ -21,7 +21,7 @@
 				</li>
 				<ul class="dropdown-menu offcanvas-dropdown">
 					<template v-if="auth" aria-labelledby="userMenu">
-						<li class=""><a :href="url">My Profile</a></li>
+						<li class=""><a :href="url" id="menu-profile-link">My Profile</a></li>
 						<li class=""><a href="/dashboard">Dashboard</a></li>
 						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
 						<li class=""><a href="/logout">Sign Out</a></li>

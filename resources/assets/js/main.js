@@ -167,7 +167,10 @@ Vue.component('tooltip', VueStrap.tooltip);
 // import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
-
+Vue.component('bootstrap-alert-error', {
+    props: ['field', 'validator', 'message'],
+    template: '<div><div class="alert alert-danger alert-dismissible error-{{field}}-{{validator}}" role="alert">{{ message }} </div></div>',
+});
 // Vue Cookie
 Vue.use(require('vue-cookie'));
 // Vue Resource

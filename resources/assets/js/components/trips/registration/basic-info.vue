@@ -29,7 +29,7 @@
 						<div class="form-group" :class="{ 'has-error': checkForError('role') }">
 							<label for="desiredRole">Desired Team Role</label>
 								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:role="{ required: true }">
-									<option v-for="role in roles" :value="role.value">{{role.name}}</option>
+									<option v-for="role in roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
 								</select>
 						</div><!-- end form-group -->
 						<label>Given Names</label>
@@ -182,7 +182,7 @@
 										<div class="form-group" :class="{ 'has-error': checkForError('heightA') }">
 											<div class="input-group input-group-sm">
 												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" v-validate:heightA="{ required: true }" :classes="{ invalid: 'has-error' }">
-												<div class="input-group-addon">ft.</div>
+												<div class="input-group-addon" v-text="heightUnitA"></div>
 											</div>
 										</div>
 									</div>
@@ -190,7 +190,7 @@
 										<div class="form-group" :class="{ 'has-error': checkForError('heightB') }">
 											<div class="input-group input-group-sm">
 												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11.99" v-validate:heightB="{ required: true }" :classes="{ invalid: 'has-error' }">
-												<div class="input-group-addon">in.</div>
+												<div class="input-group-addon" v-text="heightUnitB"></div>
 											</div>
 										</div>
 									</div>
@@ -204,7 +204,7 @@
 									<label for="infoWeight">Weight</label>
 									<div class="input-group input-group-sm">
 										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" v-validate:weight="{ required: true }" :classes="{ invalid: 'has-error' }">
-										<div class="input-group-addon">lbs.</div>
+										<div class="input-group-addon" v-text="weightUnit"></div>
 									</div>
 								</div>
 							</div>
@@ -252,7 +252,7 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
-									<label for="infoZip">Zip Code</label>
+									<label for="infoZip">Zip/Postal Code</label>
 									<input type="text" class="form-control input-sm" v-model="zipCode"
 										   v-validate:zip="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
 								</div>
@@ -311,7 +311,7 @@
 				onBehalf: false,
 
 				// basic info data
-				desired_role: 'MISS',
+				desired_role: {value: 'MISS', name: 'Missionary'},
 				address: null,
 				city: null,
 				state: null,
@@ -331,10 +331,29 @@
 				heightA: null,
 				heightB: null,
 				weight: null,
+				avatar_upload_id: null,
 				userInfo: {}
 			}
 		},
 		computed: {
+			heightUnitA() {
+				if (this.country == 'us')
+					return 'ft';
+
+				return 'm';
+			},
+			heightUnitB() {
+				if (this.country == 'us')
+					return 'in';
+
+				return 'cm';
+			},
+			weightUnit() {
+				if (this.country == 'us')
+					return 'lbs';
+
+				return 'kg';
+			},
 			country(){
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			},
@@ -358,6 +377,7 @@
 					state: this.state,
 					zipCode: this.zipCode,
 					country: this.country,
+					country_name: this.countryCodeObj.name,
 					phone: this.phone,
 					mobile: this.mobile,
 					firstName: this.firstName,
@@ -371,9 +391,13 @@
 					relationshipStatus: this.relationshipStatus,
 					size: this.size,
 					height: this.height,
+					heightUnitA: this.heightUnitA,
+					heightUnitB: this.heightUnitB,
 					heightA: this.heightA,
 					heightB: this.heightB,
 					weight: this.weight,
+					weightUnit: this.weightUnit,
+					avatar_upload_id: this.avatar_upload_id
 				}
 			}
 		},
@@ -411,6 +435,7 @@
 						this.state = null;
 						this.zipCode = null;
                         this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                        this.avatar_upload_id = null;
                         break;
 					case false:
 						var user = this.forAdmin ? this.userObj : this.$parent.userData;
@@ -434,6 +459,7 @@
 						this.state = user.state;
 						this.zipCode = user.zip;
                         this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                        this.avatar_upload_id = user.avatar_upload_id;
                         break;
 				}
 

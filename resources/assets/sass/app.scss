@@ -1604,6 +1604,15 @@ $divider-base-size: 10px;
   }
 }
 
+@media screen and (max-width: 767px) {
+  .alert.top-right {
+    right: 0px !important;
+  }
+  .alert.top, .alert.top-right {
+    top:68px !important;
+  }
+}
+
 [v-cloak] {
     display: none;
 }

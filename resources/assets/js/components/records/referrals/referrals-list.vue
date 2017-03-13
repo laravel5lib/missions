@@ -105,6 +105,7 @@
             return{
                 referrals: [],
                 selectedReferral: '',
+                trips: [],
                 //logic vars
                 includeManaging: false,
                 search: '',

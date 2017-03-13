@@ -133,6 +133,7 @@
             return{
                 passports: [],
                 selectedPassport: null,
+                trips: [],
                 //logic vars
                 filters: {
                     sort: 'surname'

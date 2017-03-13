@@ -86,23 +86,23 @@
                 <div class="list-group">
                     <div class="list-group-item text-center" v-if="pagination.total === 0">No transactions found.</div>
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
-                        <h5>
-                            <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span>
-                            <br>
-                            <span class="label label-default">{{ transaction.type|uppercase }}</span>
-                            <span class="pull-right"><i class="fa fa-clock-o"></i>&nbsp;{{ transaction.created_at|moment 'll'}}</span>
-                            <br>
-                            <br>
-                            <small v-if="contains(['donation'], transaction.type)" class="small">by
-                            <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
-                            <span v-else>an anonymous donor</span>
-                             <!--on {{ transaction.created_at|moment 'll'}}--></small>
-                            <br />
-                            <small v-if="transaction.details">
-                                <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
-                                <span v-if="transaction.details.reason">{{ transaction.details.reason }} <br></span>
-                            </small>
-                        </h5>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span><span class="small"> &middot; {{ transaction.type|uppercase }}</span>
+                                <small v-if="contains(['donation'], transaction.type)" class="small">by
+                                <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
+                                <span v-else>an anonymous donor</span>
+                                 <!--on {{ transaction.created_at|moment 'll'}}--></small>
+                                </h5>
+                            </div><!-- end col -->
+                            <div class="col-sm-6">
+                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment 'll'}}</h5>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <small v-if="transaction.details">
+                            <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
+                            <span v-if="transaction.details.reason">{{ transaction.details.reason }} <br></span>
+                        </small>
                     </div>
                 </div>
 

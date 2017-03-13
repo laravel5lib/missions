@@ -184,6 +184,9 @@
 
 				var data = {
 					// reservation data
+					height: this.userInfo.height,
+					weight: this.userInfo.weight,
+					desired_role: this.userInfo.desired_role,
 					given_names: this.userInfo.firstName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,

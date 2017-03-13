@@ -115,6 +115,7 @@
             return{
                 visas: [],
                 selectedVisa: null,
+                trips: [],
                 //logic vars
                 filters: {
                     sort: 'surname'

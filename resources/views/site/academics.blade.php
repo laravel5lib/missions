@@ -39,10 +39,10 @@
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-3 col-md-2">
+				<div class="col-sm-4 col-md-3">
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Academics</h2>
 				</div>
-				<div class="col-sm-7 col-md-8">
+				<div class="col-sm-8 col-md-9">
 						<p class="small">MMC is committed to providing students with the best education. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program.</p>
 
 						<p class="small">With a Bachelors of Science and Associate of Arts degree programs accredited under Southeastern University in Florida, students will receive the educational training they need to be successful in whatever field they desire.</p>
@@ -58,10 +58,10 @@
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-3 col-md-2">
+				<div class="col-sm-4 col-md-3">
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Missions</h2>
 				</div>
-				<div class="col-sm-7 col-md-8">
+				<div class="col-sm-8 col-md-9">
 					<p class="small">Missions is the heartbeat of our organization. At MMC you will have the opportunity to go on trips, participate on teams, build missions experiences, and learn how to operate a successful missions organization.</p>
 
 					<p class="small">At Missions.Me, nearly every aspect of the organization is fueled by people like you. Our staff will coach you as we push the limits of traditional missions together.</p>

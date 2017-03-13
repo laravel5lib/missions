@@ -509,9 +509,17 @@
                         this.hasChanged = false;
 
                         if (this.public) {
-                            let myProfileButton = document.getElementById('settings-profile-link');
-                            if (myProfileButton)
-                                myProfileButton.attributes.href.value = '/' + response.body.data.url;
+                            let settingsProfileButton = document.getElementById('settings-profile-link');
+                            if (settingsProfileButton)
+                                settingsProfileButton.attributes.href.value = '/' + response.body.data.url;
+
+                            let topProfileButton = document.getElementById('top-profile-link');
+                            if (topProfileButton)
+                                topProfileButton.attributes.href.value = '/' + response.body.data.url;
+
+                            let menuProfileButton = document.getElementById('menu-profile-link');
+                            if (menuProfileButton)
+                                menuProfileButton.attributes.href.value = '/' + response.body.data.url;
                         }
 
                     }, function (error) {

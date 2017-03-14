@@ -259,6 +259,7 @@
                 this.getReservations();
             },
             'includeManaging': function (val, oldVal) {
+                this.updateConfig();
                 this.pagination.current_page = 1;
                 this.getReservations();
             }

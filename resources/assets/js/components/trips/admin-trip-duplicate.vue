@@ -116,11 +116,11 @@
                         this.trip.notes = this.trip.hasOwnProperty('notes') ? this.trip.notes.data : undefined;
 
                         // for now remove rep_id and links
-                        delete this.trip.rep_id;
+                        //delete this.trip.rep_id;
                         delete this.trip.links;
 
                         this.$http.post('trips', this.trip).then(function (response) {
-                            console.log(response);
+                            //console.log(response);
                             // we need to duplicate the payments after the costs are duplicated
                             let promises = [];
                             _.each(payments, function(costPayments, id){
@@ -128,7 +128,7 @@
                                     delete payment.id;
                                     promises.push(this.$http.post('costs/' + id + '/payments', payment)
                                             .then(function (res) {
-                                                console.log(res);
+                                                //console.log(res);
                                             }, function (error) {
                                                 console.log(error);
                                             }));

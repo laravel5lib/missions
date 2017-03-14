@@ -401,6 +401,17 @@
 				}
 			}
 		},
+		watch: {
+		    // fail safe for poor loading
+		    '$parent.trip'(val){
+                this.$http.get('utilities/team-roles').then(function (response) {
+                    _.each(response.body.roles, function (name, key) {
+                        if (_.contains(val.team_roles, key))
+                            this.roles.push({ value: key, name: name});
+                    }.bind(this));
+                });
+		    }
+		},
 		methods: {
 			onValid(){
 				this.$parent.userInfo = this.userInfo;

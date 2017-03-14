@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\v1\Trip;
+use App\Models\v1\Donor;
 use App\Jobs\ExportTrips;
+use App\Services\PaymentGateway;
 use App\Events\RegisteredForTrip;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
@@ -22,14 +24,18 @@ class TripsController extends Controller
      * @var Trip
      */
     private $trip;
+    private $gateway;
+    private $donor;
 
     /**
      * Instantiate a new TripsController instance.
      * @param Trip $trip
      */
-    public function __construct(Trip $trip)
+    public function __construct(Trip $trip, PaymentGateway $gateway, Donor $donor)
     {
         $this->trip = $trip;
+        $this->gateway = $gateway;
+        $this->donor = $donor;
     }
 
     /**
@@ -129,6 +135,36 @@ class TripsController extends Controller
     public function register($id, TripRegistrationRequest $request)
     {
         $trip = $this->trip->findOrFail($id);
+
+        // CAPTURE CARD
+        // create customer with the token and donor details
+        $customer = $this->gateway
+            ->createCustomer($request->get('donor'), $request->get('token'));
+
+        // merge the customer id with donor details
+        // $requestdonor->merge(['customer_id' => $customer['id']]);
+        $request['donor'] = $request['donor'] + ['customer_id' => $customer['id']];
+
+        // create the charge with customer id, token, and donation details
+        $charge = $this->gateway->createCharge(
+            $request->only(
+                'donor', 'payment', 'token', 'amount', 
+                'donor_id', 'currency', 'description'
+                ),
+            $customer['default_source'],
+            $customer['id']
+        );
+
+        // capture the charge
+        $this->gateway->captureCharge($charge['id']);
+
+        $request['details'] = [
+            'type' => 'card',
+            'charge_id' => $charge['id'],
+            'brand' => $charge['source']['brand'],
+            'last_four' => $charge['source']['last4'],
+            'cardholder' => $charge['source']['name'],
+        ];
 
         $weight = $request->get('weight'); // kilograms
         $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters

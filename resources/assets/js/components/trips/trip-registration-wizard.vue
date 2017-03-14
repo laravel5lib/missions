@@ -115,7 +115,8 @@
 				userInfo: {},
 				paymentInfo: {},
 				upfrontTotal: 0,
-				fundraisingGoal: 0
+				fundraisingGoal: 0,
+				paymentErrors:[]
 			}
 		},
 		computed: {
@@ -128,6 +129,9 @@
 				if (step.complete) {
 					this.currentStep = step;
 				}
+			},
+			fallbackStep(step){
+                this.currentStep = step;
 			},
 			backStep(){
 				this.stepList.some(function(step, i, list) {
@@ -243,6 +247,9 @@
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
 					console.log(response);
+					this.$root.$emit('showError', response.body.message);
+                    this.fallbackStep(this.stepList[5]); // return to payment details step
+					this.paymentErrors.push(response.body.message);
 					this.$refs.reservationspinner.hide();
 				});
 

@@ -63,7 +63,7 @@
                                     :class="[layout == 'grid' ? 'btn-primary' : 'btn-default']"
                                     @click.prevent="layout = 'grid'"><i class="fa fa-th-large"></i></button>
                         </div>
-                        <div style="margin-left:5px;display: inline-block;" v-if="true">
+                        <div style="margin-left:5px;display: inline-block;" v-if="isFacilitator">
                             <label>
                                 <input type="checkbox" v-model="includeManaging"> Include my group's reservations
                             </label>

@@ -367,40 +367,44 @@
 			}
 		},
 		ready(){
-		    // get team roles list
-			this.$http.get('utilities/team-roles').then(function (response) {
+            // get some groups
+            let groupsPromise = this.$http.get('groups').then(function (response) {
+                this.groups = response.body.data;
+            });
+
+			// get team roles list
+			let teamRolesPromise = this.$http.get('utilities/team-roles').then(function (response) {
 			    _.each(response.body.roles, function (name, key) {
 					this.teamRolesList.push({ value: key, name: name});
 				}.bind(this));
 			});
 
-			if (this.isUpdate) {
-				this.$http.get('trips/' + this.tripId, { params: {include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
-					let trip = response.body.data;
-					// trim campaign
-					$.extend(this, trip);
-					this.campaign = trip.campaign.data;
-					this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
-					// this.prospects = trip.prospects;
-					this.prospectsObj = _.filter(this.prospectsList, function(p) { return _.contains(trip.prospects, p.value);});
-					this.rolesObj = _.filter(this.teamRolesList, function(p) { return _.contains(trip.team_roles, p.value);});
+			Promise.all([groupsPromise, teamRolesPromise]).then(function (values) {
+                if (this.isUpdate) {
+                    this.$http.get('trips/' + this.tripId, { params: {include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
+                        let trip = response.body.data;
+                        // trim campaign
+                        $.extend(this, trip);
+                        this.campaign = trip.campaign.data;
+                        this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
+                        // this.prospects = trip.prospects;
+                        this.prospectsObj = _.filter(this.prospectsList, function(p) { return _.contains(trip.prospects, p.value);});
+                        this.rolesObj = _.filter(this.teamRolesList, function(p) { return _.contains(trip.team_roles, p.value);});
 
-					this.trip = trip;
-					// this.wizardData.campaign_id = this.trip.campaign_id;
-					// this.wizardData.country_code = this.trip.country_code;
+                        this.trip = trip;
+                        this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});
+						// this.wizardData.campaign_id = this.trip.campaign_id;
+                        // this.wizardData.country_code = this.trip.country_code;
 
-				});
-			} else {
-				this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-					this.campaign = response.body.data;
-				});
-			}
+                    });
+                } else {
+                    this.$http.get('campaigns/' + this.campaignId).then(function (response) {
+                        this.campaign = response.body.data;
+                    });
+                }
+            }.bind(this))
 
-			// get some groups
-			this.$http.get('groups').then(function (response) {
-				this.groups = response.body.data;
-				this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});
-			});
+
 		}
 	}
 </script>

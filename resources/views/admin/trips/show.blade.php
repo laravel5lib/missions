@@ -23,7 +23,7 @@
                         <ul class="dropdown-menu">
                             <li><a href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">Edit</a></li>
                             <li><a data-toggle="modal" data-target="#addReservationModal" data-backdrop="static">Create Reservation</a></li>
-                            <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
+                            {{-- <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li> --}}
                             <li role="separator" class="divider"></li>
                             <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Delete</a></li>
                         </ul>

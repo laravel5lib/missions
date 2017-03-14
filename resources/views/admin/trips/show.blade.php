@@ -22,7 +22,7 @@
                             Manage <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ Request::url() }}/edit">Edit</a></li>
+                            <li><a href="{{ chop(Request::url(), '/' . $tab) }}/edit">Edit</a></li>
                             <li><a data-toggle="modal" data-target="#addReservationModal" data-backdrop="static">Create Reservation</a></li>
                             <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
                             <li role="separator" class="divider"></li>

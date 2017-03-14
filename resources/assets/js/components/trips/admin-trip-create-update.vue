@@ -167,7 +167,7 @@
 
 					<div class="col-sm-12 text-center">
 						<div class="form-group">
-							<a class="btn btn-default" @click="back()">Cancel</a>
+							<a class="btn btn-default" @click="back()">Done</a>
 							<a class="btn btn-success" v-if="isUpdate" @click="finish()">Update</a>
 							<a class="btn btn-success" v-if="!isUpdate" @click="finish()">Create</a>
 						</div>
@@ -231,8 +231,8 @@
 				teamRolesList: [],
 				prospectsList: [
 					{value: "adults", name: "Adults"},
-					{value: "young adults", name: "Young Adults (18-29)"},
-					{value: "teens", name: "Teens (13+)"},
+					{value: "young adults (18-29)", name: "Young Adults (18-29)"},
+					{value: "teens (13+)", name: "Teens (13+)"},
 					{value: "families", name: "Families"},
 					{value: "men", name: "Men"},
 					{value: "women", name: "Women"},

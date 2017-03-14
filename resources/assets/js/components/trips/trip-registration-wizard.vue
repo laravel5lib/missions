@@ -102,7 +102,7 @@
 					{name: 'Review', view: 'step8', complete:false}
 				],
 				currentStep: null,
-				canContinue: false,
+//				canContinue: false,
 				trip: {},
 				tripCosts: {},
 				deadlines:[],
@@ -133,7 +133,11 @@
 			fallbackStep(step){
                 this.wizardComplete = false;
                 this.currentStep = step;
-			},
+                this.$nextTick(function () {
+                    this.currentStep.complete = true;
+                });
+                this.$emit('review', false);
+            },
 			backStep(){
 				this.stepList.some(function(step, i, list) {
 					if (this.currentStep.view === step.view){

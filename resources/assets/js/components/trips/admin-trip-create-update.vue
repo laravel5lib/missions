@@ -400,7 +400,9 @@
                         });
 
                         this.trip = trip;
-                        this.groupObj = _.findWhere(this.groups, { group_id: this.trip.group_id});
+                        this.$http.get('groups/' + this.trip.group_id).then(function (response) {
+                            this.groupObj = response.body.data;
+                        });
 						// this.wizardData.campaign_id = this.trip.campaign_id;
                         // this.wizardData.country_code = this.trip.country_code;
 

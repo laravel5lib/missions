@@ -224,7 +224,7 @@
 				trip: {},
 				wizardData: {
 					campaign_id: this.campaignId,
-					country_code: [this.countryCode]
+					country_code: this.countryCode
 				},
 				reps: [],
 				groups: [],
@@ -404,7 +404,7 @@
                             this.groupObj = response.body.data;
                         });
 						// this.wizardData.campaign_id = this.trip.campaign_id;
-                        // this.wizardData.country_code = this.trip.country_code;
+                         //this.trip.country_code = trip.country_code[0];
 
                         this.$http.get('users/' + this.trip.rep_id).then(function (response) {
                             this.repObj = response.body.data;

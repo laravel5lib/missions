@@ -125,12 +125,13 @@
 			}
 		},
 		methods: {
-			toStep(step){
+			toStep(stepNumber){
 				if (step.complete) {
 					this.currentStep = step;
 				}
 			},
 			fallbackStep(step){
+                this.wizardComplete = false;
                 this.currentStep = step;
 			},
 			backStep(){
@@ -246,11 +247,11 @@
 					window.location.href = '/dashboard/reservations/' + response.body.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
-					console.log(response);
+                    this.$refs.reservationspinner.hide();
+                    console.log(response);
 					this.$root.$emit('showError', response.body.message);
                     this.fallbackStep(this.stepList[5]); // return to payment details step
 					this.paymentErrors.push(response.body.message);
-					this.$refs.reservationspinner.hide();
 				});
 
 

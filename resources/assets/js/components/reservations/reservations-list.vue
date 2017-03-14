@@ -295,14 +295,10 @@
                 let params = {
                     include: 'trip.campaign,trip.group,requirements',
                     search: this.search,
-                    page: this.pagination.current_page
+                    page: this.pagination.current_page,
+                    trip: !!this.includeManaging && this.trips.length ? this.trips : null,
+                    user: !this.includeManaging ? new Array(this.userId) : null
                 };
-
-                if (this.includeManaging) {
-                    params.trip = this.trips || [];
-                } else {
-                    params.user = new Array(this.userId);
-                }
 
                 switch (this.type) {
                     case 'active':
@@ -317,7 +313,7 @@
                 this.exportFilters = params;
 
                 this.$http.get('reservations', {params: params}).then(function (response) {
-                    this.reservations = response.body.data
+                    this.reservations = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 });
             },

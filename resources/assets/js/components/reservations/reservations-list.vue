@@ -259,6 +259,7 @@
                 this.getReservations();
             },
             'includeManaging': function (val, oldVal) {
+                this.updateConfig();
                 this.pagination.current_page = 1;
                 this.getReservations();
             }
@@ -331,6 +332,7 @@
             updateConfig(){
                 localStorage['DashboardReservations'] = JSON.stringify({
                     layout: this.layout,
+                    includeManaging: this.includeManaging,
                     filters: {
                         groups: this.filters.groups,
                         campaign: this.filters.campaign,
@@ -349,6 +351,7 @@
                 let config = JSON.parse(localStorage['DashboardReservations']);
                 this.layout = config.layout;
                 this.filters = config.filters;
+                this.includeManaging = config.includeManaging;
             }
 
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {

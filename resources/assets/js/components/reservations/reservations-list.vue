@@ -231,16 +231,20 @@
                 },
                 exportFilters: {},
                 layout: 'list',
-                incomplete: []
+                incomplete: [],
+                startUp: true,
             }
         },
         watch: {
-            'layout': function () {
-                this.updateConfig();
+            'layout': function (val, oldVal) {
+                if (val !== oldVal && !this.startUp)
+                    this.updateConfig();
             },
             // watch filters obj
             'filters': {
                 handler: function (val) {
+                    if (this.startUp)
+                        return;
                     // console.log(val);
                     this.updateConfig();
                     this.pagination.current_page = 1;
@@ -259,9 +263,11 @@
                 this.getReservations();
             },
             'includeManaging': function (val, oldVal) {
-                this.updateConfig();
-                this.pagination.current_page = 1;
-                this.getReservations();
+                if (val !== oldVal && !this.startUp) {
+                    this.updateConfig();
+                    this.pagination.current_page = 1;
+                    this.getReservations();
+                }
             }
         },
         computed: {
@@ -289,14 +295,10 @@
                 let params = {
                     include: 'trip.campaign,trip.group,requirements',
                     search: this.search,
-                    page: this.pagination.current_page
+                    page: this.pagination.current_page,
+                    trip: !!this.includeManaging && this.trips.length ? this.trips : null,
+                    user: !this.includeManaging ? new Array(this.userId) : null
                 };
-
-                if (this.includeManaging) {
-                    params.trip = this.trips;
-                } else {
-                    params.user = new Array(this.userId);
-                }
 
                 switch (this.type) {
                     case 'active':
@@ -311,7 +313,7 @@
                 this.exportFilters = params;
 
                 this.$http.get('reservations', {params: params}).then(function (response) {
-                    this.reservations = response.body.data
+                    this.reservations = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 });
             },
@@ -354,7 +356,7 @@
                 this.includeManaging = config.includeManaging;
             }
 
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+            let userPromise = this.$http.get('users/' + this.userId, { params: {include: 'facilitating,managing.trips'}}).then(function (response) {
                 let user = response.body.data;
                 let managing = [];
 
@@ -370,9 +372,17 @@
                     });
                     this.trips = _.union(this.trips, managing);
                 }
-            });
 
-            this.getReservations();
+                if (this.trips.length === 0) {
+                    this.includeManaging = false;
+                }
+
+            });
+            Promise.all([userPromise]).then(function (values) {
+                this.startUp = false;
+                this.getReservations();
+            }.bind(this));
+
         }
     }
 </script>

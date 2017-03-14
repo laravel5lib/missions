@@ -484,13 +484,11 @@
                 campaigns:[],
                 groups:[],
                 groupsLimit: 12,
-//                attemptSubmit: false,
                 resource: this.$resource('groups', { isPublic: 'yes' }),
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
-//                errors: {},
                 showSuccess: false,
 
                 // form vars

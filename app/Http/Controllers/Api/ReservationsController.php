@@ -117,13 +117,6 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->findOrFail($id);
 
-        $weight = $request->get('weight', $reservation->weight); // kilograms
-        $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
-
-        if ($request->get('country_code') == 'us')
-            $weight = convert_to_kg($request->get('weight'));
-            $height = convert_to_cm($request->get('height_a'), $request->get('height_b'));
-
         $reservation->update([
             'given_names' => trim($request->get('given_names', $reservation->given_names)),
             'surname' => trim($request->get('surname', $reservation->surname)),
@@ -141,9 +134,7 @@ class ReservationsController extends Controller
             'user_id' => $request->get('user_id', $reservation->user_id),
             'email' => trim(strtolower($request->get('email', $reservation->email))),
             'desired_role' => $request->get('desired_role', $reservation->desired_role),
-            'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
-            'height' => $height ?: $reservation->height,
-            'weight' => $weight,
+            'shirt_size' => $request->get('shirt_size', $reservation->shirt_size)
         ]);
 
         $reservation->syncCosts($request->get('costs'));

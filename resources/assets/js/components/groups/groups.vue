@@ -484,13 +484,11 @@
                 campaigns:[],
                 groups:[],
                 groupsLimit: 12,
-//                attemptSubmit: false,
-                resource: this.$resource('groups?isPublic=yes'),
+                resource: this.$resource('groups', { isPublic: 'yes' }),
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
-//                errors: {},
                 showSuccess: false,
 
                 // form vars
@@ -540,7 +538,7 @@
 				},*/
             searchGroups(){
                 // this.$refs.spinner.show();
-                this.resource.query(null, {
+                this.resource.query({
                     search: this.search,
                     page: this.pagination.current_page,
                     per_page: this.per_page
@@ -625,7 +623,7 @@
 
             this.$http.get('campaigns').then(function (response) {
                 this.campaigns = response.body.data;
-            })
+            });
 
             //TODO use promise defer
         }

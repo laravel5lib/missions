@@ -258,19 +258,19 @@
 				attemptedContinue: false,
 				// details data
 				groupObj: null,
-				group_id: '',
+				//group_id: '',
 				description: '',
 				type: '',
 				difficulty: '',
 				companion_limit: 0,
 				prospectsObj: null,
-				prospects: [],
+				//prospects: [],
 				started_at: '',
 				ended_at: '',
 				repObj: null,
-				rep_id: '',
+				//rep_id: '',
 				rolesObj: null,
-				team_roles: [],
+				//team_roles: [],
 				// details data
 				spots: null,
 				closed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -286,10 +286,10 @@
 				return _.isObject(this.repObj) ? this.repObj.id : null;
 			},
 			prospects(){
-				return _.pluck(this.prospectsObj, 'value');
+				return _.pluck(this.prospectsObj, 'value') || [];
 			},
 			team_roles(){
-				return _.pluck(this.rolesObj, 'value');
+				return _.pluck(this.rolesObj, 'value') || [];
 			}
 		},
 		filters: {
@@ -400,7 +400,9 @@
                         });
 
                         this.trip = trip;
-                        this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});
+                        this.$http.get('groups/' + this.trip.group_id).then(function (response) {
+                            this.groupObj = response.body.data;
+                        });
 						// this.wizardData.campaign_id = this.trip.campaign_id;
                         // this.wizardData.country_code = this.trip.country_code;
 

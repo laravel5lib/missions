@@ -125,7 +125,7 @@
 			}
 		},
 		methods: {
-			toStep(stepNumber){
+			toStep(step){
 				if (step.complete) {
 					this.currentStep = step;
 				}

@@ -98,7 +98,8 @@ class ReservationsController extends Controller
             'shirt_size' => $request->get('shirt_size'),
             'height' => $height,
             'weight' => $weight,
-            'avatar_upload_id' => $request->get('avatar_upload_id')
+            'avatar_upload_id' => $request->get('avatar_upload_id'),
+            'trip_id' => $request->get('trip_id')
         ]);
 
         event(new ReservationWasCreated($reservation, $request));
@@ -134,12 +135,15 @@ class ReservationsController extends Controller
             'user_id' => $request->get('user_id', $reservation->user_id),
             'email' => trim(strtolower($request->get('email', $reservation->email))),
             'desired_role' => $request->get('desired_role', $reservation->desired_role),
-            'shirt_size' => $request->get('shirt_size', $reservation->shirt_size)
+            'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
+            // 'height' => $height,
+            // 'weight' => $weight,
+            'trip_id' => $request->get('trip_id', $reservation->trip_id)
         ]);
 
-        $reservation->syncCosts($request->get('costs'));
-        $reservation->syncRequirements($request->get('requirements'));
-        $reservation->syncDeadlines($request->get('deadlines'));
+        // $reservation->syncCosts($request->get('costs'));
+        // $reservation->syncRequirements($request->get('requirements'));
+        // $reservation->syncDeadlines($request->get('deadlines'));
 
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));

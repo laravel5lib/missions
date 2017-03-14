@@ -141,7 +141,7 @@ class FundraisersController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function store(FundraiserRequest $request)
-    {
+    {   
         $fundraiser = $this->fundraiser->create($request->all());
 
         if ($request->has('tags')) {
@@ -171,7 +171,6 @@ class FundraisersController extends Controller
             'type'             => $request->get('type', $fundraiser->type),
             'url'              => $request->get('url', $fundraiser->url),
             'fund_id'          => $request->get('fund_id', $fundraiser->fund_id),
-            'goal_amount'      => $request->get('goal_amount', $fundraiser->goal_amount),
             'public'           => $request->get('public', $fundraiser->public),
             'description'      => $request->get('description', $fundraiser->description),
             'show_donors'      => $request->get('show_donors', $fundraiser->show_donors),

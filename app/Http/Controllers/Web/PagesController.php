@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-
 use App\Http\Requests;
 use App\Models\v1\Slug;
+use Illuminate\Http\Request;
+use App\Models\v1\Fundraiser;
 use App\Http\Controllers\Controller;
 
 class PagesController extends Controller
 {
-    function __construct(Slug $slug)
+    private $slug;
+    private $fundraiser;
+
+    function __construct(Slug $slug, Fundraiser $fundraiser)
     {
         $this->slug = $slug;
+        $this->fundraiser = $fundraiser;
     }
 
     public function show($slug)
     {
+        $fundraiser = $this->fundraiser->where('url', $slug)->first();
+
+        if ($fundraiser)
+            return redirect($fundraiser->sponsor->slug->url.'/'.$slug);
+
         return $this->redirect_to_controller($slug);
     }
 
@@ -31,7 +40,7 @@ class PagesController extends Controller
     }
 
     private function lookup_resource_by_slug($slug)
-    {
+    {    
         $resource = $this->slug->where('url', $slug)->first();
 
         return $resource ? $resource : null;

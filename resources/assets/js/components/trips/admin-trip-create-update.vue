@@ -159,9 +159,12 @@
 					</div><!-- end row -->
 					<div class="form-group">
 						<div class="col-sm-12">
-							<label for="published_at" class="control-label">Publish</label>
-							<date-picker class="form-control" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control hidden" v-model="published_at | moment 'LLLL'" id="published_at">
+							<label for="published_at" class="control-label">
+								Publish
+							</label>
+							<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
+							<date-picker class="form-control" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>
+							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment 'LLLL'" id="published_at" :disabled="toggleDraft">
 						</div>
 					</div>
 
@@ -274,8 +277,9 @@
 				// details data
 				spots: null,
 				closed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
-				published_at: '',
+				published_at: null,
 				public: false,
+                toggleDraft: false,
 			}
 		},
 		computed: {
@@ -291,6 +295,13 @@
 			team_roles(){
 				return _.pluck(this.rolesObj, 'value') || [];
 			}
+		},
+		watch:{
+		    'toggleDraft'(val){
+		        if (val){
+		            this.published_at = null;
+		        }
+		    }
 		},
 		filters: {
 			marked: marked,

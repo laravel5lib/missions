@@ -89,6 +89,12 @@
 				</div>
 				<hr class="divider" />
 				<div class="col-md-12">
+					<div id="paymentAlerts" v-if="paymentErrors.length > 0">
+						<div v-for="error in paymentErrors" class="alert alert-danger alert-dismissible"
+						     role="alert">
+							{{ error }}
+						</div>
+					</div><!-- end alert -->
 					<div class="well">
 						<validator name="PaymentDetails">
 							<form novalidate role="form">

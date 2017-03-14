@@ -102,7 +102,7 @@
 					{name: 'Review', view: 'step8', complete:false}
 				],
 				currentStep: null,
-				canContinue: false,
+//				canContinue: false,
 				trip: {},
 				tripCosts: {},
 				deadlines:[],
@@ -115,7 +115,8 @@
 				userInfo: {},
 				paymentInfo: {},
 				upfrontTotal: 0,
-				fundraisingGoal: 0
+				fundraisingGoal: 0,
+				paymentErrors:[]
 			}
 		},
 		computed: {
@@ -129,6 +130,14 @@
 					this.currentStep = step;
 				}
 			},
+			fallbackStep(step){
+                this.wizardComplete = false;
+                this.currentStep = step;
+                this.$nextTick(function () {
+                    this.currentStep.complete = true;
+                });
+                this.$emit('review', false);
+            },
 			backStep(){
 				this.stepList.some(function(step, i, list) {
 					if (this.currentStep.view === step.view){
@@ -242,8 +251,11 @@
 					window.location.href = '/dashboard/reservations/' + response.body.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
-					console.log(response);
-					this.$refs.reservationspinner.hide();
+                    this.$refs.reservationspinner.hide();
+                    console.log(response);
+					this.$root.$emit('showError', response.body.message);
+                    this.fallbackStep(this.stepList[5]); // return to payment details step
+					this.paymentErrors.push(response.body.message);
 				});
 
 

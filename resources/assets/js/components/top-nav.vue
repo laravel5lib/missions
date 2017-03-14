@@ -124,7 +124,7 @@
 		        return this.auth ? this.$root.user.avatar : '';
 			},
 			url() {
-		        return this.auth ? this.$root.user.url : '';
+		        return this.auth ? '/' + this.$root.user.url : '';
 			},
 		},
 		methods: {

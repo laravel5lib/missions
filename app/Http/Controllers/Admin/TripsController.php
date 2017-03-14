@@ -37,8 +37,8 @@ class TripsController extends Controller
 
     public function create($campaignId)
     {
-        $campaign = Campaign::whereId($campaignId)->orWhere('page_url', $campaignId)->first();
-        // $this->api->get('campaigns/'.$campaignId);
+        // $campaign = Campaign::findOrFail($campaignId);
+        $campaign = $this->api->get('campaigns/'.$campaignId);
         return view('admin.trips.create')->with('campaign', $campaign);
     }
 }

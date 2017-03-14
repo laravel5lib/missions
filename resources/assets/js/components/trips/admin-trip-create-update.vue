@@ -127,7 +127,7 @@
                     <div class="form-group"	>
                         <div class="col-sm-12">
                         	<label class="control-label">Trip Rep.</label>
-                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
+                            <v-select @keydown.enter.prevent="" class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
                                       label="name"></v-select>
                             <!--v-validate:rep="{ required: false}"-->
                             <select hidden v-model="rep_id">
@@ -388,13 +388,25 @@
                         this.campaign = trip.campaign.data;
                         this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
                         // this.prospects = trip.prospects;
-                        this.prospectsObj = _.filter(this.prospectsList, function(p) { return _.contains(trip.prospects, p.value);});
-                        this.rolesObj = _.filter(this.teamRolesList, function(p) { return _.contains(trip.team_roles, p.value);});
+                        this.prospectsObj = _.filter(this.prospectsList, function (p) {
+                            return _.some(trip.prospects, function (prospect) {
+	                            return prospect.toLowerCase() === p.value.toLowerCase();
+                            });
+                        });
+                        this.rolesObj = _.filter(this.teamRolesList, function (p) {
+                            return _.some(trip.team_roles, function (prospect) {
+                                return prospect.toLowerCase() === p.value.toLowerCase();
+                            });
+                        });
 
                         this.trip = trip;
                         this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});
 						// this.wizardData.campaign_id = this.trip.campaign_id;
                         // this.wizardData.country_code = this.trip.country_code;
+
+                        this.$http.get('users/' + this.trip.rep_id).then(function (response) {
+                            this.repObj = response.body.data;
+                        });
 
                     });
                 } else {

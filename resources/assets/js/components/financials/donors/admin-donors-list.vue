@@ -11,44 +11,44 @@
 
                 <legend>By Designation</legend>
                 <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter by Group"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="reservationFilter" :debounce="250" :on-search="getReservations"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="reservationFilter" :debounce="250" :on-search="getReservations"
                               :value.sync="reservationObj" :options="reservationsOptions" label="given_names"
                               placeholder="Filter by Reservation"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignsOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="causesFilter" :debounce="250" :on-search="getCauses"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="causesFilter" :debounce="250" :on-search="getCauses"
                               :value.sync="causeObj" :options="causesOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="tripsFilter" :debounce="250" :on-search="getTrips"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="tripsFilter" :debounce="250" :on-search="getTrips"
                               :value.sync="tripObj" :options="tripsOptions" label="name"
                               placeholder="Filter by Trip"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="projectsFilter" :debounce="250" :on-search="getProjects"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="projectsFilter" :debounce="250" :on-search="getProjects"
                               :value.sync="projectObj" :options="projectsOptions" label="name"
                               placeholder="Filter by Project"></v-select>
                 </div>
 
                 <legend>By Account Holder</legend>
                 <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupAccountObj" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select class="form-control" id="userFilter" :debounce="250" :on-search="getUsers"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" :debounce="250" :on-search="getUsers"
                               :value.sync="userObj" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>
@@ -484,36 +484,36 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { search: search}).then(function (response) {
-                    this.groupsOptions = response.data.data;
+                this.$http.get('groups', { params: { search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getReservations(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('reservations', { search: search}).then(function (response) {
-                    this.reservationsOptions = response.data.data;
+                this.$http.get('reservations', { params: { search: search} }).then(function (response) {
+                    this.reservationsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { search: search}).then(function (response) {
-                    this.campaignsOptions = response.data.data;
+                this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
+                    this.campaignsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCauses(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('causes', { search: search}).then(function (response) {
-                    this.causesOptions = response.data.data;
+                this.$http.get('causes', { params: { search: search} }).then(function (response) {
+                    this.causesOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('trips', { search: search, include: 'group'}).then(function (response) {
-                    this.tripsOptions = response.data.data;
+                this.$http.get('trips', { params: { search: search, include: 'group'} }).then(function (response) {
+                    this.tripsOptions = response.body.data;
                     _.each(this.tripsOptions, function (trip) {
                         trip.name = trip.type + ' | ' + trip.country_name + ' | ' + trip.group.data.name;
                     });
@@ -522,8 +522,8 @@
             },
             getProjects(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('projects', { search: search}).then(function (response) {
-                    this.projectsOptions = response.data.data;
+                this.$http.get('projects', { params: { search: search} }).then(function (response) {
+                    this.projectsOptions = response.body.data;
                     _.each(this.projectsOptions, function (project) {
                         project.name = project.plaque.prefix + ' ' + project.plaque.message;
                     });
@@ -532,18 +532,18 @@
             },
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { search: search}).then(function (response) {
-                    this.usersOptions = response.data.data;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             searchDonors(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('donors', params).then(function (response) {
+                this.$http.get('donors', { params: params }).then(function (response) {
                     let self = this;
-                    this.donors = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.donors = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }).then(function () {
                     this.updateConfig();

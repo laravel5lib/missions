@@ -19,7 +19,7 @@
 			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 							  label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code"
 							v-validate:country="{ required: true }">
@@ -324,12 +324,12 @@
 		created(){
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			});
 
 			// get campaign data
 			this.resource.get({id: this.campaignId}).then(function(response) {
-				let campaign = response.data.data;
+				let campaign = response.body.data;
 				this.name = campaign.name;
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;

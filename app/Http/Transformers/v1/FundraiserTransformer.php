@@ -38,6 +38,7 @@ class FundraiserTransformer extends TransformerAbstract
             'url'            => $fundraiser->url,
             'public'         => (bool) $fundraiser->public,
             'show_donors'    => (bool) $fundraiser->show_donors,
+            'status'         => $fundraiser->getStatus(),
             'description'    => $fundraiser->description,
             'started_at'     => $fundraiser->started_at->toDateTimeString(),
             'ended_at'       => $fundraiser->ended_at->toDateTimeString(),

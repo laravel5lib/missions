@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
-use App\Http\Requests\v1\PaymentRequest;
-use App\Http\Transformers\v1\PaymentTransformer;
 use App\Models\v1\Cost;
+use App\Jobs\UpdateDues;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Http\Requests\v1\PaymentRequest;
+use App\Http\Transformers\v1\PaymentTransformer;
 
 class CostPaymentsController extends Controller
 {
@@ -72,12 +73,14 @@ class CostPaymentsController extends Controller
         $cost = $this->cost->findOrFail($costId);
 
         $payment = $cost->payments()->create([
-            'amount_owed' => $request->get('amount_owed')/100,
+            'amount_owed' => $request->get('amount_owed'),
             'percent_owed' => $request->get('percent_owed'),
             'due_at' => $request->get('due_at', null),
             'upfront' => $request->get('upfront', false),
             'grace_period' => $request->get('grace_period', 0)
         ]);
+
+        $this->dispatch(new UpdateDues($payment));
 
         return $this->response->item($payment, new PaymentTransformer);
     }
@@ -96,12 +99,14 @@ class CostPaymentsController extends Controller
 
         $payment->update([
             'cost_id' => $request->get('cost_id', $costId),
-            'amount_owed' => $request->get('amount_owed')/100,
+            'amount_owed' => $request->get('amount_owed'),
             'percent_owed' => $request->get('percent_owed'),
             'due_at' => $request->get('due_at', null),
             'upfront' => $request->get('upfront', false),
             'grace_period' => $request->get('grace_period', 0)
         ]);
+
+        $this->dispatch(new UpdateDues($payment));
 
         return $this->response->item($payment, new PaymentTransformer);
     }

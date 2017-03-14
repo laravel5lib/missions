@@ -44,12 +44,14 @@ class TransferTransaction extends TransactionHandler
         event(new TransactionWasCreated($to));
 
         $to->details = [
-            'related_transaction_id' => $from->id
+            'related_transaction_id' => $from->id,
+            'comment' => 'Transfer from ' . $from->fund->name
         ];
         $to->save();
 
         $from->details = [
-            'related_transaction_id' => $to->id
+            'related_transaction_id' => $to->id,
+            'comment' => 'Transfer to ' . $to->fund->name
         ];
         $from->save();
 

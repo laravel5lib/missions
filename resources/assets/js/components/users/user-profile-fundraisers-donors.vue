@@ -133,24 +133,24 @@
                 this.page = 1;
             },
             searchDonors(){
-                this.$http.get('fundraisers{/id}/donors', {
+                this.$http.get('fundraisers/'+ this.id + '/donors', { params: {
                     id: this.id,
                     per_page: this.per_page,
                     page: this.page
-                }).then(function (response) {
-                    this.donors = _.toArray(response.data.data);
-                    this.pagination = response.data.meta.pagination;
+                }}).then(function (response) {
+                    this.donors = _.toArray(response.body.data);
+                    this.pagination = response.body.meta.pagination;
                 });
             },
             searchDonations(){
-                this.$http.get('fundraisers{/id}/donations', {
+                this.$http.get('fundraisers/'+ this.id + '/donations', { params: {
                     id: this.id, 
                     include: 'donor',
                     per_page: this.per_page,
                     page: this.page
-                }).then(function (response) {
-                    this.donations = _.toArray(response.data.data);
-                    this.pagination = response.data.meta.pagination;
+                }}).then(function (response) {
+                    this.donations = _.toArray(response.body.data);
+                    this.pagination = response.body.meta.pagination;
                 });
             }
         },

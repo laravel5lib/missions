@@ -16,7 +16,10 @@
             </div>
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
-                <action-trigger text="Save Settings" event="save-settings"></action-trigger>
+                {{-- <action-trigger text="Save Settings" event="save-settings"></action-trigger> --}}
+                <a id="settings-profile-link" class="btn btn-primary" href="{{ url(auth()->user()->slug->url) }}">
+                    My Profile
+                </a>
             </div>
         </div>
         <div class="row visible-xs">

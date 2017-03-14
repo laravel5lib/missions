@@ -30,6 +30,7 @@ $api->version('v1', [
 
     $api->resource('uploads', 'UploadsController');
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
+    $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
     $api->post('/register', 'AuthenticationController@register');
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
@@ -64,6 +65,7 @@ $api->version('v1', [
     $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
+    $api->put('reservations/{id}/restore', 'ReservationsController@restore');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
     $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
     $api->post('reservations/{reservations}/companions', 'CompanionsController@store');

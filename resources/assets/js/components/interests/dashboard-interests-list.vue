@@ -65,16 +65,16 @@
         methods: {
             searchInterests() {
                 // this.$refs.spinner.show();
-                this.$http.get('interests', {
+                this.$http.get('interests', { params: {
                     group: this.groupId,
                     trip: this.tripId,
                     include: '',
                     search: this.search,
                     page: this.pagination.current_page,
                     per_page: this.per_page
-                }).then(function (response) {
-                    this.interests = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                }}).then(function (response) {
+                    this.interests = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             }

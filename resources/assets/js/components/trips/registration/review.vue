@@ -10,10 +10,10 @@
 				</div>
 				<div class="panel-body">
 					<address>
-						<strong>{{userInfo.firstName}} {{userInfo.middleName}} {{userInfo.lastName}}</strong><br>
+						<strong>{{userInfo.firstName}} {{userInfo.lastName}}</strong><br>
 						{{userInfo.address}}<br>
 						{{userInfo.city}}, {{userInfo.state}} {{userInfo.zipCode}}<br>
-						{{userInfo.country | uppercase}}<br>
+						{{userInfo.country_name}}<br>
 					</address>
 						<hr class="divider">
 						<div class="row">
@@ -29,13 +29,13 @@
 						</div><!-- end row -->
 						<div class="row">
 							<div class="col-sm-4">
-								<label>Height</label><p>{{userInfo.height}}</p>
+								<label>Height</label><p>{{userInfo.heightA}} {{userInfo.heightUnitA}} {{userInfo.heightB}} {{userInfo.heightUnitB}}</p>
 							</div><!-- end col -->
 							<div class="col-sm-4">
-								<label>Weight</label><p>{{userInfo.weight}} lbs.</p>
+								<label>Weight</label><p>{{userInfo.weight}} {{userInfo.weightUnit}}</p>
 							</div><!-- end col -->
 							<div class="col-sm-4">
-								<label>Role</label><p>{{userInfo.desired_role}}</p>
+								<label>Role</label><p>{{userInfo.desired_role.name}}</p>
 							</div><!-- end col -->
 						</div><!-- end row -->
 						<hr class="divider">
@@ -138,6 +138,10 @@
 			'review'(val, oldVal) {
 				this.$dispatch('review', val)
 			}
+		},
+		activate(done){
+			$('html, body').animate({scrollTop : 200},300);
+			done();
 		}
 
 	}

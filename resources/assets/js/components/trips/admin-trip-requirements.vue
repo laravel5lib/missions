@@ -17,7 +17,7 @@
                 <h6><small>Type: {{ requirement.document_type }}</small></h6>
             </div>
             <div class="col-xs-4 text-right">
-                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'll' }} </h5>
+                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'lll' }} </h5>
                 <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
             </div>
         </div><!-- end row -->
@@ -193,21 +193,18 @@
                     'Passport',
                     'Visa',
                     'Referral',
-                    'Credentials',
-                    'Minor Release',
-                    'Immunization',
                     'Testimony',
                     'Arrival Designation',
-                    'Itinerary'
+                    'Airport Preference'
                 ],
                 documentTypes: [
                     'medical_releases',
                     'passports',
                     'visas',
                     'referrals',
-                    'credentials',
-                    'arrival_designation',
+                    'arrival_designations',
                     'essays',
+                    'airport_preferences'
                 ],
                 sort: 'due_at',
                 direction: 'asc'
@@ -223,7 +220,7 @@
             resetRequirement(){
                 this.newRequirement = {
                     requester_id: this.id,
-                    requester_type: 'trip',
+                    requester_type: 'trips',
                     name: '',
                     document_type: '',
                     due_at: null,
@@ -236,7 +233,7 @@
                 if(this.$TripRequirementsCreate.valid) {
                     // this.$refs.spinner.show();
                     this.resource.save({}, this.newRequirement).then(function (response) {
-                        this.requirements.push(response.data.data);
+                        this.requirements.push(response.body.data);
                         this.resetRequirement();
                         this.attemptedAddRequirement = false;
                         this.showAddModal = false;
@@ -279,7 +276,7 @@
                     search: this.search,
                     sort: this.sort + '|' + this.direction,
                 }).then(function (response) {
-                    this.requirements = response.data.data;
+                    this.requirements = response.body.data;
                     this.$refs.spinner.hide()
                 });
             },

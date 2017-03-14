@@ -1,6 +1,6 @@
 @unless(! $link)
 <li>
-    <a href="{{ $link->url }}">
+    <a href="{{ $link->url }}" target="_blank">
         @if(in_array($link->name, ['facebook', 'instagram', 'twitter', 'linkedin', 'google', 'vimeo', 'youtube']))
             <i class="fa fa-{{$link->name}} text-muted"></i>
         @elseif($link->name == 'pinterest')

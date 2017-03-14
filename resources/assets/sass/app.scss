@@ -1398,6 +1398,39 @@ a.btn-college-nav {
   }
 }
 
+/* Flexbox styles */
+.flex-container {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  .flex-row {
+    flex:0 1 100%;
+    width:100%;
+    flex-basis:30%;
+    @media screen and (max-width: 767px) {
+      flex-basis:100%;
+    }
+    .flex-col {
+      flex-direction:column;
+      height:100%;
+      display:flex;
+      margin-right:2%;
+      margin-left:2%;
+      align-content:center;
+      .flex-item {
+        flex:0 1 100%;
+        .panel-body {
+          h5 {
+            text-overflow: ellipsis;
+            overflow:hidden;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
 /*=========================
   Icons
  ================= */
@@ -1568,6 +1601,15 @@ $divider-base-size: 10px;
   &.sm {
     margin-top: $divider-base-size/2;
     margin-bottom: $divider-base-size/2;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .alert.top-right {
+    right: 0px !important;
+  }
+  .alert.top, .alert.top-right {
+    top:68px !important;
   }
 }
 

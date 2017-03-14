@@ -45,7 +45,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': checkForError('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select class="form-control" id="user" multiple :value.sync="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDues" :options="availableDues"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" v-validate:dues="{ required: true }" multiple>
                                 <option :value="due.id" v-for="due in dues">{{due.name}}</option>
@@ -233,7 +233,7 @@
 
                 // this.$refs.spinner.show();
                 this.$http.put('initiatives/' + initiative.id, initiative).then(function (response) {
-                    let thisTrip = response.data.data;
+                    let thisTrip = response.body.data;
                     this.selecteddues = new Array(this.newDeadline);
                     // this.$refs.spinner.hide();
                     return this.adddues();
@@ -248,7 +248,7 @@
             doUpdate(project){
                 // this.$refs.spinner.show();
                 return this.resource.update(project).then(function (response) {
-                    this.setProjectData(response.data.data);
+                    this.setProjectData(response.body.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
@@ -276,7 +276,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setProjectData(response.data.data)
+                this.setProjectData(response.body.data)
                 // this.$refs.spinner.hide();
             });
 

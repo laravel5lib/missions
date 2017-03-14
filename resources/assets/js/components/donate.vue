@@ -15,7 +15,8 @@
                             <label>Enter Donation Amount</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input style="font-size:22px;color:#05ce7b;" type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                                <input style="font-size:22px;color:#05ce7b;" type="text" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                                <span class="input-group-addon">USD</span>
                             </div>
                         </div>
                     </div>
@@ -600,12 +601,12 @@
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then(function (response) {
-                    this.donor = response.data.data.name;
-                    this.donor_id = response.data.data.donor_id || null;
-                    this.cardHolderName = response.data.data.name;
-                    this.cardEmail = response.data.data.email;
-                    this.cardPhone = response.data.data.phone_one;
-                    this.cardZip = response.data.data.zip
+                    this.donor = response.body.data.name;
+                    this.donor_id = response.body.data.donor_id || null;
+                    this.cardHolderName = response.body.data.name;
+                    this.cardEmail = response.body.data.email;
+                    this.cardPhone = response.body.data.phone_one;
+                    this.cardZip = response.body.data.zip
                 });
             }
 

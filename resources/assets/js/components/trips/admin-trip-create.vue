@@ -139,7 +139,7 @@
 			this.currentStep = this.stepList[0];
 
 			this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-				this.campaign = response.data.data;
+				this.campaign = response.body.data;
 			});
 		},
 		events: {

@@ -40,7 +40,7 @@
                 <div class="col-sm-6 col-md-4 text-center">
                     <label>Funding Progress</label>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 30%; width: {{ $reservation->getPercentRaised() }}%;">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{ $reservation->getPercentRaised() }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 1%; width: {{ $reservation->getPercentRaised() }}%;">
                         </div>
                     </div>
                     <span class="text-success">{{ $reservation->getPercentRaised() }}%</span> <small>of ${{ number_format($reservation->totalCostInDollars(), 2) }} Raised</small>

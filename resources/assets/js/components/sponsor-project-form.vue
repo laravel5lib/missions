@@ -12,7 +12,7 @@
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': checkForError('country') }">
 						<label for="name">Select a location</label>
-						<!--<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
 						<select name="country" id="country" class="form-control" v-model="country_code"
 								v-validate:country="{ required: true }">
@@ -121,7 +121,6 @@
 				availableCountries: [],
 				countries: [],
 				causes: [],
-				cause: null,
 				initiatives: [],
 				availableInitiatives: [],
 				countryCodeObj: null,
@@ -154,9 +153,9 @@
 				let allCodes = _.findWhere(this.causes, { id: val }).countries;
 				// filter selectable countries
 				this.availableCountries = [];
-				_.each(allCodes, function (code) {
+				_.each(allCodes, function (country) {
 					let test = undefined;
-					if (test = _.findWhere(this.countries, { code: code.toLowerCase()}))
+					if (test = _.findWhere(this.countries, { code: country.code.toLowerCase()}))
 					    this.availableCountries.push(test);
 				}.bind(this));
 				this.getInitiatives();
@@ -193,7 +192,7 @@
 				this.causeResource
 						.get(null)
 						.then(function (response) {
-							this.causes = response.data.data;
+							this.causes = response.body.data;
 						}, function (error) {
 							console.log(error);
 						});
@@ -202,7 +201,7 @@
 				this.intiativeResource
 						.get({causeId: this.causeId})
 						.then(function (response) {
-							this.initiatives = response.data.data;
+							this.initiatives = response.body.data;
 						}, function (error) {
 							console.log(error);
 						});
@@ -246,7 +245,7 @@
 		ready(){
 			// Get Countries
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			}, function (error) {
 				console.log(error);
 			});

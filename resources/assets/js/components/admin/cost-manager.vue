@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Active Date</label>
-                        <p>{{ cost.active_at|moment 'll' }}</p>
+                        <p>{{ cost.active_at|moment 'lll' }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Cost</label>
@@ -329,7 +329,7 @@
                         // cost payments must total full amount owed and percent owed
                         var amount = 0;
                         cost.payments.forEach(function (payment, index) {
-                            amount += payment.amount_owed;
+                            amount += parseFloat(payment.amount_owed);
                         }, this);
                         // evaluate difference
                         if (amount != cost.amount) {
@@ -375,7 +375,7 @@
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
                     this.resource.save(this.newCost, { include: 'payments'}).then(function (response) {
-                        this.costs.push(response.data.data);
+                        this.costs.push(response.body.data);
                         this.resetCost();
                         this.showAddModal = false;
                         this.attemptedAddCost = false;
@@ -391,7 +391,7 @@
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
                     this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then(function (response) {
-                        this.showReminder = response.data.data.id;
+                        this.showReminder = response.body.data.id;
                         $.extend(this.costs, this.selectedCost);
                         this.selectedCost = null;
                         this.attemptedAddCost = false;
@@ -420,7 +420,7 @@
                     sort: this.sort,
                     type: this.filters.type
                 }).then(function (response) {
-                    this.costs = response.data.data;
+                    this.costs = response.body.data;
                     // this.$refs.spinner.hide();
                     this.checkPaymentsSync();
                 });
@@ -433,7 +433,7 @@
                 _.each(this.costs, function (cost) {
                     let t = 0;
                     _.each(cost.payments.data, function (payment) {
-                        t += payment.amount_owed;
+                        t += parseFloat(payment.amount_owed);
                     });
                     if (parseFloat(cost.amount) !== parseFloat(t)) {
                         this.unSyncedCosts.push(cost.id);

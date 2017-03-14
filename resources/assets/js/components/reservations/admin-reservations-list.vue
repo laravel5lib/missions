@@ -9,17 +9,17 @@
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
 				</div>
 				<div class="form-group">
-					<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							  :value.sync="groupsArr" :options="groupsOptions" label="name"
 							  placeholder="Filter Groups"></v-select>
 				</div>
 				<div class="form-group">
-					<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
 							  :value.sync="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
 				<div class="form-group" v-if="!tripId">
-					<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 							  :value.sync="campaignObj" :options="campaignOptions" label="name"
 							  placeholder="Filter by Campaign"></v-select>
 				</div>
@@ -122,7 +122,7 @@
 
 				<div class="form-group">
 					<label>Shirt Size</label>
-					<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -374,6 +374,8 @@
 					</th>
 					<th v-if="isActive('registered')">
 						Registered On
+						<i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
 					<th v-if="isActive('gender')">
 						Gender
@@ -386,6 +388,8 @@
 					</th>
 					<th v-if="isActive('email')">
 						Email
+						<i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
 					<th v-if="isActive('requirements')">
 						Requirements
@@ -816,13 +820,13 @@
 			searchReservations(){
 				let params = this.getListSettings();
 				// this.$refs.spinner.show();
-				this.$http.get('reservations', params).then(function (response) {
+				this.$http.get('reservations', {params: params}).then(function (response) {
 					let self = this;
-					_.each(response.data.data, function (reservation) {
+					_.each(response.body.data, function (reservation) {
 						reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
 					}, this);
-					this.reservations = response.data.data;
-					this.pagination = response.data.meta.pagination;
+					this.reservations = response.body.data;
+					this.pagination = response.body.meta.pagination;
 					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
@@ -831,50 +835,50 @@
 			},
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('groups', {search: search}).then(function (response) {
-					this.groupsOptions = response.data.data;
+				this.$http.get('groups', { params: {search: search} }).then(function (response) {
+					this.groupsOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', {search: search}).then(function (response) {
-					this.campaignOptions = response.data.data;
+				this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
+					this.campaignOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.usersOptions = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.usersOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getTodos(){
-				this.$http.get('todos', {
+				this.$http.get('todos', { params: {
 					'type': 'reservations',
 					'per_page': 100,
 					'unique': true
-				}).then(function (response) {
-					this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
+				}}).then(function (response) {
+					this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
 				});
 			},
 			getRequirements(){
-				this.$http.get('requirements', {
+				this.$http.get('requirements', { params: {
 					'type': 'trips',
 					'per_page': 100,
 					'unique': true
-				}).then(function (response) {
-					this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				}}).then(function (response) {
+					this.requirementOptions = _.uniq(_.pluck(response.body.data, 'name'));
 				});
 			},
 			getCosts(){
-				this.$http.get('costs', {
+				this.$http.get('costs', { params: {
 					'assignment': 'trips',
 					'per_page': 100,
 					'unique': true
-				}).then(function (response) {
-					this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				}}).then(function (response) {
+					this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
 				});
 			}
 		},
@@ -900,7 +904,7 @@
 					switch (arr[0]) {
 						case 'campaign':
 							this.$http.get('campaigns/' + arr[1]).then(function (response) {
-								this.campaignObj = response.data.data;
+								this.campaignObj = response.body.data;
 							});
 							// this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
 					}

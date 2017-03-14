@@ -13,21 +13,10 @@ return [
 
     'users' => 50,
     'groups' => 25,
-    'campaigns' => 3,
-    'trips' => 20,
-    'reservations' => 200,
-    'assignments' => 10,
+    'campaigns' => 2,
+    'trips' => 3, // per campaign
+    'reservations' => 5, // per trip
     'passports' => 50,
     'visas' => 20,
-    'contacts' => 10,
-    'medical_releases' => 50,
-    'decisions' => 50,
-    'exams' => 50,
-    'sites' => 10,
-    'transports' => 10,
-    'regions' => 10,
-    'accommodations' => 10,
     'uploads' => 25,
-    'translators' => 10,
-    'teams' => 30
 ];

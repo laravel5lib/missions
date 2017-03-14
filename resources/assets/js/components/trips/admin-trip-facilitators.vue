@@ -53,10 +53,10 @@
 							<div class="col-sm-12 text-center">
 								<validator name="AddFacilitator">
 									<form class="form-horizontal" novalidate>
-										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', 'server: 'user_id' }"><label
+										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 												class="col-sm-2 control-label">User</label>
 											<div class="col-sm-10">
-												<v-select class="form-control" id="user" :value.sync="userObj" :options="users"
+												<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value.sync="userObj" :options="users"
 														  :on-search="getUsers" label="name"></v-select>
 												<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
 													<option :value="user.id" v-for="user in users">{{user.name}}</option>
@@ -116,8 +116,8 @@
 			},*/
 			getUsers: function getUsers(search, loading) {
 				loading(true);
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.users = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.users = response.body.data;
 					loading(false);
 				});
 			},
@@ -144,7 +144,7 @@
 				this.trip.difficulty = this.trip.difficulty.split(' ').join('_');
 				// Update Trip
 				this.resource.update({id: this.tripId}, this.trip).then(function (response) {
-					this.trip = response.data.data;
+					this.trip = response.body.data;
 					this.facilitators = this.trip.facilitators.data;
 
 					this.user_id = null;
@@ -159,9 +159,9 @@
 		},
 		ready: function ready() {
 			this.resource.get({id: this.tripId}).then(function (response) {
-				this.trip = response.data.data;
+				this.trip = response.body.data;
 				this.facilitators = this.trip.facilitators.data;
-				//                $.extend(this.$data, response.data.data);
+				//                $.extend(this.$data, response.body.data);
 			}, function (response) {
 				console.log('Update Failed! :(');
 				console.log(response);

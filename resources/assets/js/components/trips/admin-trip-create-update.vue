@@ -13,7 +13,7 @@
                     <div class="form-group" :class="{ 'has-error': checkForError('group') }">
                         <div class="col-sm-12">	
                         	<label class="control-label">Group</label>
-                            <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
                             <select hidden v-model="group_id" v-validate:group="{ required: true}">
                                 <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
                             </select>
@@ -52,7 +52,7 @@
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('prospects') }">
 	                        	<label class="control-label">Perfect For</label>
-	                            <v-select multiple class="form-control" id="group" :value.sync="prospectsObj"
+	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
 	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 	                            <select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
 	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -63,7 +63,7 @@
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('teamroles') }">
 	                        	<label class="control-label">Available Roles</label>
-	                            <v-select multiple class="form-control" id="group" :value.sync="rolesObj"
+	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="rolesObj"
 	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
 	                            <select hidden multiple v-model="team_roles" v-validate:teamroles="{ required: true}">
 	                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
@@ -127,7 +127,7 @@
                     <div class="form-group"	>
                         <div class="col-sm-12">
                         	<label class="control-label">Trip Rep.</label>
-                            <v-select multiple class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
+                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
                                       label="name"></v-select>
                             <!--v-validate:rep="{ required: false}"-->
                             <select hidden v-model="rep_id">
@@ -321,15 +321,15 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', {search: search}).then(function (response) {
-					this.groups = response.data.data;
+				this.$http.get('groups', { params: {search: search} }).then(function (response) {
+					this.groups = response.body.data;
 					loading(false);
 				});
 			},
 			getReps(search, loading){
 				loading(true);
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.reps = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.reps = response.body.data;
 					loading(false);
 				});
 			},
@@ -348,8 +348,8 @@
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {
 						resource.update({id: this.tripId}, this.wizardData).then(function (response) {
-							$.extend(this, response.data.data);
-							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
+							$.extend(this, response.body.data);
+							this.difficulty = response.body.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
 							this.$dispatch('showSuccess', 'Trip Updated');
 						}, function (error) {
@@ -369,14 +369,14 @@
 		ready(){
 		    // get team roles list
 			this.$http.get('utilities/team-roles').then(function (response) {
-			    _.each(response.data.roles, function (name, key) {
+			    _.each(response.body.roles, function (name, key) {
 					this.teamRolesList.push({ value: key, name: name});
 				}.bind(this));
 			});
 
 			if (this.isUpdate) {
-				this.$http.get('trips/' + this.tripId, {include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (response) {
-					let trip = response.data.data;
+				this.$http.get('trips/' + this.tripId, { params: {include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
+					let trip = response.body.data;
 					// trim campaign
 					$.extend(this, trip);
 					this.campaign = trip.campaign.data;
@@ -392,13 +392,13 @@
 				});
 			} else {
 				this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-					this.campaign = response.data.data;
+					this.campaign = response.body.data;
 				});
 			}
 
 			// get some groups
 			this.$http.get('groups').then(function (response) {
-				this.groups = response.data.data;
+				this.groups = response.body.data;
 				this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});
 			});
 		}

@@ -14,7 +14,7 @@
                                 <div class="form-group" :class="{ 'has-error': checkForError('group') }">
                                     <label class="col-sm-2 control-label">Group</label>
                                     <div class="col-sm-10">
-                                        <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+                                        <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
                                                   label="name"></v-select>
                                         <select hidden v-model="group_id" v-validate:group="{ required: true}">
                                             <option :value="group.id" v-for="group in groups">{{group.name}}</option>
@@ -74,8 +74,8 @@
         methods:{
             getGroups(search, loading){
                 loading(true);
-                this.$http.get('groups', { search: search }).then(function (response) {
-                    this.groups = response.data.data;
+                this.$http.get('groups', { params: { search: search } }).then(function (response) {
+                    this.groups = response.body.data;
                     loading(false);
                 });
             },
@@ -87,7 +87,7 @@
                 this.$validate('group', true);
                 this.attemptedContinue = true;
                 if (this.$TripDuplication.valid) {
-                    this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (trip) {
+                    this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (trip) {
                         let payments = {};
                         this.trip = trip.data.data;
                         $.extend(this.trip, {
@@ -135,7 +135,7 @@
                                 }.bind(this));
                             }.bind(this));
                             Promise.all(promises).then(function (values) {
-                                window.location.href = '/admin' + response.data.data.links[0].uri;
+                                window.location.href = '/admin' + response.body.data.links[0].uri;
                             });
                         }, function (error) {
                             console.log(error);

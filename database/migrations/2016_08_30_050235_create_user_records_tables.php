@@ -70,8 +70,8 @@ class CreateUserRecordsTables extends Migration
             $table->string('type');
             $table->json('referrer')->nullable();
             $table->json('response')->nullable();
-            $table->timestamp('sent_at');
-            $table->timestamp('responded_at');
+            $table->timestamp('sent_at')->nullable();
+            $table->timestamp('responded_at')->nullable();
             $table->timestamps();
         });
 

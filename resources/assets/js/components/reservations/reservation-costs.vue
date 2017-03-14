@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-xs-4 tour-step-addons">
                 <button class="btn btn-primary btn-sm" @click="add">
-                    <span class="fa fa-plus"></span> Add <span class="hidden-xs">Optional</span> Costs
+                    <span class="fa fa-plus"></span> Addons
                 </button>
             </div>
             <div class="col-xs-8 text-right" v-if="reservation && listedCosts !== reservation.costs.data">
@@ -20,7 +20,7 @@
         <hr class="divider inv sm">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h5>Applied Costs</h5>
+                <h5>Reservation Cost Breakdown</h5>
             </div><!-- end panel-heading -->
 
             <div class="list-group">
@@ -57,8 +57,13 @@
                 <validator name="AddCost">
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
-                            <label class="control-label">Available Costs</label>
-                            <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <label class="control-label">Available Addons or Requests</label>
+                            <p class="help-block" v-for="cost in selectedCosts">
+                                <strong>{{ cost.name }} - {{ cost.amount | currency }}</strong><br />
+                                {{ cost.description }}
+                                <hr class="divider">
+                            </p>
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
@@ -242,7 +247,7 @@
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.successMessage = 'Costs updated Successfully';
@@ -281,14 +286,14 @@
             revert(){
                 this.temporaryCosts = [];
                 this.resource.get().then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                 });
             },
         },
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data);
+                this.setReservationData(response.body.data);
                 // this.$refs.spinner.hide();
             });
         }

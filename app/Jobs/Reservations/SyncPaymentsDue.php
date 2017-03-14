@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SyncPaymentsDue extends Job implements ShouldQueue
 {
-    use InteractsWithQueue, SerializesModels;
+    use SerializesModels;
     /**
      * @var Reservation
      */

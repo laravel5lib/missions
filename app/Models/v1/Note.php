@@ -24,7 +24,7 @@ class Note extends Model
      * @var array
      */
     protected $fillable = [
-        'subject', 'content', 'user_id', 'noteable_id', 'noteable_type'
+        'subject', 'content', 'user_id', 'noteable_id', 'noteable_type', 'created_at', 'updated_at'
     ];
 
     /**

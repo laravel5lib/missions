@@ -30,7 +30,7 @@
             // get transport data
             var resource = this.$resource('regions{/id}', {'campaign_id': this.$parent.campaignId});
             resource.get().then(function(response) {
-                this.regions = response.data.data;
+                this.regions = response.body.data;
             });
 
             done();

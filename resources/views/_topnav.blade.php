@@ -11,7 +11,7 @@
       <li><a class="navbar-btn btn btn-primary hidden-xs" href="/donate/general">Donate</a></li>
       <li id="userMenu" class="dropdown-toggle hidden-xs text-capitalize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left" src="{{ image(auth()->user()->getAvatar()->source . '?w=100') }}" alt="{{ auth()->user()->name }}"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
-        <li><a href="{{ url(auth()->user()->slug->url) }}">My Profile</a></li>
+        <li><a href="{{ url(auth()->user()->slug->url) }}" id="top-profile-link">My Profile</a></li>
         @can('access-dashboard')
           <li><a href="{{ url('/dashboard') }}">Dashboard</a></li>
         @endcan

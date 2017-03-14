@@ -39,10 +39,10 @@
         <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Countries" width="800" :callback="updateAccolades">
             <div slot="modal-body" class="modal-body text-center">
 				<validator name="AddCountry">
-					<form class="for" novalidate>
+					<form class="for" @submit.prevent="" novalidate>
 						<div class="form-group" :class="">
 							<label class="control-label">Countries</label>
-							<v-select class="form-control" multiple :value.sync="selectedCountries" :options="availableCountries"
+							<v-select @keydown.enter.prevent="" class="form-control" multiple :value.sync="selectedCountries" :options="availableCountries"
 									  label="name"></v-select>
 							<select hidden="" v-model="selectedCodes" multiple v-validate:code="{ required: true }">
 								<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>
@@ -127,14 +127,14 @@
 				}).then(function(response) {
 					this.showSuccess = true;
 					this.$root.$emit('showSuccess', 'Countries Visited Updated!');
-					this.accolades = response.data.data;
+					this.accolades = response.body.data;
                     this.selectedCountries = [];
                     this.filterAccolades();
 				});
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'countries_visited'}).then(function (response) {
-                    this.accolades = response.data.data[0] || { items: [] };
+                    this.accolades = response.body.data[0] || { items: [] };
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
@@ -149,17 +149,19 @@
 				});
 			},
             searchCountries() {
-				this.$http.get('utilities/countries').then(function(response) {
-					this.countries = response.data.countries;
+				return this.$http.get('utilities/countries').then(function(response) {
+					this.countries = response.body.countries;
 				});
             }
         },
         ready(){
 			if (this.isUser()) {
-				this.searchCountries();
-			}
-
-			this.getAccolades();
+				this.searchCountries().then(function () {
+                    this.getAccolades();
+                });
+			} else {
+                this.getAccolades();
+            }
 
         }
     }

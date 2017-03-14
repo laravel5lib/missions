@@ -47,7 +47,7 @@
                 <div class="col-sm-8">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
-                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -68,7 +68,7 @@
             <div class="form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                 <div class="col-sm-12">
                     <label for="timezone">Timezone</label>
-                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>
@@ -169,8 +169,8 @@
             'name': function (val) {
                 if (typeof val === 'string') {
                     // pre-populate slug
-                    this.$http.get('utilities/make-slug{/string}', { string: val, hideLoader: true }).then(function (response) {
-                        this.url = response.data.slug;
+                    this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then(function (response) {
+                        this.url = response.body.slug;
                     });
                 }
             }
@@ -227,11 +227,11 @@
         ready(){
             // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
+                this.timezones = response.body.timezones;
                 // this.$refs.spinner.hide();
             });
             //TODO use promises defers here

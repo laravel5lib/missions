@@ -14773,8 +14773,8 @@ body.vjs-full-window {
   text-align: center;
   text-transform: lowercase; }
 
-.vjs-menu li.vjs-menu-item:focus,
-.vjs-menu li.vjs-menu-item:hover {
+.vjs-menu li:focus,
+.vjs-menu li:hover {
   outline: 0;
   background-color: #73859f;
   background-color: rgba(115, 133, 159, 0.5); }
@@ -14889,6 +14889,9 @@ body.vjs-full-window {
   visibility: visible;
   opacity: 0;
   transition: visibility 1s, opacity 1s; }
+  @media \0screen {
+    .vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+      visibility: hidden; } }
 
 .vjs-controls-disabled .vjs-control-bar,
 .vjs-using-native-controls .vjs-control-bar,
@@ -14898,6 +14901,10 @@ body.vjs-full-window {
 .vjs-audio.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
   opacity: 1;
   visibility: visible; }
+
+@media \0screen {
+  .vjs-user-inactive.vjs-playing .vjs-control-bar :before {
+    content: ""; } }
 
 .vjs-has-started.vjs-no-flex .vjs-control-bar {
   display: table; }
@@ -17064,6 +17071,42 @@ a.btn-college-nav {
     -webkit-transform: translateX(250px);
     transition-delay: 0.1s; }
 
+/* Flexbox styles */
+.flex-container {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -ms-flex-pack: center;
+  justify-content: center; }
+  .flex-container .flex-row {
+    -ms-flex: 0 1 100%;
+    flex: 0 1 100%;
+    width: 100%;
+    -ms-flex-preferred-size: 30%;
+    flex-basis: 30%; }
+    @media screen and (max-width: 767px) {
+      .flex-container .flex-row {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%; } }
+    .flex-container .flex-row .flex-col {
+      -ms-flex-direction: column;
+      flex-direction: column;
+      height: 100%;
+      display: -ms-flexbox;
+      display: flex;
+      margin-right: 2%;
+      margin-left: 2%;
+      -ms-flex-line-pack: center;
+      align-content: center; }
+      .flex-container .flex-row .flex-col .flex-item {
+        -ms-flex: 0 1 100%;
+        flex: 0 1 100%; }
+        .flex-container .flex-row .flex-col .flex-item .panel-body h5 {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap; }
+
 /*=========================
   Icons
  ================= */
@@ -17190,6 +17233,12 @@ a.socialIcon:hover, .socialHoverClass {
   .divider.sm {
     margin-top: 5px;
     margin-bottom: 5px; }
+
+@media screen and (max-width: 767px) {
+  .alert.top-right {
+    right: 0px !important; }
+  .alert.top, .alert.top-right {
+    top: 68px !important; } }
 
 [v-cloak] {
   display: none; }

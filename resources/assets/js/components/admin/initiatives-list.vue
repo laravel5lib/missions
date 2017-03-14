@@ -224,9 +224,9 @@
             searchInitiatives(){
                 // this.$refs.spinner.show();
                 var params = this.getParameters();
-                this.$http.get('causes/' + this.causeId + '/initiatives', params).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.initiatives = response.data.data;
+                this.$http.get('causes/' + this.causeId + '/initiatives', { params: params }).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.initiatives = response.body.data;
                     // this.$refs.spinner.hide();
                 })
             }

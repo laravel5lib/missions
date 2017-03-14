@@ -38,10 +38,10 @@
 					<hr class="divider inv">
 				</div>
 			</div>
-			<div class="row" style="display:flex;flex-wrap:wrap;justify-content:center;">
-				<div v-for="trip in trips" style="flex:0 1 100%;width:100%;flex-basis:22%;">
-					<div style="flex-direction:column;display:flex;height:100%;margin-right:3%;margin-left:3%;">
-						<div class="panel panel-default" style="flex:0 1 100%;">
+			<div class="row flex-container">
+				<div v-for="trip in trips" class="flex-row">
+					<div class="flex-col">
+						<div class="panel panel-default" class="flex-item">
 							<div class="panel-heading" :class="'panel-' + trip.type">
 								<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
 							</div>
@@ -100,8 +100,8 @@
 				});
 				// this.$refs.spinner.show();
 				resource.query().then(function (response) {
-					this.pagination = response.data.meta.pagination;
-					this.trips = response.data.data;
+					this.pagination = response.body.meta.pagination;
+					this.trips = response.body.data;
 
 					let cId = this.campaignId, calcLowest = this.calcStartingCost;
 					_.each(this.trips, function (trip, index, list) {
@@ -133,7 +133,7 @@
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
 			this.$http.get('groups/' + this.id).then(function (response) {
-				this.group = response.data.data;
+				this.group = response.body.data;
 			});
 			this.getTrips();
 			done();

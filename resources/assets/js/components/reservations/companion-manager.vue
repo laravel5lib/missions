@@ -49,7 +49,7 @@
                                 <div class="form-group" :class="{ 'has-error': checkForError('reservation') }">
                                     <label class="control-label">Reservation</label>
                                     <span class="help-block" v-show="reservations.length < 1"><i class="fa fa-warning"></i> If your search yields no options it could mean (1) the reservation does not exist or (2) the reservation belongs to another group or campaign.</span>
-                                    <v-select class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
+                                    <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
                                     <!-- <select hidden="" v-model="newCompanion.companion_reservation_id" v-validate:reservation="{ required: true}">
                                         <option :value="reservation.id" v-for="reservation in reservations">{{reservation.name}}</option>
                                     </select> -->
@@ -120,7 +120,7 @@ export default {
         loading(true);
         var that = this;
         this.$http.get('reservations?campaign='+this.campaignId+'&groups[]='+this.groupId+'&search='+search+'&per_page=5&ignore[]=' + this.reservationId).then(function (response) {
-            this.reservations = _.chain(response.data.data).reject(function(reservation) {
+            this.reservations = _.chain(response.body.data).reject(function(reservation) {
                 return _.chain(that.companions).pluck('id').contains(reservation.id).value();
             }).map(function(reservation) {
                 return {
@@ -135,16 +135,16 @@ export default {
     },
     getReservation() {
         this.$http.get('reservations/'+this.reservationId+'?include=trip').then(function (response) {
-            this.limit = response.data.data.companion_limit;
-            this.campaignId = response.data.data.trip.data.campaign_id;
-            this.groupId = response.data.data.trip.data.group_id;
+            this.limit = response.body.data.companion_limit;
+            this.campaignId = response.body.data.trip.data.campaign_id;
+            this.groupId = response.body.data.trip.data.group_id;
         }, function (response) {
             this.$dispatch('showError', 'Could not retreive reservation.');
         });
     },
     fetch() {
         this.resource.get({reservation: this.reservationId}).then(function (response) {
-            this.companions = response.data.data;
+            this.companions = response.body.data;
         }, function (response) {
             this.$dispatch('showError', 'Could not retreive companions.');
         });
@@ -160,8 +160,8 @@ export default {
             this.reservations = [];
             this.fetch();
         }, function (response) {
-            console.log(_.first(_.toArray(response.data.errors)));
-            this.$dispatch('showError', _.first(_.toArray(response.data.errors)));
+            console.log(_.first(_.toArray(response.body.errors)));
+            this.$dispatch('showError', _.first(_.toArray(response.body.errors)));
         });
     },
     leave() {

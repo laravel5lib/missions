@@ -5,7 +5,7 @@
             <form class="col-sm-12">
 
                 <div class="form-group">
-                    <v-select class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
                               :value.sync="causeObj" :options="causeOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
@@ -17,7 +17,7 @@
 
         <div class="row">
 
-            <div class="col-xs-12 text-right">
+            <div class="col-xs-12 text-right tour-step-find">
                 <form class="form-inline">
                     <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                         <label>
@@ -58,7 +58,7 @@
                                 <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
                             </div><!-- end col -->
                             <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.goal|currency}}</p>
+                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.amount_raised|currency}}</p>
                             <hr class="divider inv sm">
                             <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
                         </div>
@@ -155,23 +155,23 @@
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();
-                this.$http.get('projects', params).then(function (response) {
-                    this.projects = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('projects', { params: params }).then(function (response) {
+                    this.projects = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { search: search}).then(function (response) {
-                    this.groupOptions = response.data.data;
+                this.$http.get('groups', { params: { search: search} }).then(function (response) {
+                    this.groupOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCauses(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('causes', { search: search}).then(function (response) {
-                    this.causeOptions = response.data.data;
+                this.$http.get('causes', { params: { search: search} }).then(function (response) {
+                    this.causeOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -179,7 +179,7 @@
         },
         ready(){
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.projects').then(function (response) {
-                let user = response.data.data;
+                let user = response.body.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

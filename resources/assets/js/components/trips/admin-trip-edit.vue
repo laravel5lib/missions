@@ -138,8 +138,8 @@
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('trips/' + this.tripId, { include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (response) {
-				var trip = response.data.data;
+			this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
+				var trip = response.body.data;
 				$.extend(trip, {
 					type: this.type,
 					group_id: this.group_id

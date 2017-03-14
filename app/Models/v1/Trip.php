@@ -225,7 +225,11 @@ class Trip extends Model
      */
     public function setTodosAttribute($value)
     {
-        $this->attributes['todos'] = json_encode($value);
+        $todos = collect($value)->transform(function($item) {
+            return trim(strtolower($item));
+        });
+        
+        $this->attributes['todos'] = json_encode($todos);
     }
 
     /**
@@ -352,18 +356,18 @@ class Trip extends Model
         // default status
         $status = 'active';
 
-        // close it if past closing date
-        $status = $this->closed_at->isPast() ? 'closed' : $status;
-
-        // close it if no more spots are available
-        $status = $this->spots === 0 ? 'closed' : $status;
+        // no published date indicates a draft status
+        $status = is_null($this->published_at) ? 'draft' : $status;
 
         // a future published date means it's scheduled
         $status = ! is_null($this->published_at) &&
         $this->published_at->isFuture() ? 'scheduled' : $status;
 
-        // no published date indicates a draft status
-        $status = is_null($this->published_at) ? 'draft' : $status;
+        // close it if no more spots are available
+        $status = $this->spots === 0 ? 'closed' : $status;
+
+        // close it if past closing date
+        $status = $this->closed_at->isPast() ? 'closed' : $status;
 
         return $status;
     }

@@ -29,7 +29,7 @@ class DonationTransformer extends TransformerAbstract
         $array = [
             'id'          => $donation->id,
             'name'        => $donation->donor->name,
-            'amount'      => $donation->amount,
+            'amount'      => $donation->amountInDollars(),
             'anonymous'   => (bool) $donation->anonymous,
             'type'        => $donation->type,
             'description' => $donation->description,

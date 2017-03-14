@@ -28,7 +28,7 @@ class FundraiserRequest extends FormRequest
             'type'             => 'string|in:general',
             'url'              => 'string|unique:fundraisers,url',
             'fund_id'          => 'required|exists:funds,id',
-            'goal_amount'      => 'required|min:1|numeric',
+            'goal_amount'      => 'required|numeric',
             'public'           => 'boolean',
             'description'      => 'string',
             'banner_upload_id' => 'string|exists:uploads,id',
@@ -41,6 +41,11 @@ class FundraiserRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $rules['url'] = 'string|unique:fundraisers,url,' . $this->route('fundraisers');
+            $rules['name'] = 'sometimes|required|string';
+            $rules['fund_id'] = 'sometimes|required|string';
+            $rules['goal_amount'] = 'sometimes|required|numeric';
+            $rules['started_at'] = 'sometimes|required|date|before:ended_at';
+            $rules['ended_at'] = 'sometimes|required|date|after:started_at';
         }
 
         return $rules;

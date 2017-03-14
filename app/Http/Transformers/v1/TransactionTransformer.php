@@ -19,7 +19,7 @@ class TransactionTransformer extends TransformerAbstract {
     {
         $array = [
             'id'          => $transaction->id,
-            'amount'      => $transaction->amount,
+            'amount'      => $transaction->amountInDollars(),
             'anonymous'   => (bool) $transaction->anonymous,
             'type'        => $transaction->type,
             'description' => $transaction->description,

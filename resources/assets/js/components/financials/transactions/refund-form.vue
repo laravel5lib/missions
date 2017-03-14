@@ -56,8 +56,8 @@
                 }).then(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully refunded.');
-                    window.location = '/admin/transactions/' + response.data.data.id;
-                }).error(function (response) {
+                    window.location = '/admin/transactions/' + response.body.data.id;
+                },function (response) {
                     this.$root.$emit.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });

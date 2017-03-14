@@ -2,14 +2,8 @@
 
 use Illuminate\Support\Facades\Session;
 
-// use Illuminate\Foundation\Testing\WithoutMiddleware;
-// use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 class CreateUserAccountTest extends TestCase
 {
-    use DatabaseTransactions;
-    
     /**
      * @test
      */

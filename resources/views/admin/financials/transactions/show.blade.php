@@ -43,9 +43,9 @@
                             <div class="col-xs-6">
                                 <label>Amount</label>
                                 @if($transaction->amount > 0)
-                                    <h4 class="text-success">$ {{ $transaction->amount }}</h4>
+                                    <h4 class="text-success">$ {{ $transaction->amountInDollars() }}</h4>
                                 @else
-                                    <h4 class="text-danger">$ {{ $transaction->amount }}</h4>
+                                    <h4 class="text-danger">$ {{ $transaction->amountInDollars() }}</h4>
                                 @endif
                                 <label>Type</label>
                                 <p>{{ str_singular(ucwords($transaction->type)) }}</p>

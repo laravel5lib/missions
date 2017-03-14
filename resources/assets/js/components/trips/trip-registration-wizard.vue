@@ -184,7 +184,11 @@
 
 				var data = {
 					// reservation data
-					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+					height_a: this.userInfo.heightA,
+					height_b: this.userInfo.heightB,
+					weight: this.userInfo.weight,
+					desired_role: this.userInfo.desired_role.value,
+					given_names: this.userInfo.firstName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,
@@ -199,6 +203,7 @@
 					phone_one: this.userInfo.phone,
 					phone_two: this.userInfo.mobile,
 					user_id: this.userData.id,
+					avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
 					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
@@ -234,7 +239,7 @@
 //					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
-					window.location.href = '/dashboard/reservations/' + response.data.data.id;
+					window.location.href = '/dashboard/reservations/' + response.body.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
 					console.log(response);

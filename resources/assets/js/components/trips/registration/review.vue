@@ -137,7 +137,17 @@
 		watch:{
 			'review'(val, oldVal) {
 				this.$dispatch('review', val)
+			},
+			'$parent.paymentErrors'(val) {
+                if (val.length > 0) {
+                    this.review = false;
+                }
 			}
+		},
+		events: {
+		    'review'(val) {
+		        this.review = val;
+		    }
 		},
 		activate(done){
 			$('html, body').animate({scrollTop : 200},300);

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 
 class PasswordController extends Controller
 {

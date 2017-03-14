@@ -11,7 +11,7 @@
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">
                     <div class="btn-group">
-                        <a href="{{ url('admin/records/medical-releases') }}" class="btn btn-primary-darker">
+                        <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span> Back
                         </a>
                         {{-- <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-sm-4 text-center visible-xs">
                     <div class="btn-group">
-                        <a href="{{ url('admin/records/medical-releases') }}" class="btn btn-primary-darker">
+                        <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
                         </a>
                         <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">

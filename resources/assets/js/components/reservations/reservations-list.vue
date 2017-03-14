@@ -63,7 +63,7 @@
                                     :class="[layout == 'grid' ? 'btn-primary' : 'btn-default']"
                                     @click.prevent="layout = 'grid'"><i class="fa fa-th-large"></i></button>
                         </div>
-                        <div style="margin-left:5px;display: inline-block;" v-if="isFacilitator">
+                        <div style="margin-left:5px;display: inline-block;" v-if="true">
                             <label>
                                 <input type="checkbox" v-model="includeManaging"> Include my group's reservations
                             </label>
@@ -259,6 +259,7 @@
                 this.getReservations();
             },
             'includeManaging': function (val, oldVal) {
+                this.updateConfig();
                 this.pagination.current_page = 1;
                 this.getReservations();
             }

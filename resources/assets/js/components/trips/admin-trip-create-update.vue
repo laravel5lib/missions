@@ -388,8 +388,16 @@
                         this.campaign = trip.campaign.data;
                         this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
                         // this.prospects = trip.prospects;
-                        this.prospectsObj = _.filter(this.prospectsList, function(p) { return _.contains(trip.prospects, p.value);});
-                        this.rolesObj = _.filter(this.teamRolesList, function(p) { return _.contains(trip.team_roles, p.value);});
+                        this.prospectsObj = _.filter(this.prospectsList, function (p) {
+                            return _.some(trip.prospects, function (prospect) {
+	                            return prospect.toLowerCase() === p.value.toLowerCase();
+                            });
+                        });
+                        this.rolesObj = _.filter(this.teamRolesList, function (p) {
+                            return _.some(trip.team_roles, function (prospect) {
+                                return prospect.toLowerCase() === p.value.toLowerCase();
+                            });
+                        });
 
                         this.trip = trip;
                         this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});

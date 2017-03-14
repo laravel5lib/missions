@@ -14,7 +14,6 @@
             </div>
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
-                <hr class="divider inv">
                 <div class="btn-group">
                     <a href="{{ url('admin/campaigns/' . $trip->campaign->id) }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
                     <div class="btn-group">
@@ -22,7 +21,7 @@
                             Manage <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{ chop(Request::url(), '/' . $tab) }}/edit">Edit</a></li>
+                            <li><a href="{{ url('/admin/trips/' . $trip->id . '/edit')}}">Edit</a></li>
                             <li><a data-toggle="modal" data-target="#addReservationModal" data-backdrop="static">Create Reservation</a></li>
                             <li><a data-toggle="modal" data-target="#duplicationModal">Duplicate</a></li>
                             <li role="separator" class="divider"></li>

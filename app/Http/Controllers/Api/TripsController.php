@@ -75,9 +75,9 @@ class TripsController extends Controller
      */
     public function store(TripRequest $request)
     {
-        $trip = $this->trip->create($request->except('deadlines', 'requirements', 'costs'));
+        $trip = $this->trip->create($request->all());
 
-        $this->syncResources($trip, $request);
+        // $this->syncResources($trip, $request);
 
         if ($request->has('tags'))
             $trip->tag($request->get('tags'));
@@ -96,9 +96,9 @@ class TripsController extends Controller
     {
         $trip = $this->trip->findOrFail($id);
 
-        $trip->update($request->except('deadlines', 'requirements', 'costs'));
+        $trip->update($request->all());
 
-        $this->syncResources($trip, $request);
+        // $this->syncResources($trip, $request);
 
         if ($request->has('tags'))
             $trip->retag($request->get('tags'));

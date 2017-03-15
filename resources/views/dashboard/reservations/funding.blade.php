@@ -9,7 +9,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6"><h5>Fundraiser</h5></div>
-                @if($fundraiser->url && $fundraiser->public)
+                @if($fundraiser->url)
                 <div class="col-xs-6"><a href="/{{ $fundraiser->sponsor->slug->url }}/{{ $fundraiser->url }}" class="btn btn-sm btn-primary pull-right" target="_blank">View Page</a></div>
                 @endif
             </div>

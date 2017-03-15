@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
 use App\Jobs\ExportReservations;
+use App\Events\RegisteredForTrip;
 use Silber\Bouncer\Database\Role;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
@@ -102,7 +103,7 @@ class ReservationsController extends Controller
             'trip_id' => $request->get('trip_id')
         ]);
 
-        event(new ReservationWasCreated($reservation, $request));
+        event(new RegisteredForTrip($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }

@@ -196,12 +196,12 @@ class Reservation extends Model
      */
     public function fundraisers()
     {
-        return $this->fund->fundraisers();
+        return $this->fund->fundraisers()->withTrashed();
     }
 
     public function fund()
     {
-        return $this->morphOne(Fund::class, 'fundable');
+        return $this->morphOne(Fund::class, 'fundable')->withTrashed();
     }
 
     public function donations()
@@ -484,5 +484,25 @@ class Reservation extends Model
         }
 
         return $this->avatar;
+    }
+
+    /**
+     * Drop the reservation
+     */
+    public function drop()
+    {
+        $this->fund ? $this->fund->archive() : null;
+
+        $this->delete();
+    }
+
+    /**
+     * Restore a dropped reservation
+     */
+    public function undoDrop()
+    {
+        $this->fund ? $this->fund->reactivate() : null;
+
+        $this->restore();
     }
 }

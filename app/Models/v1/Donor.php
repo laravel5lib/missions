@@ -86,6 +86,6 @@ class Donor extends Model
      */
     public function funds()
     {
-        return $this->belongsToMany(Fund::class, 'transactions');
+        return $this->belongsToMany(Fund::class, 'transactions')->withTrashed();
     }
 }

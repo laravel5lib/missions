@@ -31,7 +31,7 @@
                 </tr>
             @empty
                 <div style="padding: 40px 0;">
-                    <p class="text-muted text-center"><em>Congrats, you're all paid up!<br/><small>Start a new project or go on a trip!</small></em></p>
+                    <p class="text-muted text-center"><em>You have no upcoming payments.</em></p>
                     <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Trips</a>
                         <a class="btn btn-link btn-sm" href="/sponsor-a-project">Projects</a></p>
                 </div>

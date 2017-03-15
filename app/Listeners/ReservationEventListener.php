@@ -24,7 +24,8 @@ class ReservationEventListener {
             'currency', 'description', 'details'
         ) + ['fund_id' => $fund->id, 'fund_name' => $fund->name];
 
-        dispatch(new MakeDeposit($params));
+        if ($event->request->get('amount'))
+            dispatch(new MakeDeposit($params));
     }
 
     /**

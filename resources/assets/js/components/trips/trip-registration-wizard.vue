@@ -136,9 +136,11 @@
 			    // negate last step completion
                 this.wizardComplete = false;
                 this.stepList[7].complete = false;
+
                 // negate second last step completion
                 this.stepList[6].complete = false;
                 this.rocaAgree = false;
+
                 // negate step completion
                 this.currentStep = step;
                 if (step.view === 'step6') {

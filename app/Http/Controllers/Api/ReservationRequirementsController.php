@@ -45,6 +45,7 @@ class ReservationRequirementsController extends Controller
     public function index(Request $request, $reservationId)
     {
         $requirements = $this->reservation
+                            ->withTrashed()
                             ->findOrFail($reservationId)
                             ->requirements()
                             ->filter($request->all())

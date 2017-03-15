@@ -67,6 +67,7 @@ class Requirement extends Model
     {
         return $this->belongsToMany(Reservation::class, 'reservation_requirements')
                     ->withPivot('grace_period', 'status', 'completed_at')
+                    ->withTrashed()
                     ->withTimestamps();
     }
 }

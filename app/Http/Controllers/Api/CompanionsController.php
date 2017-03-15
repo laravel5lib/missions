@@ -31,7 +31,7 @@ class CompanionsController extends Controller
      */
     public function index($reservation_id)
     {
-        $reservation = $this->reservation->findOrFail($reservation_id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($reservation_id);
 
         return $this->response->collection($reservation->companionReservations, new ReservationTransformer);
     }
@@ -60,7 +60,7 @@ class CompanionsController extends Controller
      */
     public function destroy($reservation_id)
     {
-        $reservation = $this->reservation->findOrFail($reservation_id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($reservation_id);
 
         $this->leaveGroup($reservation);
 
@@ -69,8 +69,8 @@ class CompanionsController extends Controller
 
     private function set_companions($reservation_id, $companion_id, $relationship)
     {
-        $reservation = $this->reservation->with('companions')->find($reservation_id);
-        $companion   = $this->reservation->with('companions')->find($companion_id);
+        $reservation = $this->reservation->withTrashed()->with('companions')->find($reservation_id);
+        $companion   = $this->reservation->withTrashed()->with('companions')->find($companion_id);
 
         if ($reservation->companions->count() && $companion->companions->count())
         {

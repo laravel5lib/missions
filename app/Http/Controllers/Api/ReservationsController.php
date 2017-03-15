@@ -116,7 +116,7 @@ class ReservationsController extends Controller
      */
     public function update(ReservationRequest $request, $id)
     {
-        $reservation = $this->reservation->findOrFail($id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
         $reservation->update([
             'given_names' => trim($request->get('given_names', $reservation->given_names)),
@@ -141,9 +141,9 @@ class ReservationsController extends Controller
             'trip_id' => $request->get('trip_id', $reservation->trip_id)
         ]);
 
-        // $reservation->syncCosts($request->get('costs'));
-        // $reservation->syncRequirements($request->get('requirements'));
-        // $reservation->syncDeadlines($request->get('deadlines'));
+        $reservation->syncCosts($request->get('costs'));
+        $reservation->syncRequirements($request->get('requirements'));
+        $reservation->syncDeadlines($request->get('deadlines'));
 
         if ($request->has('tags'))
             $reservation->retag($request->get('tags'));
@@ -161,7 +161,7 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->findOrFail($id);
 
-        $reservation->delete();
+        $reservation->drop();
 
         return $this->response->noContent();
     }
@@ -176,7 +176,7 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
-        $reservation->restore();
+        $reservation->undoDrop();
     }
 
       

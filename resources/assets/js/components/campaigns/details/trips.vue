@@ -340,7 +340,7 @@
                     campaign_id: this.campaignId,
                     include:'campaign,group',
                     sort: this.orderByField + '|' + (this.direction === 1 ? 'desc' : 'asc'),
-                    search: this.searchText,
+                    search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
                 };

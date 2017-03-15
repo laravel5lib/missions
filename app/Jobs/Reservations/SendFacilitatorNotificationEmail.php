@@ -39,6 +39,9 @@ class SendFacilitatorNotificationEmail extends Job implements ShouldQueue
 
         $emails = $reservation->trip->facilitators()->pluck('email')->toArray();
 
+        // admin monitors
+        $emails = $emails + ['matt@missions.me', 'neil@missions.me'];
+
         if( ! count($emails)) return false;
 
         $mailer->send('emails.reservations.notification',

@@ -147,6 +147,9 @@
                     given_names: this.userInfo.firstName,
                     surname: this.userInfo.lastName,
                     gender: this.userInfo.gender,
+                    height_a: this.userInfo.heightA,
+                    height_b: this.userInfo.heightB,
+                    weight: this.userInfo.weight,
                     status: this.userInfo.relationshipStatus,
                     shirt_size: this.userInfo.size,
                     birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
@@ -228,17 +231,16 @@
         },
         ready(){
             //get trip costs
-            var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
-            resource.query({id: this.tripId}).then(function (trip) {
-                this.trip = trip.data.data;
+            this.$http.get('trips/' + this.tripId, { params: {include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then(function (response) {
+                this.trip = response.body.data;
                 // deadlines, requirements, and companion_limit
-                this.deadlines =  trip.data.data.deadlines.data;
-                this.requirements =  trip.data.data.requirements.data;
-                this.companion_limit = trip.data.data.companion_limit;
+                this.deadlines =  response.body.data.deadlines.data;
+                this.requirements =  response.body.data.requirements.data;
+                this.companion_limit = response.body.data.companion_limit;
 
                 // filter costs by type
                 var optionalArr = [], staticArr = [], incrementalArr = [];
-                trip.data.data.costs.data.forEach(function (cost) {
+                response.body.data.costs.data.forEach(function (cost) {
                     switch (cost.type) {
                         case 'static':
                             staticArr.push(cost);

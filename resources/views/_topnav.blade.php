@@ -19,7 +19,10 @@
           <li><a href="{{ url('/admin') }}">Admin</a></li>
         @endcan
         <li role="separator" class="divider"></li>
-        <li><a href="{{ url('/logout') }}">Sign Out <i style="margin-top:6px;" class="fa fa-chevron-right pull-right"></i></a></li>
+        @unless(request()->cookie('impersonate'))
+        <li><a href="{{ url('/logout') }}">Sign Out <i style="margin-top:6px;" class="fa 
+        fa-chevron-right pull-right"></i></a></li>
+        @endunless
         @if(request()->cookie('impersonate'))
           <li><a href="{{ url('/admin/users/stop') }}">Stop Impersonating</a></li>
         @endif

@@ -47,7 +47,7 @@ class GroupRequest extends FormRequest {
         }
 
         $optional = [
-            'description'      => 'string|max:120',
+            'description'      => 'string',
             'address_one'      => 'string',
             'address_two'      => 'string',
             'city'             => 'string',

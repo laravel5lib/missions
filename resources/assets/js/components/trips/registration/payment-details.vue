@@ -362,7 +362,7 @@
 						});
 					});
 				}
-
+                this.$parent.upfrontTotal = amount;
 				return amount;
 			},
 			yearList() {

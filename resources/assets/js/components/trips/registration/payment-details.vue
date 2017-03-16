@@ -89,13 +89,13 @@
 				</div>
 				<hr class="divider" />
 				<div class="col-md-12">
-					<div id="paymentAlerts" v-if="paymentErrors.length > 0">
-						<div v-for="error in paymentErrors" class="alert alert-danger alert-dismissible"
+					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
+						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
 						     role="alert">
 							{{ error }}
 						</div>
 					</div><!-- end alert -->
-					<div class="well">
+					<div class="well" v-if="upfrontTotal > 0">
 						<validator name="PaymentDetails">
 							<form novalidate role="form">
 								<div class="row">
@@ -196,11 +196,11 @@
 			return {
 				title: 'Payment Details',
 				paymentComplete: false,
-				staticCosts: [],
-				incrementalCosts: [],
-				selectedOptions: [],
-				upfrontTotal:0,
-				totalCosts: 0,
+				//staticCosts: [],
+				//incrementalCosts: [],
+				//selectedOptions: [],
+				//upfrontTotal:0,
+				//totalCosts: 0,
 				attemptedCreateToken: false,
 
 				//card vars
@@ -290,19 +290,19 @@
 		},
 		computed: {
 			stripeKey() {
-				return this.$parent.stripeKey
+				return this.$parent.stripeKey || null;
 			},
 			fundraisingGoal(){
 				return this.totalCosts - this.upfrontTotal;
 			},
 			staticCosts(){
-				return this.$parent.tripCosts.static;
+				return this.$parent.tripCosts.static || [];
 			},
 			incrementalCosts(){
-				return this.$parent.tripCosts.incremental;
+				return this.$parent.tripCosts.incremental || [];
 			},
 			selectedOptions(){
-				return this.$parent.selectedOptions;
+				return this.$parent.selectedOptions || [];
 			},
 			totalCosts(){
 				var amount = 0;
@@ -362,7 +362,7 @@
 						});
 					});
 				}
-
+                this.$parent.upfrontTotal = amount;
 				return amount;
 			},
 			yearList() {

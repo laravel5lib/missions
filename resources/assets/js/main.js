@@ -813,6 +813,10 @@ new Vue({
             this.showError = true;
         });
 
+        // check if impersonated data is no longer needed
+        if (this.$cookie.get('impersonate') === null)
+            localStorage.removeItem('impersonatedUser');
+
     },
     created () {
         // if api_token cookie doesn't exist user data will be cleared if they do exist

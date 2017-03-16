@@ -815,6 +815,10 @@ new Vue({
 
     },
     created () {
+        // check if impersonated data is no longer needed
+        if (this.$cookie.get('impersonate') === null)
+            localStorage.removeItem('impersonatedUser');
+
         // if api_token cookie doesn't exist user data will be cleared if they do exist
         if (this.$cookie.get('api_token') === null) {
             if (localStorage.hasOwnProperty('user'))

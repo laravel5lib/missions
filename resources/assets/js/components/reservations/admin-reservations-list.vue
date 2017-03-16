@@ -199,6 +199,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="desired_role" :disabled="maxCheck('desired_role')"> Role
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="group" :disabled="maxCheck('group')"> Group
 								</label>
 							</li>
@@ -347,6 +352,11 @@
 						<i @click="setOrderByField('surname')" v-if="orderByField !== 'surname'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'surname'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('desired_role')" :class="{'text-primary': orderByField === 'desired_role'}">
+						Role
+						<i @click="setOrderByField('desired_role')" v-if="orderByField !== 'desired_role'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'desired_role'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
 					<th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
 						Group
 						<i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'trip.data.group.data.name'" class="fa fa-sort pull-right"></i>
@@ -404,6 +414,7 @@
 				<tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
+					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
 					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>

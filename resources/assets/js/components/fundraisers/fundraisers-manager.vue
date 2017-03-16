@@ -105,7 +105,7 @@
     var marked = require('marked');
     export default{
         name: 'fundraisers-manager',
-        props: ['id', 'sponsorId'],
+        props: ['id', 'sponsorId', 'editable'],
         data(){
             return {
                 description: '',
@@ -142,6 +142,8 @@
         },
         methods: {
             isUser(){
+                if (this.editable === 1) return true;
+                
                 return this.$root.user && this.sponsorId === this.$root.user.id;
             },
             reset(){
@@ -193,6 +195,7 @@
                         this.showDescriptionSuccess = true;
                     } else {
                         this.showSettingsSuccess = true;
+                        this.$dispatch('fundraiserSettingsChanged', response.body.data);
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();

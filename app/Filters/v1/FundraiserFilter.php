@@ -95,6 +95,11 @@ class FundraiserFilter extends Filter
         return $this->where('sponsor_id', $id);
     }
 
+    public function fund($id)
+    {
+        return $this->where('fund_id', $id);
+    }
+
     /**
      * Find by sponsor url.
      *

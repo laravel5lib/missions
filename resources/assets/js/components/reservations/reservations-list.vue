@@ -112,7 +112,7 @@
                                     <div class="row">
                                         <div class="col-sm-3">
                                             {{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}<br>
-                                            <label class="visible-xs">Name</label>
+                                            <label>{{ reservation.desired_role.name }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
@@ -126,9 +126,9 @@
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            <span class="text-success small">
-                                            {{ reservation.percent_raised }}%
-                                            </span> <small>of {{ reservation.total_cost | currency }}</small>
+                                            <span class="text-success">
+                                            {{ reservation.percent_raised }}% &middot;
+                                            </span> <small class="text-muted">{{ reservation.total_raised | currency }} of {{ reservation.total_cost | currency }}</small>
                                             <br>
                                             <tooltip effect="scale" placement="top" content="Complete">
                                                 <span class="label label-success">{{ complete(reservation) }}</span>
@@ -221,13 +221,14 @@
                     state_providence: 'State/Providence',
                     zip_postal: 'Zip/Postal Code',
                     country: 'Country',
-                    payments: 'Payments Due',
-                    applied_costs: 'Applied Costs',
-                    requirements: 'Travel Requirements',
+                    // payments: 'Payments Due',
+                    // applied_costs: 'Applied Costs',
+                    // requirements: 'Travel Requirements',
                     percent_raised: 'Percent Raised',
                     amount_raised: 'Amount Raised',
                     outstanding: 'Outstanding',
-                    deadlines: 'Other Deadlines'
+                    // deadlines: 'Other Deadlines'
+                    desired_role: 'Role'
                 },
                 exportFilters: {},
                 layout: 'list',

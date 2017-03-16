@@ -66,6 +66,9 @@ $this->get('/campaigns/{slug}', function($slug) {
 $this->get('/search', function() {
     return redirect('/fundraisers');
 });
+$this->get('/go/{slug?}', function($slug) {
+    return redirect('/'.$slug);
+});
 
 // Authentication and Registration Routes...
 $this->get('/login', 'Auth\AuthController@login');

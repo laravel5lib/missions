@@ -126,6 +126,19 @@ class ReservationFilter extends Filter
     }
 
     /**
+     * By role.
+     * 
+     * @param  string $code
+     * @return mixed
+     */
+    public function role($code)
+    {
+        if(! $code) return $this;
+
+        return $this->where('desired_role', $code);
+    }
+
+    /**
      * Between ages.
      *
      * @param $ages

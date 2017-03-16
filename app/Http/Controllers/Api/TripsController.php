@@ -196,7 +196,8 @@ class TripsController extends Controller
                 'shirt_size' => $request->get('shirt_size'),
                 'height' => $height,
                 'weight' => $weight,
-                'avatar_upload_id' => $request->get('avatar_upload_id')
+                'avatar_upload_id' => $request->get('avatar_upload_id'),
+                'companion_limit' => $trip->companion_limit
             ]);
 
         event(new RegisteredForTrip($reservation, $request));

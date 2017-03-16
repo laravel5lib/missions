@@ -22,6 +22,7 @@ class ExportReservations extends Exporter
             'user_email' => $reservation->user->email,
             'user_primary_phone' => $reservation->user->phone_one,
             'user_secondary_phone' => $reservation->user->secondary_phone,
+            'group' => $reservation->trip->group->name,
             'trip_type' => $reservation->trip->type,
             'campaign' => $reservation->trip->campaign->name,
             'country_located' => country($reservation->trip->campaign->country_code),

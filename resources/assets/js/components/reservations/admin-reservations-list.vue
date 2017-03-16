@@ -569,13 +569,14 @@
 					state_providence: 'State/Providence',
 					zip_postal: 'Zip/Postal Code',
 					country: 'Country',
-					payments: 'Payments Due',
-					applied_costs: 'Applied Costs',
-					requirements: 'Travel Requirements',
+					// payments: 'Payments Due',
+					// applied_costs: 'Applied Costs',
+					// requirements: 'Travel Requirements',
 					percent_raised: 'Percent Raised',
 					amount_raised: 'Amount Raised',
 					outstanding: 'Outstanding',
-					deadlines: 'Other Deadlines'
+					// deadlines: 'Other Deadlines'
+					desired_role: 'Role'
 				},
 				exportFilters: {}
 			}
@@ -785,7 +786,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,requirements,rep',
+					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep',
 					search: this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,

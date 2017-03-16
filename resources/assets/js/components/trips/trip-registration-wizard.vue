@@ -116,7 +116,9 @@
 				paymentInfo: {},
 				upfrontTotal: 0,
 				fundraisingGoal: 0,
-				paymentErrors:[]
+				paymentErrors:[],
+                detailsConfirmed: false,
+                rocaAgree: false,
 			}
 		},
 		computed: {
@@ -131,11 +133,24 @@
 				}
 			},
 			fallbackStep(step){
+			    // negate last step completion
                 this.wizardComplete = false;
+                this.stepList[7].complete = false;
+
+                // negate second last step completion
+                this.stepList[6].complete = false;
+                this.rocaAgree = false;
+
+                // negate step completion
                 this.currentStep = step;
-                this.$nextTick(function () {
-                    this.currentStep.complete = true;
-                });
+                if (step.view === 'step6') {
+                    this.detailsConfirmed = false;
+                    this.$nextTick(function () {
+                        this.currentStep.complete = false;
+                        this.$emit('payment-complete', false);
+                    });
+                }
+
                 this.$emit('review', false);
             },
 			backStep(){

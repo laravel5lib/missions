@@ -9,6 +9,7 @@
           <li><a href="/about-mm">Meet Our Team</a></li>
           <li><a href="/support">Become A Partner</a></li>
           <li><a href="http://shop.missions.me" target="_blank">Shop</a></li>
+          <li><a href="/donate/general">Donate to Missions.Me</a></li>
         </ul>
       </div><!-- end col -->
       <div class="col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1">

@@ -51,6 +51,7 @@ class FundsController extends Controller
     {
         $fund = $this->fund->where('id', $param)
                            ->orWhere('slug', $param)
+                           ->withTrashed()
                            ->firstOrFail();
 
         return $this->response->item($fund, new FundTransformer);

@@ -7,10 +7,11 @@ use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fundraiser extends Model
 {
-    use Filterable, UuidForKey, Taggable;
+    use Filterable, UuidForKey, Taggable, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -63,7 +64,7 @@ class Fundraiser extends Model
      */
     public function fund()
     {
-        return $this->belongsTo(Fund::class);
+        return $this->belongsTo(Fund::class)->withTrashed();
     }
 
     /**
@@ -230,6 +231,22 @@ class Fundraiser extends Model
     public function scopePublic($query)
     {
         return $query->where('public', true);
+    }
+
+    /**
+     * Close Fundraiser
+     */
+    public function close()
+    {
+        $this->delete();
+    }
+
+    /**
+     * Open a closed fundraiser.
+     */
+    public function open()
+    {
+        $this->restore();
     }
 
 }

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
 use App\Jobs\ExportReservations;
+use App\Events\RegisteredForTrip;
 use Silber\Bouncer\Database\Role;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
@@ -102,7 +103,7 @@ class ReservationsController extends Controller
             'trip_id' => $request->get('trip_id')
         ]);
 
-        event(new ReservationWasCreated($reservation, $request));
+        event(new RegisteredForTrip($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -116,7 +117,7 @@ class ReservationsController extends Controller
      */
     public function update(ReservationRequest $request, $id)
     {
-        $reservation = $this->reservation->findOrFail($id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
         $reservation->update([
             'given_names' => trim($request->get('given_names', $reservation->given_names)),
@@ -161,7 +162,7 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->findOrFail($id);
 
-        $reservation->delete();
+        $reservation->drop();
 
         return $this->response->noContent();
     }
@@ -176,7 +177,7 @@ class ReservationsController extends Controller
     {
         $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
-        $reservation->restore();
+        $reservation->undoDrop();
     }
 
       

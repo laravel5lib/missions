@@ -181,12 +181,10 @@
 					case 'step6':
 						// find child
 						if (this.upfrontTotal > 0) {
-
                             this.$children.forEach(function (child) {
                                 if (child.hasOwnProperty('$PaymentDetails'))
                                     thisChild = child;
                             });
-
                             // promise needed to wait for async response from stripe
                             $.when(thisChild.createToken())
 	                                .done(function (success) {

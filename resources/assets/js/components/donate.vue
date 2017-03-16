@@ -101,8 +101,8 @@
                             <div :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
                                 <label for="cvCode">
                                     CV CODE</label>
-                                <input type="text" class="form-control input input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
-                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+                                <input type="text" class="form-control input input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
+                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 4 }"/>
                                 <span class="help-block" v-if="checkForError('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
                             </div>
                         </div>

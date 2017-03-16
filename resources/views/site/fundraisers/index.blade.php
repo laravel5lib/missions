@@ -264,4 +264,15 @@
 	    </div><!-- end content-section -->
     </div><!-- end container -->
 </div><!-- end lighter-gray-bg -->
+<div class="dark-bg-primary">
+	<div class="container">
+	<div class="content-section">
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-4 text-center">
+				<a href="/donate" class="btn btn-white-hollow btn-lg btn-block">Donate to the Organization</a>
+			</div>
+		</div><!-- end row -->
+	</div>
+	</div><!-- end container -->
+</div><!-- end dark-bg-primary -->
 @stop

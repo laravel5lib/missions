@@ -24,7 +24,7 @@ class CreditRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount'  => 'required|integer',
+            'amount'  => 'required|numeric',
             'fund_id' => 'required|exists:funds,id',
             'reason'  => 'required|string'
         ];

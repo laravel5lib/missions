@@ -145,7 +145,7 @@
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'fundraisers-uploads',
-        props: ['id', 'sponsorId'],
+        props: ['id', 'sponsorId', 'editable'],
         components: {'upload-create-update': uploadCreateUpdate},
         data(){
             return{
@@ -178,6 +178,8 @@
         },
         methods:{
             isUser(){
+                if (this.editable === 1) return true;
+
                 return this.sponsorId && this.$root.user && this.sponsorId === this.$root.user.id;
             },
             viewUpload(upload){

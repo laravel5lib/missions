@@ -15,6 +15,7 @@ import fundraisers from './components/fundraisers/fundraisers.vue';
 import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
 import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
 import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
+import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
 import campaignGroups from './components/campaigns/campaign-groups.vue';
 import groupTrips from './components/campaigns/group-trips.vue';
 import groupProfileTrips from './components/groups/group-profile-trips.vue';
@@ -687,6 +688,7 @@ new Vue({
         fundraisersManager,
         fundraisersStories,
         fundraisersUploads,
+        fundraiserCollection,
         topNav,
         actionTrigger,
         donate,

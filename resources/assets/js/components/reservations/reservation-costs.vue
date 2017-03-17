@@ -243,7 +243,8 @@
                     costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
 
-                let res = jQuery.extend(true, {}, this.reservation);
+                // let res = jQuery.extend(true, {}, this.reservation);
+                let res = {};
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
@@ -264,8 +265,8 @@
                     status: this.reservation.status,
                     shirt_size: this.reservation.shirt_size,
                     birthday: this.reservation.birthday,
-                    user_id: this.reservation.user_id,
-                    trip_id: this.reservation.trip_id,
+                    // user_id: this.reservation.user_id,
+                    // trip_id: this.reservation.trip_id,
                 };
 
                 this.getAvailableCosts();

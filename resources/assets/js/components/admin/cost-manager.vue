@@ -130,7 +130,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="newCost_amount" class="form-control"
-                                                           v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                           v-model="newCost.amount" v-validate:costAmount="{required: true}">
                                                 </div>
                                             </div>
                                         </div>
@@ -191,7 +191,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="selectedCost_amount" class="form-control"
-                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true}">
                                                 </div>
                                             </div>
                                         </div>

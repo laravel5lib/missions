@@ -14,9 +14,9 @@
                         <p class="badge">{{ trip.status | capitalize }}</p><br>
                         <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-circle img-md">
                         <h4>{{ trip.campaign.data.name }}</h4>
-                        <p class="small">{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</p>
+                        <p class="small">{{ trip.country_name }}</p>
                         <label>Travel Date</label>
-                        <p>{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</p>
+                        <p>{{ trip.started_at|moment 'MMMM DD' false true }} - {{ trip.ended_at|moment 'LL' false true }}</p>
                         <p class="text-left" data-toggle="tooltip" data-placement="top" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
                         <p><a class="btn btn-primary btn-block" :href="id + trip.links[0].uri">Details</a></p>
                     </div><!-- end panel-body -->

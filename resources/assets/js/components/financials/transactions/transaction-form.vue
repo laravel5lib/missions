@@ -403,6 +403,7 @@
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
                     this.$dispatch('transactionCreated');
+                    this.reset();
                 },function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
@@ -416,6 +417,7 @@
                 this.$http.put('transactions/' + this.id, data).then(function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction updated successfully.');
+                    this.reset();
                 },function (response) {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');

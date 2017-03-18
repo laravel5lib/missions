@@ -64,10 +64,6 @@ return [
                 'url' => 'payments'
             ],
             [
-                'label' => 'Deadlines',
-                'url' => 'deadlines'
-            ],
-            [
                 'label' => 'Funds',
                 'url' => 'funds'
             ],

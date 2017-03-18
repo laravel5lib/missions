@@ -332,7 +332,12 @@ Vue.filter('percentage', {
 // This filter should convert date assigned property from UTC to local when being displayed -> read()
 // This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
 Vue.filter('moment', {
-    read: function (val, format, diff = false) {
+    read: function (val, format, diff = false, noLocal = false) {
+
+        if (noLocal) {
+            return moment(val).format(format || 'LL'); // do not convert to local
+        }
+
         // console.log('before: ', val);
         var date = moment.utc(val).local().format(format || 'LL');
 

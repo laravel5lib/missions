@@ -13,7 +13,7 @@ class ReservationsEndpointTest extends TestCase
             'given_names' => 'John Doe',
             'weight'      => 160,
             'height_a'    => 5,
-            'height_b'    => 9
+            'height_b'    => 0
         ]);
 
         $this->post('/api/reservations', $reservation->toArray())

@@ -167,7 +167,27 @@
     export default{
         name: 'reservations-list',
         components: {vSelect, exportUtility},
-        props: ['userId', 'type'],
+        props: {
+            userId: {
+                type: String,
+                required: true
+            },
+            type: {
+                type: String,
+                required: true
+            },
+            groupOnly: {
+                type: Boolean,
+                default: false
+            },
+            groupId: {
+                type: String,
+
+            },
+            tripId: {
+                type: String,
+            }
+        },
         data(){
             return {
                 reservations: [],
@@ -311,6 +331,12 @@
                 }
                 $.extend(params, this.filters);
 
+                if (this.groupOnly) {
+//                    this.filters.groups = this.groupId;
+                    params.groups = new Array(this.groupId);
+                    params.trip = new Array(this.tripId);
+                }
+
                 this.exportFilters = params;
 
                 this.$http.get('reservations', {params: params}).then(function (response) {
@@ -376,6 +402,10 @@
 
                 if (this.trips.length === 0) {
                     this.includeManaging = false;
+                }
+
+                if (this.groupOnly && this.groupId) {
+                    this.includeManaging = true;
                 }
 
             });

@@ -66,7 +66,8 @@ $this->get('/campaigns/{slug}', function($slug) {
 $this->get('/search', function() {
     return redirect('/fundraisers');
 });
-$this->get('/go/{slug?}', function($slug) {
+$this->get('/go/{slug?}', function($slug = null) {
+    if (! $slug) return redirect('/fundraisers');
     return redirect('/'.$slug);
 });
 

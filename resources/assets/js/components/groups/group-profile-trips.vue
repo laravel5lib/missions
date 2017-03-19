@@ -13,9 +13,9 @@
                 <div class="panel-body text-center">
                     <p class="badge">{{ trip.status | capitalize }}</p><br>
                     <h4>{{ trip.campaign.data.name }}</h4>
-                    <p class="small">{{ trip.country_name }} {{ trip.started_at|moment 'YYYY' }}</p>
+                    <p class="small">{{ trip.country_name }}</p>
                     <label>Travel Dates</label>
-                    <p class="small">{{ trip.started_at|moment 'MMMM DD' }} - {{ trip.ended_at|moment 'LL' }}</p>
+                    <p class="small">{{ trip.started_at|moment 'MMMM DD' false true }} - {{ trip.ended_at|moment 'LL' false true }}</p>
                     <label>Perfect For</label>
                     <p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
                                 {{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>

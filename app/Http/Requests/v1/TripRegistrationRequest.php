@@ -29,7 +29,7 @@ class TripRegistrationRequest extends FormRequest
         $rules = [
             'given_names'        => 'required|max:100',
             'surname'            => 'required|max:60',
-            'gender'             => 'required|in:male,female',
+            'gender'             => 'required|in:male,female,Male,Female',
             'status'             => 'required|string',
             'shirt_size'         => 'required|in:' . $this->getShirtSizes(),
             'birthday'           => 'required|date|before:' . Carbon::now()->subYears(12),
@@ -57,6 +57,9 @@ class TripRegistrationRequest extends FormRequest
             'payment'            => 'required_unless:amount,0|array',
             'payment.type'       => 'required_unless:amount,0|in:cash,check,card',
             'payment.number'     => 'required_if:payment.type,check|string',
+            'weight'             => 'required|numeric',
+            'height_a'           => 'required|numeric',
+            'height_b'           => 'required|numeric'
         ];
 
         return $rules;

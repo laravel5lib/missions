@@ -136,35 +136,37 @@ class TripsController extends Controller
     {
         $trip = $this->trip->findOrFail($id);
 
-        // CAPTURE CARD
-        // create customer with the token and donor details
-        $customer = $this->gateway
-            ->createCustomer($request->get('donor'), $request->get('token'));
+        if ($request->get('amount') > 0) {
+            // CAPTURE CARD
+            // create customer with the token and donor details
+            $customer = $this->gateway
+                ->createCustomer($request->get('donor'), $request->get('token'));
 
-        // merge the customer id with donor details
-        // $requestdonor->merge(['customer_id' => $customer['id']]);
-        $request['donor'] = $request['donor'] + ['customer_id' => $customer['id']];
+            // merge the customer id with donor details
+            // $requestdonor->merge(['customer_id' => $customer['id']]);
+            $request['donor'] = $request['donor'] + ['customer_id' => $customer['id']];
 
-        // create the charge with customer id, token, and donation details
-        $charge = $this->gateway->createCharge(
-            $request->only(
-                'donor', 'payment', 'token', 'amount', 
-                'donor_id', 'currency', 'description'
-                ),
-            $customer['default_source'],
-            $customer['id']
-        );
+            // create the charge with customer id, token, and donation details
+            $charge = $this->gateway->createCharge(
+                $request->only(
+                    'donor', 'payment', 'token', 'amount', 
+                    'donor_id', 'currency', 'description'
+                    ),
+                $customer['default_source'],
+                $customer['id']
+            );
 
-        // capture the charge
-        $this->gateway->captureCharge($charge['id']);
+            // capture the charge
+            $this->gateway->captureCharge($charge['id']);
 
-        $request['details'] = [
-            'type' => 'card',
-            'charge_id' => $charge['id'],
-            'brand' => $charge['source']['brand'],
-            'last_four' => $charge['source']['last4'],
-            'cardholder' => $charge['source']['name'],
-        ];
+            $request['details'] = [
+                'type' => 'card',
+                'charge_id' => $charge['id'],
+                'brand' => $charge['source']['brand'],
+                'last_four' => $charge['source']['last4'],
+                'cardholder' => $charge['source']['name'],
+            ];
+        }
 
         $weight = $request->get('weight'); // kilograms
         $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
@@ -194,7 +196,8 @@ class TripsController extends Controller
                 'shirt_size' => $request->get('shirt_size'),
                 'height' => $height,
                 'weight' => $weight,
-                'avatar_upload_id' => $request->get('avatar_upload_id')
+                'avatar_upload_id' => $request->get('avatar_upload_id'),
+                'companion_limit' => $trip->companion_limit
             ]);
 
         event(new RegisteredForTrip($reservation, $request));

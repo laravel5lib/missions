@@ -41,6 +41,10 @@
             'cancel': {
                 type: String,
                 default: 'Keep'
+            },
+            'redirect': {
+                type: String,
+                default: null
             }
         },
         data(){
@@ -51,7 +55,12 @@
         methods: {
             destroy(){
                 this.$http.delete(this.resource + 's/' + this.id).then(function (response) {
-                    window.location.href = '/admin/' + this.resource + 's/' + this.id;
+                    if ( ! this.redirectUrl) {
+                        window.location.href = '/admin/' + this.resource + 's/';
+                    }
+
+                    window.location.href = this.redirect;
+
                 }, function (error) {
                     this.dispatch('showError', 'Unable to ' + this.action);
                 })

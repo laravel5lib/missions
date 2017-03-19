@@ -1,28 +1,6 @@
 <template>
     <div class="panel panel-default">
 
-        <alert :show.sync="showSuccess"
-               placement="top-right"
-               :duration="3000"
-               type="success"
-               width="400px"
-               dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Well Done!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
-        <alert :show.sync="showError"
-               placement="top-right"
-               :duration="6000"
-               type="danger"
-               width="400px"
-               dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>{{ message }}</p>
-        </alert>
-
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-6">
@@ -228,11 +206,9 @@
                 this.$http.post('notes', this.selectedNote).then(function () {
                     this.reset();
                     this.fetch();
-                    this.message = 'Note created successfully.';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Note created successfully.');
                 }, function () {
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are errors on the form.');
                 });
             },
             edit() {
@@ -240,11 +216,9 @@
                 this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(function () {
                     this.reset();
                     this.fetch();
-                    this.message = 'Note saved successfully.';
-                    this.showSuccess = true;
+                    this.$dispatch('showSuccess', 'Note saved successfully.');
                 }, function () {
-                    this.message = 'There are errors on the form.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'There are errors on the form.');
                 });
             },
             reset() {
@@ -257,13 +231,15 @@
             },
             remove(note) {
                 this.$http.delete('notes/' + note.id).then(function () {
+                    // remove note from collection
+                    this.notes.$remove(note.id);
+                    // reset selected
                     this.reset();
-                    this.fetch();
-                    this.message = 'Note deleted.';
-                    this.showSuccess = true;
+                    // re-fetch list
+                    // this.fetch();
+                    this.$dispatch('showSuccess', 'Note deleted.');
                 }, function () {
-                    this.message = 'Unable to delete note.';
-                    this.showError = true;
+                    this.$dispatch('showError', 'Unable to delete note.');
                 });
             }
         },

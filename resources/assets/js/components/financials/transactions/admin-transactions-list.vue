@@ -345,16 +345,16 @@
         data(){
             return {
                 transactions: [],
-                orderByField: 'description',
-                direction: 1,
+                orderByField: 'created_at',
+                direction: 0,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {
                     current_page: 1
                 },
                 search: '',
-                activeFields: ['description', 'type', 'amount'],
-                maxActiveFields: 3,
+                activeFields: ['description', 'type', 'amount', 'donor', 'created_at'],
+                maxActiveFields: 6,
                 maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars

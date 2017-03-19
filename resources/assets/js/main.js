@@ -291,6 +291,8 @@ Vue.http.interceptors.push(function(request, next) {
 
 // Register email validator function.
 Vue.validator('email', function (val) {
+    if (! val) return true;
+    
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 });
 // Validate datetime inputs
@@ -334,7 +336,12 @@ Vue.filter('percentage', {
 // This filter should convert date assigned property from UTC to local when being displayed -> read()
 // This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
 Vue.filter('moment', {
-    read: function (val, format, diff = false) {
+    read: function (val, format, diff = false, noLocal = false) {
+
+        if (noLocal) {
+            return moment(val).format(format || 'LL'); // do not convert to local
+        }
+
         // console.log('before: ', val);
         var date = moment.utc(val).local().format(format || 'LL');
 

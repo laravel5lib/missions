@@ -28,7 +28,8 @@
                     </td>
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>
-                    <td>{{ due.due_at | moment 'lll' }}</td>
+                    <td v-if="due.type === 'static'">Immedately</td>
+                    <td v-else>{{ due.due_at | moment 'lll' }}</td>
                     <td>{{ due.grace_period }} days</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>

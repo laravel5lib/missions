@@ -50,7 +50,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" :class="{'has-error': checkForAddError('due')}">
                                             <label for="date">Due</label>
-                                            <date-picker class="form-control input-sm" :time.sync="newDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                            <date-picker :input-sm="true" :model.sync="newDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                             <input type="datetime" id="date" class="form-control input-sm hidden"
                                                    v-model="newDeadline.date" v-validate:due="{required: true}">
                                         </div>
@@ -101,7 +101,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" :class="{'has-error': checkForEditError('due')}">
                                             <label for="date">Due</label>
-                                            <date-picker class="form-control input-sm" :time.sync="selectedDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                            <date-picker :input-sm="true" :model.sync="selectedDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                             <input type="datetime" id="date" class="form-control input-sm hidden"
                                                    v-model="selectedDeadline.date" v-validate:due="{required: true}">
                                         </div>

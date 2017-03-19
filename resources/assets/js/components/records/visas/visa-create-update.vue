@@ -34,24 +34,24 @@
                     <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="input-group input-group-sms"
+                            <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment 'YYYY-MM-DD'"></date-picker>
+                            <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
+                                   v-validate:issued="{ required: true }" required>
+                            <!--<div class="input-group input-group-sms"
                                  v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
                                 <span class="input-group-addon">Issued</span>
-                                <date-picker class="form-control input-sms" :time.sync="issued_at" :option="{ type: 'day', format: 'YYYY-MM-DD' }"></date-picker>
-                                <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
-                                       v-validate:issued="{ required: true }" required>
 
-                            </div>
+                            </div>-->
                             <br>
                         </div>
                         <div class="col-lg-6">
-                            <div class="input-group input-group-sms"
+                            <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment 'YYYY-MM-DD'"></date-picker>
+                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
+                                   v-validate:expires="{ required: true }" required>
+                            <!--<div class="input-group input-group-sms"
                                  v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
                                 <span class="input-group-addon">Expires</span>
-                                <date-picker class="form-control input-sms" :time.sync="expires_at" :option="{ type: 'day', format: 'YYYY-MM-DD' }"></date-picker>
-                                <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                       v-validate:expires="{ required: true }" required>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

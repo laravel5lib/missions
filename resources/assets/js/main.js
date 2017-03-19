@@ -136,6 +136,7 @@ require('jquery.cookie');
 require('bootstrap-sass');
 // require('tether');
 window.Shepherd = require('tether-shepherd');
+require('eonasdan-bootstrap-datetimepicker');
 
 window.AOS = require('aos');
 AOS.init();
@@ -166,8 +167,10 @@ Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
 // import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+// import myDatepicker from './components/date-picker.vue'
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
+// Vue.component('date-picker', require('vue-datetime-picker/src/vue-datetime-picker.js'));
 Vue.component('bootstrap-alert-error', {
     props: ['field', 'validator', 'message'],
     template: '<div><div class="alert alert-danger alert-dismissible error-{{field}}-{{validator}}" role="alert">{{ message }} </div></div>',

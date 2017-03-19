@@ -73,7 +73,7 @@
                                 <div class="form-group">
                                     <label for="due_date">Due Date</label>
                                     <!--<input id="due_date" type="datetime" class="form-control" v-model="editedDue.due_at">-->
-                                    <date-picker class="form-control" :time.sync="editedDue.due_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="editedDue.due_at"></date-picker>
+                                    <date-picker :model.sync="editedDue.due_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="editedDue.due_at"></date-picker>
                                 </div>
                             </div>
                         </div>

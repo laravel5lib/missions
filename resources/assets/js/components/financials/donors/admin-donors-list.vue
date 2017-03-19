@@ -57,21 +57,21 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="input-group input-group-sm">
+                            <date-picker addon="Start" :input-sm="true" :model.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss" v-if="filters"></date-picker>
+                            <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">Start</span>
-                                <!--<input type="datetime-local" class="form-control" v-model="filters.starts"/>-->
-                                <date-picker class="form-control" :time.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss" v-if="filters"></date-picker>
+                                &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.starts"/>&ndash;&gt;
 
-                            </div>
+                            </div>-->
                             <br>
                         </div>
                         <div class="col-xs-12">
-                            <div class="input-group input-group-sm">
+                            <date-picker addon="End" :input-sm="true" :model.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">End</span>
-                                <!--<input type="datetime-local" class="form-control" v-model="filters.ends"/>-->
-                                <date-picker class="form-control" :time.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                                &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.ends"/>&ndash;&gt;
 
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>

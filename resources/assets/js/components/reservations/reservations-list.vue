@@ -155,6 +155,13 @@
                         </div>
                     </div><!-- end col -->
                     <div class="form-group col-lg-8 col-md-8 col-sm-12">
+                        <div class="form-group" style="display: inline-block;" v-if="isFacilitator">
+                            <label>Show</label>
+                            <select class="form-control  input-sm" v-model="per_page">
+                                <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+                            </select>
+                        </div>
+
                         <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
                             Filters
                             <i class="fa fa-filter"></i>
@@ -330,6 +337,8 @@
                 ],
                 ageMin: 0,
                 ageMax: 120,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
                 filters: {
                     type: '',
                     groups: [],
@@ -433,7 +442,11 @@
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
-            }
+            },
+            'per_page': function (val, oldVal) {
+                this.updateConfig();
+                this.getReservations();
+            },
         },
         computed: {
             isFacilitator() {
@@ -460,6 +473,7 @@
                 let params = {
                     include: 'trip.campaign,trip.group,requirements',
                     search: this.search,
+                    per_page: this.per_page,
                     page: this.pagination.current_page,
                     trip: !!this.includeManaging && this.trips.length ? this.trips : null,
                     user: !this.includeManaging ? new Array(this.userId) : null
@@ -589,6 +603,7 @@
             if (localStorage['DashboardReservations']) {
                 let config = JSON.parse(localStorage['DashboardReservations']);
                 this.layout = config.layout;
+                this.per_page = config.per_page;
                 this.filters = config.filters;
                 this.includeManaging = config.includeManaging;
             }

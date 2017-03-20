@@ -8,13 +8,15 @@
                               :value.sync="groupsArr" :options="groupOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
+
                 <div class="form-group" v-if="!tripId">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
+
                 <div class="form-group">
-                    <select  class="form-control input-sm" v-model="filters.type">
+                    <select  class="form-control input-sm" v-model="filters.trip_type">
                         <option value="">Any Type</option>
                         <option value="ministry">Ministry</option>
                         <option value="family">Family</option>
@@ -297,7 +299,6 @@
             },
             type: {
                 type: String,
-                required: true
             },
             groupOnly: {
                 type: Boolean,
@@ -340,7 +341,7 @@
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 filters: {
-                    type: '',
+                    trip_type: '',
                     groups: [],
                     campaign: '',
                     gender: '',
@@ -549,7 +550,7 @@
                     ageMin: this.ageMin,
                     ageMax: this.ageMax,
                     filters: {
-                        type: this.filters.type,
+                        trip_type: this.filters.trip_type,
                         groups: this.filters.groups,
                         campaign: this.filters.campaign,
                         gender: this.filters.gender,
@@ -577,7 +578,7 @@
                 this.usersArr = [];
                 this.campaignObj = null;
                 this.filters = {
-                    type: '',
+                    trip_type: '',
                     role: '',
                     groups: [],
                     campaign: '',

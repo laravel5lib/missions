@@ -273,7 +273,7 @@
 									Male</label>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Female" id="gender"
-									       v-model="newUser.gender"> Female</label>
+									       v-model="newUser.gender" v-validate:gender="{ required: { rule: true, message: 'Please select a gender.' }}"> Female</label>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" :class="{ 'has-error': registerErrors.country_code }">

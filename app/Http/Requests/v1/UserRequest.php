@@ -29,7 +29,7 @@ class UserRequest extends FormRequest
             'email'            => 'required|email|unique:users,email,NULL,id,deleted_at,NULL',
             'password'         => 'required|confirmed|min:8',
             'alt_email'        => 'email|unique:users,alt_email',
-            'gender'           => 'in:Male,Female',
+            'gender'           => 'in:Male,male,Female,female',
             'status'           => 'string',
             'birthday'         => 'date',
             'street'           => 'string|max:100',

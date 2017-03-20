@@ -687,7 +687,8 @@
 				this.searchReservations();
 			},
 			'per_page': function (val, oldVal) {
-				this.searchReservations();
+                this.updateConfig();
+                this.searchReservations();
 			},
 			/*'groups':function () {
 				this.searchReservations();
@@ -899,7 +900,8 @@
 			if (localStorage[this.storageName]) {
 				let config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
-				this.maxActiveFields = config.maxActiveFields;
+                this.per_page = config.per_page;
+                this.maxActiveFields = config.maxActiveFields;
 				this.filters = config.filters;
 			}
 			// populate

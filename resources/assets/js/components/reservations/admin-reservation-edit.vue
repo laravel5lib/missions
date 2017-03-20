@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <date-picker v-if="loaded" class="form-control" :time.sync="birthday|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                    <date-picker v-if="loaded" :model.sync="birthday|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                 </div>
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">

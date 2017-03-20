@@ -71,7 +71,8 @@ import adminCampaignDetails from './components/campaigns/admin-campaign-details.
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
 import adminTrips from './components/trips/admin-trips-list.vue';
-import adminTripReservationsList from './components/trips/admin-trip-reservations-list.vue';
+import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
+import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
 import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
 import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
@@ -136,6 +137,7 @@ require('jquery.cookie');
 require('bootstrap-sass');
 // require('tether');
 window.Shepherd = require('tether-shepherd');
+require('eonasdan-bootstrap-datetimepicker');
 
 window.AOS = require('aos');
 AOS.init();
@@ -166,8 +168,10 @@ Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 // Vue.component('vSelect', require('vue-select'));
 // import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+// import myDatepicker from './components/date-picker.vue'
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
+// Vue.component('date-picker', require('vue-datetime-picker/src/vue-datetime-picker.js'));
 Vue.component('bootstrap-alert-error', {
     props: ['field', 'validator', 'message'],
     template: '<div><div class="alert alert-danger alert-dismissible error-{{field}}-{{validator}}" role="alert">{{ message }} </div></div>',
@@ -745,8 +749,9 @@ new Vue({
         campaignTripCreateWizard,
         campaignTripEditWizard,
         adminTrips,
+        adminGroupTrips,
         adminTripCreateUpdate,
-        adminTripReservationsList,
+        adminTripReservations,
         adminTripFacilitators,
         adminTripDuplicate,
         adminDeleteModal,

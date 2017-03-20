@@ -98,7 +98,7 @@
 				users: [],
 				trip: null,
 				userObj: null,
-				resource: this.$resource('trips{/id}', {include: 'facilitators.user'}),
+				resource: this.$resource('trips{/id}', {include: 'facilitators'}),
 //				attemptSubmit: false
 			};
 		},

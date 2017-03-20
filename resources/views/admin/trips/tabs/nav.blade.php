@@ -4,6 +4,7 @@
             <li class="{{ $tab === 'description' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/description' }}">Description</a></li>
             <li class="{{ $tab === 'pricing' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/pricing' }}">Pricing</a></li>
             <li class="{{ $tab === 'requirements' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/requirements' }}">Requirements</a></li>
+            <li class="{{ $tab === 'reservations' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/reservations' }}">Reservations</a></li>
             <li class="{{ $tab === 'deadlines' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/deadlines' }}">Deadlines</a></li>
             <li class="{{ $tab === 'facilitators' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/facilitators' }}">Facilitators</a></li>
             <li class="{{ $tab === 'todos' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/todos' }}">Todos</a></li>

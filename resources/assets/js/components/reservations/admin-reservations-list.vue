@@ -23,6 +23,19 @@
 							  :value.sync="campaignObj" :options="campaignOptions" label="name"
 							  placeholder="Filter by Campaign"></v-select>
 				</div>
+
+				<div class="form-group">
+					<select  class="form-control input-sm" v-model="filters.trip_type">
+						<option value="">Any Type</option>
+						<option value="ministry">Ministry</option>
+						<option value="family">Family</option>
+						<option value="international">International</option>
+						<option value="media">Media</option>
+						<option value="medical">Medical</option>
+						<option value="leader">Leader</option>
+					</select>
+				</div>
+
 				<div class="form-group">
 					<label>Gender</label>
 					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
@@ -536,6 +549,7 @@
 
 				// filter vars
 				filters: {
+                    trip_type: '',
 					tags: [],
 					user: [],
 					groups: [],
@@ -730,7 +744,8 @@
 					usersArr: this.usersArr,
 					campaignObj: this.campaignObj,
 					filters: {
-						tags: this.filters.tags,
+                        trip_type: this.filters.trip_type,
+                        tags: this.filters.tags,
 						user: this.filters.user,
 						groups: this.filters.groups,
 						campaign: this.filters.campaign,
@@ -770,6 +785,7 @@
 				this.usersArr = [];
 				this.campaignObj = null;
 				this.filters = {
+                    trip_type: '',
 					tags: [],
 					user: [],
 					groups: [],

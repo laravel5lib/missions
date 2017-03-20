@@ -15,7 +15,7 @@
             <div class="col-sm-4 text-right">
                 <hr class="divider inv sm">
                 <div class="btn-group">
-                    <a href="{{ url('admin/campaigns/' . $trip->campaign->id) }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                    <a onclick="window.history.back()" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
                     <div class="btn-group">
                         <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Manage <i class="fa fa-angle-down"></i>

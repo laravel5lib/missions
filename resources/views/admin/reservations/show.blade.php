@@ -17,7 +17,7 @@
                 <hr class="divider inv xs">
                 <hr class="divider inv sm">
                 <div class="btn-group" role="group">
-                    <a href="{{ url('admin/reservations') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                    <a href="{{ url('admin/reservations/current') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
                     <div class="btn-group">
                         <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Manage <i class="fa fa-angle-down"></i>

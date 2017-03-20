@@ -297,7 +297,6 @@
             },
             type: {
                 type: String,
-                required: true
             },
             groupOnly: {
                 type: Boolean,

@@ -54,13 +54,13 @@
         },
         methods: {
             destroy(){
+                console.log(this.redirect);
                 this.$http.delete(this.resource + 's/' + this.id).then(function (response) {
-                    if ( ! this.redirectUrl) {
-                        window.location.href = '/admin/' + this.resource + 's/';
+                    if (this.redirect) {
+                        window.location.href = this.redirect;
+                    } else {
+                        window.location.href = '/admin/' + this.resource + 's/' + this.id;
                     }
-
-                    window.location.href = this.redirect;
-
                 }, function (error) {
                     this.dispatch('showError', 'Unable to ' + this.action);
                 })

@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-	<validator name="UpdateCampaign" @touched="onTouched">
+	<div>
+		<validator name="UpdateCampaign" @touched="onTouched">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
 			<div class="row">
@@ -189,6 +190,7 @@
 		</div>
 
 	</validator>
+	</div>
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";

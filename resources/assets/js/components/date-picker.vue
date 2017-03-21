@@ -124,7 +124,7 @@
             datetimeFormat: {
                 type: String,
                 required: false,
-                default: "YYYY-MM-DD HH:mm:ss"
+                default: "LLL"
             },
             dateFormat: {
                 type: String,
@@ -190,6 +190,7 @@
                 case "datetime":
                 default:
                     options.format = this.datetimeFormat;
+                    options.extraFormats = ['YYYY-MM-DD HH:mm:ss', 'LLL'];
                     break;
             }
             // use the vue-i18n plugin for localize the tooltips

@@ -5,7 +5,6 @@
         <li class="{{ $tab === 'registration' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/registration' }}">Registration</a></li>
         <li class="{{ $tab === 'pricing' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/pricing' }}">Pricing</a></li>
         <li class="{{ $tab === 'requirements' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/requirements' }}">Requirements</a></li>
-        <li class="{{ $tab === 'reservations' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/reservations' }}">Reservations</a></li>
         <li class="{{ $tab === 'deadlines' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/deadlines' }}">Deadlines</a></li>
     </ul>
 </div>

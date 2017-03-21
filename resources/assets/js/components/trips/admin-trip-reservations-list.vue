@@ -3,11 +3,11 @@
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Tags</label>
                     <input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
                            :debounce="250" placeholder="Tag, tag2, tag3...">
-                </div>
+                </div> -->
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
                               :value.sync="groupsArr" :options="groupsOptions" label="name"

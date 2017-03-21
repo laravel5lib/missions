@@ -35,12 +35,32 @@
 </div>
 <hr class="divider inv lg">
     <div class="container">
-        <div class="row">
-            <div class="col-xs-12 col-sm-4 col-md-3">
-                @include('admin.trips.tabs.nav')
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#details" aria-controls="home" role="tab" data-toggle="tab">Details</a></li>
+            <li role="presentation"><a href="#reservations" aria-controls="profile" role="tab" data-toggle="tab">Reservations</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade in active" id="details">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-3">
+                        @include('admin.trips.tabs.nav')
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-9">
+                        @include('admin.trips.tabs.'.($tab === 'reservations' ? 'details' : $tab))
+                    </div>
+                </div>
             </div>
-            <div class="col-xs-12 col-sm-8 col-md-9">
-                @include('admin.trips.tabs.'.$tab)
+            <div role="tabpanel" class="tab-pane fade" id="reservations">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h5>Reservations</h5>
+                    </div>
+                    <div class="panel-body">
+                        <admin-trip-reservations trip-id="{{ $trip->id }}"></admin-trip-reservations>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -70,4 +90,23 @@
             text-transform: capitalize;
         }
     </style>
+@endsection
+
+@section('scripts')
+    <script type="text/javascript">
+        // Javascript to enable link to tab
+        var url = document.location.toString();
+        var tab = '{{ $tab }}';
+        if (url.match('reservations')) {
+            $('.nav-tabs a[href="#reservations"]').tab('show');
+        }
+
+        // Change history for page-reload
+        $('.nav-tabs a').on('shown.bs.tab', function (e) {
+            var newHistory = e.currentTarget.href.match('#reservations')
+                ? e.currentTarget.href.replace(tab, 'reservations').split('#')[0]
+                : e.currentTarget.href.replace('reservations', tab === 'reservations' ? 'details' : tab).split('#')[0]
+            history.pushState('data', '', newHistory);
+        })
+    </script>
 @endsection

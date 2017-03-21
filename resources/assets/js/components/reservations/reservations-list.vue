@@ -4,16 +4,21 @@
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
+                    <label>Groups</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
                               :value.sync="groupsArr" :options="groupOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
+
                 <div class="form-group" v-if="!tripId">
+                    <label>Campaign</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
+
                 <div class="form-group">
+                    <label>Trip Type</label>
                     <select  class="form-control input-sm" v-model="filters.type">
                         <option value="">Any Type</option>
                         <option value="ministry">Ministry</option>
@@ -150,6 +155,7 @@
                 <div class="row">
                     <div class="form-group col-lg-4 col-md-4 col-sm-12">
                         <div class="input-group input-group-sm">
+                            <label>Search</label>
                             <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         </div>
@@ -157,7 +163,7 @@
                     <div class="form-group col-lg-8 col-md-8 col-sm-12">
                         <div class="form-group" style="display: inline-block;" v-if="isFacilitator">
                             <label>Show</label>
-                            <select class="form-control  input-sm" v-model="per_page">
+                            <select class="form-control input-sm" v-model="per_page">
                                 <option v-for="option in perPageOptions" :value="option">{{option}}</option>
                             </select>
                         </div>
@@ -297,7 +303,6 @@
             },
             type: {
                 type: String,
-                required: true
             },
             groupOnly: {
                 type: Boolean,
@@ -373,7 +378,7 @@
                     user_email: 'User Email',
                     user_primary_phone: 'User Primary Phone',
                     user_secondary_phone: 'User Secondary Phone',
-                    trip_type: 'Trip Type',
+                    type: 'Trip Type',
                     campaign: 'Campaign',
                     group: 'Group',
                     country_located: 'Country Located',

@@ -64,6 +64,7 @@
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <hr class="divider inv">
             </form>
         </aside>
 
@@ -307,7 +308,6 @@
                 </tr>
                 </tfoot>
             </table>
-
         </div>
     </div>
 </template>

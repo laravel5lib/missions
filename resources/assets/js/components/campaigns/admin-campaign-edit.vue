@@ -122,7 +122,7 @@
 				</div><!-- end col -->
 				<div class="col-sm-6">
 					<h5>
-						<img class="av-left img-rounded img-lg"
+						<img class="av-left img-rounded img-md"
 							:src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 							data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
@@ -340,6 +340,8 @@
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
+				this.avatar_upload_id = campaign.avatar_upload_id;
+				this.banner_upload_id = campaign.banner_upload_id;
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();

@@ -9,46 +9,46 @@
                            :debounce="250" placeholder="Tag, tag2, tag3...">
                 </div>
 
-                <legend>By Designation</legend>
+                <h6 style="font-size: .7em;letter-spacing: 2px;text-transform: uppercase;text-align: center;color: #808080;background: #242424;padding-top: 4px;padding-bottom: 4px;">By Designation</h6>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter by Group"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="reservationFilter" :debounce="250" :on-search="getReservations"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="reservationFilter" :debounce="250" :on-search="getReservations"
                               :value.sync="reservationObj" :options="reservationsOptions" label="given_names"
                               placeholder="Filter by Reservation"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignsOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="causesFilter" :debounce="250" :on-search="getCauses"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="causesFilter" :debounce="250" :on-search="getCauses"
                               :value.sync="causeObj" :options="causesOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="tripsFilter" :debounce="250" :on-search="getTrips"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="tripsFilter" :debounce="250" :on-search="getTrips"
                               :value.sync="tripObj" :options="tripsOptions" label="name"
                               placeholder="Filter by Trip"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="projectsFilter" :debounce="250" :on-search="getProjects"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="projectsFilter" :debounce="250" :on-search="getProjects"
                               :value.sync="projectObj" :options="projectsOptions" label="name"
                               placeholder="Filter by Project"></v-select>
                 </div>
 
-                <legend>By Account Holder</legend>
+                <h6 style="font-size: .7em;letter-spacing: 2px;text-transform: uppercase;text-align: center;color: #808080;background: #242424;padding-top: 4px;padding-bottom: 4px;">By Account Holder</h6>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupAccountObj" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" :debounce="250" :on-search="getUsers"
+                    <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="userFilter" :debounce="250" :on-search="getUsers"
                               :value.sync="userObj" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>
@@ -57,27 +57,28 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="input-group input-group-sm">
+                            <date-picker addon="Start" :input-sm="true" :model.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">Start</span>
-                                <!--<input type="datetime-local" class="form-control" v-model="filters.starts"/>-->
-                                <date-picker class="form-control" :time.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss" v-if="filters"></date-picker>
+                                &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.starts"/>&ndash;&gt;
 
-                            </div>
+                            </div>-->
                             <br>
                         </div>
                         <div class="col-xs-12">
-                            <div class="input-group input-group-sm">
+                            <date-picker addon="End" :input-sm="true" :model.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">End</span>
-                                <!--<input type="datetime-local" class="form-control" v-model="filters.ends"/>-->
-                                <date-picker class="form-control" :time.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                                &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.ends"/>&ndash;&gt;
 
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <hr class="divider inv">
             </form>
         </aside>
 

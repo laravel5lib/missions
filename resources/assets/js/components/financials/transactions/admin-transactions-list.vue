@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker class="form-control" :time.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker class="form-control" :time.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -64,6 +64,7 @@
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <hr class="divider inv">
             </form>
         </aside>
 
@@ -307,7 +308,6 @@
                 </tr>
                 </tfoot>
             </table>
-
         </div>
     </div>
 </template>

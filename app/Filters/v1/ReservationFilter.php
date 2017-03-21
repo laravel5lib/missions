@@ -322,4 +322,44 @@ class ReservationFilter extends Filter
 
         });
     }
+
+    /**
+     * By minimum amount raised.
+     * 
+     * @param  string/integer $amount
+     * @return Builder
+     */
+    public function minAmountRaised($amount)
+    {
+        $amount = (int) $amount * 100; // convert to cents
+
+        return $this->whereHas('fund', function ($fund) use ($amount) {
+            return $fund->where('balance', '>=', $amount);
+        });
+    }
+
+    /**
+     * By maximum amount raised.
+     * 
+     * @param  string/integer $amount
+     * @return Builder
+     */
+    public function maxAmountRaised($amount)
+    {
+        $amount = (int) $amount * 100; // convert to cents
+        
+        return $this->whereHas('fund', function ($fund) use ($amount) {
+            return $fund->where('balance', '<=', $amount);
+        });
+    }
+
+    public function minPercentRaised($percent)
+    {
+        //
+    }
+
+    public function maxPercentRaised($percent)
+    {
+        //
+    }
 }

@@ -4,16 +4,21 @@
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
+                    <label>Groups</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
                               :value.sync="groupsArr" :options="groupOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
+
                 <div class="form-group" v-if="!tripId">
+                    <label>Campaign</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
+
                 <div class="form-group">
+                    <label>Trip Type</label>
                     <select  class="form-control input-sm" v-model="filters.type">
                         <option value="">Any Type</option>
                         <option value="ministry">Ministry</option>
@@ -24,21 +29,145 @@
                         <option value="leader">Leader</option>
                     </select>
                 </div>
+
+                <template v-if="isFacilitator">
+                    <div class="form-group">
+                        <label>Desired Role</label>
+                        <!--<select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">-->
+                        <select class="form-control input-sm" id="desiredRole" v-model="filters.role">
+                            <option value="">Any Role</option>
+                            <option v-for="role in rolesArr" :value="role.value">{{role.name}}</option>
+                        </select>
+                        <!--</select>-->
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
+                            <option value="">Any Genders</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Marital Status</label>
+                        <select class="form-control input-sm" v-model="filters.status" style="width:100%;">
+                            <option value="">Any Status</option>
+                            <option value="single">Single</option>
+                            <option value="married">Married</option>
+                        </select>
+                    </div>
+
+                    <!-- Cost/Payments -->
+                    <div class="form-group">
+                        <label>Applied Cost</label>
+                        <select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
+                            <option value="">Any Cost</option>
+                            <option v-for="option in dueOptions" v-bind:value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group" v-if="filters.dueName">
+                        <label>Payment Status</label>
+                        <select class="form-control input-sm" v-model="filters.dueStatus" style="width:100%;">
+                            <option value="">Any Status</option>
+                            <option value="overdue">Overdue</option>
+                            <option value="late">Late</option>
+                            <option value="extended">Extended</option>
+                            <option value="paid">Paid</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    <!-- end cost/payments -->
+
+                    <!-- Requirements -->
+                    <div class="form-group">
+                        <label>Requirements</label>
+                        <select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
+                            <option value="">Any Requirement</option>
+                            <option v-for="option in requirementOptions" v-bind:value="option">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group" v-if="filters.requirementName">
+                        <select class="form-control input-sm" v-model="filters.requirementStatus" style="width:100%;">
+                            <option value="">Any Status</option>
+                            <option value="incomplete">Incomplete</option>
+                            <option value="reviewing">Reviewing</option>
+                            <option value="attention">Attention</option>
+                            <option value="complete">Complete</option>
+                        </select>
+                    </div>
+                    <!-- end requirements -->
+
+                    <div class="form-group">
+                        <label>Shirt Size</label>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+                                  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <label>Age Range</label>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon">Age Min</span>
+                                    <input type="number" class="form-control" number v-model="ageMin" min="0">
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon">Max</span>
+                                    <input type="number" class="form-control" number v-model="ageMax" max="120">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Travel Companions</label>
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="companions" id="companions2" v-model="filters.hasCompanions" value="yes"> Yes
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
+                            </label>
+                        </div>
+                    </div>
+                </template>
+
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
-                <form>
+                <form class="form-inline">
                 <div class="row">
-                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                        <div class="input-group input-group-sm">
+                    <div class="form-group col-lg-3 col-md-12 col-xs-12">
+                        <div class="input-group input-group-sm col-xs-12">
                             <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         </div>
                     </div><!-- end col -->
-                    <div class="form-group col-lg-8 col-md-8 col-sm-12">
+                    <div class="form-group col-lg-9 col-md-12">
+                        <hr class="divider inv hidden-lg">
+                        <div class="form-group" style="display: inline-block;" v-if="isFacilitator">
+                            <label>Show</label>
+                            <select class="form-control input-sm" v-model="per_page">
+                                <option v-for="option in perPageOptions" :value="option">{{option}}</option>
+                            </select>
+                        </div>
+
                         <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
                             Filters
                             <i class="fa fa-filter"></i>
@@ -167,7 +296,26 @@
     export default{
         name: 'reservations-list',
         components: {vSelect, exportUtility},
-        props: ['userId', 'type'],
+        props: {
+            userId: {
+                type: String,
+                required: true
+            },
+            type: {
+                type: String,
+            },
+            groupOnly: {
+                type: Boolean,
+                default: false
+            },
+            groupId: {
+                type: String,
+
+            },
+            tripId: {
+                type: String,
+            }
+        },
         data(){
             return {
                 reservations: [],
@@ -176,16 +324,46 @@
                 includeManaging: false,
                 search: '',
                 showFilters: false,
+                rolesArr: [],
                 groupsArr: [],
                 groupOptions: [],
                 campaignObj: null,
                 campaignOptions: [],
+                requirementOptions: [],
+                dueOptions: [],
+                shirtSizeArr: [],
+                shirtSizeOptions: [
+                    {id: 'XS', name: 'Extra Small'},
+                    {id: 'S', name: 'Small'},
+                    {id: 'M', name: 'Medium'},
+                    {id: 'L', name: 'Large'},
+                    {id: 'XL', name: 'Extra Large'},
+                    {id: 'XXL', name: 'Extra Large X2'},
+                ],
+                ageMin: 0,
+                ageMax: 120,
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
                 filters: {
-                    groups: '',
-                    campaign: '',
                     type: '',
+                    groups: [],
+                    campaign: '',
+                    gender: '',
+                    status: '',
+                    shirtSize: [],
+                    hasCompanions: null,
+                    due: '',
+                    role: '',
+                    todoName: '',
+                    todoStatus: null,
+                    requirementName: '',
+                    requirementStatus: '',
+                    dueName: '',
+                    dueStatus: '',
+                    rep: '',
                     sort: 'created_at',
                     direction: 'desc'
+
                 },
                 sortOptions: [
                     { name: 'Given Names - Ascending', value: 'given_names', direction: 'asc'},
@@ -200,7 +378,7 @@
                     user_email: 'User Email',
                     user_primary_phone: 'User Primary Phone',
                     user_secondary_phone: 'User Secondary Phone',
-                    trip_type: 'Trip Type',
+                    type: 'Trip Type',
                     campaign: 'Campaign',
                     group: 'Group',
                     country_located: 'Country Located',
@@ -269,7 +447,11 @@
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
-            }
+            },
+            'per_page': function (val, oldVal) {
+                this.updateConfig();
+                this.getReservations();
+            },
         },
         computed: {
             isFacilitator() {
@@ -296,6 +478,7 @@
                 let params = {
                     include: 'trip.campaign,trip.group,requirements',
                     search: this.search,
+                    per_page: this.per_page,
                     page: this.pagination.current_page,
                     trip: !!this.includeManaging && this.trips.length ? this.trips : null,
                     user: !this.includeManaging ? new Array(this.userId) : null
@@ -310,6 +493,12 @@
                         break;
                 }
                 $.extend(params, this.filters);
+
+                if (this.groupOnly) {
+//                    this.filters.groups = this.groupId;
+                    params.groups = new Array(this.groupId);
+                    params.trip = new Array(this.tripId);
+                }
 
                 this.exportFilters = params;
 
@@ -332,20 +521,86 @@
                     loading ? loading(false) : void 0;
                 })
             },
+            getRequirements(){
+                this.$http.get('requirements', { params: {
+                    'type': 'trips',
+                    'per_page': 100,
+                    'unique': true
+                }}).then(function (response) {
+                    this.requirementOptions = _.uniq(_.pluck(response.body.data, 'name'));
+                });
+            },
+            getRoles(){
+                this.$http.get('utilities/team-roles').then(function (response) {
+                    _.each(response.body.roles, function (name, key) {
+                        this.rolesArr.push({ value: key, name: name});
+                    }.bind(this));
+                });
+            },
+            getCosts(){
+                this.$http.get('costs', { params: {
+                    'assignment': 'trips',
+                    'per_page': 100,
+                    'unique': true
+                }}).then(function (response) {
+                    this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
+                });
+            },
             updateConfig(){
                 localStorage['DashboardReservations'] = JSON.stringify({
                     layout: this.layout,
                     includeManaging: this.includeManaging,
+                    per_page: this.per_page,
+                    ageMin: this.ageMin,
+                    ageMax: this.ageMax,
                     filters: {
+                        type: this.filters.type,
                         groups: this.filters.groups,
                         campaign: this.filters.campaign,
-                        type: this.filters.type,
-                        sort: this.filters.sort,
-                        direction: this.filters.direction,
+                        gender: this.filters.gender,
+                        status: this.filters.status,
+                        shirtSize: this.filters.shirtSize,
+                        hasCompanions: this.filters.hasCompanions,
+                        todoName: this.filters.todoName,
+                        todoStatus: this.filters.todoStatus,
+                        requirementName: this.filters.requirementName,
+                        requirementStatus: this.filters.requirementStatus,
+                        dueName: this.filters.dueName,
+                        dueStatus: this.filters.dueStatus,
+                        rep: this.filters.rep,
                     }
                 });
 
-            }
+            },
+            resetFilter(){
+                this.orderByField = 'surname';
+                this.direction = 1;
+                this.search = null;
+                this.ageMin = 0;
+                this.ageMax = 120;
+                this.groupsArr = [];
+                this.usersArr = [];
+                this.campaignObj = null;
+                this.filters = {
+                    type: '',
+                    role: '',
+                    groups: [],
+                    campaign: '',
+                    gender: '',
+                    status: '',
+                    shirtSize: [],
+                    hasCompanions: null,
+                    todoName: '',
+                    todoStatus: null,
+                    requirementName: '',
+                    requirementStatus: '',
+                    rep: '',
+                    dueName: '',
+                    dueStatus: ''
+                }
+
+
+            },
 
         },
         ready(){
@@ -353,6 +608,7 @@
             if (localStorage['DashboardReservations']) {
                 let config = JSON.parse(localStorage['DashboardReservations']);
                 this.layout = config.layout;
+                this.per_page = config.per_page;
                 this.filters = config.filters;
                 this.includeManaging = config.includeManaging;
             }
@@ -378,7 +634,18 @@
                     this.includeManaging = false;
                 }
 
+                if (this.groupOnly && this.groupId) {
+                    this.includeManaging = true;
+                }
+
+                if (this.isFacilitator) {
+                    this.getCosts();
+                    this.getRequirements();
+                    this.getRoles();
+                }
+
             });
+
             Promise.all([userPromise]).then(function (values) {
                 this.startUp = false;
                 this.getReservations();

@@ -3,7 +3,7 @@
 @section('content')
     <h3 style="color: #242424;font-family:Helvetica, Arial, sans-serif;color:#242424;">Hey {{ $recipient_name }},</h3>
 
-    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">The status of {{ $reservation_name }}'s <strong style="font-size:18px;font-weight:bold;">{{ $requirement }} Travel Requirement</strong> for {{ $gender == 'male' ? 'his' : 'her' }} trip to {{ $country }} has changed.
+    <p style="color: #242424;font-family:Helvetica, Arial, sans-serif;">The status of {{ $reservation_name }}'s <strong style="font-size:18px;font-weight:bold;">{{ $requirement }} Travel Requirement</strong> for {{ strtolower($gender) == 'male' ? 'his' : 'her' }} trip to {{ $country }} has changed.
 
     <table style="border-collapse: collapse;font-size:12px;color: #242424;font-family:Helvetica, Arial, sans-serif;border: 2px solid #e6e6e6;" width="100%">
         <tbody>

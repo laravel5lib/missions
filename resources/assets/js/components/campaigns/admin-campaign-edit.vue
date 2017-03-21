@@ -122,7 +122,7 @@
 				</div><!-- end col -->
 				<div class="col-sm-6">
 					<h5>
-						<img class="av-left img-rounded img-lg"
+						<img class="av-left img-rounded img-md"
 							:src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 							data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">

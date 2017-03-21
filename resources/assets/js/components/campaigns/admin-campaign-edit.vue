@@ -342,6 +342,8 @@
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
+				this.avatar_upload_id = campaign.avatar_upload_id;
+				this.banner_upload_id = campaign.banner_upload_id;
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();

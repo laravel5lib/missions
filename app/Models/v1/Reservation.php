@@ -334,7 +334,7 @@ class Reservation extends Model
             return $value->type == 'incremental' && $value->active_at < $maxDate;
         });
 
-        // 1) remove any reservation costs that are "overdue"
+        // 1) remove any reservation "incremental" costs that are "overdue" and not locked
         // 2) merge new trip costs with existing reservation costs
         // 3) remove duplicates
         $costs = $this->costs
@@ -345,7 +345,7 @@ class Reservation extends Model
                                  ->late()
                                  ->pluck('payment.cost_id')
                                  ->toArray()
-                        );
+                        ) and ! $cost->pivot->locked and $cost->type == 'incremental';
                     })
                     ->merge($tripCosts)
                     ->unique();
@@ -376,6 +376,7 @@ class Reservation extends Model
         if ( ! $costs instanceof Collection)
             $costs = collect($costs);
 
+        // build the data array
         $data = $costs->keyBy('id')->map(function($item) {
             return [
                 'locked' => isset($item['locked']) and $item['locked'] ? true : false,
@@ -384,12 +385,13 @@ class Reservation extends Model
         
         $this->costs()->sync($data);
 
-        // update any related fudraiser goal amounts
+        // update the related fudraiser goal amount
         if ($this->fundraisers->count())
             $this->fundraisers()->first()->update([
                 'goal_amount' => $this->getTotalCost()/100
             ]);
 
+        // go update the payments due
         dispatch(new SyncPaymentsDue($this));
     }
 

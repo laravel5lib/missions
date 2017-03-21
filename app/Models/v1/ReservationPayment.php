@@ -143,6 +143,7 @@ class ReservationPayment {
     {
         return $this->reservation->dues()->with('payment')->get()->filter(function($due) {
            return $due->getStatus() == 'overdue';
+           // && $due->payment->enforced
         });
     }
 
@@ -164,7 +165,7 @@ class ReservationPayment {
 
         if ($current->contains('type', 'incremental')) {
             $this->reservation->updateCosts();
-            
+
             return true;
         }
 

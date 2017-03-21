@@ -50,10 +50,6 @@ class HandleLatePayments extends Command
                 $this->info('Costs updated for reservation id: '. $id) :
                 $this->error('No changes made to reservation id: '. $id);
         } else {
-            // $reservations = $this->reservation->current()->whereHas('dues', function($due) {
-            //     return $due->late();
-            // })->get();
-            
             $reservations = $this->reservation->current()->get();
 
             $reservations->each(function($reservation) {

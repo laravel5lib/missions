@@ -119,7 +119,7 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Registration Closes</label>
-                <h4>{{ date('F d, Y h:i a', strtotime($trip->ended_at)) }}</h4>
+                <h4>{{ $trip->closed_at->timezone('America/Detroit')->format('M j, Y h:i a') }} EST</h4>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Starting Cost</label>

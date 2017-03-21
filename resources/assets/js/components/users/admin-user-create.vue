@@ -410,7 +410,7 @@
             },
             birthday() {
                 return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
+                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL')
                         : null;
             }
         },

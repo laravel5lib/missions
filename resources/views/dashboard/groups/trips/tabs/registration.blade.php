@@ -10,8 +10,8 @@
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Registration Closes</label>
-                <h4>{{ $trip->ended_at->diffForHumans() }}</h4>
-                <small>{{ $trip->ended_at->format('M j, Y h:i a') }}</small>
+                <h4>{{ $trip->closes_at->diffForHumans() }}</h4>
+                <small>{{ $trip->closes_at->format('M j, Y h:i a') }}</small>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-4 text-center">
                 <label>Starting Cost</label>

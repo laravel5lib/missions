@@ -72,12 +72,11 @@ class ReservationPayment {
             $dues = collect($dues);
 
         // get lowest due_at in dues,
-        // subtract a of that date
-        // and apply as date for nulls
         $min = $dues->reject(function($due) {
             return is_null($due['due_at']);
         })->min('due_at');
 
+        // subtract a day from that date and apply as date for nulls
         $upfrontDate = is_null($min) ? Carbon::now() : $min->subDay();
 
         $data = $dues->map(function($due) use($upfrontDate) {
@@ -159,24 +158,13 @@ class ReservationPayment {
                         ->whereIn('id', $this->late()->pluck('payment.cost_id'))
                         ->get()
                         ->reject(function($cost) {
-                            return  ! $cost->pivot->locked
+                            return  $cost->pivot->locked
                                     and $cost->type == 'incremental';
                         });
 
-        if ( ! $current->contains('type', 'incremental')) {
-            $active = $this->reservation->trip->activeCosts()->get();
-
-            $maxDate = $active->where('type', 'incremental')->max('active_at');
-
-            $costs = $active->reject(function ($value) use ($maxDate)
-            {
-                return $value->type == 'incremental' && $value->active_at < $maxDate;
-            });
-
-            $new_costs = $current->merge($costs);
-
-            $this->reservation->syncCosts($new_costs);
-
+        if ($current->contains('type', 'incremental')) {
+            $this->reservation->updateCosts();
+            
             return true;
         }
 

@@ -13,6 +13,7 @@
 	.bootstrap-datetimepicker-widget {
 		z-index: 99;
         text-align:center;
+        color: #2d2d2d !important;
 	}
 </style>
 <script type="text/javascript">

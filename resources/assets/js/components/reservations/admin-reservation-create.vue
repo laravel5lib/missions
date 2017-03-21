@@ -152,7 +152,7 @@
                     weight: this.userInfo.weight,
                     status: this.userInfo.relationshipStatus,
                     shirt_size: this.userInfo.size,
-                    birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
+                    birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
                     address: this.userInfo.address,
                     city: this.userInfo.city,
                     state: this.userInfo.state,

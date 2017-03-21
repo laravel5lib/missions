@@ -386,7 +386,7 @@
 					dobDay: this.dobDay,
 					dobMonth: this.dobMonth,
 					dobYear: this.dobYear,
-					dob: moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, "MM-DD-YYYY").format('LL'),
+					dob: moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL'),
 					gender: this.gender,
 					relationshipStatus: this.relationshipStatus,
 					size: this.size,

@@ -150,7 +150,7 @@
 								</div>
 								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
-										<input type="radio" v-model="gender" v-validate:gender value="female"> Female
+										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }" value="female"> Female
 									</label>
 								</div>
 								<span class="help-block" v-show="checkForError('gender')">Select a gender</span>
@@ -189,7 +189,7 @@
 									<div class="col-sm-6">
 										<div class="form-group" :class="{ 'has-error': checkForError('heightB') }">
 											<div class="input-group input-group-sm">
-												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11.99" v-validate:heightB="{ required: true }" :classes="{ invalid: 'has-error' }">
+												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" v-validate:heightB="{ required: true }" :classes="{ invalid: 'has-error' }">
 												<div class="input-group-addon" v-text="heightUnitB"></div>
 											</div>
 										</div>
@@ -386,7 +386,7 @@
 					dobDay: this.dobDay,
 					dobMonth: this.dobMonth,
 					dobYear: this.dobYear,
-					dob: moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL'),
+					dob: moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL'),
 					gender: this.gender,
 					relationshipStatus: this.relationshipStatus,
 					size: this.size,

@@ -107,4 +107,19 @@ class UserFilter extends Filter
            $fundraiser->where('url', $url);
         });
     }
+
+    /**
+     * By facilitating.
+     *
+     * @param $url
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    /*public function isFacilitator($isFacilitator)
+    {
+        if( !$isFacilitator ) return $this;
+
+        return $this->has('facilitating', '>', 1)->orWhereHas('managing', function ($managing) {
+            $managing->has('trips', '>', 1);
+        });
+    }*/
 }

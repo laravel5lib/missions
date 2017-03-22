@@ -1,6 +1,6 @@
  <div class="panel panel-default">
     <ul class="nav nav-pills nav-stacked">
-        <li class="{{ $tab === 'details' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/details' }}">Details</a></li>
+        <li class="{{ $tab === 'details' || $tab === 'reservations' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/details' }}">Details</a></li>
         <li class="{{ $tab === 'description' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/description' }}">Description</a></li>
         <li class="{{ $tab === 'registration' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/registration' }}">Registration</a></li>
         <li class="{{ $tab === 'pricing' ? 'active' : '' }}"><a href="{{ url('dashboard/groups/'. $groupId .'/trips/' . $id) . '/pricing' }}">Pricing</a></li>

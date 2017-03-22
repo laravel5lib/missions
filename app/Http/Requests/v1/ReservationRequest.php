@@ -28,7 +28,7 @@ class ReservationRequest extends FormRequest
         $rules = [
             'given_names'        => 'required|max:100',
             'surname'            => 'required|max:60',
-            'gender'             => 'required',
+            'gender'             => 'required|in:male,female,Male,Female',
             'status'             => 'required|string',
             'shirt_size'         => 'required|string',
             'birthday'           => 'required|date|before:' . Carbon::now()->subYears(12),
@@ -45,9 +45,9 @@ class ReservationRequest extends FormRequest
             'costs.*.id'         => 'required|exists:costs,id',
             'costs.*.locked'     => 'boolean',
             'companion_limit'    => 'numeric',
-            'weight'             => 'required',
-            'height_a'            => 'required',
-            'height_b'            => 'required'
+            'weight'             => 'required|numeric',
+            'height_a'           => 'required|numeric',
+            'height_b'           => 'required|numeric'
         ];
 
         if ($this->isMethod('put')) {
@@ -70,7 +70,10 @@ class ReservationRequest extends FormRequest
                 'costs'              => 'array',
                 'costs.*.id'         => 'required|exists:costs,id',
                 'costs.*.locked'     => 'boolean',
-                'companion_limit'    => 'numeric'
+                'companion_limit'    => 'numeric',
+                'weight'             => 'sometimes|required',
+                'height_a'           => 'sometimes|required',
+                'height_b'           => 'sometimes|required'
             ];
         }
 

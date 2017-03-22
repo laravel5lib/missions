@@ -33,7 +33,7 @@
                                class="form-control"
                                v-model="donor.email"
                                initial="off"
-                               v-validate:email="{required: true, email: true}">
+                               v-validate:email="{email: true}">
                     </div>
                     <div class="col-md-6">
                         <label>Phone</label>
@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="panel-body text-center">
-                <button class="btn btn-default" @click="cancel">Cancel</button>
+                <button class="btn btn-default" @click="cancel">Back</button>
                 <button class="btn btn-primary" v-if="!isUpdate" @click="create">Create</button>
                 <button class="btn btn-primary" v-if="isUpdate" @click="update">Save</button>
             </div>

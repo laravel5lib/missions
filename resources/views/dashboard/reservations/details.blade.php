@@ -56,7 +56,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Height</label>
-                        <p>{{ convert_to_inches($reservation->height)['ft'] }} ft {{ convert_to_inches($reservation->height)['in'] }} in <small class="text-muted">({{ $reservation->weight }} cm)</small></p>
+                        <p>{{ convert_to_inches($reservation->height)['ft'] }} ft {{ convert_to_inches($reservation->height)['in'] }} in <small class="text-muted">({{ $reservation->height }} cm)</small></p>
                     </div>
                     <div class="col-md-6">
                         <label>Weight</label>

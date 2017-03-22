@@ -3,7 +3,7 @@
     <div class="panel panel-default" v-for="fundraiser in fundraisers">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6"><h5>{{ fundraiser.name }}</h5></div>
+                <div class="col-xs-6"><h5>{{ fundraiser.name }}<br><small><label>Fundraiser Title</label></small></h5></div>
                 <div class="col-xs-6">
                     <a :href="fundraiserPath(fundraiser)" class="btn btn-sm btn-primary pull-right" target="_blank">View</a>
                 </div>

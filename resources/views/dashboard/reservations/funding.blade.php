@@ -6,7 +6,7 @@
     
         <ul class="nav nav-tabs">
         <li role="presentation" class="active"><a href="#funds" data-toggle="tab">Funds</a></li>
-        <li role="presentation"><a href="#fundraiser" data-toggle="tab">Fundraiser</a>
+        <li role="presentation"><a href="#fundraiser" data-toggle="tab">Fundraiser Page</a>
         </li>
     </ul>
     <div class="tab-content">
@@ -19,7 +19,7 @@
                         </div>
                         <div class="col-xs-6 text-right">
                             <a href="/donate/{{ $reservation->fund->slug }}" target="_blank" class="btn btn-sm btn-primary">
-                                Make Donation
+                                Donate to this Trip
                             </a>
                         </div>
                     </div>

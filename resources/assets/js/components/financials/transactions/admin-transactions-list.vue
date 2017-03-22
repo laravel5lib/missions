@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker class="form-control" :time.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker class="form-control" :time.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -64,6 +64,7 @@
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <hr class="divider inv">
             </form>
         </aside>
 
@@ -307,7 +308,6 @@
                 </tr>
                 </tfoot>
             </table>
-
         </div>
     </div>
 </template>
@@ -345,16 +345,16 @@
         data(){
             return {
                 transactions: [],
-                orderByField: 'description',
-                direction: 1,
+                orderByField: 'created_at',
+                direction: 0,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {
                     current_page: 1
                 },
                 search: '',
-                activeFields: ['description', 'type', 'amount'],
-                maxActiveFields: 3,
+                activeFields: ['description', 'type', 'amount', 'donor', 'created_at'],
+                maxActiveFields: 6,
                 maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars

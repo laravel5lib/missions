@@ -28,7 +28,8 @@
                     </td>
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>
-                    <td>{{ due.due_at | moment 'lll' }}</td>
+                    <td v-if="due.type === 'static'">Immedately</td>
+                    <td v-else>{{ due.due_at | moment 'lll' }}</td>
                     <td>{{ due.grace_period }} days</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
@@ -73,7 +74,7 @@
                                 <div class="form-group">
                                     <label for="due_date">Due Date</label>
                                     <!--<input id="due_date" type="datetime" class="form-control" v-model="editedDue.due_at">-->
-                                    <date-picker class="form-control" :time.sync="editedDue.due_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="editedDue.due_at"></date-picker>
+                                    <date-picker :model.sync="editedDue.due_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="editedDue.due_at"></date-picker>
                                 </div>
                             </div>
                         </div>

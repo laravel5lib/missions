@@ -19,7 +19,7 @@
       <a href="/admin/uploads"><i class="menu-icon fa fa-picture-o"></i><span class="text-label">Uploads</span></a>
     </li>
     <li @if(in_array(request()->segment(2), ['funds', 'transactions', 'donors']))class="active"@endif>
-      <a href="/admin/funds"><i class="menu-icon fa fa-usd" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Funds</span></a>
+      <a href="/admin/transactions"><i class="menu-icon fa fa-usd" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Transactions</span></a>
     </li>
     <li @if(in_array(request()->segment(2), ['causes', 'projects', 'initiatives']))class="active"@endif>
         <a href="/admin/causes"><i class="menu-icon fa fa-tint" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Projects</span></a>

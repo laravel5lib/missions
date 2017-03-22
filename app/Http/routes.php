@@ -56,9 +56,19 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
  * Web Routes
  */
 
-// redirect
+// redirects
 $this->get('/signup/{slug}', function($slug) {
     return redirect('/'.$slug.'/signup');
+});
+$this->get('/campaigns/{slug}', function($slug) {
+    return redirect('/'.$slug);
+});
+$this->get('/search', function() {
+    return redirect('/fundraisers');
+});
+$this->get('/go/{slug?}', function($slug = null) {
+    if (! $slug) return redirect('/fundraisers');
+    return redirect('/'.$slug);
 });
 
 // Authentication and Registration Routes...

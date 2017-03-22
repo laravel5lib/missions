@@ -3,26 +3,43 @@
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label>Tags</label>
 					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
-				</div>
+				</div> -->
 				<div class="form-group">
+					<label>Groups</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							  :value.sync="groupsArr" :options="groupsOptions" label="name"
 							  placeholder="Filter Groups"></v-select>
 				</div>
 				<div class="form-group">
+					<label>Managing Users</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
 							  :value.sync="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
 				<div class="form-group" v-if="!tripId">
+					<label>Campaign</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 							  :value.sync="campaignObj" :options="campaignOptions" label="name"
 							  placeholder="Filter by Campaign"></v-select>
 				</div>
+
+				<div class="form-group">
+					<label>Trip Type</label>
+					<select  class="form-control input-sm" v-model="filters.type">
+						<option value="">Any Type</option>
+						<option value="ministry">Ministry</option>
+						<option value="family">Family</option>
+						<option value="international">International</option>
+						<option value="media">Media</option>
+						<option value="medical">Medical</option>
+						<option value="leader">Leader</option>
+					</select>
+				</div>
+
 				<div class="form-group">
 					<label>Gender</label>
 					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
@@ -199,6 +216,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="desired_role" :disabled="maxCheck('desired_role')"> Role
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="group" :disabled="maxCheck('group')"> Group
 								</label>
 							</li>
@@ -347,6 +369,11 @@
 						<i @click="setOrderByField('surname')" v-if="orderByField !== 'surname'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'surname'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('desired_role')" :class="{'text-primary': orderByField === 'desired_role'}">
+						Role
+						<i @click="setOrderByField('desired_role')" v-if="orderByField !== 'desired_role'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'desired_role'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
 					<th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
 						Group
 						<i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'trip.data.group.data.name'" class="fa fa-sort pull-right"></i>
@@ -404,6 +431,7 @@
 				<tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
+					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
 					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
@@ -525,6 +553,7 @@
 
 				// filter vars
 				filters: {
+                    type: '',
 					tags: [],
 					user: [],
 					groups: [],
@@ -548,7 +577,7 @@
 					user_email: 'User Email',
 					user_primary_phone: 'User Primary Phone',
 					user_secondary_phone: 'User Secondary Phone',
-					trip_type: 'Trip Type',
+					type: 'Trip Type',
 					campaign: 'Campaign',
 					group: 'Group',
 					country_located: 'Country Located',
@@ -676,7 +705,8 @@
 				this.searchReservations();
 			},
 			'per_page': function (val, oldVal) {
-				this.searchReservations();
+                this.updateConfig();
+                this.searchReservations();
 			},
 			/*'groups':function () {
 				this.searchReservations();
@@ -718,7 +748,8 @@
 					usersArr: this.usersArr,
 					campaignObj: this.campaignObj,
 					filters: {
-						tags: this.filters.tags,
+                        type: this.filters.type,
+                        tags: this.filters.tags,
 						user: this.filters.user,
 						groups: this.filters.groups,
 						campaign: this.filters.campaign,
@@ -758,6 +789,7 @@
 				this.usersArr = [];
 				this.campaignObj = null;
 				this.filters = {
+                    type: '',
 					tags: [],
 					user: [],
 					groups: [],
@@ -888,7 +920,8 @@
 			if (localStorage[this.storageName]) {
 				let config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
-				this.maxActiveFields = config.maxActiveFields;
+                this.per_page = config.per_page;
+                this.maxActiveFields = config.maxActiveFields;
 				this.filters = config.filters;
 			}
 			// populate

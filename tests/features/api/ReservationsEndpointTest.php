@@ -9,7 +9,12 @@ class ReservationsEndpointTest extends TestCase
     /** @test */
     public function creates_reservation()
     {
-        $reservation = factory(Reservation::class)->make(['given_names' => 'John Doe']);
+        $reservation = factory(Reservation::class)->make([
+            'given_names' => 'John Doe',
+            'weight'      => 160,
+            'height_a'    => 5,
+            'height_b'    => 0
+        ]);
 
         $this->post('/api/reservations', $reservation->toArray())
              ->assertResponseOk()

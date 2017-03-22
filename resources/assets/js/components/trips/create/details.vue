@@ -78,22 +78,22 @@
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<div class="input-group input-group-sm"
+									<date-picker addon="Start" :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
+									       v-validate:start="{ required: true }" required>
+									<!--<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
-										<date-picker class="form-control input-sms" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-											   v-validate:start="{ required: true }" required>
-									</div>
+									</div>-->
 								</div>
 								<div class="col-sm-6">
-									<div class="input-group input-group-sm"
+									<date-picker addon="End" :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
+									       v-validate:end="{ required: true }" required>
+									<!--<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('end') }">
 										<span class="input-group-addon">End</span>
-										<date-picker class="form-control input-sms" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-											   v-validate:end="{ required: true }" required>
-									</div>
+									</div>-->
 								</div>
 							</div>
 						</div>

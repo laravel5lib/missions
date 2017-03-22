@@ -118,7 +118,7 @@
                                             <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
                                                 <label for="newCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker class="form-control input-sm" :time.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                                <date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                                 <input type="datetime" id="newCost_active_at" class="form-control hidden"
                                                        v-model="newCost.active_at" v-validate:costActive="{required: true}">
                                             </div>
@@ -130,7 +130,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="newCost_amount" class="form-control"
-                                                           v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                           v-model="newCost.amount" v-validate:costAmount="{required: true}">
                                                 </div>
                                             </div>
                                         </div>
@@ -179,7 +179,7 @@
                                             <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker class="form-control input-sm" :time.sync="selectedCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                                <date-picker :input-sm="true" :model.sync="selectedCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                                 <input type="datetime" id="selectedCost_active_at" class="form-control hidden"
                                                        v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
                                             </div>
@@ -191,7 +191,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="selectedCost_amount" class="form-control"
-                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true}">
                                                 </div>
                                             </div>
                                         </div>

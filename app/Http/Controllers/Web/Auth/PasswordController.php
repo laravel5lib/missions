@@ -43,20 +43,30 @@ class PasswordController extends Controller
      */
     protected function getResetSuccessResponse($response)
     {
-        $user = Auth::user();
+        return redirect('/logout'); //temp solution until JS can be updated with authenticated user
 
-        try {
-            // attempt to verify the credentials and create a token for the user
-            if (! $token = JWTAuth::fromUser($user)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
-            }
-        } catch (JWTException $e) {
-            // something went wrong whilst attempting to encode the token
-            return response()->json(['error' => 'could_not_create_token'], 500);
-        }
+        // $user = Auth::user();
 
-        $cookie = $this->makeApiTokenCookie($token);
+        // try {
+        //     // attempt to verify the credentials and create a token for the user
+        //     if (! $token = JWTAuth::fromUser($user)) {
+        //         return response()->json(['error' => 'invalid_credentials'], 401);
+        //     }
+        // } catch (JWTException $e) {
+        //     // something went wrong whilst attempting to encode the token
+        //     return response()->json(['error' => 'could_not_create_token'], 500);
+        // }
 
-        return redirect($this->redirectPath())->with('status', trans($response)->withCookie($cookie));
+        // $cookie = $this->makeApiTokenCookie($token);
+
+        // return redirect($this->redirectPath())->with('status', trans($response)->withCookie($cookie));
+    }
+
+    /**
+     * Make the API token cookie.
+     */
+    protected function makeApiTokenCookie($token)
+    {
+        return cookie('api_token', sprintf('Bearer %s', $token), 60, '/', null, false, false);
     }
 }

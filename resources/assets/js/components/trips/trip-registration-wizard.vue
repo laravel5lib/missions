@@ -180,16 +180,20 @@
 						break;
 					case 'step6':
 						// find child
-						this.$children.forEach(function (child) {
-							if (child.hasOwnProperty('$PaymentDetails'))
-								thisChild = child;
-						});
-							// promise needed to wait for async response from stripe
-						$.when(thisChild.createToken())
-								.done(function (success) {
-									this.$refs.validationspinner.hide();
-									this.nextStepCallback();
-								}.bind(this));
+						if (this.upfrontTotal > 0) {
+                            this.$children.forEach(function (child) {
+                                if (child.hasOwnProperty('$PaymentDetails'))
+                                    thisChild = child;
+                            });
+                            // promise needed to wait for async response from stripe
+                            $.when(thisChild.createToken())
+	                                .done(function (success) {
+	                                    this.$refs.validationspinner.hide();
+	                                    this.nextStepCallback();
+	                                }.bind(this));
+                        } else {
+                            this.nextStepCallback();
+                        }
 						break;
 					default:
 						this.nextStepCallback();
@@ -217,7 +221,7 @@
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,
 					shirt_size: this.userInfo.size,
-					birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
+					birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
 					address: this.userInfo.address,
 					city: this.userInfo.city,
 					state: this.userInfo.state,
@@ -234,16 +238,21 @@
 
 					// payment data
 					amount: this.upfrontTotal,
-					token: this.paymentInfo.token,
 					description: 'Reservation payment',
 					currency: 'USD', // determined from card token
-					payment: {
-						type: 'card',
-						brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
-						last_four: this.paymentInfo.card.number.substr(-4),
-						cardholder: this.paymentInfo.card.cardholder,
-					}
+
 				};
+				if (this.upfrontTotal > 0) {
+				    _.extend(data, {
+                        token: this.paymentInfo.token,
+                        payment: {
+                            type: 'card',
+                            brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
+                            last_four: this.paymentInfo.card.number.substr(-4),
+                            cardholder: this.paymentInfo.card.cardholder,
+                        }
+				    });
+				}
 
 				if (this.userData && this.userData.donor_id) {
 					data.donor_id = this.donor_id;

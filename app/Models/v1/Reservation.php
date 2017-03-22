@@ -318,7 +318,14 @@ class Reservation extends Model
     public function updateCosts()
     {
         // first, we get all of a trip's active costs
-        $active = $this->trip->activeCosts()->get();
+        $active = $this->trip
+                       ->activeCosts()
+                       ->get()
+                       ->transform(function($cost) {
+                            // set a "locked" attribute for 
+                            // merge with reseration costs
+                            return $cost->setAttribute('locked', 0);
+                       });
 
         // we find the 'incremental' cost with the latest activation date
         $maxDate = $active->where('type', 'incremental')->max('active_at');
@@ -338,6 +345,11 @@ class Reservation extends Model
         // 2) merge new trip costs with existing reservation costs
         // 3) remove duplicates
         $costs = $this->costs
+                    ->transform(function($cost) {
+                        // set a "locked" attribute to make sure any previously
+                        // locked costs remain locked after update
+                        return $cost->setAttribute('locked', $cost->pivot->locked);
+                    })
                     ->reject(function($cost) {
                         return in_array(
                             $cost->id, 

@@ -63,6 +63,50 @@ class Reservation extends Model
     public $timestamps = true;
 
     /**
+     * Set the reservation's gender.
+     *
+     * @param $value
+     */
+    public function setGenderAttribute($value)
+    {
+        if ($value)
+            $this->attributes['gender'] = trim(strtolower($value));
+    }
+
+    /**
+     * Get the reservation's gender.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getGenderAttribute($value)
+    {
+        return $value ? strtolower($value) : null;
+    }
+
+    /**
+     * Set the reservation's status.
+     *
+     * @param $value
+     */
+    public function setStatusAttribute($value)
+    {
+        if ($value)
+            $this->attributes['status'] = trim(strtolower($value));
+    }
+
+    /**
+     * Get the reservation's status.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getStatusAttribute($value)
+    {
+        return $value ? strtolower($value) : null;
+    }
+
+    /**
      * Get the user that owns the reservation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

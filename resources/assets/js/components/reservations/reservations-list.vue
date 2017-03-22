@@ -151,16 +151,16 @@
         </aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
-                <form>
+                <form class="form-inline">
                 <div class="row">
-                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                        <div class="input-group input-group-sm">
-                            <label>Search</label>
+                    <div class="form-group col-lg-3 col-md-12 col-xs-12">
+                        <div class="input-group input-group-sm col-xs-12">
                             <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         </div>
                     </div><!-- end col -->
-                    <div class="form-group col-lg-8 col-md-8 col-sm-12">
+                    <div class="form-group col-lg-9 col-md-12">
+                        <hr class="divider inv hidden-lg">
                         <div class="form-group" style="display: inline-block;" v-if="isFacilitator">
                             <label>Show</label>
                             <select class="form-control input-sm" v-model="per_page">

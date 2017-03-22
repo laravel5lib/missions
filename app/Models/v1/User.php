@@ -204,7 +204,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getGenderAttribute($value)
     {
-        return $value ? ucfirst($value) : null;
+        return $value ? strtolower($value) : null;
     }
 
     /**
@@ -226,7 +226,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getStatusAttribute($value)
     {
-        return $value ? ucfirst($value) : null;
+        return $value ? strtolower($value) : null;
     }
 
     /**

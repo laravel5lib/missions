@@ -13,6 +13,7 @@
 	.bootstrap-datetimepicker-widget {
 		z-index: 99;
         text-align:center;
+        color: #2d2d2d !important;
 	}
 </style>
 <script type="text/javascript">
@@ -124,7 +125,7 @@
             datetimeFormat: {
                 type: String,
                 required: false,
-                default: "YYYY-MM-DD HH:mm:ss"
+                default: "LLL"
             },
             dateFormat: {
                 type: String,
@@ -190,6 +191,7 @@
                 case "datetime":
                 default:
                     options.format = this.datetimeFormat;
+                    options.extraFormats = ['YYYY-MM-DD HH:mm:ss', 'LLL'];
                     break;
             }
             // use the vue-i18n plugin for localize the tooltips

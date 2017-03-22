@@ -35,13 +35,18 @@
             </div>
         </div>
 
-        <div class="btn-group btn-group-sm btn-group-justified hidden-xs" role="group" aria-label="...">
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'credit'}" @click="toggleView('credit')">Credits</a>
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'refund'}" @click="toggleView('refund')">Refunds</a>
-            <a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'transfer'}" @click="toggleView('transfer')">Transfers</a>
-        </div>
+        <ul class="nav nav-tabs nav-justified hidden-xs">
+            <li role="presentation" :class="{'active': activeView === 'donor'}"><a type="button" @click="toggleView('donor')">Donors</a></li>
+            <li role="presentation" :class="{'active': activeView === 'activity'}"><a type="button" @click="toggleView('activity')">Activity</a></li>
+        </ul>
+        <!--<div class="btn-group btn-group-sm btn-group-justified hidden-xs" role="group" aria-label="...">-->
+            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donor'}" @click="toggleView('donor')">Donors</a>-->
+            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'activity'}" @click="toggleView('activity')">Activity</a>-->
+            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'donation'}" @click="toggleView('donation')">Donations</a>-->
+            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'credit'}" @click="toggleView('credit')">Credits</a>-->
+            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'refund'}" @click="toggleView('refund')">Refunds</a>-->
+            <!--<a type="button" class="btn btn-default" :class="{'btn-primary': activeView === 'transfer'}" @click="toggleView('transfer')">Transfers</a>-->
+        <!--</div>-->
 
         <hr class="divider inv sm">
         <div style="position:relative">
@@ -79,20 +84,25 @@
             </template>
             <template v-if="activeView !== 'donor'">
                 <div class="list-group">
-                    <div class="list-group-item text-center" v-if="pagination.total === 0">No {{activeView}}s found.</div>
+                    <div class="list-group-item text-center" v-if="pagination.total === 0">No transactions found.</div>
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
-                        <h5>
-                            <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span> was {{ action }}<br>
-                            <small v-if="contains(['donation'], transaction.type)" class="small">by 
-                            <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
-                            <span v-else>an anonymous donor</span>
-                             on {{ transaction.created_at|moment 'll'}}</small>
-                            <br />
-                            <small v-if="transaction.details">
-                                <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
-                                <span v-if="transaction.details.reason">{{ transaction.details.reason }} <br></span>
-                            </small>
-                        </h5>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span><span class="small"> &middot; {{ transaction.type|uppercase }}</span>
+                                <small v-if="contains(['donation'], transaction.type)" class="small">by
+                                <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
+                                <span v-else>an anonymous donor</span>
+                                 <!--on {{ transaction.created_at|moment 'll'}}--></small>
+                                </h5>
+                            </div><!-- end col -->
+                            <div class="col-sm-6">
+                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment 'll'}}</h5>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <small v-if="transaction.details">
+                            <span v-if="transaction.details.comment">{{ transaction.details.comment }} <br></span>
+                            <span v-if="transaction.details.reason">{{ transaction.details.reason }} <br></span>
+                        </small>
                     </div>
                 </div>
 
@@ -101,7 +111,7 @@
                         <nav>
                             <ul class="pagination pagination-sm">
                                 <li>
-                                    <a>{{ pagination.total }} {{ activeView | capitalize }}s</a>
+                                    <a>{{ pagination.total }} {{ pagination.total > 1 ? 'Activities' : 'Activity' }}</a>
                                 </li>
                                 <li :class="{ 'disabled': pagination.current_page == 1 }">
                                     <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
@@ -182,24 +192,24 @@
             },
             searchDonors(){
                 // this.$refs.spinner.show();
-                this.$http.get('funds/'+ this.fundId +'/donors', {page: this.donorPagination.current_page}).then(function (response) {
-                    this.donors = _.toArray(response.data.data);
-                    this.donorPagination = response.data.meta.pagination;
+                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then(function (response) {
+                    this.donors = _.toArray(response.body.data);
+                    this.donorPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             searchTransactions(type){
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', {include: 'donor', type: type, fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page}).then(function (response) {
-                    this.transactions = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then(function (response) {
+                    this.transactions = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             }
         },
         ready(){
             this.$http.get('funds/' + this.fundId).then(function (response) {
-                this.fund = response.data.data;
+                this.fund = response.body.data;
             });
 
 

@@ -7,8 +7,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TripTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
-
     /** 
      * @test
      */
@@ -103,7 +101,7 @@ class TripTest extends TestCase
         $trip = factory(App\Models\v1\Trip::class)->make([
             'published_at' => Carbon::tomorrow(),
             'spots' => 50,
-            'closed_at' => Carbon::yesterday()
+            'closed_at' => Carbon::tomorrow()
         ]);
 
         $this->assertEquals('scheduled', $trip->status);

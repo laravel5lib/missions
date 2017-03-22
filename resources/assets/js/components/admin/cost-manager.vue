@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Active Date</label>
-                        <p>{{ cost.active_at|moment 'll' }}</p>
+                        <p>{{ cost.active_at|moment 'lll' }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Cost</label>
@@ -118,7 +118,7 @@
                                             <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
                                                 <label for="newCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker class="form-control input-sm" :time.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                                <date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                                 <input type="datetime" id="newCost_active_at" class="form-control hidden"
                                                        v-model="newCost.active_at" v-validate:costActive="{required: true}">
                                             </div>
@@ -130,7 +130,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="newCost_amount" class="form-control"
-                                                           v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                           v-model="newCost.amount" v-validate:costAmount="{required: true}">
                                                 </div>
                                             </div>
                                         </div>
@@ -179,7 +179,7 @@
                                             <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker class="form-control input-sm" :time.sync="selectedCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                                <date-picker :input-sm="true" :model.sync="selectedCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                                 <input type="datetime" id="selectedCost_active_at" class="form-control hidden"
                                                        v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
                                             </div>
@@ -191,7 +191,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="selectedCost_amount" class="form-control"
-                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true, min: 1}">
+                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true}">
                                                 </div>
                                             </div>
                                         </div>
@@ -375,7 +375,7 @@
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
                     this.resource.save(this.newCost, { include: 'payments'}).then(function (response) {
-                        this.costs.push(response.data.data);
+                        this.costs.push(response.body.data);
                         this.resetCost();
                         this.showAddModal = false;
                         this.attemptedAddCost = false;
@@ -391,7 +391,7 @@
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
                     this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then(function (response) {
-                        this.showReminder = response.data.data.id;
+                        this.showReminder = response.body.data.id;
                         $.extend(this.costs, this.selectedCost);
                         this.selectedCost = null;
                         this.attemptedAddCost = false;
@@ -420,7 +420,7 @@
                     sort: this.sort,
                     type: this.filters.type
                 }).then(function (response) {
-                    this.costs = response.data.data;
+                    this.costs = response.body.data;
                     // this.$refs.spinner.hide();
                     this.checkPaymentsSync();
                 });

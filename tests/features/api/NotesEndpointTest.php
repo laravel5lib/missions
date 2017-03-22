@@ -2,14 +2,9 @@
 
 use App\Models\v1\Note;
 use App\Models\v1\User;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class NotesEndpointTest extends TestCase
 {
-    use DatabaseMigrations, DatabaseTransactions;
-
     /**
      * @test
      */
@@ -107,7 +102,7 @@ class NotesEndpointTest extends TestCase
         $this->post('/api/notes', $note)
             ->assertResponseOk()
             ->seeJson(
-                array_except($note, ['noteable_type', 'noteable_id', 'user_id'])
+                array_except($note, ['id', 'noteable_type', 'noteable_id', 'user_id'])
             );
     }
 

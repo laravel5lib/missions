@@ -22,6 +22,7 @@ class ExportReservations extends Exporter
             'user_email' => $reservation->user->email,
             'user_primary_phone' => $reservation->user->phone_one,
             'user_secondary_phone' => $reservation->user->secondary_phone,
+            'group' => $reservation->trip->group->name,
             'trip_type' => $reservation->trip->type,
             'campaign' => $reservation->trip->campaign->name,
             'country_located' => country($reservation->trip->campaign->country_code),
@@ -42,22 +43,24 @@ class ExportReservations extends Exporter
             'state_providence' => $reservation->state,
             'zip_postal' => $reservation->zip,
             'country' => country($reservation->country_code),
-            'percent_raised' => $reservation->getPercentRaised(),
-            'amount_raised' => $reservation->getTotalRaised(),
-            'outstanding' => $reservation->getTotalOwed(),
-            'payments' => implode(", ", $reservation->dues->map(function($due) {
-                return $due->payment->cost->name. ' [balance: $'.number_format($due->outstanding_balance,2).'] ('.$due->getStatus().')';
-            })->all()),
-            'applied_costs' => implode(", ", $reservation->costs->map(function($cost) {
-                return $cost->name . ' ($'.number_format($cost->amount,2).')';
-            })->all()),
-            'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
-                return $requirement->requirement->name . ' ('.$requirement->status.')';
-            })->all()),
-            'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
-                return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
-            })->all())
+            'percent_raised' => $reservation->getPercentRaised().'%',
+            'amount_raised' => $reservation->totalRaisedInDollars(),
+            'outstanding' => $reservation->totalOwedInDollars(),
+            'desired_role' => teamRole($reservation->desired_role)
         ];
+
+            // 'payments' => implode(", ", $reservation->dues->map(function($due) {
+            //     return $due->payment->cost->name. ' [balance: $'.number_format($due->outstanding_balance,2).'] ('.$due->getStatus().')';
+            // })->all()),
+            // 'applied_costs' => implode(", ", $reservation->costs->map(function($cost) {
+            //     return $cost->name . ' ($'.number_format($cost->amount,2).')';
+            // })->all()),
+            // 'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
+            //     return $requirement->requirement->name . ' ('.$requirement->status.')';
+            // })->all()),
+            // 'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
+            //     return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
+            // })->all())
 
         return $columns;
     }

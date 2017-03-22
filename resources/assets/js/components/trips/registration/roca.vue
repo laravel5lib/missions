@@ -31,7 +31,7 @@
 		<div class="col-sm-12">
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" v-model="rocaAgree">
+					<input type="checkbox" v-model="$parent.rocaAgree">
 					I have read and agree to the Rules of Conduct Agreement.
 				</label>
 			</div>
@@ -44,11 +44,11 @@
 		data(){
 			return {
 				title: 'Rules of Conduct Agreement',
-				rocaAgree: false
+//				rocaAgree: false
 			}
 		},
 		watch:{
-			'rocaAgree'(val, oldVal) {
+			'$parent.rocaAgree'(val, oldVal) {
 				this.$dispatch('roca-agree', val)
 			}
 		},

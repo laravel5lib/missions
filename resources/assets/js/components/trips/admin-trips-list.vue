@@ -102,7 +102,7 @@
                     <td>{{trip.type|capitalize}}</td>
                     <td>{{trip.campaign.data.name|capitalize}}</td>
                     <td>{{trip.status}}</td>
-                    <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
+                    <td>{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
                     <td>{{trip.reservations}}</td>
                     <td>
                         <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-eye"></i></a>
@@ -219,9 +219,9 @@
                 };
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('trips', params).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.trips = response.data.data;
+                this.$http.get('trips', { params: params }).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.trips = response.body.data;
                 })
             }
         },

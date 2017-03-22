@@ -150,9 +150,9 @@
 				$.extend(params, this.filters);
         this.exportFilters = params;
 
-				this.$http.get('campaigns', params).then(function (response) {
-					this.campaigns = response.data.data;
-					this.pagination = response.data.meta.pagination;
+				this.$http.get('campaigns', { params: params }).then(function (response) {
+					this.campaigns = response.body.data;
+					this.pagination = response.body.meta.pagination;
 				})
 			}
         },

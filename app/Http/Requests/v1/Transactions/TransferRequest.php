@@ -24,7 +24,7 @@ class TransferRequest extends FormRequest
     public function rules()
     {
         return [
-            'amount' => 'required|integer',
+            'amount' => 'required|numeric',
             'from_fund_id' => 'required|exists:funds,id',
             'to_fund_id' => 'required|exists:funds,id'
         ];

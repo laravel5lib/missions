@@ -145,7 +145,7 @@
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     export default{
         name: 'fundraisers-uploads',
-        props: ['id', 'sponsorId'],
+        props: ['id', 'sponsorId', 'editable'],
         components: {'upload-create-update': uploadCreateUpdate},
         data(){
             return{
@@ -178,6 +178,8 @@
         },
         methods:{
             isUser(){
+                if (this.editable === 1) return true;
+
                 return this.sponsorId && this.$root.user && this.sponsorId === this.$root.user.id;
             },
             viewUpload(upload){
@@ -252,7 +254,7 @@
                 console.log(this);
                 // this.$refs.spinner.show();
                 this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then(function (response) {
-                    this.fundraiser = response.data.data;
+                    this.fundraiser = response.body.data;
                     this.initVideoPlayers();
                     // this.$refs.spinner.hide();
                 });
@@ -297,8 +299,8 @@
         },
         ready(){
             // this.$refs.spinner.show();
-            this.$http.get('fundraisers/' + this.id, { include: 'uploads'}).then(function (response) {
-                this.fundraiser = response.data.data;
+            this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then(function (response) {
+                this.fundraiser = response.body.data;
                 this.initVideoPlayers();
                 // this.$refs.spinner.hide();
             }, function (error) {

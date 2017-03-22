@@ -17,15 +17,26 @@
                 <hr class="divider inv xs">
                 <hr class="divider inv sm">
                 <div class="btn-group" role="group">
-                    <a href="{{ url('admin/reservations') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
-                    <a class="btn btn-primary" href="/admin/reservations/{{ $reservation->id }}/edit">Edit</a>
+                    <a href="{{ url('admin/reservations/current') }}" class="btn btn-primary-darker"><span class="fa fa-chevron-left icon-left"></span></a>
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Manage <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url('admin/reservations/'.$reservation->id.'/edit') }}">Edit</a></li>
+                            @unless($reservation->deleted_at)
+                            <li role="separator" class="divider"></li>
+                            <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Drop</a></li>
+                            @endunless
+                        </ul>
+                    </div><!-- end btn-group -->
                 </div>
             </div>
         </div>
     </div>
 </div>
 @if($reservation->deleted_at)
-<div class="dark-bg-primary">
+<div class="darker-bg-primary">
     <div class="container">
         <div class="col-sm-8 text-center">
             <hr class="divider inv sm">
@@ -36,7 +47,7 @@
         </div>
         <div class="col-sm-4 text-center">
             <hr class="divider inv sm hidden-xs">
-            <button class="btn btn-sm btn-white-hollow"><i class="fa fa-undo"></i> Restore</button>
+            <button data-toggle="modal" data-target="#restoreConfirmationModal" class="btn btn-sm btn-white-hollow"><i class="fa fa-undo"></i> Restore</button>
             <hr class="divider inv sm">
         </div>
     </div><!-- end container -->
@@ -56,4 +67,12 @@
         </div>
     </div>
 </div>
+
+<admin-delete-modal 
+    id="{{ $reservation->id }}" 
+    resource="reservation" 
+    label="Drop reservation?" 
+    action="Drop">
+</admin-delete-modal>
+<restore-reservation id="{{ $reservation->id }}"></restore-reservation>
 @endsection

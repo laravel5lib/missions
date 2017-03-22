@@ -35,13 +35,13 @@
         },
 		methods: {
             getReservations() {
-				this.$http.get('reservations', {
+				this.$http.get('reservations', { params: {
 					current: true,
 					per_page: 5,
 					sort: 'created_at+DESC',
 					page: 1
-				}).then(function (response) {
-					this.reservations = response.data.data;
+				}}).then(function (response) {
+					this.reservations = response.body.data;
 				})
 			}
 		},

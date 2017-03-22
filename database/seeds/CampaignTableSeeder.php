@@ -21,7 +21,7 @@ class CampaignTableSeeder extends Seeder
             ]);
 
         $oneNation->slug()->save(factory(App\Models\v1\Slug::class)->make([
-                'url' => '1n1d2017'
+                'url' => '1n1d17'
             ]));
         
         $india = factory(App\Models\v1\Campaign::class, 'india')->create([

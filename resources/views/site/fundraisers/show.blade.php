@@ -3,6 +3,7 @@
     @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.0/css/Jcrop.min.css" type="text/css">
     @endif
+    <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=58ba1e02535b950011d40583&product=sticky-share-buttons"></script>
 @endsection
 @section('scripts')
     @if( $fundraiser->sponsor_id === (auth()->check() ? auth()->id() : '') )
@@ -27,17 +28,19 @@
             <h5 class="text-center text-capitalize">organized by <a href="{{ url($fundraiser->sponsor->slug->url) }}">{{ $fundraiser->sponsor->name }}</a></h5>
             <hr class="divider inv lg">
             <div class="col-xs-12 col-sm-6 col-sm-push-6 col-md-4 col-md-push-8">
+                {{-- <div class="sharethis-inline-share-buttons"></div>
+                <hr class="divider inv md"> --}}
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h1 class="text-center text-success">${{ $fundraiser->raisedAsDollars() }} <span style="font-size: 18px;">Raised</span></h1>
-                        @unless($fundraiser->ended_at->isPast())
+                        @unless($fundraiser->isClosed())
                         <h4 class="text-center">${{ $fundraiser->goalAmountAsDollars() }} <span style="font-size: 14px;">Goal</span></h4>
                         <div class="panel panel-default" style="background-color: #f7f7f7">
                             <div class="panel-body">
                                 <user-profile-fundraisers-progress :now="{{ $fundraiser->getPercentRaised() }}"></user-profile-fundraisers-progress>
                             </div>
                         </div>
-                        <h6 class="text-center small text-muted"><i class="fa fa-calendar"></i> Deadline is {{ $fundraiser->ended_at->format('M j, Y h:i a') }}</h6>
+                        {{-- <h6 class="text-center small text-muted"><i class="fa fa-calendar"></i> Closes {{ $fundraiser->ended_at->format('M j, Y h:i a') }}</h6> --}}
                         <h6 class="text-center small text-muted">Ends {{ $fundraiser->ended_at->diffForHumans() }}</h6>
                         <div>
                             <modal-donate title="{{ $fundraiser->fund->name }}" stripe-key="{{ env('STRIPE_PUBLIC_KEY') }}" auth="{{ auth()->check() ? 1 : 0 }}"
@@ -45,7 +48,7 @@
                         </div>
                         @endunless
 
-                        @unless($fundraiser->ended_at->isFuture())
+                        @unless($fundraiser->isOpen())
                             <h6 class="text-center small text-muted">This fundraiser closed on {{ $fundraiser->ended_at->format('F j, Y') }}.</h6>
                             <p class="text-center small text-muted">You can still make a general donation to Missions.Me by clicking the button below.</p>
                             <div class="text-center">

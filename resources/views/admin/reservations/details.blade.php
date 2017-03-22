@@ -27,11 +27,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <label>Gender</label>
-                    <p>{{ $reservation->gender }}</p>
+                    <p>{{ ucwords($reservation->gender) }}</p>
                 </div>
                 <div class="col-md-6">
                     <label>Marital Status</label>
-                    <p>{{ $reservation->status }}</p>
+                    <p>{{ ucwords($reservation->status) }}</p>
                 </div>
             </div>
             <hr class="divider">
@@ -43,6 +43,17 @@
                 <div class="col-md-6">
                     <label>Age</label>
                     <p>{{ $reservation->birthday->age }}</p>
+                </div>
+            </div>
+            <hr class="divider">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Height</label>
+                    <p>{{ convert_to_inches($reservation->height)['ft'] }} ft {{ convert_to_inches($reservation->height)['in'] }} in <small class="text-muted">({{ $reservation->height }} cm)</small></p>
+                </div>
+                <div class="col-md-6">
+                    <label>Weight</label>
+                    <p>{{ convert_to_pounds($reservation->weight) }} lbs <small class="text-muted">({{ $reservation->weight }} kg)</small></p>
                 </div>
             </div>
             <hr class="divider">

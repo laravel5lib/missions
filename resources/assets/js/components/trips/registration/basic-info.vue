@@ -7,7 +7,7 @@
 						<div class="col-sm-12">
 							<div class="form-group" :class="{ 'has-error': checkForError('manager') }">
 								<label for="infoManager">Reservation Manager</label>
-								<v-select class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
 								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
 									<option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
 								</select>
@@ -29,7 +29,7 @@
 						<div class="form-group" :class="{ 'has-error': checkForError('role') }">
 							<label for="desiredRole">Desired Team Role</label>
 								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:role="{ required: true }">
-									<option v-for="role in roles" :value="role.value">{{role.name}}</option>
+									<option v-for="role in roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
 								</select>
 						</div><!-- end form-group -->
 						<label>Given Names</label>
@@ -150,7 +150,7 @@
 								</div>
 								<div :class="{ 'has-error': checkForError('gender') }">
 									<label>
-										<input type="radio" v-model="gender" v-validate:gender value="female"> Female
+										<input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }" value="female"> Female
 									</label>
 								</div>
 								<span class="help-block" v-show="checkForError('gender')">Select a gender</span>
@@ -182,15 +182,15 @@
 										<div class="form-group" :class="{ 'has-error': checkForError('heightA') }">
 											<div class="input-group input-group-sm">
 												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" v-validate:heightA="{ required: true }" :classes="{ invalid: 'has-error' }">
-												<div class="input-group-addon">ft.</div>
+												<div class="input-group-addon" v-text="heightUnitA"></div>
 											</div>
 										</div>
 									</div>
 									<div class="col-sm-6">
 										<div class="form-group" :class="{ 'has-error': checkForError('heightB') }">
 											<div class="input-group input-group-sm">
-												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11.99" v-validate:heightB="{ required: true }" :classes="{ invalid: 'has-error' }">
-												<div class="input-group-addon">in.</div>
+												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" v-validate:heightB="{ required: true }" :classes="{ invalid: 'has-error' }">
+												<div class="input-group-addon" v-text="heightUnitB"></div>
 											</div>
 										</div>
 									</div>
@@ -204,7 +204,7 @@
 									<label for="infoWeight">Weight</label>
 									<div class="input-group input-group-sm">
 										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" v-validate:weight="{ required: true }" :classes="{ invalid: 'has-error' }">
-										<div class="input-group-addon">lbs.</div>
+										<div class="input-group-addon" v-text="weightUnit"></div>
 									</div>
 								</div>
 							</div>
@@ -213,6 +213,7 @@
 									<label for="infoShirtSize">Shirt Sizes</label>
 									<select class="form-control input-sm" v-model="size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
 											id="infoShirtSize">
+										<option value="XS">XS (Extra Small)</option>
 										<option value="S">S (Small)</option>
 										<option value="M">M (Medium)</option>
 										<option value="L">L (Large)</option>
@@ -251,7 +252,7 @@
 						<div class="row">
 							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
-									<label for="infoZip">Zip Code</label>
+									<label for="infoZip">Zip/Postal Code</label>
 									<input type="text" class="form-control input-sm" v-model="zipCode"
 										   v-validate:zip="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345">
 								</div>
@@ -259,7 +260,7 @@
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': checkForError('country') }">
 									<label for="infoCountry">Country</label>
-									<v-select class="form-control" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
 									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" v-validate:country="{ required: true }">
 										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 									</select>
@@ -310,7 +311,7 @@
 				onBehalf: false,
 
 				// basic info data
-				desired_role: 'MISS',
+				desired_role: {value: 'MISS', name: 'Missionary'},
 				address: null,
 				city: null,
 				state: null,
@@ -318,7 +319,6 @@
 				phone: '',
 				mobile: '',
 				firstName: null,
-				// middleName: null,
 				lastName: null,
 				email: null,
 				dobDay: '',
@@ -331,10 +331,29 @@
 				heightA: null,
 				heightB: null,
 				weight: null,
+				avatar_upload_id: null,
 				userInfo: {}
 			}
 		},
 		computed: {
+			heightUnitA() {
+				if (this.country == 'us')
+					return 'ft';
+
+				return 'm';
+			},
+			heightUnitB() {
+				if (this.country == 'us')
+					return 'in';
+
+				return 'cm';
+			},
+			weightUnit() {
+				if (this.country == 'us')
+					return 'lbs';
+
+				return 'kg';
+			},
 			country(){
 				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
 			},
@@ -358,25 +377,40 @@
 					state: this.state,
 					zipCode: this.zipCode,
 					country: this.country,
+					country_name: this.countryCodeObj.name,
 					phone: this.phone,
 					mobile: this.mobile,
 					firstName: this.firstName,
-					// middleName: this.middleName,
 					lastName: this.lastName,
 					email: this.email,
 					dobDay: this.dobDay,
 					dobMonth: this.dobMonth,
 					dobYear: this.dobYear,
-					dob: moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL'),
+					dob: moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL'),
 					gender: this.gender,
 					relationshipStatus: this.relationshipStatus,
 					size: this.size,
 					height: this.height,
+					heightUnitA: this.heightUnitA,
+					heightUnitB: this.heightUnitB,
 					heightA: this.heightA,
 					heightB: this.heightB,
 					weight: this.weight,
+					weightUnit: this.weightUnit,
+					avatar_upload_id: this.avatar_upload_id
 				}
 			}
+		},
+		watch: {
+		    // fail safe for poor loading
+		    '$parent.trip'(val){
+                this.$http.get('utilities/team-roles').then(function (response) {
+                    _.each(response.body.roles, function (name, key) {
+                        if (_.contains(val.team_roles, key))
+                            this.roles.push({ value: key, name: name});
+                    }.bind(this));
+                });
+		    }
 		},
 		methods: {
 			onValid(){
@@ -388,8 +422,8 @@
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { search: search}).then(function (response) {
-					this.usersArr = response.data.data;
+				this.$http.get('users', { params: { search: search} }).then(function (response) {
+					this.usersArr = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
@@ -397,7 +431,6 @@
 				switch (this.onBehalf) {
 					case true:
 						this.firstName = null;
-						this.middleName = null;
 						this.lastName = null;
 						this.dobDay = '';
 						this.dobMonth = '';
@@ -413,12 +446,12 @@
 						this.state = null;
 						this.zipCode = null;
                         this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                        this.avatar_upload_id = null;
                         break;
 					case false:
 						var user = this.forAdmin ? this.userObj : this.$parent.userData;
 						var names = user.name.split(' ');
 						this.firstName = _.first(names);
-						this.middleName = _.without(names, _.first(names), _.last(names));
 						this.lastName = names.length>1 ? _.last(names) : null;
 
 						var birthdays = user.birthday.split('-');
@@ -437,6 +470,7 @@
 						this.state = user.state;
 						this.zipCode = user.zip;
                         this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                        this.avatar_upload_id = user.avatar_upload_id;
                         break;
 				}
 
@@ -448,19 +482,20 @@
 			}
 
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 				this.toggleUserData();
 			});
 
 			this.$http.get('utilities/team-roles').then(function (response) {
-				_.each(response.data.roles, function (name, key) {
+				_.each(response.body.roles, function (name, key) {
 				    if (_.contains(this.$parent.trip.team_roles, key))
 						this.roles.push({ value: key, name: name});
 				}.bind(this));
 			});
 
 			this.$dispatch('basic-info', true);
-			$('html, body').animate({scrollTop: 200}, 300);
+			if (location.pathname.indexOf('admin') === -1)
+				$('html, body').animate({scrollTop: 200}, 300);
 			done();
 		}
 	}

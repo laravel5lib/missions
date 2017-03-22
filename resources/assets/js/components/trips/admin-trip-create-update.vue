@@ -13,7 +13,7 @@
                     <div class="form-group" :class="{ 'has-error': checkForError('group') }">
                         <div class="col-sm-12">	
                         	<label class="control-label">Group</label>
-                            <v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
                             <select hidden v-model="group_id" v-validate:group="{ required: true}">
                                 <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
                             </select>
@@ -52,7 +52,7 @@
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('prospects') }">
 	                        	<label class="control-label">Perfect For</label>
-	                            <v-select multiple class="form-control" id="group" :value.sync="prospectsObj"
+	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
 	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 	                            <select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
 	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -63,7 +63,7 @@
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': checkForError('teamroles') }">
 	                        	<label class="control-label">Available Roles</label>
-	                            <v-select multiple class="form-control" id="group" :value.sync="rolesObj"
+	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="rolesObj"
 	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
 	                            <select hidden multiple v-model="team_roles" v-validate:teamroles="{ required: true}">
 	                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
@@ -103,22 +103,26 @@
                         	<label for="started_at" class="control-label">Dates</label>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="input-group"
-                                         :class="{ 'has-error': checkForError('start') }">
-                                        <span class="input-group-addon">Start</span>
-										<date-picker class="form-control" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+	                                <date-picker :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD'" type="date" addon="Start" ></date-picker>
+	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
+	                                       v-validate:start="['required']" required>
+	                                <!--<div class="input-group" :class="{ 'has-error': checkForError('start') }">
+										<span class="input-group-addon">Start</span>
 										<input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
-                                               v-validate:start="['required']" required>
-                                    </div>
+											   v-validate:start="['required']" required>
+									</div>-->
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="input-group"
+	                                <date-picker :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD'" type="date" addon="End" ></date-picker>
+	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
+	                                       v-validate:end="['required']" required>
+	                                <!--<div class="input-group"
                                          :class="{ 'has-error': checkForError('end') }">
                                         <span class="input-group-addon">End</span>
-										<date-picker class="form-control" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+										<date-picker class="form-control" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'" type="date"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
                                                v-validate:end="['required']" required>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -127,7 +131,7 @@
                     <div class="form-group"	>
                         <div class="col-sm-12">
                         	<label class="control-label">Trip Rep.</label>
-                            <v-select multiple class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
+                            <v-select @keydown.enter.prevent="" class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
                                       label="name"></v-select>
                             <!--v-validate:rep="{ required: false}"-->
                             <select hidden v-model="rep_id">
@@ -152,22 +156,27 @@
 						<div class="col-sm-6">
 							<div :class="{ 'has-error': checkForError('closed') }">
 								<label for="closed_at" class="control-label">Registration Closes</label>
-								<date-picker class="form-control" :time.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+								<date-picker :has-error="checkForError('closed')" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
+								<!--<date-picker class="form-control" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
 								<input type="datetime" class="form-control hidden" v-model="closed_at | moment 'LLLL'" v-validate:closed="{ required: true }" id="closed_at">
 							</div>
 						</div><!-- end col -->
 					</div><!-- end row -->
 					<div class="form-group">
 						<div class="col-sm-12">
-							<label for="published_at" class="control-label">Publish</label>
-							<date-picker class="form-control" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control hidden" v-model="published_at | moment 'LLLL'" id="published_at">
+							<label for="published_at" class="control-label">
+								Publish
+							</label>
+							<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
+							<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>
+							<!--<date-picker class="form-control" :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>-->
+							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment 'LLLL'" id="published_at" :disabled="toggleDraft">
 						</div>
 					</div>
 
 					<div class="col-sm-12 text-center">
 						<div class="form-group">
-							<a class="btn btn-default" @click="back()">Cancel</a>
+							<a class="btn btn-default" @click="back()">Done</a>
 							<a class="btn btn-success" v-if="isUpdate" @click="finish()">Update</a>
 							<a class="btn btn-success" v-if="!isUpdate" @click="finish()">Create</a>
 						</div>
@@ -224,15 +233,15 @@
 				trip: {},
 				wizardData: {
 					campaign_id: this.campaignId,
-					country_code: [this.countryCode]
+					country_code: this.countryCode
 				},
 				reps: [],
 				groups: [],
 				teamRolesList: [],
 				prospectsList: [
 					{value: "adults", name: "Adults"},
-					{value: "young adults", name: "Young Adults (18-29)"},
-					{value: "teens", name: "Teens (13+)"},
+					{value: "young adults (18-29)", name: "Young Adults (18-29)"},
+					{value: "teens (13+)", name: "Teens (13+)"},
 					{value: "families", name: "Families"},
 					{value: "men", name: "Men"},
 					{value: "women", name: "Women"},
@@ -258,24 +267,25 @@
 				attemptedContinue: false,
 				// details data
 				groupObj: null,
-				group_id: '',
+				//group_id: '',
 				description: '',
 				type: '',
 				difficulty: '',
 				companion_limit: 0,
 				prospectsObj: null,
-				prospects: [],
+				//prospects: [],
 				started_at: '',
 				ended_at: '',
 				repObj: null,
-				rep_id: '',
+				//rep_id: '',
 				rolesObj: null,
-				team_roles: [],
+				//team_roles: [],
 				// details data
 				spots: null,
 				closed_at: moment().format('YYYY-MM-DD HH:mm:ss'),
-				published_at: '',
+				published_at: null,
 				public: false,
+                toggleDraft: false,
 			}
 		},
 		computed: {
@@ -286,11 +296,18 @@
 				return _.isObject(this.repObj) ? this.repObj.id : null;
 			},
 			prospects(){
-				return _.pluck(this.prospectsObj, 'value');
+				return _.pluck(this.prospectsObj, 'value') || [];
 			},
 			team_roles(){
-				return _.pluck(this.rolesObj, 'value');
+				return _.pluck(this.rolesObj, 'value') || [];
 			}
+		},
+		watch:{
+		    'toggleDraft'(val){
+		        if (val){
+		            this.published_at = null;
+		        }
+		    }
 		},
 		filters: {
 			marked: marked,
@@ -321,15 +338,15 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', {search: search}).then(function (response) {
-					this.groups = response.data.data;
+				this.$http.get('groups', { params: {search: search} }).then(function (response) {
+					this.groups = response.body.data;
 					loading(false);
 				});
 			},
 			getReps(search, loading){
 				loading(true);
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.reps = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.reps = response.body.data;
 					loading(false);
 				});
 			},
@@ -348,8 +365,8 @@
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {
 						resource.update({id: this.tripId}, this.wizardData).then(function (response) {
-							$.extend(this, response.data.data);
-							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
+							$.extend(this, response.body.data);
+							this.difficulty = response.body.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
 							this.$dispatch('showSuccess', 'Trip Updated');
 						}, function (error) {
@@ -367,40 +384,56 @@
 			}
 		},
 		ready(){
-		    // get team roles list
-			this.$http.get('utilities/team-roles').then(function (response) {
-			    _.each(response.data.roles, function (name, key) {
+            // get some groups
+            let groupsPromise = this.$http.get('groups').then(function (response) {
+                this.groups = response.body.data;
+            });
+
+			// get team roles list
+			let teamRolesPromise = this.$http.get('utilities/team-roles').then(function (response) {
+			    _.each(response.body.roles, function (name, key) {
 					this.teamRolesList.push({ value: key, name: name});
 				}.bind(this));
 			});
 
-			if (this.isUpdate) {
-				this.$http.get('trips/' + this.tripId, {include: 'campaign,costs.payments,requirements,notes,deadlines'}).then(function (response) {
-					let trip = response.data.data;
-					// trim campaign
-					$.extend(this, trip);
-					this.campaign = trip.campaign.data;
-					this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
-					// this.prospects = trip.prospects;
-					this.prospectsObj = _.filter(this.prospectsList, function(p) { return _.contains(trip.prospects, p.value);});
-					this.rolesObj = _.filter(this.teamRolesList, function(p) { return _.contains(trip.team_roles, p.value);});
+			Promise.all([groupsPromise, teamRolesPromise]).then(function (values) {
+                if (this.isUpdate) {
+                    this.$http.get('trips/' + this.tripId, { params: {include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
+                        let trip = response.body.data;
+                        // trim campaign
+                        $.extend(this, trip);
+                        this.campaign = trip.campaign.data;
+                        this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
+                        // this.prospects = trip.prospects;
+                        this.prospectsObj = _.filter(this.prospectsList, function (p) {
+                            return _.some(trip.prospects, function (prospect) {
+	                            return prospect.toLowerCase() === p.value.toLowerCase();
+                            });
+                        });
+                        this.rolesObj = _.filter(this.teamRolesList, function (p) {
+                            return _.some(trip.team_roles, function (prospect) {
+                                return prospect.toLowerCase() === p.value.toLowerCase();
+                            });
+                        });
 
-					this.trip = trip;
-					// this.wizardData.campaign_id = this.trip.campaign_id;
-					// this.wizardData.country_code = this.trip.country_code;
+                        this.trip = trip;
+                        this.$http.get('groups/' + this.trip.group_id).then(function (response) {
+                            this.groupObj = response.body.data;
+                        });
+						// this.wizardData.campaign_id = this.trip.campaign_id;
+                         //this.trip.country_code = trip.country_code[0];
 
-				});
-			} else {
-				this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-					this.campaign = response.data.data;
-				});
-			}
+                        this.$http.get('users/' + this.trip.rep_id).then(function (response) {
+                            this.repObj = response.body.data;
+                        });
 
-			// get some groups
-			this.$http.get('groups').then(function (response) {
-				this.groups = response.data.data;
-				this.groupObj = _.findWhere(this.groups, { id: this.trip.group_id});
-			});
+                    });
+                } else {
+                    this.$http.get('campaigns/' + this.campaignId).then(function (response) {
+                        this.campaign = response.body.data;
+                    });
+                }
+            }.bind(this))
 		}
 	}
 </script>

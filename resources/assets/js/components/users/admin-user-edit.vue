@@ -280,7 +280,7 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -289,7 +289,7 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                             <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                         </select>
@@ -395,7 +395,7 @@
             },
             birthday() {
                 return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment().set({year: this.dobYear, month: this.dobMonth, day:this.dobDay}).format('LL')
+                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL')
                         : null;
             }
         },
@@ -457,16 +457,16 @@
         },
         ready(){
             let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
+                this.timezones = response.body.timezones;
             });
 
             Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get({id: this.userId}).then(function (response) {
-                    let user = response.data.data;
+                    let user = response.body.data;
                     this.name = user.name;
                     this.bio = user.bio;
                     this.type = user.type;

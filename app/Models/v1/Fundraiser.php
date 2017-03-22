@@ -2,14 +2,16 @@
 
 namespace App\Models\v1;
 
+use Carbon\Carbon;
 use App\UuidForKey;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fundraiser extends Model
 {
-    use Filterable, UuidForKey, Taggable;
+    use Filterable, UuidForKey, Taggable, SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -62,7 +64,7 @@ class Fundraiser extends Model
      */
     public function fund()
     {
-        return $this->belongsTo(Fund::class);
+        return $this->belongsTo(Fund::class)->withTrashed();
     }
 
     /**
@@ -94,7 +96,7 @@ class Fundraiser extends Model
      */
     public function transactions()
     {
-        return $this->fund->transactions();
+        return $this->fund->transactions;
     }
 
     /**
@@ -110,25 +112,50 @@ class Fundraiser extends Model
     /**
      * Get the fundraiser's total amount raised.
      *
-     * @return mixed
+     * @return integer
      */
     public function raised()
     {
         $amount = $this->transactions()->sum('amount'); // in cents
 
-        return $amount ? $amount : 0;
+        return $amount ? (int) $amount : 0;
     }
 
+    /**
+     * Get the fundraiser's total amount raised in dollars.
+     * 
+     * @return string
+     */
     public function raisedAsDollars()
     {
-        return number_format(($this->raised() / 100), 2);
+        return number_format(($this->raised() / 100), 2, '.', '');
     }
 
+    /**
+     * Set the fundraiser's goal amount in cents.
+     * 
+     * @param integet $value
+     */
+    public function setGoalAmountAttribute($value)
+    {
+        $this->attributes['goal_amount'] = $value*100; // convert to cents
+    }
+
+    /**
+     * Get the fundraiser's goal amount in dollars.
+     * 
+     * @return string
+     */
     public function goalAmountAsDollars()
     {
-        return number_format(($this->goal_amount / 100), 2);
+        return number_format(($this->goal_amount / 100), 2, '.', '');
     }
 
+    /**
+     * Get the fundraiser's percentage raised.
+     * 
+     * @return integer
+     */
     public function getPercentRaised()
     {
         // check for 0 values first,
@@ -136,7 +163,53 @@ class Fundraiser extends Model
         if( $this->raised() === 0 or $this->goal_amount === 0 )
             return 0;
 
-        return round(($this->raised()/$this->goal_amount) * 100);
+        return (int) round(($this->raised()/$this->goal_amount) * 100);
+    }
+
+    /**
+     * Get the Fundraiser's Status.
+     * 
+     * @return string
+     */
+    public function getStatus()
+    {
+        if ($this->ended_at->isPast()) {
+            return 'closed';
+        }
+
+        if ($this->getPercentRaised() >= 100) {
+            $this->ended_at = Carbon::now();
+            
+            return 'closed';
+        }
+
+        return 'open';
+    }
+
+    /**
+     * Check if fundraiser is closed.
+     * 
+     * @return boolean
+     */
+    public function isClosed()
+    {
+        if ($this->getStatus() == 'closed')
+            return true;
+
+        return false;
+    }
+
+    /**
+     * Check if fundraiser is closed.
+     * 
+     * @return boolean
+     */
+    public function isOpen()
+    {
+        if ($this->getStatus() == 'open')
+            return true;
+
+        return false;
     }
 
     /**
@@ -149,9 +222,31 @@ class Fundraiser extends Model
         return $this->morphToMany(Upload::class, 'uploadable');
     }
 
+    /**
+     * Get public fundraisers
+     * 
+     * @param  Builder $query
+     * @return Builder
+     */
     public function scopePublic($query)
     {
         return $query->where('public', true);
+    }
+
+    /**
+     * Close Fundraiser
+     */
+    public function close()
+    {
+        $this->delete();
+    }
+
+    /**
+     * Open a closed fundraiser.
+     */
+    public function open()
+    {
+        $this->restore();
     }
 
 }

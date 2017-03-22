@@ -44,12 +44,12 @@
         methods: {
             getFundraisers(){
                 // this.$refs.spinner.show();
-                this.$http.get('fundraisers', {
+                this.$http.get('fundraisers', { params: {
                     sponsor: 'groups/' + this.groupUrl,
                     page: this.pagination.current_page
-                }).then(function (response) {
-                    this.fundraisers = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                }}).then(function (response) {
+                    this.fundraisers = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

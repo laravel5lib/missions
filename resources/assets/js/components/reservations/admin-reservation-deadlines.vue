@@ -22,10 +22,10 @@
             <tbody v-if="reservation">
             <tr v-for="deadline in reservation.deadlines.data">
                 <td>
-                    <i class="fa {{ isPast(deadline.due_at) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
+                    <i class="fa {{ isPast(deadline.date) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
                     {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
                 </td>
-                <td>{{ deadline.due_at| moment 'll' }}</td>
+                <td>{{ deadline.date | moment 'lll' }}</td>
                 <td>{{ deadline.grace_period }} {{ deadline.grace_period | pluralize 'day' }}</td>
                 <td>
                     <a class="btn btn-default btn-xs" @click="edit(deadline)"><i class="fa fa-pencil"></i></a>
@@ -42,7 +42,7 @@
                         <div class="form-group" :class="{ 'has-error': checkForError('deadlines') }"><label
                                 class="col-sm-2 control-label">Available Deadlines</label>
                             <div class="col-sm-10">
-                                <v-select class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
+                                <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
                                           label="name"></v-select>
                                 <select hidden="" v-model="user_id" v-validate:deadlines="{ required: true }" multiple>
                                     <option :value="deadline.id" v-for="deadline in deadlines">{{deadline.name}}</option>
@@ -99,7 +99,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" :class="{'has-error': checkForNewDeadlineError('due')}">
                                             <label for="due_at">Due</label>
-                                            <date-picker class="form-control input-sm" :time.sync="newDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                            <date-picker :input-sm="true" :model.sync="newDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                             <input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                    v-model="newDeadline.date" v-validate:due="{required: true}">
                                         </div>
@@ -175,7 +175,7 @@
                 this.newDeadline = {
                     item: '',
                     item_type: '',
-                    due_at: null,
+                    date: null,
                     grace_period: 0,
                     enforced: false,
                 };
@@ -257,8 +257,8 @@
 
                 // this.$refs.spinner.show();
                 this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
-                    let thisTrip = response.data.data;
-                    this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
+                    let thisTrip = response.body.data;
+                    this.selectedDeadlines = new Array(_.findWhere(response.body.data.deadlines.data, { name: this.newDeadline.name }));
 
                     return this.addDeadlines();
 
@@ -267,7 +267,7 @@
             doUpdate(reservation){
                 // this.$refs.spinner.show();
                 return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedDeadlines = [];
 
                     // close modals
@@ -304,7 +304,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data)
+                this.setReservationData(response.body.data)
                 // this.$refs.spinner.hide();
             });
 

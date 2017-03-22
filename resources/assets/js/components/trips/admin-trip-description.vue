@@ -62,8 +62,8 @@
                 this.resource.update({ id: this.id }, {
                     description: this.description
                 }).then(function (response) {
-                    this.trip = response.data.data;
-                    this.description = response.data.data.description;
+                    this.trip = response.body.data;
+                    this.description = response.body.data.description;
                     // this.$refs.spinner.hide();
                     this.showSuccess = true;
                 });
@@ -71,8 +71,8 @@
         },
         ready(){
             this.resource.get({ id: this.id }).then(function (response) {
-                // this.trip = response.data.data;
-                this.description = response.data.data.description;
+                // this.trip = response.body.data;
+                this.description = response.body.data.description;
             });
             var self = this;
             this.$root.$on('toggleMode', function () {

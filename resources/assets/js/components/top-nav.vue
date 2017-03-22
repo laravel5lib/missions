@@ -13,6 +13,8 @@
 			<ul class="nav navmenu-nav">
 				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>
+				<!-- <li class="donate-nav"><a class="navDonate" href="/donate/general">Donate to Missions.Me</a> -->
+				</li>
 				<li class="navlabel">Account</li>
 				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
 					<a href="#">
@@ -21,7 +23,7 @@
 				</li>
 				<ul class="dropdown-menu offcanvas-dropdown">
 					<template v-if="auth" aria-labelledby="userMenu">
-						<li class=""><a :href="url">My Profile</a></li>
+						<li class=""><a :href="url" id="menu-profile-link">My Profile</a></li>
 						<li class=""><a href="/dashboard">Dashboard</a></li>
 						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
 						<li class=""><a href="/logout">Sign Out</a></li>
@@ -124,7 +126,7 @@
 		        return this.auth ? this.$root.user.avatar : '';
 			},
 			url() {
-		        return this.auth ? this.$root.user.url : '';
+		        return this.auth ? '/' + this.$root.user.url : '';
 			},
 		},
 		methods: {

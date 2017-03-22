@@ -89,33 +89,39 @@
 				</div>
 				<hr class="divider" />
 				<div class="col-md-12">
-					<div class="well">
+					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
+						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
+						     role="alert">
+							{{ error }}
+						</div>
+					</div><!-- end alert -->
+					<div class="well" v-if="upfrontTotal > 0">
 						<validator name="PaymentDetails">
 							<form novalidate role="form">
-							<div class="row">
-								<div class="col-sm-12 col-md-6">
-									<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
-										<label for="cardHolderName">Card Holder's Name</label>
-										<div class="input-group">
-											<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
-											<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
-												   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+								<div class="row">
+									<div class="col-sm-12 col-md-6">
+										<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+											<label for="cardHolderName">Card Holder's Name</label>
+											<div class="input-group">
+												<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
+												<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
+													   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-12 col-md-6">
+										<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+											<label for="cardNumber">Card Number</label>
+											<div class="input-group">
+												<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
+												<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
+													   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+													   @keyup="formatCard($event)" maxlength="19"/>
+											</div>
+											<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
 										</div>
 									</div>
 								</div>
-								<div class="col-sm-12 col-md-6">
-									<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
-										<label for="cardNumber">Card Number</label>
-										<div class="input-group">
-											<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
-											<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
-												   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
-												   @keyup="formatCard($event)" maxlength="19"/>
-										</div>
-										<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
-									</div>
-								</div>
-							</div>
 								<div class="row">
 									<div class="col-xs-7 col-md-7">
 										<label for="expiryMonth">EXPIRY DATE</label>
@@ -140,12 +146,11 @@
 										<div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
 											<label for="cvCode">
 												CV CODE</label>
-											<input type="text" class="form-control input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
-												   placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+											<input type="text" class="form-control input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
+												   placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 4 }"/>
 										</div>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="col-sm-7">
 										<div class="form-group" :class="{ 'has-error': checkForError('email') }">
@@ -170,6 +175,12 @@
 
 								<p class="help-block text-success">Your card will be charged for the upfront fees
 									immediately after your trip registration process is complete to secure your spot on this trip.</p>
+
+								<div class="alert" :class="{ 'alert-warning': !$parent.detailsConfirmed, 'alert-success': $parent.detailsConfirmed }" v-if="$parent.paymentErrors.length > 0">
+									<label for="errorConfirm">
+										<input id="errorConfirm" type="checkbox" v-model="$parent.detailsConfirmed"> I have confirmed my payment details
+									</label>
+								</div>
 							</form>
 						</validator>
 					</div>
@@ -185,11 +196,11 @@
 			return {
 				title: 'Payment Details',
 				paymentComplete: false,
-				staticCosts: [],
-				incrementalCosts: [],
-				selectedOptions: [],
-				upfrontTotal:0,
-				totalCosts: 0,
+				//staticCosts: [],
+				//incrementalCosts: [],
+				//selectedOptions: [],
+				//upfrontTotal:0,
+				//totalCosts: 0,
 				attemptedCreateToken: false,
 
 				//card vars
@@ -221,12 +232,17 @@
 				},
 				// deferred variable used for card validation
 				// needs to be on `this` scope to access in response callback
-				stripeDeferred: {}
+				stripeDeferred: {},
 			}
 		},
 		watch: {
 			'paymentComplete'(val, oldVal) {
 				this.$dispatch('payment-complete', val)
+			},
+			'$parent.detailsConfirmed'(val, oldVal) {
+			    if (val !== oldVal && this.$parent.paymentErrors.length > 0) {
+                    this.$dispatch('payment-complete', val);
+			    }
 			}
 		},
 		events: {
@@ -235,7 +251,19 @@
 			},
 			'VueStripe::reset-form': function () {
 				return this.resetCaching();
-			}
+			},
+            'payment-complete': function (val) {
+			    if (this.$parent.paymentErrors.length > 0) {
+                    this.$parent.detailsConfirmed = val;
+//                this.$dispatch('payment-complete', val)
+                }
+
+            },
+            '$parent.paymentErrors'(val) {
+                if (val.length > 0) {
+                    this.$parent.detailsConfirmed = false;
+                }
+            }
 		},
 		ready: function () {
 			this.$dispatch('payment-complete', true);
@@ -262,19 +290,19 @@
 		},
 		computed: {
 			stripeKey() {
-				return this.$parent.stripeKey
+				return this.$parent.stripeKey || null;
 			},
 			fundraisingGoal(){
 				return this.totalCosts - this.upfrontTotal;
 			},
 			staticCosts(){
-				return this.$parent.tripCosts.static;
+				return this.$parent.tripCosts.static || [];
 			},
 			incrementalCosts(){
-				return this.$parent.tripCosts.incremental;
+				return this.$parent.tripCosts.incremental || [];
 			},
 			selectedOptions(){
-				return this.$parent.selectedOptions;
+				return this.$parent.selectedOptions || [];
 			},
 			totalCosts(){
 				var amount = 0;
@@ -334,7 +362,7 @@
 						});
 					});
 				}
-
+                this.$parent.upfrontTotal = amount;
 				return amount;
 			},
 			yearList() {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\models\v1\Essay;
+use App\Models\v1\Essay;
 use App\Jobs\ExportEssays;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;

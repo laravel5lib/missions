@@ -5,7 +5,7 @@
 				<div class="row">
 					<div class="col-sm-8">
                 		<h3 class="hidden-xs">
-                			<a :href="group.url"><img class="img-circle img-sm av-left" :src="group.avatar">
+                			<a :href="'/'+group.url"><img class="img-circle img-sm av-left" :src="group.avatar">
 							{{ group.name }}</a>
 						</h3>
 						<div class="visible-xs text-center">
@@ -47,7 +47,7 @@
 							</div>
 							<div class="panel-body text-center">
 								<p class="badge">{{ trip.status | capitalize }}</p><br>
-								<p class="small">{{ trip.started_at | moment 'll'}} - {{ trip.ended_at | moment 'll'}}</p>
+								<p class="small">{{ trip.started_at | moment 'll' false true}} - {{ trip.ended_at | moment 'll' false true}}</p>
 								<label>Perfect For</label>
 								<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
 									{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
@@ -100,8 +100,8 @@
 				});
 				// this.$refs.spinner.show();
 				resource.query().then(function (response) {
-					this.pagination = response.data.meta.pagination;
-					this.trips = response.data.data;
+					this.pagination = response.body.meta.pagination;
+					this.trips = response.body.data;
 
 					let cId = this.campaignId, calcLowest = this.calcStartingCost;
 					_.each(this.trips, function (trip, index, list) {
@@ -133,7 +133,7 @@
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
 			this.$http.get('groups/' + this.id).then(function (response) {
-				this.group = response.data.data;
+				this.group = response.body.data;
 			});
 			this.getTrips();
 			done();

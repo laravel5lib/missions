@@ -108,10 +108,10 @@
 
             },
             searchEssays(){
-                this.$http.get('essays/?user=' + this.userId, { page: this.pagination.current_page }).then(function (response) {
-                    this.essays = response.data.data;
-                    this.pagination = response.data.meta.pagination;
-                    this.essay = _.findWhere(response.data.data, {id: this.essayId});
+                this.$http.get('essays/?user=' + this.userId, { params: { page: this.pagination.current_page } }).then(function (response) {
+                    this.essays = response.body.data;
+                    this.pagination = response.body.meta.pagination;
+                    this.essay = _.findWhere(response.body.data, {id: this.essayId});
                     this.loaded = true;
                 });
             }

@@ -26,7 +26,7 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox" v-if="userId">
+                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's passports
                     </label>
@@ -64,8 +64,8 @@
                             {{passport.given_names}} {{passport.surname}}
                         </h5>
                     </a>
-                    <div style="position:absolute;right:25px;top:12px;">
-                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                    <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
+                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/passports/' + passport.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedPassport = passport,deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                     <hr class="divider">
@@ -100,7 +100,7 @@
         </div>
         </div>
 
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchPassports"></pagination>
 
         </div>
@@ -133,6 +133,7 @@
             return{
                 passports: [],
                 selectedPassport: null,
+                trips: [],
                 //logic vars
                 filters: {
                     sort: 'surname'
@@ -171,6 +172,11 @@
                 importOptionalFields: [
                     'created_at', 'updated_at'
                 ],
+            }
+        },
+        computed: {
+            isFacilitator() {
+                return this.trips.length > 0 ? true : false;
             }
         },
         watch:{
@@ -217,15 +223,33 @@
                     params.manager = this.userId;
                 this.exportFilters = params;
                 $.extend(params, this.filters);
-                this.$http.get('passports', params).then(function (response) {
-                    this.passports = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('passports', { params: params }).then(function (response) {
+                    this.passports = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     this.loaded = true;
                 });
             }
 
         },
         ready(){
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+                let user = response.body.data;
+                let managing = [];
+
+                if (user.facilitating.data.length) {
+                    this.isFacilitator = true;
+                    let facilitating = _.pluck(user.facilitating.data, 'id');
+                    this.trips = _.union(this.trips, facilitating);
+                }
+
+                if (user.managing.data.length) {
+                    _.each(user.managing.data, function (group) {
+                        managing = _.union(managing, _.pluck(group.trips.data, 'id'));
+                    });
+                    this.trips = _.union(this.trips, managing);
+                }
+            });
+
             this.searchPassports();
         }
     }

@@ -39,10 +39,10 @@
         <modal class="text-center" v-if="isUser()" :show.sync="manageModal" title="Manage Trips" width="800" :callback="updateAccolades">
             <div slot="modal-body" class="modal-body text-center">
 				<validator name="AddTrip">
-					<form class="for" novalidate>
+					<form class="for" @submit.prevent="" novalidate>
 						<div class="form-group" :class="">
 							<label class="control-label">Trips</label>
-							<v-select class="form-control" multiple :value.sync="selectedTrips" :options="availableTrips"
+							<v-select @keydown.enter.prevent="" class="form-control" multiple :value.sync="selectedTrips" :options="availableTrips"
 									  label="name"></v-select>
 							<select hidden="" v-model="selectedCodes" multiple v-validate:code="{ required: true }">
 								<option :value="trip" v-for="trip in availableTrips">{{trip.name}}</option>
@@ -121,14 +121,14 @@
 					items: allCodes
 				}).then(function(response) {
 				    this.$root.$emit('showSuccess', 'Trips History Updated!');
-                    this.accolades = response.data.data;
+                    this.accolades = response.body.data;
                     this.selectedTrips = [];
                     this.filterAccolades();
 				});
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
-                    this.accolades = response.data.data[0] || { items: [] };
+                    this.accolades = response.body.data[0] || { items: [] };
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
@@ -144,7 +144,7 @@
 			},
             searchTrips() {
 				return this.$http.get('utilities/past-trips').then(function(response) {
-					this.trips = response.data;
+					this.trips = response.body;
 				});
             }
         },

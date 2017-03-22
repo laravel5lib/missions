@@ -71,7 +71,7 @@
                       <div class="col-sm-6">
                           <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                               <label for="country">Country</label>
-                              <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                              <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                               <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                                   <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                               </select>
@@ -89,7 +89,7 @@
                   <div class="form-group">
                       <div class="col-sm-4" v-error-handler="{ value: timezone, handle: 'timezone' }">
                           <label for="timezone">Timezone</label>
-                          <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                          <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                           <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                               <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                           </select>
@@ -484,13 +484,11 @@
                 campaigns:[],
                 groups:[],
                 groupsLimit: 12,
-//                attemptSubmit: false,
-                resource: this.$resource('groups?isPublic=yes'),
+                resource: this.$resource('groups', { isPublic: 'yes' }),
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 countries: [],
                 countryCodeObj: null,
                 timezones: [],
-//                errors: {},
                 showSuccess: false,
 
                 // form vars
@@ -498,7 +496,7 @@
                 type: '',
                 country_code: null,
                 description: '',
-                timezone: null,
+                timezone: timezone.tz.guess(),
                 phone_one: '',
                 phone_two: '',
                 address_one: '',
@@ -506,7 +504,6 @@
                 city: '',
                 state: '',
                 zip: '',
-                url: '',
                 campaign: '',
                 contact: '',
                 position: '',
@@ -541,7 +538,7 @@
 				},*/
             searchGroups(){
                 // this.$refs.spinner.show();
-                this.resource.query(null, {
+                this.resource.query({
                     search: this.search,
                     page: this.pagination.current_page,
                     per_page: this.per_page
@@ -562,7 +559,7 @@
                 this.countryCodeObj = null;
                 this.country_code = null;
                 this.description ='';
-                this.timezone = null;
+                this.timezone = timezone.tz.guess();
                 this.phone_one ='';
                 this.phone_two ='';
                 this.address_one ='';
@@ -570,7 +567,6 @@
                 this.city ='';
                 this.state ='';
                 this.zip ='';
-                this.url ='';
                 this.campaign ='';
                 this.contact ='';
                 this.position ='';
@@ -596,7 +592,6 @@
                         city: this.city,
                         state: this.state,
                         zip: this.zip,
-                        url: this.url,
                         campaign: this.campaign,
                         contact: this.contact,
                         position: this.position,
@@ -619,16 +614,16 @@
             this.searchGroups();
 
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
+                this.timezones = response.body.timezones;
             });
 
             this.$http.get('campaigns').then(function (response) {
-                this.campaigns = response.data.data;
-            })
+                this.campaigns = response.body.data;
+            });
 
             //TODO use promise defer
         }

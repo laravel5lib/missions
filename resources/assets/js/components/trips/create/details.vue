@@ -12,7 +12,7 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('group') }">
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<v-select class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+							<v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
 									  label="name"></v-select>
 							<select hidden v-model="group_id" v-validate:group="{ required: true}">
 								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
@@ -37,7 +37,7 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<v-select multiple class="form-control" id="group" :value.sync="prospectsObj"
+							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 							<select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
 								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -78,22 +78,22 @@
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<div class="input-group input-group-sm"
+									<date-picker addon="Start" :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
+									       v-validate:start="{ required: true }" required>
+									<!--<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
-										<date-picker class="form-control input-sms" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-											   v-validate:start="{ required: true }" required>
-									</div>
+									</div>-->
 								</div>
 								<div class="col-sm-6">
-									<div class="input-group input-group-sm"
+									<date-picker addon="End" :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
+									       v-validate:end="{ required: true }" required>
+									<!--<div class="input-group input-group-sm"
 										 :class="{ 'has-error': checkForError('end') }">
 										<span class="input-group-addon">End</span>
-										<date-picker class="form-control input-sms" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-											   v-validate:end="{ required: true }" required>
-									</div>
+									</div>-->
 								</div>
 							</div>
 						</div>
@@ -102,7 +102,7 @@
 					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
 						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
-							<v-select multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"
+							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"
 									  label="name"></v-select>
 							<!--v-validate:rep="{ required: false}"-->
 							<select hidden v-model="rep_id">
@@ -208,8 +208,8 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', { search: search }).then(function (response) {
-					this.groups = response.data.data;
+				this.$http.get('groups', { params: { search: search } }).then(function (response) {
+					this.groups = response.body.data;
 					loading(false);
 				});
 			},
@@ -227,7 +227,7 @@
 
 			// get some groups
 			this.$http.get('groups').then(function (response) {
-				this.groups = response.data.data;
+				this.groups = response.body.data;
 			});
 			done();
 		}

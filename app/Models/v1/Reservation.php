@@ -28,7 +28,7 @@ class Reservation extends Model
      * @var array
      */
     protected $fillable = [
-        'given_names', 'surname', 'gender', 'status',
+        'id', 'given_names', 'surname', 'gender', 'status',
         'shirt_size', 'birthday', 'phone_one', 'phone_two',
         'address', 'city', 'state', 'zip', 'country_code',
         'trip_id', 'rep_id', 'todos', 'companion_limit', 'costs',
@@ -61,6 +61,50 @@ class Reservation extends Model
      * @var bool
      */
     public $timestamps = true;
+
+    /**
+     * Set the reservation's gender.
+     *
+     * @param $value
+     */
+    public function setGenderAttribute($value)
+    {
+        if ($value)
+            $this->attributes['gender'] = trim(strtolower($value));
+    }
+
+    /**
+     * Get the reservation's gender.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getGenderAttribute($value)
+    {
+        return $value ? strtolower($value) : null;
+    }
+
+    /**
+     * Set the reservation's status.
+     *
+     * @param $value
+     */
+    public function setStatusAttribute($value)
+    {
+        if ($value)
+            $this->attributes['status'] = trim(strtolower($value));
+    }
+
+    /**
+     * Get the reservation's status.
+     *
+     * @param $value
+     * @return string
+     */
+    public function getStatusAttribute($value)
+    {
+        return $value ? strtolower($value) : null;
+    }
 
     /**
      * Get the user that owns the reservation.
@@ -196,12 +240,12 @@ class Reservation extends Model
      */
     public function fundraisers()
     {
-        return $this->fund->fundraisers();
+        return $this->fund->fundraisers()->withTrashed();
     }
 
     public function fund()
     {
-        return $this->morphOne(Fund::class, 'fundable');
+        return $this->morphOne(Fund::class, 'fundable')->withTrashed();
     }
 
     public function donations()
@@ -254,9 +298,14 @@ class Reservation extends Model
      */
     public function getTotalCost()
     {
-        return $this->costs()->sum('amount');
+        return $this->costs ? (int) $this->costs()->sum('amount') : 0;
     }
 
+    /**
+     * Get reservation's total cost in dollars.
+     * 
+     * @return string
+     */
     public function totalCostInDollars()
     {
         return number_format($this->getTotalCost()/100, 2, '.', '');
@@ -287,7 +336,7 @@ class Reservation extends Model
         if( $this->getTotalRaised() === 0 or $this->getTotalCost() === 0 )
             return 0;
 
-        return round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
+        return (int) round(($this->getTotalRaised()/$this->getTotalCost()) * 100);
     }
 
     /**
@@ -297,12 +346,14 @@ class Reservation extends Model
      */
     public function getTotalOwed()
     {
-        return $this->getTotalCost() - $this->fund->balance;
+        $total = $this->getTotalCost() - $this->getTotalRaised();
+
+        return $total > 0 ? $total : 0;
     }
 
     public function totalOwedInDollars()
     {
-        return number_format($this->getTotalCost()/100, 2 , '.', '');
+        return number_format($this->getTotalOwed()/100, 2 , '.', '');
     }
 
     /**
@@ -324,6 +375,11 @@ class Reservation extends Model
         })->toArray();
         
         $this->costs()->sync($data);
+
+        if ($this->fundraisers->count())
+            $this->fundraisers()->first()->update([
+                'goal_amount' => $this->getTotalCost()/100
+            ]);
 
         dispatch(new SyncPaymentsDue($this));
     }
@@ -401,28 +457,50 @@ class Reservation extends Model
     }
 
     /**
-     * Synchronize all the reservation's todos.
-     *
-     * @param $todos
+     * Delete an array of todos from the reservation.
+     * 
+     * @param  array  $todos
      */
-    public function syncTodos($todos)
+    public function removeTodos(array $todos)
     {
         if ( ! $todos) return;
 
-        $ids = $this->todos()->lists('id', 'id');
-
-        foreach($todos as $todo)
-        {
-            if( ! isset($todo['id'])) $todo['id'] = null;
-
-            array_forget($ids, $todo['id']);
-
-            $this->todos()->updateOrCreate(['id' => $todo['id']], $todos);
-        }
-
-        if( ! $ids->isEmpty()) $this->todos()->delete($ids);
+        $this->todos()
+             ->whereIn('task', $todos)
+             ->whereNull('completed_at')
+             ->delete();
     }
 
+    /**
+     * Synchronize all the reservation's todos.
+     *
+     * @param $tripTodos
+     */
+    public function syncTodos(array $tripTodos)
+    {
+        $tasks = $this->todos()->pluck('task')->toArray();
+        
+        $todos = collect($tripTodos)->transform(function($todo) {
+            return ucfirst(trim(strtolower($todo)));
+        })->toArray();
+
+        $oldTodos = collect($tasks)->reject(function ($task) use($todos) {
+            return in_array($task, $todos);
+        })->all();
+        $this->removeTodos($oldTodos);
+
+        $newTodos = collect($todos)->reject(function ($todo) use($tasks) {
+            return in_array($todo, $tasks);
+        })->all();
+        $this->addTodos($newTodos);
+    }
+
+    /**
+     * Get current reservations
+     * 
+     * @param  Builder $query
+     * @return Builder
+     */
     public function scopeCurrent($query)
     {
         return $query->whereHas('trip', function($trip) {
@@ -450,5 +528,25 @@ class Reservation extends Model
         }
 
         return $this->avatar;
+    }
+
+    /**
+     * Drop the reservation
+     */
+    public function drop()
+    {
+        $this->fund ? $this->fund->archive() : null;
+
+        $this->delete();
+    }
+
+    /**
+     * Restore a dropped reservation
+     */
+    public function undoDrop()
+    {
+        $this->fund ? $this->fund->reactivate() : null;
+
+        $this->restore();
     }
 }

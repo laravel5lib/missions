@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\ReservationWasCreated;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\v1\ExportRequest;
-use App\Http\Requests\v1\RequirementRequest;
-use App\Http\Transformers\v1\DonorTransformer;
-use App\Http\Transformers\v1\RequirementTransformer;
-use App\Jobs\ExportReservations;
+use Carbon\Carbon;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
-use Carbon\Carbon;
+use App\Jobs\ExportReservations;
+use App\Events\RegisteredForTrip;
+use Silber\Bouncer\Database\Role;
+use App\Http\Controllers\Controller;
 use Dingo\Api\Contract\Http\Request;
+use App\Events\ReservationWasCreated;
+use App\Http\Requests\v1\ExportRequest;
+use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Requests\v1\ReservationRequest;
+use App\Http\Transformers\v1\DonorTransformer;
+use App\Http\Transformers\v1\RequirementTransformer;
 use App\Http\Transformers\v1\ReservationTransformer;
 
 class ReservationsController extends Controller
@@ -30,7 +32,6 @@ class ReservationsController extends Controller
      */
     public function __construct(Reservation $reservation)
     {
-        $this->middleware('api.auth', ['only' => 'store', 'update', 'destroy']);
         $this->reservation = $reservation;
     }
 
@@ -64,36 +65,45 @@ class ReservationsController extends Controller
     }
 
     /**
-     * Show all the donors for the specified reservation.
-     *
-     * @param $id
-     * @param Request $request
-     * @return \Dingo\Api\Http\Response
-     */
-//    public function donors($id, Request $request)
-//    {
-//        // Filter donors by reservation
-//        $request->merge(['reservation' => $id]);
-//
-//        $donors = Donor::filter($request->all())
-//            ->paginate($request->get('per_page'));
-//
-//        // Pass the reservation to the transformer to filter
-//        // embedded relationships by designation.
-//        return $this->response->paginator($donors, new DonorTransformer(['reservation' => $id]));
-//    }
-
-    /**
      * Store a reservation.
      *
      * @param ReservationRequest $request
      * @return \Dingo\Api\Http\Response
      */
     public function store(ReservationRequest $request)
-    {
-        $reservation = $this->reservation->create($request->except('costs', 'donor', 'payment'));
+    {   
+        $weight = $request->get('weight'); // kilograms
+        $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
 
-        event(new ReservationWasCreated($reservation, $request));
+        if ($request->get('country_code') == 'us')
+            $weight = convert_to_kg($request->get('weight'));
+            $height = convert_to_cm($request->get('height_a'), $request->get('height_b'));
+
+        $reservation = $this->reservation->create([
+            'given_names' => trim($request->get('given_names')),
+            'surname' => trim($request->get('surname')),
+            'gender' => $request->get('gender'),
+            'status' => $request->get('status'),
+            'shirt_size' => $request->get('shirt_size'),
+            'birthday' => $request->get('birthday'),
+            'phone_one' => stripPhone($request->get('phone_one')),
+            'phone_two' => stripPhone($request->get('phone_two')),
+            'address' => trim(ucwords(strtolower($request->get('address')))),
+            'city' => trim(ucwords(strtolower($request->get('city')))),
+            'state' => trim(ucwords(strtolower($request->get('state')))),
+            'zip' => trim(strtoupper($request->get('zip'))),
+            'country_code' => $request->get('country_code'),
+            'user_id' => $request->get('user_id'),
+            'email' => trim(strtolower($request->get('email'))),
+            'desired_role' => $request->get('desired_role'),
+            'shirt_size' => $request->get('shirt_size'),
+            'height' => $height,
+            'weight' => $weight,
+            'avatar_upload_id' => $request->get('avatar_upload_id'),
+            'trip_id' => $request->get('trip_id')
+        ]);
+
+        event(new RegisteredForTrip($reservation, $request));
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -107,9 +117,30 @@ class ReservationsController extends Controller
      */
     public function update(ReservationRequest $request, $id)
     {
-        $reservation = $this->reservation->findOrFail($id);
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
-        $reservation->update($request->except('costs', 'requirements', 'deadlines', 'todos'));
+        $reservation->update([
+            'given_names' => trim($request->get('given_names', $reservation->given_names)),
+            'surname' => trim($request->get('surname', $reservation->surname)),
+            'gender' => $request->get('gender', $reservation->gender),
+            'status' => $request->get('status', $reservation->status),
+            'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
+            'birthday' => $request->get('birthday', $reservation->birthday),
+            'phone_one' => stripPhone($request->get('phone_one', $reservation->phone_one)),
+            'phone_two' => stripPhone($request->get('phone_two', $reservation->phone_two)),
+            'address' => trim(ucwords(strtolower($request->get('address', $reservation->address)))),
+            'city' => trim(ucwords(strtolower($request->get('city', $reservation->city)))),
+            'state' => trim(ucwords(strtolower($request->get('state', $reservation->state)))),
+            'zip' => trim(strtoupper($request->get('zip', $reservation->zip))),
+            'country_code' => $request->get('country_code', $reservation->country_code),
+            'user_id' => $request->get('user_id', $reservation->user_id),
+            'email' => trim(strtolower($request->get('email', $reservation->email))),
+            'desired_role' => $request->get('desired_role', $reservation->desired_role),
+            'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
+            // 'height' => $height,
+            // 'weight' => $weight,
+            'trip_id' => $request->get('trip_id', $reservation->trip_id)
+        ]);
 
         $reservation->syncCosts($request->get('costs'));
         $reservation->syncRequirements($request->get('requirements'));
@@ -129,12 +160,27 @@ class ReservationsController extends Controller
      */
     public function destroy($id)
     {
-        $reservation = $this->reseration->findOrFail($id);
+        $reservation = $this->reservation->findOrFail($id);
 
-        $reservation->delete();
+        $reservation->drop();
 
         return $this->response->noContent();
     }
+
+    /**
+     * Restore the specified reservation.
+     *
+     * @param $id
+     * @return \Dingo\Api\Http\Response
+     */
+    public function restore($id)
+    {
+        $reservation = $this->reservation->withTrashed()->findOrFail($id);
+
+        $reservation->undoDrop();
+    }
+
+      
 
     public function reconcile($id)
     {

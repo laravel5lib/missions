@@ -14,6 +14,8 @@ class Fund extends Model
 
     protected $guarded = [];
 
+    protected $dates = ['created_at', 'udpated_at', 'deleted_at'];
+
     public function balanceInDollars()
     {
         return number_format($this->balance/100, 2, '.', ''); // convert to dollars
@@ -31,7 +33,7 @@ class Fund extends Model
      */
     public function fundraisers()
     {
-        return $this->hasMany(Fundraiser::class);
+        return $this->hasMany(Fundraiser::class)->withTrashed();
     }
 
     /**
@@ -97,5 +99,33 @@ class Fund extends Model
         $this->balance = $this->transactions()->sum('amount')/100;
 
         $this->save();
+    }
+
+    /**
+     * Archive the fundraiser.
+     */
+    public function archive()
+    {
+        if ($this->fundraisers->count()) {
+            $this->fundraisers->each(function($fundraiser) {
+                $fundraiser->close();
+            });
+        }
+
+        $this->delete();
+    }
+
+    /**
+     * Reactive an archived fundraiser.
+     */
+    public function reactivate()
+    {
+        if ($this->fundraisers->count()) {
+            $this->fundraisers->each(function($fundraiser) {
+                $fundraiser->open();
+            });
+        }
+
+        $this->restore();
     }
 }

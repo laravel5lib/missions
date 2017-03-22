@@ -13,16 +13,14 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h3 class="text-primary">Legacy Partners,</h3>
+				<h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-				<p>We are so excited to share some updates with you as we continue to carry the vision of 1Nation1Day to Nicaragua this summer.</p>
+				<p>I wanted to take a moment and share a testimony with you. The vision of Missions.Me has always been centered on empowering people to change the world, but often times we forget to talk about the transformation that takes place within the lives of those who are on the ground changing the world. People just like you.</p>
 
-				<p>This month marked our first official 1Nation1Day State Leaders Conference and it was absolutely incredible! Check out what happened.</p>
-
-				<p>We love each and every one of you very much and are so thankful for your continued support!</p>
+                <p>Please know that your generosity is not only transforming nations, but also forever changing the lives of countless people around the world who have been the hands and feet for all that we do at Missions.Me.</p>
 				<hr class="divider inv">
-		        <p>Blessings,</p>
-		        <h5 class="text-primary"><em>The Missions.Me Team</em></h5>
+		        <p>Have a blessed March,</p>
+		        <h5 class="text-primary"><em>Gabe</em></h5>
 			</div>
 		</div><!-- end row -->
 	</div><!-- end content-section -->
@@ -37,7 +35,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/204082792?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/208726172?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

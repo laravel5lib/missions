@@ -14,7 +14,7 @@
         <tr v-for="payment in payments|orderBy 'due_at'">
             <td>{{ payment.amount_owed|currency }}</td>
             <td>{{ payment.percent_owed|number }}%</td>
-            <td v-if="payment.due_at">{{ payment.due_at|moment 'll' }}</td>
+            <td v-if="payment.due_at">{{ payment.due_at|moment 'lll' }}</td>
             <td v-else>Upfront</td>
             <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
             <td>
@@ -36,13 +36,13 @@
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('amount') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                 <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(newPayment)" number v-model="newPayment.amount_owed"
-                                       v-validate:amount="{required: true, min: 0.01}" @change="modifyPercentOwed(newPayment)">
+                                       v-validate:amount="{required: true, min: 0}" @change="modifyPercentOwed(newPayment)">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('percent') }">
                                 <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed|number 2"
-                                       v-validate:percent="{required: true, min: 0.01}" @change="modifyAmountOwed(newPayment)">
+                                       v-validate:percent="{required: true, min: 0}" @change="modifyAmountOwed(newPayment)">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="dueAt">Due</label>
-                                <date-picker class="form-control input-sm" :time.sync="newPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                <date-picker :input-sm="true" :model.sync="newPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                 <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>
                             </div>
                         </div>
@@ -95,13 +95,13 @@
                                 <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('amount') }">
                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                     <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
-                                           v-validate:amount="{required: true, min: 0.01}" @change="modifyPercentOwed(selectedPayment)" >
+                                           v-validate:amount="{required: true, min: 0}" @change="modifyPercentOwed(selectedPayment)" >
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('percent') }">
                                     <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
-                                           v-validate:percent="{required: true, min: 0.01}" @change="modifyAmountOwed(selectedPayment)">
+                                           v-validate:percent="{required: true, min: 0}" @change="modifyAmountOwed(selectedPayment)">
                                     <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="dueAt">Due</label>
-                                    <date-picker class="form-control input-sm" :time.sync="selectedPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                    <date-picker :input-sm="true" :model.sync="selectedPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                     <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>
                                 </div>
                             </div>
@@ -334,6 +334,9 @@
             updatePayment(){
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentEdit.valid) {
+                    if (this.selectedPayment.due_at === 'Invalid date') {
+                        this.selectedPayment.due_at = null;
+                    }
                     this.$root.$emit('SpinnerOn');
                     this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then(function (response) {
                         this.resetPayment();

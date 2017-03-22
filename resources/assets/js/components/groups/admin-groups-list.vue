@@ -330,7 +330,7 @@
                 this.type = '';
             },
             searchGroups(){
-                this.$http.get('groups', {
+                this.$http.get('groups', { params: {
                     include: 'trips:status(active),notes',
                     sort: this.orderByField + (this.direction ? ' ASC' : ' DESC'),
                     isPublic: this.filters.status,
@@ -339,9 +339,9 @@
                     per_page: this.per_page,
                     page: this.pagination.current_page,
                     pending: this.pending ? true : null
-                }).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.groups = response.data.data;
+                }}).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.groups = response.body.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Something went wrong!')
                 })

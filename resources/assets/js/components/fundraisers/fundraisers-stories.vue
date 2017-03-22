@@ -18,7 +18,7 @@
                 <form>
                     <div class="form-group">
                         <label for="newStoryTitle">Story Title</label>
-                        <input type="text" class="form-control" id="newStoryTitle" v-model="selectedStory.title">
+                        <input type="text" class="form-control" id="newStoryTitle" v-model="selectedStory.title" maxlength="60">
                     </div>
                     <div class="form-group">
                         <label for="newStoryContent">Content 
@@ -41,7 +41,7 @@
                         </label>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-sm btn-default" type="button" @click="newMode = false">Cancel</button>
+                        <button class="btn btn-sm btn-default" type="button" @click="newMode = false,resetData()">Cancel</button>
                         <button class="btn btn-sm btn-primary" type="button" @click="createStory(selectedStory)">Publish</button>
                     </div>
                 </form>
@@ -89,7 +89,7 @@
                     <form>
                         <div class="form-group">
                             <label for="selectedStoryTitle">Title</label>
-                            <input type="text" class="form-control" id="selectedStoryTitle" v-model="selectedStory.title">
+                            <input type="text" class="form-control" id="selectedStoryTitle" v-model="selectedStory.title" maxlength="60">
                         </div>
                         <div class="form-group">
                             <label for="selectedStoryContent">Content
@@ -196,7 +196,7 @@
                         this.resetData();
                         //this.searchStories();
                         // this.$refs.spinner.hide();
-                        return response.data.data;
+                        return response.body.data;
                     }, function (error) {
                         // this.$refs.spinner.hide();
                         //TODO add error alert
@@ -226,13 +226,13 @@
             },
             searchStories(){
                 // this.$refs.spinner.show();
-                this.$http.get('stories', {
+                this.$http.get('stories', { params: {
                     fundraiser: this.id,
                     page: this.pagination.current_page,
                     per_page: this.per_page,
-                }).then(function(response) {
-                    this.stories = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                }}).then(function(response) {
+                    this.stories = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();

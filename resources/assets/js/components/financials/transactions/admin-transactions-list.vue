@@ -16,7 +16,7 @@
 
                 <div class="form-group" v-if="!donor">
                     <label>Donor</label>
-                    <v-select class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
                               :value.sync="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
                 </div>
@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker class="form-control" :time.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker class="form-control" :time.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -64,6 +64,7 @@
 
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <hr class="divider inv">
             </form>
         </aside>
 
@@ -293,7 +294,7 @@
                     <td v-if="isActive('donor_phone')" v-text="transaction.donor.data.phone"></td>
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
-                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'll'"></td>
+                    <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'lll'"></td>
                     <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>
@@ -307,7 +308,6 @@
                 </tr>
                 </tfoot>
             </table>
-
         </div>
     </div>
 </template>
@@ -345,16 +345,16 @@
         data(){
             return {
                 transactions: [],
-                orderByField: 'description',
-                direction: 1,
+                orderByField: 'created_at',
+                direction: 0,
                 per_page: 10,
                 perPageOptions: [5, 10, 25, 50, 100],
                 pagination: {
                     current_page: 1
                 },
                 search: '',
-                activeFields: ['description', 'type', 'amount'],
-                maxActiveFields: 3,
+                activeFields: ['description', 'type', 'amount', 'donor', 'created_at'],
+                maxActiveFields: 6,
                 maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars
@@ -512,18 +512,18 @@
             },
             getDonors(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('donors', { search: search}).then(function (response) {
-                    this.donorsOptions = response.data.data;
+                this.$http.get('donors', { params: { search: search} }).then(function (response) {
+                    this.donorsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             searchTransactions(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', params).then(function (response) {
+                this.$http.get('transactions', { params: params }).then(function (response) {
                     let self = this;
-                    this.transactions = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.transactions = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
@@ -545,6 +545,8 @@
                 this.filters.maxDate = '';
 
                 let config = JSON.parse(localStorage[this.storageName]);
+                this.activeFields = config.activeFields;
+                this.maxActiveFields = config.maxActiveFields;
                 this.filters = config.filters;
             }
 

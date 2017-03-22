@@ -13,7 +13,7 @@
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2 text-center">
 				<h2>Unwanted. Discarded. Abandoned.</h2>
-				<p>It’s not trash, but it's lives in the garbage dumps. It’s not a dog, but it begs for food.</p>
+				<p>It’s not trash, but it lives in the garbage dumps. It’s not a dog, but it begs for food.</p>
 				<hr class="divider inv">
 				<h4 class="text-uppercase">It's A Child</h4>
 				<hr class="divider inv">

@@ -29,8 +29,8 @@ class TripRegistrationRequest extends FormRequest
         $rules = [
             'given_names'        => 'required|max:100',
             'surname'            => 'required|max:60',
-            'gender'             => 'required|in:male,female',
-            'status'             => 'required|in:single,married',
+            'gender'             => 'required|in:male,female,Male,Female',
+            'status'             => 'required|string',
             'shirt_size'         => 'required|in:' . $this->getShirtSizes(),
             'birthday'           => 'required|date|before:' . Carbon::now()->subYears(12),
             'user_id'            => 'required|exists:users,id',
@@ -50,13 +50,16 @@ class TripRegistrationRequest extends FormRequest
             'donor.country_code' => 'required|in:' . Country::codes(),
             'donor.account_id'   => 'string|exists:users,id',
             'donor.account_type' => 'in:users',
-            'amount'             => 'required',
-            'token'              => 'required|string',
-            'description'        => 'required|string',
-            'currency'           => 'required|string',
-            'payment'            => 'required|array',
-            'payment.type'       => 'required|in:cash,check,card',
+            'amount'             => 'required_unless:amount,0',
+            'token'              => 'required_unless:amount,0|string',
+            'description'        => 'required_unless:amount,0|string',
+            'currency'           => 'required_unless:amount,0|string',
+            'payment'            => 'required_unless:amount,0|array',
+            'payment.type'       => 'required_unless:amount,0|in:cash,check,card',
             'payment.number'     => 'required_if:payment.type,check|string',
+            'weight'             => 'required|numeric',
+            'height_a'           => 'required|numeric',
+            'height_b'           => 'required|numeric'
         ];
 
         return $rules;

@@ -8,6 +8,8 @@
                 </h6>
             </div>
             <div class="col-xs-12" v-else>
+                <div class="alert alert-warning"><i class="fa fa-warning icon-left"></i> Please verify your arrival designation with your team facilitator and travel companions <strong>before</strong> submitting a selection.</div>
+                
                 <h6 class="text-uppercase"><i class="fa fa-map-marker"></i>Select designation</h6>
                 <select v-model="designation.content" @change="updateInfo" class="form-control">
                     <option value="">Select</option>
@@ -82,9 +84,9 @@
                     reservation_id: this.reservationId,
                     type: 'arrival_designation'
                 }).then(function (response) {
-                    this.designation = response.data.data;
+                    this.designation = response.body.data;
                     this.editMode = false;
-                    this.setDesignation(response.data.data);
+                    this.setDesignation(response.body.data);
                 });
             },
             setDesignation(designation) {

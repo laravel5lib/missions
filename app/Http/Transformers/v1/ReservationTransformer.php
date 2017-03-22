@@ -40,7 +40,7 @@ class ReservationTransformer extends TransformerAbstract
             'surname'             => $reservation->surname,
             'gender'              => $reservation->gender,
             'status'              => $reservation->status,
-            'shirt_size'          => $reservation->shirt_size,
+            'shirt_size'          => strtoupper($reservation->shirt_size),
             'shirt_size_name'     => shirtSize($reservation->shirt_size),
             'age'                 => $reservation->age,
             'birthday'            => $reservation->birthday->toDateString(),
@@ -61,7 +61,7 @@ class ReservationTransformer extends TransformerAbstract
                                         'name' => teamRole($reservation->desired_role) 
                                      ],
             'total_cost'          => $reservation->totalCostInDollars(),
-            'total_raised'        => $reservation->fund->balanceInDollars(),
+            'total_raised'        => $reservation->totalRaisedInDollars(),
             'percent_raised'      => (int) $reservation->getPercentRaised(),
             'total_owed'          => $reservation->totalOwedInDollars(),
             'created_at'          => $reservation->created_at->toDateTimeString(),

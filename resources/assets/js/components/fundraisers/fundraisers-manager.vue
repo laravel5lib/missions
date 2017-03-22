@@ -105,7 +105,7 @@
     var marked = require('marked');
     export default{
         name: 'fundraisers-manager',
-        props: ['id', 'sponsorId'],
+        props: ['id', 'sponsorId', 'editable'],
         data(){
             return {
                 description: '',
@@ -142,6 +142,8 @@
         },
         methods: {
             isUser(){
+                if (this.editable === 1) return true;
+                
                 return this.$root.user && this.sponsorId === this.$root.user.id;
             },
             reset(){
@@ -156,9 +158,9 @@
 			},
             validateUrl(){
                 this.checkingUrl = true;
-                this.$http.get('fundraisers', { url: this.fundraiser.url }).then(function (response) {
-                    if (response.data.data.length) {
-                        this.validUrl = response.data.data[0].id === this.fundraiser.id;
+                this.$http.get('fundraisers', { params: { url: this.fundraiser.url } }).then(function (response) {
+                    if (response.body.data.length) {
+                        this.validUrl = response.body.data[0].id === this.fundraiser.id;
                     } else {
                         this.validUrl = true;
                     }
@@ -187,12 +189,13 @@
                     public: this.fundraiser.public,
                     show_donors: this.fundraiser.show_donors
                 }).then(function (response) {
-                    this.fundraiser = response.data.data;
+                    this.fundraiser = response.body.data;
                     this.newMarkedContentToggle = true;
                     if (type === 'description') {
                         this.showDescriptionSuccess = true;
                     } else {
                         this.showSettingsSuccess = true;
+                        this.$dispatch('fundraiserSettingsChanged', response.body.data);
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();
@@ -205,7 +208,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.get({id: this.id}).then(function (response) {
-                this.fundraiser = response.data.data;
+                this.fundraiser = response.body.data;
 				this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors);
                 // this.$refs.spinner.hide();
             });

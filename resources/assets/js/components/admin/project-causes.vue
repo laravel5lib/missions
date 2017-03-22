@@ -127,8 +127,8 @@
         methods: {
             fetch() {
                 this.$http.get('causes').then(function (response) {
-                    this.causes = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                    this.causes = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                 });
             }
         },

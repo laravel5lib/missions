@@ -74,14 +74,14 @@ class ReferralsController extends Controller
             'recipient_email' => $request->get('recipient_email'),
             'type' => $request->get('type'),
             'referrer' => $request->get('referrer'),
-            'sent_at' => Carbon::now()
+            'response' => $request->get('response'),
+            'sent_at' => Carbon::now(),
+            'responded_at' => null
         ]);
-
-        $location = url('/referrals/' . $referral->id);
 
         dispatch(new SendReferralRequestEmail($referral));
 
-        return $this->response->created($location);
+        return $this->response->item($referral, new ReferralTransformer);
     }
 
     /**

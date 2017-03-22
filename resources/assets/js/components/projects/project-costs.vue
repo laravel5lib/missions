@@ -58,7 +58,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
                             <label class="control-label">Available Costs</label>
-                            <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
@@ -235,7 +235,7 @@
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
-                    this.setProjectData(response.data.data);
+                    this.setProjectData(response.body.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.$dispatch('showSuccess', 'Costs updated successfully.');
@@ -271,14 +271,14 @@
             revert(){
                 this.temporaryCosts = [];
                 this.resource.get().then(function (response) {
-                    this.setProjectData(response.data.data);
+                    this.setProjectData(response.body.data);
                 });
             },
         },
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setProjectData(response.data.data);
+                this.setProjectData(response.body.data);
                 // this.$refs.spinner.hide();
             });
         }

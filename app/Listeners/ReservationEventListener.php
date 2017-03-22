@@ -21,10 +21,11 @@ class ReservationEventListener {
 
         $params = $event->request->only(
             'donor', 'payment', 'token', 'amount', 'donor_id',
-            'currency', 'description'
+            'currency', 'description', 'details'
         ) + ['fund_id' => $fund->id, 'fund_name' => $fund->name];
 
-        dispatch(new MakeDeposit($params));
+        if ($event->request->get('amount') && $event->request->get('amount') > 0)
+            dispatch(new MakeDeposit($params));
     }
 
     /**

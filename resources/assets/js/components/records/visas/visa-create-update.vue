@@ -34,23 +34,24 @@
                     <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="input-group input-group-sms"
+                            <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment 'YYYY-MM-DD'"></date-picker>
+                            <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
+                                   v-validate:issued="{ required: true }" required>
+                            <!--<div class="input-group input-group-sms"
                                  v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
                                 <span class="input-group-addon">Issued</span>
-                                <date-picker class="form-control input-sms" :time.sync="issued_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-                                <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
-                                       v-validate:issued="{ required: true }" required>
-                            </div>
+
+                            </div>-->
                             <br>
                         </div>
                         <div class="col-lg-6">
-                            <div class="input-group input-group-sms"
+                            <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment 'YYYY-MM-DD'"></date-picker>
+                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
+                                   v-validate:expires="{ required: true }" required>
+                            <!--<div class="input-group input-group-sms"
                                  v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
                                 <span class="input-group-addon">Expires</span>
-                                <date-picker class="form-control input-sms" :time.sync="expires_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-                                <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                       v-validate:expires="{ required: true }" required>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -59,7 +60,7 @@
             <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
-                    <v-select class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
                     <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
@@ -68,7 +69,7 @@
             </div>
 
             <accordion :one-at-atime="true">
-                <panel header="Avatar" :is-open.sync="true">
+                <panel header="Upload Photocopy" :is-open.sync="true">
                     <div class="media" v-if="selectedAvatar">
                         <div class="media-left">
                             <a href="#">
@@ -80,7 +81,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
+                        <upload-create-update type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
                     </div><!-- end panel-body -->
                 </panel>
             </accordion>
@@ -192,14 +193,13 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.showSuccess = true;
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/records/visas';
+                        this.$dispatch('showSuccess', 'Visa created.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/visas/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        // this.$refs.spinner.hide();
-                        debugger;
+                        this.$dispatch('showError', 'Unable to create visa.');
                     });
                 } else {
                     this.showError = true;
@@ -219,13 +219,14 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-//                        window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        // window.location.href = '/dashboard/visas';
-                        // this.$refs.spinner.hide();
+                        this.$dispatch('showSuccess', 'Changes saved.');
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/visas/' + that.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        // this.$refs.spinner.hide();
-//                        debugger;
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -245,14 +246,14 @@
         },
         ready(){
             this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.visasResource.get({ id: this.id }).then(function (response) {
-                    let visa = response.data.data;
+                    let visa = response.body.data;
                     $.extend(this, visa);
                     this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
                 });

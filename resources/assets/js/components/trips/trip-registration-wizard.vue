@@ -102,7 +102,7 @@
 					{name: 'Review', view: 'step8', complete:false}
 				],
 				currentStep: null,
-				canContinue: false,
+//				canContinue: false,
 				trip: {},
 				tripCosts: {},
 				deadlines:[],
@@ -115,7 +115,10 @@
 				userInfo: {},
 				paymentInfo: {},
 				upfrontTotal: 0,
-				fundraisingGoal: 0
+				fundraisingGoal: 0,
+				paymentErrors:[],
+                detailsConfirmed: false,
+                rocaAgree: false,
 			}
 		},
 		computed: {
@@ -129,6 +132,27 @@
 					this.currentStep = step;
 				}
 			},
+			fallbackStep(step){
+			    // negate last step completion
+                this.wizardComplete = false;
+                this.stepList[7].complete = false;
+
+                // negate second last step completion
+                this.stepList[6].complete = false;
+                this.rocaAgree = false;
+
+                // negate step completion
+                this.currentStep = step;
+                if (step.view === 'step6') {
+                    this.detailsConfirmed = false;
+                    this.$nextTick(function () {
+                        this.currentStep.complete = false;
+                        this.$emit('payment-complete', false);
+                    });
+                }
+
+                this.$emit('review', false);
+            },
 			backStep(){
 				this.stepList.some(function(step, i, list) {
 					if (this.currentStep.view === step.view){
@@ -156,16 +180,20 @@
 						break;
 					case 'step6':
 						// find child
-						this.$children.forEach(function (child) {
-							if (child.hasOwnProperty('$PaymentDetails'))
-								thisChild = child;
-						});
-							// promise needed to wait for async response from stripe
-						$.when(thisChild.createToken())
-								.done(function (success) {
-									this.$refs.validationspinner.hide();
-									this.nextStepCallback();
-								}.bind(this));
+						if (this.upfrontTotal > 0) {
+                            this.$children.forEach(function (child) {
+                                if (child.hasOwnProperty('$PaymentDetails'))
+                                    thisChild = child;
+                            });
+                            // promise needed to wait for async response from stripe
+                            $.when(thisChild.createToken())
+	                                .done(function (success) {
+	                                    this.$refs.validationspinner.hide();
+	                                    this.nextStepCallback();
+	                                }.bind(this));
+                        } else {
+                            this.nextStepCallback();
+                        }
 						break;
 					default:
 						this.nextStepCallback();
@@ -184,12 +212,16 @@
 
 				var data = {
 					// reservation data
-					given_names: this.userInfo.firstName + ' ' + this.userInfo.middleName,
+					height_a: this.userInfo.heightA,
+					height_b: this.userInfo.heightB,
+					weight: this.userInfo.weight,
+					desired_role: this.userInfo.desired_role.value,
+					given_names: this.userInfo.firstName,
 					surname: this.userInfo.lastName,
 					gender: this.userInfo.gender,
 					status: this.userInfo.relationshipStatus,
 					shirt_size: this.userInfo.size,
-					birthday: moment().set({year: this.userInfo.dobYear, month: this.userInfo.dobMonth, day: this.userInfo.dobDay}).format('YYYY-MM-DD'),
+					birthday: moment(this.userInfo.dobMonth + '-' + this.userInfo.dobDay + '-' + this.userInfo.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD'),
 					address: this.userInfo.address,
 					city: this.userInfo.city,
 					state: this.userInfo.state,
@@ -199,22 +231,28 @@
 					phone_one: this.userInfo.phone,
 					phone_two: this.userInfo.mobile,
 					user_id: this.userData.id,
+					avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
 					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
 
 					// payment data
 					amount: this.upfrontTotal,
-					token: this.paymentInfo.token,
 					description: 'Reservation payment',
 					currency: 'USD', // determined from card token
-					payment: {
-						type: 'card',
-						brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
-						last_four: this.paymentInfo.card.number.substr(-4),
-						cardholder: this.paymentInfo.card.cardholder,
-					}
+
 				};
+				if (this.upfrontTotal > 0) {
+				    _.extend(data, {
+                        token: this.paymentInfo.token,
+                        payment: {
+                            type: 'card',
+                            brand: this.detectCardType(this.paymentInfo.card.number) || 'visa',
+                            last_four: this.paymentInfo.card.number.substr(-4),
+                            cardholder: this.paymentInfo.card.cardholder,
+                        }
+				    });
+				}
 
 				if (this.userData && this.userData.donor_id) {
 					data.donor_id = this.donor_id;
@@ -234,11 +272,14 @@
 //					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
-					window.location.href = '/dashboard/reservations/' + response.data.data.id;
+					window.location.href = '/dashboard/reservations/' + response.body.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
-					console.log(response);
-					this.$refs.reservationspinner.hide();
+                    this.$refs.reservationspinner.hide();
+                    console.log(response);
+					this.$root.$emit('showError', response.body.message);
+                    this.fallbackStep(this.stepList[5]); // return to payment details step
+					this.paymentErrors.push(response.body.message);
 				});
 
 

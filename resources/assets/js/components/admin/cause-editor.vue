@@ -29,7 +29,7 @@
             <input class="form-control" v-model="cause.name" v-if="editMode" />
             <p v-else>{{ cause.name }}</p>
             <label>Countries</label>
-            <v-select class="form-control"
+            <v-select @keydown.enter.prevent=""  class="form-control"
                       multiple
                       id="country"
                       :value.sync="cause.countries"
@@ -105,16 +105,16 @@
         methods: {
             fetch () {
                 this.$http.get('causes/' + this.id).then(function (response) {
-                    this.cause = response.data.data;
+                    this.cause = response.body.data;
                 });
             },
             save() {
                 this.$http.put('causes/' + this.id, this.cause).then(function (response) {
-                    this.cause = response.data.data;
+                    this.cause = response.body.data;
                     this.editMode = false;
                     this.message = 'Your changes were saved successfully.';
                     this.showSuccess = true;
-                }).error(function () {
+                },function () {
                     this.message = 'Your changes could not be saved.';
                     this.showError = true;
                 });
@@ -123,7 +123,7 @@
                 this.$http.post('causes', this.cause).then(function (response) {
                     this.cause = {};
                     window.location.reload();
-                }).error(function () {
+                },function () {
                     this.message = 'The cause could not be created.';
                     this.showError = true;
                 });
@@ -144,7 +144,7 @@
             }
 
             this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			});
         }
     }

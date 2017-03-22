@@ -3,7 +3,7 @@
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
-                <div style="margin-right:5px;" class="checkbox" v-if="userId">
+                <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
                     <label>
                         <input type="checkbox" v-model="includeManaging"> Include my group's essays
                     </label>
@@ -29,7 +29,7 @@
             <p class="text-center text-muted" role="alert"><em>Add and manage your essays here!</em></p>
         </div>
 
-        <div class="col-md-4 col-sm-6" v-for="essay in essays">
+        <div class="col-xs-12 col-md-4 col-sm-6" v-for="essay in essays">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <a role="button" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id">
@@ -54,8 +54,8 @@
                             <p class="small">{{essay.updated_at|moment 'll'}}</p>
                         </div>
                     </div>
-                    <div style="position:absolute;right:20px;top:5px;">
-                        <a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>
+                    <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
+                        <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
                     </div>
                 </div>
@@ -68,12 +68,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 text-center">
+        <div class="col-xs-12 text-center">
             <pagination :pagination.sync="pagination" :callback="searchEssays"></pagination>
         </div>
         <modal :show.sync="deleteModal" title="Remove Essay" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Essay?</div>
-            <div slot="modal-footer" claass="modal-footer">
+            <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeEssay(selectedEssay)'>Delete</button>
             </div>
@@ -100,6 +100,7 @@
             return{
                 essays: [],
                 selectedEssay: '',
+                trips: [],
                 //logic vars
                 includeManaging: false,
                 search: '',
@@ -123,6 +124,12 @@
                 importOptionalFields: [
                     'created_at', 'updated_at'
                 ],
+
+            }
+        },
+        computed: {
+            isFacilitator() {
+                return this.trips.length > 0 ? true : false;
             }
         },
         watch:{
@@ -160,16 +167,35 @@
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;
-                this.$http.get('essays', params).then(function (response) {
-                    this.essays = response.data.data;
-                    this.pagination = response.data.meta.pagination;
+                this.$http.get('essays', { params: params }).then(function (response) {
+                    this.essays = response.body.data;
+                    this.pagination = response.body.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });
             }
         },
         ready(){
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
+                let user = response.body.data;
+                let managing = [];
+
+                if (user.facilitating.data.length) {
+                    this.isFacilitator = true;
+                    let facilitating = _.pluck(user.facilitating.data, 'id');
+                    this.trips = _.union(this.trips, facilitating);
+                }
+
+                if (user.managing.data.length) {
+                    _.each(user.managing.data, function (group) {
+                        managing = _.union(managing, _.pluck(group.trips.data, 'id'));
+                    });
+                    this.trips = _.union(this.trips, managing);
+                }
+            });
+
             this.searchEssays();
+
         }
     }
 </script>

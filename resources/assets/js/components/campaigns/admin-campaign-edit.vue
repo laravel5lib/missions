@@ -1,5 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-	<validator name="UpdateCampaign" @touched="onTouched">
+	<div>
+		<validator name="UpdateCampaign" @touched="onTouched">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
 			<div class="row">
@@ -19,7 +20,7 @@
 			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 							  label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code"
 							v-validate:country="{ required: true }">
@@ -41,21 +42,22 @@
 					<label for="started_at">Dates</label>
 					<div class="row">
 						<div class="col-sm-6">
-							<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
+							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
+							       v-validate:start="{ required: true }" required>
+							<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
 								<span class="input-group-addon">Start</span>
-								<date-picker class="form-control" :time.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'" :option="{ type: 'day' }"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-									   v-validate:start="{ required: true }" required>
-							</div>
+							</div>-->
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
-							<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
+							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
+							       v-validate:end="{ required: true }" required>
+							<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
 								<span class="input-group-addon">End</span>
-								<date-picker class="form-control" :time.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-									   v-validate:end="{ required: true }" required>
-							</div>
+								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							</div>-->
 							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
 						</div>
 					</div>
@@ -65,12 +67,12 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
-					<div class="input-group">
-						<date-picker class="form-control" :time.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+					<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+					<!--<div class="input-group">
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
 						</span>
-					</div>
+					</div>-->
 					<input type="datetime" class="form-control hidden"
 						   v-model="published_at|moment 'YYYY-MM-DD HH:mm:ss'" id="published_at">
 				</div>
@@ -121,7 +123,7 @@
 				</div><!-- end col -->
 				<div class="col-sm-6">
 					<h5>
-						<img class="av-left img-rounded img-lg"
+						<img class="av-left img-rounded img-md"
 							:src="selectedBanner.source ? (selectedBanner.source + '?w=100&q=50') : '/images/placeholders/campaign-placeholder.png'" width="100">
 						<button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
 							data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse">
@@ -188,6 +190,7 @@
 		</div>
 
 	</validator>
+	</div>
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";
@@ -324,12 +327,12 @@
 		created(){
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.data.countries;
+				this.countries = response.body.countries;
 			});
 
 			// get campaign data
 			this.resource.get({id: this.campaignId}).then(function(response) {
-				let campaign = response.data.data;
+				let campaign = response.body.data;
 				this.name = campaign.name;
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;
@@ -339,6 +342,8 @@
 				this.page_src = campaign.page_src;
 				this.countryCodeObj = _.findWhere(this.countries, { name: campaign.country });
 				this.country_code = this.countryCodeObj.code;
+				this.avatar_upload_id = campaign.avatar_upload_id;
+				this.banner_upload_id = campaign.banner_upload_id;
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();

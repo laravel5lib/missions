@@ -15,7 +15,8 @@
                             <label>Enter Donation Amount</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
-                                <input style="font-size:22px;color:#05ce7b;" type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                                <input style="font-size:22px;color:#05ce7b;" type="text" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                                <span class="input-group-addon">USD</span>
                             </div>
                         </div>
                     </div>
@@ -100,8 +101,8 @@
                             <div :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
                                 <label for="cvCode">
                                     CV CODE</label>
-                                <input type="text" class="form-control input input-sm" id="cvCode" maxlength="3" v-model="cardCVC"
-                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+                                <input type="text" class="form-control input input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
+                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 4 }"/>
                                 <span class="help-block" v-if="checkForError('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
                             </div>
                         </div>
@@ -600,12 +601,12 @@
 
             if (parseInt(this.auth)) {
                 this.$http.get('users/me').then(function (response) {
-                    this.donor = response.data.data.name;
-                    this.donor_id = response.data.data.donor_id || null;
-                    this.cardHolderName = response.data.data.name;
-                    this.cardEmail = response.data.data.email;
-                    this.cardPhone = response.data.data.phone_one;
-                    this.cardZip = response.data.data.zip
+                    this.donor = response.body.data.name;
+                    this.donor_id = response.body.data.donor_id || null;
+                    this.cardHolderName = response.body.data.name;
+                    this.cardEmail = response.body.data.email;
+                    this.cardPhone = response.body.data.phone_one;
+                    this.cardZip = response.body.data.zip
                 });
             }
 

@@ -37,7 +37,7 @@ class FundDonorsController extends Controller
         $per_page = $request->get('per_page', 10);
         $page = $request->get('page', 1);
 
-        $fund = $this->fund->findOrFail($fund_id);
+        $fund = $this->fund->withTrashed()->findOrFail($fund_id);
 
         $amountGivenAnonymously = $fund->donations()->where('anonymous', true)->sum('amount');
 
@@ -50,7 +50,7 @@ class FundDonorsController extends Controller
                              ->map(function($donation) {
                                 return [
                                     'name' => $donation->pluck('donor.name')->first(),
-                                    'total_donated' => $donation->sum('amount'),
+                                    'total_donated' => $donation->sum('amount')/100,
                                     'account_url' => $donation->pluck('donor.account.slug.url')->first()
                                 ];
                              });

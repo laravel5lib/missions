@@ -63,7 +63,7 @@
                                 {{ cost.description }}
                                 <hr class="divider">
                             </p>
-                            <v-select class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
@@ -243,11 +243,12 @@
                     costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
 
-                let res = jQuery.extend(true, {}, this.reservation);
+                // let res = jQuery.extend(true, {}, this.reservation);
+                let res = {};
                 res.costs = costIds
 
                 return this.resource.update(res).then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.successMessage = 'Costs updated Successfully';
@@ -264,8 +265,8 @@
                     status: this.reservation.status,
                     shirt_size: this.reservation.shirt_size,
                     birthday: this.reservation.birthday,
-                    user_id: this.reservation.user_id,
-                    trip_id: this.reservation.trip_id,
+                    // user_id: this.reservation.user_id,
+                    // trip_id: this.reservation.trip_id,
                 };
 
                 this.getAvailableCosts();
@@ -286,14 +287,14 @@
             revert(){
                 this.temporaryCosts = [];
                 this.resource.get().then(function (response) {
-                    this.setReservationData(response.data.data);
+                    this.setReservationData(response.body.data);
                 });
             },
         },
         ready(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
-                this.setReservationData(response.data.data);
+                this.setReservationData(response.body.data);
                 // this.$refs.spinner.hide();
             });
         }

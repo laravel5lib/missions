@@ -8,10 +8,10 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="nav navbar-nav navbar-right dropdown" style="margin-left:75px;">
       @if(auth()->check())
-      <li><a class="navbar-btn btn btn-primary hidden-xs" href="/donate/general">Donate</a></li>
+      {{-- <li><a class="navbar-btn btn btn-primary hidden-xs" href="/donate/general">Donate</a></li> --}}
       <li id="userMenu" class="dropdown-toggle hidden-xs text-capitalize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><a href="#"><img class="img-xs img-circle av-left" src="{{ image(auth()->user()->getAvatar()->source . '?w=100') }}" alt="{{ auth()->user()->name }}"> {{ auth()->user()->name }} <i class="fa fa-angle-down"></i></a></li>
       <ul class="dropdown-menu" aria-labelledby="userMenu">
-        <li><a href="{{ url(auth()->user()->slug->url) }}">My Profile</a></li>
+        <li><a href="{{ url(auth()->user()->slug->url) }}" id="top-profile-link">My Profile</a></li>
         @can('access-dashboard')
           <li><a href="{{ url('/dashboard') }}">Dashboard</a></li>
         @endcan
@@ -19,7 +19,10 @@
           <li><a href="{{ url('/admin') }}">Admin</a></li>
         @endcan
         <li role="separator" class="divider"></li>
-        <li><a href="{{ url('/logout') }}">Sign Out <i style="margin-top:6px;" class="fa fa-chevron-right pull-right"></i></a></li>
+        @unless(request()->cookie('impersonate'))
+        <li><a href="{{ url('/logout') }}">Sign Out <i style="margin-top:6px;" class="fa 
+        fa-chevron-right pull-right"></i></a></li>
+        @endunless
         @if(request()->cookie('impersonate'))
           <li><a href="{{ url('/admin/users/stop') }}">Stop Impersonating</a></li>
         @endif

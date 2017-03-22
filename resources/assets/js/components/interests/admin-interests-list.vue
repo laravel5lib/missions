@@ -4,7 +4,7 @@
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
-                    <v-select class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
                               :value.sync="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter Group"></v-select>
                 </div>
@@ -26,7 +26,7 @@
                     </select>
                 </div>
                 <div class="form-group" v-if="!tripId">
-                    <v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               :value.sync="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
@@ -321,22 +321,22 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { search: search}).then(function (response) {
-                    this.groupsOptions = response.data.data;
+                this.$http.get('groups', { params: { search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { search: search}).then(function (response) {
-                    this.campaignOptions = response.data.data;
+                this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
+                    this.campaignOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('trips', { search: search}).then(function (response) {
-                    this.tripOptions = response.data.data;
+                this.$http.get('trips', { params: { search: search} }).then(function (response) {
+                    this.tripOptions = response.body.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -351,9 +351,9 @@
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();
-                this.$http.get('interests', params).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.interests = response.data.data;
+                this.$http.get('interests', { params: params }).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.interests = response.body.data;
                     // this.$refs.spinner.hide();
                 })
             }

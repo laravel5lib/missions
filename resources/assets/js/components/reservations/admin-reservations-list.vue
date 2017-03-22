@@ -3,26 +3,43 @@
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label>Tags</label>
 					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
-				</div>
+				</div> -->
 				<div class="form-group">
-					<v-select class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					<label>Groups</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							  :value.sync="groupsArr" :options="groupsOptions" label="name"
 							  placeholder="Filter Groups"></v-select>
 				</div>
 				<div class="form-group">
-					<v-select class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
+					<label>Managing Users</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
 							  :value.sync="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
 				<div class="form-group" v-if="!tripId">
-					<v-select class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+					<label>Campaign</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 							  :value.sync="campaignObj" :options="campaignOptions" label="name"
 							  placeholder="Filter by Campaign"></v-select>
 				</div>
+
+				<div class="form-group">
+					<label>Trip Type</label>
+					<select  class="form-control input-sm" v-model="filters.type">
+						<option value="">Any Type</option>
+						<option value="ministry">Ministry</option>
+						<option value="family">Family</option>
+						<option value="international">International</option>
+						<option value="media">Media</option>
+						<option value="medical">Medical</option>
+						<option value="leader">Leader</option>
+					</select>
+				</div>
+
 				<div class="form-group">
 					<label>Gender</label>
 					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
@@ -122,7 +139,7 @@
 
 				<div class="form-group">
 					<label>Shirt Size</label>
-					<v-select class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -195,6 +212,11 @@
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="surname" :disabled="maxCheck('surname')"> Surname
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="desired_role" :disabled="maxCheck('desired_role')"> Role
 								</label>
 							</li>
 							<li>
@@ -347,6 +369,11 @@
 						<i @click="setOrderByField('surname')" v-if="orderByField !== 'surname'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'surname'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('desired_role')" :class="{'text-primary': orderByField === 'desired_role'}">
+						Role
+						<i @click="setOrderByField('desired_role')" v-if="orderByField !== 'desired_role'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'desired_role'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
 					<th v-if="isActive('group')" :class="{'text-primary': orderByField === 'trip.data.group.data.name'}">
 						Group
 						<i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'trip.data.group.data.name'" class="fa fa-sort pull-right"></i>
@@ -374,6 +401,8 @@
 					</th>
 					<th v-if="isActive('registered')">
 						Registered On
+						<i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
 					<th v-if="isActive('gender')">
 						Gender
@@ -386,6 +415,8 @@
 					</th>
 					<th v-if="isActive('email')">
 						Email
+						<i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
 					<th v-if="isActive('requirements')">
 						Requirements
@@ -400,6 +431,7 @@
 				<tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
+					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
 					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
@@ -521,6 +553,7 @@
 
 				// filter vars
 				filters: {
+                    type: '',
 					tags: [],
 					user: [],
 					groups: [],
@@ -544,7 +577,7 @@
 					user_email: 'User Email',
 					user_primary_phone: 'User Primary Phone',
 					user_secondary_phone: 'User Secondary Phone',
-					trip_type: 'Trip Type',
+					type: 'Trip Type',
 					campaign: 'Campaign',
 					group: 'Group',
 					country_located: 'Country Located',
@@ -565,13 +598,14 @@
 					state_providence: 'State/Providence',
 					zip_postal: 'Zip/Postal Code',
 					country: 'Country',
-					payments: 'Payments Due',
-					applied_costs: 'Applied Costs',
-					requirements: 'Travel Requirements',
+					// payments: 'Payments Due',
+					// applied_costs: 'Applied Costs',
+					// requirements: 'Travel Requirements',
 					percent_raised: 'Percent Raised',
 					amount_raised: 'Amount Raised',
 					outstanding: 'Outstanding',
-					deadlines: 'Other Deadlines'
+					// deadlines: 'Other Deadlines'
+					desired_role: 'Role'
 				},
 				exportFilters: {}
 			}
@@ -671,7 +705,8 @@
 				this.searchReservations();
 			},
 			'per_page': function (val, oldVal) {
-				this.searchReservations();
+                this.updateConfig();
+                this.searchReservations();
 			},
 			/*'groups':function () {
 				this.searchReservations();
@@ -713,7 +748,8 @@
 					usersArr: this.usersArr,
 					campaignObj: this.campaignObj,
 					filters: {
-						tags: this.filters.tags,
+                        type: this.filters.type,
+                        tags: this.filters.tags,
 						user: this.filters.user,
 						groups: this.filters.groups,
 						campaign: this.filters.campaign,
@@ -753,6 +789,7 @@
 				this.usersArr = [];
 				this.campaignObj = null;
 				this.filters = {
+                    type: '',
 					tags: [],
 					user: [],
 					groups: [],
@@ -781,7 +818,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,requirements,rep',
+					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep',
 					search: this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,
@@ -816,13 +853,13 @@
 			searchReservations(){
 				let params = this.getListSettings();
 				// this.$refs.spinner.show();
-				this.$http.get('reservations', params).then(function (response) {
+				this.$http.get('reservations', {params: params}).then(function (response) {
 					let self = this;
-					_.each(response.data.data, function (reservation) {
+					_.each(response.body.data, function (reservation) {
 						reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
 					}, this);
-					this.reservations = response.data.data;
-					this.pagination = response.data.meta.pagination;
+					this.reservations = response.body.data;
+					this.pagination = response.body.meta.pagination;
 					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
@@ -831,50 +868,50 @@
 			},
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('groups', {search: search}).then(function (response) {
-					this.groupsOptions = response.data.data;
+				this.$http.get('groups', { params: {search: search} }).then(function (response) {
+					this.groupsOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', {search: search}).then(function (response) {
-					this.campaignOptions = response.data.data;
+				this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
+					this.campaignOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', {search: search}).then(function (response) {
-					this.usersOptions = response.data.data;
+				this.$http.get('users', { params: {search: search} }).then(function (response) {
+					this.usersOptions = response.body.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getTodos(){
-				this.$http.get('todos', {
+				this.$http.get('todos', { params: {
 					'type': 'reservations',
 					'per_page': 100,
 					'unique': true
-				}).then(function (response) {
-					this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
+				}}).then(function (response) {
+					this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
 				});
 			},
 			getRequirements(){
-				this.$http.get('requirements', {
+				this.$http.get('requirements', { params: {
 					'type': 'trips',
 					'per_page': 100,
 					'unique': true
-				}).then(function (response) {
-					this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				}}).then(function (response) {
+					this.requirementOptions = _.uniq(_.pluck(response.body.data, 'name'));
 				});
 			},
 			getCosts(){
-				this.$http.get('costs', {
+				this.$http.get('costs', { params: {
 					'assignment': 'trips',
 					'per_page': 100,
 					'unique': true
-				}).then(function (response) {
-					this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+				}}).then(function (response) {
+					this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
 				});
 			}
 		},
@@ -883,7 +920,8 @@
 			if (localStorage[this.storageName]) {
 				let config = JSON.parse(localStorage[this.storageName]);
 				this.activeFields = config.activeFields;
-				this.maxActiveFields = config.maxActiveFields;
+                this.per_page = config.per_page;
+                this.maxActiveFields = config.maxActiveFields;
 				this.filters = config.filters;
 			}
 			// populate
@@ -900,7 +938,7 @@
 					switch (arr[0]) {
 						case 'campaign':
 							this.$http.get('campaigns/' + arr[1]).then(function (response) {
-								this.campaignObj = response.data.data;
+								this.campaignObj = response.body.data;
 							});
 							// this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
 					}

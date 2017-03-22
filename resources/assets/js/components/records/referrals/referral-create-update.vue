@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('referralname') }">
                     <label for="author" class="control-label">Referral Name</label>
-                    <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referral_name"
+                    <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referrer.name"
                        placeholder="Referral Name" v-validate:referralname="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
@@ -64,16 +64,6 @@
                 </div>
             </div>
         </form>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
-            <span class="icon-ok-circled alert-icon-float-left"></span>
-            <strong>Good job!</strong>
-            <p>Referral updated</p>
-        </alert>
-        <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
-            <span class="icon-info-circled alert-icon-float-left"></span>
-            <strong>Oh No!</strong>
-            <p>There are errors on the form.</p>
-        </alert>
         <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -113,21 +103,18 @@
                 },
                 applicant_name: '',
                 attention_to: '',
+                recipient_email: '',
                 response: [
-                    { q: 'How Long have you known the applicant?', a: ''},
-                    { q: 'Please list any current roles the applicant serves in at your church:', a: ''},
-                    { q: 'To the best of your knowledge, what is the current state of the applicant\'s spiritual walk?', a: ''},
-                    { q: 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation? Please explain.', a: ''},
-                    { q: 'Please list the applicant\'s significant strengths:', a: ''},
-                    { q: 'Please list the applicant\'s significant weaknesses:', a: ''},
-                    { q: 'Would you recommend this applicant for a leadership role on the trip? Please explain.', a: ''},
+                    { q: 'How Long have you known the applicant?', a: '', type: 'textarea'},
+                    { q: 'Does the applicant currently attend your church?', a: '', type: 'radio'},
+                    { q: 'Do you have any concerns about this applicant’s ability to honor authority or adhere to instruction?  Please explain.', a: '', type: 'textarea'},
+                    { q: 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation for 7-14 days? Please explain.', a: '', type: 'textarea'},
+                    { q: 'Do you recommend this applicant for missions service with Missions.Me?', a: '', type: 'radio'}
                 ],
                 user_id: this.userId,
 
                 // logic vars
                 resource: this.$resource('referrals{/id}'),
-                showSuccess: false,
-                showError: false,
                 hasChanged: false,
 //                attemptSubmit: false,
             }
@@ -162,13 +149,13 @@
                         user_id: this.user_id,
                         attention_to: this.attention_to
                     }).then(function (resp) {
-                        this.showSuccess = true;
-                        // window.location.href = '/dashboard' + resp.data.data.links[0].uri;
-                        window.location.href = '/dashboard/records/referrals';
+                        this.$dispatch('showSuccess', 'Referral created and sent.');
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/referrals/' + resp.data.data.id;
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.showError = true;
-                        console.log(error);
+                        this.$dispatch('showError', 'Unable to create referral.');
                     });
                 } else {
                     this.showError = true;
@@ -178,6 +165,7 @@
                 this.resetErrors();
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.update({id: this.id}, {
+                        attention_to: this.attention_to,
                         applicant_name: this.applicant_name,
                         recipient_email: this.recipient_email,
                         referrer: this.referrer,
@@ -185,19 +173,23 @@
                         response: this.response,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.showSuccess = true;
+                        this.$dispatch('showSuccess', 'Changes saved.');
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/dashboard/records/referrals/' + that.id; 
+                        }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-//                        debugger;
+                        this.$dispatch('showError', 'Unable to save changes.');
                     });
                 }
             },
         },
         ready(){
             if (this.isUpdate) {
-                this.$http('referrals/' + this.id).then(function (response) {
+                this.$http.get('referrals/' + this.id).then(function (response) {
 
-                    let referral = response.data.data;
+                    let referral = response.body.data;
                     $.extend(this, referral);
                 });
             }

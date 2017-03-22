@@ -195,7 +195,7 @@
                         <td v-if="isActive('name')">{{trip.group.data.name}}</td>
                         <td v-if="isActive('type')">{{trip.type|capitalize}}</td>
                         <td v-if="isActive('status')">{{trip.status|capitalize}}</td>
-                        <td v-if="isActive('dates')">{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
+                        <td v-if="isActive('dates')">{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
@@ -340,15 +340,15 @@
                     campaign_id: this.campaignId,
                     include:'campaign,group',
                     sort: this.orderByField + '|' + (this.direction === 1 ? 'desc' : 'asc'),
-                    search: this.searchText,
+                    search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
                 };
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('trips', params).then(function (response) {
-                    this.pagination = response.data.meta.pagination;
-                    this.trips = response.data.data;
+                this.$http.get('trips', { params: params }).then(function (response) {
+                    this.pagination = response.body.meta.pagination;
+                    this.trips = response.body.data;
                 }, function (error) {
                 })
             }

@@ -10,7 +10,7 @@ $factory->define(App\Models\v1\ProjectInitiative::class, function(Faker\Generato
         },
         'type' => $faker->catchPhrase,
         'short_desc' => $faker->realText(200),
-        'country_code' => function (array $initiative) {
+        'country_code' => function (array $initiative) use($faker) {
             $countries = App\Models\v1\ProjectCause::find($initiative['project_cause_id'])->countries;
             return $faker->randomElement($countries)['code'];
         },

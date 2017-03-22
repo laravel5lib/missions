@@ -5,6 +5,7 @@
 @import "node_modules/aos/src/sass/aos.scss";
 @import "node_modules/video.js/src/css/video-js.scss";
 @import "node_modules/tether-shepherd/dist/css/shepherd-theme-arrows";
+@import "node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";
 /*
  * Variables...
  */
@@ -1601,6 +1602,15 @@ $divider-base-size: 10px;
   &.sm {
     margin-top: $divider-base-size/2;
     margin-bottom: $divider-base-size/2;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .alert.top-right {
+    right: 0px !important;
+  }
+  .alert.top, .alert.top-right {
+    top:68px !important;
   }
 }
 

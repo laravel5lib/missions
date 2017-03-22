@@ -28,9 +28,9 @@ class ReservationRequest extends FormRequest
         $rules = [
             'given_names'        => 'required|max:100',
             'surname'            => 'required|max:60',
-            'gender'             => 'required|in:male,female',
-            'status'             => 'required|in:single,married',
-            'shirt_size'         => 'in:' . $this->getShirtSizes(),
+            'gender'             => 'required|in:male,female,Male,Female',
+            'status'             => 'required|string',
+            'shirt_size'         => 'required|string',
             'birthday'           => 'required|date|before:' . Carbon::now()->subYears(12),
             'user_id'            => 'required|exists:users,id',
             'trip_id'            => 'required|exists:trips,id',
@@ -44,16 +44,19 @@ class ReservationRequest extends FormRequest
             'costs'              => 'array',
             'costs.*.id'         => 'required|exists:costs,id',
             'costs.*.locked'     => 'boolean',
-            'companion_limit'    => 'numeric'
+            'companion_limit'    => 'numeric',
+            'weight'             => 'required|numeric',
+            'height_a'           => 'required|numeric',
+            'height_b'           => 'required|numeric'
         ];
 
         if ($this->isMethod('put')) {
             $rules = [
                 'given_names'        => 'sometimes|required|max:100',
                 'surname'            => 'sometimes|required|max:60',
-                'gender'             => 'sometimes|required|in:male,female',
-                'status'             => 'sometimes|required|in:single,married',
-                'shirt_size'         => 'in:' . $this->getShirtSizes(),
+                'gender'             => 'sometimes|required',
+                'status'             => 'sometimes|required|string',
+                'shirt_size'         => 'sometimes|required|string',
                 'birthday'           => 'sometimes|required|date|before:' . Carbon::now()->subYears(12),
                 'user_id'            => 'sometimes|required|exists:users,id',
                 'trip_id'            => 'sometimes|required|exists:trips,id',
@@ -67,7 +70,10 @@ class ReservationRequest extends FormRequest
                 'costs'              => 'array',
                 'costs.*.id'         => 'required|exists:costs,id',
                 'costs.*.locked'     => 'boolean',
-                'companion_limit'    => 'numeric'
+                'companion_limit'    => 'numeric',
+                'weight'             => 'sometimes|required',
+                'height_a'           => 'sometimes|required',
+                'height_b'           => 'sometimes|required'
             ];
         }
 

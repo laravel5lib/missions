@@ -67,10 +67,10 @@
         methods: {
             getDonations(){
 				// this.$refs.spinner.show();
-				this.$http.get('fundraisers.donations', {
+				this.$http.get('fundraisers.donations', { params: {
 
-                }).then(function (response) {
-                    this.donations = response.data.data;
+                }}).then(function (response) {
+                    this.donations = response.body.data;
 					// this.$refs.spinner.hide();
 				})
             },

@@ -107,6 +107,19 @@ class UploadsController extends Controller
     }
 
     /**
+     * Display a file
+     * 
+     * @param  string $path
+     * @return response
+     */
+    public function display_file($path)
+    {
+        return response()->make(Storage::disk('s3')->get($path), 200, [
+                'Content-Type' => 'application/pdf'
+            ]);
+    }
+
+    /**
      * Update the specified upload.
      *
      * @param UploadRequest $request

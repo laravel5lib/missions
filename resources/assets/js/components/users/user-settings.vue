@@ -148,8 +148,8 @@
                                 </div><!-- end form-group -->
 
                                 <div class="row form-group" v-error-handler="{ value: gender, handle: 'gender' }">
-                                    <label for="gender" class="col-sm-2">Gender</label>
-                                    <div class="col-sm-10">
+                                    <label for="gender" class="col-sm-3">Gender</label>
+                                    <div class="col-sm-9">
                                         <label class="radio-inline">
                                             <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
                                         </label>
@@ -160,20 +160,21 @@
                                 </div>
 
                                 <div class="row form-group">
-                                    <label for="status" class="col-sm-2">Status</label>
-                                    <div class="col-sm-10">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="status" id="status" value="Single" v-model="status"> Single
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="status2" id="status2" value="Married" v-model="status"> Married
-                                        </label>
+                                    <label for="status" class="col-sm-3">Relationship Status</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control input-sm" v-model="status" id="status">
+                                            <option value="Single">Single</option>
+                                            <option value="Engaged">Engaged</option>
+                                            <option value="Married">Married</option>
+                                            <option value="Divorced">Divorced</option>
+                                            <option value="Widowed">Widowed</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <div class="row form-group">
-                                    <label for="public" class="col-sm-2">Public</label>
-                                    <div class="col-sm-10 tour-step-privacy">
+                                    <label for="public" class="col-sm-3">Account Visibility</label>
+                                    <div class="col-sm-9 tour-step-privacy">
                                         <label class="radio-inline">
                                             <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                                         </label>
@@ -235,7 +236,7 @@
                                 <div class="col-sm-8">
                                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                                        <v-select class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
                                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
                                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                                         </select>
@@ -245,7 +246,7 @@
                             <div class="row form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
-                                    <v-select class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
                                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
                                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                                     </select>
@@ -309,7 +310,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <label class="control-label" for="website">Website</label>
-                                        <input type="text" class="form-control" v-model="website" id="website" placeholder="wwww.my-website.com">
+                                        <input type="text" class="form-control" v-model="website" id="website" placeholder="www.my-website.com">
                                     </div>
                                 </div>
                             </div><!-- end panel-body -->
@@ -414,8 +415,8 @@
                         : null;
             },
             years() {
-                var currentYear = new moment().subtract(8, 'years').year(), years = [];
-                startYear = new moment().subtract(100, 'years').year();
+                let currentYear = new moment().subtract(8, 'years').year(), years = [];
+                let startYear = new moment().subtract(100, 'years').year();
 
                 while ( startYear <= currentYear ) {
                         years.push(startYear++);
@@ -450,10 +451,6 @@
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$UserSettings[field].invalid && this.attemptSubmit;
-            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -507,9 +504,24 @@
                             }
                         ]
                 }).then(function (response) {
-                        this.setUserData(response.data.data);
+                        this.setUserData(response.body.data);
                         this.$dispatch('showSuccess', 'Settings updated successfully.');
                         this.hasChanged = false;
+
+                        if (this.public) {
+                            let settingsProfileButton = document.getElementById('settings-profile-link');
+                            if (settingsProfileButton)
+                                settingsProfileButton.attributes.href.value = '/' + response.body.data.url;
+
+                            let topProfileButton = document.getElementById('top-profile-link');
+                            if (topProfileButton)
+                                topProfileButton.attributes.href.value = '/' + response.body.data.url;
+
+                            let menuProfileButton = document.getElementById('menu-profile-link');
+                            if (menuProfileButton)
+                                menuProfileButton.attributes.href.value = '/' + response.body.data.url;
+                        }
+
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
@@ -567,16 +579,16 @@
         },
         ready(){
             let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.data.countries;
+                this.countries = response.body.countries;
             });
 
             let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.data.timezones;
+                this.timezones = response.body.timezones;
             });
 
             Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get().then(function (response) {
-                    this.setUserData(response.data.data)
+                    this.setUserData(response.body.data)
                 }, function (response) {
                     console.log('Update Failed! :(');
                     console.log(response);

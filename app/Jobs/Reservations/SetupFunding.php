@@ -40,22 +40,20 @@ class SetupFunding extends Job
             'description' => file_get_contents(resource_path('assets/sample_fundraiser.md')),
             'sponsor_type' => 'users',
             'sponsor_id' => $this->reservation->user_id,
-            'goal_amount' => $this->reservation->getTotalCost(),
+            'goal_amount' => $this->reservation->getTotalCost()/100,
             'started_at' => $this->reservation->created_at,
             'ended_at' => $this->reservation->trip->started_at,
-            'banner_upload_id' => $this->reservation->trip->campaign->banner->id,
-            'public' => false // private by default
+            'public' => true // public by default
         ]);
     }
 
     protected function makeSlug()
     {
         $slug = generate_fundraiser_slug(
-                    country($this->reservation->trip->country_code)).
+                    country($this->reservation->trip->country_code).
                     '-'.
                     $this->reservation->trip->started_at->format('Y')
-                )
-
+                );
         return $slug;
     }
 }

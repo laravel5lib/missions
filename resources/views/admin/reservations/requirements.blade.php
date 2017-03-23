@@ -2,6 +2,6 @@
 
 @section('tab')
 
-    <reservation-requirements id="{{ $reservation->id }}"></reservation-requirements>
+    <reservation-requirements id="{{ $reservation->id }}" :age="{{ $reservation->age }}"></reservation-requirements>
 
 @endsection

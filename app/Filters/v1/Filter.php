@@ -1,6 +1,7 @@
 <?php namespace App\Filters\v1;
 
 use EloquentFilter\ModelFilter;
+use Illuminate\Support\Facades\DB;
 
 class Filter extends ModelFilter
 {
@@ -70,6 +71,14 @@ class Filter extends ModelFilter
                     $query->orWhereHas(strrev($relationship), function($col) use($field, $terms) {
                         $col->where(strrev($field), 'LIKE', "%$terms%");
                     });
+
+                } elseif (str_contains($column, '::')) {
+                    
+                    list($first, $second) = explode('::', $column, 2);
+
+                    $query->orWhere(
+                        DB::raw('CONCAT('.$first.', " ", '.$second.')'), 'LIKE', "%$terms%"
+                    );
 
                 } else {
                     $query->orWhere($column, 'LIKE', "%$terms%");

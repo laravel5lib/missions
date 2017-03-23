@@ -436,7 +436,7 @@
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
 					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
-					<td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
+					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
 					<td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
 					<td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
@@ -855,9 +855,9 @@
 				// this.$refs.spinner.show();
 				this.$http.get('reservations', {params: params}).then(function (response) {
 					let self = this;
-					_.each(response.body.data, function (reservation) {
-						reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
-					}, this);
+					// _.each(response.body.data, function (reservation) {
+					// 	reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
+					// }, this);
 					this.reservations = response.body.data;
 					this.pagination = response.body.meta.pagination;
 					// this.$refs.spinner.hide();

@@ -10,7 +10,10 @@ use App\Http\Controllers\Controller;
 class DonationsController extends Controller
 {
     public function show($recipient = null)
-    {
+    {   
+        // redirect if using an old donation route
+        if ( request('type') ) return redirect('/fundraisers');
+
         $fund = !is_null($recipient) ? 
                   $this->api->get('funds/' . $recipient) : 
                   $this->api->get('funds/general');

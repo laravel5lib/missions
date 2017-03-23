@@ -41,7 +41,7 @@
                                 <span v-if="!donation.anonymous && !donation.donor.data.account_url">
                                     {{ donation.name }}
                                 </span>
-                                <span v-else>an anonymous donor</span>
+                                <span v-if="donation.anonymous">an anonymous donor</span>
                                 on {{ donation.created_at|moment 'll'}}
                             </small>
                             <br /><small>{{ donation.details.comment }}</small>

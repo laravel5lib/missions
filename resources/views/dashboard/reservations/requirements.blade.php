@@ -11,7 +11,7 @@
     
     <div class="row">
         <div class="col-xs-12 tour-step-requirements">
-            <reservation-requirements id="{{ $reservation->id }}"></reservation-requirements>
+            <reservation-requirements id="{{ $reservation->id }}" :age="{{ $reservation->age }}"></reservation-requirements>
         </div>
     </div>
 

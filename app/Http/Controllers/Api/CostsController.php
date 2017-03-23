@@ -96,12 +96,18 @@ class CostsController extends Controller
         $cost->update([
             'cost_assignable_type' => $request->get('cost_assignable_type', $cost->cost_assignable_type),
             'cost_assignable_id' => $request->get('cost_assignable_id', $cost->cost_assignable_id),
-            'name' => $request->get('name'),
-            'amount' => $request->get('amount'),
-            'description' => $request->get('description'),
-            'type' => $request->get('type'),
-            'active_at' => $request->get('active_at')
+            'name' => $request->get('name', $cost->name),
+            'amount' => $request->get('amount', $cost->amount),
+            'description' => $request->get('description', $cost->description),
+            'type' => $request->get('type', $cost->type),
+            'active_at' => $request->get('active_at', $cost->active_at)
         ]);
+        
+        // TODO: check for changes on certain attributes and then dispatch the job.
+        // reservation costs don't need to be updated for simple cost name and description changes.
+        // $cost->name = $request->get('name');
+        // $cost->save();
+        // return $cost->getOriginal('name');
 
         if ($cost->costAssignable instanceOf Trip) {
             $this->dispatch(new UpdateReservationCosts($cost));

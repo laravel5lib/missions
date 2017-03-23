@@ -32,22 +32,7 @@ class UpdateReservationCosts extends Job implements ShouldQueue
     public function handle()
     {
         $this->cost->costAssignable->reservations->each(function($reservation) {
-
-            $active = $reservation->trip->activeCosts()->get();
-
-            $maxDate = $active->where('type', 'incremental')->max('active_at');
-
-            $tripCosts = $active->reject(function ($value) {
-                return $value->type == 'optional';
-            })->reject(function ($value) use ($maxDate) {
-                return $value->type == 'incremental' && $value->active_at < $maxDate;
-            });
-
-            $costs = $reservation->costs
-                        ->merge($tripCosts)
-                        ->unique();
-
-            $reservation->syncCosts($costs);
+            $reservation->updateCosts();
         });
     }
 }

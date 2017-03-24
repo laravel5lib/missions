@@ -98,7 +98,10 @@
                         // trim costs
                         this.trip.costs = this.trip.costs.data;
                         _.each(this.trip.costs, function (cost) {
-                            payments[cost.id] = cost.payments.data;
+                            // use name as reference to new duplicated costs
+                            payments[cost.name] = cost.payments.data;
+
+                            delete cost.id;
                             delete cost.payments;
                             delete cost.links;
                         });
@@ -118,25 +121,28 @@
                         // for now remove rep_id and links
                         //delete this.trip.rep_id;
                         delete this.trip.links;
+                        delete this.trip.created_at;
+                        delete this.trip.updated_at;
 
-                        this.$http.post('trips', this.trip).then(function (response) {
-                            //console.log(response);
-                            // we need to duplicate the payments after the costs are duplicated
-                            let promises = [];
-                            _.each(payments, function(costPayments, id){
-                                _.each(costPayments, function (payment) {
-                                    delete payment.id;
-                                    promises.push(this.$http.post('costs/' + id + '/payments', payment)
-                                            .then(function (res) {
-                                                //console.log(res);
-                                            }, function (error) {
-                                                console.log(error);
-                                            }));
-                                }.bind(this));
+                        this.$http.post('trips', this.trip, { params: { include: 'costs.payments'}}).then(function (response) {
+                            let costPromises = [];
+                            _.each(this.trip.costs, function (cost) {
+                                // assign cost to trip
+                                cost.cost_assignable_type = 'trips';
+                                cost.cost_assignable_id = response.body.data.id;
+
+                                // add payments array from costs based on name
+                                cost.payments = payments[cost.name];
+                                // duplicate cost
+                                costPromises.push(this.$http.post('costs', cost).then(function (res) {
+                                }, function (error) {
+                                    console.log(error);
+                                }));
                             }.bind(this));
-                            Promise.all(promises).then(function (values) {
+
+                            Promise.all(costPromises).then(function (newCosts) {
                                 window.location.href = '/admin' + response.body.data.links[0].uri;
-                            });
+                            }.bind(this));
                         }, function (error) {
                             console.log(error);
                         });

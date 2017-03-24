@@ -38,6 +38,11 @@ class CostRequest extends FormRequest
             $rules['cost_assignable_type'] = 'sometimes|required|string|in:trips,reservations,projects,project_initiatives';
         }
 
-        return $rules;
+        if ($this->isMethod('post')) {
+            $rules['payments'] = 'sometimes|array';
+        }
+
+
+            return $rules;
     }
 }

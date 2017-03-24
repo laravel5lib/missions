@@ -56,6 +56,7 @@ $api->version('v1', [
     $api->post('campaigns/export', 'CampaignsController@export');
     $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
+    $api->post('trips/duplicate', 'TripsController@duplicate');
     $api->post('trips/export', 'TripsController@export');
     $api->post('trips/import', 'TripsController@import');
     $api->get('trips/{id}/todos', 'TripTodosController@index');

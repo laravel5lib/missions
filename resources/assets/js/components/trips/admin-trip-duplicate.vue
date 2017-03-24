@@ -124,7 +124,7 @@
                         delete this.trip.created_at;
                         delete this.trip.updated_at;
 
-                        this.$http.post('trips', this.trip, { params: { include: 'costs.payments'}}).then(function (response) {
+                        this.$http.post('trips/duplicate', this.trip, { params: { include: 'costs.payments'}}).then(function (response) {
                             let costPromises = [];
                             _.each(this.trip.costs, function (cost) {
                                 // assign cost to trip

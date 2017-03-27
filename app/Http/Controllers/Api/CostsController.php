@@ -73,7 +73,16 @@ class CostsController extends Controller
             'active_at' => $request->get('active_at')
         ]);
 
-        $cost->createDefaultPayment();
+        if ($request->has('payments'))
+        {
+            $payments = collect($request->get('payments'));
+            foreach ($payments as $payment)
+            {
+                $cost->payments()->create($payment);
+            }
+        } else {
+            $cost->createDefaultPayment();
+        }
 
         if ($cost->costAssignable instanceOf Trip) {
             $this->dispatch(new UpdateReservationCosts($cost));

@@ -34,7 +34,7 @@ class ReservationFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'given_names::surname', 'email', 'phone_one',
+        'given_names', 'surname', 'email', 'phone_one',
         'phone_two', 'zip', 'city', 'state'
     ];
 

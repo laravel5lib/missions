@@ -413,8 +413,12 @@
                 });
 		    },
 			'userObj'(val){
-                if (this.forAdmin) {
-                    this.setLocalUserData();
+		        if (this.forAdmin) {
+                    if (val && val.id) {
+                        this.setLocalUserData();
+                    } else {
+                        this.toggleUserData()
+                    }
                 }
 			}
 		},

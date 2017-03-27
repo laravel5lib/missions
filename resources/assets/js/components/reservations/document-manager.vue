@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <component :is="list"
-                               :user-id="$root.user.id"
+                               :user-id="managingUserId"
                                 selector keep-alive>
                     </component>
                 </div>
@@ -92,6 +92,10 @@
             'requirementId': {
                 type: String,
                 required: true
+            },
+            'userId': {
+                type: String,
+                required: false
             }
         },
         data(){
@@ -114,6 +118,13 @@
                 list: null,
                 docPreview: null,
                 questionnaire: null
+            }
+        },
+        computed: {
+            'managingUserId': function() {
+                if (this.userId) return this.userId;
+
+                return this.$root.user.id;
             }
         },
         watch:{

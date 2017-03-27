@@ -16,7 +16,7 @@
                     </div>
                     <div class="col-sm-6 text-center">
                         <label>Publish Date</label>
-                        <p>{{ date('F d, Y', strtotime($trip->updated_at)) }}</p>
+                        <p>{{ $trip->published_at ? $trip->published_at->format('F d, Y h:i a') : 'Draft' }}</p>
                     </div>
                 </div>
                 <hr class="divider">

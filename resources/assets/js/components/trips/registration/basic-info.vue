@@ -360,7 +360,8 @@
 			user_id(){
 				if (this.$parent.hasOwnProperty('userData') && _.isObject(this.userObj)) {
 					this.$parent.userData = this.userObj;
-				}
+
+                }
 				return  _.isObject(this.userObj) ? this.userObj.id : null;
 			},
 			dobYear(){
@@ -410,7 +411,16 @@
                             this.roles.push({ value: key, name: name});
                     }.bind(this));
                 });
-		    }
+		    },
+			'userObj'(val){
+		        if (this.forAdmin) {
+                    if (val && val.id) {
+                        this.setLocalUserData();
+                    } else {
+                        this.toggleUserData()
+                    }
+                }
+			}
 		},
 		methods: {
 			onValid(){
@@ -428,52 +438,51 @@
 				})
 			},
 			toggleUserData(){
-				switch (this.onBehalf) {
-					case true:
-						this.firstName = null;
-						this.lastName = null;
-						this.dobDay = '';
-						this.dobMonth = '';
-						this.dobYearCalc = '';
-						this.dobYear = '';
-						this.email = null;
-						this.gender = null;
-						this.address = null;
-						this.relationshipStatus = 'single';
-						this.phone = '';
-						this.mobile = '';
-						this.address = null;
-						this.state = null;
-						this.zipCode = null;
-                        this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
-                        this.avatar_upload_id = null;
-                        break;
-					case false:
-						var user = this.forAdmin ? this.userObj : this.$parent.userData;
-						var names = user.name.split(' ');
-						this.firstName = _.first(names);
-						this.lastName = names.length>1 ? _.last(names) : null;
+				if (this.onBehalf) {
+                    this.firstName = null;
+                    this.lastName = null;
+                    this.dobDay = '';
+                    this.dobMonth = '';
+                    this.dobYearCalc = '';
+                    this.dobYear = '';
+                    this.email = null;
+                    this.gender = null;
+                    this.address = null;
+                    this.relationshipStatus = 'single';
+                    this.phone = '';
+                    this.mobile = '';
+                    this.address = null;
+                    this.state = null;
+                    this.zipCode = null;
+                    this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                    this.avatar_upload_id = null;
+                } else {
+				    this.setLocalUserData();
+                }
+			},
+			setLocalUserData(){
+                let user = this.forAdmin ? this.userObj : this.$parent.userData;
+                let names = user.name.split(' ');
+                this.firstName = _.first(names);
+                this.lastName = names.length > 1 ? _.last(names) : null;
 
-						var birthdays = user.birthday.split('-');
-						this.dobDay = birthdays[2];
-						this.dobMonth = birthdays[1];
-						this.dobYearCalc = (parseInt(birthdays[0]) - this.currentYear + 100).toString();
+                let birthdays = user.birthday.split('-');
+                this.dobDay = birthdays[2];
+                this.dobMonth = birthdays[1];
+                this.dobYearCalc = (parseInt(birthdays[0]) - this.currentYear + 100).toString();
 
-						this.email = user.email;
-						this.gender = user.gender.toLowerCase();
-						this.address = user.address;
-						this.relationshipStatus = user.status.toLowerCase();
-						this.phone = user.phone_one;
-						this.mobile = user.phone_two;
-						this.address = user.address;
-						this.city = user.city;
-						this.state = user.state;
-						this.zipCode = user.zip;
-                        this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
-                        this.avatar_upload_id = user.avatar_upload_id;
-                        break;
-				}
-
+                this.email = user.email;
+                this.gender = user.gender.toLowerCase();
+                this.address = user.address;
+                this.relationshipStatus = user.status.toLowerCase();
+                this.phone = user.phone_one;
+                this.mobile = user.phone_two;
+                this.address = user.address;
+                this.city = user.city;
+                this.state = user.state;
+                this.zipCode = user.zip;
+                this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                this.avatar_upload_id = user.avatar_upload_id;
 			}
 		},
 		activate(done){

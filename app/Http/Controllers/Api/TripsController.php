@@ -95,7 +95,6 @@ class TripsController extends Controller
 
         $trip->syncDeadlines($request->get('deadlines'));
         $trip->syncRequirements($request->get('requirements'));
-        // $trip->syncFacilitators($request->get('facilitators'));
         // $trip->syncCosts($request->get('costs'));
 
         if ($request->has('tags'))
@@ -119,6 +118,8 @@ class TripsController extends Controller
 
         if ($request->has('tags'))
             $trip->retag($request->get('tags'));
+
+        $trip->syncFacilitators($request->get('facilitators'));
 
         return $this->response->item($trip, new TripTransformer);
     }

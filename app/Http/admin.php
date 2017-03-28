@@ -78,14 +78,22 @@ Route::get('records/visas/{id}/edit', function ($id) {
     return view('admin.records.visas.edit', compact('id'));
 });
 
-Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
-    $essay = $dispatcher->get('essays/' . $id);
-    return view('admin.records.essays.show', compact('essay'));
+Route::get('records/medical-releases/create', function () {
+    return view('admin.records.medical-releases.create');
 });
 
 Route::get('records/medical-releases/{id}', function ($id) use ($dispatcher) {
     $release = $dispatcher->get('medical/releases/' . $id);
     return view('admin.records.medical-releases.show', compact('release'));
+});
+
+Route::get('records/medical-releases/{id}/edit', function ($id) {
+    return view('admin.records.medical-releases.edit', compact('id'));
+});
+
+Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
+    $essay = $dispatcher->get('essays/' . $id);
+    return view('admin.records.essays.show', compact('essay'));
 });
 
 Route::get('records/referrals/{id}', function ($id) use ($dispatcher) {

@@ -88,7 +88,7 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/records/visas" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -174,7 +174,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/records/visas/';
+                window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + this.id;
             },
             forceBack(){
                 return this.back(true);
@@ -195,7 +195,7 @@
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Visa created.');
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/visas/' + resp.data.data.id;
+                            window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -222,7 +222,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/visas/' + that.id;
+                            window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;

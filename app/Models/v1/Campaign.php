@@ -139,7 +139,7 @@ class Campaign extends Model
      */
     public function groups()
     {
-        return $this->belongsToMany(Group::class, 'trips');
+        return $this->belongsToMany(Group::class, 'trips')->distinct();
     }
 
     /**

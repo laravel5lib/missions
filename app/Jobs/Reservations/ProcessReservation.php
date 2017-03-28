@@ -49,7 +49,7 @@ class ProcessReservation extends Job
 
             $costs = $active->reject(function ($value) use ($maxDate)
             {
-                return $value->type == 'incremental' && $value->active_at < $maxDate;
+                return ($value->type == 'incremental' && $value->active_at < $maxDate) or $value->type == 'optional';
             });
 
             $this->reservation->syncCosts($costs);

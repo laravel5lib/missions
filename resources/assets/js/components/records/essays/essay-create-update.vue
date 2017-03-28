@@ -20,7 +20,7 @@
             <hr class="divider inv">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/records/essays" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" :href="'/'+ firstUrlSegment +'/records/essays'" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -81,7 +81,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/records/essays/';
+                window.location.href = '/'+ this.firstUrlSegment + '/records/essays/' + this.id;
             },
             forceBack(){
                 return this.back(true);
@@ -97,8 +97,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Essay created.');
+                        let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/essays/' + resp.data.data.id;
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/essays/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -121,7 +122,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/essays/' + that.id; 
+                            window.location.href = '/'+ that.firstUrlSegment + '/records/essays/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;

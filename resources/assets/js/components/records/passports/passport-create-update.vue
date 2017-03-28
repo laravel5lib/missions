@@ -88,7 +88,7 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/passports" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" :href="'/' + firstUrlSegment + '/records/passports'" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -169,7 +169,8 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/passports/';
+                // window.location.href = '/dashboard/passports/';
+                window.location.href = '/' + this.firstUrlSegment + '/records/passports/' + this.id;
             },
             forceBack(){
                 return this.back(true);
@@ -190,7 +191,7 @@
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Passport created.');
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/passports/' + resp.data.data.id;
+                            window.location.href = '/' + this.firstUrlSegment + '/records/passports/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -217,7 +218,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/passports/' + that.id;
+                            window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
                         }, 1000);
                         this.hasChanged = false;
                     }, function (error) {

@@ -9,6 +9,7 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
+use App\Jobs\Reservations\ProcessReservation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
@@ -615,5 +616,29 @@ class Reservation extends Model
         $this->fund ? $this->fund->reactivate() : null;
 
         $this->restore();
+    }
+
+    /**
+     * Transfer Reservation to another trip
+     * 
+     * @param  String $trip_id
+     * @param  String $desired_role
+     * @return void
+     */
+    public function transferToTrip($trip_id, $desired_role)
+    {
+        // change trip and desired role
+        $this->update([
+            'desired_role' => $desired_role,
+            'trip_id' => $trip_id
+        ]);
+        
+        // remove the current todos
+        $this->costs()->delete();
+        $this->requirements()->delete();
+        $this->todos()->delete();
+
+        // sync all other resources
+        dispatch(new ProcessReservation($this));
     }
 }

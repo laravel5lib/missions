@@ -24,6 +24,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="{{ url('admin/reservations/'.$reservation->id.'/edit') }}">Edit</a></li>
+                            <li><a data-toggle="modal" data-target="#transferModal">Transfer</a></li>
                             @unless($reservation->deleted_at)
                             <li role="separator" class="divider"></li>
                             <li><a data-toggle="modal" data-target="#deleteConfirmationModal">Drop</a></li>
@@ -75,4 +76,7 @@
     action="Drop">
 </admin-delete-modal>
 <restore-reservation id="{{ $reservation->id }}"></restore-reservation>
+<transfer-reservation id="{{ $reservation->id }}" 
+                      campaign-id="{{ $reservation->trip->campaign_id }}">
+</transfer-reservation>
 @endsection

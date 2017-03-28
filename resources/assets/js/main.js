@@ -27,6 +27,7 @@ import tripRegistrationWizard from './components/trips/trip-registration-wizard.
 import userProjectsList from './components/projects/user-projects-list.vue';
 import reservationsList from './components/reservations/reservations-list.vue';
 import restoreReservation from './components/reservations/restore-reservation.vue';
+import transferReservation from './components/reservations/transfer-reservation.vue';
 import donationsList from './components/reservations/donations-list.vue';
 import recordsList from './components/records/records-list.vue';
 import groupsList from './components/groups/groups-list.vue';
@@ -712,6 +713,7 @@ new Vue({
         referralResponse,
         sendEmail,
         restoreReservation,
+        transferReservation,
 
         //dashboard components
         recordsList,

@@ -91,9 +91,17 @@ Route::get('records/medical-releases/{id}/edit', function ($id) {
     return view('admin.records.medical-releases.edit', compact('id'));
 });
 
+Route::get('records/essays/create', function () {
+    return view('admin.records.essays.create');
+});
+
 Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
     $essay = $dispatcher->get('essays/' . $id);
     return view('admin.records.essays.show', compact('essay'));
+});
+
+Route::get('records/essays/{id}/edit', function ($id) {
+    return view('admin.records.essays.edit', compact('id'));
 });
 
 Route::get('records/referrals/{id}', function ($id) use ($dispatcher) {

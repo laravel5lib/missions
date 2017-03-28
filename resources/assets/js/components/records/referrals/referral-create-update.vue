@@ -57,7 +57,7 @@
             <hr class="divider inv">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/records/referrals" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" :href="'/'+ firstUrlSegment +'/records/referrals'" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -132,7 +132,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/records/referrals/';
+                window.location.href = '/'+ this.firstUrlSegment +'/records/referrals/';
             },
             forceBack(){
                 return this.back(true);
@@ -150,8 +150,9 @@
                         attention_to: this.attention_to
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Referral created and sent.');
+                        let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/referrals/' + resp.data.data.id;
+                            window.location.href = '/'+ that.firstUrlSegment + '/records/referrals/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -176,7 +177,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/referrals/' + that.id; 
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/referrals/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;

@@ -104,7 +104,16 @@ Route::get('records/essays/{id}/edit', function ($id) {
     return view('admin.records.essays.edit', compact('id'));
 });
 
+Route::get('records/referrals/create', function () {
+    return view('admin.records.referrals.create');
+});
+
 Route::get('records/referrals/{id}', function ($id) use ($dispatcher) {
     $referral = $dispatcher->get('referrals/' . $id);
     return view('admin.records.referrals.show', compact('referral'));
 });
+
+Route::get('records/referrals/{id}/edit', function ($id) {
+    return view('admin.records.referrals.edit', compact('id'));
+});
+

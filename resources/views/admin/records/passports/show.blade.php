@@ -12,7 +12,7 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
-                            <span class="fa fa-chevron-left icon-left"></span> Back
+                            <span class="fa fa-chevron-left icon-left"></span>
                         </a>
                         <a href="{{ url('admin/records/passports/' . $passport->id . '/edit') }}" class="btn btn-primary">
                             Edit

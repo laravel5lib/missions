@@ -65,9 +65,17 @@ Route::get('records/passports/{id}/edit', function ($id) {
     return view('admin.records.passports.edit', compact('id'));
 });
 
+Route::get('records/visas/create', function () {
+    return view('admin.records.visas.create');
+});
+
 Route::get('records/visas/{id}', function ($id) use ($dispatcher) {
     $visa = $dispatcher->get('visas/' . $id);
     return view('admin.records.visas.show', compact('visa'));
+});
+
+Route::get('records/visas/{id}/edit', function ($id) {
+    return view('admin.records.visas.edit', compact('id'));
 });
 
 Route::get('records/essays/{id}', function ($id) use ($dispatcher) {

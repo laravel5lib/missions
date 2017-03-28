@@ -14,9 +14,9 @@
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span> Back
                         </a>
-                        {{-- <a href="{{ url('admin/records/passports/' . $passport->id . '/edit') }}" class="btn btn-primary">
+                        <a href="{{ url('admin/records/passports/' . $passport->id . '/edit') }}" class="btn btn-primary">
                             Edit
-                        </a> --}}
+                        </a>
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">

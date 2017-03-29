@@ -220,6 +220,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+
                 this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
                     this.passportResource.update({id:this.id}, {
@@ -271,6 +274,7 @@
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});
                     this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship});
                     this.userObj = passport.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

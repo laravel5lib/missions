@@ -25,7 +25,7 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <essay-create-update user-id="{{ auth()->user()->id }}" :is-update="true" id="{{ $id }}"></essay-create-update>
+                        <essay-create-update :is-update="true" id="{{ $id }}"></essay-create-update>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div>

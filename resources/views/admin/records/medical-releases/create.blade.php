@@ -23,7 +23,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <medical-create-update></medical-create-update>
+                <medical-create-update :for-admin="true"></medical-create-update>
             </div>
         </div>
     </div>

@@ -186,6 +186,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+                
                 this.resetErrors();
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.update({id: this.id}, {
@@ -216,6 +219,7 @@
                     let referral = response.body.data;
                     $.extend(this, referral);
                     this.userObj = referral.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

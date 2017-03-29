@@ -219,6 +219,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+                
                 this.resetErrors();
                 if (this.$CreateUpdateVisa.valid) {
                     this.visasResource.update({id:this.id}, {
@@ -267,6 +270,7 @@
                     $.extend(this, visa);
                     this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
                     this.userObj = visa.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

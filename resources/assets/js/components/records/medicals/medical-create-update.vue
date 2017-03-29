@@ -473,6 +473,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+                
                 this.resetErrors();
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
@@ -526,6 +529,7 @@
                     this.upload_ids = _.pluck(medical_release.uploads, 'id');
                     this.uploadCounter = medical_release.uploads.length + 1;
                     this.userObj = medical_release.user.data;
+                    this.usersArr.push(this.userObj);
                     $.extend(this, medical_release);
 
                     this.$http.get('medical/conditions').then(function (response) {

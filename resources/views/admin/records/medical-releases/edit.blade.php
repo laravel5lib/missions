@@ -30,7 +30,7 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
-                <medical-create-update :is-update="true" id="{{ $id }}"></medical-create-update>
+                <medical-create-update :is-update="true" id="{{ $id }}" :for-admin="true"></medical-create-update>
             </div>
         </div>
     </div>

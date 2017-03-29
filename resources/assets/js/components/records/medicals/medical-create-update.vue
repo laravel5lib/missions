@@ -11,6 +11,19 @@
                     </div>
                 </div>
                 <div class="panel-body">
+                    
+                    <template v-if="forAdmin">
+                        <div class="col-sm-12">
+                            <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                                <label for="infoManager">Record Manager</label>
+                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                                    <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </template>
+
                     <div class="row">
                         <div class="col-sm-6">
                             <div v-error-handler="{ value: name, handle: 'name' }">
@@ -203,7 +216,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" v-if="hasConditionsOrAllergies">
                 <div class="panel-heading">
                     <h5 class="panel-header">Doctor's Permission</h5>
                 </div>
@@ -307,6 +320,10 @@
             id: {
                 type: String,
                 default: null
+            },
+            forAdmin: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -314,7 +331,8 @@
                 // mixin settings
                 validatorHandle: 'CreateUpdateMedicalRelease',
 
-                user_id: null,
+                usersArr: [],
+                userObj: null,
                 name:'',
                 ins_provider:'',
                 ins_policy_no:'',
@@ -351,7 +369,6 @@
                 additionalAllergiesList: [],
                 countries: [],
                 countryObj: null,
-//                attemptSubmit: false,
                 showSuccess: false,
                 showError: false,
                 selectedAvatar: null,
@@ -365,12 +382,21 @@
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
+            user_id(){
+                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            },
+            hasConditionsOrAllergies(){
+                return _.contains(_.pluck(this.conditionsList, 'selected'), true) || _.contains(_.pluck(this.allergiesList, 'diagnosed'), true) || _.contains(_.pluck(this.allergiesList, 'medication'), true)
+            }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpdateMedicalRelease[field].invalid && this.attemptSubmit;
-            },*/
+            getUsers(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersArr = response.body.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -385,12 +411,10 @@
                 return this.back(true);
             },
             addCondition(condition){
-                // condition.selected = true;
                 this.additionalConditionsList.push(condition);
                 this.reset('condition');
             },
             addAllergy(allergy){
-                // allergy.selected = true;
                 this.additionalAllergiesList.push(allergy);
                 this.reset('allergy');
             },
@@ -449,6 +473,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+                
                 this.resetErrors();
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
@@ -494,16 +521,15 @@
             }
         },
         ready(){
-            // set user data
-            this.user_id = this.$root.user.id;
             if (this.isUpdate) {
-                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads'} }).then(function (response) {
-                    // this.user = response.body.data;
+                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads,user'} }).then(function (response) {
                     this.user_id = response.body.data.id;
                     let medical_release = response.body.data;
                     medical_release.uploads = medical_release.uploads.data;
                     this.upload_ids = _.pluck(medical_release.uploads, 'id');
                     this.uploadCounter = medical_release.uploads.length + 1;
+                    this.userObj = medical_release.user.data;
+                    this.usersArr.push(this.userObj);
                     $.extend(this, medical_release);
 
                     this.$http.get('medical/conditions').then(function (response) {

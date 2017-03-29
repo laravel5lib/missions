@@ -67,7 +67,7 @@ class ReferralsController extends Controller
      */
     public function store(ReferralRequest $request)
     {
-        $referral = Referral::create([
+        $referral = $this->referral->create([
             'user_id' => $request->get('user_id'),
             'applicant_name' => $request->get('applicant_name'),
             'attention_to' => $request->get('attention_to'),

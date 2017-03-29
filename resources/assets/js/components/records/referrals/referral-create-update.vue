@@ -2,6 +2,19 @@
     <validator name="CreateUpdateReferral" @touched="onTouched">
         <form id="CreateUpdateReferral" class="form-horizontal" novalidate style="postition:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            
+            <template v-if="forAdmin">
+                <div class="col-sm-12">
+                    <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                        <label for="infoManager">Record Manager</label>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </template>
+
             <div class="row">
                 <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
                     <label for="author" class="control-label">Applicant Name</label>
@@ -26,7 +39,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('referreraltitle') }">
+                <div class="col-sm-6" :class="{ 'has-error': checkForError('referraltitle') }">
                     <label for="author" class="control-label">Referral Title/Position</label>
                     <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
                        placeholder="Referral title or position" v-validate:referraltitle="{ required: true, minlength:1, maxlength:100 }"
@@ -71,10 +84,12 @@
     </validator>
 </template>
 <script type="text/javascript">
+    import vSelect from "vue-select";
     import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'referral-create-update',
         mixins: [errorHandler],
+        components: {vSelect},
         props: {
             isUpdate: {
                 type: Boolean,
@@ -84,9 +99,9 @@
                 type: String,
                 default: null
             },
-            userId: {
-                type: String,
-                required: true
+            forAdmin: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -111,19 +126,27 @@
                     { q: 'Do you have any concerns about this applicant\'s spiritual, physical, and social endurance in a foreign nation for 7-14 days? Please explain.', a: '', type: 'textarea'},
                     { q: 'Do you recommend this applicant for missions service with Missions.Me?', a: '', type: 'radio'}
                 ],
-                user_id: this.userId,
+                usersArr: [],
+                userObj: null,
 
                 // logic vars
                 resource: this.$resource('referrals{/id}'),
                 hasChanged: false,
-//                attemptSubmit: false,
+            }
+        },
+        computed: {
+            user_id(){
+                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpdateReferral[field].invalid && this.attemptSubmit;
-            },*/
+            getUsers(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersArr = response.body.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -163,6 +186,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+                
                 this.resetErrors();
                 if (this.$CreateUpdateReferral.valid) {
                     this.resource.update({id: this.id}, {
@@ -188,10 +214,12 @@
         },
         ready(){
             if (this.isUpdate) {
-                this.$http.get('referrals/' + this.id).then(function (response) {
+                this.$http.get('referrals/' + this.id + '?include=user').then(function (response) {
 
                     let referral = response.body.data;
                     $.extend(this, referral);
+                    this.userObj = referral.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

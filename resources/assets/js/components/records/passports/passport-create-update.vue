@@ -2,6 +2,19 @@
     <validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            
+            <template v-if="forAdmin">
+                <div class="col-sm-12">
+                    <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
+                        <label for="infoManager">Record Manager</label>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </template>
+
             <div class="row">
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
@@ -37,9 +50,6 @@
                             <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD'" :input-sm="false"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
-                            <!--<div class="input-group input-group-sms" :class="{ 'has-error': checkForError('expires') }">
-
-                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -118,6 +128,10 @@
             id: {
                 type: String,
                 default: null
+            },
+            forAdmin: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -132,20 +146,20 @@
                 birth_country: null,
                 citizenship: null,
                 upload_id: null,
-                user_id: null,
+                usersArr: [],
+                userObj: null,
 
                 // logic vars
                 countries: [],
                 birthCountryObj: null,
                 citizenshipObj: null,
-//                attemptSubmit: false,
                 selectedAvatar: null,
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
                 showSaveAlert: false,
                 hasChanged: false,
-                passportResource: this.$resource('passports{/id}')
+                passportResource: this.$resource('passports{/id}', {include: 'user'})
             }
         },
         computed: {
@@ -155,12 +169,18 @@
             citizenship(){
                 return _.isObject(this.citizenshipObj) ? this.citizenshipObj.code : null;
             },
+            user_id(){
+                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpdatePassport[field].invalid && this.attemptSubmit;
-            },*/
+            getUsers(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersArr = response.body.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -169,7 +189,6 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                // window.location.href = '/dashboard/passports/';
                 window.location.href = '/' + this.firstUrlSegment + '/records/passports/' + this.id;
             },
             forceBack(){
@@ -178,7 +197,6 @@
             submit(){
                 this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
-                    // this.$refs.spinner.show();
                     this.passportResource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -202,9 +220,11 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+
                 this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
-                    // this.$refs.spinner.show();
                     this.passportResource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -242,12 +262,9 @@
             }
         },
         ready(){
-            // this.$refs.spinner.show();
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.body.countries;
             });
-
-            this.user_id = this.$root.user.id;
 
             if (this.isUpdate) {
                 this.passportResource.get({ id: this.id }).then(function (response) {
@@ -256,7 +273,8 @@
 
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});
                     this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship});
-                    // this.$refs.spinner.hide();
+                    this.userObj = passport.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

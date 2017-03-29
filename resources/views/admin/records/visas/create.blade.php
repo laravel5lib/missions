@@ -32,7 +32,7 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <visa-create-update></visa-create-update>
+                        <visa-create-update :for-admin="true"></visa-create-update>
                     </div><!-- end panel-body -->
                 </div><!-- end panel -->
             </div>

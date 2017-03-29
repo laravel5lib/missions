@@ -24,7 +24,7 @@ class ReferralTransformer extends TransformerAbstract
      */
     public function transform(Referral $referral)
     {
-        $array = [
+        return [
             'id' => $referral->id,
             'user_id' => $referral->user_id,
             'applicant_name' => $referral->applicant_name,
@@ -45,20 +45,18 @@ class ReferralTransformer extends TransformerAbstract
                 ]
             ]
         ];
-
-        return $array;
     }
 
     /**
-     * Include Response
+     * Include User
      *
      * @param Referral $referral
      * @return \League\Fractal\Resource\Item
      */
     public function includeUser(Referral $referral)
     {
-        $response = $referral->response;
+        $response = $referral->user;
 
-        return $this->item($response, new ReferralTransformer);
+        return $this->item($response, new UserTransformer);
     }
 }

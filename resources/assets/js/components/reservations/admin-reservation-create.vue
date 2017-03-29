@@ -120,6 +120,10 @@
                                 thisChild = child;
                         });
 
+                        // Touch fields for proper validation
+                        if ( _.isFunction(thisChild.$validate) )
+                            thisChild.$validate(true);
+
                         // if form is invalid do not continue
                         if (thisChild.$BasicInfo.invalid) {
                             thisChild.attemptedContinue = true;

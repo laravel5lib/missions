@@ -634,7 +634,7 @@ class Reservation extends Model
         ]);
         
         // remove the current todos
-        $this->costs()->delete();
+        // $this->costs()->delete();
         $this->requirements()->delete();
         $this->todos()->delete();
 

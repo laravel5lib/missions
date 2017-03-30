@@ -231,6 +231,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="fund" :disabled="maxCheck('fund')"> Fund
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="type" :disabled="maxCheck('type')"> Type
 								</label>
 							</li>
@@ -384,6 +389,9 @@
 						<i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('fund')">
+						Fund
+					</th>
 					<th v-if="isActive('type')" :class="{'text-primary': orderByField === 'trip.data.type'}">
 						Type
 						<i @click="setOrderByField('trip.data.type')" v-if="orderByField !== 'trip.data.type'" class="fa fa-sort pull-right"></i>
@@ -434,6 +442,7 @@
 					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
 					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
+					<td v-if="isActive('fund')"><a :href="'/admin/funds/'+reservation.fund.data.id" target="_blank">{{ reservation.fund.data.name|capitalize }}</a></td>
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
 					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
 					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
@@ -577,9 +586,9 @@
 					user_email: 'User Email',
 					user_primary_phone: 'User Primary Phone',
 					user_secondary_phone: 'User Secondary Phone',
-					type: 'Trip Type',
-					campaign: 'Campaign',
 					group: 'Group',
+					trip_type: 'Trip Type',
+					campaign: 'Campaign',
 					country_located: 'Country Located',
 					start_date: 'Trip Start Date',
 					end_date: 'Trip End Date',
@@ -598,13 +607,13 @@
 					state_providence: 'State/Providence',
 					zip_postal: 'Zip/Postal Code',
 					country: 'Country',
-					// payments: 'Payments Due',
-					// applied_costs: 'Applied Costs',
-					// requirements: 'Travel Requirements',
+					payments: 'Payments Due',
+					applied_costs: 'Applied Costs',
+					requirements: 'Travel Requirements',
 					percent_raised: 'Percent Raised',
 					amount_raised: 'Amount Raised',
 					outstanding: 'Outstanding',
-					// deadlines: 'Other Deadlines'
+					deadlines: 'Other Deadlines',
 					desired_role: 'Role'
 				},
 				exportFilters: {}
@@ -818,7 +827,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep',
+					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund',
 					search: this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,

@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
-			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
+			<form id="CreateUploadForm" class="form" novalidate @submit.prevent="">
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -113,7 +113,7 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && type !== 'video'">
+				<div class="form-group" v-if="type && type !== 'video'" :class="{ 'has-error': isFileSet}">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
 						<!--<h5>Coords: {{coords|json}}</h5>-->
@@ -138,12 +138,11 @@
 
 				<br>
 
-				<div class="form-group">
-						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
+				<div class="form-group" v-if="!hideSubmit">
+					<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
+					<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
+					<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
 				</div>
-
 			</form>
 		</validator>
 
@@ -227,7 +226,15 @@
             buttonText: {
                 type: String,
                 default: 'Save'
-            }
+            },
+            submitEvent: {
+                type: String,
+                default: 'start-upload'
+            },
+	        hideSubmit: {
+			    type: Boolean,
+		        default: false
+	        }
 		},
         data(){
             return {
@@ -289,7 +296,10 @@
 				} else {
 			        return 'col-sm-2 col-md-2';
 				}
-			}
+			},
+            isFileSet() {
+			    return  !_.isNull(this.file) && !!this.attemptSubmit
+            }
 		},
 		watch:{
         	'type': function (val, oldVal) {
@@ -422,9 +432,6 @@
 					this.vueCropApi.setOptions({aspectRatio: (w/h)});
 				}
 				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
-			},
-			prevent(e){
-				e.preventDefault();
 			},
             /*checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
@@ -568,6 +575,7 @@
 			}
         },
 		ready(){
+            let self = this;
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
 					let upload = response.body.data;
@@ -588,6 +596,14 @@
 			}
 
 			this.searchUploads();
+
+            this.$root.$on(self.submitEvent, function () {
+                if (self.isUpdate) {
+                    self.update();
+                } else {
+                    self.submit();
+                }
+            }.bind(this));
 
         }
     }

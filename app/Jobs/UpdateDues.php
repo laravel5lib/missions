@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Jobs\Job;
 use App\Models\v1\Payment;
+use App\Models\v1\Project;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,18 +31,6 @@ class UpdateDues extends Job implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        $this->payment->due ? $this->updateDues() : $this->createDues();
-    }
-
-    private function updateDues()
-    {
-        $this->payment->due->payable->each(function ($payable) {
-            $payable->payments()->sync();
-        });
-    }
-
-    private function createDues()
     {
         $assignable = $this->payment->cost->costAssignable;
 

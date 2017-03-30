@@ -64,6 +64,9 @@ class ReservationRequirementTransformer extends TransformerAbstract
             case 'essays':
                 return $this->item($document, new EssayTransformer);
                 break;
+            case 'influencer_applications':
+                return $this->item($document, new EssayTransformer);
+                break;
             case 'medical_releases':
                 return $this->item($document, new MedicalReleaseTransformer);
                 break;

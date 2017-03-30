@@ -67,6 +67,7 @@ $api->version('v1', [
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
     $api->put('reservations/{id}/restore', 'ReservationsController@restore');
+    $api->post('reservations/{id}/transfer', 'ReservationTransfersController@store');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
     $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
     $api->post('reservations/{reservations}/companions', 'CompanionsController@store');
@@ -113,6 +114,9 @@ $api->version('v1', [
     $api->resource('essays', 'EssaysController');
     $api->post('essays/export', 'EssaysController@export');
     $api->post('essays/import', 'EssaysController@import');
+    $api->resource('influencers', 'EssaysController');
+    $api->post('influencers/export', 'EssaysController@export');
+    $api->post('influencers/import', 'EssaysController@import');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');
@@ -121,6 +125,11 @@ $api->version('v1', [
     $api->resource('questionnaires', 'QuestionnairesController');
     $api->resource('permissions/roles', 'PermissionRolesController');
     $api->resource('permissions/abilities', 'PermissionAbilitiesController');
+
+    $api->group(['prefix' => 'credentials'], function($api)
+    {
+        $api->resource('medical', 'MedicalCredentialsController');
+    });
 
     $api->group(['prefix' => 'medical'], function($api)
     {
@@ -136,7 +145,7 @@ $api->version('v1', [
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {
-        $api->get('team-roles', 'UtilitiesController@getTeamRoles');
+        $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');

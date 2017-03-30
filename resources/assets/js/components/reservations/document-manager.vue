@@ -13,7 +13,7 @@
                             <i class="fa fa-times"></i> Cancel
                         </span>
                     </a>
-                    <a v-if="! isAdmin()" class="btn btn-primary-hollow btn-sm" href="/dashboard/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
+                    <a class="btn btn-primary-hollow btn-sm" href="/{{ firstUrlSegment }}/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
                     <a class="btn btn-default-hollow btn-sm" @click="removeDocument(document)" v-if="document">
                         <i class="fa fa-trash icon-left"></i> Remove
                     </a>
@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <component :is="list"
-                               :user-id="$root.user.id"
+                               :user-id="managingUserId"
                                 selector keep-alive>
                     </component>
                 </div>
@@ -61,6 +61,8 @@
     import visasList from '../records/visas/visas-list.vue';
     import visa from '../records/visas/visa.vue';
     import essaysList from '../records/essays/essays-list.vue';
+    import influencerQuestionnairesList from '../records/influencers/influencer-questionnaires-list.vue';
+    import influencerQuestionnaire from '../records/influencers/influencer-questionnaire.vue';
     import essay from '../records/essays/essay.vue';
     import medicalsList from '../records/medicals/medicals-list.vue';
     import medical from '../records/medicals/medical.vue';
@@ -76,6 +78,8 @@
             visasList,
             visa,
             essaysList,
+            influencerQuestionnairesList,
+            influencerQuestionnaire,
             essay,
             medicalsList,
             medical,
@@ -92,6 +96,10 @@
             'requirementId': {
                 type: String,
                 required: true
+            },
+            'userId': {
+                type: String,
+                required: false
             }
         },
         data(){
@@ -114,6 +122,13 @@
                 list: null,
                 docPreview: null,
                 questionnaire: null
+            }
+        },
+        computed: {
+            'managingUserId': function() {
+                if (this.userId) return this.userId;
+
+                return this.$root.user.id;
             }
         },
         watch:{
@@ -146,6 +161,12 @@
                         this.url = 'essays';
                         this.list = 'essays-list';
                         this.docPreview = 'essay';
+                        break;
+                    case 'influencer_applications':
+                        this.label = 'Influencer Application';
+                        this.url = 'influencers';
+                        this.list = 'influencer-questionnaires-list';
+                        this.docPreview = 'influencer-questionnaire';
                         break;
                     case 'medical_releases':
                         this.label = 'Medical Release';

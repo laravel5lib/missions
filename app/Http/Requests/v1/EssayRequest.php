@@ -24,10 +24,12 @@ class EssayRequest extends FormRequest
     public function rules()
     {
         return [
-            'author_name' => 'required|string',
-            'subject' => 'required|string',
-            'content' => 'required|array',
-            'user_id' => 'required|exists:users,id'
+            'author_name'  => 'required|string',
+            'subject'      => 'required|string',
+            'content'      => 'required|array',
+            'user_id'      => 'required|exists:users,id',
+            'upload_ids'   => 'array',
+            'upload_ids.*' => 'required|exists:uploads,id'
         ];
     }
 }

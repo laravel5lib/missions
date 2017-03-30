@@ -62,7 +62,8 @@
                     </div>
                     <div class="panel-body">
                         <document-manager :reservation-id="id"
-                                          :requirement-id="requirement.id">
+                                          :requirement-id="requirement.id"
+                                          :user-id="userId">
                         </document-manager>
                     </div>
                 </div>
@@ -123,6 +124,10 @@
             'age': {
                 type: Number,
                 default: 100
+            },
+            'userId': {
+                type: String,
+                required: true
             }
         },
         computed: {

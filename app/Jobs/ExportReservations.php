@@ -48,10 +48,10 @@ class ExportReservations extends Exporter
             'outstanding' => $reservation->totalOwedInDollars(),
             'desired_role' => teamRole($reservation->desired_role),
             'payments' => implode(", ", $reservation->dues->map(function($due) {
-                return $due->payment->cost->name. ' [balance: $'.number_format($due->outstanding_balance,2).'] ('.$due->getStatus().')';
+                return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(),2).'] ('.$due->getStatus().')';
             })->all()),
             'applied_costs' => implode(", ", $reservation->costs->map(function($cost) {
-                return $cost->name . ' ($'.number_format($cost->amount,2).')';
+                return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
             })->all()),
             'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
                 return $requirement->requirement->name . ' ('.$requirement->status.')';

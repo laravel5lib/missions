@@ -1,3 +1,5 @@
-# Missions.Me Feature Branch
+# Missions.Me
 
-This is a feature branch. Nothing deploys from this branch.
+[![Build Status](https://travis-ci.org/missions-me/missions.svg)](https://travis-ci.org/missions-me/missions)
+
+Missions.Me repo

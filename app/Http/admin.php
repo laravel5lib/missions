@@ -117,11 +117,10 @@ Route::get('records/referrals/{id}/edit', function ($id) {
     return view('admin.records.referrals.edit', compact('id'));
 });
 
-Route::get('records/influencers/{id}', function ($id) use ($dispatcher) {
-    $essay = $dispatcher->get('essays/' . $id);
-    return view('admin.records.influencers.show', compact('essay'));
-});
-
 $this->resource('records/medical-credentials', 'MedicalCredentialsController', [
-        'except' => ['index', 'destroy']
-    ]);
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/influencers', 'InfluencersController', [
+    'except' => ['index', 'destroy']
+]);

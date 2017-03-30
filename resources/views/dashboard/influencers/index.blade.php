@@ -5,8 +5,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3 class="hidden-xs">My Questionnaires</h3>
-                    <h3 class="visible-xs text-center">My Questionnaires</h3>
+                    <h3 class="hidden-xs">My Influencer Applications</h3>
+                    <h3 class="visible-xs text-center">My Influencer Applications</h3>
                 </div>
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">

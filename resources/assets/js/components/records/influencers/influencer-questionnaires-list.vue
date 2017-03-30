@@ -12,10 +12,10 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility v-if="canExport" url="influencers/export"
+                <!-- <export-utility v-if="canExport" url="influencers/export"
                                 :options="exportOptions"
                                 :filters="exportFilters">
-                </export-utility>
+                </export-utility> -->
                 <!-- <import-utility title="Import Influencers List"
                       url="influencers/import"
                       :required-fields="importRequiredFields" 

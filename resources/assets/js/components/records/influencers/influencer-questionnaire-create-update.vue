@@ -3,6 +3,21 @@
         <validator name="CreateUpdateInfluencer" @touched="onTouched">
             <form id="CreateUpdateInfluencer" class="" novalidate>
                 <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                
+                <template v-if="forAdmin">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
+                            <label for="infoManager">Record Manager</label>
+                            <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                            <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                                <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                </template>
+
                 <div class="form-group" v-error-handler="{ value: author_name, handle: 'author' }">
                     <label for="author" class="control-label">Author Name</label>
                     <input type="text" class="form-control" name="author" id="author" v-model="author_name"
@@ -64,12 +79,13 @@
     </div>
 </template>
 <script type="text/javascript">
+    import vSelect from "vue-select";
     import errorHandler from'../../error-handler.mixin';
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     export default{
         name: 'influencer-questionnaire-create-update',
         mixins: [errorHandler],
-        components: {'upload-create-update': uploadCreateUpdate},
+        components: {vSelect, 'upload-create-update': uploadCreateUpdate},
         props: {
             isUpdate: {
                 type: Boolean,
@@ -79,9 +95,9 @@
                 type: String,
                 default: null
             },
-            userId: {
-                type: String,
-                required: true
+            forAdmin: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -105,7 +121,8 @@
                     { q: 'Please list 3-4 topics that you would be most comfortable speaking on to college students? (i.e. technology, education, leadership, business, politics, etc.)', a: '', type: 'textarea'},
                     { q: 'Please upload a bio or resume for review.', a: [], type: 'file'},
                 ],
-                user_id: this.userId,
+                usersArr: [],
+                userObj: null,
 
                 // logic vars
                 resource: this.$resource('essays{/id}'),
@@ -113,7 +130,19 @@
                 hasChanged: false,
             }
         },
+        computed: {
+            user_id(){
+                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            }
+        },
         methods: {
+            getUsers(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersArr = response.body.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -122,7 +151,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/records/influencers/';
+                window.location.href = '/'+ this.firstUrlSegment +'/records/influencers/';
             },
             forceBack(){
                 return this.back(true);
@@ -139,8 +168,9 @@
                         upload_ids: this.upload_ids,
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Influencer created.');
+                        let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/influencers/' + resp.body.data.id;
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + resp.body.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -151,6 +181,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+
                 this.resetErrors();
                 if (this.$CreateUpdateInfluencer.valid) {
                     // this.$refs.spinner.show();
@@ -164,7 +197,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/influencers/' + that.id; 
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -193,11 +226,13 @@
         ready(){
             if (this.isUpdate) {
                 // this.$refs.spinner.show();
-                this.resource.get({ id: this.id }).then(function (response) {
+                this.resource.get({ id: this.id, include: 'user' }).then(function (response) {
                     let influencer = response.body.data;
                     this.author_name = influencer.author_name;
                     this.subject = influencer.subject;
                     this.content = influencer.content;
+                    this.userObj = influencer.user.data;
+                    this.usersArr.push(this.userObj);
 
                     if (this.content[7].a.length) {
                         this.uploadCounter += this.content[7].a.length;

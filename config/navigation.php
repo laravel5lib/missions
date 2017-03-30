@@ -54,11 +54,11 @@ return [
                 'url' => 'referrals'
             ],
             [
-                'label' => 'Essays',
+                'label' => 'Testimonies',
                 'url' => 'essays'
             ],
             [
-                'label' => 'Influencers',
+                'label' => 'Influencer Applications',
                 'url' => 'influencers'
             ]
         ],
@@ -122,11 +122,11 @@ return [
                 'url' => 'referrals'
             ],
             [
-                'label' => 'Essays',
+                'label' => 'Testimonies',
                 'url' => 'essays'
             ],
             [
-                'label' => 'Influencers',
+                'label' => 'Influencer Applications',
                 'url' => 'influencers'
             ]
         ],

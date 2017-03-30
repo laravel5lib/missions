@@ -126,6 +126,11 @@ $api->version('v1', [
     $api->resource('permissions/roles', 'PermissionRolesController');
     $api->resource('permissions/abilities', 'PermissionAbilitiesController');
 
+    $api->group(['prefix' => 'credentials'], function($api)
+    {
+        $api->resource('medical', 'MedicalCredentialsController');
+    });
+
     $api->group(['prefix' => 'medical'], function($api)
     {
         $api->resource('releases', 'Medical\ReleasesController');
@@ -140,7 +145,7 @@ $api->version('v1', [
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {
-        $api->get('team-roles', 'UtilitiesController@getTeamRoles');
+        $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');

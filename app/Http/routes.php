@@ -36,6 +36,9 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     $this->resource('records/medical-releases', 'Dashboard\MedicalReleasesController', [
         'except' => ['index', 'destroy']
     ]);
+    $this->resource('records/medical-credentials', 'Dashboard\MedicalCredentialsController', [
+        'except' => ['index', 'destroy']
+    ]);
     $this->resource('records/essays', 'Dashboard\EssaysController', [
         'except' => ['index', 'destroy']
     ]);

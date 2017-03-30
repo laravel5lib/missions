@@ -46,6 +46,10 @@ return [
                 'url' => 'medical-releases'
             ],
             [
+                'label' => 'Medical Credentials',
+                'url' => 'medical-credentials'
+            ],
+            [
                 'label' => 'Referrals',
                 'url' => 'referrals'
             ],
@@ -108,6 +112,10 @@ return [
             [
                 'label' => 'Medical Releases',
                 'url' => 'medical-releases'
+            ],
+            [
+                'label' => 'Medical Credentials',
+                'url' => 'medical-credentials'
             ],
             [
                 'label' => 'Referrals',

@@ -121,3 +121,7 @@ Route::get('records/influencers/{id}', function ($id) use ($dispatcher) {
     $essay = $dispatcher->get('essays/' . $id);
     return view('admin.records.influencers.show', compact('essay'));
 });
+
+$this->resource('records/medical-credentials', 'MedicalCredentialsController', [
+        'except' => ['index', 'destroy']
+    ]);

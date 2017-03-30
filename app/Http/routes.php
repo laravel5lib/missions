@@ -39,6 +39,9 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     $this->resource('records/essays', 'Dashboard\EssaysController', [
         'except' => ['index', 'destroy']
     ]);
+    $this->resource('records/influencers', 'Dashboard\InfluencersController', [
+        'except' => ['index', 'destroy']
+    ]);
     $this->resource('records/referrals', 'Dashboard\ReferralsController', [
         'except' => ['index', 'destroy']
     ]);

@@ -117,3 +117,7 @@ Route::get('records/referrals/{id}/edit', function ($id) {
     return view('admin.records.referrals.edit', compact('id'));
 });
 
+Route::get('records/influencers/{id}', function ($id) use ($dispatcher) {
+    $essay = $dispatcher->get('essays/' . $id);
+    return view('admin.records.influencers.show', compact('essay'));
+});

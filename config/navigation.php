@@ -52,6 +52,10 @@ return [
             [
                 'label' => 'Essays',
                 'url' => 'essays'
+            ],
+            [
+                'label' => 'Influencers',
+                'url' => 'influencers'
             ]
         ],
         'project' => [
@@ -112,6 +116,10 @@ return [
             [
                 'label' => 'Essays',
                 'url' => 'essays'
+            ],
+            [
+                'label' => 'Influencers',
+                'url' => 'influencers'
             ]
         ],
         'reservation' => [

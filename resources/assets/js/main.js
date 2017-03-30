@@ -36,10 +36,12 @@ import medicalsList from './components/records/medicals/medicals-list.vue';
 import passportsList from './components/records/passports/passports-list.vue';
 import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
 import essaysList from './components/records/essays/essays-list.vue';
+import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
 import referralsList from './components/records/referrals/referrals-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
 import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
+import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
 import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
 import reservationAvatar from './components/reservations/reservation-avatar.vue';
 import reservationCosts from './components/reservations/reservation-costs.vue';
@@ -426,24 +428,29 @@ Vue.directive('crop', {
 
         if (this.vm.jcrop) return;
 
-        var $wrapper = $(this.el).wrap('<div/>').parent();
-        $wrapper.width(this.el.width).height(this.el.height);
-        this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
-        // send api to active componant
-        this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+        if (!_.contains(['file', 'video'], this.vm.type)) {
+            var $wrapper = $(this.el).wrap('<div/>').parent();
+            $wrapper.width(this.el.width).height(this.el.height);
+            this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
+            // send api to active componant
+            this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+        }
     },
 
     update: function (callback) {
-        this.vm.jcrop.container.on('crop' + this.arg, callback)
+        if (!_.contains(['file', 'video'], this.vm.type))
+            this.vm.jcrop.container.on('crop' + this.arg, callback)
     },
 
     unbind: function () {
-        this.vm.jcrop.container.off('crop' + this.arg);
+        if (!_.contains(['file', 'video'], this.vm.type)) {
+            this.vm.jcrop.container.off('crop' + this.arg);
 
-        if (this._watcher.id != 1) return;
+            if (this._watcher.id != 1) return;
 
-        this.vm.jcrop.destroy();
-        this.vm.jcrop = null
+            this.vm.jcrop.destroy();
+            this.vm.jcrop = null
+        }
     }
 });
 
@@ -719,8 +726,10 @@ new Vue({
         recordsList,
         passportsList,
         essaysList,
+        influencerQuestionnairesList,
         referralsList,
         essayCreateUpdate,
+        influencerQuestionnaireCreateUpdate,
         referralCreateUpdate,
         passportCreateUpdate,
         visasList,

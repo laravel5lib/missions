@@ -114,6 +114,9 @@ $api->version('v1', [
     $api->resource('essays', 'EssaysController');
     $api->post('essays/export', 'EssaysController@export');
     $api->post('essays/import', 'EssaysController@import');
+    $api->resource('influencers', 'EssaysController');
+    $api->post('influencers/export', 'EssaysController@export');
+    $api->post('influencers/import', 'EssaysController@import');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');

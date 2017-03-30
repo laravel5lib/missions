@@ -46,21 +46,20 @@ class ExportReservations extends Exporter
             'percent_raised' => $reservation->getPercentRaised().'%',
             'amount_raised' => $reservation->totalRaisedInDollars(),
             'outstanding' => $reservation->totalOwedInDollars(),
-            'desired_role' => teamRole($reservation->desired_role)
+            'desired_role' => teamRole($reservation->desired_role),
+            'payments' => implode(", ", $reservation->dues->map(function($due) {
+                return $due->payment->cost->name. ' [balance: $'.number_format($due->outstanding_balance,2).'] ('.$due->getStatus().')';
+            })->all()),
+            'applied_costs' => implode(", ", $reservation->costs->map(function($cost) {
+                return $cost->name . ' ($'.number_format($cost->amount,2).')';
+            })->all()),
+            'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
+                return $requirement->requirement->name . ' ('.$requirement->status.')';
+            })->all()),
+            'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
+                return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
+            })->all())
         ];
-
-            // 'payments' => implode(", ", $reservation->dues->map(function($due) {
-            //     return $due->payment->cost->name. ' [balance: $'.number_format($due->outstanding_balance,2).'] ('.$due->getStatus().')';
-            // })->all()),
-            // 'applied_costs' => implode(", ", $reservation->costs->map(function($cost) {
-            //     return $cost->name . ' ($'.number_format($cost->amount,2).')';
-            // })->all()),
-            // 'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
-            //     return $requirement->requirement->name . ' ('.$requirement->status.')';
-            // })->all()),
-            // 'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
-            //     return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
-            // })->all())
 
         return $columns;
     }

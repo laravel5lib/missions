@@ -1,6 +1,8 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\v1\Fund;
+use App\Models\v1\Trip;
 use App\Models\v1\Reservation;
 
 class ReservationsEndpointTest extends TestCase
@@ -67,5 +69,23 @@ class ReservationsEndpointTest extends TestCase
         $this->put('/api/reservations/'.$reservation->id.'/restore')
              ->assertResponseOk()
              ->seeInDatabase('reservations', ['deleted_at' => null]);
+    }
+
+    /** @test */
+    public function transfers_reservation_to_another_trip()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $fund = factory(Fund::class)->create([
+            'fundable_id' => $reservation->id, 
+            'fundable_type' => 'reservations'
+        ]);
+        $trip = factory(Trip::class)->create();
+
+        $this->post(
+            '/api/reservations/'.$reservation->id.'/transfer', 
+            ['trip_id' => $trip->id, 'desired_role' => 'MISS']
+        )
+        ->assertResponseOk()
+        ->seeInDatabase('reservations', ['trip_id' => $trip->id, 'desired_role' => 'MISS']);
     }
 }

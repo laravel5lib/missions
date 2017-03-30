@@ -2,6 +2,19 @@
     <validator name="CreateUpdateVisa" @touched="onTouched">
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            
+            <template v-if="forAdmin">
+                <div class="col-sm-12">
+                    <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                        <label for="infoManager">Record Manager</label>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </template>
+
             <div class="row">
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
@@ -37,21 +50,12 @@
                             <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment 'YYYY-MM-DD'"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
                                    v-validate:issued="{ required: true }" required>
-                            <!--<div class="input-group input-group-sms"
-                                 v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
-                                <span class="input-group-addon">Issued</span>
-
-                            </div>-->
                             <br>
                         </div>
                         <div class="col-lg-6">
                             <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment 'YYYY-MM-DD'"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
-                            <!--<div class="input-group input-group-sms"
-                                 v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
-                                <span class="input-group-addon">Expires</span>
-                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -88,7 +92,7 @@
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/records/visas" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -127,6 +131,10 @@
             id: {
                 type: String,
                 default: null
+            },
+            forAdmin: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -141,31 +149,37 @@
                 expires_at: null,
                 country_code: null,
                 upload_id: null,
-                user_id: null,
+                usersArr: [],
+                userObj: null,
 
                 // logic vars
                 countries: [],
                 countryObj: null,
-//                attemptSubmit: false,
                 showSuccess: false,
                 showError: false,
                 selectedAvatar: null,
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
-                visasResource: this.$resource('visas{/id}')
+                visasResource: this.$resource('visas{/id}', {include: 'user'})
             }
         },
         computed: {
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
+            user_id(){
+                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpdateVisa[field].invalid && this.attemptSubmit;
-            },*/
+            getUsers(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersArr = response.body.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -174,7 +188,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/records/visas/';
+                window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + this.id;
             },
             forceBack(){
                 return this.back(true);
@@ -182,7 +196,6 @@
             submit(){
                 this.resetErrors();
                 if (this.$CreateUpdateVisa.valid) {
-                    // this.$refs.spinner.show();
                     this.visasResource.save(null, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -195,7 +208,7 @@
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Visa created.');
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/visas/' + resp.data.data.id;
+                            window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -206,9 +219,11 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+                
                 this.resetErrors();
                 if (this.$CreateUpdateVisa.valid) {
-                    // this.$refs.spinner.show();
                     this.visasResource.update({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -222,7 +237,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/visas/' + that.id;
+                            window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -249,13 +264,13 @@
                 this.countries = response.body.countries;
             });
 
-            this.user_id = this.$root.user.id;
-
             if (this.isUpdate) {
                 this.visasResource.get({ id: this.id }).then(function (response) {
                     let visa = response.body.data;
                     $.extend(this, visa);
                     this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
+                    this.userObj = visa.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

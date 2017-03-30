@@ -199,6 +199,7 @@
                 })
                 this.$http.post('donors', this.donor).then(function (response) {
                     this.$refs.donorspinner.hide();
+                    this.reset();
                     this.$dispatch('showSuccess', 'Donor created successfully.');
                     this.$dispatch('donor-created', response.body.data.id);
                 },function (response) {
@@ -221,8 +222,8 @@
                 });
             },
             cancel() {
+                this.reset();
                 if (this.$parent != this.$root) {
-                    console.log('cancelled');
 				    this.$dispatch('cancel');
 			    } else {
 			        if( this.isUpdate) {
@@ -230,6 +231,20 @@
 			        }
 			        return window.location.href = '/admin/donors';
 			    }
+            },
+            reset() {
+                this.donor.name = null;
+                this.donor.company = null;
+                this.donor.email = null;
+                this.donor.phone = null;
+                this.donor.address = null;
+                this.donor.city = null;
+                this.donor.state = null;
+                this.donor.zip = null;
+                this.donor.country_code = null;
+                this.donor.account_type = null;
+                this.donor.account_id = null;
+                this.donor.customer_id =  null;
             },
             getCountries() {
                 // this.$refs.spinner.show();

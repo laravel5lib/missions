@@ -13,7 +13,7 @@
                             <i class="fa fa-times"></i> Cancel
                         </span>
                     </a>
-                    <a v-if="! isAdmin()" class="btn btn-primary-hollow btn-sm" href="/dashboard/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
+                    <a class="btn btn-primary-hollow btn-sm" href="/{{ firstUrlSegment }}/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
                     <a class="btn btn-default-hollow btn-sm" @click="removeDocument(document)" v-if="document">
                         <i class="fa fa-trash icon-left"></i> Remove
                     </a>
@@ -46,7 +46,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <component :is="list"
-                               :user-id="$root.user.id"
+                               :user-id="managingUserId"
                                 selector keep-alive>
                     </component>
                 </div>
@@ -92,6 +92,10 @@
             'requirementId': {
                 type: String,
                 required: true
+            },
+            'userId': {
+                type: String,
+                required: false
             }
         },
         data(){
@@ -114,6 +118,13 @@
                 list: null,
                 docPreview: null,
                 questionnaire: null
+            }
+        },
+        computed: {
+            'managingUserId': function() {
+                if (this.userId) return this.userId;
+
+                return this.$root.user.id;
             }
         },
         watch:{

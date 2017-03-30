@@ -70,7 +70,7 @@ class Exporter extends Job implements ShouldQueue
     protected function filter($collection)
     {
         return collect($this->columns($collection))->filter(function($value, $key) {
-            return in_array($key, $this->fields);
+            return in_array($key, $this->fields, true);
         })->all();
     }
 

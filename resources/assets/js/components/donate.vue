@@ -6,7 +6,7 @@
                 <template v-if="isState('form', 1)">
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <label>Recipient</label>
+                            <label>Your Donation will go to:</label>
                             <h4 class="text-primary" style="margin-top:0px;">{{ recipient }}</h4>
                         </div>
                     </div>
@@ -145,13 +145,11 @@
                 <div class="row">
                     <div class="col-sm-12 text-center">
                         <label>Donation Amount</label>
-                        <h3 class="text-success" style="margin-top:0px;margin-bottom:0px;">{{amount|currency}}</h3>
-                        <label>Recipient</label>
-                        <p style="margin-bottom:0;">{{recipient}}</p>
-                        <label>Designation</label>
-                        <p style="margin-bottom:0;">{{title}}</p>
-                        <label>Giving Anonymously</label>
-                        <p style="margin-bottom:0;">{{anonymous ? 'Yes' : 'No'}}</p>
+                        <h3 class="text-success" style="margin-top:0px;">{{amount|currency}}</h3>
+                        <label>Donation will go to</label>
+                        <p>{{recipient}}</p>
+                        <label>Who can see this?</label>
+                        <p style="margin-bottom:0;">{{anonymous ? 'This donation is anonymous.' : 'This donation is public.'}}</p>
                     </div>
                     <div class="col-sm-12">
                         <hr class="divider inv">

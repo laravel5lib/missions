@@ -56,6 +56,7 @@ $api->version('v1', [
     $api->post('campaigns/export', 'CampaignsController@export');
     $api->post('campaigns/import', 'CampaignsController@import');
     $api->resource('trips', 'TripsController');
+    $api->post('trips/duplicate', 'TripsController@duplicate');
     $api->post('trips/export', 'TripsController@export');
     $api->post('trips/import', 'TripsController@import');
     $api->get('trips/{id}/todos', 'TripTodosController@index');
@@ -66,6 +67,7 @@ $api->version('v1', [
     $api->resource('reservations', 'ReservationsController');
     $api->post('reservations/export', 'ReservationsController@export');
     $api->put('reservations/{id}/restore', 'ReservationsController@restore');
+    $api->post('reservations/{id}/transfer', 'ReservationTransfersController@store');
     $api->resource('reservations.requirements', 'ReservationRequirementsController');
     $api->get('reservations/{reservations}/companions', 'CompanionsController@index');
     $api->post('reservations/{reservations}/companions', 'CompanionsController@store');

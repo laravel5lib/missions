@@ -350,7 +350,7 @@
 
 				<div class="form-group text-center">
 					<div class="col-xs-12">
-						<a v-if="!isUpdate" href="/dashboard/records/medical-credentials" class="btn btn-default">Cancel</a>
+						<a v-if="!isUpdate" href="/{{ firstUrlSegment }}/records/medical-credentials" class="btn btn-default">Cancel</a>
 						<a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
 						<a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
 						<a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -494,11 +494,11 @@
                 ],
                 expired_at: moment().add(1, 'y').add(1, 'days').startOf('day').format('YYYY-MM-DD'),
                 show_expire: {
-                    license: null,
-                    certification: null,
-                    diploma: null,
-                    letter: null,
-                    resume: null,
+                    license: true,
+                    certification: true,
+                    diploma: false,
+                    letter: false,
+                    resume: false,
                 },
                 expires: {
                     license: null,

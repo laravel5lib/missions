@@ -76,7 +76,7 @@
 							</template>
                             
                             <!-- start certification checklist -->
-                            <div class="panel panel-default" v-show="selectedRoleObj && !isStudent">
+                            <div class="panel panel-default" v-show="selectedRoleObj && isCertified && !isStudent">
                                 <div class="panel-heading">
                                     <h5>I am certified in the following:</h5>
                                 </div>
@@ -193,7 +193,6 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5 class="panel-header">Required Documents</h5>
-
 					</div>
 					<div class="panel-body">
 						<div class="row">
@@ -214,16 +213,25 @@
 									<form id="UploadLicenseForm">
 										<!-- <div class="form-group"> -->
 										<div class="col-xs-12">
-											<label>License</label>
+											<div class="col-sm-6">
+												<label>License</label>
+											</div>
+											<div class="col-sm-6">
+												<label>
+													<input type="checkbox" v-model="show_expire.license"> This document Expires
+                                                </label>
+											</div>
 										</div>
 										<div class="col-sm-6">
 											<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-license" :name="'credentials-license-'+ today + '-' + uploadCounter"></upload-create-update>
-												<a @click="uploadDoc('UploadLicenseForm', 'license')" class="btn btn-primary">Attach</a>
-											</div>
-											<div class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)}">
-												<label class="control-label">Expires</label>
+											<a @click="uploadDoc('UploadLicenseForm', 'license')" class="btn btn-primary">Attach</a>
+										</div>
+										<div v-if="show_expire.license" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)}">
+											<label class="control-label">Expires</label>
+											<div>
 												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model.sync="expires.license|moment 'YYYY-MM-DD'" type="date" ></date-picker>
 												<input type="datetime" class="form-control hidden" v-validate:licenseexpires="['required']" v-model="expires.license" id="licenseexpires" required>
+											</div>
 										</div>
 										<!-- </div> -->
 									</form>
@@ -234,17 +242,25 @@
 								<validator name="UploadCertificationForm">
 								<form id="UploadCertificationForm">
 									<div class="col-xs-12">
-										<label>Certification</label>
+										<div class="col-sm-6"><label>Certification</label></div>
+										<div class="col-sm-6">
+											<label>
+												<input type="checkbox" v-model="show_expire.certification"> This document Expires
+                                            </label>
+										</div>
+
 									</div>
-									<div class="col-sm-12">
+									<div class="col-sm-6">
 										<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-certification" :name="'credentials-certification-'+ today + '-' + uploadCounter"></upload-create-update>
 										<a @click="uploadDoc('UploadCertificationForm', 'certification')" class="btn btn-primary">Attach</a>
 									</div>
-									<!--<div class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)}">
+									<div v-if="show_expire.certification" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)}">
 										<label class="control-label">Expires</label>
-										<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model.sync="expires.certification|moment 'YYYY-MM-DD'" type="date" ></date-picker>
-										<input type="datetime" class="form-control hidden" v-validate:certexpires="['required']" v-model="expires.certification" id="certexpires" required>
-									</div>-->
+										<div>
+											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model.sync="expires.certification|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+											<input type="datetime" class="form-control hidden" v-validate:certexpires="['required']" v-model="expires.certification" id="certexpires" required>
+										</div>
+									</div>
 								</form>
 								</validator>
 							</div>
@@ -253,53 +269,79 @@
 								<validator name="UploadDiplomaForm">
 								<form id="UploadDiplomaForm">
 									<div class="col-xs-12">
-										<label>Diploma</label>
+										<div class="col-sm-6"><label>Diploma</label></div>
+										<div class="col-sm-6">
+											<label>
+												<input type="checkbox" v-model="show_expire.diploma"> This document Expires
+                                            </label>
+										</div>
 									</div>
-									<div class="col-sm-12">
+									<div class="col-sm-6">
 										<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-diploma" :name="'credentials-diploma-'+ today + '-' + uploadCounter"></upload-create-update>
 										<a @click="uploadDoc('UploadDiplomaForm', 'diploma')" class="btn btn-primary">Attach</a>
 									</div>
-									<!--<div class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)}">
+									<div class="col-sm-6" v-if="show_expire.diploma" :class="{ 'has-error': checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)}">
 										<label class="control-label">Expires</label>
-										<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model.sync="expires.diploma|moment 'YYYY-MM-DD'" type="date" ></date-picker>
-										<input type="datetime" class="form-control hidden" v-validate:diplomaexpires="['required']" v-model="expires.diploma" id="diplomaexpires" required>
-									</div>-->
+										<div>
+											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model.sync="expires.diploma|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+											<input type="datetime" class="form-control hidden" v-validate:diplomaexpires="['required']" v-model="expires.diploma" id="diplomaexpires" required>
+										</div>
+									</div>
 								</form>
 								</validator>
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('letter') || optionalByRole('letter')) && !uploadSatisfied('letter')">
                                 <hr class="divider">
-								<form id="UploadLetterForm">
-									<div class="col-xs-12">
-										<label>Note from Professor</label>
-									</div>
-									<div class="col-xs-12">
-										<!--<ul class="list-group" v-if="letterUploads.length">
-											<li class="list-group-item" v-for="upload in uploads">
-												<i class="fa fa-file-pdf-o"></i> {{upload.name}}
-                                                <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
-											</li>
-										</ul>-->
-										<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"></upload-create-update>
-									</div>
-								</form>
+								<validator name="UploadLetterForm">
+									<form id="UploadLetterForm">
+										<div class="col-xs-12">
+											<div class="col-sm-6"><label>Note from Professor</label></div>
+											<div class="col-sm-6">
+												<label>
+													<input type="checkbox" v-model="show_expire.letter"> This document Expires
+	                                            </label>
+											</div>
+
+										</div>
+										<div class="col-sm-6">
+											<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-letter" :name="'credentials-letter-'+ today + '-' + uploadCounter"></upload-create-update>
+											<a @click="uploadDoc('UploadLetterForm', 'letter')" class="btn btn-primary">Attach</a>
+										</div>
+										<div v-if="show_expire.letter" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)}">
+											<label class="control-label">Expires</label>
+											<div>
+												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model.sync="expires.letter|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+												<input type="datetime" class="form-control hidden" v-validate:letterexpires="['required']" v-model="expires.letter" id="letterexpires" required>
+											</div>
+										</div>
+									</form>
+								</validator>
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('resume') || optionalByRole('resume')) && !uploadSatisfied('resume')">
                                 <hr class="divider">
-								<form id="UploadResumeForm">
-									<div class="col-xs-12">
-										<label>Resume</label>
-									</div>
-									<div class="col-xs-12">
-										<!--<ul class="list-group" v-if="resumeUploads.length">
-											<li class="list-group-item" v-for="upload in uploads">
-												<i class="fa fa-file-pdf-o"></i> {{upload.name}}
-                                                <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
-											</li>
-										</ul>-->
-										<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-letter-'+ today + '-' + uploadCounter"></upload-create-update>
-									</div>
-								</form>
+								<validator name="UploadResumeForm">
+									<form id="UploadResumeForm">
+										<div class="col-sm-12">
+											<div class="col-sm-6"><label>Resume</label></div>
+											<div class="col-sm-6">
+												<label>
+													<input type="checkbox" v-model="show_expire.resume"> This document Expires
+	                                            </label>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-resume" :name="'credentials-resume-'+ today + '-' + uploadCounter"></upload-create-update>
+											<a @click="uploadDoc('UploadResumeForm', 'resume')" class="btn btn-primary">Attach</a>
+										</div>
+										<div v-if="show_expire.resume" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)}">
+											<label class="control-label">Expires</label>
+											<div>
+												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model.sync="expires.resume|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+												<input type="datetime" class="form-control hidden" v-validate:resumeexpires="['required']" v-model="expires.resume" id="resumeexpires" required>
+											</div>
+										</div>
+									</form>
+								</validator>
 							</div>
 						</div>
 					</div>
@@ -307,7 +349,7 @@
 
 				<div class="form-group text-center">
 					<div class="col-xs-12">
-						<a v-if="!isUpdate" href="/dashboard/records/medical-credentials" class="btn btn-default">Cancel</a>
+						<a v-if="!isUpdate" href="/{{ firstUrlSegment }}/records/medical-credentials" class="btn btn-default">Cancel</a>
 						<a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
 						<a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
 						<a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -325,13 +367,11 @@
 			<modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
-
 		</validator>
 	</div>
 
 </template>
 <script type="text/javascript">
-
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
@@ -407,7 +447,6 @@
 	                'NTEC','NPRC','REGN','LPNN','MEDA','LVNN','HEDU','ETEC','MDFG','MDOC','DDOC','DENT','DENH','DENA',
 	                'CHRA','CHRO','RDIO','CRDO','ANES'],
                 student: ['HEDU', 'MDSG', 'MDSN', 'MDSP', 'MDSD'],
-
                 content: [
                     { id: 'role', q: 'Medical role', a:'', type: 'select', options: []},
                     { id: 'certifications', q: 'Certifications', a: [], type: 'checkbox', certifiedOptions: [
@@ -428,7 +467,6 @@
                         { name: 'Dermatology', value: false},
                         { name: 'Pediatrics', value: false},
                         { name: 'Other', value: false},
-
                     ], allOptions: [
                         { name: 'Register patients by going over their chief concern and record medical and family histories', value: false},
                         { name: 'Patient processing and clinic flow', value: false},
@@ -451,10 +489,19 @@
                     }, type:'file'},
                 ],
                 expired_at: moment().add(1, 'y').add(1, 'days').startOf('day').format('YYYY-MM-DD'),
+                show_expire: {
+                    license: true,
+                    certification: true,
+                    diploma: false,
+                    letter: false,
+                    resume: false,
+                },
                 expires: {
                     license: null,
                     certification: null,
                     diploma: null,
+                    letter: null,
+                    resume: null,
                 },
 
                 uploads: [],
@@ -479,6 +526,9 @@
         computed: {
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
+            },
+            isCertified(){
+                return _.isObject(this.selectedRoleObj) && _.contains(this.certified, this.selectedRoleObj.value);
             },
             isStudent(){
                 return _.isObject(this.selectedRoleObj) && _.contains(this.student, this.selectedRoleObj.value);
@@ -646,26 +696,26 @@
 
 	                    if (data.name.indexOf('license') !== -1) {
                             this.content[contentIndex].a.license.push({ id: data.id, name: data.name, expires: this.expires.license });
-                            this.uploads.push({ id: data.id, name: data.name, expires: this.expires.license, type: 'license'});
+                            this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.license, type: 'license'});
                             this.expires.license = null;
                             break;
 	                    } else if (data.name.indexOf('certification') !== -1) {
                             this.content[contentIndex].a.certification.push({ id: data.id, name: data.name, expires: this.expires.certification});
-                            this.uploads.push({ id: data.id, name: data.name, expires: this.expires.certification, type: 'certification'});
+                            this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.certification, type: 'certification'});
                             this.expires.certification = null;
                             break;
 	                    } else if (data.name.indexOf('diploma') !== -1) {
                             this.content[contentIndex].a.diploma.push({ id: data.id, name: data.name, expires: this.expires.diploma});
-                            this.uploads.push({ id: data.id, name: data.name, expires: this.expires.diploma, type: 'diploma'});
+                            this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.diploma, type: 'diploma'});
                             this.expires.diploma = null;
                             break;
 	                    } else if (data.name.indexOf('letter') !== -1) {
                             this.content[contentIndex].a.letter.push({ id: data.id, name: data.name, expires: null});
-                            this.uploads.push({ id: data.id, name: data.name, type: 'letter'});
+                            this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.letter, type: 'letter'});
                             break;
 	                    } else if (data.name.indexOf('resume') !== -1) {
                             this.content[contentIndex].a.resume.push({ id: data.id, name: data.name, expires: null});
-                            this.uploads.push({ id: data.id, name: data.name, type: 'resume'});
+                            this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.resume, type: 'resume'});
                             break;
 	                    } else {
 	                        // minor failsafe
@@ -725,7 +775,6 @@
 	                    });
                     }
                 //}.bind(this));
-
     }
     }
 </script>

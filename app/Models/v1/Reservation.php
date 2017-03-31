@@ -633,7 +633,7 @@ class Reservation extends Model
             'trip_id' => $trip_id
         ]);
         
-        // remove the current todos
+        // remove the current resources
         $this->costs()->detach();
         $this->requirements()->delete();
         $this->todos()->delete();

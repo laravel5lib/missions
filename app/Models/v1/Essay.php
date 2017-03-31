@@ -3,6 +3,9 @@
 namespace App\models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\User;
+use App\Models\v1\Upload;
+use App\Models\v1\Reservation;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

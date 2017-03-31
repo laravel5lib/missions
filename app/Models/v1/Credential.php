@@ -48,16 +48,6 @@ class Credential extends Model
     }
 
     /**
-     * Get the credential's uploads.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function uploads()
-    {
-        return $this->morphToMany(Upload::class, 'uploadable');
-    }
-
-    /**
      * Get medical credentials
      * @param  Builder $query
      * @return Builder
@@ -65,5 +55,25 @@ class Credential extends Model
     public function scopeMedical($query)
     {
         return $query->where('type', 'medical');
+    }
+
+    /**
+     * Get media credentials
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeMedia($query)
+    {
+        return $query->where('type', 'media');
+    }
+    
+    /**
+     * Get the credential's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
     }
 }

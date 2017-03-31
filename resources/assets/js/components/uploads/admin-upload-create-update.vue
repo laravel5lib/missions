@@ -116,6 +116,7 @@
 				<div class="form-group" v-if="type && type !== 'video'" :class="{ 'has-error': isFileSet}">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
+						<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
 						<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
 

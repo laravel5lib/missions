@@ -76,14 +76,4 @@ class Credential extends Model
     {
         return $this->morphToMany(Upload::class, 'uploadable');
     }
-
-    /**
-     * Get the credential's uploads.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function uploads()
-    {
-        return $this->morphToMany(Upload::class, 'uploadable');
-    }
 }

@@ -44,7 +44,7 @@
 					</div>
 					<hr class="divider">
 					<label>Role</label>
-					<p class="small">{{ getRole(medical_credential) }}</p>
+					<p class="small">{{ getRoleName(getRole(medical_credential)) }}</p>
                     <label>Attachments</label>
                     <p class="small">{{ medical_credential.uploads.data.length }} documents</p>
 				</div><!-- end panel-body -->
@@ -59,7 +59,6 @@
 		</div>
 		<div class="col-xs-12 text-center">
 			<pagination :pagination.sync="pagination" :callback="searchMedicals"></pagination>
-
 		</div>
 		<modal :show.sync="deleteModal" title="Remove Medical Credential" small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Credential?</div>
@@ -93,7 +92,48 @@
                 medical_credentials: [],
                 selectedMedicalCredential: null,
                 trips: [],
-                //logic vars
+                roles: [
+                    {value: 'MDPF', name: 'Medical Professional', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'MDSG', name: 'Medical Student', required: ['letter', ], optional: ['certification']},
+                    {value: 'MDSN', name: 'Medical Student: Nursing', required: ['letter', ], optional: ['certification']},
+                    {value: 'MDSP', name: 'Medical Student: Pre-Med', required: ['letter', ], optional: ['certification']},
+                    {value: 'MDSD', name: 'Medical Student: Dental', required: ['letter', ], optional: ['certification']},
+                    {value: 'RESP', name: 'Respitory Therapist', required: ['license', 'diploma', ], optional: []},
+                    {value: 'PHYA', name: 'Physican\'s Assistant', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'PHYT', name: 'Physical Therapist', required: ['license', 'diploma','resume' ], optional: []},
+                    {value: 'PHAT', name: 'Pharmacy Tech', required: ['license', 'diploma', ], optional: []},
+                    {value: 'PHAA', name: 'Pharmacy Assistant', required: ['license', 'diploma', ], optional: []},
+                    {value: 'PHAR', name: 'Pharmacist', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'OTEC', name: 'Optometry Tech', required: ['license', 'diploma', ], optional: []},
+                    {value: 'ODOC', name: 'Optometry Doctor', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'OAST', name: 'Optical Assistant', required: ['license', 'diploma', ], optional: []},
+                    {value: 'DIET', name: 'Dietitian', required: ['license', 'diploma', ], optional: []},
+                    {value: 'NUTR', name: 'Nutrionist', required: ['license', 'resume'], optional: ['certification']},
+                    {value: 'LACT', name: 'Lactation Consultant', required: ['license', 'resume'], optional: ['certification']},
+                    {value: 'NAST', name: 'Nurse Assistant', required: ['license', 'diploma', ], optional: []},
+                    {value: 'NTEC', name: 'Nurse Tech', required: ['license', 'diploma', ], optional: []},
+                    //{value: 'NPRC', name: 'Nurse Practitioner', required: [], optional: []},
+                    {value: 'REGN', name: 'Nurse (RN)', required: ['license', 'diploma', ], optional: []},
+                    {value: 'LPNN', name: 'Nurse (LPN)', required: ['license', 'diploma', ], optional: []},
+                    {value: 'NCRT', name: 'Non-Certified', required: [], optional: []},
+                    {value: 'MEDA', name: 'Medical Assistant', required: ['license', 'diploma', ], optional: []},
+                    {value: 'LVNN', name: 'LVN', required: ['license', 'diploma', ], optional: []},
+                    {value: 'HEDU', name: 'Health Education', required: [], optional: ['license', 'diploma', 'resume']},
+                    {value: 'ETEC', name: 'EMT', required: ['license', 'diploma', ], optional: []},
+                    {value: 'MDFG', name: 'Doctor (OB/GYN)', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'MDOC', name: 'Doctor (MD)', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'DDOC', name: 'Doctor (DO)', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'DENT', name: 'Dentist (DDS)', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'DENH', name: 'Dental Hygienist', required: ['license', 'diploma', ], optional: []},
+                    {value: 'DENA', name: 'Dental Assistant', required: ['license', 'diploma', ], optional: []},
+                    {value: 'CHRA', name: 'Chiropractor Assistant', required: ['license', 'diploma', ], optional: []},
+                    {value: 'CHRO', name: 'Chiropractor', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'RDIO', name: 'Radiologist', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'CRDO', name: 'Cardiologist', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'ANES', name: 'Anesthesiologist', required: ['license', 'diploma', 'resume'], optional: []},
+                    {value: 'PRAY', name: 'Prayer Team', required: [], optional: []}
+                ],
+	            //logic vars
                 filters: {
                     expired: false,
                     sort: 'name'
@@ -181,6 +221,9 @@
             },
 	        getRole(medical_credential){
                 return _.findWhere(medical_credential.content, { id: 'role'}).a;
+	        },
+	        getRoleName(role){
+	            return _.findWhere(this.roles, { value: role}).name;
 	        }
         },
         ready(){

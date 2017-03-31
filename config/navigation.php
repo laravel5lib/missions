@@ -46,6 +46,10 @@ return [
                 'url' => 'medical-releases'
             ],
             [
+                'label' => 'Media Credentials',
+                'url' => 'media-credentials'
+            ],
+            [
                 'label' => 'Medical Credentials',
                 'url' => 'medical-credentials'
             ],
@@ -112,6 +116,10 @@ return [
             [
                 'label' => 'Medical Releases',
                 'url' => 'medical-releases'
+            ],
+            [
+                'label' => 'Media Credentials',
+                'url' => 'media-credentials'
             ],
             [
                 'label' => 'Medical Credentials',

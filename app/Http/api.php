@@ -129,6 +129,7 @@ $api->version('v1', [
     $api->group(['prefix' => 'credentials'], function($api)
     {
         $api->resource('medical', 'MedicalCredentialsController');
+        $api->resource('media', 'MediaCredentialsController');
     });
 
     $api->group(['prefix' => 'medical'], function($api)

@@ -33,7 +33,6 @@
                                                         @endif
                                                     @endforeach
                                                 </ul>
-
                                                 <span class="help-block">Participation</span>
                                                 <ul class="list-group">
                                                     @foreach($content['allOptions'] as $answer)

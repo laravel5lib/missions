@@ -34,6 +34,7 @@ import groupsList from './components/groups/groups-list.vue';
 import visasList from './components/records/visas/visas-list.vue';
 import medicalsList from './components/records/medicals/medicals-list.vue';
 import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
+import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
 import passportsList from './components/records/passports/passports-list.vue';
 import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
 import essaysList from './components/records/essays/essays-list.vue';
@@ -42,6 +43,7 @@ import referralsList from './components/records/referrals/referrals-list.vue';
 import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
 import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
+import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
 import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
 import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
 import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
@@ -738,8 +740,10 @@ new Vue({
         visaCreateUpdate,
         medicalsList,
         medicalCredentialsList,
+        mediaCredentialsList,
         medicalCreateUpdate,
         medicalCredentialCreateUpdate,
+        mediaCredentialCreateUpdate,
         groupsList,
         reservationAvatar,
         reservationCosts,

@@ -59,6 +59,12 @@ class CredentialTransformer extends TransformerAbstract
         return $this->collection($uploads, new UploadTransformer);
     }
 
+    /**
+     * Include the credential holder
+     * 
+     * @param  Credential $credential
+     * @return \League\Fractal\Resource\Item
+     */
     public function includeHolder(Credential $credential)
     {
         $holder = $credential->holder;

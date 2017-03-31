@@ -12,15 +12,6 @@
 					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-				<!-- <export-utility url="medical/credentials/export"
-				                :options="exportOptions"
-				                :filters="exportFilters">
-				</export-utility> -->
-				<!-- <import-utility title="Import Medical Credential List"
-					url="medical/credentials/import"
-					:required-fields="importRequiredFields"
-					:optional-fields="importOptionalFields">
-				</import-utility> -->
 			</form>
 			<hr class="divider sm inv">
 		</div>
@@ -37,8 +28,6 @@
 						</h5>
 					</a>
 					<div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:25px;top:12px;">
-						<!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/medical-credentials/' + medical_credential.id + '/edit'"><i
-								class="fa fa-pencil"></i></a>-->
 						<a @click="selectedMedicalCredential = medical_credential,deleteModal = true"><i
 								class="fa fa-times"></i></a>
 					</div>

@@ -193,7 +193,6 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h5 class="panel-header">Required Documents</h5>
-
 					</div>
 					<div class="panel-body">
 						<div class="row">
@@ -373,7 +372,6 @@
 
 </template>
 <script type="text/javascript">
-
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
@@ -449,7 +447,6 @@
 	                'NTEC','NPRC','REGN','LPNN','MEDA','LVNN','HEDU','ETEC','MDFG','MDOC','DDOC','DENT','DENH','DENA',
 	                'CHRA','CHRO','RDIO','CRDO','ANES'],
                 student: ['HEDU', 'MDSG', 'MDSN', 'MDSP', 'MDSD'],
-
                 content: [
                     { id: 'role', q: 'Medical role', a:'', type: 'select', options: []},
                     { id: 'certifications', q: 'Certifications', a: [], type: 'checkbox', certifiedOptions: [
@@ -470,7 +467,6 @@
                         { name: 'Dermatology', value: false},
                         { name: 'Pediatrics', value: false},
                         { name: 'Other', value: false},
-
                     ], allOptions: [
                         { name: 'Register patients by going over their chief concern and record medical and family histories', value: false},
                         { name: 'Patient processing and clinic flow', value: false},
@@ -776,7 +772,6 @@
 	                    });
                     }
                 //}.bind(this));
-
     }
     }
 </script>

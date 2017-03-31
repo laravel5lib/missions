@@ -121,6 +121,10 @@ $this->resource('records/medical-credentials', 'MedicalCredentialsController', [
     'except' => ['index', 'destroy']
 ]);
 
+$this->resource('records/media-credentials', 'MediaCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
 $this->resource('records/influencers', 'InfluencersController', [
     'except' => ['index', 'destroy']
 ]);

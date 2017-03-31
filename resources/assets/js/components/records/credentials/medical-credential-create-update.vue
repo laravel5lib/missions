@@ -76,7 +76,7 @@
 							</template>
                             
                             <!-- start certification checklist -->
-                            <div class="panel panel-default" v-show="selectedRoleObj && !isStudent">
+                            <div class="panel panel-default" v-show="selectedRoleObj && isCertified && !isStudent">
                                 <div class="panel-heading">
                                     <h5>I am certified in the following:</h5>
                                 </div>
@@ -526,6 +526,9 @@
         computed: {
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
+            },
+            isCertified(){
+                return _.isObject(this.selectedRoleObj) && _.contains(this.certified, this.selectedRoleObj.value);
             },
             isStudent(){
                 return _.isObject(this.selectedRoleObj) && _.contains(this.student, this.selectedRoleObj.value);

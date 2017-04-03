@@ -632,7 +632,7 @@ class Reservation extends Model
             'desired_role' => $desired_role,
             'trip_id' => $trip_id
         ]);
-        
+
         // remove the current resources
         $this->costs()->detach();
         $this->requirements()->delete();

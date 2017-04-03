@@ -5,8 +5,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8">
-                    <h3 class="hidden-xs">My Media Credentials <small>&middot; {{ $credential->applicant_name }}</small></h3>
-                    <h3 class="visible-xs text-center">My Media Credentials<br><small>{{ $credential->applicant_name }}</small></h3>
+                    <h3 class="hidden-xs">User Media Credentials <small>&middot; {{ $credential->applicant_name }}</small></h3>
+                    <h3 class="visible-xs text-center">User Media Credentials<br><small>{{ $credential->applicant_name }}</small></h3>
                 </div>
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">

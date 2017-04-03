@@ -1,6 +1,7 @@
 <?php namespace App\Filters\v1;
 
 use Carbon\Carbon;
+use App\Models\v1\Slug;
 
 class FundraiserFilter extends Filter
 {
@@ -108,24 +109,8 @@ class FundraiserFilter extends Filter
      */
     public function sponsor($url)
     {
-        if (starts_with($url, 'groups/')) {
-            $url = str_replace('groups/', '', $url);
+        $slug = Slug::where('url', $url)->first();
 
-            return $this->where('sponsor_type', 'groups')->join('groups', function ($join) use ($url) {
-                $join->on('groups.id', '=', 'fundraisers.sponsor_id')
-                    ->where('groups.url', '=', $url);
-            })->select('fundraisers.*');
-        }
-
-        if (starts_with($url, '@')) {
-            $url = str_replace('@', '', $url);
-
-            return $this->where('sponsor_type', 'users')->join('users', function ($join) use ($url) {
-                $join->on('users.id', '=', 'fundraisers.sponsor_id')
-                    ->where('users.url', '=', $url);
-            })->select('fundraisers.*');
-        }
-
-        return $this;
+        return $this->where('sponsor_id', $slug->slugable_id);
     }
 }

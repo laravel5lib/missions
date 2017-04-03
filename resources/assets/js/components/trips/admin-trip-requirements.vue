@@ -13,8 +13,9 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <h5><a href="#">{{ requirement.name|capitalize }}</a></h5>
+                <h5>{{ requirement.name|capitalize }}</h5>
                 <h6><small>Type: {{ requirement.document_type }}</small></h6>
+                <p>{{ requirement.short_desc }}</p>
             </div>
             <div class="col-xs-4 text-right">
                 <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'lll' }} </h5>
@@ -33,10 +34,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForAddError('name')}">
                                         <label for="name">Name</label>
-                                        <select id="name" class="form-control input-sm" v-model="newRequirement.name" v-validate:name="{ required: true }">
-                                            <option value="">-- select --</option>
-                                            <option :value="option" v-for="option in documentNames">{{option}}</option>
-                                        </select>
+                                        <input type="text" id="name" class="form-control input-sm" v-model="newRequirement.name" v-validate:name="{ required: true }">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -44,7 +42,7 @@
                                         <label for="type">Document Type</label>
                                         <select id="type" class="form-control input-sm" v-model="newRequirement.document_type">
                                             <option value="">-- select --</option>
-                                            <option :value="option" v-for="option in documentTypes">{{option}}</option>
+                                            <option :value="type.value" v-for="type in documentTypes">{{type.text}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -71,14 +69,16 @@
 
                                 </div>
                             </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="shortDesc">Short Description</label>
+                                        <textarea id="shortDesc" class="form-control" v-model="newRequirement.short_desc" maxlength="120"></textarea>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <br>
-                            <!--<div class="checkbox">
-								<label>
-									<input type="checkbox" v-model="newRequirement.enforced">
-									Enforced?
-								</label>
-							</div>-->
                         </div>
                     </div>
                 </form>
@@ -99,10 +99,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForEditError('name')}">
                                         <label for="name">Name</label>
-                                        <select id="name" class="form-control input-sm" v-model="selectedRequirement.name" v-validate:name="{ required: true }">
-                                            <option value="">-- select --</option>
-                                            <option :value="option" v-for="option in documentNames">{{option}}</option>
-                                        </select>
+                                        <input type="text" class="form-control input-sm" v-model="selectedRequirement.name" v-validate:name="{ required: true }">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -110,7 +107,7 @@
                                         <label for="type">Document Type</label>
                                         <select id="type" class="form-control input-sm" v-model="selectedRequirement.document_type">
                                             <option value="">-- select --</option>
-                                            <option :value="option" v-for="option in documentTypes">{{option}}</option>
+                                            <option :value="type.value" v-for="type in documentTypes">{{type.text}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -137,14 +134,16 @@
 
                                 </div>
                             </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label for="shortDesc">Short Description</label>
+                                        <textarea id="shortDesc" class="form-control" v-model="selectedRequirement.short_desc"maxlength="120"></textarea>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <br>
-                            <!--<div class="checkbox">
-								<label>
-									<input type="checkbox" v-model="newRequirement.enforced">
-									Enforced?
-								</label>
-							</div>-->
                         </div>
                     </div>
                 </form>
@@ -185,26 +184,18 @@
                     document_type: '',
                     due_at: null,
                     grace_period: 0,
-                    // enforced: false,
+                    short_desc: null,
                 },
                 resource: this.$resource('requirements{/id}'),
-                documentNames: [
-                    'Medical Release',
-                    'Passport',
-                    'Visa',
-                    'Referral',
-                    'Testimony',
-                    'Arrival Designation',
-                    'Airport Preference'
-                ],
                 documentTypes: [
-                    'medical_releases',
-                    'passports',
-                    'visas',
-                    'referrals',
-                    'arrival_designations',
-                    'essays',
-                    'airport_preferences'
+                    {value: 'medical_releases', text: 'Medical Release'},
+                    {value: 'passports', text: 'Passport'},
+                    {value: 'visas', text: 'Visa'},
+                    {value: 'referrals', text: 'Referral'},
+                    {value: 'arrival_designations', text: 'Arrival Designation'},
+                    {value: 'essays', text: 'Testimony'},
+                    {value: 'influencer_applications', text: 'Influencer Application'},
+                    {value: 'airport_preferences', text: 'Airport Preference'}
                 ],
                 sort: 'due_at',
                 direction: 'asc'
@@ -225,7 +216,7 @@
                     document_type: '',
                     due_at: null,
                     grace_period: 0,
-                    // enforced: false,
+                    short_desc: null,
                 };
             },
             addRequirement(){

@@ -72,6 +72,10 @@ class EssaysController extends Controller
             'user_id'     => $request->get('user_id')
         ]);
 
+        if ($request->has('upload_ids')) {
+            $essay->uploads()->sync($request->get('upload_ids'));
+        }
+
         return $this->response->item($essay, new EssayTransformer);
     }
 
@@ -92,6 +96,10 @@ class EssaysController extends Controller
             'content'     => $request->get('content'),
             'user_id'     => $request->get('user_id')
         ]);
+
+        if ($request->has('upload_ids')) {
+            $essay->uploads()->sync($request->get('upload_ids'));
+        }
 
         return $this->response->item($essay, new EssayTransformer);
     }

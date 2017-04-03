@@ -14,9 +14,21 @@ use Illuminate\Support\Facades\Mail;
 
 class UtilitiesController extends Controller
 {   
-    public function getTeamRoles()
+    public function getTeamRoles($type = null)
     {
-        $roles = TeamRole::all();
+        switch ($type) {
+            case 'general':
+                $roles = TeamRole::general();
+                break;
+            case 'medical':
+                $roles = TeamRole::medical();
+                break;
+            case 'leadership':
+                $roles = TeamRole::leadership();
+                break;
+            default:
+                $roles = TeamRole::all();
+        }
 
         return response()->json(compact('roles'));
     }

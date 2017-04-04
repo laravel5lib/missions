@@ -225,6 +225,16 @@ class Reservation extends Model
     }
 
     /**
+     * Get all of the reservation's promo codes
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promoCodes()
+    {
+        return $this->morphMany(PromoCode::class, 'endorser');
+    }
+
+    /**
      * Get all of the reservation's requirements
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

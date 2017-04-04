@@ -77,7 +77,25 @@ class TripsController extends Controller
     {
         $trip = $this->trip->create($request->all());
 
-        // $this->syncResources($trip, $request);
+        if ($request->has('tags'))
+            $trip->tag($request->get('tags'));
+
+        return $this->response->item($trip, new TripTransformer);
+    }
+
+    /**
+     * Duplicate a trip
+     * 
+     * @param  TripRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
+    public function duplicate(TripRequest $request)
+    {
+        $trip = $this->trip->create($request->all());
+
+        $trip->syncDeadlines($request->get('deadlines'));
+        $trip->syncRequirements($request->get('requirements'));
+        // $trip->syncCosts($request->get('costs'));
 
         if ($request->has('tags'))
             $trip->tag($request->get('tags'));
@@ -98,10 +116,10 @@ class TripsController extends Controller
 
         $trip->update($request->all());
 
-        // $this->syncResources($trip, $request);
-
         if ($request->has('tags'))
             $trip->retag($request->get('tags'));
+
+        $trip->syncFacilitators($request->get('facilitators'));
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -119,17 +137,6 @@ class TripsController extends Controller
         $trip->delete();
 
         return $this->response->noContent();
-    }
-
-    private function syncResources(Trip $trip, TripRequest $request)
-    {
-        $trip->syncDeadlines($request->get('deadlines'));
-        $trip->syncCosts($request->get('costs'));
-        $trip->syncRequirements($request->get('requirements'));
-        $trip->syncFacilitators($request->get('facilitators'));
-
-        if ($request->has('tags'))
-            $trip->retag($request->get('tags'));
     }
 
     public function register($id, TripRegistrationRequest $request)

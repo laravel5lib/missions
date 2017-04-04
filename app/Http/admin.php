@@ -65,14 +65,21 @@ Route::get('records/passports/{id}/edit', function ($id) {
     return view('admin.records.passports.edit', compact('id'));
 });
 
+Route::get('records/visas/create', function () {
+    return view('admin.records.visas.create');
+});
+
 Route::get('records/visas/{id}', function ($id) use ($dispatcher) {
     $visa = $dispatcher->get('visas/' . $id);
     return view('admin.records.visas.show', compact('visa'));
 });
 
-Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
-    $essay = $dispatcher->get('essays/' . $id);
-    return view('admin.records.essays.show', compact('essay'));
+Route::get('records/visas/{id}/edit', function ($id) {
+    return view('admin.records.visas.edit', compact('id'));
+});
+
+Route::get('records/medical-releases/create', function () {
+    return view('admin.records.medical-releases.create');
 });
 
 Route::get('records/medical-releases/{id}', function ($id) use ($dispatcher) {
@@ -80,7 +87,44 @@ Route::get('records/medical-releases/{id}', function ($id) use ($dispatcher) {
     return view('admin.records.medical-releases.show', compact('release'));
 });
 
+Route::get('records/medical-releases/{id}/edit', function ($id) {
+    return view('admin.records.medical-releases.edit', compact('id'));
+});
+
+Route::get('records/essays/create', function () {
+    return view('admin.records.essays.create');
+});
+
+Route::get('records/essays/{id}', function ($id) use ($dispatcher) {
+    $essay = $dispatcher->get('essays/' . $id);
+    return view('admin.records.essays.show', compact('essay'));
+});
+
+Route::get('records/essays/{id}/edit', function ($id) {
+    return view('admin.records.essays.edit', compact('id'));
+});
+
+Route::get('records/referrals/create', function () {
+    return view('admin.records.referrals.create');
+});
+
 Route::get('records/referrals/{id}', function ($id) use ($dispatcher) {
     $referral = $dispatcher->get('referrals/' . $id);
     return view('admin.records.referrals.show', compact('referral'));
 });
+
+Route::get('records/referrals/{id}/edit', function ($id) {
+    return view('admin.records.referrals.edit', compact('id'));
+});
+
+$this->resource('records/medical-credentials', 'MedicalCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/media-credentials', 'MediaCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/influencers', 'InfluencersController', [
+    'except' => ['index', 'destroy']
+]);

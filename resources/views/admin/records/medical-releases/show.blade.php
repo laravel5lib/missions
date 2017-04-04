@@ -12,11 +12,10 @@
                     <hr class="divider inv sm">
                     <div class="btn-group">
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
-                            <span class="fa fa-chevron-left icon-left"></span> Back
+                            <span class="fa fa-chevron-left icon-left"></span>
                         </a>
-                        {{-- <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">
-                            <i class="fa fa-edit icon-left"></i> Edit
-                        </a> --}}
+                        <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">Edit
+                        </a>
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">
@@ -24,8 +23,7 @@
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
                         </a>
-                        <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">
-                            <i class="fa fa-edit icon-left"></i> Edit
+                        <a href="{{ url('admin/records/medical-releases/' . $release->id . '/edit') }}" class="btn btn-primary">Edit
                         </a>
                     </div>
                     <hr class="divider inv sm">

@@ -135,6 +135,8 @@ class EventServiceProvider extends ServiceProvider
                      ->fundraisers()
                      ->first()
                      ->update(['goal_amount' => $cost->costAssignable->goal/100]);
+
+                $cost->costAssignable->payments()->sync();
             }
         });
 
@@ -145,6 +147,8 @@ class EventServiceProvider extends ServiceProvider
                      ->fundraisers()
                      ->first()
                      ->update(['goal_amount' => $cost->costAssignable->goal/100]);
+                     
+                $cost->costAssignable->payments()->sync();
             }
         });
     }

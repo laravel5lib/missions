@@ -163,7 +163,7 @@
                 }
             },
             searchEssays(){
-                let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
+                let params = {user: this.userId, subject: 'Testimony', sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;

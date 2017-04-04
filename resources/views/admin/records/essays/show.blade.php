@@ -11,15 +11,12 @@
                 <div class="col-sm-4 text-right hidden-xs">
                     <hr class="divider inv sm">
                     <div class="btn-group">
-                        <button class="btn btn-primary-darker" onclick="window.history.back()">
-                            <span class="fa fa-chevron-left icon-left"></span> Back
-                        </button>
-                        {{-- <a onclick="window.history.back()" class="btn btn-primary-darker">
+                        <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
-                        </a> --}}
-                        {{-- <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
+                        </a>
+                        <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
                             Edit
-                        </a> --}}
+                        </a>
                     </div>
                 </div>
                 <div class="col-sm-4 text-center visible-xs">
@@ -27,9 +24,9 @@
                         <a onclick="window.history.back()" class="btn btn-primary-darker">
                             <span class="fa fa-chevron-left icon-left"></span>
                         </a>
-                        <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
+                        {{-- <a href="{{ url('admin/records/essays/' . $essay->id . '/edit') }}" class="btn btn-primary">
                             Edit
-                        </a>
+                        </a> --}}
                     </div>
                     <hr class="divider inv sm">
                 </div>
@@ -41,7 +38,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-2 col-md-8">
+            <div class="col-md-12">
                 <notes type="essays" id="{{ $essay->id }}" :can-modify="1"></notes>
             </div>
         </div>

@@ -2047,7 +2047,7 @@ class TransferData extends Command
     {
         return collect($this->connection()
             ->table('testimonies')
-            ->join('users', 'users.id', '=', 'testimonies.id')
+            ->join('users', 'users.id', '=', 'testimonies.user_id')
             ->select(
                 'user_id', 'decision', 'church', 'walk', 'missions_experience', 
                 'testimonies.created_at', 'testimonies.updated_at', 'testimonies.id'

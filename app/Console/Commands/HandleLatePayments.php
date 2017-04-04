@@ -12,7 +12,7 @@ class HandleLatePayments extends Command
      *
      * @var string
      */
-    protected $signature = 'payments:penalize';
+    protected $signature = 'payments:penalize {id? : The ID of the reservation}';
 
     /**
      * The console command description.
@@ -43,14 +43,22 @@ class HandleLatePayments extends Command
      */
     public function handle()
     {
-        $reservations = $this->reservation->current()->get();
+        $id = $this->argument('id');
 
-        $reservations->each(function($reservation) {
-            $reservation->payments()->bump() ?
-                $this->info('Costs updated for reservation id: '. $reservation->id) :
-                $this->error('No changes made to reservation id: '. $reservation->id);
-        });
+        if ($id) {
+            $this->reservation->findOrFail($id)->payments()->bump() ?
+                $this->info('Costs updated for reservation id: '. $id) :
+                $this->error('No changes made to reservation id: '. $id);
+        } else {
+            $reservations = $this->reservation->current()->get();
 
-        $this->info('All reservation costs updated.');
+            $reservations->each(function($reservation) {
+                $reservation->payments()->bump() ?
+                    $this->info('Costs updated for reservation id: '. $reservation->id) :
+                    $this->error('No changes made to reservation id: '. $reservation->id);
+            });
+
+            $this->info('All reservation costs updated.');
+        }
     }
 }

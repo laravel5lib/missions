@@ -2,6 +2,19 @@
     <validator name="CreateUpdateEssay" @touched="onTouched">
         <form id="CreateUpdateEssay" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            
+            <template v-if="forAdmin">
+                <div class="col-sm-12">
+                    <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
+                        <label for="infoManager">Record Manager</label>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
+                        </select>
+                    </div>
+                </div>
+            </template>
+
             <div class="row" v-error-handler="{ value: author, handle: 'author' }">
                 <div class="col-sm-12">
                     <label for="author" class="control-label">Author Name</label>
@@ -20,7 +33,7 @@
             <hr class="divider inv">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" href="/dashboard/records/essays" class="btn btn-default">Cancel</a>
+                    <a v-if="!isUpdate" :href="'/'+ firstUrlSegment +'/records/essays'" class="btn btn-default">Cancel</a>
                     <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
                     <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
                     <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
@@ -34,10 +47,12 @@
     </validator>
 </template>
 <script type="text/javascript">
+    import vSelect from "vue-select";
     import errorHandler from'../../error-handler.mixin';
     export default{
         name: 'essay-create-update',
         mixins: [errorHandler],
+        components: {vSelect},
         props: {
             isUpdate: {
                 type: Boolean,
@@ -47,9 +62,9 @@
                 type: String,
                 default: null
             },
-            userId: {
-                type: String,
-                required: true
+            forAdmin: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -65,14 +80,27 @@
                     { q: 'Describe your current walk with God', a: ''},
                     { q: 'Please describe any prior missions trip experience you have', a: ''},
                 ],
-                user_id: this.userId,
+                usersArr: [],
+                userObj: null,
 
                 // logic vars
-                resource: this.$resource('essays{/id}'),
+                resource: this.$resource('essays{/id}', {include: 'user'}),
                 hasChanged: false,
             }
         },
+        computed: {
+            user_id(){
+                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            }
+        },
         methods: {
+            getUsers(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('users', { params: { search: search} }).then(function (response) {
+                    this.usersArr = response.body.data;
+                    loading ? loading(false) : void 0;
+                })
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -81,7 +109,7 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/dashboard/records/essays/';
+                window.location.href = '/'+ this.firstUrlSegment + '/records/essays/' + this.id;
             },
             forceBack(){
                 return this.back(true);
@@ -97,8 +125,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Essay created.');
+                        let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/essays/' + resp.data.data.id;
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/essays/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -109,6 +138,9 @@
                 }
             },
             update(){
+                if ( _.isFunction(this.$validate) )
+                    this.$validate(true);
+
                 this.resetErrors();
                 if (this.$CreateUpdateEssay.valid) {
                     // this.$refs.spinner.show();
@@ -121,7 +153,7 @@
                         this.$dispatch('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/dashboard/records/essays/' + that.id; 
+                            window.location.href = '/'+ that.firstUrlSegment + '/records/essays/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -132,16 +164,14 @@
         },
         ready(){
             if (this.isUpdate) {
-                // this.$refs.spinner.show();
-                this.$http.get('essays/' + this.id).then(function (response) {
-                // this.user = response.body.data;
+                this.resource.get({id: this.id}).then(function (response) {
 
                     let essay = response.body.data;
                     this.author_name = essay.author_name;
                     this.subject = essay.subject;
                     this.content = essay.content;
-                    // this.user_id = essay.user_id;
-                    // this.$refs.spinner.hide();
+                    this.userObj = essay.user.data;
+                    this.usersArr.push(this.userObj);
                 });
             }
         }

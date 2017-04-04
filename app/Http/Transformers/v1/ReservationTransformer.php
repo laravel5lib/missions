@@ -66,7 +66,7 @@ class ReservationTransformer extends TransformerAbstract
             'total_owed'          => $reservation->totalOwedInDollars(),
             'created_at'          => $reservation->created_at->toDateTimeString(),
             'updated_at'          => $reservation->updated_at->toDateTimeString(),
-            'dropped_at'          => $reservation->deleted_at ? $reservation->deleted_at->toDateTimeString() : null,
+            'deleted_at'          => $reservation->deleted_at ? $reservation->deleted_at->toDateTimeString() : null,
             'tags'                => $reservation->tagSlugs(),
             'links'               => [
                 [

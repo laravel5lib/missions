@@ -29,19 +29,14 @@ class Promocode extends Model
      * 
      * @return Illuminate\Database\Eloquent\BelongsTo
      */
-    public function promoteable()
+    public function rewardable()
     {
         return $this->morphTo();
     }
 
-    /**
-     * Get the promocode's rewardable funds.
-     * 
-     * @return mixed
-     */
-    public function funds()
+    public function promotional()
     {
-        return $this->belongsToMany(Fund::class, 'rewardable_funds');
+        return $this->belongsTo(Promotional::class);
     }
 
     /**

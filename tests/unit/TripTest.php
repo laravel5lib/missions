@@ -129,13 +129,15 @@ class TripTest extends TestCase
     {
         $campaign = factory(Campaign::class, '1n1d2017')->create();
 
-        $campaign->createCode('Campaign Promotional', 1, 10000);
+        $campaign->promote('Campaign Promotional', 1, 10000);
 
         $trip = factory(App\Models\v1\Trip::class)->create([
             'campaign_id' => $campaign->id
         ]);
 
-        $reward = $trip->applyCode($campaign->promocodes()->first()->code);
+        $code = $campaign->promotionals()->first()->promocodes()->first()->code;
+
+        $reward = $trip->applyCode($code);
 
         $this->assertEquals(10000, $reward);
     }
@@ -145,13 +147,15 @@ class TripTest extends TestCase
     {
         $group = factory(Group::class)->create();
 
-        $group->createCode('Group Promotional', 1, 10000);
+        $group->promote('Group Promotional', 1, 10000);
 
         $trip = factory(App\Models\v1\Trip::class)->create([
             'group_id' => $group->id
         ]);
 
-        $reward = $trip->applyCode($group->promocodes()->first()->code);
+        $code = $group->promotionals()->first()->promocodes()->first()->code;
+
+        $reward = $trip->applyCode($code);
 
         $this->assertEquals(10000, $reward);
     }
@@ -161,25 +165,11 @@ class TripTest extends TestCase
     {
         $trip = factory(App\Models\v1\Trip::class)->create();
 
-        $trip->createCode('Trip Promotional', 1, 10000);
+        $trip->promote('Trip Promotional', 1, 10000);
 
-        $reward = $trip->applyCode($trip->promocodes()->first()->code);
+        $code = $trip->promotionals()->first()->promocodes()->first()->code;
 
-        $this->assertEquals(10000, $reward);
-    }
-
-    /** @test */
-    function apply_generic_promocode()
-    {
-        $promocode = Promocodes::create(
-            $name = 'Generic', 
-            $amount = 1, 
-            $reward = 10000
-        );
-
-        $trip = factory(App\Models\v1\Trip::class)->create();
-
-        $reward = $trip->applyCode($promocode->first()['code']);
+        $reward = $trip->applyCode($code);
 
         $this->assertEquals(10000, $reward);
     }

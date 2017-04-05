@@ -14,12 +14,10 @@ class CreatePromocodesTable extends Migration
     {
         Schema::create('promocodes', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->uuid('promotional_id')->index();
             $table->string('code', 32)->unique();
-            $table->integer('reward')->default(0);
-            $table->uuid('promoteable_id')->nullable();
-            $table->string('promoteable_type')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->uuid('rewardable_id')->nullable();
+            $table->string('rewardable_type')->nullable();
             $table->timestamps();
         });
     }

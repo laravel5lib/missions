@@ -137,7 +137,7 @@ class Promocodes
      * @return static
      */
     public function create(
-        $name, 
+        $name,
         $amount = 1, 
         $reward = null, 
         $expires = null

@@ -83,4 +83,9 @@ trait Rewardable
 
         return false;
     }
+
+    public function promocodes()
+    {
+        return $this->morphMany(Promocode::class, 'rewardable');
+    }
 }

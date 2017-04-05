@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Facades\Promocodes;
 use App\Models\v1\Promocode;
+use App\Models\v1\Promotional;
 
 trait Promoteable
 {
@@ -15,31 +16,48 @@ trait Promoteable
      *
      * @return mixed
      */
-    public function createCode(
+    public function promote(
         $name, 
-        $amount = 1, 
+        $qty = 1, 
         $reward = null, 
-        $expires = null,
+        $expires = null
     )
     {
-        $records = [];
 
-        // loop though each promocodes required
-        foreach (Promocodes::output($amount) as $code) {
-            $records[] = new Promocode([
-                'name'   => $name,
-                'code'   => $code,
-                'reward' => $reward,
-                'expires_at' => $expires
-            ]);
-        }
+        $promotionals = $this->promotionals()->create([
+            'name' => $name,
+            'reward' => $reward,
+            'expires_at' => $expires
+        ]);
 
-        // check for insertion of record
-        if ($this->promocodes()->saveMany($records)) {
-            return collect($records);
-        }
+        $promotionals->each(function ($promotional) use($qty) {
+            
+            $records = [];
 
-        return collect([]);
+            // if the promoter has rewardable items
+            // then we need to determine those items
+            // and loop through them assign a unique promocode to them
+            
+            // $this->{rewardables}()->each(){ $rewardable->createCode() }
+            
+            // other wise we just create promocodes without rewardable items
+
+            // loop though each promocodes required
+            foreach (Promocodes::output($qty) as $code) {
+                $records[] = new Promocode([
+                    'code'   => $code,
+                    // 'rewardable_id' => $this->id,
+                    // 'rewardable_type' => str_plural(get_class($this))
+                ]);
+            }
+
+            // check for insertion of record
+            if ($promotional->promocodes()->saveMany($records)) {
+                return collect($records);
+            }
+
+            return collect([]);
+        });
     }
 
     /**
@@ -52,17 +70,19 @@ trait Promoteable
     {
         $promocode = Promocode::byCode($code)->first();
 
-        $promoter = str_singular($promocode->promoter_type);
+        if (! $promocode or ! $promocode->promotional) return false;
+
+        $promoter = str_singular($promocode->promotional->promoteable_type);
 
         if (! $promoter) return $promocode;
 
         if (method_exists($this, $promoter)) {
-            if ($this->{$promoter}()->where('id', $promocode->promoter_id)->exists()) {
+            if ($this->{$promoter}()->where('id', $promocode->promotional->promoteable_id)->exists()) {
                 return $promocode;
             }
         }
 
-        if ($this->attributes['id'] === $promocode->promoter_id) {
+        if ($this->attributes['id'] === $promocode->promotional->promoteable_id) {
             return $promocode;
         }
 
@@ -97,13 +117,8 @@ trait Promoteable
         return false;
     }
 
-    /**
-     * Get all of the model's promocodes.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function promocodes()
+    public function promotionals()
     {
-        return $this->morphMany(Promocode::class, 'promoteable');
+        return $this->morphMany(Promotional::class, 'promoteable');
     }
 }

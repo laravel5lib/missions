@@ -25,8 +25,6 @@ class TransportsController extends Controller
     public function __construct(Transport $transport)
     {
         $this->transport = $transport;
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**

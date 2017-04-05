@@ -46,7 +46,8 @@ class AppServiceProvider extends ServiceProvider
             'arrival_designations' => \App\Models\v1\Questionnaire::class,
             'airport_preferences' => \App\Models\v1\Questionnaire::class,
             'notes' => \App\Models\v1\Note::class,
-            'todos' => \App\Models\v1\Todo::class
+            'todos' => \App\Models\v1\Todo::class,
+            'transports' => \App\Models\v1\Transport::class
         ]);
 
         Validator::extend('is_csv',function($attribute, $value, $params, $validator) {

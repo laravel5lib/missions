@@ -126,6 +126,10 @@ $api->version('v1', [
     $api->resource('permissions/roles', 'PermissionRolesController');
     $api->resource('permissions/abilities', 'PermissionAbilitiesController');
 
+    $api->resource('transports', 'TransportsController');
+    $api->resource('itineraries', 'ItinerariesController');
+    $api->resource('itineraries.items', 'ItineraryItemsController');
+
     $api->group(['prefix' => 'credentials'], function($api)
     {
         $api->resource('medical', 'MedicalCredentialsController');

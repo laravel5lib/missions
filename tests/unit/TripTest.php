@@ -1,6 +1,9 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\v1\Group;
+use App\Facades\Promocodes;
+use App\Models\v1\Campaign;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -119,6 +122,66 @@ class TripTest extends TestCase
         ]);
 
         $this->assertEquals('active', $trip->status);
+    }
+
+    /** @test */
+    function apply_campaign_promocode()
+    {
+        $campaign = factory(Campaign::class, '1n1d2017')->create();
+
+        $campaign->createCode('Campaign Promotional', 1, 10000);
+
+        $trip = factory(App\Models\v1\Trip::class)->create([
+            'campaign_id' => $campaign->id
+        ]);
+
+        $reward = $trip->applyCode($campaign->promocodes()->first()->code);
+
+        $this->assertEquals(10000, $reward);
+    }
+
+    /** @test */
+    function apply_group_promocode()
+    {
+        $group = factory(Group::class)->create();
+
+        $group->createCode('Group Promotional', 1, 10000);
+
+        $trip = factory(App\Models\v1\Trip::class)->create([
+            'group_id' => $group->id
+        ]);
+
+        $reward = $trip->applyCode($group->promocodes()->first()->code);
+
+        $this->assertEquals(10000, $reward);
+    }
+
+    /** @test */
+    function apply_trip_promocode()
+    {
+        $trip = factory(App\Models\v1\Trip::class)->create();
+
+        $trip->createCode('Trip Promotional', 1, 10000);
+
+        $reward = $trip->applyCode($trip->promocodes()->first()->code);
+
+        $this->assertEquals(10000, $reward);
+    }
+
+    /** @test */
+    function apply_generic_promocode()
+    {
+        $promocode = Promocodes::create(
+            $name = 'Generic', 
+            $amount = 1, 
+            $reward = 10000
+        );
+
+        $trip = factory(App\Models\v1\Trip::class)->create();
+
+        $reward = $trip->applyCode($promocode->first()['code']);
+
+        $this->assertEquals(10000, $reward);
     }
 
 }

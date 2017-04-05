@@ -41,4 +41,17 @@ class CampaignTest extends TestCase
         $this->assertEquals('Published', $campaign->status);
     }
 
+    /** @test */
+    function create_promocodes()
+    {
+        $campaign = factory(Campaign::class, '1n1d2017')->create();
+
+        $campaign->createCode('Recruit1', 1, 10000);
+
+        $this->assertEquals(
+            $campaign->id, 
+            $campaign->promocodes->first()->promoteable_id
+        );
+    }
+
 }

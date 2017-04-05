@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Campaign extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable;
 
     /**
      * The table associated with the model.

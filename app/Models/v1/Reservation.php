@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use Carbon\Carbon;
 use App\UuidForKey;
+use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable;
 
     /**
      * The table associated with the model.
@@ -222,16 +223,6 @@ class Reservation extends Model
     public function notes()
     {
         return $this->morphMany(Note::class, 'noteable');
-    }
-
-    /**
-     * Get all of the reservation's promo codes
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function promoCodes()
-    {
-        return $this->morphMany(PromoCode::class, 'endorser');
     }
 
     /**

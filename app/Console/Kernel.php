@@ -18,7 +18,9 @@ class Kernel extends ConsoleKernel
         Commands\SendReservationConfirmationEmail::class,
         Commands\SendReceiptEmail::class,
         Commands\HandleLatePayments::class,
-        Commands\TransferData::class
+        Commands\TransferData::class,
+        Commands\AddRoleToTrips::class,
+        Commands\AddTodoToTrips::class
     ];
 
     /**

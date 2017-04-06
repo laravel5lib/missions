@@ -208,8 +208,9 @@
                         user_id: this.user_id,
                     }).then(function (resp) {
                         this.$dispatch('showSuccess', 'Passport created.');
+                        let that = this;
                         setTimeout(function () {
-                            window.location.href = '/' + this.firstUrlSegment + '/records/passports/' + resp.data.data.id;
+                            window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;

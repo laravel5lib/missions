@@ -20,7 +20,7 @@
             <div class="col-xs-12 panel panel-default" v-for="companion in companions" track-by="id">
                 <h5>
                     <a href="/admin/reservations/{{ companion.id }}">
-                        <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" alt="{{ companion.given_names }}">
+                        <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ companion.given_names }}">
                         {{ companion.given_names }} {{ companion.surname }}
                         <small> &middot; <em>{{ companion.relationship | capitalize }}</em></small>
                     </a>

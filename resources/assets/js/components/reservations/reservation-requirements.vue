@@ -132,9 +132,10 @@
         },
         computed: {
             canEdit() {
-                if (_.findWhere(this.$root.user.abilities.data, {slug: "manage requirements-reservations"})) {
-                    return true;
-                }
+                if (this.firstUrlSegment === 'admin') return true;
+                // if (_.findWhere(this.$root.user.abilities.data, {slug: "manage requirements-reservations"})) {
+                //     return true;
+                // }
 
                 return false;
             }

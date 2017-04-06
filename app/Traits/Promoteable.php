@@ -20,7 +20,8 @@ trait Promoteable
         $name, 
         $qty = 1, 
         $reward = null, 
-        $expires = null
+        $expires = null,
+        $affilates = null
     )
     {
 
@@ -34,11 +35,17 @@ trait Promoteable
             
             $records = [];
 
+            if ($affilates) {
+                $this->{$affiliates}->each(function($affiliate) {
+                    $affilate->createCode();
+                });
+            }
+
             // if the promoter has rewardable items
             // then we need to determine those items
             // and loop through them assign a unique promocode to them
             
-            // $this->{rewardables}()->each(){ $rewardable->createCode() }
+            // $this->{$affiliate}()->each(){ $rewardable->createCode() }
             
             // other wise we just create promocodes without rewardable items
 

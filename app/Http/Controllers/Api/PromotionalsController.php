@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
+use App\TripPromoHandler;
+use App\GroupPromoHandler;
 use Illuminate\Http\Request;
 use App\CampaignPromoHandler;
 use App\Models\v1\Promotional;
@@ -84,6 +86,12 @@ class PromotionalsController extends Controller
     private function getPromoHandler($request)
     {
         switch ($request->get('promoteable_type')) {
+            case 'campaigns':
+                return app()->make(CampaignPromoHandler::class);
+            case 'trips':
+                return app()->make(TripPromoHandler::class);
+            case 'groups':
+                return app()->make(GroupPromoHandler::class);
             default:
                 return app()->make(CampaignPromoHandler::class);
         }

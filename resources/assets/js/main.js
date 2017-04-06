@@ -121,6 +121,7 @@ import refundForm from './components/financials/transactions/refund-form.vue';
 import transactionDelete from './components/financials/transactions/transaction-delete.vue';
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
+import promotionals from './components/admin/promotionals.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -799,7 +800,8 @@ new Vue({
         refundForm,
         transactionDelete,
         fundManager,
-        companionManager
+        companionManager,
+        promotionals
     },
     http: {
         headers: {

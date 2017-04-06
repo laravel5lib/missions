@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Traits\Rewardable;
 use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
@@ -203,6 +204,16 @@ class Campaign extends Model
     public function scopeActive($query)
     {
         return $query->whereDate('ended_at', '>=', date('Y-m-d'));
+    }
+
+    /**
+     * Get all the campaign's trip reservations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function reservations()
+    {
+        return $this->hasManyThrough(Reservation::class, Trip::class);
     }
 
     /**

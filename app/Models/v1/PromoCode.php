@@ -5,10 +5,11 @@ namespace App\Models\v1;
 use Carbon\Carbon;
 use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promocode extends Model
 {   
-    use UuidForKey;
+    use UuidForKey, SoftDeletes;
 
     /**
      * The attributes that should not be mass assigned.
@@ -22,7 +23,7 @@ class Promocode extends Model
      * 
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'expires_at'];
+    protected $dates = ['created_at', 'updated_at', 'expires_at', 'deleted_at'];
 
     /**
      * Get the promoter of the promocode.

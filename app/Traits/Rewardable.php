@@ -16,10 +16,8 @@ trait Rewardable
      * @return mixed
      */
     public function createCode(
-        $name, 
-        $amount = 1, 
-        $reward = null, 
-        $expires = null
+        $promotionalId,
+        $amount = 1
     )
     {
         $records = [];
@@ -27,10 +25,8 @@ trait Rewardable
         // loop though each promocodes required
         foreach (Promocodes::output($amount) as $code) {
             $records[] = new Promocode([
-                'name'   => $name,
-                'code'   => $code,
-                'reward' => $reward,
-                'expires_at' => $expires
+                'promotional_id' => $promotionalId,
+                'code'   => $code
             ]);
         }
 
@@ -70,10 +66,10 @@ trait Rewardable
 
             // callback function with reward value
             if (is_callable($callback)) {
-                $callback($promocode->reward ?: true);
+                $callback($promocode->promotional->reward ?: true);
             }
 
-            return $promocode->reward ?: true;
+            return $promocode->promotional->reward ?: true;
         }
 
         // callback function with false value

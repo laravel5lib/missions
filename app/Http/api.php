@@ -62,6 +62,7 @@ $api->version('v1', [
     $api->get('trips/{id}/todos', 'TripTodosController@index');
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
+    $api->post('trips/{id}/promo', 'TripsController@checkPromoCode');
     $api->resource('interests', 'TripInterestsController');
     $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
@@ -122,6 +123,8 @@ $api->version('v1', [
     $api->resource('questionnaires', 'QuestionnairesController');
     $api->resource('permissions/roles', 'PermissionRolesController');
     $api->resource('permissions/abilities', 'PermissionAbilitiesController');
+    $api->resource('promotionals', 'PromotionalsController');
+    $api->put('promotionals/{id}/restore', 'PromotionalsController@restore');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

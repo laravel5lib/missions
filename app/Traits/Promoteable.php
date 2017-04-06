@@ -31,40 +31,37 @@ trait Promoteable
             'expires_at' => $expires
         ]);
 
-        $promotionals->each(function ($promotional) use($qty) {
+        $promotionals->each(function ($promotional) use($qty, $affilates) {
             
             $records = [];
-
-            if ($affilates) {
-                $this->{$affiliates}->each(function($affiliate) {
-                    $affilate->createCode();
-                });
-            }
 
             // if the promoter has rewardable items
             // then we need to determine those items
             // and loop through them assign a unique promocode to them
-            
-            // $this->{$affiliate}()->each(){ $rewardable->createCode() }
-            
-            // other wise we just create promocodes without rewardable items
+            if ( ! is_null($affilates) and method_exists($this, $affilates)) {
+                $this->{$affilates}->each(function($affiliate) use($promotional, $qty) {
+                    $affiliate->createCode($promotional->id, $qty);
+                });
+            } else {
+                // other wise we just create promocodes without rewardable items
+                // loop though each promocodes required
+                foreach (Promocodes::output($qty) as $code) {
+                    $records[] = new Promocode([
+                        'code'   => $code,
+                    ]);
+                }
 
-            // loop though each promocodes required
-            foreach (Promocodes::output($qty) as $code) {
-                $records[] = new Promocode([
-                    'code'   => $code,
-                    // 'rewardable_id' => $this->id,
-                    // 'rewardable_type' => str_plural(get_class($this))
-                ]);
+                // check for insertion of record
+                if ($promotional->promocodes()->saveMany($records)) {
+                    return collect($records);
+                }
+
+                return collect([]);
             }
-
-            // check for insertion of record
-            if ($promotional->promocodes()->saveMany($records)) {
-                return collect($records);
-            }
-
-            return collect([]);
+            
         });
+
+        return $promotionals;
     }
 
     /**
@@ -109,10 +106,10 @@ trait Promoteable
 
             // callback function with reward value
             if (is_callable($callback)) {
-                $callback($promocode->reward ?: true);
+                $callback($promocode->promotional->reward ?: true);
             }
 
-            return $promocode->reward ?: true;
+            return $promocode->promotional->reward ?: true;
 
         }
 

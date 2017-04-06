@@ -20,6 +20,7 @@ class CreatePromotionalsTable extends Migration
             $table->string('promoteable_type')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

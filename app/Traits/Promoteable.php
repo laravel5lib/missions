@@ -25,13 +25,13 @@ trait Promoteable
     )
     {
 
-        $promotionals = $this->promotionals()->create([
+        $promotional = $this->promotionals()->create([
             'name' => $name,
             'reward' => $reward,
             'expires_at' => $expires
         ]);
 
-        $promotionals->each(function ($promotional) use($qty, $affilates) {
+        // $promotionals->each(function ($promotional) use($qty, $affilates) {
             
             $records = [];
 
@@ -53,15 +53,13 @@ trait Promoteable
 
                 // check for insertion of record
                 if ($promotional->promocodes()->saveMany($records)) {
-                    return collect($records);
+                    return $promotional;
                 }
-
-                return collect([]);
             }
             
-        });
+        // });
 
-        return $promotionals;
+        return $promotional;
     }
 
     /**

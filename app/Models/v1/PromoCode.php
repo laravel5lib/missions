@@ -51,18 +51,6 @@ class Promocode extends Model
     {
         return $query->where('code', $code);
     }
-
-    /**
-     * Query builder to find all promocodes by type.
-     * 
-     * @param  $query
-     * @param  string $type
-     * @return mixed
-     */
-    public function scopeByType($query, $type)
-    {
-        return $query->where('promoteable_type', $type);
-    }
     
     /**
      * Query builder to find all not expired promocodes.
@@ -72,9 +60,11 @@ class Promocode extends Model
      */
     public function scopeFresh($query)
     {
-        return $query->whereNull('expires_at')
+        return $query->whereHas('promotional', function($promotional) {
+            return $promotional->whereNull('expires_at')
                      ->orWhereDate(
                         'expires_at', '>=', Carbon::now()
                     );
+        });
     }
 }

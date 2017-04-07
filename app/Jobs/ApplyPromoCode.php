@@ -41,6 +41,8 @@ class ApplyPromoCode extends Job implements ShouldQueue
          if ($code->exists()) {
             $record = $code->first();
 
+            $record->increment('use_count');
+
             $credit = $transaction->create([
                 'type' => 'credit',
                 'amount' => $record->promotional->reward/100,

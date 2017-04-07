@@ -27,7 +27,7 @@ class PromocodeTransformer extends TransformerAbstract {
         $data = [
             'id'               => $promocode->id,
             'code'             => $promocode->code,
-            'use_count'        => (int) 0,
+            'use_count'        => (int) $promocode->use_count,
             'created_at'       => $promocode->created_at->toDateTimeString(),
             'updated_at'       => $promocode->updated_at->toDateTimeString(),
             'deleted_at'       => $promocode->deleted_at ? $promocode->deleted_at->toDateTimeString() : null,

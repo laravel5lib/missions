@@ -16,6 +16,7 @@ class CreatePromocodesTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('promotional_id')->index();
             $table->string('code', 32);
+            $table->integer('use_count')->default(0);
             $table->uuid('rewardable_id')->nullable();
             $table->string('rewardable_type')->nullable();
             $table->timestamps();

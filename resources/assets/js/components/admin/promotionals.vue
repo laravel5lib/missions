@@ -1,11 +1,10 @@
 <template>
-    <a @click="toView('promotional-form')" class="btn btn-primary">
-        <i class="fa fa-plus"></i> New
-    </a>
-    <component :is="currentView" 
-               transition="fade" 
-               transition-mode="out-in">
-   </component>
+        <component :is="currentView" 
+                   :type="type" 
+                   :id="id"
+                   transition="fade" 
+                   transition-mode="out-in">
+        </component>
 </template>
 <style>
     .fade-transition {
@@ -17,10 +16,12 @@
 
 </style>
 <script type="text/javascript">
-    import promotionalList from './promotional-list.vue';
+    import list from './promotionals/list.vue';
+    import createEdit from './promotionals/create-edit.vue';
+    import details from './promotionals/details.vue';
     export default {
         name: 'promotionals',
-        components: [promotionalList],
+        components: [list, createEdit, details],
         props: {
           'type': {
             type: String,
@@ -33,7 +34,12 @@
         },
         data() {
             return {
-                currentView: 'promotional-list'
+                currentView: 'list'
+            }
+        },
+        events: {
+            'load-view': function (view) {
+                this.toView(view);
             }
         },
         methods: {

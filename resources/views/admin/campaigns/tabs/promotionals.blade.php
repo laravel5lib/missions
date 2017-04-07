@@ -1,5 +1,5 @@
 @extends('admin.campaigns.show')
 
 @section('tab')
-    <promotionals type="campaigns" id="{{ $campaign->id}}"></promotionals>
+    <promotionals promoter-type="campaigns" promoter-id="{{ $campaign->id}}"></promotionals>
 @endsection

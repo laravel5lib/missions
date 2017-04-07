@@ -2,11 +2,12 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
+                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>Promotionals</h5>
                 </div>
                 <div class="col-sm-4 text-right">
-                    <a @click="callView('create-edit')" class="btn btn-primary btn-sm">
+                    <a @click="callView({view: 'create-edit'})" class="btn btn-primary btn-sm">
                         <i class="fa fa-plus"></i> New
                     </a>
                 </div>
@@ -33,7 +34,7 @@
                         <td>{{ promo.promocodes_count }}</td>
                         <td>{{ promo.created_at | moment 'll' }}</td>
                         <td>{{ promo.updated_at | moment 'll' }}</td>
-                        <th><a @click="callView('details')"><i class="fa fa-cog"></i></a></th>
+                        <th><a @click="callView({view: 'details', id: promo.id})"><i class="fa fa-cog"></i></a></th>
                     </tr>
                 </tbody>
             </table>
@@ -44,11 +45,11 @@
     export default {
         name: 'list',
         props: {
-          'type': {
+          'promoterType': {
             type: String,
             required: true
           },
-          'id': {
+          'promoterId': {
             type: String,
             required: true
           }
@@ -64,11 +65,11 @@
                     this.promos = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to fetch promotionals.');
+                    this.$dispatch('showError', 'Unable to get data from server.');
                 });
             },
-            callView(view) {
-                this.$dispatch('load-view', view);
+            callView(data) {
+                this.$dispatch('load-view', data);
             }
         },
         ready() {

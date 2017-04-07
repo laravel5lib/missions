@@ -2,17 +2,23 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
+                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>{{ promo.name }}</h5>
                 </div>
                 <div class="col-sm-4 text-right">
-                    <a @click="callView('list')" class="btn btn-primary btn-sm">
+                    <button @click="callView({view:'list'})" class="btn btn-default btn-sm">
                         <i class="fa fa-chevron-left"></i> Back
-                    </a>
+                    </button>
+                    <button @click="callView({view:'create-edit', id: promo.id})" class="btn btn-primary btn-sm">
+                        Edit
+                    </button>
                 </div>
             </div>
         </div>
         <div class="panel-body">
+            {{ promo.reward | currency }}
+            <label>Credit Amount</label>
         </div>
     </div>
 </template>
@@ -20,25 +26,36 @@
     export default {
         name: 'details',
         props: {
-          'type': {
-            type: String,
-            required: false
-          },
           'id': {
             type: String,
-            required: false
+            required: true
           }
         },
         data() {
             return {
-                promo: null
+                promo: {
+                    id: null,
+                    name: null,
+                    reward: null,
+                    expires_at: null
+                }
             }
         },
         events: {},
         methods: {
-            callView(view) {
-                this.$dispatch('load-view', view);
+            fetch() {
+                this.$http.get('promotionals/' + this.id).then(function (response) {
+                    this.promo = response.body.data;
+                }, function (error) {
+                    this.$dispatch('showError', 'Unable to get data from server.');
+                });
+            },
+            callView(data) {
+                this.$dispatch('load-view', data);
             }
+        },
+        ready() {
+            this.fetch();
         }
     }
 </script>

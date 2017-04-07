@@ -1,19 +1,24 @@
 <template>
+    <div class="white-bg">
         <component :is="currentView" 
-                   :type="type" 
+                   :promoter-type="promoterType" 
+                   :promoter-id="promoterId"
                    :id="id"
                    transition="fade" 
                    transition-mode="out-in">
         </component>
+    </div>
 </template>
-<style>
+<style scoped>
     .fade-transition {
         transition: opacity .3s ease;
     }
     .fade-enter, .fade-leave {
         opacity: 0;
+    },
+    div.panel.panel-default {
+        min-height: 200px;
     }
-
 </style>
 <script type="text/javascript">
     import list from './promotionals/list.vue';
@@ -23,11 +28,11 @@
         name: 'promotionals',
         components: [list, createEdit, details],
         props: {
-          'type': {
+          'promoterType': {
             type: String,
             required: true
           },
-          'id': {
+          'promoterId': {
             type: String,
             required: true
           }
@@ -38,13 +43,14 @@
             }
         },
         events: {
-            'load-view': function (view) {
-                this.toView(view);
+            'load-view': function (msg) {
+                this.toView(msg);
             }
         },
         methods: {
-            toView(view){
-                this.currentView = view;
+            toView(data){
+                this.currentView = data.view;
+                this.id = data.id;
             }
         }
     }

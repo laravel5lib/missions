@@ -2,11 +2,12 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
+                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>Create New Promotional</h5>
                 </div>
                 <div class="col-sm-4 text-right">
-                    <button @click="callView('list')" class="btn btn-primary btn-sm">
+                    <button @click="callView({view: 'list'})" class="btn btn-primary btn-sm">
                         <i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
@@ -84,14 +85,14 @@
             update() {
 
             },
-            callView(view) {
+            callView(data) {
                 this.resetForm();
-                this.$dispatch('load-view', view);
+                this.$dispatch('load-view', data);
             },
             cancel()
             {
                 this.resetForm();
-                this.$dispatch('load-view', 'list');
+                this.$dispatch('load-view', {view:'list'});
             }
         }
     }

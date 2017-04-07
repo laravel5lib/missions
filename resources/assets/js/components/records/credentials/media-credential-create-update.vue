@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div>
 		<validator name="CreateUpdateMediaCredential" @touched="onTouched">
-			<form id="CreateUpdateMediaCredential" class="form-horizontal" novalidate>
+			<form id="CreateUpdateMediaCredential" class="form-horizontal">
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -62,26 +62,64 @@
 								</div>
 								<div class="panel-body">
 									<div class="row">
-										<template v-for="choice in QA.options">
-											<div class="checkbox col-sm-6 col-xs-12">
-												<label>
-													<input type="checkbox" :value="choice.value" v-model="choice.value">
-													{{ choice.name }}
-                                                </label>
-												<div class="well well-sm" :class="{'hidden': !choice.value}">
-													<label>Proficiency</label><br>
-													<label class="radio-inline">
-														<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
-                                                </label>
-													<label class="radio-inline">
-														<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
-                                                </label>
-													<label class="radio-inline">
-														<input type="radio" value="expert" v-model="choice.proficiency"> Expert
-                                                </label>
-												</div>
-											</div>
-										</template>
+										<div class="checkbox col-sm-6 col-xs-12">
+											<template v-for="choice in QA.options">
+												<template v-if="$index % 2 == 0">
+													<label>
+														<input type="checkbox" :value="choice.value" v-model="choice.value">
+														{{ choice.name }}
+													</label>
+													<div v-show="choice.value">
+														<div class="row" :class="{'has-error': !choice.proficiency}">
+															<div class="col-md-4">
+																<label class="control-label">Proficiency</label>
+															</div>
+															<div class="col-md-8">
+																<label class="radio-inline">
+																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" value="expert" v-model="choice.proficiency"> Expert
+																</label>
+															</div>
+														</div>
+													</div>
+													<hr class="divider sm">
+												</template>
+											</template>
+										</div>
+										<div class="checkbox col-sm-6 col-xs-12">
+											<template v-for="choice in QA.options">
+												<template v-if="$index % 2 != 0">
+													<label>
+														<input type="checkbox" :value="choice.value" v-model="choice.value">
+														{{ choice.name }}
+													</label>
+													<div v-show="choice.value">
+														<div class="row" :class="{'has-error': !choice.proficiency}">
+															<div class="col-md-4">
+																<label class="control-label">Proficiency</label>
+															</div>
+															<div class="col-md-8">
+																<label class="radio-inline">
+																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
+																</label>
+																<label class="radio-inline">
+																	<input type="radio" value="expert" v-model="choice.proficiency"> Expert
+																</label>
+															</div>
+														</div>
+													</div>
+													<hr class="divider sm">
+												</template>
+											</template>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -214,9 +252,9 @@
 							<label>
 								<input type="checkbox" v-model="disclaimer" v-validate:disclaimer="['required']">
 								I agree that, Missions.Me is not responsible for any lost, stolen or broken equipment brought my your missions trip.
+
 							</label>
 						</div>
-
 					</div>
 				</div>
 
@@ -333,6 +371,19 @@
             },
             user_id(){
                 return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            },
+            validateDynamically(){
+                let self = this;
+                let pass = true;
+                // check proficiencies
+                let roles = _.findWhere(this.content, { id: 'role'});
+                _.each(roles.options, function (role) {
+                    if (role.proficiency === null || role.proficiency === '') {
+                        self.$root.$emit('showError', 'Please select a proficiency level for ' + role.name);
+                        pass = false;
+                    }
+                });
+                return pass;
             }
         },
         watch:{
@@ -374,7 +425,7 @@
             },
             submit(){
                 this.resetErrors();
-                if (this.$CreateUpdateMediaCredential.valid) {
+                if (this.validateDynamically && this.$CreateUpdateMediaCredential.valid) {
                     this.resource.save(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -401,7 +452,7 @@
                     this.$validate(true);
 
                 this.resetErrors();
-                if (this.$CreateUpdateMediaCredential.valid) {
+                if (this.validateDynamically && this.$CreateUpdateMediaCredential.valid) {
                     this.resource.update({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,

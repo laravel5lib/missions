@@ -15,7 +15,7 @@
     }
     .fade-enter, .fade-leave {
         opacity: 0;
-    },
+    }
     div.panel.panel-default {
         min-height: 200px;
     }

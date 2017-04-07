@@ -12,12 +12,15 @@
                            v-model="options.params.search" 
                            debounce="250" 
                            placeholder="Search by codes or referral names">
-                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    <span class="input-group-addon">
+                        <i class="fa fa-circle-o-notch fa-spin" v-show="loading"></i>
+                        <i class="fa fa-search" v-else></i>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
-    <table class="table table-striped">
+    <table class="table table-striped" v-show="codes.length">
         <thead>
             <tr>
                 <th>Code</th>
@@ -28,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="code in codes" track-by="id">
+            <tr v-for="code in codes" track-by="id" transition="stagger" stagger="50">
                 <td><code>{{ code.code }}</code></td>
                 <td v-html="affiliate(code.rewardable)"></td>
                 <td>{{ code.use_count}} {{ code.use_count | pluralize 'time'}}</td>
@@ -48,6 +51,9 @@
             </tr>
         </tbody>
     </table>
+    <div class="panel-footer text-center" v-else>
+        No promo codes found.
+    </div>
     <div class="panel-footer">
         <div class="row">
             <div class="col-xs-12 text-center">
@@ -57,6 +63,18 @@
     </div>
 </div>
 </template>
+<style scoped>
+    .stagger-transition {
+        transition: all .2s ease;
+        overflow: hidden;
+        margin: 0;
+        height: 20px;
+    }
+    .stagger-enter, .stagger-leave {
+        opacity: 0;
+        height: 0;
+    }
+</style>
 <script type="text/javascript">
     export default {
         name: 'promocodes',
@@ -79,6 +97,7 @@
                     }
                 },
                 pagination: { current_page: 1},
+                loading: false
             }
         },
         watch: {
@@ -90,6 +109,8 @@
         events: {},
         methods: {
             fetch() {
+                this.loading = true;
+
                 $.extend(this.options.params, {
                     page: this.pagination.current_page
                 });
@@ -97,14 +118,16 @@
                 this.$http.get('promocodes', this.options).then(function (response) {
                     this.codes = response.body.data;
                     this.pagination = response.body.meta.pagination;
+                    this.loading = false;
                 }, function (error) {
                     this.$dispatch('showError', 'Unable to get data from server.');
+                    this.loading = false;
                 });
             },
             affiliate(rewardable) {
                 if (! rewardable) return 'none';
 
-                return '<a href="/admin/reservations/'+rewardable.data.id+'" target="_blank">' + rewardable.data.given_names + ' ' + rewardable.data.surname + '</a>';
+                return '<i class="fa fa-external-link text-muted"></i> <a href="/admin/reservations/'+rewardable.data.id+'" target="_blank">' + rewardable.data.given_names + ' ' + rewardable.data.surname + '</a>';
             },
             activate(codeId) {
                 this.$http.put('promocodes/' + codeId + '/restore').then(function (response) {

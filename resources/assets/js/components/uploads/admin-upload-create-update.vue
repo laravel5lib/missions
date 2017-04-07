@@ -527,14 +527,16 @@
 						self.imageHeight = img.height * self.imageAspectRatio;
 
 						// adjust container
-						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar', 'other', 'passport'], self.typeObj.type) ) {
-							self.adjustSelectByType()
-						} else {
-							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
-						}
+						if (self.vueCropApi) {
+                            self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
+                            if (self.typeObj && _.contains(['banner', 'avatar', 'other', 'passport'], self.typeObj.type)) {
+                                self.adjustSelectByType()
+                            } else {
+                                self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
+                            }
+                        }
 					};
-					self.file = img.src = event.target.result;
+					self.file = img.src = event.target.result
 				};
 				reader.readAsDataURL(e.target.files[0]);
 			},

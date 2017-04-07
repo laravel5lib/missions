@@ -102,7 +102,7 @@
                     <td>{{trip.type|capitalize}}</td>
                     <td>{{trip.campaign.data.name|capitalize}}</td>
                     <td>{{trip.status}}</td>
-                    <td>{{trip.started_at|moment 'll'}} - <br>{{trip.ended_at|moment 'll'}}</td>
+                    <td>{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
                     <td>{{trip.reservations}}</td>
                     <td>
                         <a href="/admin/trips/{{ trip.id }}"><i class="fa fa-eye"></i></a>

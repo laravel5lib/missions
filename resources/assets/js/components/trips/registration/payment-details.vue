@@ -506,7 +506,7 @@
 					};
 					this.$parent.upfrontTotal = this.upfrontTotal;
 					this.$parent.fundraisingGoal = this.fundraisingGoal;
-					this.$parent.promocode = !!this.promoValid ? this.promo : null;
+					this.$parent.promocode = this.promoValid ? this.promo : null;
 					this.stripeDeferred.resolve(true);
 				}
 			}

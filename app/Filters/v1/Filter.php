@@ -69,19 +69,19 @@ class Filter extends ModelFilter
                     list($field, $relationship) = explode(".", strrev($column), 2);
 
                     $query->orWhereHas(strrev($relationship), function($col) use($field, $terms) {
-                        $col->where(strrev($field), 'LIKE', "%$terms%");
+
+                        $keywords = explode(' ', $terms);
+
+                        foreach($keywords as $term) {
+                            $col->orWhere(strrev($field), 'LIKE', "%$term%");
+                        }
                     });
-
-                } elseif (str_contains($column, '::')) {
-                    
-                    list($first, $second) = explode('::', $column, 2);
-
-                    $query->orWhere(
-                        DB::raw('CONCAT('.$first.', " ", '.$second.')'), 'LIKE', "%$terms%"
-                    );
-
                 } else {
-                    $query->orWhere($column, 'LIKE', "%$terms%");
+                    $keywords = explode(' ', $terms);
+
+                    foreach($keywords as $term) {
+                        $query->orWhere($column, 'LIKE', "%$term%");
+                    }
                 }
             }
 

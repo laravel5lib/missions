@@ -40,7 +40,7 @@ class Due extends Model
      */
     public function payable()
     {
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 
     /**

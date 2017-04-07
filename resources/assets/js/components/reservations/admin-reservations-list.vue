@@ -256,6 +256,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="dropped" :disabled="maxCheck('dropped')"> Dropped On
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="gender" :disabled="maxCheck('gender')"> Gender
 								</label>
 							</li>
@@ -412,6 +417,11 @@
 						<i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('dropped')">
+						Dropped On
+						<i @click="setOrderByField('deleted_at')" v-if="orderByField !== 'deleted_at'" class="fa fa-sort pull-right"></i>
+						<i @click="direction=direction*-1" v-if="orderByField === 'deleted_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+					</th>
 					<th v-if="isActive('gender')">
 						Gender
 					</th>
@@ -447,6 +457,7 @@
 					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
 					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
 					<td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
+					<td v-if="isActive('dropped')" v-text="reservation.deleted_at|moment 'll'"></td>
 					<td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>

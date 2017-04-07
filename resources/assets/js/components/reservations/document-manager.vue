@@ -66,6 +66,7 @@
     import essay from '../records/essays/essay.vue';
     import medicalsList from '../records/medicals/medicals-list.vue';
     import medical from '../records/medicals/medical.vue';
+    import travelItineraries from '../reservations/travel-itineraries.vue';
     import arrivalDesignation from '../reservations/arrival-designation.vue';
     import airportPreference from '../reservations/airport-preference.vue';
     import referralsList from '../records/referrals/referrals-list.vue';
@@ -86,6 +87,7 @@
             referralsList,
             referral,
             arrivalDesignation,
+            travelItineraries,
             airportPreference
         },
         props:{
@@ -185,6 +187,9 @@
                         break;
                     case 'arrival_designations':
                         this.questionnaire = 'arrival-designation';
+                        break;
+                    case 'travel_itineraries':
+                        this.questionnaire = 'travel-itineraries';
                         break;
                     default:
                         this.label = 'Document';

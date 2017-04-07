@@ -147,6 +147,8 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'utilities'], function ($api) {
         $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
+        $api->get('airlines', 'UtilitiesController@getAirlines');
+        $api->get('airlines/{iata}', 'UtilitiesController@getAirline');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');

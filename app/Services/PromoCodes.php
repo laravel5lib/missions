@@ -148,10 +148,7 @@ class Promocodes
         // loop though each promocodes required
         foreach ($this->output($amount) as $code) {
             $records[] = [
-                'name'   => $name,
                 'code'   => $code,
-                'reward' => $reward,
-                'expires_at' => $expires
             ];
         }
 

@@ -125,6 +125,8 @@ $api->version('v1', [
     $api->resource('permissions/abilities', 'PermissionAbilitiesController');
     $api->resource('promotionals', 'PromotionalsController');
     $api->put('promotionals/{id}/restore', 'PromotionalsController@restore');
+    $api->resource('promocodes', 'PromocodesController');
+    $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
 
     $api->group(['prefix' => 'medical'], function($api)
     {

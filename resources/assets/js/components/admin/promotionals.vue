@@ -1,5 +1,5 @@
 <template>
-    <div class="white-bg">
+    <div>
         <component :is="currentView" 
                    :promoter-type="promoterType" 
                    :promoter-id="promoterId"

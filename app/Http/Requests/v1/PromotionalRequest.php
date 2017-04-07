@@ -26,7 +26,7 @@ class PromotionalRequest extends FormRequest
         $rules = [
             'name' => 'required|string',
             'reward' => 'required|numeric',
-            'expires_at' => 'date',
+            'expires_at' => 'date|after:now',
             'promoteable_id' => 'required|string',
             'promoteable_type' => 'required|in:campaigns,groups,trips',
             'affiliates' => 'string|in:reservations',
@@ -38,6 +38,7 @@ class PromotionalRequest extends FormRequest
             $rules['reward'] = 'sometimes|required|numeric';
             $rules['promoteable_id'] = 'sometimes|required|string';
             $rules['promoteable_type'] = 'sometimes|required|in:campaigns,groups,trips';
+            $rules['expires_at'] = 'date';
         }
 
         return $rules;

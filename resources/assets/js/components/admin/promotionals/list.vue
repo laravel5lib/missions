@@ -56,12 +56,18 @@
         },
         data() {
             return {
-                promos: []
+                promos: [],
+                options: {
+                    params: {
+                        promoterType: this.promoterType, 
+                        promoterId: this.promoterId
+                    }
+                }
             }
         },
         methods: {
             fetch() {
-                this.$http.get('promotionals', {type: this.type, id: this.id}).then(function (response) {
+                this.$http.get('promotionals', this.options).then(function (response) {
                     this.promos = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 }, function (error) {

@@ -9,4 +9,14 @@ class PromotionalFilter extends Filter
     * @var array
     */
     public $relations = [];
+
+    public function promoterType($type)
+    {
+        return $this->where('promoteable_type', $type);
+    }
+
+    public function promoterId($id)
+    {
+        return $this->where('promoteable_id', $id);
+    }
 }

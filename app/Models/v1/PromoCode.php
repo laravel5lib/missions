@@ -4,12 +4,13 @@ namespace App\Models\v1;
 
 use Carbon\Carbon;
 use App\UuidForKey;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promocode extends Model
 {   
-    use UuidForKey, SoftDeletes;
+    use UuidForKey, SoftDeletes, Filterable;
 
     /**
      * The attributes that should not be mass assigned.
@@ -33,6 +34,11 @@ class Promocode extends Model
     public function rewardable()
     {
         return $this->morphTo();
+    }
+
+    public function reservations()
+    {
+        return $this->belongsTo(Reservation::class, 'rewardable_id')->where('rewardable_type', 'reservations');
     }
 
     public function promotional()

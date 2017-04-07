@@ -52,6 +52,7 @@
                             <option value="L">L (Large)</option>
                             <option value="XL">XL (Extra Large)</option>
                             <option value="XXL">XXL (2 Extra Large)</option>
+                            <option value="XXXL">XXXL (3 Extra Large)</option>
                         </select>
                     </div>
                 </div>

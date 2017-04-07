@@ -15,7 +15,8 @@ class ShirtSize {
         'M' => 'Medium',
         'L' => 'Large',
         'XL' => 'Extra Large',
-        'XXL' => 'Extra Large x2'
+        'XXL' => 'Extra Large x2',
+        'XXXL' => 'Extra Large x3'
     ];
 
     /**

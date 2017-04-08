@@ -98,7 +98,7 @@
 						<div class="input-group">
 							<input type="text" class="form-control input-sm" id="promo" placeholder=""
 						       v-model="promo" debounce="250" />
-							<span v-show="promo" class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promo !== '' && !promoValid}"></span></span>
+							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promo !== '' && !promoValid, 'fa-gift': promo === ''}"></span></span>
 						</div>
 					</div>
 				</div>

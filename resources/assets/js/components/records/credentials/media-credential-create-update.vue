@@ -378,7 +378,8 @@
 
                 // check proficiencies
                 let roles = _.findWhere(this.content, { id: 'role'});
-                _.each(roles.options, function (role) {
+                let selectedRoles = _.findWhere(roles.options, { value: true});
+                _.each(selectedRoles, function (role) {
                     if (role.proficiency === null || role.proficiency === '') {
                         self.$root.$emit('showError', 'Please select a proficiency level for ' + role.name);
                         pass = false;
@@ -387,7 +388,8 @@
 
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});
-                _.each(equipment.options, function (item) {
+                let selectedEquipment = _.findWhere(equipment.options, { value: true});
+                _.each(selectedEquipment, function (item) {
                     if (item.brand === null || item.brand === '') {
                         self.$root.$emit('showError', 'Please type a brand/model name for your ' + item.name);
                         pass = false;

@@ -71,10 +71,10 @@
 													</label>
 													<div v-show="choice.value">
 														<div class="row" :class="{'has-error': !choice.proficiency}">
-															<div class="col-md-4">
-																<label class="control-label">Proficiency</label>
-															</div>
-															<div class="col-md-8">
+                                                            <div class="col-md-2">
+                                                                <span class="help-block">Proficiency: </span>
+                                                            </div>
+															<div class="col-md-10">
 																<label class="radio-inline">
 																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
 																</label>
@@ -86,8 +86,9 @@
 																</label>
 															</div>
 														</div>
+                                                        <hr class="divider md">
 													</div>
-													<hr class="divider sm">
+                                                     <hr class="divider inv sm">
 												</template>
 											</template>
 										</div>
@@ -100,10 +101,10 @@
 													</label>
 													<div v-show="choice.value">
 														<div class="row" :class="{'has-error': !choice.proficiency}">
-															<div class="col-md-4">
-																<label class="control-label">Proficiency</label>
+															<div class="col-md-2">
+																<span class="help-block">Proficiency:</label>
 															</div>
-															<div class="col-md-8">
+															<div class="col-md-10">
 																<label class="radio-inline">
 																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
 																</label>
@@ -115,8 +116,9 @@
 																</label>
 															</div>
 														</div>
+                                                        <hr class="divider md">
 													</div>
-													<hr class="divider sm">
+													<hr class="divider inv sm">
 												</template>
 											</template>
 										</div>
@@ -138,9 +140,12 @@
 													<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
                                                 </label>
 												<div v-show="choice.value" :class="{'has-error': !choice.brand}">
-													<label>BRAND/MODEL</label>
-													<input class="form-control input-sm " type="text" v-model="choice.brand">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon input-sm">Brand/Model</span>
+													   <input class="form-control input-sm" type="text" v-model="choice.brand">
+                                                    </div>
 												</div>
+                                                <hr class="divider inv sm">
 											</div>
 										</template>
 									</div>

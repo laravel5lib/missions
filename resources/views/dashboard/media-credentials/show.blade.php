@@ -35,8 +35,4 @@
     </div>
     <hr class="divider inv">
     @include('_media_credential', $credential)
-    <hr class="divider sm">
-    <p>
-        <strong><i class="fa fa-asterisk text-danger"></i> Missions.Me requires that Media Professionals provide their own equipment. Rental equipment will not be provided.</strong>
-    </p>
 @endsection

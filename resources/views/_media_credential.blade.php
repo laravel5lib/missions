@@ -58,6 +58,12 @@
                                     </div>
                                 @endforeach
                             </div>
+                            <div class="row">
+                                <div class="col-xs-12 help-block">
+                                    <label>Disclaimer</label>
+                                    <p class="help-block">Missions.Me requires that Media Professionals provide their own equipment. Rental equipment will not be provided.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

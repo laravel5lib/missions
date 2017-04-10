@@ -54,7 +54,6 @@
         },
         methods: {
             destroy(){
-                console.log(this.redirect);
                 this.$http.delete(this.resource + 's/' + this.id).then(function (response) {
                     if (this.redirect) {
                         window.location.href = this.redirect;

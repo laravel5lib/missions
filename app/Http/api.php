@@ -44,6 +44,7 @@ $api->version('v1', [
     $api->post('users/export', 'UsersController@export');
     $api->post('users/import', 'UsersController@import');
     $api->get('users/{id}/reports', 'UserReportsController@index');
+    $api->delete('reports/{id}', 'UserReportsController@destroy');
     $api->resource('users.contacts', 'ContactsController');
     $api->post('users/{id}/roles', 'UserRolesController@store');
     $api->delete('users/{id}/roles', 'UserRolesController@destroy');

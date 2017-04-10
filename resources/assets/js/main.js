@@ -68,6 +68,7 @@ import uploadCreateUpdate from './components/uploads/admin-upload-create-update.
 import reservationRequirements from './components/reservations/reservation-requirements.vue';
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
+import reportsList from './components/reports/reports-list.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -747,6 +748,7 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        reportsList,
 
         // admin components
         campaignCreate,

@@ -26,7 +26,7 @@ class ExportRequest extends FormRequest
         return [
             'fields' => 'bail|required|array',
             'filename' => 'string',
-            'user_id' => 'bail|required|exists:users,id'
+            'author_id' => 'bail|required|exists:users,id'
         ];
     }
 
@@ -40,6 +40,7 @@ class ExportRequest extends FormRequest
         return [
             'fields.required' => 'At least one field is required.',
             'users.required' => 'A valid user id is required.',
+            'users.exists' => 'A valid user id is required.',
             'email.required' => 'Enter a valid email.',
             'email.email' => 'Enter a valid email.'
         ];

@@ -137,9 +137,9 @@
 												<label>
 													<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
                                                 </label>
-												<div class="well well-sm" :class="{'hidden': !choice.value}">
+												<div v-show="choice.value" :class="{'has-error': !choice.brand}">
 													<label>BRAND/MODEL</label>
-													<input class="form-control" type="text" v-model="choice.brand">
+													<input class="form-control input-sm " type="text" v-model="choice.brand">
 												</div>
 											</div>
 										</template>
@@ -375,14 +375,28 @@
             validateDynamically(){
                 let self = this;
                 let pass = true;
+
                 // check proficiencies
                 let roles = _.findWhere(this.content, { id: 'role'});
-                _.each(roles.options, function (role) {
+                let selectedRoles = _.findWhere(roles.options, { value: true});
+                _.each(selectedRoles, function (role) {
                     if (role.proficiency === null || role.proficiency === '') {
                         self.$root.$emit('showError', 'Please select a proficiency level for ' + role.name);
                         pass = false;
                     }
                 });
+
+                // check brands/models
+                let equipment = _.findWhere(this.content, { id: 'equipment'});
+                let selectedEquipment = _.findWhere(equipment.options, { value: true});
+                _.each(selectedEquipment, function (item) {
+                    if (item.brand === null || item.brand === '') {
+                        self.$root.$emit('showError', 'Please type a brand/model name for your ' + item.name);
+                        pass = false;
+                    }
+                });
+
+
                 return pass;
             }
         },

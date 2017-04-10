@@ -539,6 +539,8 @@
                     this.expired_at = credential.expired_at;
                     this.userObj = credential.holder.data;
                     this.usersArr.push(this.userObj);
+
+                    this.disclaimer = _.findWhere(this.content, { id: 'disclaimer'}).a;
                 });
             }
         }

@@ -3,13 +3,14 @@
 namespace App\Jobs;
 
 use App\Jobs\Job;
-use Illuminate\Contracts\Mail\Mailer;
+use App\Models\v1\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Facades\Excel;
 
 class Exporter extends Job implements ShouldQueue
 {
@@ -27,10 +28,6 @@ class Exporter extends Job implements ShouldQueue
     /**
      * @var
      */
-    protected $email;
-    /**
-     * @var
-     */
     protected $fileName;
 
     /**
@@ -42,15 +39,14 @@ class Exporter extends Job implements ShouldQueue
     {
         $this->request = $request;
         $this->fields = $request['fields'];
-        $this->email = $request['email'];
         $this->fileName = $request['filename'] ? snake_case($request['filename'] .'_'. time()) : time();
     }
 
     /**
      * Execute the job.
-     * @param Mailer $mailer
+     * @param Report $report
      */
-    public function handle(Mailer $mailer)
+    public function handle(Report $report)
     {
         $collection = $this->data($this->request);
 
@@ -58,7 +54,7 @@ class Exporter extends Job implements ShouldQueue
             return $this->filter($collection);
         })->all();
 
-        $this->createExport($data, 'Funds')->sendEmail($mailer);
+        $this->createExport($data, 'Export')->saveReport($report);
     }
 
     /**
@@ -107,10 +103,25 @@ class Exporter extends Job implements ShouldQueue
         $data = ['file' => $this->fileName.'.csv'];
 
         $mailer->send('emails.reports.export', $data, function ($message) {
-            $message->to($this->email);
+            // $message->to($this->email);
             $message->subject('Your report is ready!');
             $message->attach(storage_path('exports/' . $this->fileName.'.csv'));
         });
+    }
+
+    /**
+     * Save a report record.
+     * 
+     * @param  Report $report
+     */
+    protected function saveReport(Report $report)
+    {
+        $report->create([
+            'name' => $this->fileName,
+            'type' => 'csv',
+            'source' => storage_path('exports/' . $this->fileName.'.csv'),
+            'user_id' => $this->request['author_id']
+        ]);
     }
 
     /**

@@ -19,6 +19,10 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.settings');
     });
 
+    $this->get('reports', function() {
+        return view('dashboard.reports.index');
+    });
+
     // Group Routes...
     $this->resource('groups', 'Dashboard\GroupsController', ['only' => ['index', 'show', 'edit']]);
     $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trips');

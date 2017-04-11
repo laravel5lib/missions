@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use App\Exportable;
 use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
 use App\Jobs\ExportReservations;
@@ -20,6 +21,7 @@ use App\Http\Transformers\v1\ReservationTransformer;
 
 class ReservationsController extends Controller
 {
+    use Exportable;
 
     /**
      * @var Reservation
@@ -214,20 +216,5 @@ class ReservationsController extends Controller
             ->where('requirement_id', $requirement_id)
             ->first(),
             new RequirementTransformer);
-    }
-
-    /**
-     * Export reservations.
-     *
-     * @param ExportRequest $request
-     * @return mixed
-     */
-    public function export(ExportRequest $request)
-    {
-        $this->dispatch(new ExportReservations($request->all()));
-
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
     }
 }

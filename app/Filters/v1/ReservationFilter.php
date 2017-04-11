@@ -25,7 +25,7 @@ class ReservationFilter extends Filter
         'birthday', 'updated_at', 'created_at',
         'given_names', 'surname', 'email', 'address',
         'city', 'zip', 'country_code', 'phone_one',
-        'phone_two'
+        'phone_two', 'deleted_at'
     ];
 
     /**

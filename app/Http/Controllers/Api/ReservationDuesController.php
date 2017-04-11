@@ -29,6 +29,7 @@ class ReservationDuesController extends Controller
     public function index($reservation_id, Request $request)
     {
         $dues = $this->reservation
+                     ->withTrashed()
                      ->findOrFail($reservation_id)
                      ->dues()
                      ->filter($request->all())
@@ -47,6 +48,7 @@ class ReservationDuesController extends Controller
     public function show($reservation_id, $due_id)
     {
         $due = $this->reservation
+                    ->withTrashed()
                     ->findOrFail($reservation_id)
                     ->dues()
                     ->findOrFail($due_id);

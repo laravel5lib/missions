@@ -1,3 +1,8 @@
+// IE support for vue $cookie
+Number.isInteger = Number.isInteger || function(value) {
+    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+};
+
 import Vue from 'vue';
 import markdownExampleModal from './components/markdown-example-modal.vue';
 import contactForm from './components/contact-form.vue';
@@ -69,6 +74,7 @@ import uploadCreateUpdate from './components/uploads/admin-upload-create-update.
 import reservationRequirements from './components/reservations/reservation-requirements.vue';
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
+import reportsList from './components/reports/reports-list.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -759,6 +765,7 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        reportsList,
 
         // admin components
         campaignCreate,

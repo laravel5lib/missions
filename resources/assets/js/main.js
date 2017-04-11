@@ -83,7 +83,7 @@ import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue'
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
-import adminTrips from './components/trips/admin-trips-list.vue';
+import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
 import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
 import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
@@ -133,6 +133,7 @@ import refundForm from './components/financials/transactions/refund-form.vue';
 import transactionDelete from './components/financials/transactions/transaction-delete.vue';
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
+import promotionals from './components/admin/promotionals.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -774,7 +775,7 @@ new Vue({
         adminCampaignDetails,
         campaignTripCreateWizard,
         campaignTripEditWizard,
-        adminTrips,
+        adminCampaignTrips,
         adminGroupTrips,
         adminTripCreateUpdate,
         adminTripReservations,
@@ -823,7 +824,8 @@ new Vue({
         refundForm,
         transactionDelete,
         fundManager,
-        companionManager
+        companionManager,
+        promotionals
     },
     http: {
         headers: {

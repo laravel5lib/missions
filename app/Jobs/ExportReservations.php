@@ -6,7 +6,7 @@ use App\Models\v1\Reservation;
 
 class ExportReservations extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         $reservations = Reservation::filter($request)
             ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines')

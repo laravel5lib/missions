@@ -12,15 +12,12 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility v-if="canExport" url="essays/export"
-                                :options="exportOptions"
-                                :filters="exportFilters">
-                </export-utility>
-                <!-- <import-utility title="Import Essays List" 
-                      url="essays/import" 
-                      :required-fields="importRequiredFields" 
-                      :optional-fields="importOptionalFields">
-                </import-utility> -->
+                <template v-if="canExport()">
+                    <export-utility url="essays/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
+                </template>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -144,10 +141,7 @@
         },
         methods:{
             canExport() {
-                let roles = _.pluck(this.$root.user.roles.data, 'name');
-                return !!this.$root.user ? _.contains(roles, 'admin') : false;
-                // TODO - use abilities instead of roles
-                // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
+                return this.firstUrlSegment == 'admin';
             },
             setEssay(essay) {
                 this.$dispatch('set-document', essay);

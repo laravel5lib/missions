@@ -50,6 +50,11 @@ function display_file($source)
     return url('api/files/'.$source);
 }
 
+function download_file($source)
+{
+    return url('api/download/'.$source);
+}
+
 function generateFundName($data)
 {
     if ($data instanceof Reservation) {

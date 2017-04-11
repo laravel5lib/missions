@@ -46,12 +46,24 @@ return [
                 'url' => 'medical-releases'
             ],
             [
+                'label' => 'Media Credentials',
+                'url' => 'media-credentials'
+            ],
+            [
+                'label' => 'Medical Credentials',
+                'url' => 'medical-credentials'
+            ],
+            [
                 'label' => 'Referrals',
                 'url' => 'referrals'
             ],
             [
-                'label' => 'Essays',
+                'label' => 'Testimonies',
                 'url' => 'essays'
+            ],
+            [
+                'label' => 'Influencer Applications',
+                'url' => 'influencers'
             ]
         ],
         'project' => [
@@ -106,12 +118,24 @@ return [
                 'url' => 'medical-releases'
             ],
             [
+                'label' => 'Media Credentials',
+                'url' => 'media-credentials'
+            ],
+            [
+                'label' => 'Medical Credentials',
+                'url' => 'medical-credentials'
+            ],
+            [
                 'label' => 'Referrals',
                 'url' => 'referrals'
             ],
             [
-                'label' => 'Essays',
+                'label' => 'Testimonies',
                 'url' => 'essays'
+            ],
+            [
+                'label' => 'Influencer Applications',
+                'url' => 'influencers'
             ]
         ],
         'reservation' => [

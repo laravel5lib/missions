@@ -61,6 +61,8 @@
     import visasList from '../records/visas/visas-list.vue';
     import visa from '../records/visas/visa.vue';
     import essaysList from '../records/essays/essays-list.vue';
+    import influencerQuestionnairesList from '../records/influencers/influencer-questionnaires-list.vue';
+    import influencerQuestionnaire from '../records/influencers/influencer-questionnaire.vue';
     import essay from '../records/essays/essay.vue';
     import medicalsList from '../records/medicals/medicals-list.vue';
     import medical from '../records/medicals/medical.vue';
@@ -76,6 +78,8 @@
             visasList,
             visa,
             essaysList,
+            influencerQuestionnairesList,
+            influencerQuestionnaire,
             essay,
             medicalsList,
             medical,
@@ -157,6 +161,12 @@
                         this.url = 'essays';
                         this.list = 'essays-list';
                         this.docPreview = 'essay';
+                        break;
+                    case 'influencer_applications':
+                        this.label = 'Influencer Application';
+                        this.url = 'influencers';
+                        this.list = 'influencer-questionnaires-list';
+                        this.docPreview = 'influencer-questionnaire';
                         break;
                     case 'medical_releases':
                         this.label = 'Medical Release';

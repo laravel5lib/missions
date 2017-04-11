@@ -120,3 +120,15 @@ Route::get('records/referrals/{id}/edit', function ($id) {
 Route::get('reports', function() {
     return view('admin.reports.index');
 });
+
+$this->resource('records/medical-credentials', 'MedicalCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/media-credentials', 'MediaCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/influencers', 'InfluencersController', [
+    'except' => ['index', 'destroy']
+]);

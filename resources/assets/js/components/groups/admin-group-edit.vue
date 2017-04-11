@@ -1,182 +1,182 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <validator name="UpdateGroup" @touched="onTouched">
+    <validator name="UpdateGroup" @touched="onTouched">
+        <form id="UpdateGroupForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            <form id="UpdateGroupForm" class="form-horizontal" novalidate>
-                <div class="row form-group">
-                    <div class="col-sm-6">
-                        <label>Profile Photo (max file size:2mb)</label>
-                        <h5>
-                            <a href="#">
-                                <img class="av-left img-circle img-md" :src="avatar + '?w=64&h=64'" :alt="name" width="64">
-                            </a>
-                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button>
-                        </h5>
-                    </div>
-                    <hr class="divider inv visible-xs">
-                    <div class="col-sm-6">
-                        <label>Cover Photo (max file size:2mb)</label>
-                        <h5>
-                            <a href="#">
-                                <img class="av-left img-rounded img-md"
-                                     :src="banner + '?w=64&h=64&fit=crop-center'"
-                                     :alt="name" width="64">
-                            </a>
-                            <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
-                        </h5>
-                    </div><!-- end col -->
-                    <div class="col-sm-12">
-                        <div class="collapse" id="avatarCollapse">
-                            <div class="well">
-                                <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Group']"></upload-create-update>
-                            </div>
-                        </div>
-                        <div class="collapse" id="bannerCollapse">
-                            <div class="well">
-                                <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['Group']"></upload-create-update>
-                            </div>
-                        </div>
-                        <hr class="divider inv" />
-                    </div>
-                </div><!-- end row -->
-
-                <div class="row form-group" v-error-handler="{ value: name, handle: 'name' }">
-                    <div class="col-sm-12">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" v-model="name"
-                               placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
-                               maxlength="100" minlength="1" required>
-                    </div>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label>Profile Photo (max file size:2mb)</label>
+                    <h5>
+                        <a href="#">
+                            <img class="av-left img-circle img-md" :src="avatar + '?w=64&h=64'" :alt="name" width="64">
+                        </a>
+                        <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#avatarCollapse" aria-expanded="false" aria-controls="avatarCollapse"><i class="fa fa-camera"></i> Upload</button>
+                    </h5>
                 </div>
-                <div class="row form-group">
-                    <div class="col-sm-12">
-                        <label for="description">Description</label>
-                        <textarea class="form-control" v-model="description" id="description" placeholder="Description of Group" maxlength="120"></textarea>
-                        <span class="help-block">Characters left: {{120 - (description.length||0)}}</span>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-sm-6">
-                        <label for="infoAddress">Address 1</label>
-                        <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-                    </div>
-                    <div class="col-sm-6">
-                        <label for="infoAddress2">Address 2</label>
-                        <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
-                    </div>
-                </div>
-
-                <div class="row form-group col-sm-offset-2">
-                    <div class="col-sm-6">
-                        <label for="infoCity">City</label>
-                        <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
-                    </div>
-                    <div class="col-sm-6">
-                        <label for="infoState">State/Prov.</label>
-                        <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label for="infoZip">ZIP/Postal Code</label>
-                        <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
-                    </div>
-                    <div class="col-sm-8">
-                        <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
-                            <label for="country">Country</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                            <select hidden name="country" id="country" class="" v-model="country_code" v-validate:country="{ required: true }" >
-                                <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                            </select>
+                <hr class="divider inv visible-xs">
+                <div class="col-sm-6">
+                    <label>Cover Photo (max file size:2mb)</label>
+                    <h5>
+                        <a href="#">
+                            <img class="av-left img-rounded img-md"
+                                 :src="banner + '?w=64&h=64&fit=crop-center'"
+                                 :alt="name" width="64">
+                        </a>
+                        <button class="btn btn-primary btn-xs" type="button" data-toggle="collapse" data-target="#bannerCollapse" aria-expanded="false" aria-controls="bannerCollapse"><i class="fa fa-camera"></i> Cover</button>
+                    </h5>
+                </div><!-- end col -->
+                <div class="col-sm-12">
+                    <div class="collapse" id="avatarCollapse">
+                        <div class="well">
+                            <upload-create-update type="avatar" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Group']"></upload-create-update>
                         </div>
                     </div>
-                </div>
-
-                <div class="row" v-error-handler="{ value: type, handle: 'type' }">
-                    <div class="col-sm-6">
-                        <label for="country">Type</label>
-                        <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
-                            <option value="">-- please select --</option>
-                            <option :value="option" v-for="option in typeOptions">{{option|capitalize}}</option>
-                        </select>
-                    </div>
-                    <div v-error-handler="{ value: timezone, handle: 'timezone' }">
-                        <div class="col-sm-6">
-                            <label for="country">Timezone</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                            <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate:timezone="{ required: true }">
-                                <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
-                            </select>
-
+                    <div class="collapse" id="bannerCollapse">
+                        <div class="well">
+                            <upload-create-update type="banner" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['Group']"></upload-create-update>
                         </div>
                     </div>
+                    <hr class="divider inv" />
                 </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <label for="infoPhone">Phone 1</label>
-                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
-                    </div>
-                    <div class="col-sm-6">
-                        <label for="infoMobile">Phone 2</label>
-                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
-                    </div>
-                </div>
+            </div><!-- end row -->
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <label for="name">Email</label>
-                        <input type="text" class="form-control" name="email" id="email" v-model="email">
-                    </div>
+            <div class="row form-group" v-error-handler="{ value: name, handle: 'name' }">
+                <div class="col-sm-12">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" name="name" id="name" v-model="name"
+                           placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                           maxlength="100" minlength="1" required>
                 </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-12">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" v-model="description" id="description" placeholder="Description of Group" maxlength="120"></textarea>
+                    <span class="help-block">Characters left: {{120 - (description.length||0)}}</span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-sm-6">
+                    <label for="infoAddress">Address 1</label>
+                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
+                </div>
+                <div class="col-sm-6">
+                    <label for="infoAddress2">Address 2</label>
+                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
+                </div>
+            </div>
 
-                <div class="row" v-if="isAdmin">
-                    <div class="col-sm-12">
-                        <label for="status" class="control-label">Status</label>
-                        <select class="form-control" name="status" id="status" v-model="status">
-                            <option value="approved">Approved</option>
-                            <option value="pending">Pending</option>
+            <div class="row form-group col-sm-offset-2">
+                <div class="col-sm-6">
+                    <label for="infoCity">City</label>
+                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
+                </div>
+                <div class="col-sm-6">
+                    <label for="infoState">State/Prov.</label>
+                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <label for="infoZip">ZIP/Postal Code</label>
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                </div>
+                <div class="col-sm-8">
+                    <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
+                        <label for="country">Country</label>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <select hidden name="country" id="country" class="" v-model="country_code" v-validate:country="{ required: true }" >
+                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
                     </div>
                 </div>
+            </div>
 
-                <div class="row">
+            <div class="row" v-error-handler="{ value: type, handle: 'type' }">
+                <div class="col-sm-6">
+                    <label for="country">Type</label>
+                    <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
+                        <option value="">-- please select --</option>
+                        <option :value="option" v-for="option in typeOptions">{{option|capitalize}}</option>
+                    </select>
+                </div>
+                <div v-error-handler="{ value: timezone, handle: 'timezone' }">
+                    <div class="col-sm-6">
+                        <label for="country">Timezone</label>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                        <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate:timezone="{ required: true }">
+                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="infoPhone">Phone 1</label>
+                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                </div>
+                <div class="col-sm-6">
+                    <label for="infoMobile">Phone 2</label>
+                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="name">Email</label>
+                    <input type="text" class="form-control" name="email" id="email" v-model="email">
+                </div>
+            </div>
+
+            <div class="row" v-if="isAdmin">
+                <div class="col-sm-12">
+                    <label for="status" class="control-label">Status</label>
+                    <select class="form-control" name="status" id="status" v-model="status">
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="public" class="control-label">Visibility</label><br>
+                    <label class="radio-inline">
+                        <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
+                    </label>
+                </div>
+            </div>
+
+            <template v-if="!!public">
+                <div class="form-group" v-error-handler="{ value: url, handle: 'url' }">
                     <div class="col-sm-12">
-                        <label for="public" class="control-label">Visibility</label><br>
-                        <label class="radio-inline">
-                            <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
-                        </label>
-                    </div>
-                </div>
-
-                <template v-if="!!public">
-                    <div class="form-group" v-error-handler="{ value: url, handle: 'url' }">
-                        <div class="col-sm-12">
-                            <label for="url" class="control-label">Url Slug</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">www.missions.me/</span>
-                                <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>
-                            </div>
-                            <!--<span class="help-block" v-if="errors.url" v-text="errors.url"></span>-->
+                        <label for="url" class="control-label">Url Slug</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">www.missions.me/</span>
+                            <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>
                         </div>
-                    </div>
-                </template>
-
-                <div class="form-group">
-                    <div class="col-sm-12 text-center">
-                        <a @click="back()" class="btn btn-default">Cancel</a>
-                        <a @click="submit()" class="btn btn-primary">Update</a>
+                        <!--<span class="help-block" v-if="errors.url" v-text="errors.url"></span>-->
                     </div>
                 </div>
+            </template>
 
-                <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
-                    <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
-                </modal>
-            </form>
-        </validator>
+            <div class="form-group">
+                <div class="col-sm-12 text-center">
+                    <a @click="back()" class="btn btn-default">Cancel</a>
+                    <a @click="submit()" class="btn btn-primary">Update</a>
+                </div>
+            </div>
+
+            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
+            </modal>
+        </form>
+    </validator>
     </div>
 </template>
 <script type="text/javascript">
@@ -326,7 +326,7 @@
                 this.timezones = response.body.timezones;
             });
 
-            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
+            //Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get({id: this.groupId}).then(function (response) {
                     let group = response.body.data;
                     this.name = group.name;
@@ -357,7 +357,7 @@
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
-            }.bind(this));
+            //}.bind(this));
         }
     }
 </script> 

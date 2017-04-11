@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -52,7 +53,7 @@ class Exporter extends Job implements ShouldQueue
         $filename = $this->getFilename();
 
         $this->create($this->getFilteredData(), 'Export', $filename)
-             ->saveReport($report, $filename, $this->userId())
+             ->saveReport($report, $filename, $this->file['full'], $this->getUserId())
              ->sendEmail($mailer, $filename, $this->getEmail());
     }
 
@@ -89,7 +90,7 @@ class Exporter extends Job implements ShouldQueue
      * @param  Collection $data
      * @return Collection
      */
-    public function getColumns(Collection $data)
+    public function getColumns($data)
     {
         return collect($this->columns($data));
     }
@@ -121,9 +122,9 @@ class Exporter extends Job implements ShouldQueue
      * 
      * @return string
      */
-    public function getFilename($filename = null)
+    public function getFilename()
     {
-        $filename = $filename ?: $this->request->get('filename', 'report');
+        $filename = $this->request->get('filename', 'report');
 
         return snake_case($filename) .'_'. time();
     }
@@ -167,7 +168,7 @@ class Exporter extends Job implements ShouldQueue
      */
     public function create($data, $sheetname, $filename)
     {
-        $file = Excel::create($this->getFilename($filename), function($excel) use($data, $sheetname) {
+        $content = Excel::create($filename, function($excel) use($data, $sheetname) {
 
             $excel->sheet($sheetname, function($sheet) use($data) {
 
@@ -176,11 +177,36 @@ class Exporter extends Job implements ShouldQueue
 
             });
 
-        })->store('csv', false, true);
+        })->string('csv');
 
-        $this->setFile($file);
+        $this->putInStorage($filename, $content);
 
         return $this;
+    }
+
+    /**
+     * Save the document in storage
+     * 
+     * @param  string $filename
+     * @param  string $content raw file content
+     */
+    public function putInStorage($filename, $content)
+    {
+        $path = $this->getUserId() ? 'export/reports/'.$this->getUserId().'/' : 'export/reports/system/';
+        $file = $filename.'.csv';
+
+        Storage::disk('s3')->put(
+            $path.$file, 
+            $content, 
+            'public'
+        );
+
+        $this->setFile([
+            'full' => $path.$file,
+            'path' => $path,
+            'name' => $filename,
+            'ext' => 'csv'
+        ]);
     }
 
     /**
@@ -188,12 +214,12 @@ class Exporter extends Job implements ShouldQueue
      * 
      * @param  Report $report
      */
-    public function saveReport(Report $report, $filename, $userId = null)
+    public function saveReport(Report $report, $filename, $source, $userId = null)
     {
         $data = $report->create([
             'name' => $filename,
             'type' => 'csv',
-            'source' => storage_path('exports/' . $filename.'.csv'),
+            'source' => $source,
             'user_id' => $userId
         ]);
 

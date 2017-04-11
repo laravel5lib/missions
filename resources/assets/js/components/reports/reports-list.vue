@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="form-group col-sm-8">
+            <div class="form-group col-sm-offset-2 col-sm-8">
                 <div class="input-group">
                     <input class="form-control input-md" 
                            placeholder="Search reports by name..." 
@@ -76,9 +76,9 @@
                                 <p class="text-center"><i class="fa fa-file-excel-o"></i> {{ report.type | uppercase }}</p>
                             </div>
                             <div class="col-sm-2">
-                                <a :href="report.source" class="btn btn-primary btn-sm btn-block">
+                                <button @click="prepareToDownload(report.source)" class="btn btn-primary btn-sm btn-block">
                                     <i class="fa fa-download"></i> <span class="hidden-sm">Download</span>
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -96,6 +96,19 @@
                             label="Delete Report Forever"
                             redirect="/admin/reports">
         </admin-delete-modal>
+
+        <modal :show.sync="showDisclaimer" ok-text="Download" cancel-text="Cancel">
+          <div slot="modal-header" class="modal-header">
+            <h4 class="modal-title">Privacy Notice</h4>
+          </div>
+          <div slot="modal-body" class="modal-body">
+              <p>Some reports may contain sensitive information. <strong>Please DO NOT share reports with unauthorized personnel</strong>. If you are unsure, please ask a Missions.Me representative. Thank you for protecting our users' privacy!</p>
+          </div>
+          <div slot="modal-footer" class="modal-footer">
+              <button type="button" class="btn btn-default" @click="showDisclaimer = false">Cancel</button>
+              <button @click="download(source)" class="btn btn-primary">Download</button>
+            </div>
+        </modal>
 
     </div>
 </template>
@@ -118,6 +131,8 @@
                 },
                 search: '',
                 selectedReportId: '',
+                showDisclaimer: false,
+                source: ''
             }
         },
         watch: {
@@ -139,6 +154,21 @@
                 }, function (error) {
                     this.$dispatch('showError', 'Unable to get reports from server.');
                 });
+            },
+            prepareToDownload(source)
+            {
+                this.showDisclaimer = true;
+                this.source = source;
+            },
+            download(source)
+            {   
+                if (source) {
+                    this.showDisclaimer = false;
+                    this.source = '';
+                    window.open(source);
+                } else {
+                    this.$dispatch('showError', 'The file could not be found.');
+                }
             },
             destroy(id) {
                 this.selectedReportId = id;

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,13 @@ $api->version('v1', [
     $api->resource('uploads', 'UploadsController');
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
     $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
+
     $api->get('download/{path}', function($path) {
-        return response()->download($path);
+        return response()->make(Storage::disk('s3')->get($path), 200, [
+                'Content-Type' => 'text/csv'
+            ]);
     })->where('path', '.+');
+    
     $api->post('/register', 'AuthenticationController@register');
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');

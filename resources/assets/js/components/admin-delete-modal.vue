@@ -61,7 +61,7 @@
                         window.location.href = '/admin/' + this.resource + 's/' + this.id;
                     }
                 }, function (error) {
-                    this.dispatch('showError', 'Unable to ' + this.action);
+                    this.$dispatch('showError', 'Unable to ' + this.action);
                 })
             }
         }

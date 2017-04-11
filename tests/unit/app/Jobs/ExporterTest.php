@@ -65,12 +65,12 @@ class ExporterTest extends TestCase
     {
         $exporter = new Exporter([]);
 
-        $data = $exporter->create([], 'Export', 'Test File');
+        $data = $exporter->create([], 'Export', 'test_file');
 
-        $this->assertTrue( File::exists($data->file['full']) );
+        $this->assertTrue( Storage::disk('s3')->exists($data->file['full']) );
 
         // clean up
-        File::delete($data->file['full']);
+        Storage::disk('s3')->delete($data->file['full']);
     }
 
     /** @test */
@@ -78,7 +78,7 @@ class ExporterTest extends TestCase
     {
         $exporter = new Exporter([]);
 
-        $exporter->saveReport(new Report, 'Test File Name');
+        $exporter->saveReport(new Report, 'Test File Name', 'export/reports');
 
         $this->seeInDatabase('reports', $exporter->report->toArray())
              ->assertTrue($exporter->report->type === 'csv');

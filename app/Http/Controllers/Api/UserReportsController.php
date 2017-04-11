@@ -8,6 +8,7 @@ use App\Models\v1\Report;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Transformers\v1\ReportTransformer;
 
 class UserReportsController extends Controller
@@ -50,8 +51,7 @@ class UserReportsController extends Controller
     {
         $report = $this->report->findOrFail($id);
 
-        if ( ! File::exists($report->source)) 
-            return abort(500, 'Unable to delete the report.');
+        Storage::disk('s3')->delete($report->source);
 
         $report->delete();
         

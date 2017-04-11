@@ -6,7 +6,7 @@ use App\Models\v1\MedicalRelease;
 
 class ExportMedicalReleases extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return MedicalRelease::filter($request)
                 ->with('user', 'conditions', 'allergies')

@@ -6,7 +6,7 @@ use App\Models\v1\Essay;
 
 class ExportEssays extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Essay::filter($request)
             ->with('user')

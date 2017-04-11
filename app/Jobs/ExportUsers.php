@@ -6,7 +6,7 @@ use App\Models\v1\User;
 
 class ExportUsers extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         // not working ???
         $users = User::filter($request)->get();

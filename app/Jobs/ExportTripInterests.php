@@ -6,7 +6,7 @@ use App\Models\v1\TripInterest;
 
 class ExportTripInterests extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         $interests = TripInterest::filter($request)
             ->with('trip.group', 'trip.campaign')

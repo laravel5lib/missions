@@ -6,7 +6,7 @@ use App\Models\v1\Campaign;
 
 class ExportCampaigns extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Campaign::filter($request)
                 ->with('slug', 'groups', 'fund')

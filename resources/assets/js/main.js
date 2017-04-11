@@ -151,6 +151,7 @@ require('bootstrap-sass');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
 
+
 window.AOS = require('aos');
 AOS.init();
 $(document).ready(function () {

@@ -134,9 +134,9 @@
 								</div>
 								<div class="panel-body">
 									<div class="row">
+                                        <div class="checkbox col-sm-6 col-xs-12">
 										<template v-for="choice in QA.options">
 											<template v-if="$index % 2 == 0">
-												<div class="checkbox col-sm-6 col-xs-12">
 													<label>
 														<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
 	                                                </label>
@@ -148,12 +148,12 @@
 														<hr class="divider md">
 													</div>
 													<hr class="divider inv sm">
-												</div>
 											</template>
 										</template>
+                                        </div>
+                                        <div class="checkbox col-sm-6 col-xs-12">
 										<template v-for="choice in QA.options">
 											<template v-if="$index % 2 != 0">
-												<div class="checkbox col-sm-6 col-xs-12">
 													<label>
 														<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
 	                                                </label>
@@ -165,9 +165,9 @@
 														<hr class="divider md">
 													</div>
 													<hr class="divider inv sm">
-												</div>
 											</template>
 										</template>
+                                        </div>
 									</div>
 								</div>
 							</div>

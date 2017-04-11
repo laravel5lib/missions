@@ -113,12 +113,13 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && type !== 'video'" :class="{ 'has-error': isFileSet}">
+				<div class="form-group" v-if="type && type === 'file'" :class="{ 'has-error': isFileSet}">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
 						<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
 						<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+
 
 				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
@@ -127,15 +128,25 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="file" v-show="type !== 'file'">
-					<label for="file" class="control-label">Crop Image</label>
-					<div id="crop-wrapper" class="col-sm-12">
-						<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
-							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
-						<!--<hr>-->
-						<!--<img :src="resultImage" v-if="resultImage">-->
+				<div class="form-group" v-if="type && type !== 'video' && type !== 'file'" :class="{ 'has-error': isFileSet}">
+					<label for="file" class="control-label">File</label>
+					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed" v-crop>
+						<img :src="src" class="img-responsive">
+						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
 					</div>
+					<span class="help-block"><i class="fa fa-image"></i> Image formats only</span>
+					<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+
+				<!--<div class="form-group" v-if="file" v-show="type !== 'file'">-->
+					<!--<label for="file" class="control-label">Crop Image</label>-->
+					<!--<div id="crop-wrapper" class="col-sm-12">-->
+						<!--&lt;!&ndash;<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"-->
+							 <!--v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>&ndash;&gt;-->
+						<!--&lt;!&ndash;<hr>&ndash;&gt;-->
+						<!--&lt;!&ndash;<img :src="resultImage" v-if="resultImage">&ndash;&gt;-->
+					<!--</div>-->
+				<!--</div>-->
 
 				<br>
 
@@ -241,6 +252,7 @@
             return {
                 url: '',
                 path: '',
+                src: '',
                 file: null,
                 x_axis: null,
                 y_axis: null,
@@ -252,6 +264,7 @@
 				coords: 'Try to move/resize the selection',
 				// constrained: true,
 				vueCropApi: null,
+                slimAPI: null,
 				scaledWidth: 400,
 				scaledHeight: 400,
 				imageMaxWidth: 400,
@@ -335,9 +348,9 @@
 			}
 		},
 		events:{
-			'vueCrop-api':function (api) {
+			'slim-api':function (api) {
 				// make api available on scope
-				window.vueCropApi = this.vueCropApi = api;
+				window.slimAPI = this.slimAPI = api;
 			},
 			'uploads-complete'(data){
 				switch(data.type){
@@ -409,15 +422,14 @@
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other', 'passport'], this.typeObj.type)) {
+				if (this.slimAPI && _.contains(['banner', 'avatar'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
-					// update jCrop
-					this.vueCropApi.setOptions({aspectRatio: (this.typeObj.width/this.typeObj.height)});
-					this.vueCropApi.setSelect([0, 0, this.width, this.height]);
+					// update slim editor ratio
+					this.slimAPI.slim('ratio', this.typeObj.width + ':' + this.typeObj.height);
 				}
 			},
 			adjustSelect(){
@@ -430,9 +442,9 @@
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
 				if (!this.constrained) {
-					this.vueCropApi.setOptions({aspectRatio: (w/h)});
-				}
-				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
+                    this.slimAPI.slim('ratio', w + ':' + h);
+                }
+//				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
             /*checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
@@ -454,10 +466,8 @@
 							name: this.name,
 							tags: this.tags,
 							type: this.type,
-							file: this.file,
+                            file: (slimAPI.slim('data')[0].output ? slimAPI.slim('data')[0].output.image.toDataURL("image/jpeg") : false)||this.file,
 							path: this.path,
-							x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-							y_axis: parseInt(this.y_axis / this.imageAspectRatio),
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
 						};
@@ -487,9 +497,7 @@
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: this.file||undefined,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+                        file: (slimAPI.slim('data')[0].output ? slimAPI.slim('data')[0].output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
                     };
@@ -517,22 +525,22 @@
 				}
 			},
 			handleImage(e){
-				var self = this;
-				var reader = new FileReader();
+				let self = this;
+				let reader = new FileReader();
 				reader.onload = function(event){
-					var img = new Image();
+					let img = new Image();
 					img.onload = function(){
 						self.imageAspectRatio = Math.min(self.imageMaxWidth / img.width, self.imageMaxHeight / img.height);
 						self.imageWidth = img.width * self.imageAspectRatio;
 						self.imageHeight = img.height * self.imageAspectRatio;
 
 						// adjust container
-						if (self.vueCropApi) {
-                            self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-                            if (self.typeObj && _.contains(['banner', 'avatar', 'other', 'passport'], self.typeObj.type)) {
+                        if (self.slimAPI) {
+//                            self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
+                            if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                                 self.adjustSelectByType()
                             } else {
-                                self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
+                                this.slimAPI.slim('ratio', 'free');
                             }
                         }
 					};
@@ -575,7 +583,10 @@
 			preview(upload){
 			    this.previewModal = true;
 			    this.previewUpload = upload;
-			}
+			},
+	        slimConfirmed(data){
+			    debugger;
+	        }
         },
 		ready(){
             let self = this;

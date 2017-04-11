@@ -1,8 +1,8 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdatePassport" @touched="onTouched">
+    <div><validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            
+
             <template v-if="forAdmin">
                 <div class="col-sm-12">
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country' }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
@@ -89,7 +89,7 @@
                                         <h5 class="media-heading">{{selectedAvatar.name}}</h5>
                                     </div>
                                 </div>
-                                <upload-create-update type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                                <upload-create-update v-if="isUpdate && userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
                             </div>
                         </panel>
                     </accordion>
@@ -110,7 +110,7 @@
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
 
-    </validator>
+    </validator></div>
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

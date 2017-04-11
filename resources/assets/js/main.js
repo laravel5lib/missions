@@ -408,58 +408,66 @@ Vue.filter('mFormat', {
     }
 });
 
-var VueCropOptions = {
-    setSelect: [10, 10, 100, 100],
-    aspectRatio: 1,
-    bgColor: 'red',
-    minSize: [100, 100]
-};
-var VueCropEvents = [
-    'create',
-    'start',
-    'move',
-    'end',
-    'focus',
-    'blur',
-    'remove'
-];
-
 Vue.directive('crop', {
 
     acceptStatement: true,
 
     bind: function () {
-        var event = this.arg;
+        let event = this.arg;
 
-        if ($.inArray(event, VueCropEvents) == -1) {
-            console.warn('Invalid v-crop event: ' + event);
+        let slimEvents = [
+            'didInit',                  // Initialized
+            'didLoad',                  // Image Loaded
+            'didTransform',             // Image Transformed
+            'didCancel',                // Image Editor Cancelled
+            'didConfirm',               // Image Editor Confirmed
+            'didSave',                  // Image Saved
+            'didRemove',                // Image Removed
+            'didUpload',                // Image Uploaded
+            'didReceiveServerError',    // Error Received from Server During Upload
+        ];
+
+        if (event && !_.contains(slimEvents, event)) {
+            console.warn('Invalid slim event: ' + event);
             return;
         }
 
-        if (this.vm.jcrop) return;
+        if (this.vm.slim) return;
+
+        let self = this;
+        let vm = this.vm;
+        self.waitForLibrary = function() {
+            if (_.isFunction($().slim)) {
+                let $wrapper = $(self.el);
+                vm.slimAPI = $wrapper.slim();
+
+                // send api to active componant
+                vm.$dispatch('slim-api', vm.slimAPI);
+            } else {
+                setTimeout(self.waitForLibrary, 1000);
+            }
+        };
 
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            var $wrapper = $(this.el).wrap('<div/>').parent();
-            $wrapper.width(this.el.width).height(this.el.height);
-            this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
-            // send api to active componant
-            this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+            this.waitForLibrary();
         }
     },
 
     update: function (callback) {
+        let $wrapper = $(this.el);
         if (!_.contains(['file', 'video'], this.vm.type))
-            this.vm.jcrop.container.on('crop' + this.arg, callback)
+            $wrapper.on('crop' + this.arg, callback)
     },
 
     unbind: function () {
+        let $wrapper = $(this.el);
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            this.vm.jcrop.container.off('crop' + this.arg);
+            $wrapper.off('crop' + this.arg);
 
             if (this._watcher.id != 1) return;
 
-            this.vm.jcrop.destroy();
-            this.vm.jcrop = null
+            $wrapper.slim('destroy');
+            this.vm.slimAPI = null
         }
     }
 });

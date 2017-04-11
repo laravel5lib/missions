@@ -15,15 +15,6 @@
                                    v-model="exportSettings.filename"
                                    placeholder="Enter an optional file name">
                         </div>
-                        <!-- <div v-validate-class class="col-sm-6 form-group">
-                            <label>Send Report to Email</label>
-                            <input type="text"
-                                   class="form-control"
-                                   v-model="exportSettings.email"
-                                   placeholder="Enter an email address"
-                                   initial="off"
-                                   v-validate:email="{email: { rule: true, message: 'Enter a valid email.'}}">
-                        </div> -->
                     </div>
                     <hr class="divider inv">
                     <div class="row">
@@ -105,8 +96,11 @@
 
                 this.$http.post(this.url, params).then(function (response) {
                     this.$dispatch('showSuccess', response.body.message);
+                    this.showExportModal = false;
+                    this.exportSettings.fields = [];
+                    this.exportSettings.filename = '';
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to export the list.');
+                    this.$dispatch('showError', 'The server is unable to create the export.');
                 })
             }
         }

@@ -3,8 +3,10 @@
 namespace App\Jobs;
 
 use App\Jobs\Job;
+use App\Models\v1\User;
 use App\Models\v1\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Contracts\Mail\Mailer;
@@ -22,13 +24,14 @@ class Exporter extends Job implements ShouldQueue
     protected $request;
 
     /**
-     * @var $fields
+     * @var Report
      */
-    protected $fields;
+    public $report;
+
     /**
-     * @var
+     * @var File
      */
-    protected $fileName;
+    public $file;
 
     /**
      * Create a new job instance.
@@ -37,37 +40,122 @@ class Exporter extends Job implements ShouldQueue
      */
     public function __construct(array $request)
     {
-        $this->request = $request;
-        $this->fields = $request['fields'];
-        $this->fileName = $request['filename'] ? snake_case($request['filename'] .'_'. time()) : time();
+        $this->request = collect($request);
     }
 
     /**
      * Execute the job.
      * @param Report $report
      */
-    public function handle(Report $report)
+    public function handle(Report $report, Mailer $mailer)
     {
-        $collection = $this->data($this->request);
+        $filename = $this->getFilename();
 
-        $data = $collection->map(function($collection) {
-            return $this->filter($collection);
-        })->all();
-
-        $this->createExport($data, 'Export')->saveReport($report);
+        $this->create($this->getFilteredData(), 'Export', $filename)
+             ->saveReport($report, $filename, $this->userId())
+             ->sendEmail($mailer, $filename, $this->getEmail());
     }
 
     /**
-     * Filter export file columns by fields.
+     * Get the filtered data.
+     * 
+     * @return array
+     */
+    public function getFilteredData()
+    {
+        $data = $this->getData()->map(function($data) {
+            return $this->filter($data, $this->getFields());
+        })->all();
+
+        return $data;
+    }
+
+    /**
+     * Filter columns by requested fields.
      *
      * @param $collection
      * @return array
      */
-    protected function filter($collection)
+    public function filter($data, array $fields)
     {
-        return collect($this->columns($collection))->filter(function($value, $key) {
-            return in_array($key, $this->fields, true);
+        return $this->getColumns($data)->filter(function($value, $key) use($fields) {
+            return in_array($key, $fields, true);
         })->all();
+    }
+
+    /**
+     * Get exportable columns.
+     * 
+     * @param  Collection $data
+     * @return Collection
+     */
+    public function getColumns(Collection $data)
+    {
+        return collect($this->columns($data));
+    }
+
+    /**
+     * Get requested fields.
+     * 
+     * @return Collection
+     */
+    public function getFields()
+    {
+        return $this->request->get('fields', []);
+    }
+
+    /**
+     * Get the requested data.
+     * 
+     * @return Collection
+     */
+    public function getData()
+    {  
+        $data = $this->data($this->request->all());
+
+        return collect($data);
+    }
+
+    /**
+     * Get the requested filename
+     * 
+     * @return string
+     */
+    public function getFilename($filename = null)
+    {
+        $filename = $filename ?: $this->request->get('filename', 'report');
+
+        return snake_case($filename) .'_'. time();
+    }
+
+    /**
+     * Get report's author
+     * 
+     * @return User
+     */
+    public function getAuthor()
+    {
+        return User::find($this->request->get('author_id'));
+    }
+
+    /**
+     * Get the author's user id
+     * 
+     * @return string
+     */
+    public function getUserId()
+    {
+        return $this->getAuthor() ? $this->getAuthor()->id : null;
+    }
+
+    /**
+     * Get email to notify
+     * 
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->getAuthor() ? $this->getAuthor()->email : 'mail@missions.me';
     }
 
     /**
@@ -77,18 +165,39 @@ class Exporter extends Job implements ShouldQueue
      * @param $sheetName
      * @return $this
      */
-    protected function createExport($data, $sheetName)
+    public function create($data, $sheetname, $filename)
     {
-        Excel::create($this->fileName, function($excel) use($data, $sheetName) {
+        $file = Excel::create($this->getFilename($filename), function($excel) use($data, $sheetname) {
 
-            $excel->sheet($sheetName, function($sheet) use($data) {
+            $excel->sheet($sheetname, function($sheet) use($data) {
 
                 $sheet->fromArray($data);
                 $sheet->freezeFirstRow();
 
             });
 
-        })->store('csv');
+        })->store('csv', false, true);
+
+        $this->setFile($file);
+
+        return $this;
+    }
+
+    /**
+     * Save a report record.
+     * 
+     * @param  Report $report
+     */
+    public function saveReport(Report $report, $filename, $userId = null)
+    {
+        $data = $report->create([
+            'name' => $filename,
+            'type' => 'csv',
+            'source' => storage_path('exports/' . $filename.'.csv'),
+            'user_id' => $userId
+        ]);
+
+        $this->setReport($data);
 
         return $this;
     }
@@ -98,30 +207,15 @@ class Exporter extends Job implements ShouldQueue
      *
      * @param $mailer
      */
-    protected function sendEmail($mailer)
+    public function sendEmail(Mailer $mailer, $filename, $email)
     {
-        $data = ['file' => $this->fileName.'.csv'];
-
-        $mailer->send('emails.reports.export', $data, function ($message) {
-            // $message->to($this->email);
+        $mailer->send('emails.reports.export', ['file' => $filename.'.csv'], function ($message) use ($filename, $email) {
+            $message->to($email);
             $message->subject('Your report is ready!');
-            $message->attach(storage_path('exports/' . $this->fileName.'.csv'));
+            // $message->attach(storage_path('exports/' . $filename .'.csv'));
         });
-    }
 
-    /**
-     * Save a report record.
-     * 
-     * @param  Report $report
-     */
-    protected function saveReport(Report $report)
-    {
-        $report->create([
-            'name' => $this->fileName,
-            'type' => 'csv',
-            'source' => storage_path('exports/' . $this->fileName.'.csv'),
-            'user_id' => $this->request['author_id']
-        ]);
+        return $this;
     }
 
     /**
@@ -133,5 +227,37 @@ class Exporter extends Job implements ShouldQueue
     public function columns($collection)
     {
         return [];
+    }
+
+    /**
+     * Get requested data.
+     * @param  array  $request
+     * @return array
+     */
+    public function data(array $request)
+    {
+        return [];
+    }
+
+    /**
+     * Set the report property
+     * 
+     * @param Model $report;
+     * @return Models
+     */
+    protected function setReport($report)
+    {
+        return $this->report = $report;
+    }
+
+    /**
+     * Set the report property
+     * 
+     * @param array $file;
+     * @return array
+     */
+    protected function setFile($file)
+    {
+        return $this->file = $file;
     }
 }

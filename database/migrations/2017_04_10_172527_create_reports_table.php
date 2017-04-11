@@ -14,7 +14,7 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id')->index();
+            $table->uuid('user_id')->nullable()->index();
             $table->string('name', 100);
             $table->string('type', 10);
             $table->string('source');

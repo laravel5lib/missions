@@ -19,4 +19,9 @@ class PromotionalFilter extends Filter
     {
         return $this->where('promoteable_id', $id);
     }
+
+    public function withInactive()
+    {
+        return $this->withTrashed();
+    }
 }

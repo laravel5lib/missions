@@ -14,8 +14,9 @@
                     <button @click="callView({view:'create-edit', id: promo.id})" class="btn btn-primary btn-sm">
                         Edit
                     </button>
-                    <button class="btn btn-primary-darker btn-sm">
-                        <i class="fa fa-trash-o"></i>
+                    <button class="btn btn-primary-darker btn-sm" @click="showModal()">
+                        <span v-if="promo.deleted_at"><i class="fa fa-play"></i> Start</span>
+                        <span v-else><i class="fa fa-ban"></i> Stop</span>
                     </button>
                 </div>
             </div>
@@ -53,6 +54,22 @@
         </div>
     </div>
 
+    <modal title="Stop Promotional" small :show.sync="showStopModal">
+        <div slot="modal-body" class="modal-body">Are you sure you want to stop this promotional? Doing so will deactivate all it's promo codes. You can always undo this action or reactivate individual promo codes.</div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default" @click="showStopModal = false">Cancel</button>
+            <button type="button" class="btn btn-primary" @click="deactivate()">Stop</button>
+          </div>
+    </modal>
+
+    <modal title="Start Promotional" small :show.sync="showStartModal">
+        <div slot="modal-body" class="modal-body">Are you sure you want to start this promotional? Doing so will activate all it's promo codes. You can always undo this action or deactivate individual promo codes.</div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default" @click="showStartModal = false">Cancel</button>
+            <button type="button" class="btn btn-primary" @click="activate()">Start</button>
+          </div>
+    </modal>
+
     <promocodes :promotional-id="id"></promocodes>
 
 </div>
@@ -78,7 +95,9 @@
                     promocodes_count: 0,
                     created_at: null,
                     updated_at: null
-                }
+                },
+                showStartModal: false,
+                showStopModal: false
             }
         },
         events: {},
@@ -104,6 +123,33 @@
             },
             callView(data) {
                 this.$dispatch('load-view', data);
+            },
+            showModal() {
+                if (this.promo.deleted_at) return this.showStartModal = true;
+
+                return this.showStopModal = true;
+            },
+            deactivate()
+            {
+                this.$http.delete('promotionals/' + this.id).then(function (response) {
+                    this.$dispatch('showSuccess', 'Deactivated successfully.');
+                    this.showStopModal = false;
+                    this.fetch();
+                    this.$broadcast('promotionalStatusChanged');
+                }, function (error) {
+                    this.$dispatch('showError', 'Unable to deactivate on server.');
+                });
+            },
+            activate()
+            {
+                this.$http.put('promotionals/' + this.id + '/restore').then(function (response) {
+                    this.$dispatch('showSuccess', 'Activated successfully.');
+                    this.showStartModal = false;
+                    this.fetch();
+                    this.$broadcast('promotionalStatusChanged');
+                }, function (error) {
+                    this.$dispatch('showError', 'Unable to activate on server.');
+                });
             }
         },
         ready() {

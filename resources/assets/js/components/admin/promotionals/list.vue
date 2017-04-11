@@ -23,6 +23,7 @@
         <table class="table table-striped" v-else>
             <thead>
                 <tr>
+                    <th>Status</th>
                     <th>Name</th>
                     <th>Credit</th>
                     <th>Expires</th>
@@ -34,6 +35,7 @@
             </thead>
             <tbody>
                 <tr v-for="promo in promos" track-by="id">
+                    <td><span class="label label-default">{{ status(promo) }}</span></td>
                     <td>{{ promo.name | capitalize }}</td>
                     <td>{{ promo.reward | currency }}</td>
                     <td>{{ promo.expires | moment 'll' }}</td>
@@ -71,6 +73,7 @@
                 promos: [],
                 options: {
                     params: {
+                        withInactive: true,
                         promoterType: this.promoterType, 
                         promoterId: this.promoterId,
                         per_page: 10,
@@ -87,6 +90,11 @@
             }
         },
         methods: {
+            status(promo) {
+                if (promo.deleted_at || promo.expired_at < moment()) return 'Stopped';
+
+                return 'Active';
+            },
             fetch() {
                 this.$http.get('promotionals', this.options).then(function (response) {
                     this.promos = response.body.data;

@@ -106,7 +106,11 @@
                 this.fetch();
             }
         },
-        events: {},
+        events: {
+            'promotionalStatusChanged': function (msg) {
+                this.fetch();
+            }
+        },
         methods: {
             fetch() {
                 this.loading = true;

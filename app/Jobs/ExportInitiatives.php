@@ -6,7 +6,7 @@ use App\Models\v1\ProjectInitiative;
 
 class ExportInitiatives extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return ProjectInitiative::filter($request)
 //            ->with('user')

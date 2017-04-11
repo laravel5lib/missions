@@ -23,9 +23,9 @@
         <div class="row">
             <div class="col-xs-12">
                 @foreach($reservation->companionReservations as $companion)
-                    <div class="col-xs-6 panel panel-default">
+                    <div class="col-xs-12 panel panel-default">
                         <h5>
-                            <img src="{{ image($companion->avatar->source.'?w=50&h=50') }}" 
+                            <img src="{{ image($companion->getAvatar()->source.'?w=50&h=50') }}" 
                                  class="img-circle av-left" 
                                  alt="{{ $companion->name }}">
                             {{ $companion->name }}

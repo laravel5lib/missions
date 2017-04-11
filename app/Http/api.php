@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,14 @@ $api->version('v1', [
     $api->resource('uploads', 'UploadsController');
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
     $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
+
+    $api->get('download/{path}', function($path) {
+        return response()->make(Storage::disk('s3')->get($path), 200, [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => "attachment"
+            ]);
+    })->where('path', '.+');
+    
     $api->post('/register', 'AuthenticationController@register');
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
@@ -40,6 +49,8 @@ $api->version('v1', [
     $api->resource('users', 'UsersController');
     $api->post('users/export', 'UsersController@export');
     $api->post('users/import', 'UsersController@import');
+    $api->get('users/{id}/reports', 'UserReportsController@index');
+    $api->delete('reports/{id}', 'UserReportsController@destroy');
     $api->resource('users.contacts', 'ContactsController');
     $api->post('users/{id}/roles', 'UserRolesController@store');
     $api->delete('users/{id}/roles', 'UserRolesController@destroy');
@@ -115,6 +126,9 @@ $api->version('v1', [
     $api->resource('essays', 'EssaysController');
     $api->post('essays/export', 'EssaysController@export');
     $api->post('essays/import', 'EssaysController@import');
+    $api->resource('influencers', 'EssaysController');
+    $api->post('influencers/export', 'EssaysController@export');
+    $api->post('influencers/import', 'EssaysController@import');
     $api->resource('costs', 'CostsController');
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');
@@ -127,6 +141,12 @@ $api->version('v1', [
     $api->put('promotionals/{id}/restore', 'PromotionalsController@restore');
     $api->resource('promocodes', 'PromocodesController');
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
+
+    $api->group(['prefix' => 'credentials'], function($api)
+    {
+        $api->resource('medical', 'MedicalCredentialsController');
+        $api->resource('media', 'MediaCredentialsController');
+    });
 
     $api->group(['prefix' => 'medical'], function($api)
     {
@@ -142,7 +162,7 @@ $api->version('v1', [
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {
-        $api->get('team-roles', 'UtilitiesController@getTeamRoles');
+        $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');

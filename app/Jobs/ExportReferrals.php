@@ -6,7 +6,7 @@ use App\Models\v1\Referral;
 
 class ExportReferrals extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Referral::filter($request)
             ->with('user')

@@ -13,7 +13,7 @@ class EssayTransformer extends TransformerAbstract
      * @var array
      */
     protected $availableIncludes = [
-        'user'
+        'user', 'reservations', 'notes', 'uploads'
     ];
 
     /**
@@ -36,6 +36,19 @@ class EssayTransformer extends TransformerAbstract
     }
 
     /**
+     * Include Reservations
+     *
+     * @param Essay $essay
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeReservations(Essay $essay)
+    {
+        $reservations = $essay->reservations;
+
+        return $this->collection($reservations, new ReservationTransformer);
+    }
+
+    /**
      * Include User
      *
      * @param Essay $essay
@@ -46,5 +59,31 @@ class EssayTransformer extends TransformerAbstract
         $user = $essay->user;
 
         return $this->item($user, new UserTransformer);
+    }
+
+    /**
+     * Include Notes
+     *
+     * @param Essay $essay
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeNotes(Essay $essay)
+    {
+        $notes = $essay->notes;
+
+        return $this->collection($notes, new NoteTransformer);
+    }
+
+    /**
+     * Include the uploads associated with the essay.
+     *
+     * @param Essay $essay
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeUploads(Essay $essay)
+    {
+        $uploads = $essay->uploads;
+
+        return $this->collection($uploads, new UploadTransformer);
     }
 }

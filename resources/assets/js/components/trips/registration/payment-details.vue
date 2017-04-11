@@ -79,15 +79,29 @@
 								<td>Up-front Charges</td>
 								<td class="text-danger text-right">{{-upfrontTotal | currency}}</td>
 							</tr>
+							<tr v-if="promoValid">
+								<td>Promo Credit</td>
+								<td class="text-danger text-right">{{-promoValid | currency}}</td>
+							</tr>
 							<tr>
 								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
-								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{fundraisingGoal | currency}}</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ promoValid ? fundraisingGoal - promoValid : fundraisingGoal | currency}}</h5></td>
 							</tr>
 
 						</tfoot>
 					</table>
 				</div>
 				<hr class="divider" />
+				<div class="col-md-12">
+					<div class="form-group" :class="{ 'has-error': promoValid }">
+						<label for="cardHolderName">Promo Code</label>
+						<div class="input-group">
+							<input type="text" class="form-control input-sm" id="promo" placeholder=""
+						       v-model="promo" debounce="250" />
+							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promo !== '' && !promoValid, 'fa-gift': promo === ''}"></span></span>
+						</div>
+					</div>
+				</div>
 				<div class="col-md-12">
 					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
 						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
@@ -202,6 +216,8 @@
 				//upfrontTotal:0,
 				//totalCosts: 0,
 				attemptedCreateToken: false,
+				promo: '',
+                promoValid: false,
 
 				//card vars
 				card: null,
@@ -243,7 +259,12 @@
 			    if (val !== oldVal && this.$parent.paymentErrors.length > 0) {
                     this.$dispatch('payment-complete', val);
 			    }
-			}
+			},
+			'promo' (val, oldVal) {
+                this.$http.get('trips/'+ this.$parent.tripId +'/promo', { params: {promocode: val} }).then(function (response) {
+	                this.promoValid = response.body.data;
+                })
+            }
 		},
 		events: {
 			'VueStripe::create-card-token': function () {
@@ -387,7 +408,7 @@
 					exp_year: this.cardYear,
 					cvc: this.cardCVC,
 				};
-			}
+			},
 		},
 		methods: {
 			onValid(){
@@ -485,6 +506,7 @@
 					};
 					this.$parent.upfrontTotal = this.upfrontTotal;
 					this.$parent.fundraisingGoal = this.fundraisingGoal;
+					this.$parent.promocode = this.promoValid ? this.promo : null;
 					this.stripeDeferred.resolve(true);
 				}
 			}

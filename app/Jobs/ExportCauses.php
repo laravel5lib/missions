@@ -6,7 +6,7 @@ use App\Models\v1\ProjectCause;
 
 class ExportCauses extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return ProjectCause::get();
     }

@@ -6,7 +6,7 @@ use App\Models\v1\Passport;
 
 class ExportPassports extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Passport::filter($request)
                 ->with('user')

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
-use App\Models\v1\Donor;
 use App\Models\v1\Reservation;
 use App\Jobs\ExportReservations;
 use App\Events\RegisteredForTrip;
@@ -14,7 +13,6 @@ use App\Events\ReservationWasCreated;
 use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\RequirementRequest;
 use App\Http\Requests\v1\ReservationRequest;
-use App\Http\Transformers\v1\DonorTransformer;
 use App\Http\Transformers\v1\RequirementTransformer;
 use App\Http\Transformers\v1\ReservationTransformer;
 
@@ -217,7 +215,7 @@ class ReservationsController extends Controller
     }
 
     /**
-     * Export reservations.
+     * Export Reservations.
      *
      * @param ExportRequest $request
      * @return mixed

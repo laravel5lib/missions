@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         Commands\SendReceiptEmail::class,
         Commands\HandleLatePayments::class,
         Commands\TransferData::class,
+        Commands\UsePromoCode::class,
         Commands\AddRoleToTrips::class,
         Commands\AddTodoToTrips::class
     ];

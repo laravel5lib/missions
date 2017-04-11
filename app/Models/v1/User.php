@@ -595,6 +595,16 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get the user's reports.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    /**
      * Synchronize User Profile Links.
      *
      * @param $links

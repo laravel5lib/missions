@@ -13,15 +13,12 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility url="visas/export"
-                      :options="exportOptions"
-                      :filters="exportFilters">
-                  </export-utility>
-                  <!-- <import-utility title="Import Visas List" 
-                      url="visas/import" 
-                      :required-fields="importRequiredFields" 
-                      :optional-fields="importOptionalFields">
-                  </import-utility> -->
+                <template v-if="canExport">
+                    <export-utility url="visas/export"
+                          :options="exportOptions"
+                          :filters="exportFilters">
+                    </export-utility>
+                </template>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -157,6 +154,9 @@
         computed: {
             isFacilitator() {
                 return this.trips.length > 0 ? true : false;
+            },
+            canExport() {
+                return this.firstUrlSegment == 'admin';
             }
         },
         watch:{

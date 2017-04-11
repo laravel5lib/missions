@@ -35,7 +35,8 @@ $api->version('v1', [
 
     $api->get('download/{path}', function($path) {
         return response()->make(Storage::disk('s3')->get($path), 200, [
-                'Content-Type' => 'text/csv'
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => "attachment"
             ]);
     })->where('path', '.+');
     

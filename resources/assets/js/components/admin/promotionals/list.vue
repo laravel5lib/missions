@@ -13,31 +13,43 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Credit</th>
-                        <th>Expires</th>
-                        <th>Codes</th>
-                        <th>Created</th>
-                        <th>Updated</th>
-                        <th><i class="fa fa-cog"></i></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="promo in promos" track-by="id">
-                        <td>{{ promo.name | capitalize }}</td>
-                        <td>{{ promo.reward | currency }}</td>
-                        <td>{{ promo.expires | moment 'll' }}</td>
-                        <td>{{ promo.promocodes_count }}</td>
-                        <td>{{ promo.created_at | moment 'll' }}</td>
-                        <td>{{ promo.updated_at | moment 'll' }}</td>
-                        <th><a @click="callView({view: 'details', id: promo.id})"><i class="fa fa-cog"></i></a></th>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="panel-body text-muted text-center" v-if="!promos.length">
+            <p class="lead">
+                No promotionals found.<br />
+                <small v-if="hasFilteredResults">Try modifying your search terms or filters.</small>
+                <small v-else>Create a new one to get started.</small>
+            </p>
+        </div>
+        <table class="table table-striped" v-else>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Credit</th>
+                    <th>Expires</th>
+                    <th>Codes</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th><i class="fa fa-cog"></i></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="promo in promos" track-by="id">
+                    <td>{{ promo.name | capitalize }}</td>
+                    <td>{{ promo.reward | currency }}</td>
+                    <td>{{ promo.expires | moment 'll' }}</td>
+                    <td>{{ promo.promocodes_count }}</td>
+                    <td>{{ promo.created_at | moment 'll' }}</td>
+                    <td>{{ promo.updated_at | moment 'll' }}</td>
+                    <th><a @click="callView({view: 'details', id: promo.id})"><i class="fa fa-cog"></i></a></th>
+                </tr>
+            </tbody>
+        </table>
+        <div class="panel-footer">
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -60,9 +72,18 @@
                 options: {
                     params: {
                         promoterType: this.promoterType, 
-                        promoterId: this.promoterId
+                        promoterId: this.promoterId,
+                        per_page: 10,
+                        search: '',
+                        filters: []
                     }
-                }
+                },
+                pagination: { current_page: 1},
+            }
+        },
+        computed: {
+            hasFilteredResults() {
+                return this.options.params.search || this.options.params.filters.length;
             }
         },
         methods: {

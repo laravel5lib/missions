@@ -73,10 +73,10 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD' false true" :input-sm="false" type="date"></date-picker>
-                            <input type="date" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
+                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
                             <span v-if="attemptSubmit" class="help-block">
-                            <span v-if="$CreateUpdatePassport.givennames.required"
+                            <span v-if="$CreateUpdatePassport.expires.required"
                                   class="help-block">
                                 Please provide the expiration date.
                             </span>

@@ -264,7 +264,7 @@
 			},
 			'promo' (val, oldVal) {
                 this.promoError = '';
-                this.$http.post('trips/'+ this.$parent.tripId +'/promo', { params: {promocode: val} }).then(function (response) {
+                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: val} ).then(function (response) {
 	                this.promoValid = response.body.data;
                 }, function(error) {
                     this.promoError = error.message;

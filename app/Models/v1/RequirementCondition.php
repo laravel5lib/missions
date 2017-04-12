@@ -2,10 +2,13 @@
 
 namespace App\Models\v1;
 
+use App\UuidForKey;
 use Illuminate\Database\Eloquent\Model;
 
 class RequirementCondition extends Model
 {
+    use UuidForKey;
+    
     protected $guarded = [];
 
     protected $casts = [

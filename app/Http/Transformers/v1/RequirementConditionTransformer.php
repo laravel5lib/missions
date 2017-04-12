@@ -12,7 +12,7 @@ class RequirementConditionTransformer extends TransformerAbstract
             'id'             => $condition->id,
             'requirement_id' => $condition->requirement_id,
             'type'           => $condition->type,
-            'condition'      => $condition->condition,
+            'operator'       => $condition->operator,
             'applies_to'     => $condition->applies_to,
             'created_at'     => $condition->created_at->toDateTimeString(),
             'updated_at'     => $condition->updated_at->toDateTimeString()

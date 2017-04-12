@@ -16,7 +16,7 @@ class CreateRequirementConditionsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('requirement_id')->index();
             $table->string('type');
-            $table->string('condition');
+            $table->string('operator');
             $table->json('applies_to');
             $table->timestamps();
         });

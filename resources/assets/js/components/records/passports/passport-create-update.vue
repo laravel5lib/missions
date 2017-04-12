@@ -6,11 +6,12 @@
             <template v-if="forAdmin">
                 <div class="col-sm-12">
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
-                        <label for="infoManager">Record Manager</label>
+                        <label for="infoManager">Passport Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                         <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
+                        <span class="help-block">The user account that manages this passport.</span>
                     </div>
                 </div>
             </template>
@@ -22,6 +23,14 @@
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="150" minlength="1" required>
+                        <span v-if="attemptSubmit" class="help-block">
+                            <span v-if="
+                                    $CreateUpdatePassport.givennames.required || 
+                                    $CreateUpdatePassport.givennames.minlength"
+                                   class="help-block">
+                                Please provide the passport holder's given names.
+                            </span>
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -30,6 +39,14 @@
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                                placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
+                        <span v-if="attemptSubmit" class="help-block">
+                            <span v-if="
+                                    $CreateUpdatePassport.surname.required || 
+                                    $CreateUpdatePassport.surname.minlength"
+                                   class="help-block">
+                                Please provide the passport holder's surname.
+                            </span>
+                        </span>
                     </div>
                 </div>
             </div><!-- end row -->
@@ -39,6 +56,14 @@
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
+                    <span v-if="attemptSubmit" class="help-block">
+                        <span v-if="
+                                $CreateUpdatePassport.number.required || 
+                                $CreateUpdatePassport.number.minlength"
+                               class="help-block">
+                            Please provide a valid passport number.
+                        </span>
+                    </span>
                 </div>
             </div>
 
@@ -47,9 +72,15 @@
                     <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD'" :input-sm="false"></date-picker>
-                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
+                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD' false true" :input-sm="false" type="date"></date-picker>
+                            <input type="date" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
+                            <span v-if="attemptSubmit" class="help-block">
+                            <span v-if="$CreateUpdatePassport.givennames.required"
+                                  class="help-block">
+                                Please provide the expiration date.
+                            </span>
+                        </span>
                         </div>
                     </div>
                 </div>
@@ -62,6 +93,11 @@
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
+                    <span v-if="attemptSubmit" class="help-block">
+                        <span v-if="$CreateUpdatePassport.birth.required" class="help-block">
+                            Please select country of nationality (where you were born).
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship' }">
@@ -71,6 +107,11 @@
                     <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate:citizenship="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
+                    <span v-if="attemptSubmit" class="help-block">
+                        <span v-if="$CreateUpdatePassport.citizenship.required" class="help-block">
+                            Please select country of citizenship.
+                        </span>
+                    </span>
                 </div>
             </div>
             <div class="row">

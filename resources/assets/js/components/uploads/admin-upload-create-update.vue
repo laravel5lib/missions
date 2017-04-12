@@ -427,7 +427,7 @@
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
 					// update slim editor ratio
-					this.slimAPI.ratio = this.typeObj.width + ':' + this.typeObj.height;
+					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){
@@ -440,7 +440,7 @@
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
 				if (!this.constrained) {
-                    this.slimAPI.ratio = w + ':' + h;
+                    this.slimAPI[0].ratio = w + ':' + h;
                 }
 //				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
@@ -464,7 +464,7 @@
 							name: this.name,
 							tags: this.tags,
 							type: this.type,
-                            file: (this.slimAPI ? this.slimAPI.data.output.image.toDataURL("image/jpeg") : false)||this.file,
+                            file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file,
 							path: this.path,
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
@@ -495,7 +495,7 @@
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: (this.slimAPI ? this.slimAPI.data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
+                        file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
                     };
@@ -538,7 +538,7 @@
                             if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                                 self.adjustSelectByType()
                             } else {
-                                this.slimAPI.ratio = 'free';
+                                this.slimAPI[0].ratio = 'free';
                             }
                         }
 					};
@@ -586,9 +586,15 @@
 			    debugger;
 	        },
 	        loadCropper() {
+                let self = this;
                 if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
                     setTimeout(function () {
-                        self.slimAPI = new Slim.parse(document);
+                        self.slimAPI = new Slim.parse(self.$el);
+                        if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                            self.adjustSelectByType()
+                        } else {
+                            self.slimAPI[0].ratio = 'free';
+                        }
                     }, 1000);
                 }
 	        }

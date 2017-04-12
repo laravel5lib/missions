@@ -8,6 +8,9 @@ class ReservationTest extends TestCase
     {
         $condition = factory(App\Models\v1\RequirementCondition::class, 'role')->make();
 
-        dd($condition);
+        $condition->applies_to = ["abc", "def", "jkl"];
+        $condition->save();
+
+        $this->assertEquals(["ABC", "DEF", "JKL"], $condition->applies_to);
     }
 }

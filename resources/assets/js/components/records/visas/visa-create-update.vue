@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <upload-create-update type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'visa-'+given_names+'-'+surname"></upload-create-update>
+                        <upload-create-update v-if="userObj" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
                     </div><!-- end panel-body -->
                 </panel>
             </accordion>

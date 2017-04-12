@@ -119,6 +119,7 @@
 				paymentErrors:[],
                 detailsConfirmed: false,
                 rocaAgree: false,
+                promocode: null,
 			}
 		},
 		computed: {
@@ -239,7 +240,9 @@
 					// payment data
 					amount: this.upfrontTotal,
 					description: 'Reservation payment',
-					currency: 'USD', // determined from card token
+					currency: 'USD', // determined from card token,
+
+                    promocode: this.promocode,
 
 				};
 				if (this.upfrontTotal > 0) {

@@ -54,7 +54,6 @@
         },
         methods: {
             destroy(){
-                console.log(this.redirect);
                 this.$http.delete(this.resource + 's/' + this.id).then(function (response) {
                     if (this.redirect) {
                         window.location.href = this.redirect;
@@ -62,7 +61,7 @@
                         window.location.href = '/admin/' + this.resource + 's/' + this.id;
                     }
                 }, function (error) {
-                    this.dispatch('showError', 'Unable to ' + this.action);
+                    this.$dispatch('showError', 'Unable to ' + this.action);
                 })
             }
         }

@@ -1,3 +1,8 @@
+// IE support for vue $cookie
+Number.isInteger = Number.isInteger || function(value) {
+    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+};
+
 import Vue from 'vue';
 import markdownExampleModal from './components/markdown-example-modal.vue';
 import contactForm from './components/contact-form.vue';
@@ -69,6 +74,7 @@ import uploadCreateUpdate from './components/uploads/admin-upload-create-update.
 import reservationRequirements from './components/reservations/reservation-requirements.vue';
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
+import reportsList from './components/reports/reports-list.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -77,7 +83,7 @@ import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue'
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
-import adminTrips from './components/trips/admin-trips-list.vue';
+import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
 import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
 import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
@@ -127,6 +133,7 @@ import refundForm from './components/financials/transactions/refund-form.vue';
 import transactionDelete from './components/financials/transactions/transaction-delete.vue';
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
+import promotionals from './components/admin/promotionals.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -145,6 +152,7 @@ require('bootstrap-sass');
 // require('tether');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
+
 
 window.AOS = require('aos');
 AOS.init();
@@ -402,58 +410,66 @@ Vue.filter('mFormat', {
     }
 });
 
-var VueCropOptions = {
-    setSelect: [10, 10, 100, 100],
-    aspectRatio: 1,
-    bgColor: 'red',
-    minSize: [100, 100]
-};
-var VueCropEvents = [
-    'create',
-    'start',
-    'move',
-    'end',
-    'focus',
-    'blur',
-    'remove'
-];
-
 Vue.directive('crop', {
 
     acceptStatement: true,
 
     bind: function () {
-        var event = this.arg;
+        let event = this.arg;
 
-        if ($.inArray(event, VueCropEvents) == -1) {
-            console.warn('Invalid v-crop event: ' + event);
+        let slimEvents = [
+            'didInit',                  // Initialized
+            'didLoad',                  // Image Loaded
+            'didTransform',             // Image Transformed
+            'didCancel',                // Image Editor Cancelled
+            'didConfirm',               // Image Editor Confirmed
+            'didSave',                  // Image Saved
+            'didRemove',                // Image Removed
+            'didUpload',                // Image Uploaded
+            'didReceiveServerError',    // Error Received from Server During Upload
+        ];
+
+        if (event && !_.contains(slimEvents, event)) {
+            console.warn('Invalid slim event: ' + event);
             return;
         }
 
-        if (this.vm.jcrop) return;
+        if (this.vm.slim) return;
+
+        let self = this;
+        let vm = this.vm;
+        self.waitForLibrary = function() {
+            if (_.isFunction($().slim)) {
+                let $wrapper = $(self.el);
+                vm.slimAPI = $wrapper.slim();
+
+                // send api to active componant
+                vm.$dispatch('slim-api', vm.slimAPI);
+            } else {
+                setTimeout(self.waitForLibrary, 1000);
+            }
+        };
 
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            var $wrapper = $(this.el).wrap('<div/>').parent();
-            $wrapper.width(this.el.width).height(this.el.height);
-            this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
-            // send api to active componant
-            this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+            this.waitForLibrary();
         }
     },
 
     update: function (callback) {
+        let $wrapper = $(this.el);
         if (!_.contains(['file', 'video'], this.vm.type))
-            this.vm.jcrop.container.on('crop' + this.arg, callback)
+            $wrapper.on('crop' + this.arg, callback)
     },
 
     unbind: function () {
+        let $wrapper = $(this.el);
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            this.vm.jcrop.container.off('crop' + this.arg);
+            $wrapper.off('crop' + this.arg);
 
             if (this._watcher.id != 1) return;
 
-            this.vm.jcrop.destroy();
-            this.vm.jcrop = null
+            $wrapper.slim('destroy');
+            this.vm.slimAPI = null
         }
     }
 });
@@ -759,6 +775,7 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        reportsList,
 
         // admin components
         campaignCreate,
@@ -767,7 +784,7 @@ new Vue({
         adminCampaignDetails,
         campaignTripCreateWizard,
         campaignTripEditWizard,
-        adminTrips,
+        adminCampaignTrips,
         adminGroupTrips,
         adminTripCreateUpdate,
         adminTripReservations,
@@ -816,7 +833,8 @@ new Vue({
         refundForm,
         transactionDelete,
         fundManager,
-        companionManager
+        companionManager,
+        promotionals
     },
     http: {
         headers: {

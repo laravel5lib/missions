@@ -188,14 +188,17 @@
                 },
                 resource: this.$resource('requirements{/id}'),
                 documentTypes: [
-                    {value: 'medical_releases', text: 'Medical Release'},
-                    {value: 'passports', text: 'Passport'},
-                    {value: 'visas', text: 'Visa'},
-                    {value: 'referrals', text: 'Referral'},
+                    {value: 'airport_preferences', text: 'Airport Preference'},
                     {value: 'arrival_designations', text: 'Arrival Designation'},
-                    {value: 'essays', text: 'Testimony'},
                     {value: 'influencer_applications', text: 'Influencer Application'},
-                    {value: 'airport_preferences', text: 'Airport Preference'}
+                    {value: 'medical_credentials', text: 'Media Credentials'},
+                    {value: 'medical_credentials', text: 'Medical Credentials'},
+                    {value: 'medical_releases', text: 'Medical Release'},
+                    {value: 'minor_releases', text: 'Minor Release'},
+                    {value: 'passports', text: 'Passport'},
+                    {value: 'referrals', text: 'Referral'},
+                    {value: 'essays', text: 'Testimony'},
+                    {value: 'visas', text: 'Visa'}
                 ],
                 sort: 'due_at',
                 direction: 'asc'

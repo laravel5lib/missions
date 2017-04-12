@@ -145,12 +145,6 @@
                                             :options="exportOptions"
                                             :filters="exportFilters">
                             </export-utility>
-                            <!-- <import-utility title="Import trips List" 
-                              url="trips/import"
-                              :parent-id="campaignId"
-                              :required-fields="importRequiredFields"
-                              :optional-fields="importOptionalFields">
-                            </import-utility> -->
                         </form>
                     </div>
                 </div>
@@ -227,15 +221,19 @@
     </div>
 </template>
 <script type="text/javascript">
-    import exportUtility from '../../export-utility.vue';
-    import importUtility from '../../import-utility.vue';
+    import exportUtility from '../export-utility.vue';
     export default{
-        name: 'admin-trips',
-        components: {exportUtility, importUtility},
+        name: 'admin-campaign-trips',
+        components: {exportUtility},
+        props: {
+            'campaignId': {
+                type: String,
+                required: true
+            }
+        },
         data(){
             return{
                 showFilters: false,
-                campaignId: this.$parent.campaignId,
                 filters: {
                     type: '',
                     status: ''
@@ -273,15 +271,7 @@
                     created_at: 'Created On',
                     updated_at: 'Last Updated',
                 },
-                exportFilters: {},
-                importRequiredFields: [
-                    'group_name', 'type', 'country_code', 'started_at', 'ended_at', 'closed_at', 'difficulty'
-                ],
-                importOptionalFields: [
-                    'spots', 'companion_limit', 'rep_email', 'todos', 'prospects', 'team_roles',
-                    'description', 'visibility', 'published_at', 'created_at', 'updated_at',
-                    'facilitator_emails'
-                ]
+                exportFilters: {}
             }
         },
         watch: {

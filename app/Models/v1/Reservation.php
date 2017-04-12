@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use Carbon\Carbon;
 use App\UuidForKey;
+use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable;
 
     /**
      * The table associated with the model.
@@ -632,7 +633,7 @@ class Reservation extends Model
             'desired_role' => $desired_role,
             'trip_id' => $trip_id
         ]);
-        
+
         // remove the current resources
         $this->costs()->detach();
         $this->requirements()->delete();

@@ -6,7 +6,7 @@ use App\Models\v1\Trip;
 
 class ExportTrips extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Trip::filter($request)
             ->with(['group', 'campaign', 'rep'])

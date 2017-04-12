@@ -66,9 +66,14 @@
     import essay from '../records/essays/essay.vue';
     import medicalsList from '../records/medicals/medicals-list.vue';
     import medical from '../records/medicals/medical.vue';
+    import medicalCredentialsList from '../records/credentials/medical-credentials-list.vue';
+    import medicalCredential from '../records/credentials/medical-credential.vue';
+    import mediaCredentialsList from '../records/credentials/media-credentials-list.vue';
+    import mediaCredential from '../records/credentials/media-credential.vue';
     import arrivalDesignation from '../reservations/arrival-designation.vue';
     import airportPreference from '../reservations/airport-preference.vue';
     import referralsList from '../records/referrals/referrals-list.vue';
+    import minorRelease from '../reservations/minor-release.vue';
     import referral from '../records/referrals/referral.vue';
     export default{
         name: 'document-manager',
@@ -86,7 +91,12 @@
             referralsList,
             referral,
             arrivalDesignation,
-            airportPreference
+            airportPreference,
+            minorRelease,
+            medicalCredentialsList,
+            medicalCredential,
+            mediaCredentialsList,
+            mediaCredential
         },
         props:{
             'reservationId': {
@@ -180,11 +190,26 @@
                         this.list = 'referrals-list';
                         this.docPreview = 'referral';
                         break;
+                    case 'medical_credentials':
+                        this.label = 'Medical Credentials';
+                        this.url = 'medical-credentials';
+                        this.list = 'medical-credentials-list';
+                        this.docPreview = 'medical-credential';
+                        break;
+                    case 'media_credentials':
+                        this.label = 'Media Credentials';
+                        this.url = 'media_credentials';
+                        this.list = 'media_credentials-list';
+                        this.docPreview = 'media-credential';
+                        break;
                     case 'airport_preferences':
                         this.questionnaire = 'airport-preference';
                         break;
                     case 'arrival_designations':
                         this.questionnaire = 'arrival-designation';
+                        break;
+                    case 'minor_releases':
+                        this.questionnaire = 'minor-release';
                         break;
                     default:
                         this.label = 'Document';

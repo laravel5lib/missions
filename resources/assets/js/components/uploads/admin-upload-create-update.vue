@@ -464,7 +464,7 @@
 							name: this.name,
 							tags: this.tags,
 							type: this.type,
-                            file: (this.slimAPI ? this.slimAPI.data.output.image.toDataURL("image/jpeg") : false)||this.file,
+                            file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file,
 							path: this.path,
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
@@ -495,7 +495,7 @@
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: (this.slimAPI ? this.slimAPI.data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
+                        file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
                     };
@@ -586,6 +586,7 @@
 			    debugger;
 	        },
 	        loadCropper() {
+                let self = this;
                 if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
                     setTimeout(function () {
                         self.slimAPI = new Slim.parse(document);

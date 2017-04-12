@@ -427,7 +427,7 @@
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
 					// update slim editor ratio
-					this.slimAPI.ratio = this.typeObj.width + ':' + this.typeObj.height;
+					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){
@@ -440,7 +440,7 @@
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
 				if (!this.constrained) {
-                    this.slimAPI.ratio = w + ':' + h;
+                    this.slimAPI[0].ratio = w + ':' + h;
                 }
 //				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
@@ -538,7 +538,7 @@
                             if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                                 self.adjustSelectByType()
                             } else {
-                                this.slimAPI.ratio = 'free';
+                                this.slimAPI[0].ratio = 'free';
                             }
                         }
 					};
@@ -589,7 +589,12 @@
                 let self = this;
                 if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
                     setTimeout(function () {
-                        self.slimAPI = new Slim.parse(document);
+                        self.slimAPI = new Slim.parse(self.$el);
+                        if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                            self.adjustSelectByType()
+                        } else {
+                            self.slimAPI[0].ratio = 'free';
+                        }
                     }, 1000);
                 }
 	        }

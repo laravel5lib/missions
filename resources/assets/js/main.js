@@ -137,6 +137,8 @@ import promotionals from './components/admin/promotionals.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
+// import slim from './vendors/slim.module.js';
+window.Slim = require('./vendors/slim.commonjs.js');
 window.moment = require('moment');
 window.timezone = require('moment-timezone');
 window._ = require('underscore');
@@ -439,9 +441,10 @@ Vue.directive('crop', {
         let self = this;
         let vm = this.vm;
         self.waitForLibrary = function() {
-            if (_.isFunction($().slim)) {
-                let $wrapper = $(self.el);
-                vm.slimAPI = $wrapper.slim();
+            if (_.isFunction(Slim)) {
+                let $wrapper = self.el;
+                debugger;
+                vm.slimAPI = new Slim($wrapper);
 
                 // send api to active componant
                 vm.$dispatch('slim-api', vm.slimAPI);
@@ -456,13 +459,14 @@ Vue.directive('crop', {
     },
 
     update: function (callback) {
-        let $wrapper = $(this.el);
-        if (!_.contains(['file', 'video'], this.vm.type))
-            $wrapper.on('crop' + this.arg, callback)
+        let $wrapper = self.el;
+        if (!_.contains(['file', 'video'], this.vm.type)) {
+            //$wrapper.on('crop' + this.arg, callback)
+        }
     },
 
     unbind: function () {
-        let $wrapper = $(this.el);
+        let $wrapper = self.el;
         if (!_.contains(['file', 'video'], this.vm.type)) {
             $wrapper.off('crop' + this.arg);
 

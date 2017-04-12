@@ -96,7 +96,7 @@
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
-					{name: 'Additional Trip Options', view: 'step5', complete:false},
+					{name: 'Rooming Options', view: 'step5', complete:false},
 					{name: 'Payment Details', view: 'step6', complete:false},
 					{name: 'Deadline Agreements', view: 'step7', complete:false},
 					{name: 'Review', view: 'step8', complete:false}

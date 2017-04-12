@@ -100,6 +100,7 @@
 						       v-model="promo" debounce="250" />
 							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promo !== '' && !promoValid, 'fa-gift': promo === ''}"></span></span>
 						</div>
+						<div class="help-block" v-if="promoError" v-text="promoError"></div>
 					</div>
 				</div>
 				<div class="col-md-12">
@@ -218,6 +219,7 @@
 				attemptedCreateToken: false,
 				promo: '',
                 promoValid: false,
+                promoError: '',
 
 				//card vars
 				card: null,
@@ -261,8 +263,11 @@
 			    }
 			},
 			'promo' (val, oldVal) {
-                this.$http.get('trips/'+ this.$parent.tripId +'/promo', { params: {promocode: val} }).then(function (response) {
+                this.promoError = '';
+                this.$http.post('trips/'+ this.$parent.tripId +'/promo', { params: {promocode: val} }).then(function (response) {
 	                this.promoValid = response.body.data;
+                }, function(error) {
+                    this.promoError = error.message;
                 })
             }
 		},

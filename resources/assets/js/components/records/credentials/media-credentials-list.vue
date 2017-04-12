@@ -16,7 +16,7 @@
 			<hr class="divider sm inv">
 		</div>
 		<div class="col-xs-12" v-if="loaded && !media_credentials.length">
-			<p class="text-center text-muted" role="alert"><em>Add and manage your media records here!</em></p>
+			<p class="text-center text-muted" role="alert"><em>Add and manage your media credentials here!</em></p>
 		</div>
 
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="media_credential in media_credentials">

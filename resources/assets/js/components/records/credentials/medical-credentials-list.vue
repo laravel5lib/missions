@@ -16,7 +16,7 @@
 			<hr class="divider sm inv">
 		</div>
 		<div class="col-xs-12" v-if="loaded && !medical_credentials.length">
-			<p class="text-center text-muted" role="alert"><em>Add and manage your medical records here!</em></p>
+			<p class="text-center text-muted" role="alert"><em>Add and manage your medical credentials here!</em></p>
 		</div>
 
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="medical_credential in medical_credentials">

@@ -195,7 +195,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
@@ -446,7 +446,7 @@
 				</tr>
 				</thead>
 				<tbody v-if="reservations.length > 0">
-				<tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+				<tr v-for="reservation in reservations|orderBy orderByField direction">
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
 					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
@@ -539,7 +539,6 @@
 				reservations: [],
 				orderByField: 'surname',
 				direction: 1,
-				page: 1,
 				per_page: 10,
 				perPageOptions: [5, 10, 25, 50, 100],
 				pagination: {current_page: 1},
@@ -718,13 +717,13 @@
 				this.updateConfig();
 			},
 			'search': function (val, oldVal) {
-				this.page = 1;
-				this.pagination.current_page = 1;
-				this.searchReservations();
+//                this.page = 1;
+                this.pagination.current_page = 1;
+                this.searchReservations();
 			},
-			'page': function (val, oldVal) {
+			/*'page': function (val, oldVal) {
 				this.searchReservations();
-			},
+			},*/
 			'per_page': function (val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
@@ -840,7 +839,7 @@
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund',
-					search: this.search,
+					search: this.search.trim(),
 					per_page: this.per_page,
 					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
@@ -890,31 +889,43 @@
 				}).then(function () {
 					this.updateConfig();
 					// this.$refs.spinner.hide();
-				})
+				});
 			},
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('groups', { params: {search: search} }).then(function (response) {
+				let promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
 					this.groupsOptions = response.body.data;
-					loading ? loading(false) : void 0;
-				})
+					if (loading) {
+                        loading(false);
+                    } else {
+                        return promise;
+                    }
+				});
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
+				let promise = this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
 					this.campaignOptions = response.body.data;
-					loading ? loading(false) : void 0;
-				})
+					if (loading) {
+                        loading(false);
+                    } else {
+                        return promise;
+                    }
+				});
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { params: {search: search} }).then(function (response) {
+				let promise = this.$http.get('users', { params: {search: search} }).then(function (response) {
 					this.usersOptions = response.body.data;
-					loading ? loading(false) : void 0;
-				})
+					if (loading) {
+                        loading(false);
+                    } else {
+                        return promise;
+                    }
+				});
 			},
 			getTodos(){
-				this.$http.get('todos', { params: {
+                return this.$http.get('todos', { params: {
 					'type': 'reservations',
 					'per_page': 100,
 					'unique': true
@@ -923,7 +934,7 @@
 				});
 			},
 			getRequirements(){
-				this.$http.get('requirements', { params: {
+                return this.$http.get('requirements', { params: {
 					'type': 'trips',
 					'per_page': 100,
 					'unique': true
@@ -932,7 +943,7 @@
 				});
 			},
 			getCosts(){
-				this.$http.get('costs', { params: {
+				return this.$http.get('costs', { params: {
 					'assignment': 'trips',
 					'per_page': 100,
 					'unique': true
@@ -951,11 +962,11 @@
 				this.filters = config.filters;
 			}
 			// populate
-			this.getGroups();
-			this.getCampaigns();
-			this.getCosts();
-			this.getRequirements();
-			this.getTodos();
+			let groupsPromise = this.getGroups();
+            let campaignsPromise = this.getCampaigns();
+            let costsPromise = this.getCosts();
+            let reqsPromise = this.getRequirements();
+            let todosPromise = this.getTodos();
 
 			// assign values from url search
 			if (window.location.search !== '') {
@@ -971,7 +982,9 @@
 				}.bind(this));
 			}
 
-			this.searchReservations();
+			Promise.all([groupsPromise, campaignsPromise, costsPromise, reqsPromise, todosPromise]).then(function () {
+                this.searchReservations();
+            }.bind(this));
 
 			//Manually handle dropdown functionality to keep dropdown open until finished
 			$('.form-toggle-menu .dropdown-menu').on('click', function(event){

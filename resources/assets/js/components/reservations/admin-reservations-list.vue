@@ -627,7 +627,8 @@
 					deadlines: 'Other Deadlines',
 					desired_role: 'Role'
 				},
-				exportFilters: {}
+				exportFilters: {},
+                lastReservationRequest: null
 			}
 		},
 		computed: {
@@ -873,7 +874,12 @@
 			searchReservations(){
 				let params = this.getListSettings();
 				// this.$refs.spinner.show();
-				this.$http.get('reservations', {params: params}).then(function (response) {
+				this.$http.get('reservations', {params: params, before: function(xhr) {
+                    if (this.lastReservationRequest) {
+                        this.lastReservationRequest.abort();
+                    }
+                    this.lastReservationRequest = xhr;
+                }}).then(function (response) {
 					let self = this;
 					// _.each(response.body.data, function (reservation) {
 					// 	reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100

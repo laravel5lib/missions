@@ -71,11 +71,14 @@
 
 				<div class="row" v-if="isUpdate">
 					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other' || type === 'passport'">
-						<img :src="src" class="img-responsive">
+						<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed" v-if="src">
+							<img :src="src" class="">
+							<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
+						</div>
 					</div>
 				</div>
 
-				<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
+				<!--<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -101,7 +104,7 @@
 					<div class="col-sm-4">
 						<button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
 					</div>
-				</div>
+				</div>-->
 
 				<div class="row" v-if="type && type === 'video'">
 					<div class="col-xs-12">
@@ -128,10 +131,9 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && type !== 'video' && type !== 'file'" :class="{ 'has-error': isFileSet}">
+				<div class="form-group" v-if="!isUpdate && type && type !== 'video' && type !== 'file'" :class="{ 'has-error': isFileSet}">
 					<label for="file" class="control-label">File</label>
-					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed" v-crop>
-						<img :src="src" class="img-responsive">
+					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed">
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
 					</div>
 					<span class="help-block"><i class="fa fa-image"></i> Image formats only</span>
@@ -348,10 +350,6 @@
 			}
 		},
 		events:{
-			'slim-api':function (api) {
-				// make api available on scope
-				window.slimAPI = this.slimAPI = api;
-			},
 			'uploads-complete'(data){
 				switch(data.type){
 					case 'avatar':
@@ -429,7 +427,7 @@
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
 					// update slim editor ratio
-					this.slimAPI.slim('ratio', this.typeObj.width + ':' + this.typeObj.height);
+					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){
@@ -442,7 +440,7 @@
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
 				if (!this.constrained) {
-                    this.slimAPI.slim('ratio', w + ':' + h);
+                    this.slimAPI[0].ratio = w + ':' + h;
                 }
 //				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
@@ -466,7 +464,7 @@
 							name: this.name,
 							tags: this.tags,
 							type: this.type,
-                            file: (slimAPI.slim('data')[0].output ? slimAPI.slim('data')[0].output.image.toDataURL("image/jpeg") : false)||this.file,
+                            file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file,
 							path: this.path,
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
@@ -497,7 +495,7 @@
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: (slimAPI.slim('data')[0].output ? slimAPI.slim('data')[0].output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
+                        file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
                     };
@@ -540,7 +538,7 @@
                             if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                                 self.adjustSelectByType()
                             } else {
-                                this.slimAPI.slim('ratio', 'free');
+                                this.slimAPI[0].ratio = 'free';
                             }
                         }
 					};
@@ -586,6 +584,19 @@
 			},
 	        slimConfirmed(data){
 			    debugger;
+	        },
+	        loadCropper() {
+                let self = this;
+                if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
+                    setTimeout(function () {
+                        self.slimAPI = new Slim.parse(self.$el);
+                        if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                            self.adjustSelectByType()
+                        } else {
+                            self.slimAPI[0].ratio = 'free';
+                        }
+                    }, 1000);
+                }
 	        }
         },
 		ready(){
@@ -597,7 +608,11 @@
 					this.tags = upload.tags;
 					this.type = upload.type;
 					this.src = upload.source;
+
+                    this.loadCropper();
 				});
+			} else {
+                this.loadCropper();
 			}
 
 			if(this.isChild){
@@ -619,6 +634,17 @@
                 }
             }.bind(this));
 
+            let slimEvents = [
+                'didInit',                  // Initialized
+                'didLoad',                  // Image Loaded
+                'didTransform',             // Image Transformed
+                'didCancel',                // Image Editor Cancelled
+                'didConfirm',               // Image Editor Confirmed
+                'didSave',                  // Image Saved
+                'didRemove',                // Image Removed
+                'didUpload',                // Image Uploaded
+                'didReceiveServerError',    // Error Received from Server During Upload
+            ];
         }
     }
 </script> 

@@ -73,10 +73,10 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD' false true" :input-sm="false" type="date"></date-picker>
-                            <input type="date" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
+                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
                             <span v-if="attemptSubmit" class="help-block">
-                            <span v-if="$CreateUpdatePassport.givennames.required"
+                            <span v-if="$CreateUpdatePassport.expires.required"
                                   class="help-block">
                                 Please provide the expiration date.
                             </span>
@@ -130,7 +130,7 @@
                                         <h5 class="media-heading">{{selectedAvatar.name}}</h5>
                                     </div>
                                 </div>
-                                <upload-create-update v-if="isUpdate && userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                                <upload-create-update v-if="userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
                             </div>
                         </panel>
                     </accordion>

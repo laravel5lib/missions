@@ -93,7 +93,7 @@
 				</div>
 				<hr class="divider" />
 				<div class="col-md-12">
-					<div class="form-group" :class="{ 'has-error': promoValid }">
+					<div class="form-group" :class="{ 'has-error': promoValid === false && promoError, 'has-success': promoValid > 0 }">
 						<label for="cardHolderName">Promo Code</label>
 						<div class="input-group">
 							<input type="text" class="form-control input-sm" id="promo" placeholder=""
@@ -264,10 +264,11 @@
 			},
 			'promo' (val, oldVal) {
                 this.promoError = '';
-                this.$http.post('trips/'+ this.$parent.tripId +'/promo', { params: {promocode: val} }).then(function (response) {
-	                this.promoValid = response.body.data;
+                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: val} ).then(function (response) {
+	                this.promoValid = parseInt(response.body.replace(/,+/, ''));
                 }, function(error) {
-                    this.promoError = error.message;
+                    this.promoError = error.body.message;
+                    this.promoValid = false;
                 })
             }
 		},

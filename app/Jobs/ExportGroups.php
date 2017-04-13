@@ -6,7 +6,7 @@ use App\Models\v1\Group;
 
 class ExportGroups extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Group::filter($request)
                 ->with('slug', 'avatar', 'banner')

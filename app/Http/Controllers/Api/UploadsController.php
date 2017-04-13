@@ -115,7 +115,8 @@ class UploadsController extends Controller
     public function display_file($path)
     {
         return response()->make(Storage::disk('s3')->get($path), 200, [
-                'Content-Type' => 'application/pdf'
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => "attachment"
             ]);
     }
 

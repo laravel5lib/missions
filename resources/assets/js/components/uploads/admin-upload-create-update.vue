@@ -71,11 +71,14 @@
 
 				<div class="row" v-if="isUpdate">
 					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other' || type === 'passport'">
-						<img :src="src" class="img-responsive">
+						<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed" v-if="src">
+							<img :src="src" class="">
+							<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
+						</div>
 					</div>
 				</div>
 
-				<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
+				<!--<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
 					<div class="checkbox">
 						<label>
 							<input type="checkbox" v-model="constrained">
@@ -101,7 +104,7 @@
 					<div class="col-sm-4">
 						<button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
 					</div>
-				</div>
+				</div>-->
 
 				<div class="row" v-if="type && type === 'video'">
 					<div class="col-xs-12">
@@ -113,12 +116,13 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && type !== 'video'" :class="{ 'has-error': isFileSet}">
+				<div class="form-group" v-if="type && type === 'file'" :class="{ 'has-error': isFileSet}">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
 						<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
 						<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+
 
 				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
@@ -127,15 +131,24 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="file" v-show="type !== 'file'">
-					<label for="file" class="control-label">Crop Image</label>
-					<div id="crop-wrapper" class="col-sm-12">
-						<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
-							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
-						<!--<hr>-->
-						<!--<img :src="resultImage" v-if="resultImage">-->
+				<div class="form-group" v-if="!isUpdate && type && type !== 'video' && type !== 'file'" :class="{ 'has-error': isFileSet}">
+					<label for="file" class="control-label">File</label>
+					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed">
+						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
 					</div>
+					<span class="help-block"><i class="fa fa-image"></i> Image formats only</span>
+					<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+
+				<!--<div class="form-group" v-if="file" v-show="type !== 'file'">-->
+					<!--<label for="file" class="control-label">Crop Image</label>-->
+					<!--<div id="crop-wrapper" class="col-sm-12">-->
+						<!--&lt;!&ndash;<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"-->
+							 <!--v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>&ndash;&gt;-->
+						<!--&lt;!&ndash;<hr>&ndash;&gt;-->
+						<!--&lt;!&ndash;<img :src="resultImage" v-if="resultImage">&ndash;&gt;-->
+					<!--</div>-->
+				<!--</div>-->
 
 				<br>
 
@@ -241,6 +254,7 @@
             return {
                 url: '',
                 path: '',
+                src: '',
                 file: null,
                 x_axis: null,
                 y_axis: null,
@@ -252,6 +266,7 @@
 				coords: 'Try to move/resize the selection',
 				// constrained: true,
 				vueCropApi: null,
+                slimAPI: null,
 				scaledWidth: 400,
 				scaledHeight: 400,
 				imageMaxWidth: 400,
@@ -335,10 +350,6 @@
 			}
 		},
 		events:{
-			'vueCrop-api':function (api) {
-				// make api available on scope
-				window.vueCropApi = this.vueCropApi = api;
-			},
 			'uploads-complete'(data){
 				switch(data.type){
 					case 'avatar':
@@ -409,15 +420,14 @@
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other', 'passport'], this.typeObj.type)) {
+				if (this.slimAPI && _.contains(['banner', 'avatar'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
-					// update jCrop
-					this.vueCropApi.setOptions({aspectRatio: (this.typeObj.width/this.typeObj.height)});
-					this.vueCropApi.setSelect([0, 0, this.width, this.height]);
+					// update slim editor ratio
+					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){
@@ -430,9 +440,9 @@
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
 				if (!this.constrained) {
-					this.vueCropApi.setOptions({aspectRatio: (w/h)});
-				}
-				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
+                    this.slimAPI[0].ratio = w + ':' + h;
+                }
+//				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
             /*checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
@@ -454,10 +464,8 @@
 							name: this.name,
 							tags: this.tags,
 							type: this.type,
-							file: this.file,
+                            file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file,
 							path: this.path,
-							x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-							y_axis: parseInt(this.y_axis / this.imageAspectRatio),
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
 						};
@@ -487,9 +495,7 @@
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: this.file||undefined,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+                        file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
                     };
@@ -517,24 +523,26 @@
 				}
 			},
 			handleImage(e){
-				var self = this;
-				var reader = new FileReader();
+				let self = this;
+				let reader = new FileReader();
 				reader.onload = function(event){
-					var img = new Image();
+					let img = new Image();
 					img.onload = function(){
 						self.imageAspectRatio = Math.min(self.imageMaxWidth / img.width, self.imageMaxHeight / img.height);
 						self.imageWidth = img.width * self.imageAspectRatio;
 						self.imageHeight = img.height * self.imageAspectRatio;
 
 						// adjust container
-						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar', 'other', 'passport'], self.typeObj.type) ) {
-							self.adjustSelectByType()
-						} else {
-							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
-						}
+                        if (self.slimAPI) {
+//                            self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
+                            if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                                self.adjustSelectByType()
+                            } else {
+                                this.slimAPI[0].ratio = 'free';
+                            }
+                        }
 					};
-					self.file = img.src = event.target.result;
+					self.file = img.src = event.target.result
 				};
 				reader.readAsDataURL(e.target.files[0]);
 			},
@@ -573,7 +581,23 @@
 			preview(upload){
 			    this.previewModal = true;
 			    this.previewUpload = upload;
-			}
+			},
+	        slimConfirmed(data){
+			    debugger;
+	        },
+	        loadCropper() {
+                let self = this;
+                if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
+                    setTimeout(function () {
+                        self.slimAPI = new Slim.parse(self.$el);
+                        if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                            self.adjustSelectByType()
+                        } else {
+                            self.slimAPI[0].ratio = 'free';
+                        }
+                    }, 1000);
+                }
+	        }
         },
 		ready(){
             let self = this;
@@ -584,7 +608,11 @@
 					this.tags = upload.tags;
 					this.type = upload.type;
 					this.src = upload.source;
+
+                    this.loadCropper();
 				});
+			} else {
+                this.loadCropper();
 			}
 
 			if(this.isChild){
@@ -606,6 +634,17 @@
                 }
             }.bind(this));
 
+            let slimEvents = [
+                'didInit',                  // Initialized
+                'didLoad',                  // Image Loaded
+                'didTransform',             // Image Transformed
+                'didCancel',                // Image Editor Cancelled
+                'didConfirm',               // Image Editor Confirmed
+                'didSave',                  // Image Saved
+                'didRemove',                // Image Removed
+                'didUpload',                // Image Uploaded
+                'didReceiveServerError',    // Error Received from Server During Upload
+            ];
         }
     }
 </script> 

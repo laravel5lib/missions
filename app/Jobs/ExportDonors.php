@@ -6,7 +6,7 @@ use App\Models\v1\Donor;
 
 class ExportDonors extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Donor::filter($request)->get();
     }

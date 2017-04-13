@@ -219,6 +219,7 @@
 										<option value="L">L (Large)</option>
 										<option value="XL">XL (Extra Large)</option>
 										<option value="XXL">XXL (2 Extra Large)</option>
+										<option value="XXXL">XXXL (3 Extra Large)</option>
 									</select>
 								</div>
 							</div>
@@ -481,6 +482,7 @@
                 this.city = user.city;
                 this.state = user.state;
                 this.zipCode = user.zip;
+                this.size = user.shirt_size;
                 this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
                 this.avatar_upload_id = user.avatar_upload_id;
 			}

@@ -151,10 +151,10 @@
                                     <label for="gender" class="col-sm-3">Gender</label>
                                     <div class="col-sm-9">
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
+                                            <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
                                         </label>
                                     </div>
                                 </div>
@@ -163,11 +163,11 @@
                                     <label for="status" class="col-sm-3">Relationship Status</label>
                                     <div class="col-sm-9">
                                         <select class="form-control input-sm" v-model="status" id="status">
-                                            <option value="Single">Single</option>
-                                            <option value="Engaged">Engaged</option>
-                                            <option value="Married">Married</option>
-                                            <option value="Divorced">Divorced</option>
-                                            <option value="Widowed">Widowed</option>
+                                            <option value="single">Single</option>
+                                            <option value="engaged">Engaged</option>
+                                            <option value="married">Married</option>
+                                            <option value="divorced">Divorced</option>
+                                            <option value="widowed">Widowed</option>
                                         </select>
                                     </div>
                                 </div>

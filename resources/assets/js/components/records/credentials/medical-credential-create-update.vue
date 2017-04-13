@@ -223,7 +223,7 @@
 											</div>
 										</div>
 										<div class="col-sm-6">
-											<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-license" :name="'credentials-license-'+ today + '-' + uploadCounter"></upload-create-update>
+											<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-license" :name="'credentials-license-'+ today + '-' + uploadCounter"></upload-create-update>
 											<a @click="uploadDoc('UploadLicenseForm', 'license')" class="btn btn-primary">Attach</a>
 										</div>
 										<div v-if="show_expire.license" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)}">
@@ -251,7 +251,7 @@
 
 									</div>
 									<div class="col-sm-6">
-										<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-certification" :name="'credentials-certification-'+ today + '-' + uploadCounter"></upload-create-update>
+										<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-certification" :name="'credentials-certification-'+ today + '-' + uploadCounter"></upload-create-update>
 										<a @click="uploadDoc('UploadCertificationForm', 'certification')" class="btn btn-primary">Attach</a>
 									</div>
 									<div v-if="show_expire.certification" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)}">
@@ -277,7 +277,7 @@
 										</div>
 									</div>
 									<div class="col-sm-6">
-										<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-diploma" :name="'credentials-diploma-'+ today + '-' + uploadCounter"></upload-create-update>
+										<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-diploma" :name="'credentials-diploma-'+ today + '-' + uploadCounter"></upload-create-update>
 										<a @click="uploadDoc('UploadDiplomaForm', 'diploma')" class="btn btn-primary">Attach</a>
 									</div>
 									<div class="col-sm-6" v-if="show_expire.diploma" :class="{ 'has-error': checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)}">
@@ -304,7 +304,7 @@
 
 										</div>
 										<div class="col-sm-6">
-											<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-letter" :name="'credentials-letter-'+ today + '-' + uploadCounter"></upload-create-update>
+											<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-letter" :name="'credentials-letter-'+ today + '-' + uploadCounter"></upload-create-update>
 											<a @click="uploadDoc('UploadLetterForm', 'letter')" class="btn btn-primary">Attach</a>
 										</div>
 										<div v-if="show_expire.letter" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)}">
@@ -688,32 +688,46 @@
         },
         events:{
             'uploads-complete'(data){
+                let contentIndex;
                 switch(data.type){
-                    case 'file':
+                    case 'other':
                         this.upload_ids.push(data.id);
                         this.upload_ids = _.uniq(this.upload_ids);
-                        let contentIndex = _.findIndex(this.content, {id: 'files'});
+                        contentIndex = _.findIndex(this.content, {id: 'files'});
 
-	                    if (data.name.indexOf('license') !== -1) {
+                        if (data.name.indexOf('license') !== -1) {
                             this.content[contentIndex].a.license.push({ id: data.id, name: data.name, expires: this.expires.license });
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.license, type: 'license'});
                             this.expires.license = null;
                             break;
-	                    } else if (data.name.indexOf('certification') !== -1) {
+                        } else if (data.name.indexOf('certification') !== -1) {
                             this.content[contentIndex].a.certification.push({ id: data.id, name: data.name, expires: this.expires.certification});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.certification, type: 'certification'});
                             this.expires.certification = null;
                             break;
-	                    } else if (data.name.indexOf('diploma') !== -1) {
+                        } else if (data.name.indexOf('diploma') !== -1) {
                             this.content[contentIndex].a.diploma.push({ id: data.id, name: data.name, expires: this.expires.diploma});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.diploma, type: 'diploma'});
                             this.expires.diploma = null;
                             break;
-	                    } else if (data.name.indexOf('letter') !== -1) {
+                        } else if (data.name.indexOf('letter') !== -1) {
                             this.content[contentIndex].a.letter.push({ id: data.id, name: data.name, expires: null});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.letter, type: 'letter'});
                             break;
-	                    } else if (data.name.indexOf('resume') !== -1) {
+                        } else {
+                            // minor failsafe
+                            contentIndex = _.findIndex(this.content, { id: 'files'});
+                            this.content[contentIndex].a.other = this.content[contentIndex].a.other || [];
+                            this.content[contentIndex].a.push({ id: data.id, expires: this.expires, type: 'other'});
+                            this.content[contentIndex].a.other = _.uniq(this.content[contentIndex].a);
+                            break;
+                        }
+                    case 'file':
+                        this.upload_ids.push(data.id);
+                        this.upload_ids = _.uniq(this.upload_ids);
+                        contentIndex = _.findIndex(this.content, {id: 'files'});
+
+	                    if (data.name.indexOf('resume') !== -1) {
                             this.content[contentIndex].a.resume.push({ id: data.id, name: data.name, expires: null});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.resume, type: 'resume'});
                             break;

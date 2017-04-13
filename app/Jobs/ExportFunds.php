@@ -6,7 +6,7 @@ use App\Models\v1\Fund;
 
 class ExportFunds extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Fund::filter($request)->get();
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div class="col-sm-12" style="max-height: 500px;overflow-y: auto;">
-            <h4>Additional Trip Options</h4>
+            <h4>Rooming and Additional Trip Options</h4>
             <hr class="divider" />
             <hr class="divider inv sm" />
 			<validator name="AdditionalOptions">

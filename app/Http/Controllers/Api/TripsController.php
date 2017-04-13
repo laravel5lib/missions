@@ -139,6 +139,15 @@ class TripsController extends Controller
         return $this->response->noContent();
     }
 
+    public function checkPromoCode($id, Request $request)
+    {
+        $trip = $this->trip->findOrFail($id);
+
+        $reward = $trip->applyCode($request->only('promocode'));
+
+        return $reward ? (string) number_format($reward/100, 2) : abort(422, 'Invalid or expired promo code');
+    }
+
     public function register($id, TripRegistrationRequest $request)
     {
         $trip = $this->trip->findOrFail($id);

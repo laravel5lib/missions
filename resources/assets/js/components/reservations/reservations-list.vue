@@ -449,6 +449,8 @@
                 }
             },
             'per_page': function (val, oldVal) {
+                if (this.startUp)
+                    return;
                 this.updateConfig();
                 this.getReservations();
             },

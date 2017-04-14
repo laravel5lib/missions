@@ -159,6 +159,16 @@ class Group extends Model
     }
 
     /**
+     * Get the group's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    /**
      * Helper method to retrieve the user's avatar
      * 
      * @return mixed

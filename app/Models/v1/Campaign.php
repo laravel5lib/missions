@@ -185,6 +185,16 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    /**
      * Get public campaigns.
      *
      * @param $query

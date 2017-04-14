@@ -262,7 +262,7 @@ class Reservation extends Model
 
     public function promocodes()
     {
-        return $this->hasMany(Promocode::class, 'rewardable_id')->where('rewardable_type', 'reservations');
+        return $this->morphMany(Promocode::class, 'rewardable');
     }
 
     /**
@@ -646,5 +646,45 @@ class Reservation extends Model
 
         // sync all other resources
         dispatch(new ProcessReservation($this));
+    }
+
+    /**
+     * Find rewardable promotionals the 
+     * reservation can be enrolled in
+     * 
+     * @return mixed
+     */
+    public function canBeRewarded()
+    {
+        $promos = collect([]);
+
+        $this->trip->campaign
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        $this->trip
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        $this->trip->group
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        return $promos->count() ? $promos : false;
     }
 }

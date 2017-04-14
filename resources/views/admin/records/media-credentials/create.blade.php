@@ -1,12 +1,19 @@
 @extends('admin.layouts.default')
 
+@section('styles')
+    <link rel="stylesheet" href="/css/slim.css" type="text/css">
+@endsection
+@section('scripts')
+    <script src="/js/slim.js"></script>
+@endsection
+
 @section('content')
 <div class="white-header-bg">
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
-                <h3 class="hidden-xs">User Media Credentials <small>&middot; Edit</small></h3>
-                <h3 class="visible-xs text-center">User Media Credentials<br><small>Edit</small></h3>
+                <h3 class="hidden-xs">User Media Credentials <small>&middot; New</small></h3>
+                <h3 class="visible-xs text-center">User Media Credentials<br><small>New</small></h3>
             </div>
             <div class="col-sm-4 text-right hidden-xs">
                 <hr class="divider inv sm">

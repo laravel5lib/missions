@@ -260,6 +260,11 @@ class Reservation extends Model
         return $this->fund()->donors();
     }
 
+    public function promocodes()
+    {
+        return $this->hasMany(Promocode::class, 'rewardable_id')->where('rewardable_type', 'reservations');
+    }
+
     /**
      * Get the reservation's avatar.
      *

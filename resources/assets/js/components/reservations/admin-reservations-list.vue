@@ -624,7 +624,8 @@
 					amount_raised: 'Amount Raised',
 					outstanding: 'Outstanding',
 					deadlines: 'Other Deadlines',
-					desired_role: 'Role'
+					desired_role: 'Role',
+					promocodes: 'Promo Codes'
 				},
 				exportFilters: {},
                 lastReservationRequest: null

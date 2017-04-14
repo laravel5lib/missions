@@ -58,8 +58,15 @@ class PromotionalsController extends Controller
         return $this->response->item($promo, new PromotionalTransformer);
     }
 
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
+        if ($request->get('force')) {
+            $promo = $this->promotional->withTrashed()->findOrFail($id);
+            $promo->forceDelete();
+
+            return $this->response->noContent();
+        }
+
         $promo = $this->promotional->findOrFail($id);
 
         $promo->promocodes()->delete();

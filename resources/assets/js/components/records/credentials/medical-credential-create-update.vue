@@ -688,32 +688,46 @@
         },
         events:{
             'uploads-complete'(data){
+                let contentIndex;
                 switch(data.type){
-                    case 'file':
+                    case 'other':
                         this.upload_ids.push(data.id);
                         this.upload_ids = _.uniq(this.upload_ids);
-                        let contentIndex = _.findIndex(this.content, {id: 'files'});
+                        contentIndex = _.findIndex(this.content, {id: 'files'});
 
-	                    if (data.name.indexOf('license') !== -1) {
+                        if (data.name.indexOf('license') !== -1) {
                             this.content[contentIndex].a.license.push({ id: data.id, name: data.name, expires: this.expires.license });
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.license, type: 'license'});
                             this.expires.license = null;
                             break;
-	                    } else if (data.name.indexOf('certification') !== -1) {
+                        } else if (data.name.indexOf('certification') !== -1) {
                             this.content[contentIndex].a.certification.push({ id: data.id, name: data.name, expires: this.expires.certification});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.certification, type: 'certification'});
                             this.expires.certification = null;
                             break;
-	                    } else if (data.name.indexOf('diploma') !== -1) {
+                        } else if (data.name.indexOf('diploma') !== -1) {
                             this.content[contentIndex].a.diploma.push({ id: data.id, name: data.name, expires: this.expires.diploma});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.diploma, type: 'diploma'});
                             this.expires.diploma = null;
                             break;
-	                    } else if (data.name.indexOf('letter') !== -1) {
+                        } else if (data.name.indexOf('letter') !== -1) {
                             this.content[contentIndex].a.letter.push({ id: data.id, name: data.name, expires: null});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.letter, type: 'letter'});
                             break;
-	                    } else if (data.name.indexOf('resume') !== -1) {
+                        } else {
+                            // minor failsafe
+                            contentIndex = _.findIndex(this.content, { id: 'files'});
+                            this.content[contentIndex].a.other = this.content[contentIndex].a.other || [];
+                            this.content[contentIndex].a.push({ id: data.id, expires: this.expires, type: 'other'});
+                            this.content[contentIndex].a.other = _.uniq(this.content[contentIndex].a);
+                            break;
+                        }
+                    case 'file':
+                        this.upload_ids.push(data.id);
+                        this.upload_ids = _.uniq(this.upload_ids);
+                        contentIndex = _.findIndex(this.content, {id: 'files'});
+
+	                    if (data.name.indexOf('resume') !== -1) {
                             this.content[contentIndex].a.resume.push({ id: data.id, name: data.name, expires: null});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.resume, type: 'resume'});
                             break;

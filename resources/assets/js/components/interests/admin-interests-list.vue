@@ -92,6 +92,11 @@
                                     <input type="checkbox" v-model="activeFields" value="group" :disabled="maxCheck('group')"> Group
                                 </label>
                             </li>
+                            <li>
+                                <label class="small" style="margin-bottom: 0px;">
+                                    <input type="checkbox" v-model="activeFields" value="created_at" :disabled="maxCheck('created_at')"> Created
+                                </label>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li>
                                 <div style="margin-bottom: 0px;" class="input-group input-group-sm">
@@ -175,6 +180,11 @@
                         <i @click="setOrderByField('trip.data.group.data.name')" v-if="orderByField !== 'status'" class="fa fa-sort pull-right"></i>
                         <i @click="direction=direction*-1" v-if="orderByField === 'trip.data.group.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
+                    <th v-if="isActive('created_at')" :class="{'text-primary': orderByField === 'created_at'}">
+                        Created
+                        <i @click="setOrderByField('created_at')" v-if="orderByField !== 'created_at'" class="fa fa-sort pull-right"></i>
+                        <i @click="direction=direction*-1" v-if="orderByField === 'created_at'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    </th>
                     <th><i class="fa fa-cog"></i></th>
                 </tr>
                 </thead>
@@ -194,6 +204,7 @@
                     <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
                     <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
                     <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
+                    <td v-if="isActive('created_at')">{{interest.created_at | moment 'lll'}}</td>
                     <td>
                         <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
                     </td>

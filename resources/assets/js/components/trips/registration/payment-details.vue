@@ -93,13 +93,17 @@
 				</div>
 				<hr class="divider" />
 				<div class="col-md-12">
-					<div class="form-group" :class="{ 'has-error': promoValid }">
+					<div class="form-group" :class="{ 'has-error': promoValid === false && promoError, 'has-success': promoValid > 0 }">
 						<label for="cardHolderName">Promo Code</label>
 						<div class="input-group">
+							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promoError !== '' && !promoValid, 'fa-gift': !promoValid && promoError === ''}"></span></span>
 							<input type="text" class="form-control input-sm" id="promo" placeholder=""
-						       v-model="promo" debounce="250" />
-							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promo !== '' && !promoValid, 'fa-gift': promo === ''}"></span></span>
+						       v-model="promo" />
+							<span class="input-group-btn">
+						        <button class="btn btn-default btn-sm" type="button" @click.prevent="checkPromo">Apply</button>
+							</span>
 						</div>
+						<div class="help-block" v-if="promoError" v-text="promoError"></div>
 					</div>
 				</div>
 				<div class="col-md-12">
@@ -218,6 +222,7 @@
 				attemptedCreateToken: false,
 				promo: '',
                 promoValid: false,
+                promoError: '',
 
 				//card vars
 				card: null,
@@ -261,9 +266,7 @@
 			    }
 			},
 			'promo' (val, oldVal) {
-                this.$http.get('trips/'+ this.$parent.tripId +'/promo', { params: {promocode: val} }).then(function (response) {
-	                this.promoValid = response.body.data;
-                })
+                this.promoError = '';
             }
 		},
 		events: {
@@ -448,6 +451,14 @@
 			},
 			checkForError(field){
 				return this.$PaymentDetails[field.toLowerCase()].invalid && this.attemptedCreateToken
+			},
+			checkPromo(){
+                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then(function (response) {
+                    this.promoValid = parseInt(response.body.replace(/,+/, ''));
+                }, function(error) {
+                    this.promoError = error.body.message;
+                    this.promoValid = false;
+                });
 			},
 			createToken() {
 				this.stripeDeferred = $.Deferred();

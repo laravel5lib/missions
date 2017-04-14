@@ -75,11 +75,16 @@ class RequirementConditionsEndpointTest extends TestCase
             ]);
     }
 
+    /** @test */
     public function  deletes_a_requirement_condition()
     {
         $requirement = factory(App\Models\v1\Requirement::class)->create();
         $condition = factory(App\Models\v1\RequirementCondition::class)->create([
             'requirement_id' => $requirement->id
         ]);
+
+        $this->delete('api/requirements/' . $requirement->id . '/conditions/' . $condition->id)
+             ->dontSeeInDatabase('requirement_conditions', $condition->toArray())
+             ->assertResponseStatus(204);
     }
 }

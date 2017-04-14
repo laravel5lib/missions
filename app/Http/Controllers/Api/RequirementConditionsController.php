@@ -63,8 +63,20 @@ class RequirementConditionsController extends Controller
         return $this->response->item($condition, new RequirementConditionTransformer);
     }
 
-    public function destroy($id)
+    /**
+     * Remove a condition
+     * 
+     * @param  String $id
+     * @return Response
+     */
+    public function destroy($requirementId, $id)
     {
-        //
+        $condition = $this->condition
+            ->where('requirement_id', $requirementId)
+            ->findOrFail($id);
+
+        $condition->delete();
+
+        return $this->response->noContent();
     }
 }

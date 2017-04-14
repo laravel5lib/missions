@@ -111,7 +111,7 @@
 
 				// user generated data
 				userData: null,
-				selectedOptions: [],
+				selectedOptions: null,
 				userInfo: {},
 				paymentInfo: {},
 				upfrontTotal: 0,

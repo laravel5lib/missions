@@ -31,12 +31,16 @@
 				title: 'Additional Trip Options',
 				atoComplete: true,
 				optionalCosts: [],
-				selectedOptions: []
+				selectedOptions: null
 			}
 		},
 		computed:{
 			optionalCosts(){
-				return this.$parent.tripCosts.optional;
+			    let arr = this.$parent.tripCosts.optional;
+			    if (!arr.length) {
+                    this.$dispatch('ato-complete', true);
+			    }
+				return arr;
 			}
 		},
 		watch:{

@@ -326,7 +326,7 @@
 				return this.$parent.tripCosts.incremental || [];
 			},
 			selectedOptions(){
-				return this.$parent.selectedOptions || [];
+				return this.$parent.selectedOptions || null;
 			},
 			totalCosts(){
 				var amount = 0;
@@ -337,7 +337,7 @@
 					});
 				}
 				// add optional costs if they exists
-				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
+				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
 					this.selectedOptions.forEach(function (cost) {
 						amount += parseFloat(cost.amount);
 					});
@@ -366,15 +366,15 @@
 					});
 				}
 				// add optional costs if they exists
-				//if (this.selectedOptions && this.selectedOptions.constructor === Array) {
+				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
 					//this.selectedOptions.forEach(function (cost) {
-						this.selectedOptions.payments.data.forEach(function (payment) {
-							if (payment.upfront) {
-								amount += parseFloat(payment.amount_owed);
-							}
-						});
+					this.selectedOptions.payments.data.forEach(function (payment) {
+						if (payment.upfront) {
+							amount += parseFloat(payment.amount_owed);
+						}
+					});
 					//});
-				//}
+				}
 
 				// add incremental costs if they exists
 				if (this.incrementalCosts && this.incrementalCosts.constructor === Array) {

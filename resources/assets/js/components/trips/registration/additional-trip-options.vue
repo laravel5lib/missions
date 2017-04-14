@@ -4,11 +4,11 @@
             <h4>Rooming and Additional Trip Options</h4>
             <hr class="divider" />
             <hr class="divider inv sm" />
-			<validator name="AdditionalOptions">
-				<form>
-					<div class="checkbox" v-for="option in optionalCosts | orderBy 'name'">
+			<validator name="AdditionalOptions" @valid="onValid">
+				<form novalidate name="AdditionalOptionsForm">
+					<div class="" v-for="option in optionalCosts | orderBy 'name'">
 						<label style="display:block" for="option{{$index}}">
-							<input type="checkbox" id="option{{$index}}" v-model="selectedOptions" :value="option">
+							<input type="radio" id="option{{$index}}" v-model="selectedOptions" :value="option" v-validate:additional="$index === 0 ? ['required'] : ''">
 							{{option.name}}
 							<span class="pull-right">{{option.amount | currency}}</span>
 						</label>
@@ -47,8 +47,14 @@
 				this.$parent.selectedOptions = val;
 			}
 		},
+		methods: {
+            onValid(){
+                this.$dispatch('ato-complete', true);
+            },
+
+        },
 		ready(){
-		    this.$dispatch('ato-complete', true);
+
 		},
 		activate(done){
 			$('html, body').animate({scrollTop : 200},300);

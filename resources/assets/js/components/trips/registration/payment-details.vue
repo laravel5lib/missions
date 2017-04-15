@@ -338,9 +338,9 @@
 				}
 				// add optional costs if they exists
 				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
-					this.selectedOptions.forEach(function (cost) {
-						amount += parseFloat(cost.amount);
-					});
+//					this.selectedOptions.forEach(function (cost) {
+						amount += parseFloat(this.selectedOptions.amount);
+//					});
 				}
 
 				// add incremental costs if they exists

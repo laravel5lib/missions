@@ -125,7 +125,7 @@
 				return this.$parent.tripCosts;
 			},
 			selectedOptionalCosts(){
-				return this.$parent.selectedOptions;
+				return [this.$parent.selectedOptions];
 			}
 		},
 		methods:{

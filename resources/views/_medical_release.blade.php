@@ -15,6 +15,7 @@
                                 </div>
                             </div>
                             <hr class="divider">
+                            @if ($release->ins_provider)
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label>Insurance Provider</label>
@@ -25,6 +26,13 @@
                                     <p>{{ $release->ins_policy_no }}</p>
                                 </div>
                             </div>
+                            @else
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label>No Medical Insurance</label>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                         <div class="col-md-4">
                             <div class="panel panel-default panel-body text-center">

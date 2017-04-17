@@ -12,31 +12,6 @@
             </div>
         </div>
         <hr class="divider inv">
-
-        <!-- Minor Release -->
-        <div class="row" v-if="age < 18">
-            <div class="col-xs-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h5>Minor Release Form</h5></div>
-                    <div class="panel-body">
-                        <p>Anyone traveling under the age of 18 is required to have a legal guardian complete this form. This document must be <strong>completed, signed and notarized</strong>. Please mail the orginal (photocopies not accepted) notarized document to the below address:<p>
-
-                        <p>
-                            Missions.Me</br>
-                            145 S. Livernois Rd.<br>
-                            Suite 308<br>
-                            Rochester Hills, MI 48307
-                        </p>
-
-                        <p class="text-center"><a class="btn btn-primary btn-sm" href="/downloads/minors_release.pdf" target="_blank">
-                            <i class="fa fa-file-pdf-o icon-left"></i> Download Minor Release Form
-                        </a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end Minor Release -->
-
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default" v-for="requirement in requirements">
@@ -65,6 +40,9 @@
                                           :requirement-id="requirement.id"
                                           :user-id="userId">
                         </document-manager>
+                    </div>
+                    <div class="panel-footer">
+                        <label>Last Updated: {{ requirement.updated_at | moment 'lll' }}</label>
                     </div>
                 </div>
             </div>
@@ -234,6 +212,7 @@
                 var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
                 if (index !== -1) {
                   this.requirements[index].status = requirement.status;
+                  this.requirements[index].updated_at = requirement.updated_at;
                 }
             }
         },

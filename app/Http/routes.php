@@ -19,6 +19,11 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
         return view('dashboard.settings');
     });
 
+    $this->get('reports', function() {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        return view('dashboard.reports.index');
+    });
+
     // Group Routes...
     $this->resource('groups', 'Dashboard\GroupsController', ['only' => ['index', 'show', 'edit']]);
     $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trips');
@@ -36,7 +41,16 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     $this->resource('records/medical-releases', 'Dashboard\MedicalReleasesController', [
         'except' => ['index', 'destroy']
     ]);
+    $this->resource('records/medical-credentials', 'Dashboard\MedicalCredentialsController', [
+        'except' => ['index', 'destroy']
+    ]);
+    $this->resource('records/media-credentials', 'Dashboard\MediaCredentialsController', [
+        'except' => ['index', 'destroy']
+    ]);
     $this->resource('records/essays', 'Dashboard\EssaysController', [
+        'except' => ['index', 'destroy']
+    ]);
+    $this->resource('records/influencers', 'Dashboard\InfluencersController', [
         'except' => ['index', 'destroy']
     ]);
     $this->resource('records/referrals', 'Dashboard\ReferralsController', [

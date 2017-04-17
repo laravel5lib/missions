@@ -6,7 +6,7 @@ use App\Models\v1\Visa;
 
 class ExportVisas extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Visa::filter($request)
                 ->with('user')

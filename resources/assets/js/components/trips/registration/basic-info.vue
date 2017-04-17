@@ -482,6 +482,7 @@
                 this.city = user.city;
                 this.state = user.state;
                 this.zipCode = user.zip;
+                this.size = user.shirt_size;
                 this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
                 this.avatar_upload_id = user.avatar_upload_id;
 			}

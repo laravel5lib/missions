@@ -16,7 +16,7 @@ class EssaysController extends Controller
     
     public function show($id)
     {
-        $essay = $this->api->get('essays/' . $id);
+        $essay = $this->api->get('essays/' . $id.'?include=uploads,user');
 
         return view('dashboard.essays.show', compact('essay'));
     }

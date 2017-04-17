@@ -2,8 +2,9 @@
 
 namespace App\Models\v1;
 
-use App\UuidForKey;
 use Carbon\Carbon;
+use App\UuidForKey;
+use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trip extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable;
 
     /**
      * The table associated with the model.
@@ -126,6 +127,16 @@ class Trip extends Model
     public function rep()
     {
         return $this->belongsTo(User::class, 'rep_id');
+    }
+
+    /**
+     * Get the trip's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
     }
 
     /**

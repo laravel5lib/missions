@@ -23,32 +23,42 @@
                             </div>
                         </div>
                     </template>
-
                     <div class="row">
                         <div class="col-sm-6">
-                            <div v-error-handler="{ value: name, handle: 'name' }">
+                            <div v-error-handler="{ value: name, handle: 'name', messages: { req: 'Please enter the release holder\'s name.'} }">
                                 <label for="name" class="control-label">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" v-model="name"
                                        placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
                                        minlength="1" required>
+
                             </div>
                         </div>
+                    </div>
+                    <div class="row" v-if="!noInsurance">
                         <div class="col-sm-6">
-                            <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider' }">
+                            <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
                                 <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
                                        placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
-                            <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no' }">
+                            <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
                                 <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
                                 <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
                                        placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
                                        maxlength="100" minlength="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <hr class="divider inv">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" v-model="noInsurance"> I do not have medical insurance 
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -253,28 +263,56 @@
                     <form name="newContact">
                         <div class="row">
                             <div class="col-sm-6">
-                                <label>Name</label>
-                                <input type="text" class="form-control" v-model="emergency_contact.name">
+                                <div v-error-handler="{ value: emergency_contact.name, handle: 'emergencyname' }">
+                                    <label>Name</label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           v-model="emergency_contact.name" 
+                                           v-validate:emergencyname="{ required: true, minlength:1 }"
+                                           minlength="1" 
+                                           required>
+                                </div>
                             </div>
                             <div class="col-sm-6">
-                                <label>Email</label>
-                                <input type="email" class="form-control" v-model="emergency_contact.email">
+                                <div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
+                                    <label>Email</label>
+                                    <input type="email" 
+                                           class="form-control" 
+                                           v-model="emergency_contact.email" 
+                                           v-validate:emergencyemail="{ required: true, minlength:1, email:true }"
+                                           minlength="1" 
+                                           required>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-6">
-                                <label>Phone</label>
-                                <input type="tel" class="form-control" v-model="emergency_contact.phone|phone">
+                                <div v-error-handler="{ value: emergency_contact.phone, handle: 'emergencyphone' }">
+                                    <label>Phone</label>
+                                    <input type="tel" 
+                                           class="form-control" 
+                                           v-model="emergency_contact.phone|phone" 
+                                           v-validate:emergencyphone="{ required: true, minlength:1 }"
+                                           minlength="1" 
+                                           required>
+
+                                </div>
                             </div>
                             <div class="col-sm-6">
-                                <label>Relationship</label>
-                                <select type="tel" class="form-control" v-model="emergency_contact.relationship">
-                                    <option value="friend">Friend</option>
-                                    <option value="spouse">Spouse</option>
-                                    <option value="family">Family</option>
-                                    <option value="guardian">Guardian</option>
-                                    <option value="other">Other</option>
-                                </select>
+                                <div v-error-handler="{ value: emergency_contact.relationship, handle: 'emergencyrelationship' }">
+                                    <label>Relationship</label>
+                                    <select type="tel" 
+                                            class="form-control" 
+                                            v-model="emergency_contact.relationship" 
+                                            v-validate:emergencyrelationship="{ required: true }"
+                                            required>
+                                        <option value="friend">Friend</option>
+                                        <option value="spouse">Spouse</option>
+                                        <option value="family">Family</option>
+                                        <option value="guardian">Guardian</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -330,7 +368,7 @@
             return{
                 // mixin settings
                 validatorHandle: 'CreateUpdateMedicalRelease',
-
+                noInsurance: false,
                 usersArr: [],
                 userObj: null,
                 name:'',

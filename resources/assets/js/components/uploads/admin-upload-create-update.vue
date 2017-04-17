@@ -25,7 +25,6 @@
 			<div class="" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 				<div class="" :class="columnCLasses" v-for="upload in uploads" style="display:flex;flex: 1">
 					<div class="panel panel-default">
-
 							<a @click="preview(upload)" role="button">
 								<tooltip effect="scale" placement="top" content="Preview">
 									<img :src="upload.source + '?w=100&h=100&fit=crop-center&q=50'" :alt="upload.name" class="img-responsive">
@@ -42,7 +41,7 @@
 			</div>
 		</div>
 		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
-			<form id="CreateUploadForm" class="form" novalidate @submit="prevent">
+			<form id="CreateUploadForm" class="form" novalidate @submit.prevent="">
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
@@ -71,35 +70,10 @@
 
 				<div class="row" v-if="isUpdate">
 					<div class="col-xs-4" v-if="type === 'avatar' || type === 'banner' || type === 'other' || type === 'passport'">
-						<img :src="src" class="img-responsive">
-					</div>
-				</div>
-
-				<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" v-model="constrained">
-							Lock Proportions (px)
-						</label>
-					</div>
-					<div class="" :class="{'col-sm-4': !constrained, 'col-sm-8': constrained}">
-						<div class="input-group">
-							<span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width</span>
-							<span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height</span>
-							<input type="number" number class="form-control" v-model="scaledWidth" id="height" min="100" aria-describedby="basic-addon3"
-								   placeholder="300">
+						<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed" v-if="src">
+							<img :src="src" class="">
+							<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
 						</div>
-						<br>
-					</div>
-					<div class="col-sm-4" v-if="!constrained">
-						<div class="input-group">
-							<span class="input-group-addon" id="basic-addon1">Height</span>
-							<input type="number" number class="form-control" v-model="scaledHeight" id="width" min="100" aria-describedby="basic-addon1"
-								   placeholder="300">
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
 					</div>
 				</div>
 
@@ -113,37 +87,47 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && type !== 'video'">
+				<div class="form-group" v-if="type && type === 'file'" :class="{ 'has-error': isFileSet}">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="form-control">
+						<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
 						<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+
 
 				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
 						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
-						The current size is <b>{{(coords.w / this.imageAspectRatio).toFixed(0)}}x{{(coords.h / this.imageAspectRatio).toFixed(0)}}</b>.
+						The current size is <b>{{(coords.w / imageAspectRatio).toFixed(0)}}x{{(coords.h / imageAspectRatio).toFixed(0)}}</b>.
 					</div>
 				</div>
 
-				<div class="form-group" v-if="file" v-show="type !== 'file'">
-					<label for="file" class="control-label">Crop Image</label>
-					<div id="crop-wrapper" class="col-sm-12">
-						<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"
-							 v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>
-						<!--<hr>-->
-						<!--<img :src="resultImage" v-if="resultImage">-->
+				<div class="form-group" v-if="!isUpdate && type && type !== 'video' && type !== 'file'" :class="{ 'has-error': isFileSet}">
+					<label for="file" class="control-label">File</label>
+					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed">
+						<input type="file" id="file" :accept="allowedTypes" v-model="fileA" @change="handleImage" class="">
 					</div>
+					<span class="help-block"><i class="fa fa-image"></i> Image formats only</span>
+					<!--<h5>Coords: {{coords|json}}</h5>-->
 				</div>
+
+				<!--<div class="form-group" v-if="file" v-show="type !== 'file'">-->
+					<!--<label for="file" class="control-label">Crop Image</label>-->
+					<!--<div id="crop-wrapper" class="col-sm-12">-->
+						<!--&lt;!&ndash;<img :src="file" :width="imageWidth" :height="imageHeight" :style="'max-width:'+imageMaxWidth+'px;max-height:'+imageMaxHeight+'px;'"-->
+							 <!--v-crop:create="test" v-crop:start="test" v-crop:move="test" v-crop:end="test"/>&ndash;&gt;-->
+						<!--&lt;!&ndash;<hr>&ndash;&gt;-->
+						<!--&lt;!&ndash;<img :src="resultImage" v-if="resultImage">&ndash;&gt;-->
+					<!--</div>-->
+				<!--</div>-->
 
 				<br>
 
-				<div class="form-group">
-						<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
-						<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
-						<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
+				<div class="form-group" v-if="!hideSubmit">
+					<a v-if="!isChild" href="/admin/uploads" class="btn btn-default">Cancel</a>
+					<a @click="submit()" v-if="!isUpdate" class="btn btn-primary">{{buttonText}}</a>
+					<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
 				</div>
-
 			</form>
 		</validator>
 
@@ -227,12 +211,21 @@
             buttonText: {
                 type: String,
                 default: 'Save'
-            }
+            },
+            submitEvent: {
+                type: String,
+                default: 'start-upload'
+            },
+	        hideSubmit: {
+			    type: Boolean,
+		        default: false
+	        }
 		},
         data(){
             return {
                 url: '',
                 path: '',
+                src: '',
                 file: null,
                 x_axis: null,
                 y_axis: null,
@@ -244,6 +237,7 @@
 				coords: 'Try to move/resize the selection',
 				// constrained: true,
 				vueCropApi: null,
+                slimAPI: null,
 				scaledWidth: 400,
 				scaledHeight: 400,
 				imageMaxWidth: 400,
@@ -289,7 +283,10 @@
 				} else {
 			        return 'col-sm-2 col-md-2';
 				}
-			}
+			},
+            isFileSet() {
+			    return  !_.isNull(this.file) && !!this.attemptSubmit
+            }
 		},
 		watch:{
         	'type': function (val, oldVal) {
@@ -324,10 +321,6 @@
 			}
 		},
 		events:{
-			'vueCrop-api':function (api) {
-				// make api available on scope
-				window.vueCropApi = this.vueCropApi = api;
-			},
 			'uploads-complete'(data){
 				switch(data.type){
 					case 'avatar':
@@ -398,15 +391,14 @@
 				return (parseInt(this.coords.w / this.imageAspectRatio) < this.scaledWidth && parseInt(this.coords.h / this.imageAspectRatio) < this.scaledHeight);
 			},
 			adjustSelectByType(){
-				if (this.vueCropApi && _.contains(['banner', 'avatar', 'other', 'passport'], this.typeObj.type)) {
+				if (this.slimAPI && _.contains(['banner', 'avatar'], this.typeObj.type)) {
 					// update dimensions
 					this.scaledWidth = this.typeObj.width;
 					this.scaledHeight = this.typeObj.height;
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
-					// update jCrop
-					this.vueCropApi.setOptions({aspectRatio: (this.typeObj.width/this.typeObj.height)});
-					this.vueCropApi.setSelect([0, 0, this.width, this.height]);
+					// update slim editor ratio
+					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){
@@ -418,13 +410,10 @@
 				// always go with the width when constrained
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
-				if (!this.constrained) {
-					this.vueCropApi.setOptions({aspectRatio: (w/h)});
-				}
-				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
-			},
-			prevent(e){
-				e.preventDefault();
+				if (!this.constrained && this.slimAPI) {
+                    this.slimAPI[0].ratio = w + ':' + h;
+                }
+//				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
             /*checkForError(field){
                 // if upload clicked submit button while the field is invalid trigger error styles 
@@ -446,10 +435,8 @@
 							name: this.name,
 							tags: this.tags,
 							type: this.type,
-							file: this.file,
+                            file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file,
 							path: this.path,
-							x_axis: parseInt(this.x_axis / this.imageAspectRatio),
-							y_axis: parseInt(this.y_axis / this.imageAspectRatio),
 							width: parseInt(this.coords.w / this.imageAspectRatio),
 							height: parseInt(this.coords.h / this.imageAspectRatio),
 						};
@@ -479,9 +466,7 @@
                         tags: this.tags,
                         type: this.type,
                         path: this.path,
-                        file: this.file||undefined,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
+                        file: (this.slimAPI ? this.slimAPI[0].data.output.image.toDataURL("image/jpeg") : false)||this.file||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined
                     };
@@ -509,24 +494,26 @@
 				}
 			},
 			handleImage(e){
-				var self = this;
-				var reader = new FileReader();
+				let self = this;
+				let reader = new FileReader();
 				reader.onload = function(event){
-					var img = new Image();
+					let img = new Image();
 					img.onload = function(){
 						self.imageAspectRatio = Math.min(self.imageMaxWidth / img.width, self.imageMaxHeight / img.height);
 						self.imageWidth = img.width * self.imageAspectRatio;
 						self.imageHeight = img.height * self.imageAspectRatio;
 
 						// adjust container
-						self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
-						if (self.typeObj && _.contains(['banner', 'avatar', 'other', 'passport'], self.typeObj.type) ) {
-							self.adjustSelectByType()
-						} else {
-							self.vueCropApi.setSelect([(self.imageWidth / 2) - 50, (self.imageHeight / 2) - 50, self.width * self.imageAspectRatio, self.height * self.imageAspectRatio]);
-						}
+                        if (self.slimAPI) {
+//                            self.vueCropApi.resizeContainer(self.imageWidth, self.imageHeight);
+                            if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                                self.adjustSelectByType()
+                            } else {
+                                this.slimAPI[0].ratio = 'free';
+                            }
+                        }
 					};
-					self.file = img.src = event.target.result;
+					self.file = img.src = event.target.result
 				};
 				reader.readAsDataURL(e.target.files[0]);
 			},
@@ -565,9 +552,26 @@
 			preview(upload){
 			    this.previewModal = true;
 			    this.previewUpload = upload;
-			}
+			},
+	        slimConfirmed(data){
+			    debugger;
+	        },
+	        loadCropper() {
+                let self = this;
+                if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
+                    setTimeout(function () {
+                        self.slimAPI = new Slim.parse(self.$el);
+                        if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
+                            self.adjustSelectByType()
+                        } else {
+                            self.slimAPI[0].ratio = 'free';
+                        }
+                    }, 1000);
+                }
+	        }
         },
 		ready(){
+            let self = this;
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {
 					let upload = response.body.data;
@@ -575,7 +579,11 @@
 					this.tags = upload.tags;
 					this.type = upload.type;
 					this.src = upload.source;
+
+                    this.loadCropper();
 				});
+			} else {
+                this.loadCropper();
 			}
 
 			if(this.isChild){
@@ -589,6 +597,25 @@
 
 			this.searchUploads();
 
+            this.$root.$on(self.submitEvent, function () {
+                if (self.isUpdate) {
+                    self.update();
+                } else {
+                    self.submit();
+                }
+            }.bind(this));
+
+            let slimEvents = [
+                'didInit',                  // Initialized
+                'didLoad',                  // Image Loaded
+                'didTransform',             // Image Transformed
+                'didCancel',                // Image Editor Cancelled
+                'didConfirm',               // Image Editor Confirmed
+                'didSave',                  // Image Saved
+                'didRemove',                // Image Removed
+                'didUpload',                // Image Uploaded
+                'didReceiveServerError',    // Error Received from Server During Upload
+            ];
         }
     }
 </script> 

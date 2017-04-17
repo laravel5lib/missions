@@ -4,6 +4,7 @@ namespace App\Models\v1;
 
 use Carbon\Carbon;
 use App\UuidForKey;
+use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable;
 
     /**
      * The table associated with the model.
@@ -257,6 +258,11 @@ class Reservation extends Model
     public function donors()
     {
         return $this->fund()->donors();
+    }
+
+    public function promocodes()
+    {
+        return $this->morphMany(Promocode::class, 'rewardable');
     }
 
     /**
@@ -632,13 +638,53 @@ class Reservation extends Model
             'desired_role' => $desired_role,
             'trip_id' => $trip_id
         ]);
-        
-        // remove the current todos
+
+        // remove the current resources
         $this->costs()->detach();
         $this->requirements()->delete();
         $this->todos()->delete();
 
         // sync all other resources
         dispatch(new ProcessReservation($this));
+    }
+
+    /**
+     * Find rewardable promotionals the 
+     * reservation can be enrolled in
+     * 
+     * @return mixed
+     */
+    public function canBeRewarded()
+    {
+        $promos = collect([]);
+
+        $this->trip->campaign
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        $this->trip
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        $this->trip->group
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        return $promos->count() ? $promos : false;
     }
 }

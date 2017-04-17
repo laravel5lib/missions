@@ -157,6 +157,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\PromocodesServiceProvider::class,
 
         /*
          * Third Party Providers...
@@ -224,6 +225,7 @@ return [
         'Markdown' => Haleks\Markdown\Facades\Markdown::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        'Promocodes' => App\Facades\Promocodes::class,
 
     ],
 

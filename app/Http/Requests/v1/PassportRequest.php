@@ -26,7 +26,7 @@ class PassportRequest extends FormRequest
         $rules = [
             'given_names' => 'required|string',
             'surname' => 'required|string',
-            'number' => 'required|string|min:9',
+            'number' => 'required|string',
             'expires_at' => 'required|date|after:now',
             'birth_country' => 'required|string',
             'citizenship' => 'required|string',

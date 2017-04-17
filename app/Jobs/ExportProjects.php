@@ -6,7 +6,7 @@ use App\Models\v1\Project;
 
 class ExportProjects extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         return Project::filter($request)
             ->with(['initiative', 'sponsor','rep'])

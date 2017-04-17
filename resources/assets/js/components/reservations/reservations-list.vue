@@ -483,9 +483,15 @@
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                    trip: !!this.includeManaging && this.trips.length ? this.trips : null,
-                    user: !this.includeManaging ? new Array(this.userId) : null
+
                 };
+                if (this.includeManaging) {
+                    params.user = null;
+                    params.trip = this.trips.length ? this.trips : new Array();
+                } else {
+                    params.user = !this.includeManaging ? new Array(this.userId) : null;
+                    params.trip = null;
+                }
 
                 switch (this.type) {
                     case 'active':

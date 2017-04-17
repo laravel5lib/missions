@@ -2,8 +2,9 @@
 
 namespace App\Models\v1;
 
-use App\Scopes\PublicScope;
 use App\UuidForKey;
+use App\Scopes\PublicScope;
+use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Group extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable;
 
     /**
      * The table associated with the model.
@@ -155,6 +156,16 @@ class Group extends Model
     public function banner()
     {
         return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
+    /**
+     * Get the group's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
     }
 
     /**

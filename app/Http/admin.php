@@ -15,10 +15,10 @@ Route::get('/', function () {
 Route::get('users/stop', 'UsersController@stopImpersonate');
 Route::get('users/{id}/impersonate', 'UsersController@impersonate');
 
-Route::resource('campaigns', 'CampaignsController');
-Route::resource('campaigns.trips', 'TripsController');
-// Route::resource('campaigns.regions', 'RegionsController');
-// Route::resource('campaigns.transports', 'TransportsController');
+Route::get('campaigns', 'CampaignsController@index');
+Route::get('campaigns/create', 'CampaignsController@create');
+Route::get('campaigns/{id}/edit', 'CampaignsController@edit');
+Route::get('campaigns/{id}/{tab?}', 'CampaignsController@show');
 
 Route::get('trips/{id}/{tab?}', 'TripsController@show');
 Route::resource('trips', 'TripsController');
@@ -117,3 +117,18 @@ Route::get('records/referrals/{id}/edit', function ($id) {
     return view('admin.records.referrals.edit', compact('id'));
 });
 
+Route::get('reports', function() {
+    return view('admin.reports.index');
+});
+
+$this->resource('records/medical-credentials', 'MedicalCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/media-credentials', 'MediaCredentialsController', [
+    'except' => ['index', 'destroy']
+]);
+
+$this->resource('records/influencers', 'InfluencersController', [
+    'except' => ['index', 'destroy']
+]);

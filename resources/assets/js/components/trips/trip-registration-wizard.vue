@@ -96,7 +96,7 @@
 					{name: 'Legal (Terms of Service)', view: 'step2', complete:false},
 					{name: 'Rules of Conduct Agreement', view: 'step3', complete:false},
 					{name: 'Basic Traveler Information', view: 'step4', complete:false},
-					{name: 'Additional Trip Options', view: 'step5', complete:false},
+					{name: 'Rooming Options', view: 'step5', complete:false},
 					{name: 'Payment Details', view: 'step6', complete:false},
 					{name: 'Deadline Agreements', view: 'step7', complete:false},
 					{name: 'Review', view: 'step8', complete:false}
@@ -111,7 +111,7 @@
 
 				// user generated data
 				userData: null,
-				selectedOptions: [],
+				selectedOptions: null,
 				userInfo: {},
 				paymentInfo: {},
 				upfrontTotal: 0,
@@ -119,6 +119,7 @@
 				paymentErrors:[],
                 detailsConfirmed: false,
                 rocaAgree: false,
+                promocode: null,
 			}
 		},
 		computed: {
@@ -234,12 +235,14 @@
 					avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
-					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
+					costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
 
 					// payment data
 					amount: this.upfrontTotal,
 					description: 'Reservation payment',
-					currency: 'USD', // determined from card token
+					currency: 'USD', // determined from card token,
+
+                    promocode: this.promocode,
 
 				};
 				if (this.upfrontTotal > 0) {

@@ -27,5 +27,8 @@
     <li @if(request()->segment(2) == 'records')class="active"@endif>
       <a href="/admin/records"><i class="menu-icon fa fa-archive"></i><span class="text-label">Records</span></a>
     </li>
+    <li @if(request()->segment(2) == 'reports')class="active"@endif>
+      <a href="/admin/reports"><i class="menu-icon fa fa-line-chart"></i><span class="text-label">Reports</span></a>
+    </li>
   </ul>
 </div>

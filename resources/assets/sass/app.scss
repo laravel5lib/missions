@@ -69,10 +69,10 @@ body {
 /*
  * Misc.
  */
-
 html {
   min-height: 100%;
   position: relative;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
 body {

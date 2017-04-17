@@ -565,10 +565,17 @@ Vue.directive('tour-guide', {
 Vue.directive('error-handler', {
     // This directive handles client-side and server-side errors.
     // It expects an object expression with three values:  { value: fieldValue, client: 'clientSideField', server: 'serverSideField' }
-    // The value property expects the actual field value to stay reactive.
-    // The client property expects the handle that the validator plugin uses for validation.
-    // The server property expects the handle that the server request rules use for validation.
-    // If the handle property is present, client and server properties will be set to this.
+
+    // PROPERTIES
+    // The `value` property expects the actual field value to stay reactive.
+    // The `client` property expects the handle that the validator plugin uses for validation.
+    // The `server` property expects the handle that the server request rules use for validation.
+    // If the `handle` property is present, client and server properties will be set to this.
+    // OPTIONAL PROPERTIES
+    // The `class` property allows you to set the error class to be set during validation.
+    // The `messages` property allows you to customize the error message the user sees based on validators
+    // i.e (`req` - required, `min` - minlength, `max` - maxlength, `email` - custom email validator)
+
     // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
     // for the field
     deep: true,
@@ -590,11 +597,12 @@ Vue.directive('error-handler', {
             // $nextTick is necessary for the component values to update first
             if (this.vm) {
                 this.vm.$nextTick(function () {
+                    // debugger;
                     let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
                     if (classTest) {
-                        $(this.el).addClass('has-error');
+                        $(this.el).addClass(value.class || 'has-error');
                     } else {
-                        $(this.el).removeClass('has-error');
+                        $(this.el).removeClass(value.class || 'has-error');
                     }
                 }.bind(this));
             }
@@ -603,7 +611,7 @@ Vue.directive('error-handler', {
         this.messages = [];
         this.handleMessages = function (value, errors) {
             // $nextTick is necessary for the component values to update first
-            if (this.vm) {
+            if (this.vm && this.vm.attemptSubmit) {
                 this.vm.$nextTick(function () {
                     //if (errors[value.server] || this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid && this.vm.attemptSubmit) {
                         // Lets first package errors to simply iterate

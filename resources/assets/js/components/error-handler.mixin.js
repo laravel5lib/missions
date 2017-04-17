@@ -42,7 +42,7 @@ export default {
     methods: {
         checkForError(field){
             // if user clicked submit button while the field is invalid trigger error styles 
-            return _.isString(field) && this['$' + this.validatorHandle][field].invalid && this.attemptSubmit;
+            return this.attemptSubmit && _.isString(field) && this['$' + this.validatorHandle][field].invalid;
         },
         resetErrors(){
             this.errors = {};

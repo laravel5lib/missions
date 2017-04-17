@@ -60,6 +60,11 @@
                                         <input type="checkbox" v-model="activeFields" value="trips" :disabled="maxCheck('trips')"> Active Trips
                                     </label>
                                 </li>
+                                <li>
+                                    <label class="small" style="margin-bottom: 0px;">
+                                        <input type="checkbox" v-model="reservations_count" value="trips" :disabled="maxCheck('reservations_count')"> Reservations
+                                    </label>
+                                </li>
                             </template>
                             <li role="separator" class="divider"></li>
                             <li>
@@ -182,6 +187,7 @@
                         <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
                     <th v-if="isActive('trips')">Active Trips</th>
+                    <th v-if="isActive('reservations_count')">Reservations</th>
                 </template>
 
                 <th><i class="fa fa-cog"></i></th>
@@ -199,9 +205,10 @@
                 <template v-else>
                     <td v-if="isActive('status')">{{group.public ? 'Public' : 'Private'}}</td>
                     <td v-if="isActive('trips')">{{group.trips.data.length}}</td>
+                    <td v-if="isActive('reservations_count')">{{ group.reservations_count }}</td>
                 </template>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin{{group.links[0].uri}}"><i class="fa fa-gear"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin/groups/{{ group.id }}"><i class="fa fa-gear"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -242,8 +249,8 @@
                     status: '',
                     type: ''
                 },
-                activeFields: this.pending ? ['name', 'type', 'location', 'phone_one', 'email'] : ['name', 'type', 'location', 'status', 'trips'],
-                maxActiveFields: 5,
+                activeFields: this.pending ? ['name', 'type', 'location', 'phone_one', 'email'] : ['name', 'type', 'location', 'status', 'trips', 'reservations_count'],
+                maxActiveFields: 6,
                 maxActiveFieldsOptions: [2, 3, 4, 5, 6],
                 exportOptions: {
                   name: 'Name',

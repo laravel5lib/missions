@@ -20,6 +20,7 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     });
 
     $this->get('reports', function() {
+        if( ! auth()->user()->managing()->count()) abort(403);
         return view('dashboard.reports.index');
     });
 

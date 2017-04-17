@@ -25,7 +25,6 @@
 			<div class="" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 				<div class="" :class="columnCLasses" v-for="upload in uploads" style="display:flex;flex: 1">
 					<div class="panel panel-default">
-
 							<a @click="preview(upload)" role="button">
 								<tooltip effect="scale" placement="top" content="Preview">
 									<img :src="upload.source + '?w=100&h=100&fit=crop-center&q=50'" :alt="upload.name" class="img-responsive">
@@ -78,34 +77,6 @@
 					</div>
 				</div>
 
-				<!--<div class="row" v-if="type && (type === 'other' || type === 'passport') && !uiLocked">
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" v-model="constrained">
-							Lock Proportions (px)
-						</label>
-					</div>
-					<div class="" :class="{'col-sm-4': !constrained, 'col-sm-8': constrained}">
-						<div class="input-group">
-							<span class="input-group-addon" v-if="!constrained" id="basic-addon3">Width</span>
-							<span class="input-group-addon" v-if="constrained" id="basic-addon3">Width/Height</span>
-							<input type="number" number class="form-control" v-model="scaledWidth" id="height" min="100" aria-describedby="basic-addon3"
-								   placeholder="300">
-						</div>
-						<br>
-					</div>
-					<div class="col-sm-4" v-if="!constrained">
-						<div class="input-group">
-							<span class="input-group-addon" id="basic-addon1">Height</span>
-							<input type="number" number class="form-control" v-model="scaledHeight" id="width" min="100" aria-describedby="basic-addon1"
-								   placeholder="300">
-						</div>
-					</div>
-					<div class="col-sm-4">
-						<button class="btn btn-default" type="button" @click="adjustSelect">Set</button>
-					</div>
-				</div>-->
-
 				<div class="row" v-if="type && type === 'video'">
 					<div class="col-xs-12">
 						<div class="input-group">
@@ -127,7 +98,7 @@
 				<div class="row2" v-if="type && type !== 'file' && file && isSmall()">
 					<div class="alert alert-warning" role="alert">
 						The recommended dimensions are <b>{{typeObj.width}}x{{typeObj.height}}</b> for best quality. <br>
-						The current size is <b>{{(coords.w / this.imageAspectRatio).toFixed(0)}}x{{(coords.h / this.imageAspectRatio).toFixed(0)}}</b>.
+						The current size is <b>{{(coords.w / imageAspectRatio).toFixed(0)}}x{{(coords.h / imageAspectRatio).toFixed(0)}}</b>.
 					</div>
 				</div>
 
@@ -439,7 +410,7 @@
 				// always go with the width when constrained
 				h = this.constrained ?  (this.height = this.width) : this.height;
 
-				if (!this.constrained) {
+				if (!this.constrained && this.slimAPI) {
                     this.slimAPI[0].ratio = w + ':' + h;
                 }
 //				this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);

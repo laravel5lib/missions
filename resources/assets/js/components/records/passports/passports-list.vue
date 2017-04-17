@@ -68,7 +68,7 @@
                     <hr class="divider">
                     <div class="row">
                         <div class="col-xs-6">
-                            <label>ID</label>
+                            <label>NUMBER</label>
                             <p class="small">{{passport.number}}</p>
                         </div>
                         <div class="col-xs-6 text-right">
@@ -77,12 +77,24 @@
                             </span>
                         </div>
                     </div>
-                    <label>CITIZENSHIP</label>
-                    <p class="small">{{passport.citizenship_name}}</p>
                     <div class="row">
+                        <div class="col-sm-6">
+                            <label>CITIZENSHIP</label>
+                            <p class="small">{{passport.citizenship_name}}</p>
+                        </div>
                         <div class="col-sm-6">
                             <label>EXPIRES ON</label>
                             <p class="small">{{passport.expires_at|moment 'll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{passport.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{passport.updated_at|moment 'lll'}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end panel-body -->

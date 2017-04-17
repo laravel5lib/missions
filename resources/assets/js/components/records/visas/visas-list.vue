@@ -43,7 +43,7 @@
                     <div class="row">
                         <div class="row">
                             <div class="col-xs-6">
-                                <label>ID</label>
+                                <label>NUMBER</label>
                                 <p class="small">{{visa.number}}</p>
                             </div>
                             <div class="col-xs-6 text-right">
@@ -66,6 +66,16 @@
                             <div class="col-sm-6">
                                 <label>EXPIRES ON</label>
                                 <p class="small">{{visa.expires_at|moment 'll'}}</p>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>CREATED ON</label>
+                                <p class="small">{{visa.created_at|moment 'lll'}}</p>
+                            </div><!-- end col -->
+                             <div class="col-sm-6">
+                                <label>UPDATED ON</label>
+                                <p class="small">{{visa.updated_at|moment 'lll'}}</p>
                             </div><!-- end col -->
                         </div><!-- end row -->
                     </div><!-- end panel-body -->

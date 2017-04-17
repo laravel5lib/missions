@@ -35,26 +35,61 @@ class UpdateReservationRequirements extends Job implements ShouldQueue
         $tripReq = $this->requirement;
         $resReqs = $reservationRequirement->where('requirement_id', $tripReq->id)->get();
 
-        if (! $resReqs->count())
-            $tripReq->requester->reservations->each(function($reservation) use ($reservationRequirement, $tripReq) {
-                $reservationRequirement->create([
-                    'reservation_id' => $reservation->id,
-                    'requirement_id' => $tripReq->id,
+        if (! $resReqs->count()) {
+
+            $reservations = $tripReq->requester->reservations;
+
+            if ($tripReq->conditions->count()) {
+                $reservations->reject(function($res) use ($tripReq) {
+
+                    $matches = collect([]);
+
+                    $tripReq->conditions->each(function($condition) use($res, $matches) {
+                        if ($condition->type === 'role') {
+                            $matches->push(in_array($res->desired_role, $condition->applies_to));
+                        } elseif ($condition->type === 'age') {
+                            $matches->push($res->age < (int) $condition->applies_to[0]);
+                        } else {
+                            $matches->push(false);
+                        }
+                    });
+
+                    return in_array(false, $matches->all());
+
+                })->each(function($reservation) use ($reservationRequirement, $tripReq) {
+                    $reservationRequirement->create([
+                        'reservation_id' => $reservation->id,
+                        'requirement_id' => $tripReq->id,
+                        'grace_period' => $tripReq->grace_period,
+                        'document_id' => $tripReq->document_id,
+                        'document_type' => $tripReq->document_type,
+                        'status' => 'incomplete'
+                    ]);
+                });
+            } else {
+                $reservations->each(function($reservation) use ($reservationRequirement, $tripReq) {
+                    $reservationRequirement->create([
+                        'reservation_id' => $reservation->id,
+                        'requirement_id' => $tripReq->id,
+                        'grace_period' => $tripReq->grace_period,
+                        'document_id' => $tripReq->document_id,
+                        'document_type' => $tripReq->document_type,
+                        'status' => 'incomplete'
+                    ]);
+                });
+            }
+        }
+        else
+        {
+            collect($resReqs)->each(function ($req) use ($tripReq) {
+                $req->update([
                     'grace_period' => $tripReq->grace_period,
-                    'document_id' => $tripReq->document_id,
+                    'document_id' => $tripReq->document_type <> $req->document_type ? null : $req->document_id,
                     'document_type' => $tripReq->document_type,
-                    'status' => 'incomplete',
+                    'status' => $tripReq->document_type <> $req->document_type ? 'incomplete' : $req->status
                 ]);
             });
-
-        collect($resReqs)->each(function ($req) use ($tripReq) {
-            $req->update([
-                'grace_period' => $tripReq->grace_period,
-                'document_id' => $tripReq->document_type <> $req->document_type ? null : $req->document_id,
-                'document_type' => $tripReq->document_type,
-                'status' => $tripReq->document_type <> $req->document_type ? 'incomplete' : $req->status
-            ]);
-        });
+        }
 
     }
 }

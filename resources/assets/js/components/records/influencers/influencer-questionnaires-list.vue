@@ -39,21 +39,25 @@
                     </a>
                     <hr class="divider">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <label>SUBJECT</label>
                             <p class="small">{{influencer.subject}}</p>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <label>QUESTIONS:</label>
                             <p class="small">{{influencer.content.length}}</p>
                         </div>
-                        <div class="col-sm-6">
-                            <label>UPDATED:</label>
-                            <p class="small">{{influencer.updated_at|moment 'll'}}</p>
-                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{influencer.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{influencer.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
                         <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/influencers/' + influencer.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedInfluencer = influencer, deleteModal = true"><i class="fa fa-times"></i></a>

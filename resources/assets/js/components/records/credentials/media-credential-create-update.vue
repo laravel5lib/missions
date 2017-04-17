@@ -16,7 +16,7 @@
 							<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name' }">
 								<label for="name" class="control-label">Credential Holder's Name</label>
 								<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-								       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+										       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
 								       minlength="1" required>
 							</div>
                             <div class="col-sm-6" v-if="forAdmin">
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 
-				<div v-for="QA in content" v-show="checkConditions(QA)">
+				<div v-for="(indexQA, QA) in content" v-show="checkConditions(QA)">
 
 					<!-- start has type designation -->
 					<template v-if="QA.type">
@@ -56,33 +56,33 @@
 						<template v-if="QA.type === 'checkbox'">
 
 							<!-- start roles checklist -->
-							<div class="panel panel-default" v-if="QA.id === 'role'">
+							<div class="panel panel-default" v-if="QA.id === 'role'" v-error-handler="{ value: QA.options, handle: 'roles', class: 'panel-danger has-error', messages: { req: 'Please select at least one role.'} }">
 								<div class="panel-heading">
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
 									<div class="row">
 										<div class="checkbox col-sm-6 col-xs-12">
-											<template v-for="choice in QA.options">
+											<template v-for="(i, choice) in QA.options">
 												<template v-if="$index % 2 == 0">
 													<label>
-														<input type="checkbox" :value="choice.value" v-model="choice.value">
+														<input type="checkbox" :value="choice.value" v-model="choice.value" field="roles" v-validate="i === 0 ? { required: { rule: true } } : void 0">
 														{{ choice.name }}
 													</label>
 													<div v-show="choice.value">
-														<div class="row" :class="{'has-error': !choice.proficiency}">
+														<div class="row" :class="{'has-error': checkForError('proficiencyEven' + i)}">
                                                             <div class="col-md-2">
                                                                 <span class="help-block">Proficiency: </span>
                                                             </div>
 															<div class="col-md-10">
 																<label class="radio-inline">
-																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
+																	<input type="radio" :field="'proficiencyEven' + i" v-validate="{ required: { rule: !!choice.value} }" value="beginner" v-model="choice.proficiency"> Beginner
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
+																	<input type="radio" :field="'proficiencyEven' + i" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="expert" v-model="choice.proficiency"> Expert
+																	<input type="radio" :field="'proficiencyEven' + i" v-validate value="expert" v-model="choice.proficiency"> Expert
 																</label>
 															</div>
 														</div>
@@ -93,26 +93,26 @@
 											</template>
 										</div>
 										<div class="checkbox col-sm-6 col-xs-12">
-											<template v-for="choice in QA.options">
+											<template v-for="(i, choice) in QA.options">
 												<template v-if="$index % 2 != 0">
 													<label>
-														<input type="checkbox" :value="choice.value" v-model="choice.value">
+														<input type="checkbox" :value="choice.value" v-model="choice.value" field="roles" v-validate>
 														{{ choice.name }}
 													</label>
 													<div v-show="choice.value">
-														<div class="row" :class="{'has-error': !choice.proficiency}">
+														<div class="row" :class="{'has-error': checkForError('proficiencyOdd' + i)}">
 															<div class="col-md-2">
 																<span class="help-block">Proficiency:</span>
 															</div>
 															<div class="col-md-10">
 																<label class="radio-inline">
-																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
+																	<input type="radio" :field="'proficiencyOdd' + i" v-validate="{ required: { rule: !!choice.value} }" value="beginner" v-model="choice.proficiency"> Beginner
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
+																	<input type="radio" :field="'proficiencyOdd' + i" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="expert" v-model="choice.proficiency"> Expert
+																	<input type="radio" :field="'proficiencyOdd' + i" v-validate value="expert" v-model="choice.proficiency"> Expert
 																</label>
 															</div>
 														</div>
@@ -123,6 +123,9 @@
 											</template>
 										</div>
 									</div>
+								</div>
+								<div class="panel-footer" v-show="checkForError('roles')">
+									<div class="errors-block"></div>
 								</div>
 							</div>
 							<!-- end roles checklist -->
@@ -402,14 +405,14 @@
                 let pass = true;
 
                 // check proficiencies
-                let roles = _.findWhere(this.content, { id: 'role'});
+                /*let roles = _.findWhere(this.content, { id: 'role'});
                 let selectedRoles = _.findWhere(roles.options, { value: true});
                 _.each(selectedRoles, function (role) {
                     if (role.proficiency === null || role.proficiency === '') {
                         self.$root.$emit('showError', 'Please select a proficiency level for ' + role.name);
                         pass = false;
                     }
-                });
+                });*/
 
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});

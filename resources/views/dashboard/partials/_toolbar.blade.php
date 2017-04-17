@@ -20,9 +20,11 @@
     <li @if(request()->segment(2) == 'projects')class="active"@endif>
       <a href="/dashboard/projects"><i class="menu-icon fa fa-tint" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Projects</span></a>
     </li>
+    @if(auth()->user()->managing()->count())
     <li @if(request()->segment(2) == 'reports')class="active"@endif>
       <a href="/dashboard/reports"><i class="menu-icon fa fa-line-chart"></i><span class="text-label">Reports</span></a>
     </li>
+    @endif
     <li>
       <a v-on:click="startTour"><i class="menu-icon fa fa-question-circle-o" style="margin-left:3px;margin-right:27px;"></i><span class="text-label">Tour</span></a>
     </li>

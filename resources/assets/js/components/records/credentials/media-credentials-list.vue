@@ -36,6 +36,16 @@
 					<hr class="divider">
 					<label>Role</label>
 					<p class="small">{{getRole(media_credential)}}</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{media_credential.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{media_credential.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
 				</div><!-- end panel-body -->
 				<div class="panel-footer" style="padding: 0;" v-if="selector">
 					<div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">

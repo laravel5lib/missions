@@ -36,6 +36,16 @@
 					<p class="small">{{ getRoleName(getRole(medical_credential)) }}</p>
                     <label>Attachments</label>
                     <p class="small">{{ medical_credential.uploads.data.length }} documents</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{passport.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{passport.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
 				</div><!-- end panel-body -->
 				<div class="panel-footer" style="padding: 0;" v-if="selector">
 					<div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">

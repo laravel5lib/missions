@@ -52,6 +52,11 @@
                 </div>
             </div>
         </div>
+        <div class="panel-footer" v-if="promo.deleted_at">
+            <span class="help-block text-right">
+                <a @click="showDeleteModal = true"><i class="fa fa-trash"></i> Delete Forever</a>
+            </span>
+        </div>
     </div>
 
     <modal title="Stop Promotional" small :show.sync="showStopModal">
@@ -67,6 +72,14 @@
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showStartModal = false">Cancel</button>
             <button type="button" class="btn btn-primary" @click="activate()">Start</button>
+          </div>
+    </modal>
+
+    <modal title="Delete Forever" small :show.sync="showDeleteModal">
+        <div slot="modal-body" class="modal-body">Are you sure you want to delete this promotional and all it's promo codes? This action cannot be undone.</div>
+        <div slot="modal-footer" class="modal-footer">
+            <button type="button" class="btn btn-default" @click="showDeleteModal = false">Keep</button>
+            <button type="button" class="btn btn-primary" @click="deleteForever()">Delete</button>
           </div>
     </modal>
 
@@ -97,7 +110,8 @@
                     updated_at: null
                 },
                 showStartModal: false,
-                showStopModal: false
+                showStopModal: false,
+                showDeleteModal: false
             }
         },
         events: {},
@@ -140,6 +154,16 @@
                     this.$dispatch('showError', 'Unable to deactivate on server.');
                 });
             },
+            deleteForever()
+            {
+                this.$http.delete('promotionals/' + this.id +'?force=true').then(function (response) {
+                    this.$dispatch('showSuccess', 'Deleted promotional.');
+                    this.showDeleteModal = false;
+                    this.callView({view: 'list'});
+                }, function (error) {
+                    this.$dispatch('showError', 'Unable to delete on server.');
+                });
+            },
             activate()
             {
                 this.$http.put('promotionals/' + this.id + '/restore').then(function (response) {
@@ -150,6 +174,9 @@
                 }, function (error) {
                     this.$dispatch('showError', 'Unable to activate on server.');
                 });
+            },
+            callView(data) {
+                this.$dispatch('load-view', data);
             }
         },
         ready() {

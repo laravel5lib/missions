@@ -59,6 +59,7 @@
                                required>
                         <span class="input-group-addon">.00</span>
                     </div>
+                    <span class="help-block" v-if="id">This will not change credits already applied.</span>
                     <span v-if="attemptSubmit" class="help-block">
                         <span v-if="$ModifyPromotional.reward.required || $ModifyPromotional.reward.min">
                             Please provide a credit amount of $1.00 or more.
@@ -147,6 +148,12 @@
 
                 this.resetErrors();
                 if (this.$ModifyPromotional.valid) {
+                    this.$http.put('promotionals/' + this.id, this.promo).then(function (response) {
+                        this.$dispatch('showSuccess', 'Promotional updated.');
+                        this.$dispatch('load-view', {view: 'details', id: response.body.data.id});
+                    }, function (error) {
+                        this.$dispatch('showError', 'Could not update promotional.');
+                    })
                 }
             },
             callView(data) {

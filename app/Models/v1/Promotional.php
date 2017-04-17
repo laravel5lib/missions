@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use Carbon\Carbon;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -39,4 +40,16 @@ class Promotional extends Model
     {
         return $this->hasMany(Promocode::class)->withTrashed();
     }
+
+    public function scopeActive($query)
+    {
+        return $query->whereDate('expires_at', '>=', Carbon::now())
+                     ->orWhereNull('expires_at');
+    }
+
+    public function scopeHasAffiliates($query, $type)
+    {
+        return $query->where('affiliates', $type);
+    }
+
 }

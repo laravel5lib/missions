@@ -21,7 +21,8 @@ class Kernel extends ConsoleKernel
         Commands\TransferData::class,
         Commands\UsePromoCode::class,
         Commands\AddRoleToTrips::class,
-        Commands\AddTodoToTrips::class
+        Commands\AddTodoToTrips::class,
+        Commands\AddRequirementToTrips::class
     ];
 
     /**

@@ -199,7 +199,7 @@
                     case 'media_credentials':
                         this.label = 'Media Credentials';
                         this.url = 'media_credentials';
-                        this.list = 'media_credentials-list';
+                        this.list = 'media-credentials-list';
                         this.docPreview = 'media-credential';
                         break;
                     case 'airport_preferences':

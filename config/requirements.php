@@ -19,5 +19,18 @@ return [
             'status',
             'country'
         ]
+    ],
+    'document_types' => [
+        'passports',
+        'visas',
+        'essays',
+        'referrals',
+        'medical_releases',
+        'minor_releases',
+        'media_credentials',
+        'medica_credentials',
+        'airport_preferenes',
+        'arrival_designations',
+        'influencer_applications'
     ]
 ];

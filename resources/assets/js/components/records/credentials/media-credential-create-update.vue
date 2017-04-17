@@ -16,7 +16,7 @@
 							<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name' }">
 								<label for="name" class="control-label">Credential Holder's Name</label>
 								<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-								       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+										       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
 								       minlength="1" required>
 							</div>
                             <div class="col-sm-6" v-if="forAdmin">
@@ -32,7 +32,7 @@
 					</div>
 				</div>
 
-				<div v-for="QA in content" v-show="checkConditions(QA)">
+				<div v-for="(indexQA, QA) in content" v-show="checkConditions(QA)">
 
 					<!-- start has type designation -->
 					<template v-if="QA.type">
@@ -56,7 +56,7 @@
 						<template v-if="QA.type === 'checkbox'">
 
 							<!-- start roles checklist -->
-							<div class="panel panel-default" v-if="QA.id === 'role'">
+							<div class="panel panel-default" v-if="QA.id === 'role'" v-error-handler="{ value: QA.options, handle: 'roles', class: 'panel-danger has-error', messages: { req: 'Please select at least one role.'} }">
 								<div class="panel-heading">
 									<h5 v-text="QA.q"></h5>
 								</div>
@@ -66,24 +66,25 @@
 											<template v-for="choice in QA.options">
 												<template v-if="$index % 2 == 0">
 													<label>
-														<input type="checkbox" :value="choice.value" v-model="choice.value">
+														<input :id="'roles_'+$index" type="checkbox" v-model="choice.value" v-validate:roles="$index === 0 ? ['required'] : void 0">
 														{{ choice.name }}
 													</label>
-													<div v-show="choice.value">
-														<div class="row" :class="{'has-error': !choice.proficiency}">
+													<div v-if="choice.value">
+														<div class="row" v-error-handler="{ value: choice.proficiency, handle: ('proficiencyEven' + $index), messages: { req: 'Please select at proficiency level.'} }">
                                                             <div class="col-md-2">
                                                                 <span class="help-block">Proficiency: </span>
                                                             </div>
 															<div class="col-md-10">
 																<label class="radio-inline">
-																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
+																	<input type="radio" :field="'proficiencyEven' + $index" v-validate="{ required: { rule: !!choice.value} }" value="beginner" v-model="choice.proficiency"> Beginner
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
+																	<input type="radio" :field="'proficiencyEven' + $index" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="expert" v-model="choice.proficiency"> Expert
+																	<input type="radio" :field="'proficiencyEven' + $index" v-validate value="expert" v-model="choice.proficiency"> Expert
 																</label>
+																<div class="errors-block"></div>
 															</div>
 														</div>
                                                         <hr class="divider md">
@@ -96,24 +97,25 @@
 											<template v-for="choice in QA.options">
 												<template v-if="$index % 2 != 0">
 													<label>
-														<input type="checkbox" :value="choice.value" v-model="choice.value">
+														<input :id="'roles_'+$index" type="checkbox" v-model="choice.value" v-validate:roles>
 														{{ choice.name }}
 													</label>
-													<div v-show="choice.value">
-														<div class="row" :class="{'has-error': !choice.proficiency}">
+													<div v-if="choice.value">
+														<div class="row" v-error-handler="{ value: choice.proficiency, handle: ('proficiencyOdd' + $index), messages: { req: 'Please select at proficiency level.'} }">
 															<div class="col-md-2">
 																<span class="help-block">Proficiency:</span>
 															</div>
 															<div class="col-md-10">
 																<label class="radio-inline">
-																	<input type="radio" value="beginner" v-model="choice.proficiency"> Beginner
+																	<input type="radio" :field="'proficiencyOdd' + $index" v-validate="{ required: { rule: !!choice.value} }" value="beginner" v-model="choice.proficiency"> Beginner
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="intermediate" v-model="choice.proficiency"> Intermediate
+																	<input type="radio" :field="'proficiencyOdd' + $index" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
 																</label>
 																<label class="radio-inline">
-																	<input type="radio" value="expert" v-model="choice.proficiency"> Expert
+																	<input type="radio" :field="'proficiencyOdd' + $index" v-validate value="expert" v-model="choice.proficiency"> Expert
 																</label>
+																<div class="errors-block"></div>
 															</div>
 														</div>
                                                         <hr class="divider md">
@@ -123,6 +125,9 @@
 											</template>
 										</div>
 									</div>
+								</div>
+								<div class="panel-footer" v-show="checkForError('roles')">
+									<div class="errors-block"></div>
 								</div>
 							</div>
 							<!-- end roles checklist -->
@@ -137,34 +142,34 @@
                                         <div class="checkbox col-sm-6 col-xs-12">
 										<template v-for="choice in QA.options">
 											<template v-if="$index % 2 == 0">
-													<label>
-														<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
-	                                                </label>
-													<div v-show="choice.value" :class="{'has-error': !choice.brand}">
-	                                                    <div class="input-group">
-	                                                        <span class="input-group-addon input-sm">Brand/Model</span>
-														   <input class="form-control input-sm" type="text" v-model="choice.brand">
-	                                                    </div>
-														<hr class="divider md">
-													</div>
-													<hr class="divider inv sm">
+												<label>
+													<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
+                                                </label>
+												<div v-if="choice.value" v-error-handler="{ value: choice.brand, handle: ('brandEven' + $index), messages: { req: 'Please enter a brand or model name.'} }">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon input-sm">Brand/Model</span>
+													    <input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandEven' + $index" v-validate="['required']">
+                                                    </div>
+													<hr class="divider md">
+												</div>
+												<hr class="divider inv sm">
 											</template>
 										</template>
                                         </div>
                                         <div class="checkbox col-sm-6 col-xs-12">
 										<template v-for="choice in QA.options">
 											<template v-if="$index % 2 != 0">
-													<label>
-														<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
-	                                                </label>
-													<div v-show="choice.value" :class="{'has-error': !choice.brand}">
-	                                                    <div class="input-group">
-	                                                        <span class="input-group-addon input-sm">Brand/Model</span>
-														   <input class="form-control input-sm" type="text" v-model="choice.brand">
-	                                                    </div>
-														<hr class="divider md">
-													</div>
-													<hr class="divider inv sm">
+												<label>
+													<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
+                                                </label>
+												<div v-if="choice.value" v-error-handler="{ value: choice.brand, handle: ('brandOdd' + $index), messages: { req: 'Please enter a brand or model name.'} }">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon input-sm">Brand/Model</span>
+													   <input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandOdd' + $index" v-validate="['required']">
+                                                    </div>
+													<hr class="divider md">
+												</div>
+												<hr class="divider inv sm">
 											</template>
 										</template>
                                         </div>
@@ -390,10 +395,13 @@
             }
         },
         computed: {
+<<<<<<< HEAD
             selectedRole(){
                 let roleObj = _.findWhere(this.content, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
                 return roleObj.a = _.isObject(this.selectedRoleObj) ? this.selectedRoleObj.value : null;
             },
+=======
+>>>>>>> develop
             user_id(){
                 return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
             },
@@ -410,6 +418,11 @@
                         pass = false;
                     }
                 });
+<<<<<<< HEAD
+=======
+                // HACK - to resume progress i need to force validation of roles checkboxes for now...
+//                this.$CreateUpdateMediaCredential.roles.invalid = pass;
+>>>>>>> develop
 
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});
@@ -464,7 +477,11 @@
             },
             submit(){
                 this.resetErrors();
+<<<<<<< HEAD
                 if (this.validateDynamically && this.$CreateUpdateMediaCredential.valid) {
+=======
+                if (this.$CreateUpdateMediaCredential.valid) {
+>>>>>>> develop
                     this.resource.save(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -476,7 +493,11 @@
                         this.$dispatch('showSuccess', 'Media Credential created.');
                         let that = this;
                         setTimeout(function () {
+<<<<<<< HEAD
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.data.data.id;
+=======
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.body.data.id;
+>>>>>>> develop
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -491,7 +512,11 @@
                     this.$validate(true);
 
                 this.resetErrors();
+<<<<<<< HEAD
                 if (this.validateDynamically && this.$CreateUpdateMediaCredential.valid) {
+=======
+                if (this.$CreateUpdateMediaCredential.valid) {
+>>>>>>> develop
                     this.resource.update({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,

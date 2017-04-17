@@ -111,7 +111,7 @@
 
 				// user generated data
 				userData: null,
-				selectedOptions: [],
+				selectedOptions: null,
 				userInfo: {},
 				paymentInfo: {},
 				upfrontTotal: 0,
@@ -235,7 +235,7 @@
 					avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
-					costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
+					costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
 
 					// payment data
 					amount: this.upfrontTotal,

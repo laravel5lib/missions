@@ -35,12 +35,12 @@
                                 <div class="col-sm-12">
                                     <div class="collapse" id="avatarCollapse">
                                         <div class="well">
-                                            <upload-create-update type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                     <div class="collapse" id="bannerCollapse">
                                         <div class="well">
-                                            <upload-create-update type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                     <hr class="divider inv" />
@@ -378,6 +378,7 @@
                 website: '',
 
                 // logic variables
+                startUp: true,
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
 //                attemptSubmit: false,
                 countries: [],
@@ -588,7 +589,8 @@
 
             Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
                 this.resource.get().then(function (response) {
-                    this.setUserData(response.body.data)
+                    this.setUserData(response.body.data);
+                    this.startUp = false;
                 }, function (response) {
                     console.log('Update Failed! :(');
                     console.log(response);

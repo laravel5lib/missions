@@ -48,19 +48,19 @@
 								</tbody>
 							</table>
 						</li>
-						<li class="list-group-item" v-for="cost in selectedOptions">
+						<li class="list-group-item">
 							<h5 class="list-group-item-heading">
-								{{cost.name}}
-								<span class="pull-right">{{cost.amount | currency}}</span>
+								{{selectedOptions.name}}
+								<span class="pull-right">{{selectedOptions.amount | currency}}</span>
 								<hr class="divider sm inv">
-								<p class="small">{{cost.description}}</p>
+								<p class="small">{{selectedOptions.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
 							</p>
 							<table class="table">
 								<tbody>
-									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
+									<tr v-for="p in selectedOptions.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
@@ -326,7 +326,7 @@
 				return this.$parent.tripCosts.incremental || [];
 			},
 			selectedOptions(){
-				return this.$parent.selectedOptions || [];
+				return this.$parent.selectedOptions || null;
 			},
 			totalCosts(){
 				var amount = 0;
@@ -337,10 +337,10 @@
 					});
 				}
 				// add optional costs if they exists
-				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
-					this.selectedOptions.forEach(function (cost) {
-						amount += parseFloat(cost.amount);
-					});
+				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
+//					this.selectedOptions.forEach(function (cost) {
+						amount += parseFloat(this.selectedOptions.amount);
+//					});
 				}
 
 				// add incremental costs if they exists
@@ -366,14 +366,14 @@
 					});
 				}
 				// add optional costs if they exists
-				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
-					this.selectedOptions.forEach(function (cost) {
-						cost.payments.data.forEach(function (payment) {
-							if (payment.upfront) {
-								amount += parseFloat(payment.amount_owed);
-							}
-						});
+				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
+					//this.selectedOptions.forEach(function (cost) {
+					this.selectedOptions.payments.data.forEach(function (payment) {
+						if (payment.upfront) {
+							amount += parseFloat(payment.amount_owed);
+						}
 					});
+					//});
 				}
 
 				// add incremental costs if they exists

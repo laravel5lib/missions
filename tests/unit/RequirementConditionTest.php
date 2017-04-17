@@ -1,6 +1,6 @@
 <?php
 
-class ReservationTest extends TestCase
+class RequirementConditionTest extends TestCase
 {
 
     /** @test */

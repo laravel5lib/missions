@@ -133,6 +133,7 @@ $api->version('v1', [
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');
     $api->resource('requirements', 'RequirementsController');
+    $api->resource('requirements.conditions', 'RequirementConditionsController');
     $api->resource('deadlines', 'DeadlinesController');
     $api->resource('questionnaires', 'QuestionnairesController');
     $api->resource('permissions/roles', 'PermissionRolesController');

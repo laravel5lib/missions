@@ -130,6 +130,16 @@ class Trip extends Model
     }
 
     /**
+     * Get the trip's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    /**
      * Get the current starting cost for the trip.
      *
      * @return int

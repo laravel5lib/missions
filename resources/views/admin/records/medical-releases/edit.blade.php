@@ -7,6 +7,13 @@
     <script src="/js/slim.js"></script>
 @endsection
 
+@section('styles')
+    <link rel="stylesheet" href="/css/slim.css" type="text/css">
+@endsection
+@section('scripts')
+    <script src="/js/slim.js"></script>
+@endsection
+
 @section('content')
     <div class="white-header-bg">
         <div class="container">

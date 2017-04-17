@@ -36,11 +36,21 @@ class Promocode extends Model
         return $this->morphTo();
     }
 
+    /**
+     * Get the rewardable reservations
+     * 
+     * @return Illuminate\Database\Eloquent\BelongsTo
+     */
     public function reservations()
     {
         return $this->belongsTo(Reservation::class, 'rewardable_id')->where('rewardable_type', 'reservations');
     }
 
+    /**
+     * Get the parent promtional
+     * 
+     * @return Illuminate\Database\Eloquent\BelongsTo
+     */
     public function promotional()
     {
         return $this->belongsTo(Promotional::class);

@@ -28,7 +28,7 @@ return [
         'medical_releases',
         'minor_releases',
         'media_credentials',
-        'medica_credentials',
+        'medical_credentials',
         'airport_preferenes',
         'arrival_designations',
         'influencer_applications'

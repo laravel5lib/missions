@@ -597,7 +597,7 @@ Vue.directive('error-handler', {
             // $nextTick is necessary for the component values to update first
             if (this.vm) {
                 this.vm.$nextTick(function () {
-                    debugger;
+                    // debugger;
                     let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
                     if (classTest) {
                         $(this.el).addClass(value.class || 'has-error');

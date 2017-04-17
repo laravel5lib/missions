@@ -79,6 +79,12 @@ class ReservationRequirementTransformer extends TransformerAbstract
             case 'arrival_designations':
                 return $this->item($document, new QuestionnaireTransformer);
                 break;
+            case 'medical_credentials':
+                return $this->item($document, new CredentialTransformer);
+                break;
+            case 'media_credentials':
+                return $this->item($document, new CredentialTransformer);
+                break;
             default:
                 return null;
         }

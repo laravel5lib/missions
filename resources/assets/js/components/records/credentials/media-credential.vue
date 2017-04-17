@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h6 class="text-uppercase"><i class="fa fa-camera-retro"></i> {{credential.applicant_name}}</h6>
+        <h6 class="text-uppercase"><i class="fa fa-camera-retro"></i> Media Credentials</h6>
         <a role="button" :href="'/' + firstUrlSegment + '/records/media-credentials/' + medical.id">
             <h5 style="text-transform:capitalize;" class="text-primary">
                 {{credential.applicant_name}}

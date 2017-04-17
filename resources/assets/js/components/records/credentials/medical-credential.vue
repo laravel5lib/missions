@@ -1,7 +1,7 @@
 <template>
     <div>
-        <h6 class="text-uppercase"><i class="fa fa-user-md"></i> {{credential.applicant_name}}</h6>
-        <a role="button" :href="'/' + firstUrlSegment + '/records/media-credentials/' + credential.id">
+        <h6 class="text-uppercase"><i class="fa fa-user-md"></i> Medical Credentials</h6>
+        <a role="button" :href="'/' + firstUrlSegment + '/records/medical-credentials/' + credential.id">
             <h5 style="text-transform:capitalize;" class="text-primary">
                 {{credential.applicant_name}}
             </h5>

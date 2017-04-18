@@ -6,10 +6,10 @@ use App\Models\v1\Reservation;
 
 class ExportReservations extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         $reservations = Reservation::filter($request)
-            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines')
+            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines', 'promocodes')
             ->get();
 
         return $reservations;
@@ -58,6 +58,9 @@ class ExportReservations extends Exporter
             })->all()),
             'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
                 return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
+            })->all()),
+            'promocodes' => implode(", ", $reservation->promocodes->map(function ($promo) {
+                return $promo->code;
             })->all())
         ];
 

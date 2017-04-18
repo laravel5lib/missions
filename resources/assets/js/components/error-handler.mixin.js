@@ -1,4 +1,4 @@
-// The purpose of this mixin is to work along custom directives to provide a standard system of
+// The purpose of this mixin is to work along with custom directives to provide a standard system of
 // error handling and error message rendering that is consistent and predictable.
 export default {
     data(){
@@ -6,6 +6,26 @@ export default {
             validatorHandle: false,
             errors: {},
             attemptSubmit: false,
+            MESSAGES: {
+                DEFAULT: 'Field invalid.',
+                // Defaults
+                name: 'Please provide your name.',
+                givennames: 'Please provide the given names.',
+                surname: 'Please provide the surname.',
+                number: 'Please provide a valid number.',
+                country: 'Please select a country.',
+                issued: 'Please provide an issue date',
+                expires: 'Please provide an expiration date',
+                role: 'Please select a role.',
+                author: 'Please enter author\'s name.',
+
+                // START EMERGENCY CONTACT FORM
+                emergencyname: 'Please enter an emergency contact name.',
+                emergencyemail: 'Please enter the contact\'s email.',
+                emergencyphone: 'Please enter the contact\'s phone number.',
+                emergencyrelationship: 'Please select relationship to the contact.',
+                // END EMERGENCY CONTACT FORM
+            }
         }
     },
     watch: {
@@ -22,7 +42,7 @@ export default {
     methods: {
         checkForError(field){
             // if user clicked submit button while the field is invalid trigger error styles 
-            return _.isString(field) && this['$' + this.validatorHandle][field].invalid && this.attemptSubmit;
+            return this.attemptSubmit && _.isString(field) && this['$' + this.validatorHandle][field].invalid;
         },
         resetErrors(){
             this.errors = {};
@@ -30,7 +50,7 @@ export default {
         },
     }, ready(){
         if (!this.validatorHandle) {
-            console.error('Please set validatorHandle to validator name');
+            console.error('Please set `validatorHandle` to validator name');
         }
     }
 }

@@ -1,16 +1,17 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdatePassport" @touched="onTouched">
+    <div><validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-            
+
             <template v-if="forAdmin">
                 <div class="col-sm-12">
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
-                        <label for="infoManager">Record Manager</label>
+                        <label for="infoManager">Passport Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                         <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
+                        <span class="help-block">The user account that manages this passport.</span>
                     </div>
                 </div>
             </template>
@@ -22,6 +23,14 @@
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
                                placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="150" minlength="1" required>
+                        <span v-if="attemptSubmit" class="help-block">
+                            <span v-if="
+                                    $CreateUpdatePassport.givennames.required || 
+                                    $CreateUpdatePassport.givennames.minlength"
+                                   class="help-block">
+                                Please provide the passport holder's given names.
+                            </span>
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -30,15 +39,17 @@
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                                placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
+
                     </div>
                 </div>
             </div><!-- end row -->
-            <div class="form-group" v-error-handler="{ value: number, handle: 'number' }">
+            <div class="form-group" v-error-handler="{ value: number, handle: 'number', messages: { req: 'Please provide a valid passport number.'} }">
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Passport Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
+
                 </div>
             </div>
 
@@ -47,15 +58,17 @@
                     <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD'" :input-sm="false"></date-picker>
+                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD' false true" :input-sm="false" type="date"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
+                            <span v-if="attemptSubmit" class="help-block">
+                        </span>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country' }">
+
+            <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country', messages: { req: 'Please select country of nationality (where you were born).'} }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
@@ -64,7 +77,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship' }">
+            <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship', messages: { req: 'Please select country of citizenship.'} }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
@@ -89,7 +102,7 @@
                                         <h5 class="media-heading">{{selectedAvatar.name}}</h5>
                                     </div>
                                 </div>
-                                <upload-create-update type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                                <upload-create-update v-if="userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
                             </div>
                         </panel>
                     </accordion>
@@ -110,7 +123,7 @@
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
 
-    </validator>
+    </validator></div>
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

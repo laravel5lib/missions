@@ -21,23 +21,21 @@ class CreateItinerariesTable extends Migration
             $table->softDeletes();
         });
 
-         Schema::create('itinerary_items', function (Blueprint $table) {
+        Schema::create('activites', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title');
             $table->string('description')->nullable();
-            $table->string('type');
-            $table->uuid('attachment_id')->nullable();
-            $table->string('attachment_type')->nullable();
+            $table->string('participant_id');
+            $table->string('participant_type');
             $table->timestamp('occurs_at');
             $table->timestamps();
             $table->softDeletes();
         });
 
-         // e21bad87-d9a9-4819-ba31-b70d5b18a1dc
-
-         Schema::create('itinerary_item', function (Blueprint $table) {
-            $table->uuid('itinerary_id')->index();
-            $table->uuid('itinerary_item_id')->index();
+        Schema::create('activitables', function (Blueprint $table) {
+            $table->string('activitable_type');
+            $table->uuid('activitable_id')->index();
+            $table->uuid('activity_id')->index();
         });
     }
 
@@ -49,7 +47,7 @@ class CreateItinerariesTable extends Migration
     public function down()
     {
         Schema::drop('itineraries');
-        Schema::drop('itinerary_items');
-        Schema::drop('itinerary_item');
+        Schema::drop('activites');
+        Schema::drop('activitables');
     }
 }

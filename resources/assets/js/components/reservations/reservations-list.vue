@@ -412,6 +412,7 @@
                 layout: 'list',
                 incomplete: [],
                 startUp: true,
+                lastReservationRequest: null
             }
         },
         watch: {
@@ -449,6 +450,8 @@
                 }
             },
             'per_page': function (val, oldVal) {
+                if (this.startUp)
+                    return;
                 this.updateConfig();
                 this.getReservations();
             },
@@ -480,9 +483,15 @@
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
-                    trip: !!this.includeManaging && this.trips.length ? this.trips : null,
-                    user: !this.includeManaging ? new Array(this.userId) : null
+
                 };
+                if (this.includeManaging) {
+                    params.user = null;
+                    params.trip = this.trips.length ? this.trips : new Array();
+                } else {
+                    params.user = !this.includeManaging ? new Array(this.userId) : null;
+                    params.trip = null;
+                }
 
                 switch (this.type) {
                     case 'active':
@@ -502,7 +511,12 @@
 
                 this.exportFilters = params;
 
-                this.$http.get('reservations', {params: params}).then(function (response) {
+                this.$http.get('reservations', { params: params, before: function(xhr) {
+                    if (this.lastReservationRequest) {
+                        this.lastReservationRequest.abort();
+                    }
+                    this.lastReservationRequest = xhr;
+                }}).then(function (response) {
                     this.reservations = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 });

@@ -2,9 +2,11 @@
 
 namespace App\Listeners;
 
+use App\Jobs\AddReferral;
 use App\Jobs\MakeDeposit;
-use App\Jobs\Reservations\ProcessReservation;
+use App\Jobs\ApplyPromoCode;
 use App\Jobs\Reservations\SetupFunding;
+use App\Jobs\Reservations\ProcessReservation;
 
 class ReservationEventListener {
 
@@ -26,6 +28,22 @@ class ReservationEventListener {
 
         if ($event->request->get('amount') && $event->request->get('amount') > 0)
             dispatch(new MakeDeposit($params));
+
+        $this->promos($event);
+    }
+
+    /**
+     * Manage Promotionals
+     * 
+     * @param  $event
+     */
+    public function promos($event)
+    {
+        if ($event->request->get('promocode'))
+            dispatch(new ApplyPromoCode($event->reservation, $event->request->get('promocode')));
+
+        if ($promos = $event->reservation->canBeRewarded())
+            dispatch(new AddReferral($event->reservation, $promos));
     }
 
     /**
@@ -88,6 +106,11 @@ class ReservationEventListener {
         $events->listen(
             'App\Events\ReservationWasCreated',
             'App\Listeners\ReservationEventListener@process'
+        );
+
+        $events->listen(
+            'App\Events\ReservationWasCreated',
+            'App\Listeners\ReservationEventListener@promos'
         );
 
         $events->listen(

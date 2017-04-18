@@ -48,19 +48,19 @@
 								</tbody>
 							</table>
 						</li>
-						<li class="list-group-item" v-for="cost in selectedOptions">
+						<li class="list-group-item">
 							<h5 class="list-group-item-heading">
-								{{cost.name}}
-								<span class="pull-right">{{cost.amount | currency}}</span>
+								{{selectedOptions.name}}
+								<span class="pull-right">{{selectedOptions.amount | currency}}</span>
 								<hr class="divider sm inv">
-								<p class="small">{{cost.description}}</p>
+								<p class="small">{{selectedOptions.description}}</p>
 							</h5>
 							<p class="list-group-item-text">
 
 							</p>
 							<table class="table">
 								<tbody>
-									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
+									<tr v-for="p in selectedOptions.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
 										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
 									</tr>
@@ -79,15 +79,33 @@
 								<td>Up-front Charges</td>
 								<td class="text-danger text-right">{{-upfrontTotal | currency}}</td>
 							</tr>
+							<tr v-if="promoValid">
+								<td>Promo Credit</td>
+								<td class="text-danger text-right">{{-promoValid | currency}}</td>
+							</tr>
 							<tr>
 								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
-								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{fundraisingGoal | currency}}</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ promoValid ? fundraisingGoal - promoValid : fundraisingGoal | currency}}</h5></td>
 							</tr>
 
 						</tfoot>
 					</table>
 				</div>
 				<hr class="divider" />
+				<div class="col-md-12">
+					<div class="form-group" :class="{ 'has-error': promoValid === false && promoError, 'has-success': promoValid > 0 }">
+						<label for="cardHolderName">Promo Code</label>
+						<div class="input-group">
+							<span class="input-group-addon input-sm"><span class="fa" :class="{'fa-check' : promoValid, 'fa-times' : promoError !== '' && !promoValid, 'fa-gift': !promoValid && promoError === ''}"></span></span>
+							<input type="text" class="form-control input-sm" id="promo" placeholder=""
+						       v-model="promo" />
+							<span class="input-group-btn">
+						        <button class="btn btn-default btn-sm" type="button" @click.prevent="checkPromo">Apply</button>
+							</span>
+						</div>
+						<div class="help-block" v-if="promoError" v-text="promoError"></div>
+					</div>
+				</div>
 				<div class="col-md-12">
 					<div id="paymentAlerts" v-if="$parent.paymentErrors.length > 0">
 						<div v-for="error in $parent.paymentErrors" class="alert alert-danger alert-dismissible"
@@ -202,6 +220,9 @@
 				//upfrontTotal:0,
 				//totalCosts: 0,
 				attemptedCreateToken: false,
+				promo: '',
+                promoValid: false,
+                promoError: '',
 
 				//card vars
 				card: null,
@@ -243,7 +264,10 @@
 			    if (val !== oldVal && this.$parent.paymentErrors.length > 0) {
                     this.$dispatch('payment-complete', val);
 			    }
-			}
+			},
+			'promo' (val, oldVal) {
+                this.promoError = '';
+            }
 		},
 		events: {
 			'VueStripe::create-card-token': function () {
@@ -302,7 +326,7 @@
 				return this.$parent.tripCosts.incremental || [];
 			},
 			selectedOptions(){
-				return this.$parent.selectedOptions || [];
+				return this.$parent.selectedOptions || null;
 			},
 			totalCosts(){
 				var amount = 0;
@@ -313,10 +337,10 @@
 					});
 				}
 				// add optional costs if they exists
-				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
-					this.selectedOptions.forEach(function (cost) {
-						amount += parseFloat(cost.amount);
-					});
+				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
+//					this.selectedOptions.forEach(function (cost) {
+						amount += parseFloat(this.selectedOptions.amount);
+//					});
 				}
 
 				// add incremental costs if they exists
@@ -342,14 +366,14 @@
 					});
 				}
 				// add optional costs if they exists
-				if (this.selectedOptions && this.selectedOptions.constructor === Array) {
-					this.selectedOptions.forEach(function (cost) {
-						cost.payments.data.forEach(function (payment) {
-							if (payment.upfront) {
-								amount += parseFloat(payment.amount_owed);
-							}
-						});
+				if (this.selectedOptions && _.isObject(this.selectedOptions)) {
+					//this.selectedOptions.forEach(function (cost) {
+					this.selectedOptions.payments.data.forEach(function (payment) {
+						if (payment.upfront) {
+							amount += parseFloat(payment.amount_owed);
+						}
 					});
+					//});
 				}
 
 				// add incremental costs if they exists
@@ -387,7 +411,7 @@
 					exp_year: this.cardYear,
 					cvc: this.cardCVC,
 				};
-			}
+			},
 		},
 		methods: {
 			onValid(){
@@ -427,6 +451,14 @@
 			},
 			checkForError(field){
 				return this.$PaymentDetails[field.toLowerCase()].invalid && this.attemptedCreateToken
+			},
+			checkPromo(){
+                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then(function (response) {
+                    this.promoValid = parseInt(response.body.replace(/,+/, ''));
+                }, function(error) {
+                    this.promoError = error.body.message;
+                    this.promoValid = false;
+                });
 			},
 			createToken() {
 				this.stripeDeferred = $.Deferred();
@@ -485,6 +517,7 @@
 					};
 					this.$parent.upfrontTotal = this.upfrontTotal;
 					this.$parent.fundraisingGoal = this.fundraisingGoal;
+					this.$parent.promocode = this.promoValid ? this.promo : null;
 					this.stripeDeferred.resolve(true);
 				}
 			}

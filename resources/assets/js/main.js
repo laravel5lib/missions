@@ -74,6 +74,7 @@ import uploadCreateUpdate from './components/uploads/admin-upload-create-update.
 import reservationRequirements from './components/reservations/reservation-requirements.vue';
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
+import reportsList from './components/reports/reports-list.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -82,7 +83,7 @@ import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue'
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
-import adminTrips from './components/trips/admin-trips-list.vue';
+import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
 import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
 import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
 import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
@@ -132,9 +133,12 @@ import refundForm from './components/financials/transactions/refund-form.vue';
 import transactionDelete from './components/financials/transactions/transaction-delete.vue';
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
+import promotionals from './components/admin/promotionals.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
+// import slim from './vendors/slim.module.js';
+window.Slim = require('./vendors/slim.commonjs.js');
 window.moment = require('moment');
 window.timezone = require('moment-timezone');
 window._ = require('underscore');
@@ -150,6 +154,7 @@ require('bootstrap-sass');
 // require('tether');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
+
 
 window.AOS = require('aos');
 AOS.init();
@@ -407,58 +412,66 @@ Vue.filter('mFormat', {
     }
 });
 
-var VueCropOptions = {
-    setSelect: [10, 10, 100, 100],
-    aspectRatio: 1,
-    bgColor: 'red',
-    minSize: [100, 100]
-};
-var VueCropEvents = [
-    'create',
-    'start',
-    'move',
-    'end',
-    'focus',
-    'blur',
-    'remove'
-];
-
 Vue.directive('crop', {
 
     acceptStatement: true,
 
     bind: function () {
-        var event = this.arg;
+        let event = this.arg;
 
-        if ($.inArray(event, VueCropEvents) == -1) {
-            console.warn('Invalid v-crop event: ' + event);
+        let slimEvents = [
+            'didInit',                  // Initialized
+            'didLoad',                  // Image Loaded
+            'didTransform',             // Image Transformed
+            'didCancel',                // Image Editor Cancelled
+            'didConfirm',               // Image Editor Confirmed
+            'didSave',                  // Image Saved
+            'didRemove',                // Image Removed
+            'didUpload',                // Image Uploaded
+            'didReceiveServerError',    // Error Received from Server During Upload
+        ];
+
+        if (event && !_.contains(slimEvents, event)) {
+            console.warn('Invalid slim event: ' + event);
             return;
         }
 
-        if (this.vm.jcrop) return;
+        if (this.vm.slim) return;
 
+        let self = this;
+        let vm = this.vm;
+        self.waitForLibrary = function() {
+            if (_.isFunction(Slim)) {
+                let $wrapper = self.el;
+                //debugger;
+                vm.slimAPI = new Slim($wrapper);
+                // send api to active componant
+                vm.$dispatch('slim-api', vm.slimAPI);
+            } else {
+                setTimeout(self.waitForLibrary, 1000);
+            }
+        };
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            var $wrapper = $(this.el).wrap('<div/>').parent();
-            $wrapper.width(this.el.width).height(this.el.height);
-            this.vm.jcrop = $.Jcrop.attach($wrapper, VueCropOptions);
-            // send api to active componant
-            this.vm.$dispatch('vueCrop-api', this.vm.jcrop);
+            this.waitForLibrary();
         }
     },
 
     update: function (callback) {
-        if (!_.contains(['file', 'video'], this.vm.type))
-            this.vm.jcrop.container.on('crop' + this.arg, callback)
+        let $wrapper = self.el;
+        if (!_.contains(['file', 'video'], this.vm.type)) {
+            //$wrapper.on('crop' + this.arg, callback)
+        }
     },
 
     unbind: function () {
+        let $wrapper = self.el;
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            this.vm.jcrop.container.off('crop' + this.arg);
+            $wrapper.off('crop' + this.arg);
 
             if (this._watcher.id != 1) return;
 
-            this.vm.jcrop.destroy();
-            this.vm.jcrop = null
+            $wrapper.slim('destroy');
+            this.vm.slimAPI = null
         }
     }
 });
@@ -550,10 +563,17 @@ Vue.directive('tour-guide', {
 Vue.directive('error-handler', {
     // This directive handles client-side and server-side errors.
     // It expects an object expression with three values:  { value: fieldValue, client: 'clientSideField', server: 'serverSideField' }
-    // The value property expects the actual field value to stay reactive.
-    // The client property expects the handle that the validator plugin uses for validation.
-    // The server property expects the handle that the server request rules use for validation.
-    // If the handle property is present, client and server properties will be set to this.
+
+    // PROPERTIES
+    // The `value` property expects the actual field value to stay reactive.
+    // The `client` property expects the handle that the validator plugin uses for validation.
+    // The `server` property expects the handle that the server request rules use for validation.
+    // If the `handle` property is present, client and server properties will be set to this.
+    // OPTIONAL PROPERTIES
+    // The `class` property allows you to set the error class to be set during validation.
+    // The `messages` property allows you to customize the error message the user sees based on validators
+    // i.e (`req` - required, `min` - minlength, `max` - maxlength, `email` - custom email validator)
+
     // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
     // for the field
     deep: true,
@@ -575,11 +595,12 @@ Vue.directive('error-handler', {
             // $nextTick is necessary for the component values to update first
             if (this.vm) {
                 this.vm.$nextTick(function () {
+                    // debugger;
                     let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
                     if (classTest) {
-                        $(this.el).addClass('has-error');
+                        $(this.el).addClass(value.class || 'has-error');
                     } else {
-                        $(this.el).removeClass('has-error');
+                        $(this.el).removeClass(value.class || 'has-error');
                     }
                 }.bind(this));
             }
@@ -588,37 +609,99 @@ Vue.directive('error-handler', {
         this.messages = [];
         this.handleMessages = function (value, errors) {
             // $nextTick is necessary for the component values to update first
-            if (this.vm) {
+            if (this.vm && this.vm.attemptSubmit) {
                 this.vm.$nextTick(function () {
-                    if (errors[value.server]) {
+                    //if (errors[value.server] || this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid && this.vm.attemptSubmit) {
                         // Lets first package errors to simply iterate
                         let newMessages = [];
+                    if (errors[value.server])
                         _.each(errors[value.server], function(error, index) {
                             newMessages.push("<div class='help-block server-validation-error'>" + error + "</div>");
                         });
-                        this.messages = newMessages;
 
-                        // We want to keep track of listed errors and specify their location when displayed
-                        // Search for an '.errors-block' element as child to display messages in
-                        // If it does not exist we will place the error message after the input element
-                        let errorsBlock = $(this.el).find('.errors-block') || false;
-                        if (errorsBlock) {
-                            errorsBlock.find('.server-validation-error').remove();
-                            errorsBlock.append(this.messages);
-                            // debugger
-                        } else {
-                            let inputGroup = $(this.el).find('input-group');
-                            let inputEl = $(this.el).find('input');
-                            if (inputGroup) {
-                                $(this.el).find('.server-validation-error').remove();
-                                inputGroup.after(this.messages);
+                    let genericMessage = this.vm.MESSAGES.DEFAULT;
+                    let validationObject = this.vm['$' + this.vm.validatorHandle][this.storage.client];
+                    if (_.isObject(validationObject)) {
+                        if (validationObject.required) {
+                            // Grab message from storage if it exists or use generic default
+                            // The manually set messages must be an object
+                            let reqMessage;
+                            if (this.storage.messages && this.storage.messages.req) {
+                                reqMessage = this.storage.messages.req;
                             } else {
-                                $(this.el).find('.server-validation-error').remove();
-                                inputEl.after(this.messages);
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                reqMessage = _.isObject(genericMessage) ? genericMessage.req : genericMessage;
                             }
-                            // debugger
+
+                            newMessages.push("<div class='help-block server-validation-error'>" + reqMessage + "</div>");
+                        }
+
+                        if (validationObject.minlength) {
+                            // Grab message from storage if it exists or use generic default
+                            let minMessage;
+                            if (this.storage.messages && this.storage.messages.min) {
+                                minMessage = this.storage.messages.min;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                minMessage = _.isObject(genericMessage) ? genericMessage.min : genericMessage;
+                            }
+                            if (minMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + minMessage + "</div>");
+                        }
+
+                        if (validationObject.maxlength) {
+                            // Grab message from storage if it exists or use generic default
+                            let maxMessage;
+                            if (this.storage.messages && this.storage.messages.max) {
+                                maxMessage = this.storage.messages.max;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                maxMessage = _.isObject(genericMessage) ? genericMessage.max : genericMessage;
+                            }
+                            if (maxMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + maxMessage + "</div>");
+                        }
+                        // custom email validator
+                        if (validationObject.email) {
+                            // Grab message from storage if it exists or use generic default
+                            let emailMessage;
+                            if (this.storage.messages && this.storage.messages.email) {
+                                emailMessage = this.storage.messages.email;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                emailMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
+                            }
+                            if (emailMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
                         }
                     }
+                    //console.log(newMessages);
+
+                    this.messages = newMessages;
+
+                    // We want to keep track of listed errors and specify their location when displayed
+                    // Search for an '.errors-block' element as child to display messages in
+                    // If it does not exist we will place the error message after the input element
+
+                    let errorsBlock = this.el.getElementsByClassName('errors-block')[0] || false;
+                    if (errorsBlock) {
+                        $(errorsBlock).find('.server-validation-error').remove();
+                        if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                            $(errorsBlock).append(this.messages);
+                    } else {
+                        let inputGroup = $(this.el).hasClass('input-group') ? this.el : this.el.getElementsByClassName('input-group')[0];
+                        let inputEl = $(this.el).find('.form-control:not(.v-select *)');
+                        if (inputGroup) {
+                            $(this.el).parent().find('.server-validation-error').remove();
+                            if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                                $(inputGroup).after(this.messages);
+                        } else {
+                            $(this.el).find('.server-validation-error').remove();
+                            if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                                inputEl.after(this.messages);
+                        }
+                    }
+                    //}
                 }.bind(this));
             }
         }
@@ -628,7 +711,6 @@ Vue.directive('error-handler', {
         if(value.handle) {
             value.client = value.server = value.handle;
         }
-
 
         // Store the value within the directive to be used outside the update function
         this.storage = value;
@@ -764,6 +846,7 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        reportsList,
 
         // admin components
         campaignCreate,
@@ -772,7 +855,7 @@ new Vue({
         adminCampaignDetails,
         campaignTripCreateWizard,
         campaignTripEditWizard,
-        adminTrips,
+        adminCampaignTrips,
         adminGroupTrips,
         adminTripCreateUpdate,
         adminTripReservations,
@@ -821,7 +904,8 @@ new Vue({
         refundForm,
         transactionDelete,
         fundManager,
-        companionManager
+        companionManager,
+        promotionals
     },
     http: {
         headers: {

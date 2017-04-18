@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,14 @@ $api->version('v1', [
     $api->resource('uploads', 'UploadsController');
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
     $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
+
+    $api->get('download/{path}', function($path) {
+        return response()->make(Storage::disk('s3')->get($path), 200, [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => "attachment"
+            ]);
+    })->where('path', '.+');
+    
     $api->post('/register', 'AuthenticationController@register');
     $api->post('/login', 'AuthenticationController@authenticate');
     $api->delete('/logout', 'AuthenticationController@deauthenticate');
@@ -40,6 +49,8 @@ $api->version('v1', [
     $api->resource('users', 'UsersController');
     $api->post('users/export', 'UsersController@export');
     $api->post('users/import', 'UsersController@import');
+    $api->get('users/{id}/reports', 'UserReportsController@index');
+    $api->delete('reports/{id}', 'UserReportsController@destroy');
     $api->resource('users.contacts', 'ContactsController');
     $api->post('users/{id}/roles', 'UserRolesController@store');
     $api->delete('users/{id}/roles', 'UserRolesController@destroy');
@@ -62,6 +73,7 @@ $api->version('v1', [
     $api->get('trips/{id}/todos', 'TripTodosController@index');
     $api->post('trips/{id}/todos', 'TripTodosController@store');
     $api->post('trips/{id}/register', 'TripsController@register');
+    $api->post('trips/{id}/promo', 'TripsController@checkPromoCode');
     $api->resource('interests', 'TripInterestsController');
     $api->post('interests/export', 'TripInterestsController@export');
     $api->resource('reservations', 'ReservationsController');
@@ -121,10 +133,15 @@ $api->version('v1', [
     $api->resource('costs.payments', 'CostPaymentsController');
     $api->resource('reservations.dues', 'ReservationDuesController');
     $api->resource('requirements', 'RequirementsController');
+    $api->resource('requirements.conditions', 'RequirementConditionsController');
     $api->resource('deadlines', 'DeadlinesController');
     $api->resource('questionnaires', 'QuestionnairesController');
     $api->resource('permissions/roles', 'PermissionRolesController');
     $api->resource('permissions/abilities', 'PermissionAbilitiesController');
+    $api->resource('promotionals', 'PromotionalsController');
+    $api->put('promotionals/{id}/restore', 'PromotionalsController@restore');
+    $api->resource('promocodes', 'PromocodesController');
+    $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
 
     $api->resource('transports', 'TransportsController');
     $api->resource('itineraries', 'ItinerariesController');

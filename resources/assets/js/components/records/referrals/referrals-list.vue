@@ -12,15 +12,12 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility v-if="canExport" url="referrals/export"
-                                :options="exportOptions"
-                                :filters="exportFilters">
-                </export-utility>
-                <!-- <import-utility title="Import Referrals List" 
-                      url="referrals/import" 
-                      :required-fields="importRequiredFields" 
-                      :optional-fields="importOptionalFields">
-                </import-utility> -->
+                <template v-if="canExport">
+                    <export-utility url="referrals/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
+                </template>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -58,11 +55,17 @@
                             <label>STATUS:</label>
                             <p class="small">{{referral.status | capitalize}}</p>
                         </div>
-                        <div class="col-sm-6">
-                            <label>UPDATED:</label>
-                            <p class="small">{{referral.updated_at | moment 'll'}}</p>
-                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{referral.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{referral.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
                 </div>
                 <div class="panel-footer" style="padding: 0;" v-if="selector">
                     <div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
@@ -143,6 +146,9 @@
         computed: {
             isFacilitator() {
                 return this.trips.length > 0 ? true : false;
+            },
+            canExport() {
+                return this.firstUrlSegment == 'admin';
             }
         },
         watch:{
@@ -156,12 +162,6 @@
             }
         },
         methods:{
-            canExport() {
-                let roles = _.pluck(this.$root.user.roles.data, 'name');
-                return !!this.$root.user ? _.contains(roles, 'admin') : false;
-                // TODO - use abilities instead of roles
-                // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
-            },
             setReferral(referral) {
                 this.$dispatch('set-document', referral);
             },

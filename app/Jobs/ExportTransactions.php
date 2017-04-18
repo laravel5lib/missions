@@ -6,7 +6,7 @@ use App\Models\v1\Transaction;
 
 class ExportTransactions extends Exporter
 {
-    public function data($request)
+    public function data(array $request)
     {
         $transactions = Transaction::filter($request)
             ->with('donor', 'fund')

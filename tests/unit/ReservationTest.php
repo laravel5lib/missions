@@ -1,8 +1,11 @@
 <?php
 
+use Carbon\Carbon;
 use App\Models\v1\Cost;
 use App\Models\v1\Fund;
+use App\Models\v1\Trip;
 use App\Models\v1\Payment;
+use App\Models\v1\Campaign;
 use App\Models\v1\Deadline;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
@@ -120,6 +123,19 @@ class ReservationTest extends TestCase
         $reservation->syncDeadlines([$deadline]);
 
         $this->assertEquals($reservation->deadlines()->first()->id, $deadline->id);
+    }
+
+    /** @test */
+    function returns_promotional_ids_for_rewardable_reservation()
+    {
+        $campaign = factory(Campaign::class)->create();
+        $campaign->promote('Test Promo', 1, 100, null, 'reservations');
+        $trip = factory(Trip::class)->create(['campaign_id' => $campaign->id]);
+        $reservation = factory(Reservation::class)->create(['trip_id' => $trip->id]);
+
+        $promo = $reservation->canBeRewarded()->first();
+
+        $this->assertContains($promo, $campaign->promotionals()->pluck('id'));
     }
 
 }

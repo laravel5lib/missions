@@ -13,15 +13,12 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility url="visas/export"
-                      :options="exportOptions"
-                      :filters="exportFilters">
-                  </export-utility>
-                  <!-- <import-utility title="Import Visas List" 
-                      url="visas/import" 
-                      :required-fields="importRequiredFields" 
-                      :optional-fields="importOptionalFields">
-                  </import-utility> -->
+                <template v-if="canExport">
+                    <export-utility url="visas/export"
+                          :options="exportOptions"
+                          :filters="exportFilters">
+                    </export-utility>
+                </template>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -46,7 +43,7 @@
                     <div class="row">
                         <div class="row">
                             <div class="col-xs-6">
-                                <label>ID</label>
+                                <label>NUMBER</label>
                                 <p class="small">{{visa.number}}</p>
                             </div>
                             <div class="col-xs-6 text-right">
@@ -69,6 +66,16 @@
                             <div class="col-sm-6">
                                 <label>EXPIRES ON</label>
                                 <p class="small">{{visa.expires_at|moment 'll'}}</p>
+                            </div><!-- end col -->
+                        </div><!-- end row -->
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>CREATED ON</label>
+                                <p class="small">{{visa.created_at|moment 'lll'}}</p>
+                            </div><!-- end col -->
+                             <div class="col-sm-6">
+                                <label>UPDATED ON</label>
+                                <p class="small">{{visa.updated_at|moment 'lll'}}</p>
                             </div><!-- end col -->
                         </div><!-- end row -->
                     </div><!-- end panel-body -->
@@ -157,6 +164,9 @@
         computed: {
             isFacilitator() {
                 return this.trips.length > 0 ? true : false;
+            },
+            canExport() {
+                return this.firstUrlSegment == 'admin';
             }
         },
         watch:{

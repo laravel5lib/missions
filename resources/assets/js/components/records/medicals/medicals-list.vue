@@ -12,15 +12,12 @@
 					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
-				<export-utility url="medical/releases/export"
-				                :options="exportOptions"
-				                :filters="exportFilters">
-				</export-utility>
-				<!-- <import-utility title="Import Medical Release List"
-					url="medical/releases/import"
-					:required-fields="importRequiredFields"
-					:optional-fields="importOptionalFields">
-				</import-utility> -->
+                <template v-if="canExport">
+    				<export-utility url="medical/releases/export"
+    				                :options="exportOptions"
+    				                :filters="exportFilters">
+    				</export-utility>
+                </template>
 			</form>
 			<hr class="divider sm inv">
 		</div>
@@ -53,6 +50,16 @@
 							<p class="small">{{medical_release.has_allergies ? 'Yes' : 'No'}}</p>
 						</div><!-- end col -->
 					</div><!-- end row -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{medical_release.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{medical_release.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
 				</div><!-- end panel-body -->
 				<div class="panel-footer" style="padding: 0;" v-if="selector">
 					<div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
@@ -143,6 +150,9 @@
         computed: {
             isFacilitator() {
                 return this.trips.length > 0 ? true : false;
+            },
+            canExport() {
+                return this.firstUrlSegment == 'admin';
             }
         },
         watch: {

@@ -1,98 +1,94 @@
 <template>
-	<div class="white-header-bg">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-8">
-					<h3 class="text-capitalize">
-						<a href="#">
-							<img :src="campaign.avatar" alt="{{campaign.name}}" class="img-circle av-left img-sm">
-						</a>
-						{{campaign.name}}
-						<small>&middot; Campaign</small>
-					</h3>
-				</div>
-				<div class="col-sm-4">
-					<div class="pull-right">
-						<hr class="divider inv sm">
-						<hr class="divider inv">
-						<div class="btn-group" role="group">
-							<a onclick="window.history.back()" class="btn btn-primary-darker"><span
-									class="fa fa-chevron-left icon-left"></span></a>
-							<a class="btn btn-primary" href="/admin/campaigns/{{campaignId}}/edit">Edit</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<hr class="divider inv lg">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12">
-					<ul class="nav nav-tabs" role="tablist">
-						<li :class="{'active': currentView === 'details'}">
-							<a @click="toView('details')">Details</a>
-						</li>
-						<li :class="{'active': currentView === 'trips'}">
-							<a @click="toView('trips')">Trips</a>
-						</li>
-					</ul>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-12">
-						<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 v-if="!editMode">{{campaign.name}}</h5>
+        </div>
+        <div class="panel-body">
+            <div class="col-sm-12 col-md-8">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Description</label>
+                        <p>{{campaign.description}}</p>
+                    </div>
+                </div>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-6 text-center">
+                        <label>Country</label>
+                        <p>{{campaign.country}}</p>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <label>Page Source</label>
+                        <p>{{campaign.page_src}}</p>
+                    </div>
+                </div>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-6 text-center">
+                        <label>Groups</label>
+                        <p>{{campaign.groups_count}}</p>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <label>Status</label>
+                        <p>{{campaign.status}}</p>
+                    </div><!-- end col -->
+                </div>
+                <hr class="divider">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <div class="well">
+                            <label>Page Url</label>
+                            <h5>
+                                <a :href="'/' + campaign.page_url">
+                                    <span class="text-muted">https://missions.me/</span>{{campaign.page_url}}
+                                </a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end col -->
+            <div class="col-sm-4 panel panel-default text-center">
+                <div class="panel-body">
+                    <label>Start Date</label>
+                    <p>{{ campaign.started_at | moment 'll' false true }}</p>
 
-						<component :is="currentView" transition="fade" transition-mode="out-in">
-
-						</component>
-			</div>
-		</div>
-	</div>
+                    <hr class="divider">
+                    <label>End Date</label>
+                    <p>{{ campaign.ended_at | moment 'll' false true }}</p>
+  
+                    <hr class="divider">
+                    <label>Created At</label>
+                    <p>{{ campaign.created_at | moment 'lll' }}</p>
+       
+                    <hr class="divider">
+                    <label>Updated At</label>
+                    <p>{{ campaign.updated_at | moment 'lll' }}</p>
+          			
+          			<div v-if="campaign.published_at">
+                    	<hr class="divider">
+                    	<label>Published At</label>
+                    	<p>{{ campaign.published_at | moment 'lll' }}</p>
+                    </div>
+ 
+                </div><!-- end panel-body -->
+            </div><!-- end col -->
+        </div><!-- end panel-body -->
+    </div>
 </template>
-<style>
-	.fade-transition {
-		transition: opacity .3s ease;
-	}
-	.fade-enter, .fade-leave {
-		opacity: 0;
-	}
-
-</style>
 <script type="text/javascript">
-	import details from './details/details.vue';
-	import trips from './details/trips.vue';
-	import regions from './details/regions.vue';
-	import transports from './details/transports.vue';
 	export default{
 		name: 'admin-campaign-details',
 		props: ['campaignId'],
 		data(){
 			return {
-				currentView: null,
 				campaign: {}
 			}
 		},
-		methods: {
-			toView(view){
-				this.currentView = view;
-			}
-		},
 		created(){
-			this.currentView = 'details';
-			// this.$refs.spinner.show();
-			// get campaign data
 			let resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
 			resource.get({id: this.campaignId}).then(function(response) {
 				this.campaign = response.body.data;
-				// this.$refs.spinner.hide();
 			});
-		},
-		components: {
-			'details': details,
-			'trips': trips,
-			'regions': regions,
-			'transports': transports
 		}
 	}
 

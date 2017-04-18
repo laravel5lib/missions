@@ -12,15 +12,12 @@
                     <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
-                <export-utility v-if="canExport" url="essays/export"
-                                :options="exportOptions"
-                                :filters="exportFilters">
-                </export-utility>
-                <!-- <import-utility title="Import Essays List" 
-                      url="essays/import" 
-                      :required-fields="importRequiredFields" 
-                      :optional-fields="importOptionalFields">
-                </import-utility> -->
+                <template v-if="canExport()">
+                    <export-utility url="essays/export"
+                                    :options="exportOptions"
+                                    :filters="exportFilters">
+                    </export-utility>
+                </template>
             </form>
             <hr class="divider sm inv">
         </div>
@@ -39,21 +36,25 @@
                     </a>
                     <hr class="divider">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <label>SUBJECT</label>
                             <p class="small">{{essay.subject}}</p>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <label>QUESTIONS:</label>
                             <p class="small">{{essay.content.length}}</p>
                         </div>
-                        <div class="col-sm-6">
-                            <label>UPDATED:</label>
-                            <p class="small">{{essay.updated_at|moment 'll'}}</p>
-                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{essay.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{essay.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
                         <!--<a style="margin-right:3px;" :href="'/'+ firstUrlSegment +'/records/essays/' + essay.id + '/edit'"><i class="fa fa-pencil"></i></a>-->
                         <a @click="selectedEssay = essay, deleteModal = true"><i class="fa fa-times"></i></a>
@@ -144,10 +145,7 @@
         },
         methods:{
             canExport() {
-                let roles = _.pluck(this.$root.user.roles.data, 'name');
-                return !!this.$root.user ? _.contains(roles, 'admin') : false;
-                // TODO - use abilities instead of roles
-                // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
+                return this.firstUrlSegment == 'admin';
             },
             setEssay(essay) {
                 this.$dispatch('set-document', essay);

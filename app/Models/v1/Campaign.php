@@ -3,6 +3,8 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Traits\Rewardable;
+use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Campaign extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Promoteable;
 
     /**
      * The table associated with the model.
@@ -183,6 +185,16 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    /**
      * Get public campaigns.
      *
      * @param $query
@@ -202,6 +214,16 @@ class Campaign extends Model
     public function scopeActive($query)
     {
         return $query->whereDate('ended_at', '>=', date('Y-m-d'));
+    }
+
+    /**
+     * Get all the campaign's trip reservations.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function reservations()
+    {
+        return $this->hasManyThrough(Reservation::class, Trip::class);
     }
 
     /**

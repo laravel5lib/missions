@@ -45,6 +45,7 @@ class UserTransformer extends TransformerAbstract
             'zip'          => $user->zip,
             'country_code' => $user->country_code,
             'country_name' => country($user->country_code),
+            'shirt_size'   => strtoupper($user->shirt_size),
             'timezone'     => $user->timezone,
             'bio'          => $user->bio,
             'url'          => $user->slug ? $user->slug->url : null,

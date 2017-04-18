@@ -7,6 +7,7 @@ use App\UuidForKey;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
@@ -489,7 +490,31 @@ class Reservation extends Model
                 'completed_at' => $item->completed_at ? $item->completed_at : null
             ];
         })->each(function($requirement) {
-            $this->requirements()->create($requirement);
+
+            // if conditions apply
+            if (RequirementCondition::where('requirement_id', $requirement['requirement_id'])->count()) {
+
+                    $matches = collect([]);
+
+                    RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function($condition) use($matches) {
+                        if ($condition->type === 'role') {
+                            $matches->push(in_array($this->desired_role, $condition->applies_to));
+                        } elseif ($condition->type === 'age') {
+                            $matches->push($this->age < (int) $condition->applies_to[0]);
+                        } else {
+                            $matches->push(false);
+                        }
+                    });
+
+                    // if all conditions match
+                    if ( ! in_array(false, $matches->all())) {
+                        $this->requirements()->create($requirement);
+                    }
+
+            } else {
+                // if not conditions apply
+                $this->requirements()->create($requirement);
+            }
         });
     }
 

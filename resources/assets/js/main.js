@@ -177,6 +177,7 @@ Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
 Vue.component('panel', VueStrap.panel);
+Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
@@ -440,21 +441,21 @@ Vue.directive('crop', {
 
         let self = this;
         let vm = this.vm;
-        self.waitForLibrary = function() {
+        /*self.waitForLibrary = function() {
             if (_.isFunction(Slim)) {
                 let $wrapper = self.el;
                 //debugger;
                 vm.slimAPI = new Slim($wrapper);
-
                 // send api to active componant
                 vm.$dispatch('slim-api', vm.slimAPI);
             } else {
                 setTimeout(self.waitForLibrary, 1000);
             }
-        };
+        };*/
 
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            this.waitForLibrary();
+            // debugger;
+            // this.waitForLibrary();
         }
     },
 
@@ -688,18 +689,18 @@ Vue.directive('error-handler', {
                     let errorsBlock = this.el.getElementsByClassName('errors-block')[0] || false;
                     if (errorsBlock) {
                         $(errorsBlock).find('.server-validation-error').remove();
-                        if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                        if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
                             $(errorsBlock).append(this.messages);
                     } else {
                         let inputGroup = $(this.el).hasClass('input-group') ? this.el : this.el.getElementsByClassName('input-group')[0];
                         let inputEl = $(this.el).find('.form-control:not(.v-select *)');
                         if (inputGroup) {
                             $(this.el).parent().find('.server-validation-error').remove();
-                            if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
                                 $(inputGroup).after(this.messages);
                         } else {
                             $(this.el).find('.server-validation-error').remove();
-                            if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
                                 inputEl.after(this.messages);
                         }
                     }
@@ -978,7 +979,7 @@ new Vue({
 
         startTour(){
             window.tour.start();
-        },
+        }
 
     },
     events: {

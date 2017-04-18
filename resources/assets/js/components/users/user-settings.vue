@@ -440,7 +440,7 @@
                     case 'avatar':
                         this.selectedAvatar = data;
                         this.avatar_upload_id = data.id;
-//                        jQuery('#avatarCollapse').collapse('hide');
+                        jQuery('#avatarCollapse').collapse('hide');
                         break;
                     case 'banner':
                         this.selectedBanner = data;

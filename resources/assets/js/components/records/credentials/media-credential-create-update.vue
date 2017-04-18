@@ -395,13 +395,6 @@
             }
         },
         computed: {
-<<<<<<< HEAD
-            selectedRole(){
-                let roleObj = _.findWhere(this.content, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
-                return roleObj.a = _.isObject(this.selectedRoleObj) ? this.selectedRoleObj.value : null;
-            },
-=======
->>>>>>> develop
             user_id(){
                 return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
             },
@@ -418,12 +411,8 @@
                         pass = false;
                     }
                 });
-<<<<<<< HEAD
-=======
                 // HACK - to resume progress i need to force validation of roles checkboxes for now...
 //                this.$CreateUpdateMediaCredential.roles.invalid = pass;
->>>>>>> develop
-
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});
                 let selectedEquipment = _.findWhere(equipment.options, { value: true});
@@ -477,11 +466,7 @@
             },
             submit(){
                 this.resetErrors();
-<<<<<<< HEAD
-                if (this.validateDynamically && this.$CreateUpdateMediaCredential.valid) {
-=======
                 if (this.$CreateUpdateMediaCredential.valid) {
->>>>>>> develop
                     this.resource.save(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -493,11 +478,7 @@
                         this.$dispatch('showSuccess', 'Media Credential created.');
                         let that = this;
                         setTimeout(function () {
-<<<<<<< HEAD
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.data.data.id;
-=======
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.body.data.id;
->>>>>>> develop
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
@@ -512,11 +493,7 @@
                     this.$validate(true);
 
                 this.resetErrors();
-<<<<<<< HEAD
-                if (this.validateDynamically && this.$CreateUpdateMediaCredential.valid) {
-=======
                 if (this.$CreateUpdateMediaCredential.valid) {
->>>>>>> develop
                     this.resource.update({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,

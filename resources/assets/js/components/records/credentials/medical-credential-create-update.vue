@@ -115,7 +115,7 @@
     									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.allOptions">
     										<label>
 											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:participations="">
-											    {{ choice.name }} <b>{{ choice.value }}</b>
+											    {{ choice.name }}
                                             </label>
     									</div>
                                     </div>

@@ -558,7 +558,7 @@
 	        },
 	        loadCropper() {
                 let self = this;
-                if (_.contains(['avatar', 'banner', 'other', 'passport'], this.type)) {
+                if (_.contains(['avatar', 'other', 'passport'], this.type) || (this.type === 'banner' && this.uiSelector !== 1)) {
                     setTimeout(function () {
                         self.slimAPI = new Slim.parse(self.$el);
                         if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {

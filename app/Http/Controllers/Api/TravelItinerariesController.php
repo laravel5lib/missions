@@ -39,6 +39,10 @@ class TravelItinerariesController extends Controller
         try {
             $transport = $this->api->json($transportData)->post('transports');
 
+            $passenger = $this->api
+                              ->json(['reservation_id' => $reservation->id])
+                              ->post('transports/'.$transport->id.'/passengers');
+
             $activity = $this->api->json($activityData)->post('activities');
 
             $response = $this->api

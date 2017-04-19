@@ -143,9 +143,10 @@ $api->version('v1', [
     $api->resource('promocodes', 'PromocodesController');
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
 
-    $api->resource('transports', 'TransportsController');
-    $api->resource('itineraries', 'ItinerariesController');
     $api->resource('activities', 'ActivitiesController');
+    $api->resource('itineraries', 'ItinerariesController');
+    $api->resource('transports', 'TransportsController');
+    $api->resource('transports.activities', 'TransportActivitiesController');
 
     $api->group(['prefix' => 'credentials'], function($api)
     {

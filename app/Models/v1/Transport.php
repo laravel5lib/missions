@@ -26,9 +26,9 @@ class Transport extends Model
         return $this->hasMany(Passenger::class);
     }
 
-    public function schedule()
+    public function activities()
     {
-        return $this->morphMany(ItineraryItem::class, 'attachment');
+        return $this->morphToMany(Activity::class, 'activitable');
     }
 
     public function addPassenger()

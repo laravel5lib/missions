@@ -43,7 +43,7 @@ class ActivitiesController extends Controller
         $activity = $this->activity->create([
             'name' => $request->get('name'),
             'description' => $request->get('description'),
-            'occured_at' => $request->get('occured_at'),
+            'occurred_at' => $request->get('occurred_at'),
             'participant_id' => $request->get('participant_id'),
             'participant_type' => $request->get('participant_type')
         ]);
@@ -78,7 +78,7 @@ class ActivitiesController extends Controller
         $activity->update([
             'name' => $request->get('name', $activity->name),
             'description' => $request->get('description', $activity->description),
-            'occured_at' => $request->get('occured_at', $activity->occured_at),
+            'occurred_at' => $request->get('occurred_at', $activity->occurred_at),
             'participant_id' => $request->get('participant_id', $activity->participant_id),
             'participant_type' => $request->get('participant_type', $activity->participant_type)
         ]);

@@ -17,7 +17,7 @@ class ActivitiesEndpointTest extends TestCase
                         'description',
                         'participant_id',
                         'participant_type',
-                        'occured_at',
+                        'occurred_at',
                         'created_at',
                         'updated_at',
                         'deleted_at'
@@ -41,7 +41,7 @@ class ActivitiesEndpointTest extends TestCase
                     'description',
                     'participant_id',
                     'participant_type',
-                    'occured_at',
+                    'occurred_at',
                     'created_at',
                     'updated_at',
                     'deleted_at'

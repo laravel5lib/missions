@@ -26,7 +26,7 @@ class ActivityRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:100',
             'description' => 'string|max:200',
-            'occured_at' => 'required|date',
+            'occurred_at' => 'required|date',
             'participant_id' => 'required|string',
             'participant_type' => 'required|string'
         ];
@@ -35,9 +35,7 @@ class ActivityRequest extends FormRequest
             $rules = [
                 'name' => 'sometimes|required|string|max:100',
                 'description' => 'string|max:200',
-                'occured_at' => 'sometimes|required|date',
-                'participant_id' => 'sometimes|required|string',
-                'participant_type' => 'sometimes|required|string'
+                'occurred_at' => 'sometimes|required|date'
             ];
         }
 

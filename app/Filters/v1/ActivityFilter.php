@@ -31,7 +31,7 @@ class ActivityFilter extends Filter
      */
     public function starts($date)
     {
-        $this->whereDate('occured_at', '>=', $date);
+        $this->whereDate('occurred_at', '>=', $date);
     }
 
     /**
@@ -41,6 +41,6 @@ class ActivityFilter extends Filter
      */
     public function ends($date)
     {
-        $this->whereDate('occured_at', '<=', $date);
+        $this->whereDate('occurred_at', '<=', $date);
     }
 }

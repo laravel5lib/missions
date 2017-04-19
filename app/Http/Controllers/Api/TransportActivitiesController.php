@@ -36,26 +36,22 @@ class TransportActivitiesController extends Controller
         return $this->response->item($activity, new ActivityTransformer);
     }
 
-    public function store($transportId, ActivityRequest $request)
+    public function store($transportId, Request $request)
     {
         $transport = $this->transport->findOrFail($transportId);
 
-        $activity = $transport->activities()->create([
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'occured_at' => $request->get('occured_at')
-        ]);
+        $transport->activities()->sync($request->json('activities'), false);
 
-        return $this->response->item($activity, new ActivityTransformer);
+        $activities = $transport->activities;
+
+        return $this->response->collection($activities, new ActivityTransformer);
     }
 
-    public function delete($transportId, $id)
+    public function destroy($transportId, $id)
     {
         $transport = $this->transport->findOrFail($transportId);
 
-        $activity = $transport->activities()->findOrFail($id);
-
-        $activity->delete();
+        $transport->activities()->detach($id);
 
         return $this->response->noContent();
     }

@@ -14,7 +14,7 @@ class ActivityTransformer extends TransformerAbstract
             'description'       => $activity->description,
             'participant_id'    => $activity->participant_id,
             'participant_type'  => $activity->participant_type,
-            'occured_at'        => $activity->occured_at->toDateTimeString(),
+            'occurred_at'       => $activity->occurred_at->toDateTimeString(),
             'created_at'        => $activity->created_at->toDateTimeString(),
             'updated_at'        => $activity->updated_at->toDateTimeString(),
             'deleted_at'        => $activity->deleted_at ? 

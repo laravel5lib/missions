@@ -13,7 +13,7 @@ class Activity extends Model
 
     protected $guarded = [];
 
-    protected $dates = ['occured_at', 'created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['occurred_at', 'created_at', 'updated_at', 'deleted_at'];
 
     public function participant()
     {

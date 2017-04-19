@@ -39,6 +39,9 @@
                 <li role="presentation" class="{{ $tab == 'promotionals' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/promotionals') }}">Promotionals</a>
                 </li>
+                <li role="presentation" class="{{ $tab == 'transports' ? 'active' : '' }}">
+                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/transports') }}">Transportation</a>
+                </li>
             </ul>
         </div>
     </div>

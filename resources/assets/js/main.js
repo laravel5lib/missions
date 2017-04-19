@@ -134,6 +134,7 @@ import transactionDelete from './components/financials/transactions/transaction-
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
+import transports from './components/admin/transports.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -905,7 +906,8 @@ new Vue({
         transactionDelete,
         fundManager,
         companionManager,
-        promotionals
+        promotionals,
+        transports
     },
     http: {
         headers: {

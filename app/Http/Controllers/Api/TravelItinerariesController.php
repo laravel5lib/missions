@@ -43,11 +43,25 @@ class TravelItinerariesController extends Controller
                               ->json(['reservation_id' => $reservation->id])
                               ->post('transports/'.$transport->id.'/passengers');
 
+            $hub = $this->api
+                        ->json([
+                            'campaign_id' => $reservation->trip->campaign->id, 
+                            'name' => 'Miami International Airport',
+                            'meta' => [
+                                'iata' => 'MIA'
+                            ]
+                        ])
+                        ->post('hubs');
+
             $activity = $this->api->json($activityData)->post('activities');
 
-            $response = $this->api
+            $transportActivity = $this->api
                              ->json(['activities' => [$activity->id]])
                              ->post('transports/' . $transport->id . '/activities');
+
+            // $hubActivity = $this->api
+            //                  ->json(['activities' => [$activity->id]])
+            //                  ->post('hubs/' . $hub->id . '/activities');
 
         } catch (\Exception $e) {
             isset($transport) ? $transport->delete() : null;

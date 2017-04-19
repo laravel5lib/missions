@@ -148,6 +148,7 @@ $api->version('v1', [
     $api->resource('itineraries', 'ItinerariesController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.activities', 'TransportActivitiesController');
+    $api->resource('hubs', 'HubsController');
 
     $api->group(['prefix' => 'credentials'], function($api)
     {

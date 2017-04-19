@@ -24,6 +24,12 @@ class CreateTransportsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::table('transports', function (Blueprint $table) {
+            $table->foreign('campaign_id')
+                ->references('id')->on('campaigns')
+                ->onDelete('cascade');
+        });
     }
 
     /**

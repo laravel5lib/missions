@@ -19,6 +19,16 @@ class CreatePassengersTable extends Migration
             $table->string('seat_no');
             $table->timestamps();
         });
+
+        Schema::table('passengers', function (Blueprint $table) {
+            $table->foreign('transport_id')
+                ->references('id')->on('transports')
+                ->onDelete('cascade');
+
+            $table->foreign('reservation_id')
+                ->references('id')->on('reservations')
+                ->onDelete('cascade');
+        });
     }
 
     /**

@@ -4,7 +4,7 @@
 			<form id="TravelItinerariesForm" novalidate>
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
-				<legend>{{itinerary.item}}</legend>
+				<legend>Arrival in Miami</legend>
 				<section>
 					<div class="form-group">
 						<label for="travel_methodA">Travel Method</label>

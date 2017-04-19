@@ -212,6 +212,7 @@
                         break;
                     case 'travel_itineraries':
                         this.questionnaire = 'travel-itineraries';
+                        break;
                     case 'minor_releases':
                         this.questionnaire = 'minor-release';
                         break;

@@ -21,13 +21,13 @@ class CreateItinerariesTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('activites', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title');
+            $table->string('name');
             $table->string('description')->nullable();
             $table->string('participant_id');
             $table->string('participant_type');
-            $table->timestamp('occurs_at');
+            $table->timestamp('occured_at');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -47,7 +47,7 @@ class CreateItinerariesTable extends Migration
     public function down()
     {
         Schema::drop('itineraries');
-        Schema::drop('activites');
+        Schema::drop('activities');
         Schema::drop('activitables');
     }
 }

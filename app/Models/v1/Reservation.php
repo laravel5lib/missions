@@ -266,6 +266,11 @@ class Reservation extends Model
         return $this->morphMany(Promocode::class, 'rewardable');
     }
 
+    public function transports()
+    {
+        return $this->belongsToMany(Transport::class, 'passengers');
+    }
+
     /**
      * Get the reservation's avatar.
      *

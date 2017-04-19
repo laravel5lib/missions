@@ -51,6 +51,7 @@ class TravelItinerariesController extends Controller
 
         } catch (\Exception $e) {
             isset($transport) ? $transport->delete() : null;
+            isset($passenger) ? $passenger->delete() : null;
             isset($activity) ? $activity->delete() : null;
 
             throw $e;

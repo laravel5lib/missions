@@ -144,6 +144,7 @@ $api->version('v1', [
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
 
     $api->resource('activities', 'ActivitiesController');
+    $api->resource('itineraries/travel', 'TravelItinerariesController');
     $api->resource('itineraries', 'ItinerariesController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.activities', 'TransportActivitiesController');

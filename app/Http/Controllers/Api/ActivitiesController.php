@@ -41,11 +41,11 @@ class ActivitiesController extends Controller
     public function store(ActivityRequest $request)
     {
         $activity = $this->activity->create([
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'occurred_at' => $request->get('occurred_at'),
-            'participant_id' => $request->get('participant_id'),
-            'participant_type' => $request->get('participant_type')
+            'name' => $request->json('name'),
+            'description' => $request->json('description'),
+            'occurred_at' => $request->json('occurred_at'),
+            'participant_id' => $request->json('participant_id'),
+            'participant_type' => $request->json('participant_type')
         ]);
 
         return $this->response->item($activity, new ActivityTransformer);

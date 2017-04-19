@@ -40,7 +40,7 @@ class TransportActivitiesController extends Controller
     {
         $transport = $this->transport->findOrFail($transportId);
 
-        $transport->activities()->sync($request->get('activities'), false);
+        $transport->activities()->sync($request->json('activities'), false);
 
         $activities = $transport->activities;
 

@@ -19,4 +19,9 @@ class Activity extends Model
     {
         return $this->morphTo();
     }
+
+    public function transports()
+    {
+        return $this->morphedByMany(Transport::class, 'activitable');
+    }
 }

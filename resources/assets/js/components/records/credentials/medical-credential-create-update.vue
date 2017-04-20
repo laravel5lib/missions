@@ -1,8 +1,8 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-	<div>
+	<div style="position:relative;">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<validator name="CreateUpdateMedicalCredential" @touched="onTouched">
 			<form id="CreateUpdateMedicalCredential" class="form-horizontal" novalidate>
-				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<div class="row">
@@ -15,7 +15,7 @@
                         
                         <template v-if="forAdmin">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                                <div class="form-group">
                                     <label for="infoManager">Record Manager</label>
                                     <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                                     <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
@@ -26,87 +26,103 @@
                         </template>
 
                         <div class="row">
-    						<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name' }">
+    						<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name', messages: { req: 'Please provide credential holder\'s name.'} }">
     							<label for="name" class="control-label">Credential Holder's Name</label>
     							<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
     							       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
     							       minlength="1" required>
     						</div>
-                             <div class="col-sm-6" v-error-handler="{ value: selectedRole, handle: 'role' }">
+                             <div class="col-sm-6" v-error-handler="{ value: selectedRole, handle: 'role', messages: { req: 'Please select a medical role.'} }">
                                 <label class="control-label">Medical Role</label>
 	                             <v-select @keydown.enter.prevent="" class="form-control" id="group" :value.sync="selectedRoleObj"
 	                                       :options="roles|orderBy 'name'" label="name" placeholder="Select Role"></v-select>
 	                             <select hidden class="form-control hidden" v-model="selectedRole" v-validate:role="['required']">
 		                             <option value="">-- Select Role --</option>
 		                             <option v-for="option in roles|orderBy 'name'" :value="option.value">{{option.name}}</option>
-	                             </select>                            </div>
+	                             </select>
+	                             <div class="errors-block"></div>
+                             </div>
                         </div>
                     </div>
                 </div>
                 
-			    <div v-for="QA in content" v-show="checkConditions(QA)">
+			    <div v-for="QA in content">
                     
                     <!-- start has type designation -->
-					<template v-if="QA.type">
+					<template v-if="QA.type && checkConditions(QA)">
                             
                         <!-- radio -->
 						<template v-if="QA.type === 'radio'">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h5 v-text="QA.q"></h5>
-                                </div>
-                                <div class="panel-body">
-        							<label class="radio-inline" v-for="choice in QA.options">
-        								<input type="radio" :value="choice.value" v-model="QA.a"> {{ choice.name }}
-                                    </label>
-                                </div>
-                            </div>
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('radio' + $index), class: 'panel-danger has-error' }">
+								<div class="panel-heading">
+									<h5 v-text="QA.q"></h5>
+								</div>
+								<div class="panel-body">
+									<label class="radio-inline" v-for="choice in QA.options">
+										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + $index" v-validate="['required']"> {{ choice.name }}
+									</label>
+								</div>
+								<div class="panel-footer" v-show="checkForError('radio' + $index)">
+									<div class="errors-block"></div>
+								</div>
+							</div>
 						</template>
                         <!-- end radio -->
                         
                         <!-- checkbox -->
 						<template v-if="QA.type === 'checkbox' && QA.id === 'certifications'">
 
-							<template v-for="role in QA.roleOptions" v-show="role.id === selectedRole">
+							<!--<template v-for="role in QA.roleOptions" v-show="role.id === selectedRole">
 								<div class="checkbox col-sm-6 col-xs-12" v-for="choice in role.options">
 									<label>
-										<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
+										&lt;!&ndash;<checkbox :checked.sync="choice.value" :value="true">{{ choice.name }}</checkbox>&ndash;&gt;
+										<input type="checkbox" :value="true" v-model="choice.value"> {{ choice.name }}
                                     </label>
 								</div>
-							</template>
+							</template>-->
                             
                             <!-- start certification checklist -->
-                            <div class="panel panel-default" v-show="selectedRoleObj && isCertified && !isStudent">
-                                <div class="panel-heading">
-                                    <h5>I am certified in the following:</h5>
-                                </div>
-                                <div class="panel-body">
-    								<div class="row">
-    									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.certifiedOptions" :class="{'has-error': checkboxMinimum(QA.certifiedOptions)}">
-    										<label>
-    											<input type="checkbox" :value="choice.value" v-model="choice.value"> 
-                                                {{ choice.name }}
-                                            </label>
-    									</div>
-    								</div>
-                                </div>
-                            </div>
+							<template v-if="selectedRoleObj && !!isCertified && !isStudent">
+								<div class="panel panel-default" v-error-handler="{ value: QA.certifiedOptions, client: 'certifications', class: 'panel-danger has-error', messages: { min: 'Please select at least one role.'} }">
+									<div class="panel-heading">
+										<h5>I am certified in the following:</h5>
+									</div>
+									<div class="panel-body">
+										<div class="row">
+											<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.certifiedOptions">
+												<label>
+													<input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:certifications="$index === 0 ?{ minlength: 1 } : void 0">
+													{{ choice.name }}
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="panel-footer" v-show="checkForError('certifications')">
+										<div class="errors-block"></div>
+									</div>
+								</div>
+							</template>
+
                             <!-- end certification checklist -->
                             
                             <!-- start participation checklist -->
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" v-error-handler="{ value: QA.allOptions, client: 'participations', class: 'panel-danger has-error', messages: { min: 'Please select at least one role.'} }">
                                 <div class="panel-heading">
                                     <h5>I am willing to participate in the following:</h5>
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
-    									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.allOptions" :class="{'has-error': checkboxMinimum(QA.allOptions)}">
+    									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.allOptions">
     										<label>
-    											<input type="checkbox" :value="choice.value" v-model="choice.value"> {{ choice.name }}
+											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:participations="">
+											    {{ choice.name }}
                                             </label>
     									</div>
                                     </div>
                                 </div>
+	                            <div class="panel-footer" v-show="checkForError('participations')">
+		                            <div class="errors-block"></div>
+	                            </div>
                             </div>
                             <!-- end participation checklist -->
 						</template>
@@ -114,31 +130,37 @@
                         
                         <!-- textarea -->
 						<template v-if="QA.type === 'textarea'">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h5 v-text="QA.q"></h5>
-                                </div>
-                                <div class="panel-body">
-                                    <span class="help-block">Please Explain:</span>
-        							<textarea class="form-control" v-model="QA.a"></textarea>
-                                </div>
-                            </div>
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('textarea' + $index), class: 'panel-danger has-error', messages: { req: 'Please explain.'} }">
+								<div class="panel-heading">
+									<h5 v-text="QA.q"></h5>
+								</div>
+								<div class="panel-body">
+									<span class="help-block">Please Explain:</span>
+									<textarea class="form-control" v-model="QA.a" :field="'textarea' + $index" v-validate="['required']"></textarea>
+								</div>
+								<div class="panel-footer" v-show="checkForError('textarea' + $index)">
+									<div class="errors-block"></div>
+								</div>
+							</div>
 						</template>
                         <!-- end textarea -->
                         
                         <!-- start select -->
-						<template v-if="QA.type === 'select'">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h5 v-text="QA.q"></h5>
-                                </div>
-                                <div class="panel-body">
-                                    <select class="form-control" v-model="QA.a">
-                                        <option value="">-- Select Role --</option>
-                                        <option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
+						<template v-if="QA.type === 'select' && QA.id !== 'role'">
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('select' + $index), class: 'panel-danger has-error' }">
+								<div class="panel-heading">
+									<h5 v-text="QA.q"></h5>
+								</div>
+								<div class="panel-body">
+									<select class="form-control" v-model="QA.a" :field="'select' + $index" v-validate="">
+										<option value="">-- Select Role --</option>
+										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
+									</select>
+								</div>
+								<div class="panel-footer" v-show="checkForError('select' + $index)">
+									<div class="errors-block"></div>
+								</div>
+							</div>
 						</template>
                         <!-- end select -->
                         
@@ -167,27 +189,23 @@
                         
                         <!-- start date -->
 						<template v-if="QA.type === 'date'">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h5 v-text="QA.q"></h5>
-                                </div>
-                                <div class="panel-body">
-        							<date-picker :model.sync="QA.a|moment 'YYYY-MM-DD'" type="date" ></date-picker>
-        							<input type="datetime" class="form-control hidden" v-model="QA.a | moment 'LLLL'" id="started_at" required>
-                                </div>
-                            </div>
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('date' + $index), class: 'panel-danger has-error' }">
+								<div class="panel-heading">
+									<h5 v-text="QA.q"></h5>
+								</div>
+								<div class="panel-body">
+									<date-picker :model.sync="QA.a|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="QA.a | moment 'LLLL'" id="started_at" required :field="'date' + $index" v-validate="">
+								</div>
+								<div class="panel-footer" v-show="checkForError('date' + $index)">
+									<div class="errors-block"></div>
+								</div>
+							</div>
 						</template>
                         <!-- end date -->
 
 					</template>
                     <!-- end has type designation -->
-                    
-                    <!-- start no type designation -->
-					<template v-else>
-						<label class="control-label" v-text="QA.q"></label>
-						<textarea class="form-control" v-model="QA.a" ></textarea>
-					</template>
-                    <!-- end no type designation -->
 				</div>
 
 				<div class="panel panel-default">
@@ -576,6 +594,9 @@
             checkboxMinimum(array){
                 return !_.findWhere(array, {value: true}) && this.attemptSubmit;
             },
+            checkCheckbox(id) {
+                debugger;
+            },
             back(force){
                 if (this.hasChanged && !force ) {
                     this.showSaveAlert = true;
@@ -588,8 +609,8 @@
             },
             submit(){
                 this.resetErrors();
-                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
-                if (this.$CreateUpdateMedicalCredential.valid && !!checkboxTest) {
+//                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
+                if (this.$CreateUpdateMedicalCredential.valid) {
                     this.resource.save(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -617,8 +638,8 @@
                     this.$validate(true);
 
                 this.resetErrors();
-                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
-                if (this.$CreateUpdateMedicalCredential.valid && !!checkboxTest) {
+//                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
+                if (this.$CreateUpdateMedicalCredential.valid) {
                     this.resource.update({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -683,7 +704,20 @@
             },
 	        dateIsValid(date){
                 return moment(date).isValid();
-	        }
+	        },
+            syncCheckboxes() {
+	            let self = this;
+				this.$nextTick(function () {
+                    _.each($('input[type=checkbox]'), function (checkbox) {
+//	                    if (checkbox.hasAttribute('checked'))
+	                        checkbox.checked = checkbox.hasAttribute('checked');
+                    });
+                    self.$validate('certifications', true);
+                    self.$validate('participations', true);
+//					debugger;
+//                  let certifications = _.findWhere(this.content, { id: 'files'})
+                });
+            }
 
         },
         events:{
@@ -757,38 +791,41 @@
                 }.bind(this));
             });*/
 
-                // this.$refs.spinner.show();
-                //Promise.all([teamRolesPromise]).then(function (values) {
-                    if (this.isUpdate) {
-                        this.resource.get({ id: this.id, include: 'holder'}).then(function (response) {
-	                        let credential = response.body.data;
-	                        this.applicant_name = credential.applicant_name;
-	                        // this.holder_id = credential.holder_id;
-	                        // this.holder_type = credential.holder_type;
-	                        this.content = credential.content;
-	                        this.expired_at = credential.expired_at;
-                            this.userObj = credential.holder.data;
-                            this.usersArr.push(this.userObj);
+            // this.$refs.spinner.show();
+            //Promise.all([teamRolesPromise]).then(function (values) {
+                if (this.isUpdate) {
+                    this.resource.get({ id: this.id, include: 'holder'}).then(function (response) {
+                        let credential = response.body.data;
+                        this.applicant_name = credential.applicant_name;
+                        // this.holder_id = credential.holder_id;
+                        // this.holder_type = credential.holder_type;
+                        this.content = credential.content;
+                        this.syncCheckboxes();
+                        this.expired_at = credential.expired_at;
+                        this.userObj = credential.holder.data;
+                        this.usersArr.push(this.userObj);
 
-	                        //assign fields from content data
-                            //console.log(_.findWhere(credential.content, { id: 'role'}));
-	                        this.selectedRoleObj = _.findWhere(this.roles, { value: _.findWhere(credential.content, { id: 'role'}).a});
+                        //assign fields from content data
+                        //console.log(_.findWhere(credential.content, { id: 'role'}));
+                        this.selectedRoleObj = _.findWhere(this.roles, { value: _.findWhere(credential.content, { id: 'role'}).a});
 
-	                        // until uploads relationship is added...
-	                        // gather all uploads ids
-	                        let ids = [];
-	                        let filesArr = _.findWhere(credential.content, { id: 'files'}).a;
-	                        _.each(filesArr, function (list, index) {
-		                        _.each(list, function (obj) {
-		                            obj.type = index;
-			                        this.uploads.push(obj);
-			                        this.upload_ids.push(obj.id);
-                                }.bind(this))
-                            }.bind(this));
-
-	                    });
-                    }
-                //}.bind(this));
-    }
+//                        this.$activateValidator();
+                        // until uploads relationship is added...
+                        // gather all uploads ids
+                        let ids = [];
+                        let filesArr = _.findWhere(credential.content, { id: 'files'}).a;
+                        _.each(filesArr, function (list, index) {
+	                        _.each(list, function (obj) {
+	                            obj.type = index;
+		                        this.uploads.push(obj);
+		                        this.upload_ids.push(obj.id);
+                            }.bind(this))
+                        }.bind(this));
+                    });
+                } else {
+//                    this.$activateValidator();
+                }
+            //}.bind(this));
+        }
     }
 </script>

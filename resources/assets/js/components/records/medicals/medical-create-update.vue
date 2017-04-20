@@ -59,6 +59,9 @@
                                 <label>
                                     <input type="checkbox" v-model="noInsurance"> I do not have medical insurance 
                                 </label>
+                                <span class="help-block">
+                                    Medical Insurance is not required for travel, but highly recommend.
+                                </span>
                             </div>
                         </div>
                     </div>

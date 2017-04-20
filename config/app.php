@@ -173,7 +173,7 @@ return [
         Haleks\Markdown\MarkdownServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
-
+        Orangehill\Iseed\IseedServiceProvider::class
     ],
 
     /*

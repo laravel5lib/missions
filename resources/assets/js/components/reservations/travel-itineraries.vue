@@ -5,100 +5,17 @@
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 				<legend>Arrival in Miami</legend>
-				<accordion :one-at-atime="false" type="info">
-					<panel is-open type="primary" v-for="transport in transports">
-						<strong slot="header"><u>Transport {{$index + 1}}</u></strong>
-						<travel-transport item="Arrive in Miami" :reservation-id="reservationId" :campaign-id="transport.campaignId" :transport="transport"></travel-transport>
-					</panel>
-				</accordion>
-				<button type="button" class="btn btn-xs btn-primary" @click="addNewTransport">Add Transport</button>
+				<div v-for="transport in arrivals">
+					<travel-transport :reservation-id="reservationId" :campaign-id="transport.campaignId" :transport="transport"></travel-transport>
+				</div>
+				<hr class="divider inv sm">
+				<button type="button" class="btn btn-xs btn-primary" @click="addNewTransport" v-if="arrivals <= 2">Have a prior connection?</button>
+				<br>
 				<br>
 				<legend>Returning Home</legend>
-				<!--<section>
-					<div class="form-group">
-						<label for="travel_methodB">Travel Method</label>
-						<select class="form-control" name="travel_methodB" id="travel_methodB" v-validate:travelmethodb="['required']" v-model="transport_return.type">
-							<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
-						</select>
-					</div>
-
-					<template v-if="transport_return && transport_return.type === 'flight'">
-						<div class="form-group">
-							<label for="travel_methodA">Airline</label>
-							<select class="form-control" name="airline" id="airline" v-validate:airline="['required']" v-model="selectedAirline">
-								<option :value="airline.name" v-for="airline in airlinesOptions">{{airline.name | capitalize}}</option>
-								<option value="other">Other</option>
-							</select>
-							<template v-if="selectedAirline === 'other'">
-								<div class="form-group">
-									<label for="">Flight No.</label>
-									<input type="text" class="form-control" v-model="transport_return.vessel_no">
-								</div>
-								<div class="form-group">
-									<label for="">Airport Code (3 letter IATA)</label>
-									<input type="text" class="form-control" v-model="">
-								</div>
-							</template>
-						</div>
-					</template>
-
-					<template v-if="transport_return && transport_return.type === 'bus'">
-						<div class="form-group">
-							<label for="">Company</label>
-							<input type="text" class="form-control" v-model="transport_return.name">
-						</div>
-						<div class="form-group">
-							<label for="">Schedule/Route No.</label>
-							<input type="text" class="form-control" v-model="transport_return.vessel_no">
-						</div>
-						<div class="form-group">
-							<label for="">Arrival Location</label>
-							<input type="text" class="form-control" v-model="">
-						</div>
-					</template>
-
-					<template v-if="transport_return && transport_return.type === 'train'">
-						<div class="form-group">
-							<label for="travel_methodB">Company</label>
-							<select class="form-control" name="travel_methodB" id="train" v-validate:train="['required']" v-model="transport_return.name">
-								<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="">Train No.</label>
-							<input type="text" class="form-control" v-model="transport_return.vessel_no">
-						</div>
-						<div class="form-group">
-							<label for="">Station</label>
-							<input type="text" class="form-control" v-model="location.name">
-						</div>
-					</template>
-
-					<template v-if="transport_return && transport_return.type === 'vehicle'">
-						<div class="form-group">
-							<label for="travel_methodB">Company</label>
-							<select class="form-control" name="travel_methodB" id="train" v-validate:train="['required']" v-model="transport_return.name">
-								<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="">Vehicle Color (if known)</label>
-							<input type="text" class="form-control" v-model="transport_return.vessel_no">
-						</div>
-						<div class="form-group">
-							<label for="">Drop Off Location</label>
-							<input type="text" class="form-control" v-model="location.name">
-						</div>
-					</template>
-
-					<template v-if="transport_return && (transport_return.type !== 'flight' || selectedAirline === 'other')">
-						<div class="form-group">
-							<label for="">Arrival Date & Time</label>
-							<date-picker :model.sync="date_time|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
-							<input type="datetime" class="form-control hidden" v-model="date_time | moment 'LLLL'" id="started_at" required>
-						</div>
-					</template>
-				</section>-->
+				<div v-for="transport in returnings">
+					<travel-transport :reservation-id="reservationId" :campaign-id="transport.campaignId" :transport="transport" :returning="true"></travel-transport>
+				</div>
 			</form>
 		</validator>
 	</div>
@@ -132,50 +49,6 @@
                 itinerant_type: 'reservations',
                 item: 'Arrive in Miami',
                 date_time: '',
-                location: {
-                    name: '',
-                    address: '',
-                    city: '',
-                    state: '',
-                    country_code: '',
-                    phone: '',
-                    fax: '',
-                    email: '',
-                    website: '',
-                },
-                transport: {
-                    type: '',
-                    vessel_no: '',
-                    name: '',
-                    call_sign: '',
-                    domestic: '',
-                    capacity: '',
-                    campaign_id: '',
-                    passengers: '',
-                },
-
-                // temporary?
-                location_return: {
-                    name: '',
-                    address: '',
-                    city: '',
-                    state: '',
-                    country_code: '',
-                    phone: '',
-                    fax: '',
-                    email: '',
-                    website: '',
-                },
-                transport_return: {
-                    type: '',
-                    vessel_no: '',
-                    name: '',
-                    call_sign: '',
-                    domestic: '',
-                    capacity: '',
-                    campaign_id: '',
-                    passengers: '',
-                },
 
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],
 	            airlinesOptions: [],
@@ -186,58 +59,57 @@
                 ],
                 vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other',],
                 selectedAirline: '',
-                transports: [
-                    {
-                        "id": "06237610-58b3-4bdb-8f75-434705398537",
-                        "campaign_id": "80ea6760-719c-46c7-8b0e-cf2ddc76fd60",
-                        "type": "flight",
-                        "vessel_no": "AA101",
-                        "name": "American Airlines",
-                        "domestic": true,
-                        "capacity": 0,
-                        "call_sign": null,
-                        "created_at": "2017-04-19 14:54:33",
-                        "updated_at": "2017-04-19 14:57:54",
-                        "links": [
-                            {
-                                "rel": "self",
-                                "uri": "/api/transports/06237610-58b3-4bdb-8f75-434705398537"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "06237610-58b3-4bdb-8f75-434705398537",
-                        "campaign_id": "80ea6760-719c-46c7-8b0e-cf2ddc76fd60",
-                        "type": "flight",
-                        "vessel_no": "AA101",
-                        "name": "American Airlines",
-                        "domestic": true,
-                        "capacity": 0,
-                        "call_sign": null,
-                        "created_at": "2017-04-19 14:54:33",
-                        "updated_at": "2017-04-19 14:57:54",
-                        "links": [
-                            {
-                                "rel": "self",
-                                "uri": "/api/transports/06237610-58b3-4bdb-8f75-434705398537"
-                            }
-                        ]
-                    }
-                ],
+	            arrivals: [{
+                    "id": "06237610-58b3-4bdb-8f75-434705398537",
+                    "campaign_id": "80ea6760-719c-46c7-8b0e-cf2ddc76fd60",
+                    "type": "flight",
+                    "vessel_no": "AA101",
+                    "name": "American Airlines",
+                    "domestic": true,
+                    "capacity": 0,
+                    "call_sign": null,
+                    "created_at": "2017-04-19 14:54:33",
+                    "updated_at": "2017-04-19 14:57:54",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/transports/06237610-58b3-4bdb-8f75-434705398537"
+                        }
+                    ]
+                }],
+                returnings: [{
+                    "id": "06237610-58b3-4bdb-8f75-434705398537",
+                    "campaign_id": "80ea6760-719c-46c7-8b0e-cf2ddc76fd60",
+                    "type": "flight",
+                    "vessel_no": "AA101",
+                    "name": "American Airlines",
+                    "domestic": true,
+                    "capacity": 0,
+                    "call_sign": null,
+                    "created_at": "2017-04-19 14:54:33",
+                    "updated_at": "2017-04-19 14:57:54",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/transports/06237610-58b3-4bdb-8f75-434705398537"
+                        }
+                    ]
+                }],
+                transports: [],
             }
         },
         watch: {
             selectedAirline(val){
                 if (val && val !== 'other') {
-                    let airline = _.findWhere(this.airlinesOptions, {name: this.selectedAirline});
-                    this.transport.name = airline.name;
+//                    let airline = _.findWhere(this.airlinesOptions, {name: this.selectedAirline});
+                    this.transport.name = val;
                 }
             }
         },
         methods: {
 	        getTransports(){
                 this.$http.get('transports', { params: { include: '', } }).then(function (response) {
-                    this.transports = response.body.data;
+                    let transports = response.body.data;
                 });
 	        },
 	        saveItinerary(){
@@ -247,7 +119,7 @@
 
 	        },
             addNewTransport(){
-				this.transports.push({
+				this.arrivals.push({
                     type: '',
                     vessel_no: '',
                     name: '',

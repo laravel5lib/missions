@@ -10,8 +10,17 @@ class HubTransformer extends TransformerAbstract
     {
         return [
             'id'           => $hub->id,
+            'campaign_id'  => $hub->campaign->id,
             'name'         => $hub->name,
-            'meta'         => $hub->meta
+            'call_sign'    => $hub->call_sign,
+            'address'      => $hub->address,
+            'city'         => $hub->city,
+            'state'        => $hub->state,
+            'city'         => $hub->city,
+            'zip'          => $hub->zip,
+            'country_code' => $hub->country_code,
+            'created_at'   => $hub->created_at->toDateTimeString(),
+            'updated_at'   => $hub->updated_at->toDateTimeString()
         ];
     }
 }

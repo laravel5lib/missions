@@ -16,12 +16,12 @@ class CreateHubsTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('campaign_id')->index();
             $table->string('name');
+            $table->string('call_sign')->nullable();
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('zip')->nullable();
             $table->string('country_code')->nullable();
-            $table->json('meta')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

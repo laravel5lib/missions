@@ -14,8 +14,13 @@ class Itinerary extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function items()
+    public function activities()
     {
-        return $this->belongsToMany(ItineraryItem::class, 'itinerary_item');
+        return $this->morphToMany(Activity::class, 'activitable');
+    }
+
+    public function curator()
+    {
+        return $this->morphTo();
     }
 }

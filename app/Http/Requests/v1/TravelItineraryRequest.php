@@ -25,17 +25,26 @@ class TravelItineraryRequest extends FormRequest
     {
         return [
             'reservation_id' => 'required|exists:reservations,id',
-            'transport' => 'required|array',
-            'transport.type' => 'required|string|in:flight,bus,vehicle,train',
-            'transport.vessel_no' => 'required|string',
-            'transport.name' => 'required|string',
-            'transport.call_sign' => 'string',
-            'transport.domestic' => 'boolean',
-            'transport.capacity' => 'numeric',
-            'activity' => 'required|array',
-            'activity.name' => 'required|string|max:100',
-            'activity.description' => 'string|max:200',
-            'activity.occurred_at' => 'required|date'
+            'items' => 'required|array',
+            'items.*.transport' => 'required|array',
+            'items.*.transport.type' => 'required|string|in:flight,bus,vehicle,train',
+            'items.*.transport.vessel_no' => 'required|string',
+            'items.*.transport.name' => 'required|string',
+            'items.*.transport.call_sign' => 'string',
+            'items.*.transport.domestic' => 'boolean',
+            'items.*.transport.capacity' => 'numeric',
+            'items.*.activity' => 'required|array',
+            'items.*.activity.name' => 'required|string|max:100',
+            'items.*.activity.description' => 'string|max:200',
+            'items.*.activity.occurred_at' => 'required|date',
+            'items.*.hub' => 'required|array',
+            'items.*.hub.name' => 'required|string',
+            'items.*.hub.call_sign' => 'required|string',
+            'items.*.hub.address' => 'string',
+            'items.*.hub.city' => 'required|string',
+            'items.*.hub.state' => 'string',
+            'items.*.hub.zip' => 'string',
+            'items.*.hub.country' => 'required|string'
         ];
     }
 }

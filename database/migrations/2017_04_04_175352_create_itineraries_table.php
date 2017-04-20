@@ -15,8 +15,8 @@ class CreateItinerariesTable extends Migration
         Schema::create('itineraries', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->uuid('itinerant_id');
-            $table->string('itinerant_type');
+            $table->uuid('curator_id');
+            $table->string('curator_type');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -11,12 +11,18 @@ class ItineraryTransformer extends TransformerAbstract
         return [
             'id'             => $itinerary->id,
             'name'           => $itinerary->name,
-            'itinerant_id'   => $itinerary->itinerant_id,
-            'itinerant_type' => $itinerary->itinerant_type,
-            'items'          => $itinerary->items_count,
+            'curator_id'     => $itinerary->curator_id,
+            'curator_type'   => $itinerary->curator_type,
+            'activities'     => $itinerary->activities_count ?: $itinerary->activities()->count(),
             'updated_at'     => $itinerary->updated_at->toDateTimeString(),
             'created_at'     => $itinerary->created_at->toDateTimeString(),
-            'deleted_at'     => $itinerary->deleted_at ? $itinerary->deleted_at->toDateTimeString() : null
+            'deleted_at'     => $itinerary->deleted_at ? $itinerary->deleted_at->toDateTimeString() : null,
+            'links'          => [
+                [
+                    'rel' => 'self',
+                    'uri' => '/api/itineraries/' . $itinerary->id,
+                ]
+            ]
         ];
     }
 }

@@ -3,74 +3,76 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
+use App\Models\v1\Itinerary;
 use Illuminate\Http\Request;
+use App\Services\TravelActivity;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\TravelItineraryRequest;
+use App\Http\Transformers\v1\ItineraryTransformer;
 
 class TravelItinerariesController extends Controller
 {   
-    public function show($id)
+    private $itinerary;
+    private $travelActivity;
+
+    function __construct(Itinerary $itinerary, TravelActivity $travelActivity)
     {
-        //
+        $this->itinerary = $itinerary;
+        $this->travelActivity = $travelActivity;
     }
 
     public function store(TravelItineraryRequest $request)
     {
         $reservation = $this->api->get('reservations/' . $request->get('reservation_id'));
 
-        $transportData = [
-            'type' => $request->json('transport.type'),
-            'vessel_no' => $request->json('transport.vessel_no'),
-            'name' => $request->json('transport.name'),
-            'call_sign' => $request->json('transport.call_sign'),
-            'domestic' => $request->json('transport.domestic', true),
-            'capacity' => $request->json('transport.capacity', 9999),
-            'campaign_id' => $reservation->trip->campaign->id
-        ];
+        $activities = collect([]);
 
-        $activityData = [
-            'name' => $request->json('activity.name'),
-            'description' => $request->json('activity.description'),
-            'occurred_at' => $request->json('activity.occurred_at'),
-            'participant_id' => $request->json('reservation_id'),
-            'participant_type' => 'reservations'
-        ];
+        collect($request->json('items'))->each(function ($item) use ($reservation, $activities) {
 
-        try {
-            $transport = $this->api->json($transportData)->post('transports');
+            $transport = collect(isset($item['transport']) ? $item['transport'] : []);
+            $activity = collect(isset($item['activity']) ? $item['activity'] : []);
+            $hub = collect(isset($item['hub']) ? $item['hub'] : []);
 
-            $passenger = $this->api
-                              ->json(['reservation_id' => $reservation->id])
-                              ->post('transports/'.$transport->id.'/passengers');
+            $data = $this->travelActivity->create([
+                'transport' => [
+                    'type' => $transport->get('type'),
+                    'vessel_no' => $transport->get('vessel_no'),
+                    'name' => $transport->get('name'),
+                    'call_sign' => $transport->get('call_sign'),
+                    'domestic' => $transport->get('domestic', true),
+                    'capacity' => $transport->get('capacity', 9999),
+                    'campaign_id' => $reservation->trip->campaign->id
+                ],
+                'passenger' => [
+                    'reservation_id' => $reservation->id
+                ],
+                'activity' => [
+                    'name' => $activity->get('name'),
+                    'description' => $activity->get('description'),
+                    'occurred_at' => $activity->get('occurred_at'),
+                    'participant_id' => $reservation->id,
+                    'participant_type' => 'reservations'
+                ],
+                'hub' => [
+                    'name' => $hub->get('name'),
+                    'call_sign' => $hub->get('iata'),
+                    'city' => $hub->get('city'),
+                    'country_code' => country_code($hub->get('country')),
+                    'campaign_id' => $reservation->trip->campaign->id
+                ]
+            ]);
 
-            $hub = $this->api
-                        ->json([
-                            'campaign_id' => $reservation->trip->campaign->id, 
-                            'name' => 'Miami International Airport',
-                            'meta' => [
-                                'iata' => 'MIA'
-                            ]
-                        ])
-                        ->post('hubs');
+            $activities->push($data->id);
+        });
 
-            $activity = $this->api->json($activityData)->post('activities');
+        $itinerary = $this->itinerary->create([
+            'name' => $reservation->name.'\'s Travel Itinerary',
+            'curator_id' => $reservation->id,
+            'curator_type' => 'reservations'
+        ]);
 
-            $transportActivity = $this->api
-                             ->json(['activities' => [$activity->id]])
-                             ->post('transports/' . $transport->id . '/activities');
+        $itinerary->activities()->sync($activities->all(), false);
 
-            // $hubActivity = $this->api
-            //                  ->json(['activities' => [$activity->id]])
-            //                  ->post('hubs/' . $hub->id . '/activities');
-
-        } catch (\Exception $e) {
-            isset($transport) ? $transport->delete() : null;
-            isset($passenger) ? $passenger->delete() : null;
-            isset($activity) ? $activity->delete() : null;
-
-            throw $e;
-        }
-
-        return $this->response->created();
+        return $this->response->item($itinerary, new ItineraryTransformer);
     }
 }

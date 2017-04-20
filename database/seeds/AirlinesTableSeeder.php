@@ -16,7 +16,6 @@ class AirlinesTableSeeder extends Seeder
 
 
         \DB::table('airlines')->delete();
-
         \DB::table('airlines')->insert(array(
             0 =>
                 array(
@@ -6020,8 +6019,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -12024,8 +12021,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -18028,8 +18023,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -24032,8 +24025,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -30036,8 +30027,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -36040,7 +36029,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
 
             0 =>
                 array(
@@ -42044,7 +42032,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
 
             0 =>
                 array(
@@ -48048,8 +48035,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -54052,8 +54037,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -60056,8 +60039,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -66060,8 +66041,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),
@@ -72064,8 +72043,6 @@ class AirlinesTableSeeder extends Seeder
                 ),
         ));
         \DB::table('airlines')->insert(array(
-            'id' => Uuid::uuid4(),
-
             0 =>
                 array(
                     'id' => Uuid::uuid4(),

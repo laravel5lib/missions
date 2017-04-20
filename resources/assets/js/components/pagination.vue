@@ -74,7 +74,7 @@
                 return arr;
             },
             config () {
-                console.log(this.pagination);
+                // console.log(this.pagination);
                 return Object.assign({
                     offset: 3,
                     ariaPrevious: 'Previous',

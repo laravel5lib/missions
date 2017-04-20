@@ -15,13 +15,6 @@ class Hub extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    protected $casts = ['meta' => 'array'];
-
-    public function setMetaAttribute($value)
-    {
-        $this->attributes['meta'] = json_encode($value);
-    }
-
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);
@@ -30,5 +23,10 @@ class Hub extends Model
     public function activities()
     {
         return $this->morphToMany(Activity::class, 'activitable');
+    }
+
+    public function scopeCallSign($query, $callSign)
+    {
+        return $this->where('call_sign', $callSign);
     }
 }

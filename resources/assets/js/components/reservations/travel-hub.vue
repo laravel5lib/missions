@@ -3,12 +3,12 @@
 		<validator name="TravelHub">
 			<form id="TravelHubForm" novalidate>
 				<template v-if="transportType === 'flight' || transportType === ''">
-					<div class="form-group" v-error-handler="{ value: hub.name, client: 'name' }">
+					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 						<label for="travel_methodA">Airport</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
 						          :value.sync="selectedAirportObj" :options="airportsOptions" label="name"
 						          placeholder="Select Airport"></v-select>
-						<select class="form-control hidden" name="airport" id="airport" v-validate:airport="['required']"
+						<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
 						        v-model="hub.name">
 							<option :value="airport.name" v-for="airport in airportsOptions">
 								{{airport.name | capitalize}}
@@ -39,20 +39,20 @@
 					</div>
 				</template>
 				<template v-else>
-					<div class="form-group" v-error-handler="{ value: hub.name, client: 'name' }">
-						<label for="">Station Name</label>
-						<input type="text" class="form-control" v-model="hub.name" v-validate:name="['required']">
+					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
+						<label for="">{{ transportType === 'train' ? 'Station Name' : 'Drop off location' }}</label>
+						<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
 					</div>
 					<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
-						<label for="">Station City</label>
+						<label for="">City</label>
 						<input type="text" class="form-control" v-model="hub.city" v-validate:city="['required']">
 					</div>
 					<div class="form-group" v-error-handler="{ value: hub.country, client: 'country' }">
-						<label for="">Station Country</label>
+						<label for="">Country</label>
 						<input type="text" class="form-control" v-model="hub.country" v-validate:country="['required']">
 					</div>
 					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
-						<label for="">Station CallSign</label>
+						<label for="">CallSign</label>
 						<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']">
 					</div>
 				</template>

@@ -1,8 +1,11 @@
 <template>
 	<div>
-		<div class="checkbox" v-if="returning">
-			<label for="returningOnOwn">
+		<div class="checkbox">
+			<label for="returningOnOwn" v-if="returning">
 				<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I do not need a returning international flight
+			</label>
+			<label for="noFlightNeeded" v-else>
+				<input type="checkbox" id="noFlightNeeded" name="noFlightNeeded" v-model="noFlightNeeded">I do not need an international flight to {{ $parent.itineraryObj }}
 			</label>
 		</div>
 		<template v-if="!returningOnOwn">
@@ -23,14 +26,17 @@
 						<template v-if="transport && transport.type === 'flight'">
 							<div class="form-group">
 								<label for="travel_methodA">Airline</label>
-								<select class="form-control" name="airline" id="airline" v-validate:airline="['required']"
-								        v-model="selectedAirline">
+								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+								          :value.sync="selectedAirlineObj" :options="airlinesOptions" label="name"
+								          placeholder="Select Airline"></v-select>
+								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+								        v-model="transport.name">
 									<option :value="airline.name" v-for="airline in airlinesOptions">
 										{{airline.name | capitalize}}
 									</option>
 									<option value="other">Other</option>
 								</select>
-								<template v-if="selectedAirline === 'other'">
+								<template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
 									<div class="form-group">
 										<label for="">Airline</label>
 										<input type="text" class="form-control" v-model="transport.name">
@@ -41,8 +47,8 @@
 									<input type="text" class="form-control" v-model="transport.vessel_no">
 								</div>
 								<div class="form-group">
-									<label for="">Airport Code (3 letter IATA)</label>
-									<input type="text" class="form-control" v-model="">
+									<label for="">Capacity</label>
+									<input type="number" number class="form-control" min="0" v-model="transport.capacity">
 								</div>
 
 							</div>
@@ -100,7 +106,7 @@
 							</div>
 						</template>
 
-						<template v-if="transport && (transport.type !== 'flight' || selectedAirline === 'other')">
+						<template v-if="transport && (transport.type !== 'flight' || selectedAirlineObj === 'other')">
 							<div class="form-group">
 								<label for="">Arrival Date & Time</label>
 								<date-picker :model.sync="date_time|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
@@ -109,8 +115,8 @@
 							</div>
 						</template>
 						<hr class="divider inv sm">
-						<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>
-						<button class="btn btn-xs btn-primary" @click="save()">Update</button>
+						<!--<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>-->
+						<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm</button>
 
 					</section>
 				</form>
@@ -143,10 +149,9 @@
                     vessel_no: '',
                     name: '',
                     call_sign: '',
-                    domestic: '',
+                    domestic: true,
                     capacity: '',
-                    campaign_id: '',
-                    passengers: '',
+//                    passengers: '',
                 }
 	        },
 	        returning: {
@@ -179,15 +184,20 @@
                     'Union Pacific Railroad',
                 ],
                 vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other',],
-                selectedAirline: '',
+                selectedAirlineObj: null,
+                noFlightNeeded: false,
                 returningOnOwn: false,
             }
         },
         watch: {
-            selectedAirline(val){
-                if (val && val !== 'other') {
-                    this.transport.name = val;
+            selectedAirlineObj(val, oldVal){
+                if (val && val !== oldVal) {
+                    this.transport.name = val.name;
+                    this.transport.call_sign = val.call_sign;
                 }
+            },
+            noFlightNeeded(val) {
+                this.transport.domestic = false;
             }
         },
 	    computed: {
@@ -198,8 +208,12 @@
         methods: {
             getAirlines(search, loading){
                 loading ? loading(true) : void 0;
-                return this.$http.get('utilities/airlines', { params: {search: search} }).then(function (response) {
-                    this.airlinesOptions = response.body.airlines;
+                return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
+                    this.airlinesOptions = response.body.data;
+                    this.airlinesOptions.push({
+	                    name: 'Other',
+	                    call_sign: ''
+                    });
                     if (loading) {
                         loading(false);
                     } else {
@@ -207,24 +221,29 @@
                     }
                 });
             },
-	        cancel() {
-                this.$http.get();
-	        },
-	        save() {
-
+            getAirline(reference){
+                return this.$http.get('utilities/airlines/' + reference).then(function (response) {
+                    return response.body.data;
+                });
+            },
+            confirm() {
+//                this.$dispatch('confirmedTransport')
 	        },
         },
         ready(){
             let self = this;
-            let airlinesPromise = this.getAirlines('', false);
+            let promises = [];
+            if (self.isUpdate) {
+                let airlinesPromise = this.getAirlines(this.transport.name, false);
+                promises.push(airlinesPromise);
+            }
 
-            Promise.all([airlinesPromise]).then(function (values) {
+            Promise.all(promises).then(function (values) {
                 // Update state data
                 if (self.isUpdate) {
                     // select airline
                     self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
-                    self.selectedAirline = self.selectedAirlineObj.name
-                    console.log(self.selectedAirline);
+                    console.log(self.selectedAirlineObj);
                 }
             });
 

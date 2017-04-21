@@ -2,7 +2,7 @@
 
 namespace App\Utilities\v1;
 
-class Airline {
+class Airport {
 
     /**
      * All available airlines

@@ -20,7 +20,7 @@ class ItinerariesController extends Controller
 
     public function index()
     {
-        $itinerary = $this->itinerary->withCount('items')->paginate(10);
+        $itinerary = $this->itinerary/*->withCount('items')*/->paginate(10);
 
         return $this->response->paginator($itinerary, new ItineraryTransformer);
     }

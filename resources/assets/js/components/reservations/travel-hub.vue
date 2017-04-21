@@ -40,19 +40,19 @@
 				</template>
 				<template v-else>
 					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-						<label for="">Station Name</label>
+						<label for="">{{ transportType === 'train' ? 'Station Name' : 'Drop off location' }}</label>
 						<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
 					</div>
 					<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
-						<label for="">Station City</label>
+						<label for="">City</label>
 						<input type="text" class="form-control" v-model="hub.city" v-validate:city="['required']">
 					</div>
 					<div class="form-group" v-error-handler="{ value: hub.country, client: 'country' }">
-						<label for="">Station Country</label>
+						<label for="">Country</label>
 						<input type="text" class="form-control" v-model="hub.country" v-validate:country="['required']">
 					</div>
 					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
-						<label for="">Station CallSign</label>
+						<label for="">CallSign</label>
 						<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']">
 					</div>
 				</template>

@@ -28,6 +28,10 @@ return [
                 'url' => 'companions'
             ],
             [
+                'label' => 'Trip Resources',
+                'url' => 'resources'
+            ],
+            [
                 'label' => 'Legal',
                 'url' => 'legal'
             ]
@@ -174,6 +178,10 @@ return [
             [
                 'label' => 'Notes',
                 'url' => 'notes'
+            ],
+            [
+                'label' => 'Trip Resources',
+                'url' => 'resources'
             ]
         ],
     ]

@@ -4,27 +4,33 @@
 			<form id="TravelItinerariesForm" novalidate>
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
-				<div v-for="itinerary in itineraries">
-					<h3>{{itinerary.name}}</h3>
-					<div v-for="item in itinerary.items">
-						<h5>Activty</h5>
-						<travel-activity :activity="item.activity"></travel-activity>
+				<accordion :one-at-atime="true" type="info">
+					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries">
+						<div v-for="item in itinerary.items">
+							<h5>Activty</h5>
+							<travel-activity :activity="item.activity"></travel-activity>
 
-						<h5>Transport</h5>
-						<travel-transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
+							<h5>Transport</h5>
+							<travel-transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
 
-						<h5>Hub</h5>
-						<travel-hub :hub="item.hub"></travel-hub>
+							<h5>Hub</h5>
+							<travel-hub :hub="item.hub"></travel-hub>
 
-						<hr class="divider inv sm">
+							<hr class="divider sm">
 
-						<!--<button type="button" class="btn btn-xs btn-primary" @click="addNewTransport" v-if="departures <= 2">
-							Have a prior connection?
-						</button>
-						<br>
-						<br>-->
-					</div>
-				</div>
+							<!--<button type="button" class="btn btn-xs btn-primary" @click="addNewTransport" v-if="departures <= 2">
+								Have a prior connection?
+							</button>
+							<br>
+							<br>-->
+						</div>
+					</panel>
+				</accordion>
+
+				<hr class="divider">
+				<button type="button" class="btn btn-xs btn-primary" @click="newItinerary">
+					New Itinerary
+				</button>
 			</form>
 		</validator>
 	</div>
@@ -58,38 +64,30 @@
                 // Itinerary
                 itineraryObj: {
                     reservation_id: this.reservationId,
+	                name: 'New Itinerary',
                     items: [
                         {
                             transport: {
-                                "id": "06237610-58b3-4bdb-8f75-434705398537",
-                                "type": "flight",
-                                "vessel_no": "AA101",
-                                "name": "American Airlines",
-                                "domestic": true,
-                                "capacity": 200,
-                                "call_sign": 'AA',
-                                "created_at": "2017-04-19 14:54:33",
-                                "updated_at": "2017-04-19 14:57:54",
-                                "links": [
-                                    {
-                                        "rel": "self",
-                                        "uri": "/api/transports/06237610-58b3-4bdb-8f75-434705398537"
-                                    }
-                                ]
+                                type: '',
+                                vessel_no: '',
+                                name: '',
+                                call_sign: '',
+                                domestic: true,
+                                capacity: '',
                             },
                             activity: {
-                                name: 'Test Activity',
-                                description: 'Test Activity for Itineraries',
-                                occurred_at: '2017-04-19 14:54:33'
+                                name: '',
+                                description: '',
+                                occurred_at: ''
                             },
                             hub: {
-                                name: 'Lester B. Pearson International Airport',
+                                name: '',
                                 address: '',
-                                call_sign: 'YYZ',
-                                city: 'Toronto',
-                                state: 'Ontario',
+                                call_sign: '',
+                                city: '',
+                                state: '',
                                 zip: '',
-                                country: 'Canada',
+                                country: '',
                             },
                         }
                     ]
@@ -166,21 +164,12 @@
             updateItinerary(){
 
             },
-            addNewTransport(){
-                this.departures.push({
-                    type: '',
-                    vessel_no: '',
-                    name: '',
-                    call_sign: '',
-                    domestic: '',
-                    capacity: '',
-                    campaign_id: '80ea6760-719c-46c7-8b0e-cf2ddc76fd60',
-                    passengers: '',
-                });
+            newItinerary(){
+                this.itineraries.push(this.itineraryObj);
             },
         },
         ready(){
-            this.getItineraries();
+//            this.getItineraries();
 
 //            this.saveItinerary();
         }

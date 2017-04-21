@@ -14,7 +14,7 @@
 					<!--<legend></legend>-->
 					<section>
 						<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>
-						<div class="form-group">
+						<div class="form-group" v-error-handler="{ value: transport, client: 'type' }">
 							<label for="travel_methodA">Travel Method</label>
 							<select class="form-control" name="travel_method" id="travel_method"
 							        v-validate:transporttype="['required']" v-model="transport.type">
@@ -106,17 +106,9 @@
 							</div>
 						</template>
 
-						<template v-if="transport && (transport.type !== 'flight' || selectedAirlineObj === 'other')">
-							<div class="form-group">
-								<label for="">Arrival Date & Time</label>
-								<date-picker :model.sync="date_time|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="date_time | moment 'LLLL'"
-								       id="started_at" required>
-							</div>
-						</template>
 						<hr class="divider inv sm">
 						<!--<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>-->
-						<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm</button>
+						<!--<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm Transport</button>-->
 
 					</section>
 				</form>
@@ -138,10 +130,6 @@
                 type: String,
 //                required: true,
             },
-            campaignId: {
-                type: String,
-//                required: true,
-            },
 	        transport: {
                 type: Object,
 		        default: {
@@ -151,7 +139,6 @@
                     call_sign: '',
                     domestic: true,
                     capacity: '',
-//                    passengers: '',
                 }
 	        },
 	        returning: {
@@ -250,6 +237,7 @@
             this.itinerant_id = this.reservationId;
 //			this.transport.campaign_id = this.campaignId;
 
+            this.attemptSubmit = true;
 
         }
     }

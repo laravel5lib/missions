@@ -2,13 +2,13 @@
 	<div>
 		<validator name="TravelHub">
 			<form id="TravelHubForm" novalidate>
-				<div class="form-group">
+				<div class="form-group" v-error-handler="{ value: hub.name, client: 'name' }">
 					<label for="travel_methodA">Airport</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
 					          :value.sync="selectedAirportObj" :options="airportsOptions" label="name"
 					          placeholder="Select Airport"></v-select>
 					<select class="form-control hidden" name="airport" id="airport" v-validate:airport="['required']"
-					        v-model="name">
+					        v-model="hub.name">
 						<option :value="airport.name" v-for="airport in airportsOptions">
 							{{airport.name | capitalize}}
 						</option>
@@ -20,6 +20,8 @@
 							<input type="text" class="form-control" v-model="transport.name">
 						</div>
 					</template>
+				</div>
+				<div class="form-group">
 					<br>
 					<div class="well well-sm" v-if="selectedAirportObj">
 						<dl class="dl-horizontal">
@@ -36,7 +38,7 @@
 				</div>
 				<hr class="divider inv sm">
 				<!--<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>-->
-				<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm</button>
+				<!--<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm Hub</button>-->
 			</form>
 		</validator>
 	</div>
@@ -52,24 +54,33 @@
 	    props: {
             hub: {
                 type: Object,
+	            default: {
+                    name: '',
+                    address: '',
+                    call_sign: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country_code: '',
+	            }
+            },
+            isUpdate: {
+                type: Boolean,
+                default: false
             }
-	    },
+        },
         data(){
             return {
                 // mixin settings
                 validatorHandle: 'TravelHub',
 
-                // Hub vars
-	            name: '',
-                address: '',
-                call_sign: '',
-                city: '',
-                state: '',
-                zip: '',
-                country_code: '',
-
                 airportsOptions: [],
                 selectedAirportObj: null,
+            }
+        },
+        computed: {
+            'isUpdate': function() {
+                return this && this.hub.hasOwnProperty('id') && _.isString(this.hub.id);
             }
         },
         methods: {
@@ -93,19 +104,24 @@
         watch: {
             selectedAirportObj(val, oldVal){
                 if (val && val !== oldVal) {
-                    this.name = val.name;
-                    this.call_sign = val.iata;
+                    this.hub.name = val.name;
+                    this.hub.call_sign = val.iata;
                 }
             },
         },
 	    ready(){
             let self = this;
             let promises = [];
-            promises.push(this.getAirports('', false));
+            promises.push(this.getAirports(this.hub.name, false));
 
             Promise.all(promises).then(function (values) {
+				// Update state data
+                // select airline
+                self.selectedAirportObj = _.findWhere(self.airportsOptions, { name: self.hub.name });
+                console.log(self.selectedAirportObj);
 
             });
-	    }
+            this.attemptSubmit = true;
+        }
     }
 </script>

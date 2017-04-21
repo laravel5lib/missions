@@ -21,9 +21,9 @@
 						</div>
 					</template>
 				</div>
-				<div class="form-group">
+				<div class="form-group" v-if="selectedAirportObj">
 					<br>
-					<div class="well well-sm" v-if="selectedAirportObj">
+					<div class="well well-sm">
 						<dl class="dl-horizontal">
 							<dt>Name</dt>
 							<dd>{{ selectedAirportObj.name }}</dd>

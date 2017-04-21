@@ -46,7 +46,7 @@
 									<label for="">Flight No.</label>
 									<input type="text" class="form-control" v-model="transport.vessel_no">
 								</div>
-								<div class="form-group">
+								<div class="form-group" v-if="isAdminRoute">
 									<label for="">Capacity</label>
 									<input type="number" number class="form-control" min="0" v-model="transport.capacity">
 								</div>

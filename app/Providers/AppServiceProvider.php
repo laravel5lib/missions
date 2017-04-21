@@ -96,24 +96,12 @@ class AppServiceProvider extends ServiceProvider
                     $reservation_count = 0;
                 }
 
-                $limit = collect(
+                $limit = collect([
                     ($companion_limit - $companion_count), 
                     ($reservation_limit - $reservation_count)
-                )->min();
+                ])->min();
 
                 return $limit > 0;
-
-               //  $reservation = Reservation::find($params[0]);
-               //  $reservation_within_limit = $reservation ? 
-               //         $reservation->companions->count() < $reservation->companion_limit : 
-               //         false;
-
-               //  $companion = Reservation::find($value);
-               //  $companion_within_limit = $companion ? 
-               //     $companion->companions->count() < $companion->companion_limit :
-               //     false;
-
-               // return $reservation_within_limit && $companion_within_limit;
             }
 
             return false;

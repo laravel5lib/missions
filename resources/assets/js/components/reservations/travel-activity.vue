@@ -2,16 +2,16 @@
 	<div>
 		<validator name="TravelActivity">
 			<form id="TravelActivityForm" novalidate>
-				<div class="form-group" v-error-handler="{ value: activity.name, client: 'name' }">
+				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.name, client: 'name' }">
 					<label for="">Name</label>
 					<input type="text" class="form-control" v-model="activity.name" v-validate:name="['required']">
 				</div>
-				<div class="form-group" v-error-handler="{ value: activity.description, client: 'description' }">
+				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.description, client: 'description' }">
 					<label for="">Description</label>
 					<input type="text" class="form-control" v-model="activity.description" v-validate:description="['required']">
 				</div>
 				<div class="form-group" v-error-handler="{ value: activity.occured_at, client: 'occured' }">
-					<label for="">Occured</label>
+					<label for="">Arrival Date & Time</label>
 					<date-picker :model.sync="activity.occurred_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 					<input type="datetime" class="form-control hidden" v-model="activity.occurred_at | moment 'LLLL'"
 					       id="occurred_at" v-validate:occured="['required']">

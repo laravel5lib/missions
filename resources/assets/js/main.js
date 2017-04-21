@@ -737,7 +737,10 @@ Vue.mixin({
     computed: {
         firstUrlSegment: function () {
             return document.location.pathname.split("/").slice(1, 2).toString();
-        }
+        },
+        isAdminRoute() {
+            return this.firstUrlSegment == 'admin';
+        },
     },
     ready() {
         function isTouchDevice() {

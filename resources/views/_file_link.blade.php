@@ -1,8 +1,12 @@
 @inject('upload', 'App\Models\v1\Upload')
 @if($upload->find($id))
-    @if ($upload->type == 'other')
+    @if ($upload->find($id)->type == 'other')
     <a href="{{ display_file($upload->find($id)->source) }}" target="_blank">
         <i class="fa fa-file-pdf-o"></i> {{ $name }}
+    </a>
+    @elseif ($upload->find($id)->type == 'audio')
+    <a href="{{ download_file($upload->find($id)->source)}}" target="_blank">
+        <i class="fa fa-file-audio-o"></i> {{ $name }}
     </a>
     @else
     <a href="{{ image($upload->find($id)->source) }}" target="_blank">

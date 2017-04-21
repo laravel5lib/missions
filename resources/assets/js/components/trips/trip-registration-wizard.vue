@@ -235,7 +235,7 @@
 					avatar_upload_id: this.userInfo.avatar_upload_id,
 //					trip_id: this.tripId,
 					companion_limit: this.companion_limit,
-					costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
+					costs: this.prepareFinalCosts(),
 
 					// payment data
 					amount: this.upfrontTotal,
@@ -286,6 +286,15 @@
 				});
 
 
+			},
+			prepareFinalCosts(){
+			    let finalCosts = [];
+			    let unionCosts = _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static);
+			    _.each(unionCosts, function (cost) {
+				    if (_.isObject(cost))
+                        finalCosts.push(cost);
+                });
+			    return finalCosts;
 			},
 			detectCardType(number) {
 				// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number

@@ -452,7 +452,7 @@ Vue.directive('crop', {
                 setTimeout(self.waitForLibrary, 1000);
             }
         };*/
-
+        
         if (!_.contains(['file', 'video'], this.vm.type)) {
             // debugger;
             // this.waitForLibrary();

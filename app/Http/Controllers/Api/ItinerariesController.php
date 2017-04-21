@@ -20,14 +20,14 @@ class ItinerariesController extends Controller
 
     public function index()
     {
-        $itinerary = $this->itinerary/*->withCount('items')*/->paginate(10);
+        $itinerary = $this->itinerary->withCount('activities')->paginate(10);
 
         return $this->response->paginator($itinerary, new ItineraryTransformer);
     }
 
     public function show($id)
     {
-        $itinerary = $this->itinerary->withCount('items')->findOrFail($id);
+        $itinerary = $this->itinerary->withCount('activities')->findOrFail($id);
 
         return $this->response->item($itinerary, new ItineraryTransformer);
     }

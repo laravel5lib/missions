@@ -24,4 +24,9 @@ class Activity extends Model
     {
         return $this->morphedByMany(Transport::class, 'activitable');
     }
+
+    public function hubs()
+    {
+        return $this->morphedByMany(Hub::class, 'activitable');
+    }
 }

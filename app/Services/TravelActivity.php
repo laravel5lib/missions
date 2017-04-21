@@ -33,9 +33,9 @@ class TravelActivity {
                 ->json(['activities' => [$activity->id]])
                 ->post('transports/' . $transport->id . '/activities');
 
-            // $hubActivity = $this->api
-            //     ->json(['activities' => [$activity->id]])
-            //     ->post('hubs/' . $hub->id . '/activities');
+            $hubActivity = $this->api
+                ->json(['activities' => [$activity->id]])
+                ->post('hubs/' . $hub->id . '/activities');
 
         } catch (\Exception $e) {
             isset($transport) ? $transport->delete() : null;

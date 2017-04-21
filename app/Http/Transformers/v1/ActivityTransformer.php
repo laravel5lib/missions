@@ -6,6 +6,15 @@ use League\Fractal\TransformerAbstract;
 
 class ActivityTransformer extends TransformerAbstract
 {
+    /**
+     * List of resources available to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [
+        'hubs', 'transports'
+    ];
+
     public function transform(Activity $activity)
     {
         return [
@@ -21,5 +30,19 @@ class ActivityTransformer extends TransformerAbstract
                                         $activity->deleted_at->toDateTimeString() : 
                                         null,
         ];
+    }
+
+    public function includeHubs(Activity $activity)
+    {
+        $hubs = $activity->hubs;
+
+        return $this->collection($hubs, new HubTransformer);
+    }
+
+    public function includeTransports(Activity $activity)
+    {
+        $transports = $activity->transports;
+
+        return $this->collection($transports, new TransportTransformer);
     }
 }

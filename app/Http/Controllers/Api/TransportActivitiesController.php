@@ -11,6 +11,8 @@ use App\Http\Transformers\v1\ActivityTransformer;
 
 class TransportActivitiesController extends Controller
 {
+    private $transport;
+    
     function __construct(Transport $transport)
     {
         $this->transport = $transport;

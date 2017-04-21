@@ -51,7 +51,9 @@ class AppServiceProvider extends ServiceProvider
             'notes' => \App\Models\v1\Note::class,
             'todos' => \App\Models\v1\Todo::class,
             'transports' => \App\Models\v1\Transport::class,
-            'travel_itineraries' => \App\Models\v1\Activity::class
+            'travel_itineraries' => \App\Models\v1\Activity::class,
+            'itineraries' => \App\Models\v1\Itinerary::class,
+            'hubs' => \App\Models\v1\Hub::class
         ]);
 
         Validator::extend('is_csv',function($attribute, $value, $params, $validator) {

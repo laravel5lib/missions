@@ -5,7 +5,17 @@ use App\Models\v1\Itinerary;
 use League\Fractal\TransformerAbstract;
 
 class ItineraryTransformer extends TransformerAbstract
-{
+{   
+
+    /**
+     * List of resources available to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = [
+        'activities'
+    ];
+
     public function transform(Itinerary $itinerary)
     {
         return [
@@ -24,5 +34,12 @@ class ItineraryTransformer extends TransformerAbstract
                 ]
             ]
         ];
+    }
+
+    public function includeActivities(Itinerary $itinerary)
+    {
+        $activities = $itinerary->activities;
+
+        return $this->collection($activities, new ActivityTransformer);
     }
 }

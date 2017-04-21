@@ -5,26 +5,42 @@
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 				<div v-for="itinerary in itineraries">
+
+					<div class="checkbox">
+						<label for="returningOnOwn">
+							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I don't need a returning international flight.
+						</label>
+					</div>
+					<div class="checkbox">
+						<label for="connectionFlight">
+							<input id="connectionFlight" type="checkbox" :checked="itinerary.items.length === 3" name="connectionFlight" @change="toggleConnectionItem(itinerary.items)"> Do you have a prior travel connection?
+						</label>
+					</div>
 					<accordion :one-at-atime="true" type="info">
 						<panel is-open="false" :header="item.activity.name" v-for="item in itinerary.items">
-							<travel-transport v-ref:transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
-
-							<travel-hub v-ref:hub :hub="item.hub"></travel-hub>
-
-							<travel-activity v-ref:activity :activity="item.activity" :simple="true"></travel-activity>
-
-							<div class="checkbox" v-if="$index === 0 && itinerary.items.length < 3">
-								<label for="connectionFLight">
-									<input id="connectionFLight" name="connectionFLight" type="checkbox" @change="toggleConnectionItem(itinerary)"> Do you have a prior connecting flight?
+							<div class="checkbox">
+								<label for="noTravelTo" v-if="itinerary.items.length === ($index + 2)">
+									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transport to the destination.
 								</label>
 							</div>
+
+							<div v-if="itinerary.items.length === ($index + 1) && returningOnOwn">
+								<p>Returning on own</p>
+							</div>
+							<div v-else>
+								<travel-transport v-ref:transport :reservation-id="reservationId" :transport.sync="item.transport"></travel-transport>
+
+								<travel-hub v-ref:hub :hub="item.hub" :transport-type="item.transport.type"></travel-hub>
+
+								<travel-activity v-ref:activity :activity="item.activity" :simple="true"></travel-activity>
+							</div>
+
 						</panel>
 					</accordion>
 					<hr class="divider sm">
 
-					<button class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>
-					<button v-if="!!itinerary.id" class="btn btn-xs btn-primary" type="button" @click="updateItinerary(itinerary)">Update Transport</button>
-					<button v-else class="btn btn-xs btn-primary" type="button" @click="saveItinerary(itinerary)">Save Transport</button>
+					<!--<button v-if="itinerary.id" class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>-->
+					<button v-if="!itinerary.id" class="btn btn-xs btn-primary" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
 				</div>
 
 				<!--<hr class="divider">-->
@@ -51,9 +67,8 @@
                 type: String,
                 required: true,
             },
-            campaignId: {
-                type: String,
-//                required: true,
+            document: {
+                type: Object,
             },
         },
         data(){
@@ -62,35 +77,73 @@
                 validatorHandle: 'TravelItineraries',
 
                 itineraries: [],
+                returningOnOwn: false
             }
         },
         watch: {
             selectedAirline(val){
                 if (val && val !== 'other') {
-//                    let airline = _.findWhere(this.airlinesOptions, {name: this.selectedAirline});
                     this.transport.name = val;
                 }
             }
         },
         methods: {
             getItineraries(){
-                this.$http.get('itineraries', {params: {include: '',}}).then(function (response) {
-                    this.itineraries = response.body.data;
+                this.$http.get('itineraries/' + this.document.id, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
+                    let itinerary = {
+                        id: response.body.data.id,
+                        reservation_id: response.body.data.curator_id,
+                        items: [],
+                    };
+                    _.each(response.body.data.activities.data, function (activity) {
+	                    itinerary.items.push({
+                            transport: {
+                                id: activity.transports.data.id,
+                                type: activity.transports.data.type,
+                                vessel_no: activity.transports.data.vessel_no,
+                                name: activity.transports.data.name,
+                                call_sign: activity.transports.data.call_sign,
+                                domestic: activity.transports.data.domestic,
+                                capacity: activity.transports.data.capacity,
+                            },
+                            activity: {
+                                id: activity.id,
+                                name: activity.name,
+	                            description: activity.description,
+                                occurred_at: activity.occured_at
+                            },
+                            hub: {
+                                id: activity.hubs.data.id,
+                                name: activity.hubs.data.name,
+                                address: activity.hubs.data.address,
+                                call_sign: activity.hubs.data.call_sign,
+                                city: activity.hubs.data.city,
+                                state: activity.hubs.data.state,
+                                zip: activity.hubs.data.zip,
+                                country: activity.hubs.data.country,
+                            },
+                        });
+                    });
+
+                    this.itineraries.push(itinerary);
+
+                    if (!this.itineraries.length)
+                        this.newItinerary();
                 });
             },
             deleteItinerary(itinerary){
                 this.$http.delete('itineraries/travel', itinerary).then(function (response) {
-                    //this.itineraries.push(response.body.data);
+                    this.$emit('showSuccess', 'Itinerary Deleted');
                 });
             },
             saveItinerary(itinerary){
+                if (this.returningOnOwn)
+                    itinerary.items.pop();
+
                 this.$http.post('itineraries/travel', itinerary).then(function (response) {
+
                     this.itineraries.push(response.body.data);
-                });
-            },
-            updateItinerary(itinerary){
-                this.$http.put('itineraries/travel/' + itinerary.id, itinerary).then(function (response) {
-                    return itinerary = response.body.data;
+                    this.$emit('showSuccess', 'Itinerary Saved');
                 });
             },
             newItinerary(){
@@ -130,15 +183,19 @@
 	        },
             toggleConnectionItem(items) {
 	            if (items.length < 3) {
-                    items.splice(1, 0, this.newItineraryItem('Connection Flight'));
+                    items.splice(0, 0, this.newItineraryItem('Travel Connection'));
                 } else {
-	                items.splice(1, 0);
+	                items.splice(0, 1);
 	            }
             }
         },
         ready(){
-            this.newItinerary();
-//            this.getItineraries();
+            if (this.document) {
+                this.getItineraries();
+            } else {
+                this.newItinerary();
+            }
+
         }
     }
 </script>

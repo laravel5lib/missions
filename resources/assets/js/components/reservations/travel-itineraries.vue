@@ -5,24 +5,23 @@
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 				<accordion :one-at-atime="true" type="info">
-					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries">
+					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries" v-ref:iList>
 						<div v-for="item in itinerary.items">
 							<h5>Activty</h5>
-							<travel-activity :activity="item.activity"></travel-activity>
+							<travel-activity v-ref:activity :activity="item.activity"></travel-activity>
 
 							<h5>Transport</h5>
-							<travel-transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
+							<travel-transport v-ref:transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
 
 							<h5>Hub</h5>
-							<travel-hub :hub="item.hub"></travel-hub>
+							<travel-hub v-ref:hub :hub="item.hub"></travel-hub>
 
 							<hr class="divider sm">
 
-							<!--<button type="button" class="btn btn-xs btn-primary" @click="addNewTransport" v-if="departures <= 2">
-								Have a prior connection?
-							</button>
-							<br>
-							<br>-->
+							<button class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>
+							<button v-if="!!itinerary.id" class="btn btn-xs btn-primary" type="button" @click="updateItinerary(itinerary)">Update Transport</button>
+							<button v-else class="btn btn-xs btn-primary" type="button" @click="saveItinerary(itinerary)">Save Transport</button>
+
 						</div>
 					</panel>
 				</accordion>
@@ -156,13 +155,20 @@
                     this.itineraries = response.body.data;
                 });
             },
-            saveItinerary(){
-                this.$http.post('itineraries/travel', this.itineraryObj).then(function (response) {
-                    this.itineraries.push(response.body.data);
-                })
+            deleteItinerary(itinerary){
+                this.$http.delete('itineraries/travel', itinerary).then(function (response) {
+                    //this.itineraries.push(response.body.data);
+                });
             },
-            updateItinerary(){
-
+            saveItinerary(itinerary){
+                this.$http.post('itineraries/travel', itinerary).then(function (response) {
+                    this.itineraries.push(response.body.data);
+                });
+            },
+            updateItinerary(itinerary){
+                this.$http.put('itineraries/travel/' + itinerary.id, itinerary).then(function (response) {
+                    return itinerary = response.body.data;
+                });
             },
             newItinerary(){
                 this.itineraries.push(this.itineraryObj);

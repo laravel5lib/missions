@@ -2,10 +2,30 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <div class="col-xs-6">
-                    <h5>Companions {{ companions.length }} of {{ limit }}</h5>
+                <div class="col-xs-8">
+                    <h5>
+                        <form class="form-inline">
+                        <a class="text-muted" @click="editMode=!editMode" v-if="firstUrlSegment === 'admin'">
+                            <i class="fa fa-cog"></i>
+                        </a>
+                        Companions {{ companions.length }} of 
+                        <span v-if="editMode">
+                            <span class="input-group input-group-sm col-lg-3 col-md-4 col-sm-8 col-xs-12">
+                                <input type="number" class="form-control" v-model="limit">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default-hollow" 
+                                            type="button" style="margin-top:0"
+                                            @click.prevent="update()">
+                                        Save
+                                    </button>
+                                </span>
+                            </span>
+                        </span>
+                        <span v-else>{{ limit }}</span>
+                        </form>
+                    </h5>
                 </div>
-                <div class="col-xs-6 text-right">
+                <div class="col-xs-4 text-right">
                     <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#LeaveCompanionsModal" v-show="companions.length > 0">
                         <span class="fa fa-remove"></span> Leave
                     </button>
@@ -97,6 +117,7 @@ export default {
   },
   data () {
     return {
+        editMode: false,
         reservations: [],
         reservationObj: null,
         limit: 0,
@@ -173,6 +194,15 @@ export default {
             this.$dispatch('showError', 'Could not leave companions.');
         });
     },
+    update() {
+        this.$http.put('reservations/' + this.reservationId, {companion_limit: this.limit})
+            .then(function (response) {
+                this.$dispatch('showSuccess', 'Successfully updated companion limit.');
+                this.editMode = false;
+            }, function (response) {
+                this.$dispatch('showError', 'Could not update companion limit.');
+            });
+    }
   },
   ready() {
     this.fetch();

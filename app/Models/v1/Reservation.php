@@ -88,6 +88,17 @@ class Reservation extends Model
     }
 
     /**
+     * Get the reservation's companion limi.
+     * 
+     * @param  integer $value
+     * @return integer
+     */
+    public function getCompanionLimitAttribute($value)
+    {
+        return $value ?: ($this->trip->companion_limit ?: 0);
+    }
+
+    /**
      * Set the reservation's status.
      *
      * @param $value

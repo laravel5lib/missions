@@ -55,5 +55,20 @@ class SendRequirementNotificationEmail extends Job implements ShouldQueue
         // facilitator
 
         // trip rep
+        $rep = $requirement->reservation->rep ?: $requirement->reservation->trip->rep;
+
+        if ($rep) {
+            $mailer->send('emails.requirements.update', [
+                'recipient_name' => $rep->name,
+                'reservation_name' => $requirement->reservation->name,
+                'country' => country($requirement->reservation->trip->campaign->country_code),
+                'requirement' => $requirement->requirement->name,
+                'status' => $requirement->status,
+                'gender' => $requirement->reservation->gender,
+            ], function ($m) use ($requirement, $rep) {
+                $m->to($rep->email, $rep->name)
+                    ->subject('The status of '.$requirement->reservation->name.'\'s travel requirement has changed!');
+            });
+        }
     }
 }

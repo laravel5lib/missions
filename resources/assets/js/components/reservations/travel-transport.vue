@@ -4,7 +4,7 @@
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<!--<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>-->
-						<div class="form-group" v-error-handler="{ value: transport, client: 'type' }">
+						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
 							<label for="travel_methodA">Travel Method</label>
 							<select class="form-control" name="travel_method" id="travel_method"
 							        v-validate:transporttype="['required']" v-model="transport.type">

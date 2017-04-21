@@ -1,6 +1,6 @@
 @inject('upload', 'App\Models\v1\Upload')
 @if($upload->find($id))
-    @if ($upload->find($id)->type == 'other')
+    @if ($upload->find($id)->type == 'file')
     <a href="{{ display_file($upload->find($id)->source) }}" target="_blank">
         <i class="fa fa-file-pdf-o"></i> {{ $name }}
     </a>

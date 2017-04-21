@@ -23,8 +23,7 @@
         "haleks/laravel-markdown": "^0.2.0",
         "maatwebsite/excel": "~2.1.0",
         "bugsnag/bugsnag-laravel": "^2.4",
-        "pda/pheanstalk": "~3.0",
-        "orangehill/iseed": "2.2"
+        "pda/pheanstalk": "~3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

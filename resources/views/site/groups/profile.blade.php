@@ -54,20 +54,20 @@
             </div><!-- end col -->
             <div class="col-md-9 col-sm-8 col-xs-12">
                 <ul id="profTabs" class="nav nav-tabs" role="tablist">
-                    <li data-toggle="tooltip" title="Stories" role="presentation" class="active"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-comments"></i> <span class="hidden-xs">Stories</span></a></li>
-                    <li data-toggle="tooltip" title="Current Trips" role="presentation"><a href="#current-trips" aria-controls="current-trips" role="tab" data-toggle="tab"><i class="fa fa-plane"></i> <span class="hidden-xs">Trips</span></a></li>
+                    <li data-toggle="tooltip" title="Stories" role="presentation"><a href="#stories" aria-controls="stories" role="tab" data-toggle="tab"><i class="fa fa-comments"></i> <span class="hidden-xs">Stories</span></a></li>
+                    <li data-toggle="tooltip" title="Current Trips" role="presentation" class="active"><a href="#current-trips" aria-controls="current-trips" role="tab" data-toggle="tab"><i class="fa fa-plane"></i> <span class="hidden-xs">Trips</span></a></li>
                     {{-- <li data-toggle="tooltip" title="Fundraisers" role="presentation"><a href="#fundraisers" aria-controls="fundraisers" role="tab" data-toggle="tab"><i class="fa fa-dollar"></i> <span class="hidden-xs">Fundraisers</span></a></li> --}}
                     @can('edit', $group)
                     <li data-toggle="tooltip" title="Dashboard" class="pull-right"><a href="/dashboard/groups/{{ $group->id }}"><i class="fa fa-tachometer"></i></a></li>
                     @endcan
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="stories">
+                    <div role="tabpanel" class="tab-pane" id="stories">
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                             <group-profile-stories id="{{ $group->id }}" :manager-ids="{{ $group->managers->pluck('id') }}" auth-id="{{ auth()->check() ? auth()->user()->id : '' }}"></group-profile-stories>
                         </div>
                     </div><!-- end row tab -->
-                    <div role="tabpanel" class="tab-pane" id="current-trips">
+                    <div role="tabpanel" class="tab-pane active" id="current-trips">
                         <group-profile-trips id="{{ $group->id }}"></group-profile-trips>
                     </div><!-- end tab-pane -->
                     {{-- <div role="tabpanel" class="tab-pane" id="fundraisers">

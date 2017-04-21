@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
+<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div style="position:relative">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
@@ -568,7 +568,7 @@
                         }
                     }, 1000);
                 }
-	        }
+	        },
         },
 		ready(){
             let self = this;
@@ -576,9 +576,19 @@
 				this.resource.get({id: this.uploadId}).then(function (response) {
 					let upload = response.body.data;
 					this.name = upload.name;
-					this.tags = upload.tags;
-					this.type = upload.type;
-					this.src = upload.source;
+					// strictly verify tags
+					switch (upload.type) {
+						case 'avatar':
+                            // if upload.tags is not an array or if it is empty
+                            this.tags = !_.isArray(upload.tags) || !upload.tags.length
+	                            // check if component prop `tags` is set, if not default to User, Group, Campaing tags
+	                            ? !_.isArray(this.tags) ? ['User', 'Campaign', 'Group']: this.tags
+	                            // else use tags from API data
+	                            : upload.tags;
+                            break;
+                    }
+                    this.type = upload.type;
+                    this.src = upload.source;
 
                     this.loadCropper();
 				});

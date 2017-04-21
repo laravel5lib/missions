@@ -1,114 +1,120 @@
 <template>
 	<div>
-		<validator name="TravelTransport">
-			<form id="TravelTransportForm" novalidate>
-				<legend></legend>
-				<section>
-					<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>
-					<div class="form-group">
-						<label for="travel_methodA">Travel Method</label>
-						<select class="form-control" name="travel_methodA" id="travel_methodA"
-						        v-validate:transporttype="['required']" v-model="transport.type">
-							<option value="">-- Select--</option>
-							<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
-						</select>
-					</div>
-
-					<template v-if="transport && transport.type === 'flight'">
-						<div class="form-group">
-							<label for="travel_methodA">Airline</label>
-							<select class="form-control" name="airline" id="airline" v-validate:airline="['required']"
-							        v-model="selectedAirline">
-								<option :value="airline.name" v-for="airline in airlinesOptions">
-									{{airline.name | capitalize}}
-								</option>
-								<option value="other">Other</option>
+		<div class="checkbox">
+			<label for="returningOnOwn" v-if="returning">
+				<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I do not need a returning international flight
+			</label>
+			<label for="noFlightNeeded" v-else>
+				<input type="checkbox" id="noFlightNeeded" name="noFlightNeeded" v-model="noFlightNeeded">I do not need an international flight to {{ $parent.itineraryObj }}
+			</label>
+		</div>
+		<template v-if="!returningOnOwn">
+			<validator name="TravelTransport">
+				<form id="TravelTransportForm" novalidate >
+					<!--<legend></legend>-->
+					<section>
+						<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>
+						<div class="form-group" v-error-handler="{ value: transport, client: 'type' }">
+							<label for="travel_methodA">Travel Method</label>
+							<select class="form-control" name="travel_method" id="travel_method"
+							        v-validate:transporttype="['required']" v-model="transport.type">
+								<option value="">-- Select--</option>
+								<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
 							</select>
-							<template v-if="selectedAirline === 'other'">
-								<div class="form-group">
-									<label for="">Airline</label>
-									<input type="text" class="form-control" v-model="airline.name">
-								</div>
-							</template>
+						</div>
+
+						<template v-if="transport && transport.type === 'flight'">
 							<div class="form-group">
-								<label for="">Flight No.</label>
+								<label for="travel_methodA">Airline</label>
+								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+								          :value.sync="selectedAirlineObj" :options="airlinesOptions" label="name"
+								          placeholder="Select Airline"></v-select>
+								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+								        v-model="transport.name">
+									<option :value="airline.name" v-for="airline in airlinesOptions">
+										{{airline.name | capitalize}}
+									</option>
+									<option value="other">Other</option>
+								</select>
+								<template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
+									<div class="form-group">
+										<label for="">Airline</label>
+										<input type="text" class="form-control" v-model="transport.name">
+									</div>
+								</template>
+								<div class="form-group">
+									<label for="">Flight No.</label>
+									<input type="text" class="form-control" v-model="transport.vessel_no">
+								</div>
+								<div class="form-group">
+									<label for="">Capacity</label>
+									<input type="number" number class="form-control" min="0" v-model="transport.capacity">
+								</div>
+
+							</div>
+						</template>
+
+						<template v-if="transport && transport.type === 'bus'">
+							<div class="form-group">
+								<label for="">Company</label>
+								<input type="text" class="form-control" v-model="transport.name">
+							</div>
+							<div class="form-group">
+								<label for="">Schedule/Route No.</label>
 								<input type="text" class="form-control" v-model="transport.vessel_no">
 							</div>
 							<div class="form-group">
-								<label for="">Airport Code (3 letter IATA)</label>
+								<label for="">Arrival Location</label>
 								<input type="text" class="form-control" v-model="">
 							</div>
+						</template>
 
-						</div>
-					</template>
+						<template v-if="transport && transport.type === 'train'">
+							<div class="form-group">
+								<label for="travel_methodB">Company</label>
+								<select class="form-control" name="travel_methodB" id="train"
+								        v-validate:train="['required']" v-model="transport.name">
+									<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="">Train No.</label>
+								<input type="text" class="form-control" v-model="transport.vessel_no">
+							</div>
+							<div class="form-group">
+								<label for="">Station</label>
+								<input type="text" class="form-control" v-model="location.name">
+							</div>
+						</template>
 
-					<template v-if="transport && transport.type === 'bus'">
-						<div class="form-group">
-							<label for="">Company</label>
-							<input type="text" class="form-control" v-model="transport.name">
-						</div>
-						<div class="form-group">
-							<label for="">Schedule/Route No.</label>
-							<input type="text" class="form-control" v-model="transport.vessel_no">
-						</div>
-						<div class="form-group">
-							<label for="">Arrival Location</label>
-							<input type="text" class="form-control" v-model="">
-						</div>
-					</template>
+						<template v-if="transport && transport.type === 'vehicle'">
+							<div class="form-group">
+								<label for="travel_methodB">Company</label>
+								<select class="form-control" name="travel_methodB" id="train"
+								        v-validate:train="['required']" v-model="transport.name">
+									<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
+									</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="">Vehicle Color (if known)</label>
+								<input type="text" class="form-control" v-model="transport.vessel_no">
+							</div>
+							<div class="form-group">
+								<label for="">Drop Off Location</label>
+								<input type="text" class="form-control" v-model="location.name">
+							</div>
+						</template>
 
-					<template v-if="transport && transport.type === 'train'">
-						<div class="form-group">
-							<label for="travel_methodB">Company</label>
-							<select class="form-control" name="travel_methodB" id="train"
-							        v-validate:train="['required']" v-model="transport.name">
-								<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="">Train No.</label>
-							<input type="text" class="form-control" v-model="transport.vessel_no">
-						</div>
-						<div class="form-group">
-							<label for="">Station</label>
-							<input type="text" class="form-control" v-model="location.name">
-						</div>
-					</template>
+						<hr class="divider inv sm">
+						<!--<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>-->
+						<!--<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm Transport</button>-->
 
-					<template v-if="transport && transport.type === 'vehicle'">
-						<div class="form-group">
-							<label for="travel_methodB">Company</label>
-							<select class="form-control" name="travel_methodB" id="train"
-							        v-validate:train="['required']" v-model="transport.name">
-								<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
-								</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label for="">Vehicle Color (if known)</label>
-							<input type="text" class="form-control" v-model="transport.vessel_no">
-						</div>
-						<div class="form-group">
-							<label for="">Drop Off Location</label>
-							<input type="text" class="form-control" v-model="location.name">
-						</div>
-					</template>
+					</section>
+				</form>
+			</validator>
+		</template>
 
-					<template v-if="transport && (transport.type !== 'flight' || selectedAirline === 'other')">
-						<div class="form-group">
-							<label for="">Arrival Date & Time</label>
-							<date-picker :model.sync="date_time|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control hidden" v-model="date_time | moment 'LLLL'"
-							       id="started_at" required>
-						</div>
-					</template>
-					<hr class="divider inv">
-					<button class="btn btn-default" @click="cancel()">Cancel</button>
-					<button class="btn btn-primary" @click="save()">Update</button>
-
-				</section>
-			</form>
-		</validator>
 	</div>
 </template>
 <style></style>
@@ -120,18 +126,25 @@
         mixins: [errorHandler],
         components: {vSelect},
         props: {
-            item: {
-                type: String,
-                required: true
-            },
             reservationId: {
                 type: String,
 //                required: true,
             },
-            campaignId: {
-                type: String,
-//                required: true,
-            },
+	        transport: {
+                type: Object,
+		        default: {
+                    type: '',
+                    vessel_no: '',
+                    name: '',
+                    call_sign: '',
+                    domestic: true,
+                    capacity: '',
+                }
+	        },
+	        returning: {
+                type: Boolean,
+		        default: false,
+	        }
         },
         data(){
             return {
@@ -148,16 +161,6 @@
                     email: '',
                     website: '',
                 },
-                transport: {
-                    type: '',
-                    vessel_no: '',
-                    name: '',
-                    call_sign: '',
-                    domestic: '',
-                    capacity: '',
-                    campaign_id: '',
-                    passengers: '',
-                },
 
                 //logic variables
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],
@@ -168,33 +171,74 @@
                     'Union Pacific Railroad',
                 ],
                 vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other',],
-                selectedAirline: '',
+                selectedAirlineObj: null,
+                noFlightNeeded: false,
+                returningOnOwn: false,
             }
         },
+        watch: {
+            selectedAirlineObj(val, oldVal){
+                if (val && val !== oldVal) {
+                    this.transport.name = val.name;
+                    this.transport.call_sign = val.call_sign;
+                }
+            },
+            noFlightNeeded(val) {
+                this.transport.domestic = false;
+            }
+        },
+	    computed: {
+            'isUpdate': function() {
+                return this && this.transport.hasOwnProperty('id') && _.isString(this.transport.id);
+		    }
+	    },
         methods: {
             getAirlines(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('utilities/airlines', { params: {search: search} }).then(function (response) {
-                    this.airlinesOptions = response.body.airlines;
+                return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
+                    this.airlinesOptions = response.body.data;
+                    this.airlinesOptions.push({
+	                    name: 'Other',
+	                    call_sign: ''
+                    });
                     if (loading) {
                         loading(false);
                     } else {
                         return this.airlinesOptions;
                     }
-                })
+                });
             },
-	        cancel() {},
-	        save() {},
+            getAirline(reference){
+                return this.$http.get('utilities/airlines/' + reference).then(function (response) {
+                    return response.body.data;
+                });
+            },
+            confirm() {
+//                this.$dispatch('confirmedTransport')
+	        },
         },
         ready(){
-            let airlinesPromise = this.getAirlines('', false);
+            let self = this;
+            let promises = [];
+            if (self.isUpdate) {
+                let airlinesPromise = this.getAirlines(this.transport.name, false);
+                promises.push(airlinesPromise);
+            }
 
-            Promise.all([airlinesPromise]).then(function (values) {
+            Promise.all(promises).then(function (values) {
                 // Update state data
+                if (self.isUpdate) {
+                    // select airline
+                    self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
+                    console.log(self.selectedAirlineObj);
+                }
             });
 
             this.itinerant_id = this.reservationId;
 //			this.transport.campaign_id = this.campaignId;
+
+            this.attemptSubmit = true;
+
         }
     }
 </script>

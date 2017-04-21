@@ -16,10 +16,9 @@
 					<input type="datetime" class="form-control hidden" v-model="activity.occurred_at | moment 'LLLL'"
 					       id="occurred_at" v-validate:occured="['required']">
 				</div>
-
-				<hr class="divider inv sm">
-				<!--<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>-->
-				<!--<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm Activity</button>-->
+				<template v-if="isUpdate">
+					<button class="btn btn-xs btn-primary" type="button" @click="update">Update Arrival</button>
+				</template>
 			</form>
 		</validator>
 	</div>
@@ -48,13 +47,18 @@
             }
         },
         computed: {
-			isReady(){
+            'isUpdate': function() {
+                return this && this.activity.hasOwnProperty('id') && _.isString(this.activity.id);
+            },
+            isReady(){
 			    return this && _.isObject(this.activity);
 			}
         },
         methods: {
-            confirm(){
-
+            update(){
+				this.$http.put('activities/' + this.activity.id, this.activity).then(function (response) {
+					this.$emit('showSuccess', 'Itinerary Arrival Date/Time Updated');
+                });
             }
         },
         ready(){

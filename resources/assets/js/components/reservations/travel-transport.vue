@@ -1,19 +1,9 @@
 <template>
 	<div>
-		<div class="checkbox">
-			<label for="returningOnOwn" v-if="returning">
-				<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I do not need a returning international flight
-			</label>
-			<label for="noFlightNeeded" v-else>
-				<input type="checkbox" id="noFlightNeeded" name="noFlightNeeded" v-model="noFlightNeeded">I do not need an international flight to {{ $parent.itineraryObj }}
-			</label>
-		</div>
-		<template v-if="!returningOnOwn">
-			<validator name="TravelTransport">
+		<validator name="TravelTransport">
 				<form id="TravelTransportForm" novalidate >
-					<!--<legend></legend>-->
 					<section>
-						<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>
+						<!--<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>-->
 						<div class="form-group" v-error-handler="{ value: transport, client: 'type' }">
 							<label for="travel_methodA">Travel Method</label>
 							<select class="form-control" name="travel_method" id="travel_method"
@@ -105,16 +95,12 @@
 								<input type="text" class="form-control" v-model="location.name">
 							</div>
 						</template>
-
-						<hr class="divider inv sm">
-						<!--<button class="btn btn-xs btn-default" @click="cancel()">Cancel</button>-->
-						<!--<button class="btn btn-xs btn-primary" type="button" @click="confirm()">Confirm Transport</button>-->
-
 					</section>
+					<template v-if="isUpdate">
+						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Travel Details</button>
+					</template>
 				</form>
-			</validator>
-		</template>
-
+		</validator>
 	</div>
 </template>
 <style></style>
@@ -128,7 +114,6 @@
         props: {
             reservationId: {
                 type: String,
-//                required: true,
             },
 	        transport: {
                 type: Object,
@@ -140,10 +125,6 @@
                     domestic: true,
                     capacity: '',
                 }
-	        },
-	        returning: {
-                type: Boolean,
-		        default: false,
 	        }
         },
         data(){
@@ -172,8 +153,6 @@
                 ],
                 vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other',],
                 selectedAirlineObj: null,
-                noFlightNeeded: false,
-                returningOnOwn: false,
             }
         },
         watch: {
@@ -213,9 +192,11 @@
                     return response.body.data;
                 });
             },
-            confirm() {
-//                this.$dispatch('confirmedTransport')
-	        },
+            update(){
+                this.$http.put('transports/' + this.transport.id, this.transport).then(function (response) {
+                    this.$emit('showSuccess', 'Itinerary Travel Details Updated');
+                });
+            }
         },
         ready(){
             let self = this;

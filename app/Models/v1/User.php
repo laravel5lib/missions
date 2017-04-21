@@ -605,6 +605,38 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get a user that is a rep
+     * 
+     * @param  Builder $query
+     * @return Builder
+     */
+    public function scopeisRep($query)
+    {
+        return $query->has('tripsRepresenting')
+                     ->orHas('reservationsRepresenting');
+    }
+
+    /**
+     * Get trips the user is representing
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tripsRepresenting()
+    {
+        return $this->hasMany(Trip::class, 'rep_id');
+    }
+
+    /**
+     * Get reservations the user is representing
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reservationsRepresenting()
+    {
+        return $this->hasMany(Reservation::class, 'rep_id');
+    }
+
+    /**
      * Synchronize User Profile Links.
      *
      * @param $links

@@ -3,11 +3,6 @@
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
-				<!-- <div class="form-group">
-					<label>Tags</label>
-					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-						   :debounce="250" placeholder="Tag, tag2, tag3...">
-				</div> -->
 				<div class="form-group">
 					<label>Groups</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
@@ -130,9 +125,9 @@
 				<label>Trip Rep</label>
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
-						<option v-for="(key, option) in repOptions" v-bind:value="key">
-					    {{ option.name | capitalize }}
-					  </option>
+						<option v-for="option in repOptions" v-bind:value="option.id">
+					    	{{ option.name | capitalize }}
+					  	</option>
 					</select>
 				</div>
 				<!-- end trip rep -->
@@ -674,28 +669,14 @@
 			'campaignObj': function (val) {
 				this.filters.campaign = val ? val.id : '';
 			},
-			'reservations': function (val) {
-				if (val.length) {
-					// use object/dictionary instead of array
-					let arr = {};
-					for (let index in val) {
-						// duplicate rep ids will be overwritten
-						if(val[index].rep)
-							arr[val[index].rep.data.id] = val[index].rep.data;
-					}
-					this.repOptions = arr;
-				}
-			},
 			'shirtSizeArr': function (val) {
 				this.filters.shirtSize = _.pluck(val, 'id') || '';
 			},
 			'groupsArr': function (val) {
 				this.filters.groups = _.pluck(val, 'id') || '';
-//				this.searchReservations();
 			},
 			'usersArr': function (val) {
 				this.filters.user = _.pluck(val, 'id') || '';
-//				this.searchReservations();
 			},
 			'tagsString': function (val) {
 				let tags = val.split(/[\s,]+/);
@@ -724,16 +705,10 @@
                 this.pagination.current_page = 1;
                 this.searchReservations();
 			},
-			/*'page': function (val, oldVal) {
-				this.searchReservations();
-			},*/
 			'per_page': function (val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
-			},
-			/*'groups':function () {
-				this.searchReservations();
-			}*/
+			}
         },
         methods: {
         	getIncomplete(reservation) {
@@ -875,7 +850,6 @@
 			},
 			searchReservations(){
 				let params = this.getListSettings();
-				// this.$refs.spinner.show();
 				this.$http.get('reservations', {params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();
@@ -883,15 +857,10 @@
                     this.lastReservationRequest = xhr;
                 }}).then(function (response) {
 					let self = this;
-					// _.each(response.body.data, function (reservation) {
-					// 	reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
-					// }, this);
 					this.reservations = response.body.data;
 					this.pagination = response.body.meta.pagination;
-					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
-					// this.$refs.spinner.hide();
 				});
 			},
 			getGroups(search, loading){
@@ -936,6 +905,14 @@
 					this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
 				});
 			},
+			getReps(){
+                return this.$http.get('users', { params: {
+					'rep': true,
+					'per_page': 100
+				}}).then(function (response) {
+					this.repOptions = response.body.data;
+				});
+			},
 			getRequirements(){
                 return this.$http.get('requirements', { params: {
 					'type': 'trips',
@@ -970,6 +947,7 @@
             let costsPromise = this.getCosts();
             let reqsPromise = this.getRequirements();
             let todosPromise = this.getTodos();
+            let repsPromise = this.getReps();
 
 			// assign values from url search
 			if (window.location.search !== '') {
@@ -985,7 +963,7 @@
 				}.bind(this));
 			}
 
-			Promise.all([groupsPromise, campaignsPromise, costsPromise, reqsPromise, todosPromise]).then(function () {
+			Promise.all([groupsPromise, campaignsPromise, costsPromise, reqsPromise, todosPromise, repsPromise]).then(function () {
                 this.searchReservations();
             }.bind(this));
 

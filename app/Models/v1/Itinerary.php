@@ -3,12 +3,13 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Itinerary extends Model
 {
-    use SoftDeletes, UuidForKey;
+    use SoftDeletes, UuidForKey, Filterable;
 
     protected $guarded = [];
 

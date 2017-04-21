@@ -18,9 +18,12 @@ class ItinerariesController extends Controller
         $this->itinerary = $itinerary;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $itinerary = $this->itinerary->withCount('activities')->paginate(10);
+        $itinerary = $this->itinerary
+            ->withCount('activities')
+            ->filter($request->all())
+            ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($itinerary, new ItineraryTransformer);
     }

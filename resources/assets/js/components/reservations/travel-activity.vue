@@ -11,7 +11,7 @@
 					<input type="text" class="form-control" v-model="activity.description" v-validate:description="['required']">
 				</div>
 				<div class="form-group" v-error-handler="{ value: activity.occured_at, client: 'occured' }">
-					<label for="">Arrival Date & Time</label>
+					<label for="">Date &amp; Time</label>
 					<date-picker :model.sync="activity.occurred_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 					<input type="datetime" class="form-control hidden" v-model="activity.occurred_at | moment 'LLLL'"
 					       id="occurred_at" v-validate:occured="['required']">

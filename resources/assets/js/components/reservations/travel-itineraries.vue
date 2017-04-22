@@ -10,18 +10,20 @@
 						<label for="returningOnOwn">
 							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I don't need a returning international flight.
 						</label>
+                        <div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am ackowledging that I will be arranging my own transportation home from the destination country.</div>
 					</div>
 					<div class="checkbox">
 						<label for="connectionFlight">
-							<input id="connectionFlight" type="checkbox" :checked="itinerary.items.length === 3" name="connectionFlight" @change="toggleConnectionItem(itinerary.items)"> Do you have a prior travel connection?
+							<input id="connectionFlight" type="checkbox" :checked="itinerary.items.length === 3" name="connectionFlight" @change="toggleConnectionItem(itinerary.items)"> I have a prior travel connection.
 						</label>
 					</div>
-					<accordion :one-at-atime="true" type="info">
+					<accordion :one-at-atime="true">
 						<panel is-open="false" :header="item.activity.name" v-for="item in itinerary.items">
 							<div class="checkbox">
 								<label for="noTravelTo" v-if="itinerary.items.length === ($index + 2)">
-									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transport to the destination.
+									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transportation to the destination.
 								</label>
+                                <div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below.</div>
 							</div>
 
 							<div v-if="itinerary.items.length === ($index + 1) && returningOnOwn">
@@ -40,7 +42,7 @@
 					<hr class="divider sm">
 
 					<!--<button v-if="itinerary.id" class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>-->
-					<button v-if="!itinerary.id" class="btn btn-xs btn-primary" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
+					<button v-if="!itinerary.id" class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
 				</div>
 
 				<!--<hr class="divider">-->
@@ -151,8 +153,8 @@
                     reservation_id: this.reservationId,
                     items: []
                 };
-                itinerary.items.push(this.newItineraryItem('Arrival in Miami'));
-                itinerary.items.push(this.newItineraryItem('Depart Miami'));
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location'));
+                itinerary.items.push(this.newItineraryItem('Depart from Training Location'));
 	            this.itineraries.push(itinerary);
             },
 	        newItineraryItem(name){
@@ -166,7 +168,7 @@
                         capacity: '',
                     },
                     activity: {
-                        name: name || 'Arrive in Miami',
+                        name: name || 'Arrive at Training Location',
                         // description: '',
                         occurred_at: ''
                     },

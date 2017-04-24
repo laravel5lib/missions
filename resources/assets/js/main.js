@@ -75,6 +75,7 @@ import reservationRequirements from './components/reservations/reservation-requi
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
+import teamManager from './components/teams/team-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -853,6 +854,7 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        teamManager,
         reportsList,
 
         // admin components

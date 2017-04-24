@@ -1,56 +1,66 @@
 <template>
 	<div style="position:relative;">
-		<validator name="TravelItineraries">
-			<form id="TravelItinerariesForm" novalidate>
-				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<template v-if="itinerary && itinerary.id">
+			<h6 class="text-uppercase">
+				<i class="fa fa-plane"></i> {{itinerary.name}}
+				<button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true" v-if="! editMode"><i class="fa fa-pencil"></i> Change</button>
+			</h6>
+			<hr class="divider lg">
+		</template>
 
-				<div v-for="itinerary in itineraries">
+		<template v-if="editMode">
+			<validator name="TravelItineraries">
+				<form id="TravelItinerariesForm" novalidate>
+					<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
-					<div class="checkbox">
-						<label for="returningOnOwn">
-							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I don't need a returning international flight.
-						</label>
-                        <div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am ackowledging that I will be arranging my own transportation home from the destination country.</div>
+					<div v-if="itinerary">
+
+						<div class="checkbox">
+							<label for="returningOnOwn">
+								<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I don't need a returning international flight.
+							</label>
+							<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am ackowledging that I will be arranging my own transportation home from the destination country.</div>
+						</div>
+						<div class="checkbox">
+							<label for="connectionFlight">
+								<input id="connectionFlight" type="checkbox" :checked="itinerary.items && itinerary.items.length === 3" name="connectionFlight" @change="toggleConnectionItem(itinerary.items)"> I have a prior travel connection.
+							</label>
+						</div>
+						<accordion :one-at-atime="true" v-if="itinerary.items">
+							<panel is-open="false" :header="item.activity.name" v-for="item in itinerary.items">
+								<div class="checkbox">
+									<label for="noTravelTo" v-if="itinerary.items.length === ($index + 2)">
+										<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transportation to the destination.
+									</label>
+									<div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below.</div>
+								</div>
+
+								<div v-if="itinerary.items.length === ($index + 1) && returningOnOwn">
+									<p>Returning on own</p>
+								</div>
+								<div v-else>
+									<travel-transport v-ref:transport :reservation-id="reservationId" :transport.sync="item.transport"></travel-transport>
+
+									<travel-hub v-ref:hub :hub="item.hub" :transport-type="item.transport.type"></travel-hub>
+
+									<travel-activity v-ref:activity :activity="item.activity" :simple="true"></travel-activity>
+								</div>
+
+							</panel>
+						</accordion>
+						<hr class="divider sm">
+
+						<!--<button v-if="itinerary.id" class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>-->
+						<button v-if="!itinerary.id" class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
 					</div>
-					<div class="checkbox">
-						<label for="connectionFlight">
-							<input id="connectionFlight" type="checkbox" :checked="itinerary.items.length === 3" name="connectionFlight" @change="toggleConnectionItem(itinerary.items)"> I have a prior travel connection.
-						</label>
-					</div>
-					<accordion :one-at-atime="true">
-						<panel is-open="false" :header="item.activity.name" v-for="item in itinerary.items">
-							<div class="checkbox">
-								<label for="noTravelTo" v-if="itinerary.items.length === ($index + 2)">
-									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transportation to the destination.
-								</label>
-                                <div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below.</div>
-							</div>
 
-							<div v-if="itinerary.items.length === ($index + 1) && returningOnOwn">
-								<p>Returning on own</p>
-							</div>
-							<div v-else>
-								<travel-transport v-ref:transport :reservation-id="reservationId" :transport.sync="item.transport"></travel-transport>
-
-								<travel-hub v-ref:hub :hub="item.hub" :transport-type="item.transport.type"></travel-hub>
-
-								<travel-activity v-ref:activity :activity="item.activity" :simple="true"></travel-activity>
-							</div>
-
-						</panel>
-					</accordion>
-					<hr class="divider sm">
-
-					<!--<button v-if="itinerary.id" class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>-->
-					<button v-if="!itinerary.id" class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
-				</div>
-
-				<!--<hr class="divider">-->
-				<!--<button type="button" class="btn btn-xs btn-primary" @click="newItinerary">-->
+					<!--<hr class="divider">-->
+					<!--<button type="button" class="btn btn-xs btn-primary" @click="newItinerary">-->
 					<!--New Itinerary-->
-				<!--</button>-->
-			</form>
-		</validator>
+					<!--</button>-->
+				</form>
+			</validator>
+		</template>
 	</div>
 </template>
 <style></style>
@@ -78,6 +88,8 @@
                 // mixin settings
                 validatorHandle: 'TravelItineraries',
 
+                editMode: true,
+                itinerary: null,
                 itineraries: [],
                 returningOnOwn: false
             }
@@ -90,7 +102,7 @@
             }
         },
         methods: {
-            getItineraries(){
+            getItinerary(){
                 this.$http.get('itineraries/' + this.document.id, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
                     let itinerary = {
                         id: response.body.data.id,
@@ -127,9 +139,9 @@
                         });
                     });
 
-                    this.itineraries.push(itinerary);
+                    this.itinerary = itinerary;
 
-                    if (!this.itineraries.length)
+                    if (this.itinerary === null)
                         this.newItinerary();
                 });
             },
@@ -143,8 +155,9 @@
                     itinerary.items.pop();
 
                 this.$http.post('itineraries/travel', itinerary).then(function (response) {
-
-                    this.itineraries.push(response.body.data);
+                    this.itinerary = response.body.data;
+                    this.editMode = false;
+                    this.setDesignation(response.body.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
                 });
             },
@@ -155,7 +168,7 @@
                 };
                 itinerary.items.push(this.newItineraryItem('Arrive at Training Location'));
                 itinerary.items.push(this.newItineraryItem('Depart from Training Location'));
-	            this.itineraries.push(itinerary);
+	            this.itinerary = itinerary;
             },
 	        newItineraryItem(name){
                 return {
@@ -189,11 +202,16 @@
                 } else {
 	                items.splice(0, 1);
 	            }
-            }
+            },
+            setDesignation(designation) {
+                this.$dispatch('set-document', designation);
+            },
+
         },
         ready(){
             if (this.document) {
-                this.getItineraries();
+                this.editMode = false;
+                this.getItinerary();
             } else {
                 this.newItinerary();
             }

@@ -8,20 +8,19 @@
 			<hr class="divider lg">
 		</template>
 
-		<template v-if="editMode">
-			<validator name="TravelItineraries">
+		<validator name="TravelItineraries">
 				<form id="TravelItinerariesForm" novalidate>
 					<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 					<div v-if="itinerary">
 
-						<div class="checkbox">
+						<div class="checkbox" v-if="editMode">
 							<label for="returningOnOwn">
 								<input type="checkbox" id="returningOnOwn" name="returningOnOwn" v-model="returningOnOwn">I don't need a returning international flight.
 							</label>
 							<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am ackowledging that I will be arranging my own transportation home from the destination country.</div>
 						</div>
-						<div class="checkbox">
+						<div class="checkbox" v-if="editMode">
 							<label for="connectionFlight">
 								<input id="connectionFlight" type="checkbox" :checked="itinerary.items && itinerary.items.length === 3" name="connectionFlight" @change="toggleConnectionItem(itinerary.items)"> I have a prior travel connection.
 							</label>
@@ -39,11 +38,11 @@
 									<p>Returning on own</p>
 								</div>
 								<div v-else>
-									<travel-transport v-ref:transport :reservation-id="reservationId" :transport.sync="item.transport"></travel-transport>
+									<travel-transport v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport"></travel-transport>
 
-									<travel-hub v-ref:hub :hub="item.hub" :transport-type="item.transport.type"></travel-hub>
+									<travel-hub v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport.type"></travel-hub>
 
-									<travel-activity v-ref:activity :activity="item.activity" :simple="true"></travel-activity>
+									<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true"></travel-activity>
 								</div>
 
 							</panel>
@@ -51,7 +50,7 @@
 						<hr class="divider sm">
 
 						<!--<button v-if="itinerary.id" class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>-->
-						<button v-if="!itinerary.id" class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
+						<button v-if="!itinerary.id && editMode" class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
 					</div>
 
 					<!--<hr class="divider">-->
@@ -60,7 +59,6 @@
 					<!--</button>-->
 				</form>
 			</validator>
-		</template>
 	</div>
 </template>
 <style></style>
@@ -103,22 +101,21 @@
         },
         methods: {
             getItinerary(){
-                this.$http.get('itineraries/' + this.document.id, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    let itinerary = {
-                        id: response.body.data.id,
-                        reservation_id: response.body.data.curator_id,
+                let doc_id = this.document ? this.document.id : this.$parent.requirement.document_id;
+                this.$http.get('itineraries/' + doc_id, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
+                    let itinerary = _.extend(response.body.data, {
                         items: [],
-                    };
+                    });
                     _.each(response.body.data.activities.data, function (activity) {
 	                    itinerary.items.push({
                             transport: {
-                                id: activity.transports.data.id,
-                                type: activity.transports.data.type,
-                                vessel_no: activity.transports.data.vessel_no,
-                                name: activity.transports.data.name,
-                                call_sign: activity.transports.data.call_sign,
-                                domestic: activity.transports.data.domestic,
-                                capacity: activity.transports.data.capacity,
+                                id: activity.transports.data[0].id,
+                                type: activity.transports.data[0].type,
+                                vessel_no: activity.transports.data[0].vessel_no,
+                                name: activity.transports.data[0].name,
+                                call_sign: activity.transports.data[0].call_sign,
+                                domestic: activity.transports.data[0].domestic,
+                                capacity: activity.transports.data[0].capacity,
                             },
                             activity: {
                                 id: activity.id,
@@ -127,14 +124,14 @@
                                 occurred_at: activity.occured_at
                             },
                             hub: {
-                                id: activity.hubs.data.id,
-                                name: activity.hubs.data.name,
-                                address: activity.hubs.data.address,
-                                call_sign: activity.hubs.data.call_sign,
-                                city: activity.hubs.data.city,
-                                state: activity.hubs.data.state,
-                                zip: activity.hubs.data.zip,
-                                country: activity.hubs.data.country,
+                                id: activity.hubs.data[0].id,
+                                name: activity.hubs.data[0].name,
+                                address: activity.hubs.data[0].address,
+                                call_sign: activity.hubs.data[0].call_sign,
+                                city: activity.hubs.data[0].city,
+                                state: activity.hubs.data[0].state,
+                                zip: activity.hubs.data[0].zip,
+                                country: activity.hubs.data[0].country,
                             },
                         });
                     });
@@ -161,8 +158,9 @@
                     this.$emit('showSuccess', 'Itinerary Saved');
                 });
             },
-            newItinerary(){
+            newItinerary(itineraryName){
                 let itinerary = {
+                    name: itineraryName || 'Itinerary',
                     reservation_id: this.reservationId,
                     items: []
                 };
@@ -209,7 +207,7 @@
 
         },
         ready(){
-            if (this.document) {
+            if (this.document || (this.$parent.requirement && this.$parent.requirement.document_id)) {
                 this.editMode = false;
                 this.getItinerary();
             } else {

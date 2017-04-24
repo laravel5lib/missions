@@ -6,11 +6,15 @@
 						<!--<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>-->
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
 							<label for="travel_methodA">Travel Method</label>
-							<select class="form-control" name="travel_method" id="travel_method"
-							        v-validate:transporttype="['required']" v-model="transport.type">
-								<option value="">-- Select--</option>
-								<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
-							</select>
+							<template v-if="editMode">
+								<select class="form-control" name="travel_method" id="travel_method"
+								        v-validate:transporttype="['required']" v-model="transport.type">
+									<option value="">-- Select--</option>
+									<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
+								</select>
+							</template>
+
+							<p v-else>{{ transport.type | uppercase }}</p>
 						</div>
 
 						<template v-if="transport && transport.type === 'flight'">
@@ -18,7 +22,7 @@
 								<label for="travel_methodA">Airline</label>
 								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
 								          :value.sync="selectedAirlineObj" :options="airlinesOptions" label="name"
-								          placeholder="Select Airline"></v-select>
+								          placeholder="Select Airline" v-if="editMode"></v-select>
 								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
 								        v-model="transport.name">
 									<option :value="airline.name" v-for="airline in airlinesOptions">
@@ -26,19 +30,23 @@
 									</option>
 									<option value="other">Other</option>
 								</select>
+								<p v-else>{{ transport.name | uppercase }}</p>
 								<template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
 									<div class="form-group">
 										<label for="">Airline</label>
-										<input type="text" class="form-control" v-model="transport.name">
+										<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
+										<p v-else>{{ transport.name | uppercase }}</p>
 									</div>
 								</template>
 								<div class="form-group">
 									<label for="">Flight No.</label>
-									<input type="text" class="form-control" v-model="transport.vessel_no">
+									<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
+									<p v-else>{{ transport.vessel_no | uppercase }}</p>
 								</div>
 								<div class="form-group" v-if="isAdminRoute">
 									<label for="">Capacity</label>
-									<input type="number" number class="form-control" min="0" v-model="transport.capacity">
+									<input type="number" number class="form-control" min="0" v-model="transport.capacity" v-if="editMode">
+									<p v-else>{{ transport.capacity | uppercase }}</p>
 								</div>
 
 							</div>
@@ -47,57 +55,51 @@
 						<template v-if="transport && transport.type === 'bus'">
 							<div class="form-group">
 								<label for="">Company</label>
-								<input type="text" class="form-control" v-model="transport.name">
+								<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
+								<p v-else>{{ transport.name | uppercase }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Schedule/Route No.</label>
-								<input type="text" class="form-control" v-model="transport.vessel_no">
-							</div>
-							<div class="form-group">
-								<label for="">Arrival Location</label>
-								<input type="text" class="form-control" v-model="">
+								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
+								<p v-else>{{ transport.vessel_no | uppercase }}</p>
 							</div>
 						</template>
 
-						<template v-if="transport && transport.type === 'train'">
+						<template v-if="transport && transport.type === 'train'" v-if="editMode">
 							<div class="form-group">
 								<label for="travel_methodB">Company</label>
-								<select class="form-control" name="travel_methodB" id="train"
+								<select class="form-control" name="travel_methodB" id="train" v-if="editMode"
 								        v-validate:train="['required']" v-model="transport.name">
 									<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
 								</select>
+								<p v-else>{{ transport.name | uppercase }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Train No.</label>
-								<input type="text" class="form-control" v-model="transport.vessel_no">
-							</div>
-							<div class="form-group">
-								<label for="">Station</label>
-								<input type="text" class="form-control" v-model="location.name">
+								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
+								<p v-else>{{ transport.vessel_no | uppercase }}</p>
 							</div>
 						</template>
 
 						<template v-if="transport && transport.type === 'vehicle'">
 							<div class="form-group">
 								<label for="travel_methodB">Company</label>
-								<select class="form-control" name="travel_methodB" id="train"
+								<select class="form-control" name="travel_methodB" id="train" v-if="editMode"
 								        v-validate:train="['required']" v-model="transport.name">
 									<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
 									</option>
 								</select>
+								<p v-else>{{ transport.name | uppercase }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Vehicle Color (if known)</label>
-								<input type="text" class="form-control" v-model="transport.vessel_no">
-							</div>
-							<div class="form-group">
-								<label for="">Drop Off Location</label>
-								<input type="text" class="form-control" v-model="location.name">
+								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
+								<p v-else>{{ transport.vessel_no | uppercase }}</p>
 							</div>
 						</template>
 					</section>
-					<template v-if="isUpdate">
-						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Travel Details</button>
+					<template v-if="isUpdate && editMode">
+						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Travel Method</button>
 					</template>
 				</form>
 		</validator>
@@ -125,23 +127,15 @@
                     domestic: true,
                     capacity: '',
                 }
-	        }
+	        },
+            editMode: {
+                type: Boolean,
+                default: true
+            }
         },
         data(){
             return {
                 validatorHandle: 'TravelTransport',
-//                item: 'Arrive in Miami',
-                location: {
-                    name: '',
-                    address: '',
-                    city: '',
-                    state: '',
-                    country_code: '',
-                    phone: '',
-                    fax: '',
-                    email: '',
-                    website: '',
-                },
 
                 //logic variables
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],

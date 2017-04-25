@@ -1,10 +1,10 @@
 <template>
 	<div class="row" style="position:relative;">
 		<div class="col-md-7">
-			<h3 v-if="currentTeam" class="">{{ currentTeam.name }}</h3>
+			<h3 v-if="currentTeam" class="">{{ currentTeam.callsign }}</h3>
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
-					<a href="#members" data-toggle="pill">Members <span class="badge">0</span></a>
+					<a href="#members" data-toggle="pill">Members <span class="badge" v-text="0"></span></a>
 				</li>
 				<li role="presentation">
 					<a href="#teamdetails" data-toggle="pill">Team Details</a>
@@ -35,70 +35,73 @@
 					<!-- Team Groups List -->
 					<div class="row">
 						<div class="col-xs-12">
-							<template v-if="currentTeam">
-								<template v-if="currentTeam.team_groups.length">
-									<template v-for="(tgIndex, team_group) in currentTeam.team_groups | filterBy membersSearch">
-										<template v-if="team_group.squad_leaders">
-											<div class="panel panel-default">
-												<div class="panel-heading">
-													<h3 class="panel-title">Squad Leaders</h3>
-												</div>
-												<div class="panel-body">
-													<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in team_group.members">
-															<div class="panel-heading" role="tab" id="headingOne">
-																<h4 class="panel-title">
-																	<div class="row">
-																		<div class="col-xs-9">
-																			<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																				<img :src="member.reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																				{{ member.reservation.surname | capitalize }}, {{ member.reservation.given_names | capitalize }}<br>
-																				<label>{{ member.reservation.desired_role.name }}</label>
-																			</a>
-																		</div>
-																		<div class="col-xs-3 text-right action-buttons">
-																			<dropdown type="default">
-																				<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																					<span class="fa fa-ellipsis-h"></span>
-																				</button>
-																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<li><a href="#dropdown">Action</a></li>
-																					<li role="separator" class="divider"></li>
-																					<li><a href="#dropdown">Separated link</a></li>
-																				</ul>
-																			</dropdown>
-																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																				<i class="fa fa-caret-down"></i>
-																			</a>
-																		</div>
+							<template v-if="currentTeam && currentSquads">
+								<template v-if="!currentSquads || (currentSquads && currentSquads.length)">
+									<p class="text-center">This team currently has no Squads</p>
+								</template>
+
+								<template v-for="(tgIndex, team_group) in currentSquads | filterBy membersSearch">
+									<template v-if="team_group.squad_leaders">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<h3 class="panel-title">Squad Leaders</h3>
+											</div>
+											<div class="panel-body">
+												<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
+													<div class="panel panel-default" v-for="member in team_group.members">
+														<div class="panel-heading" role="tab" id="headingOne">
+															<h4 class="panel-title">
+																<div class="row">
+																	<div class="col-xs-9">
+																		<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																			<img :src="member.reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
+																			{{ member.reservation.surname | capitalize }}, {{ member.reservation.given_names | capitalize }}<br>
+																			<label>{{ member.reservation.desired_role.name }}</label>
+																		</a>
 																	</div>
-																</h4>
-															</div>
-															<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-																<div class="panel-body">
-																	<dl class="dl-horizontal">
-																		<dt>Gender</dt>
-																		<dd>{{member.reservation.gender | capitalize}}</dd>
-																		<dt>Marital Status</dt>
-																		<dd>{{member.reservation.status | capitalize}}</dd>
-																		<dt>Age</dt>
-																		<dd>{{member.reservation.age}}</dd>
-																		<dt>Group Traveling with Companions</dt>
-																		<dd>{{member.reservation.companion_limit}}</dd>
-																	</dl>
+																	<div class="col-xs-3 text-right action-buttons">
+																		<dropdown type="default">
+																			<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+																				<span class="fa fa-ellipsis-h"></span>
+																			</button>
+																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																				<li><a href="#dropdown">Action</a></li>
+																				<li role="separator" class="divider"></li>
+																				<li><a href="#dropdown">Separated link</a></li>
+																			</ul>
+																		</dropdown>
+																		<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																			<i class="fa fa-caret-down"></i>
+																		</a>
+																	</div>
 																</div>
+															</h4>
+														</div>
+														<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+															<div class="panel-body">
+																<dl class="dl-horizontal">
+																	<dt>Gender</dt>
+																	<dd>{{member.reservation.gender | capitalize}}</dd>
+																	<dt>Marital Status</dt>
+																	<dd>{{member.reservation.status | capitalize}}</dd>
+																	<dt>Age</dt>
+																	<dd>{{member.reservation.age}}</dd>
+																	<dt>Group Traveling with Companions</dt>
+																	<dd>{{member.reservation.companion_limit}}</dd>
+																</dl>
 															</div>
 														</div>
 													</div>
 												</div>
 											</div>
-											<p class=" text-right">
-												<button class="btn btn-xs btn-primary" @click="newGroup">Add Group</button>
-											</p>
-											<hr class="divider sm">
-										</template>
+										</div>
 									</template>
-									<template v-for="(tgIndex, team_group) in currentTeam.team_groups | filterBy membersSearch">
+								</template>
+								<p class=" text-right">
+									<button class="btn btn-xs btn-primary" @click="showSquadCreateModal = true">Add Group</button>
+								</p>
+								<hr class="divider sm">
+								<template v-for="(tgIndex, team_group) in currentSquads | filterBy membersSearch">
 										<template v-if="!team_group.squad_leaders">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -155,13 +158,9 @@
 											</div>
 										</template>
 									</template>
-								</template>
-								<template v-else>
-									<p>This team currently has no Groups</p>
-								</template>
 							</template>
 							<template v-else>
-								<p>Select a Team to get started or <a @click="newTeam">create a new one</a>!</p>
+								<p>Select a Team to get started or <a @click="showTeamCreateModal = true">create a new one</a>!</p>
 							</template>
 						</div>
 					</div>
@@ -172,7 +171,7 @@
 						<div class="form-group">
 							<label for="" class="col-sm-4 control-label">Name</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control"  placeholder="Name" v-model="currentTeam.name">
+								<input type="text" class="form-control"  placeholder="Name" v-model="currentTeam.callsign">
 							</div>
 
 						</div>
@@ -217,10 +216,10 @@
 		<div class="col-md-5">
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
-					<a href="#teams" data-toggle="pill">Teams <span class="badge">0</span></a>
+					<a href="#teams" data-toggle="pill">Teams <span class="badge" v-text="teamsPagination.total"></span></a>
 				</li>
 				<li role="presentation">
-					<a href="#reservations" data-toggle="pill">Reservations <span class="badge">0</span></a>
+					<a href="#reservations" data-toggle="pill">Reservations <span class="badge" v-text="reservationsPagination.total"></span></a>
 				</li>
 			</ul>
 
@@ -229,7 +228,7 @@
 				<div role="tabpanel" class="tab-pane active" id="teams">
 					<div class="row">
 						<div class="col-xs-12 text-right">
-							<button class="btn btn-primary btn-xs" @click="newTeam">New Team</button>
+							<button class="btn btn-primary btn-xs" @click="showTeamCreateModal = true">New Team</button>
 							<hr class="divider sm">
 						</div>
 						<div class="col-xs-12">
@@ -238,12 +237,15 @@
 
 									<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 										<div class="row">
-											<div class="col-xs-6">{{ team.name | uppercase }}</div>
+											<div class="col-xs-6">{{ team.callsign | uppercase }}</div>
 											<div class="col-xs-6 text-right">Members: {{ countMembers(team) || 0 }}</div>
 										</div>
 									</a>
 								</ul>
-								<pagination :pagination.sync="teamsPagination" :callback=""></pagination>
+								<div class="col-xs-12 text-center">
+									<pagination :pagination.sync="teamsPagination" :callback="getTeams"></pagination>
+								</div>
+
 							</template>
 							<template v-else>
 								<p class="text-center">No Teams created yet. Create one to get started!ember</p>
@@ -294,7 +296,7 @@
 														</button>
 														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 															<template v-if="currentTeam">
-																<li v-for="team_group in currentTeam.team_groups" v-show="canAssignToGroup(team_group)"><a @click="assignToTeamGroup(reservation, team_group)" v-text="team_group.squad_leaders ? 'Assign as Squad Leader' : ('Assign to Team Group #' + $index)"></a></li>
+																<li v-for="team_group in currentSquads" v-show="canAssignToGroup(team_group)"><a @click="assignTosquad(reservation, team_group)" v-text="team_group.squad_leaders ? 'Assign as Squad Leader' : ('Assign to Team Group #' + $index)"></a></li>
 															</template>
 															<li role="separator" class="divider"></li>
 															<li><a href="#dropdown">Separated link</a></li>
@@ -344,6 +346,46 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Modals -->
+		<modal title="Create a new Team" small ok-text="Create" :callback="newTeam" :show.sync="showTeamCreateModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="TeamCreate">
+					<form id="TeamCreateForm">
+						<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
+							<label for="createTeamCallsign" class="control-label">Team Name</label>
+							<input type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal>
+
+		<modal title="Delete Team" small ok-text="Create" :callback="newTeam" :show.sync="showTeamDeleteModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="TeamCreate">
+					<form id="TeamCreateForm">
+						<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
+							<label for="createTeamCallsign" class="control-label">Team Name</label>
+							<input type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal>
+
+		<modal title="Create a new Squad" small ok-text="Create" :callback="newSquad" :show.sync="showSquadCreateModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="SquadCreate">
+					<form id="SquadCreateForm">
+						<div class="form-group" :class="{'has-error': $SquadCreate.squadcallsign.invalid}">
+							<label for="createSquadCallsign" class="control-label">Squad Name</label>
+							<input type="text" class="form-control" id="createSquadCallsign" placeholder="" v-validate:squadcallsign="['required']" v-model="newSquadCallsign">
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal>
 	</div>
 </template>
 <style>
@@ -373,11 +415,19 @@
                 reservationsPerPage: 10,
                 reservationsPagination: { current_page: 1 },
 	            currentTeam: null,
+	            currentSquads: [],
+                squadsPagination: { current_page: 1 },
 	            group: null,
                 startUp: true,
 	            reservationsFacilitator: false,
                 includeReservationsManaging: false,
                 reservationsTrips: [],
+
+                showTeamCreateModal: false,
+                newTeamCallsign: '',
+                showSquadCreateModal: false,
+                newSquadCallsign: '',
+                showTeamDeleteModal: false,
             }
         },
 	    watch: {
@@ -388,6 +438,9 @@
 		    'excludeReservationIds': function (val) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
+            },
+		    'currentTeam': function (val) {
+			    this.getSquads();
             }
 
         },
@@ -395,8 +448,8 @@
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
-	                _.each(this.currentTeam.team_groups, function (teamGroup) {
-		                IDs = _.union(IDs, _.pluck(teamGroup.members, 'reservation_id'));
+	                _.each(this.currentSquads, function (squad) {
+		                IDs = _.union(IDs, _.pluck(squad.members, 'reservation_id'));
 	                });
                 return _.uniq(IDs);
             },
@@ -433,50 +486,96 @@
                 });
             },
             getTeams(){
-                this.$http.get('groups/' + this.groupId + '/teams', { params: { }}).then(function (response) {
-	                this.teams = response.body.data;
+                let params = {
+                    include: '',
+                    page: this.teamsPagination.current_page,
+
+                };
+
+                return this.$http.get('teams', { params: params}).then(function (response) {
+	                this.teamsPagination = response.body.meta.pagination;
+                    return this.teams = response.body.data;
+                });
+            },
+            getSquads(){
+                let params = {
+                    include: '',
+                    page: this.squadsPagination.current_page,
+
+                };
+
+                return this.$http.get('teams/' + this.currentTeam.id + '/squads', { params: params}).then(function (response) {
+                    return this.currentSquads = response.body.data;
                 });
             },
 	        newTeam(){
-                let team = {
-                    name: 'Team #' + (this.teams.length + 1),
-	                type: 'default',
-	                squad_leaders: 2,
-	                max_group_members: 5,
-	                max_members: 25,
-	                team_groups: [
-		                {
-		                    squad_leaders: true,
-		                    members: []
-		                },
-		                {
-                            squad_leaders: false,
-                            members: []
-		                },
-	                ]
-                };
+                if (this.$TeamCreate.valid) {
+                    this.$http.post('teams', {callsign: this.newTeamCallsign}).then(function (response) {
+                        let team = _.extend(response.body.data, {
+                            type: 'default',
+                            squad_leaders: 2,
+                            max_group_members: 5,
+                            max_members: 25,
+                        });
 
-                this.teams.push(team);
-                this.currentTeam = team;
-                $('.nav-tabs a[href="#reservations"]').tab('show');
+                        this.currentTeam = team;
+
+                        // Create default squads for current team
+                        this.newSquad('Squad Leaders');
+                        this.newSquad('Squad #1');
+
+                        this.showTeamCreateModal = false;
+                        $('.nav-tabs a[href="#reservations"]').tab('show');
+                    });
+                } else {
+//                    this.$emit('showError', '');
+                }
 	        },
-	        newGroup(){
-	            let teamGroup = {
-                    squad_leaders: false,
-                    members: []
-	            };
+	        newSquad(callsign){
+                if (this.$SquadCreate.valid || callsign) {
+                    return this.$http.post('teams/' + this.currentTeam.id + '/squads', {callsign: callsign || this.newSquadCallsign})
+                        .then(function (response) {
+							let squad = response.body.data;
 
-                this.currentTeam.team_groups.splice(1, 0, teamGroup);
+							if (this.currentSquads.length) {
+                                this.currentSquads.splice(1, 0, squad);
+							} else {
+                                this.currentSquads.push(squad);
+							}
+
+							return squad;
+                        });
+                }
+	        },
+	        updateTeam(team){
+	            this.$http.put('team/' + team.id, team).then(function (response) {
+					this.$emit('showSuccess', team.callsign + ' Updated!');
+                });
+	        },
+	        updateSquad(squad){
+	            this.$http.put('team/' + squad.team_id + '/squads/' + squad.id, squad).then(function (response) {
+                    this.$emit('showSuccess', squad.callsign + ' Updated!');
+                });
+	        },
+	        deleteTeam(team){
+	            this.$http.delete('team/' + team.id).then(function (response) {
+
+                })
+	        },
+	        deleteSquad(squad){
+	            this.$http.delete('team/' + squad.team_id + '/squads/' + squad.id).then(function (response) {
+
+                })
 	        },
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
                 $('.nav-tabs a[href="#reservations"]').tab('show');
             },
-	        assignToTeamGroup(reservation, teamGroup) {
+	        assignTosquad(reservation, squad) {
 				//Find if a parent(group leader) is present
-	            let parent = _.findWhere(teamGroup.members, { parent: true});
+	            let parent = _.findWhere(squad.members, { parent: true});
 
-                let spot = {
+                let member = {
                     parent: false,
                     parent_id: parent ? parent.id : '',
                     team_id: this.currentTeam.id || '',
@@ -485,7 +584,7 @@
                     reservation: reservation
                 };
 
-                teamGroup.members.push(spot);
+                squad.members.push(member);
 	        },
             getIncomplete(reservation) {
                 return _.where(reservation.requirements.data, {status: 'incomplete'}).length;
@@ -501,7 +600,7 @@
             },
             countMembers(team) {
 	            let total = 0;
-	            _.each(team.team_groups, function (group) {
+	            _.each(team.team_squads, function (group) {
 		            total += group.members.length;
                 });
 	            return total;
@@ -509,7 +608,8 @@
 
         },
         ready(){
-            let userPromise = this.$http.get('users/' + this.userId, {
+            let promises = [];
+            promises.push(this.$http.get('users/' + this.userId, {
                 params: {include: 'facilitating,managing.trips'}
             }).then(function (response) {
                 let user = response.body.data;
@@ -531,13 +631,13 @@
                 this.includeReservationsManaging = true;
 
                 if (this.reservationsFacilitator) {
-//                    this.getCosts();
 //                    this.getRequirements();
 //                    this.getRoles();
                 }
-            });
+            }));
+            promises.push(this.getTeams());
 
-            Promise.all([userPromise]).then(function (values) {
+            Promise.all(promises).then(function (values) {
                 this.startUp = false;
                 this.searchReservations();
             }.bind(this));

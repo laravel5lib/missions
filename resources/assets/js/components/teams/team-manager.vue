@@ -14,133 +14,158 @@
 			<!-- Tab panes -->
 			<div class="tab-content">
 				<div role="tabpanel" class="tab-pane active" id="members">
-					<template v-if="currentTeam">
-						<template v-if="currentTeam.team_groups.length">
-							<template v-for="(tgIndex, team_group) in currentTeam.team_groups">
-								<template v-if="$index === 0">
-									<div class="panel panel-default">
-										<div class="panel-heading">
-											<h3 class="panel-title">Squad Leaders</h3>
-										</div>
-										<div class="panel-body">
-											<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
-												<div class="panel panel-default" v-for="member in team_group.members">
-													<div class="panel-heading" role="tab" id="headingOne">
-														<h4 class="panel-title">
-															<div class="row">
-																<div class="col-xs-9">
-																	<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																		<img :src="member.reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																		{{ member.reservation.surname | capitalize }}, {{ member.reservation.given_names | capitalize }}<br>
-																		<label>{{ member.reservation.desired_role.name }}</label>
-																	</a>
-																</div>
-																<div class="col-xs-3 text-right action-buttons">
-																	<dropdown type="default">
-																		<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																			<span class="fa fa-ellipsis-h"></span>
-																		</button>
-																		<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																			<li><a href="#dropdown">Action</a></li>
-																			<li role="separator" class="divider"></li>
-																			<li><a href="#dropdown">Separated link</a></li>
-																		</ul>
-																	</dropdown>
-																	<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																		<i class="fa fa-caret-down"></i>
-																	</a>
+					<!-- Search and Filter -->
+					<form class="form-inline row">
+						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
+							<div class="input-group input-group-sm col-xs-12">
+								<input type="text" class="form-control" v-model="membersSearch" debounce="250" placeholder="Search">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</div><!-- end col -->
+						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showFilters=!showFilters">
+								Filters
+								<i class="fa fa-filter"></i>
+							</button>
+						</div>
+						<div class="col-xs-12">
+							<hr class="divider inv">
+						</div>
+					</form>
+					<!-- Team Groups List -->
+					<div class="row">
+						<div class="col-xs-12">
+							<template v-if="currentTeam">
+								<template v-if="currentTeam.team_groups.length">
+									<template v-for="(tgIndex, team_group) in currentTeam.team_groups | filterBy membersSearch">
+										<template v-if="team_group.squad_leaders">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">Squad Leaders</h3>
+												</div>
+												<div class="panel-body">
+													<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
+														<div class="panel panel-default" v-for="member in team_group.members">
+															<div class="panel-heading" role="tab" id="headingOne">
+																<h4 class="panel-title">
+																	<div class="row">
+																		<div class="col-xs-9">
+																			<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																				<img :src="member.reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
+																				{{ member.reservation.surname | capitalize }}, {{ member.reservation.given_names | capitalize }}<br>
+																				<label>{{ member.reservation.desired_role.name }}</label>
+																			</a>
+																		</div>
+																		<div class="col-xs-3 text-right action-buttons">
+																			<dropdown type="default">
+																				<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+																					<span class="fa fa-ellipsis-h"></span>
+																				</button>
+																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																					<li><a href="#dropdown">Action</a></li>
+																					<li role="separator" class="divider"></li>
+																					<li><a href="#dropdown">Separated link</a></li>
+																				</ul>
+																			</dropdown>
+																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																				<i class="fa fa-caret-down"></i>
+																			</a>
+																		</div>
+																	</div>
+																</h4>
+															</div>
+															<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+																<div class="panel-body">
+																	<dl class="dl-horizontal">
+																		<dt>Gender</dt>
+																		<dd>{{member.reservation.gender | capitalize}}</dd>
+																		<dt>Marital Status</dt>
+																		<dd>{{member.reservation.status | capitalize}}</dd>
+																		<dt>Age</dt>
+																		<dd>{{member.reservation.age}}</dd>
+																		<dt>Group Traveling with Companions</dt>
+																		<dd>{{member.reservation.companion_limit}}</dd>
+																	</dl>
 																</div>
 															</div>
-														</h4>
-													</div>
-													<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-														<div class="panel-body">
-															<dl class="dl-horizontal">
-																<dt>Gender</dt>
-																<dd>{{member.reservation.gender | capitalize}}</dd>
-																<dt>Marital Status</dt>
-																<dd>{{member.reservation.status | capitalize}}</dd>
-																<dt>Age</dt>
-																<dd>{{member.reservation.age}}</dd>
-																<dt>Group Traveling with Companions</dt>
-																<dd>{{member.reservation.companion_limit}}</dd>
-															</dl>
 														</div>
 													</div>
 												</div>
 											</div>
-										</div>
-									</div>
-									<p class=" text-right">
-									<button class="btn btn-xs btn-primary" @click="newGroup">Add Group</button>
-									</p>
-									<hr class="divider sm">
+											<p class=" text-right">
+												<button class="btn btn-xs btn-primary" @click="newGroup">Add Group</button>
+											</p>
+											<hr class="divider sm">
+										</template>
+									</template>
+									<template v-for="(tgIndex, team_group) in currentTeam.team_groups | filterBy membersSearch">
+										<template v-if="!team_group.squad_leaders">
+											<div class="panel panel-default">
+												<div class="panel-heading">
+													<h3 class="panel-title">Team Group #{{$index}}</h3>
+												</div>
+												<div class="panel-body">
+													<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
+														<div class="panel panel-default" v-for="member in team_group.members">
+															<div class="panel-heading" role="tab" id="headingOne">
+																<h4 class="panel-title">
+																	<div class="row">
+																		<div class="col-xs-9">
+																			<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																				<img :src="member.reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
+																				{{ member.reservation.surname | capitalize }}, {{ member.reservation.given_names | capitalize }}<br>
+																				<label>{{ member.reservation.desired_role.name }}</label>
+																			</a>
+																		</div>
+																		<div class="col-xs-3 text-right action-buttons">
+																			<dropdown type="default">
+																				<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+																					<span class="fa fa-ellipsis-h"></span>
+																				</button>
+																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																					<li><a href="#dropdown">Action</a></li>
+																					<li role="separator" class="divider"></li>
+																					<li><a href="#dropdown">Separated link</a></li>
+																				</ul>
+																			</dropdown>
+																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																				<i class="fa fa-caret-down"></i>
+																			</a>
+																		</div>
+																	</div>
+																</h4>
+															</div>
+															<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+																<div class="panel-body">
+																	<dl class="dl-horizontal">
+																		<dt>Gender</dt>
+																		<dd>{{member.reservation.gender | capitalize}}</dd>
+																		<dt>Marital Status</dt>
+																		<dd>{{member.reservation.status | capitalize}}</dd>
+																		<dt>Age</dt>
+																		<dd>{{member.reservation.age}}</dd>
+																		<dt>Group Traveling with Companions</dt>
+																		<dd>{{member.reservation.companion_limit}}</dd>
+																	</dl>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</template>
+									</template>
 								</template>
 								<template v-else>
-									<div class="panel panel-default">
-										<div class="panel-heading">
-											<h3 class="panel-title">Team Group #{{$index}}</h3>
-										</div>
-										<div class="panel-body">
-											<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
-												<div class="panel panel-default" v-for="member in team_group.members">
-													<div class="panel-heading" role="tab" id="headingOne">
-														<h4 class="panel-title">
-															<div class="row">
-																<div class="col-xs-9">
-																	<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																		<img :src="member.reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																		{{ member.reservation.surname | capitalize }}, {{ member.reservation.given_names | capitalize }}<br>
-																		<label>{{ member.reservation.desired_role.name }}</label>
-																	</a>
-																</div>
-																<div class="col-xs-3 text-right action-buttons">
-																	<dropdown type="default">
-																		<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																			<span class="fa fa-ellipsis-h"></span>
-																		</button>
-																		<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																			<li><a href="#dropdown">Action</a></li>
-																			<li role="separator" class="divider"></li>
-																			<li><a href="#dropdown">Separated link</a></li>
-																		</ul>
-																	</dropdown>
-																	<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																		<i class="fa fa-caret-down"></i>
-																	</a>
-																</div>
-															</div>
-														</h4>
-													</div>
-													<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-														<div class="panel-body">
-															<dl class="dl-horizontal">
-																<dt>Gender</dt>
-																<dd>{{member.reservation.gender | capitalize}}</dd>
-																<dt>Marital Status</dt>
-																<dd>{{member.reservation.status | capitalize}}</dd>
-																<dt>Age</dt>
-																<dd>{{member.reservation.age}}</dd>
-																<dt>Group Traveling with Companions</dt>
-																<dd>{{member.reservation.companion_limit}}</dd>
-															</dl>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-
-									</div>
+									<p>This team currently has no Groups</p>
 								</template>
 							</template>
-						</template>
-						<template v-else>
-							<p>This team currently has no Groups</p>
-						</template>
-					</template>
-					<template v-else>
-						<p>Select a Team to get started or <a @click="newTeam">create a new one</a>!</p>
-					</template>
+							<template v-else>
+								<p>Select a Team to get started or <a @click="newTeam">create a new one</a>!</p>
+							</template>
+						</div>
+					</div>
+
 				</div>
 				<div role="tabpanel" class="tab-pane" id="teamdetails">
 					<form class="form-horizontal" v-if="currentTeam">
@@ -192,16 +217,44 @@
 		<div class="col-md-5">
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
-					<a href="#reservations" data-toggle="pill"><i class="fa fa-ticket"></i> Reservations</a>
+					<a href="#teams" data-toggle="pill"><i class="fa fa-group"></i> Teams</a>
 				</li>
 				<li role="presentation">
-					<a href="#teams" data-toggle="pill"><i class="fa fa-group"></i> Teams</a>
+					<a href="#reservations" data-toggle="pill"><i class="fa fa-ticket"></i> Reservations</a>
 				</li>
 			</ul>
 
 			<!-- Tab panes -->
 			<div class="tab-content">
-				<div role="tabpanel" class="tab-pane active" id="reservations">
+				<div role="tabpanel" class="tab-pane active" id="teams">
+					<div class="row">
+						<div class="col-xs-12 text-right">
+							<button class="btn btn-primary btn-xs" @click="newTeam">New Team</button>
+							<hr class="divider sm">
+						</div>
+						<div class="col-xs-12">
+							<template v-if="teams.length">
+								<ul class="list-group">
+
+									<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
+										<div class="row">
+											<div class="col-xs-6">{{ team.name | uppercase }}</div>
+											<div class="col-xs-6 text-right">Members: {{ countMembers(team) || 0 }}</div>
+										</div>
+									</a>
+								</ul>
+								<pagination :pagination.sync="teamsPagination" :callback=""></pagination>
+							</template>
+							<template v-else>
+								<p class="text-center">No Teams created yet. Create one to get started!ember</p>
+							</template>
+
+						</div>
+
+					</div>
+				</div>
+				<div role="tabpanel" class="tab-pane" id="reservations">
+					<!-- Search and Filter -->
 					<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
@@ -219,6 +272,7 @@
 							<hr class="divider inv">
 						</div>
 					</form>
+					<!-- Reservation Lists and Pagination -->
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
@@ -240,7 +294,7 @@
 														</button>
 														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 															<template v-if="currentTeam">
-																<li v-for="team_group in currentTeam.team_groups" v-show="$index===0 && team_group.members.length < 2 || $index!==0 && team_group.members.length < 5"><a @click="assignToTeamGroup(reservation, team_group)">Assign to Team Group #{{$index}}</a></li>
+																<li v-for="team_group in currentTeam.team_groups" v-show="canAssignToGroup(team_group)"><a @click="assignToTeamGroup(reservation, team_group)" v-text="team_group.squad_leaders ? 'Assign as Squad Leader' : ('Assign to Team Group #' + $index)"></a></li>
 															</template>
 															<li role="separator" class="divider"></li>
 															<li><a href="#dropdown">Separated link</a></li>
@@ -288,33 +342,6 @@
 						</div>
 					</div>
 				</div>
-				<div role="tabpanel" class="tab-pane" id="teams">
-					<div class="row">
-						<div class="col-xs-12 text-right">
-							<button class="btn btn-primary btn-xs" @click="newTeam">New Team</button>
-							<hr class="divider sm">
-						</div>
-						<div class="col-xs-12">
-							<template v-if="teams.length">
-								<ul class="list-group">
-
-									<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
-										<div class="row">
-											<div class="col-xs-6">{{ team.name | uppercase }}</div>
-											<div class="col-xs-6 text-right">Members: {{ countMembers(team) || 0 }}</div>
-										</div>
-									</a>
-								</ul>
-								<pagination :pagination.sync="teamsPagination" :callback=""></pagination>
-							</template>
-							<template v-else>
-								<p class="text-center">No Teams created yet. Create one to get started!ember</p>
-							</template>
-
-						</div>
-
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -341,6 +368,7 @@
                 teams: [],
                 teamsPagination: { current_page: 1 },
                 reservations: [],
+                membersSearch: '',
                 reservationsSearch: '',
                 reservationsPerPage: 10,
                 reservationsPagination: { current_page: 1 },
@@ -371,9 +399,12 @@
 		                IDs = _.union(IDs, _.pluck(teamGroup.members, 'reservation_id'));
 	                });
                 return _.uniq(IDs);
-            }
+            },
 	    },
         methods: {
+            canAssignToGroup(team_group){
+                return team_group.squad_leaders && team_group.members.length < this.currentTeam.squad_leaders || !team_group.squad_leaders && team_group.members.length < this.currentTeam.max_group_members;
+            },
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,fundraisers,costs.payments,user',
@@ -419,24 +450,28 @@
 		                    members: []
 		                },
 		                {
-		                    members: []
+                            squad_leaders: false,
+                            members: []
 		                },
 	                ]
                 };
 
                 this.teams.push(team);
                 this.currentTeam = team;
+                $('.nav-tabs a[href="#reservations"]').tab('show');
 	        },
 	        newGroup(){
 	            let teamGroup = {
+                    squad_leaders: false,
                     members: []
 	            };
 
-	            this.currentTeam.team_groups.push(teamGroup);
+                this.currentTeam.team_groups.splice(1, 0, teamGroup);
 	        },
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
-	        },
+                $('.nav-tabs a[href="#reservations"]').tab('show');
+            },
 	        assignToTeamGroup(reservation, teamGroup) {
 				//Find if a parent(group leader) is present
 	            let parent = _.findWhere(teamGroup.members, { parent: true});

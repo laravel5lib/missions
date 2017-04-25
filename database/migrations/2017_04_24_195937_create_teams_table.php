@@ -15,6 +15,7 @@ class CreateTeamsTable extends Migration
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('callsign');
+            $table->boolean('locked')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

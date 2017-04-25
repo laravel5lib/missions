@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 class TeamsEndpointTest extends TestCase
 {
     /** @test */
@@ -18,6 +14,7 @@ class TeamsEndpointTest extends TestCase
                     '*' => [
                         'id',
                         'callsign',
+                        'locked',
                         'created_at',
                         'updated_at',
                         'deleted_at'
@@ -36,6 +33,7 @@ class TeamsEndpointTest extends TestCase
              ->seeJson([
                 'id' => $team->id,
                 'callsign' => $team->callsign,
+                'locked' => false,
                 'created_at' => $team->created_at->toDateTimeString(),
                 'updated_at' => $team->updated_at->toDateTimeString(),
                 'deleted_at' => null

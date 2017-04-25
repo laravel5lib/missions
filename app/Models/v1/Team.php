@@ -17,4 +17,9 @@ class Team extends Model
     protected $dates = [
         'created_at', 'updated_at', 'deleted_at'
     ];
+
+    public function squads()
+    {
+        return $this->hasMany(TeamSquad::class);
+    }
 }

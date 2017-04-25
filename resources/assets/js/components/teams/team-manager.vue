@@ -4,10 +4,10 @@
 			<h3 v-if="currentTeam" class="">{{ currentTeam.name }}</h3>
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
-					<a href="#members" data-toggle="pill"><i class="fa fa-user"></i> Members</a>
+					<a href="#members" data-toggle="pill">Members <span class="badge">0</span></a>
 				</li>
 				<li role="presentation">
-					<a href="#teamdetails" data-toggle="pill"><i class="fa fa-list"></i> Team Details</a>
+					<a href="#teamdetails" data-toggle="pill">Team Details</a>
 				</li>
 			</ul>
 
@@ -217,10 +217,10 @@
 		<div class="col-md-5">
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
-					<a href="#teams" data-toggle="pill"><i class="fa fa-group"></i> Teams</a>
+					<a href="#teams" data-toggle="pill">Teams <span class="badge">0</span></a>
 				</li>
 				<li role="presentation">
-					<a href="#reservations" data-toggle="pill"><i class="fa fa-ticket"></i> Reservations</a>
+					<a href="#reservations" data-toggle="pill">Reservations <span class="badge">0</span></a>
 				</li>
 			</ul>
 

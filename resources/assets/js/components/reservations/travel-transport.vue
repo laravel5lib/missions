@@ -68,10 +68,12 @@
 						<template v-if="transport && transport.type === 'train'" v-if="editMode">
 							<div class="form-group">
 								<label for="travel_methodB">Company</label>
-								<select class="form-control" name="travel_methodB" id="train" v-if="editMode"
-								        v-validate:train="['required']" v-model="transport.name">
-									<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
-								</select>
+								<template v-if="editMode">
+									<select class="form-control" name="travel_methodB" id="train"
+									        v-validate:train="['required']" v-model="transport.name">
+										<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
+									</select>
+								</template>
 								<p v-else>{{ transport.name | uppercase }}</p>
 							</div>
 							<div class="form-group">
@@ -84,11 +86,14 @@
 						<template v-if="transport && transport.type === 'vehicle'">
 							<div class="form-group">
 								<label for="travel_methodB">Company</label>
-								<select class="form-control" name="travel_methodB" id="train" v-if="editMode"
-								        v-validate:train="['required']" v-model="transport.name">
-									<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
-									</option>
-								</select>
+								<template v-if="editMode">
+									<select class="form-control" name="travel_methodB" id="train"
+									        v-validate:train="['required']" v-model="transport.name">
+										<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
+										</option>
+									</select>
+								</template>
+
 								<p v-else>{{ transport.name | uppercase }}</p>
 							</div>
 							<div class="form-group">

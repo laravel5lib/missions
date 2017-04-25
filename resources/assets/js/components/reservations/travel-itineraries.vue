@@ -3,7 +3,7 @@
 		<template v-if="itinerary && itinerary.id">
 			<h6 class="text-uppercase">
 				<i class="fa fa-plane"></i> {{itinerary.name}}
-				<button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true" v-if="! editMode"><i class="fa fa-pencil"></i> Change</button>
+				<button class="btn btn-xs btn-default-hollow pull-right" @click="toggleEditMode" v-if="! editMode"><i class="fa fa-pencil"></i> Change</button>
 			</h6>
 			<hr class="divider lg">
 		</template>
@@ -201,6 +201,14 @@
 	                items.splice(0, 1);
 	            }
             },
+	        toggleEditMode() {
+	            this.editMode = true;
+	            this.$nextTick(function () {
+                    if ( _.isFunction(this.$validate) )
+                        this.$validate(true);
+                }.bind(this));
+
+	        },
             setDesignation(designation) {
                 this.$dispatch('set-document', designation);
             },

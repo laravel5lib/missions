@@ -532,8 +532,8 @@
                 }
 	        },
 	        newSquad(callsign){
-                if (this.$SquadCreate.valid || callsign) {
-                    return this.$http.post('teams/' + this.currentTeam.id + '/squads', {callsign: callsign || this.newSquadCallsign})
+                if (this.$SquadCreate.valid || _.isString(callsign)) {
+                    return this.$http.post('teams/' + this.currentTeam.id + '/squads', {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
                         .then(function (response) {
 							let squad = response.body.data;
 
@@ -543,7 +543,8 @@
                                 this.currentSquads.push(squad);
 							}
 
-							return squad;
+                            this.showSquadCreateModal = false;
+                            return squad;
                         });
                 }
 	        },

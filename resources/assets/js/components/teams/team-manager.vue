@@ -470,7 +470,8 @@
 	        },
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
-	        },
+                $('.nav-tabs a[href="#reservations"]').tab('show');
+            },
 	        assignToTeamGroup(reservation, teamGroup) {
 				//Find if a parent(group leader) is present
 	            let parent = _.findWhere(teamGroup.members, { parent: true});

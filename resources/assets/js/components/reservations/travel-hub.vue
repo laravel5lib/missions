@@ -5,24 +5,31 @@
 				<template v-if="transportType === 'flight' || transportType === ''">
 					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 						<label for="travel_methodA">Airport</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-						          :value.sync="selectedAirportObj" :options="airportsOptions" label="name"
-						          placeholder="Select Airport" v-if="editMode"></v-select>
-						<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
-						        v-model="hub.name">
-							<option :value="airport.name" v-for="airport in airportsOptions">
-								{{airport.name | capitalize}}
-							</option>
-							<option value="other">Other</option>
-						</select>
+						<template v-if="editMode">
+							<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
+							          :value.sync="selectedAirportObj" :options="airportsOptions" label="name"
+							          placeholder="Select Airport"></v-select>
+							<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
+							        v-model="hub.name">
+								<option :value="airport.name"    v-for="airport in airportsOptions">
+									{{airport.name | capitalize}}
+								</option>
+								<option value="other">Other</option>
+							</select>
+						</template>
+
 						<template v-if="selectedAirportObj && selectedAirportObj.name === 'Other'">
 							<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 								<label for="">Airport</label>
-								<input type="text" class="form-control" v-model="hub.name" v-if="editMode" v-validate:hubname="['required']">
+								<template v-if="editMode">
+									<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
+								</template>
 							</div>
 							<div  class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
 								<label for="">IATA Code</label>
-								<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']" v-if="editMode">
+								<template v-if="editMode">
+									<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']">
+								</template>
 							</div>
 						</template>
 						<template v-if="!editMode">
@@ -48,22 +55,38 @@
 				<template v-else>
 					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 						<label for="">{{ transportType === 'train' ? 'Station Name' : 'Drop off location' }}</label>
-						<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']" v-if="editMode">
+						<template v-if="editMode">
+							<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
+						</template>
 						<p v-else>{{ hub.name | uppercase }}</p>
 					</div>
 					<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
 						<label for="">City</label>
-						<input type="text" class="form-control" v-model="hub.city" v-validate:city="['required']" v-if="editMode">
+						<template v-if="editMode">
+							<input type="text" class="form-control" v-model="hub.city" v-validate:city="['required']">
+						</template>
 						<p v-else>{{ hub.city | uppercase }}</p>
 					</div>
 					<div class="form-group" v-error-handler="{ value: hub.country, client: 'country' }">
 						<label for="">Country</label>
-						<input type="text" class="form-control" v-model="hub.country" v-validate:country="['required']" v-if="editMode">
+						<template v-if="editMode">
+							<v-select @keydown.enter.prevent=""  class="form-control" id="countryFilter" :debounce="250" :on-search="getCountries"
+							          :value.sync="countryObj" :options="countriesOptions" label="name"
+							          placeholder="Select Country"></v-select>
+							<select class="form-control hidden" name="airport" id="airport" v-validate:country="['required']"
+							        v-model="hub.country">
+								<option :value="country.name" v-for="country in countriesOptions">
+									{{country.name | capitalize}}
+								</option>
+							</select>
+						</template>
 						<p v-else>{{ hub.country | uppercase }}</p>
 					</div>
 					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
 						<label for="">CallSign</label>
-						<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']" v-if="editMode">
+						<template v-if="editMode">
+							<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']" v-if="editMode">
+						</template>
 						<p v-else>{{ hub.call_sign | uppercase }}</p>
 					</div>
 				</template>
@@ -92,7 +115,7 @@
                     city: '',
                     state: '',
                     zip: '',
-                    country_code: '',
+                    country: '',
 	            }
             },
 		    transportType: {
@@ -113,7 +136,9 @@
                 validatorHandle: 'TravelHub',
 
                 airportsOptions: [],
+                countriesOptions: [],
                 selectedAirportObj: null,
+                countryObj: null,
             }
         },
         computed: {
@@ -138,6 +163,13 @@
                     return response.body.data;
                 });
             },
+            getCountries(search, loading){
+                loading ? loading(true) : void 0;
+                this.$http.get('utilities/countries', { params: { search: search} }).then(function (response) {
+                    this.countriesOptions = response.body.countries;
+                    loading ? loading(false) : void 0;
+                })
+            },
             update(){
                 this.$http.put('hubs/' + this.hub.id, this.hub).then(function (response) {
                     this.$emit('showSuccess', 'Itinerary Station Updated');
@@ -151,6 +183,11 @@
                     this.hub.city = val.city;
                     this.hub.country = val.country;
                     this.hub.call_sign = val.iata;
+                }
+            },
+            countryObj (val, oldVal) {
+                if (val) {
+                    this.hub.country = val.name;
                 }
             },
 	        transportType(val){
@@ -172,11 +209,13 @@
             let self = this;
             let promises = [];
             promises.push(this.getAirports(this.hub.name, false));
+            promises.push(this.getCountries(this.hub.country, false));
 
             Promise.all(promises).then(function (values) {
 				// Update state data
                 // select airline
                 self.selectedAirportObj = _.findWhere(self.airportsOptions, { name: self.hub.name });
+                self.countryObj = _.findWhere(self.countriesOptions, { name: self.hub.country });
                 console.log(self.selectedAirportObj);
 
             });

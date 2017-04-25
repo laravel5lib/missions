@@ -102,7 +102,6 @@ $api->version('v1', [
     $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
-    $api->resource('teams.members', 'TeamMembersController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
     $api->resource('accommodations', 'AccommodationsController');

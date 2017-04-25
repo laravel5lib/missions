@@ -14,7 +14,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->string('callsign');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -22,7 +22,7 @@ class CreateTeamsTable extends Migration
         Schema::create('team_squads', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('team_id')->index();
-            $table->string('name');
+            $table->string('callsign');
         });
 
         Schema::create('team_members', function (Blueprint $table) {
@@ -51,6 +51,6 @@ class CreateTeamsTable extends Migration
         Schema::drop('teams');
         Schema::drop('team_squads');
         Schema::drop('team_members');
-        Schema::drop('group_teams');
+        Schema::drop('teamables');
     }
 }

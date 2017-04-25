@@ -2,33 +2,19 @@
 
 namespace App\Models\v1;
 
-use App\UuidForKey;
 use Carbon\Carbon;
+use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Team extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, SoftDeletes;
 
     protected $guarded = [];
 
     protected $dates = [
-        'created_at', 'updated_at', 'deleted_at', 'published_at'
+        'created_at', 'updated_at', 'deleted_at'
     ];
-
-    public function groups()
-    {
-        // $this->belongsToMany(Group::class);
-    }
-
-    public function squads()
-    {
-        // $this->hasMany(TeamSquad::class);
-    }
-
-    public function members()
-    {
-        // $this->hasManyThrough(TeamMember::class, TeamSquad::class);
-    }
 }

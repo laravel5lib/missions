@@ -12,9 +12,7 @@ class TeamTransformer extends TransformerAbstract {
      *
      * @var array
      */
-    protected $availableIncludes = [
-        'region', 'translators'
-    ];
+    protected $availableIncludes = [];
 
     /**
      * Transform the object into a basic array
@@ -24,48 +22,18 @@ class TeamTransformer extends TransformerAbstract {
      */
     public function transform(Team $team)
     {
-        $team->load('members', 'translators');
-
         return [
             'id'           => $team->id,
-            'call_sign'    => $team->call_sign,
-            'members'      => $team->members()->count(),
-            'translators'  => $team->translators()->count(),
-            'published_at' => $team->published_at ? $team->published_at->toDateTimeString() : null,
+            'callsign'     => $team->callsign,
             'created_at'   => $team->created_at->toDateTimeString(),
             'updated_at'   => $team->updated_at->toDateTimeString(),
+            'deleted_at'   => $team->deleted_at ? $team->deleted_at->toDateTimeString() : null,
             'links'        => [
                 [
                     'rel' => 'self',
-                    'uri' => '/teams/' . $team->id,
+                    'uri' => 'api/teams/' . $team->id,
                 ]
             ]
         ];
-    }
-
-    /**
-     * Include Region
-     *
-     * @param Team $team
-     * @return \League\Fractal\Resource\Item
-     */
-    public function includeRegion(Team $team)
-    {
-        $region = $team->region;
-
-        return $this->item($region, new RegionTransformer);
-    }
-
-    /**
-     * Include Translators
-     *
-     * @param Team $team
-     * @return \League\Fractal\Resource\Collection
-     */
-    public function includeTranslators(Team $team)
-    {
-        $translators = $team->translators;
-
-        return $this->collection($translators, new TranslatorTransformer);
     }
 }

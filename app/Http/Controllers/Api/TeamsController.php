@@ -49,7 +49,9 @@ class TeamsController extends Controller
      */
     public function store(TeamRequest $request)
     {
-        $team = $this->team->create([]);
+        $team = $this->team->create([
+            'callsign' => $request->get('callsign')
+        ]);
 
         return $this->response->item($team, new TeamTransformer);
     }
@@ -78,7 +80,9 @@ class TeamsController extends Controller
     {
         $team = $this->team->findOrFail($id);
 
-        $team->update([]);
+        $team->update([
+            'callsign' => $request->get('callsign', $team->callsign)
+        ]);
 
         return $this->response->item($team, new TeamTransformer);
     }

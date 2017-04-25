@@ -4,12 +4,16 @@
 			<form id="TravelActivityForm" novalidate>
 				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.name, client: 'name' }">
 					<label for="">Name</label>
-					<input type="text" class="form-control" v-model="activity.name" v-validate:name="['required']" v-if="editMode">
+					<template v-if="editMode">
+						<input type="text" class="form-control" v-model="activity.name" v-validate:name="['required']">
+					</template>
 					<p v-else>{{ activity.name | uppercase }}</p>
 				</div>
 				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.description, client: 'description' }">
 					<label for="">Description</label>
-					<input type="text" class="form-control" v-model="activity.description" v-validate:description="['required']" v-if="editMode">
+					<template v-if="editMode">
+						<input type="text" class="form-control" v-model="activity.description" v-validate:description="['required']">
+					</template>
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
 				<div class="form-group" v-error-handler="{ value: activity.occured_at, client: 'occured' }">

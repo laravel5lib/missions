@@ -298,12 +298,12 @@
 							<template v-if="teams.length">
 								<ul class="list-group">
 
-									<li class="list-group-item" v-for="team in teams">
+									<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 										<div class="row">
 											<div class="col-xs-6">{{ team.name | uppercase }}</div>
-											<div class="col-xs-6 text-right">Members: {{ team.members.length || 0 }}</div>
+											<div class="col-xs-6 text-right">Members: {{ countMembers(team) || 0 }}</div>
 										</div>
-									</li>
+									</a>
 								</ul>
 								<pagination :pagination.sync="teamsPagination" :callback=""></pagination>
 							</template>
@@ -434,6 +434,9 @@
 
 	            this.currentTeam.team_groups.push(teamGroup);
 	        },
+	        makeTeamCurrent(team){
+	            this.currentTeam = team;
+	        },
 	        assignToTeamGroup(reservation, teamGroup) {
 				//Find if a parent(group leader) is present
 	            let parent = _.findWhere(teamGroup.members, { parent: true});
@@ -461,6 +464,13 @@
             reviewing(reservation) {
                 return _.where(reservation.requirements.data, {status: 'reviewing'}).length;
             },
+            countMembers(team) {
+	            let total = 0;
+	            _.each(team.team_groups, function (group) {
+		            total += group.members.length;
+                });
+	            return total;
+            }
 
         },
         ready(){

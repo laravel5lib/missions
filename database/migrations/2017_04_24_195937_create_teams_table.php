@@ -27,7 +27,6 @@ class CreateTeamsTable extends Migration
         });
 
         Schema::create('team_members', function (Blueprint $table) {
-            $table->uuid('id')->primary();
             $table->uuid('reservation_id')->index();
             $table->uuid('team_squad_id')->index();
             $table->boolean('leader');

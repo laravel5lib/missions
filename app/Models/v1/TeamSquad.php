@@ -18,4 +18,11 @@ class TeamSquad extends Model
     {
         return $this->belongsTo(Team::class);
     }
+
+    public function members()
+    {
+        return $this->belongsToMany(Reservation::class, 'team_members')
+                    ->withPivot('leader')
+                    ->withTimestamps();
+    }
 }

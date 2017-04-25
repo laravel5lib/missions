@@ -473,9 +473,9 @@
                 this.dobYearCalc = (parseInt(birthdays[0]) - this.currentYear + 100).toString();
 
                 this.email = user.email;
-                this.gender = user.gender.toLowerCase();
+                this.gender = user.gender ? user.gender.toLowerCase() : null;
                 this.address = user.address;
-                this.relationshipStatus = user.status.toLowerCase();
+                this.relationshipStatus = user.status ? user.status.toLowerCase() : 'single';
                 this.phone = user.phone_one;
                 this.mobile = user.phone_two;
                 this.address = user.address;

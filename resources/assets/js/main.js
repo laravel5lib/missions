@@ -181,6 +181,7 @@ Vue.component('aside', VueStrap.aside);
 Vue.component('panel', VueStrap.panel);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
+Vue.component('dropdown', VueStrap.dropdown);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);

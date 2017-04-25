@@ -29,7 +29,7 @@
                 </accordion>
             </div>
         </div>
-        <team-manager group-id="{{ $groupId }}"></team-manager>
+        <team-manager user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></team-manager>
         <hr class="divider inv lg">
     </div>
 @endsection

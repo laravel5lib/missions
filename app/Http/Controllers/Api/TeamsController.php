@@ -53,6 +53,16 @@ class TeamsController extends Controller
             'callsign' => $request->get('callsign')
         ]);
 
+        if ($request->has('associations')) {
+            foreach ($request->get('associations') as $associate)
+            {
+                $type = $associate['type'];
+                $id = $associate['id'];
+                
+                $team->{$type}()->attach($id);
+            }
+        }
+
         return $this->response->item($team, new TeamTransformer);
     }
 

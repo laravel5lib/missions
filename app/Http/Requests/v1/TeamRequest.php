@@ -25,6 +25,9 @@ class TeamRequest extends FormRequest
     {
         $rules = [
             'callsign' => 'required|string',
+            'associations' => 'array',
+            'associations.*.id' => 'required|string',
+            'associations.*.type' => 'required|in:campaigns,groups'
         ];
 
         if ($this->isMethod('put')) {

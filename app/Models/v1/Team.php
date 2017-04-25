@@ -22,4 +22,14 @@ class Team extends Model
     {
         return $this->hasMany(TeamSquad::class);
     }
+
+    public function groups()
+    {
+        return $this->morphedByMany(Group::class, 'teamable');
+    }
+
+    public function campaigns()
+    {
+        return $this->morphedByMany(Campaign::class, 'teamable');
+    }
 }

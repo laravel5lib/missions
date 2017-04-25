@@ -103,6 +103,7 @@ $api->version('v1', [
     $api->resource('regions', 'RegionsController');
     $api->resource('teams', 'TeamsController');
     $api->resource('teams.squads', 'TeamSquadsController');
+    $api->resource('squads.members', 'SquadMembersController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
     $api->resource('accommodations', 'AccommodationsController');

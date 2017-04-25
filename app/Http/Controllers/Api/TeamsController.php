@@ -25,9 +25,6 @@ class TeamsController extends Controller
     public function __construct(Team $team)
     {
         $this->team = $team;
-
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -52,13 +49,7 @@ class TeamsController extends Controller
      */
     public function store(TeamRequest $request)
     {
-        $team = $this->team->create($request->except('members'));
-
-        if ($request->has('members'))
-            $team->syncMembers($request->get('members'));
-
-        if ($request->has('translators'))
-            $team->syncTranslators($request->get('translators'));
+        $team = $this->team->create([]);
 
         return $this->response->item($team, new TeamTransformer);
     }
@@ -72,11 +63,6 @@ class TeamsController extends Controller
     public function show($id)
     {
         $team = $this->team->findOrFail($id);
-        
-        if ( ! $team->isPublished() and  ! $this->auth->user()->isAdmin())
-        {
-            abort(403);
-        }
 
         return $this->response->item($team, new TeamTransformer);
     }
@@ -92,13 +78,7 @@ class TeamsController extends Controller
     {
         $team = $this->team->findOrFail($id);
 
-        $team->update($request->except('translators'));
-
-        if ($request->has('members'))
-            $team->syncMembers($request->get('members'));
-
-        if ($request->has('translators'))
-            $team->syncTranslators($request->get('translators'));
+        $team->update([]);
 
         return $this->response->item($team, new TeamTransformer);
     }

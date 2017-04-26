@@ -2,7 +2,7 @@
 	<div class="row" style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-md-7">
-			<h3 v-if="currentTeam" class="">{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h3>
+			<h4 v-if="currentTeam" class="">{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h4>
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
 					<a href="#members" data-toggle="pill">Members <span class="badge" v-text="totalMembers"></span></a>
@@ -17,13 +17,13 @@
 				<div role="tabpanel" class="tab-pane active" id="members">
 					<!-- Search and Filter -->
 					<form class="form-inline row">
-						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
+						<div class="form-group col-lg-8 col-md-8 col-sm-7 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
 								<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
-						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
+						<div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="showFilters=!showFilters">
 								Filters
 								<i class="fa fa-filter"></i>
@@ -38,7 +38,7 @@
 						<div class="col-xs-12">
 							<template v-if="currentTeam && currentSquads">
 								<template v-if="currentSquads && !currentSquads.length">
-									<p class="text-center">This team currently has no Squads</p>
+									<p class="text-center text-italic text-muted">This team currently has no Squads</p>
 								</template>
 
 								<!-- Team Leaders Group -->
@@ -81,7 +81,7 @@
 																			</ul>
 																		</dropdown>
 																		<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																			<i class="fa fa-caret-down"></i>
+																			<i class="fa fa-angle-down"></i>
 																		</a>
 																	</div>
 																</div>
@@ -89,16 +89,20 @@
 														</div>
 														<div :id="'squadLeaderItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 															<div class="panel-body">
-																<dl class="dl-horizontal">
-																	<dt>Gender</dt>
-																	<dd>{{member.gender | capitalize}}</dd>
-																	<dt>Marital Status</dt>
-																	<dd>{{member.status | capitalize}}</dd>
-																	<dt>Age</dt>
-																	<dd>{{member.age}}</dd>
-																	<dt>Travel Group</dt>
-																	<dd>{{member.trip.data.group.data.name}}</dd>
-																</dl>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<label>Gender</label>
+																		<p class="small">{{member.gender | capitalize}}</p>
+																		<label>Marital Status</label>
+																		<p class="small">{{member.status | capitalize}}</p>
+																	</div><!-- end col -->
+																	<div class="col-sm-6">
+																		<label>Age</label>
+																		<p class="small">{{member.age}}</p>
+																		<label>Travel Group</label>
+																		<p class="small">{{member.trip.data.group.data.name}}</p>
+																	</div><!-- end col -->
+																</div><!-- end row -->
 															</div>
 														</div>
 														<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad).length">
@@ -178,7 +182,7 @@
 																			</ul>
 																		</dropdown>
 																		<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																			<i class="fa fa-caret-down"></i>
+																			<i class="fa fa-angle-down"></i>
 																		</a>
 																	</div>
 																</div>
@@ -186,17 +190,21 @@
 														</div>
 														<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 															<div class="panel-body">
-																<dl class="dl-horizontal">
-																	<dt>Gender</dt>
-																	<dd>{{member.gender | capitalize}}</dd>
-																	<dt>Marital Status</dt>
-																	<dd>{{member.status | capitalize}}</dd>
-																	<dt>Age</dt>
-																	<dd>{{member.age}}</dd>
-																	<dt>Travel Group</dt>
-																	<dd>{{member.trip.data.group.data.name}}</dd>
-																</dl>
-															</div>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<label>Gender</label>
+																		<p class="small">{{member.gender | capitalize}}</p>
+																		<label>Marital Status</label>
+																		<p class="small">{{member.status | capitalize}}</p>
+																	</div><!-- end col -->
+																	<div class="col-sm-6">
+																		<label>Age</label>
+																		<p class="small">{{member.age}}</p>
+																		<label>Travel Group</label>
+																		<p class="small">{{member.trip.data.group.data.name}}</p>
+																	</div><!-- end col -->
+																</div><!-- end row -->
+															</div><!-- end panel-body -->
 														</div>
 														<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
 															<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
@@ -210,7 +218,10 @@
 								</template>
 							</template>
 							<template v-else>
-								<p>Select a Team to get started or <a @click="showTeamCreateModal = true">create a new one</a>!</p>
+								<hr class="divider inv">
+								<p class="text-center text-muted"><em>Select a Team to get started or create a new one!</em></p>
+								<hr class="divider inv">
+								<p class="text-center"><a class="btn btn-link btn-sm" @click="showTeamCreateModal = true">Create A Team</a></p>
 							</template>
 						</div>
 					</div>
@@ -313,8 +324,8 @@
 				<div role="tabpanel" class="tab-pane active" id="teams">
 					<div class="row">
 						<div class="col-xs-12 text-right">
-							<button class="btn btn-primary btn-xs" @click="showTeamCreateModal = true">New Team</button>
-							<hr class="divider sm">
+							<button class="btn btn-primary btn-xs" @click="showTeamCreateModal = true">Create A Team</button>
+							<hr class="divider lg">
 						</div>
 						<div class="col-xs-12">
 							<template v-if="teams.length">
@@ -322,7 +333,7 @@
 
 									<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 										<div class="row">
-											<div class="col-xs-6">{{ team.callsign | uppercase }} <span v-if="team.locked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></div>
+											<div class="col-xs-6">{{ team.callsign | capitalize }} <span v-if="team.locked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></div>
 											<div class="col-xs-6 text-right">Members: {{ countMembers(team) || 0 }}</div>
 										</div>
 									</a>
@@ -333,11 +344,12 @@
 
 							</template>
 							<template v-else>
-								<p class="text-center">No Teams created yet. Create one to get started!ember</p>
+								<hr class="divider inv">
+								<p class="text-center text-italic text-muted"><em>No Teams created yet. Create one to get started!</em></p>
+								<hr class="divider inv">
+								<p class="text-center"><a class="btn btn-link btn-sm" @click="showTeamCreateModal = true">Create A Team</a></p>
 							</template>
-
 						</div>
-
 					</div>
 				</div>
 				<div role="tabpanel" class="tab-pane" id="reservations">
@@ -380,21 +392,21 @@
 															<span class="fa fa-ellipsis-h"></span>
 														</button>
 														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+															<li class="dropdown-header">Assign To Team</li>
+															<li role="separator" class="divider"></li>
 															<template v-for="squad in currentSquads">
 																<template v-if="squad.callsign === 'Team Leaders'">
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad)"><a @click="assignToSquad(reservation, squad, false)">Assign as a Team Leader</a></li>
+																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad)"><a @click="assignToSquad(reservation, squad, false)">Team Leader</a></li>
 																</template>
 																<template v-else>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad)"><a @click="assignToSquad(reservation, squad, true)" v-text="'Assign as Leader of ' + squad.callsign"></a></li>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="'Assign to ' + squad.callsign"></a></li>
+																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
+																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
 																</template>
 															</template>
-															<!--<li role="separator" class="divider"></li>-->
-															<!--<li><a href="#dropdown">Separated link</a></li>-->
 														</ul>
 													</dropdown>
 													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-														<i class="fa fa-caret-down"></i>
+														<i class="fa fa-angle-down"></i>
 													</a>
 												</div>
 											</div>
@@ -403,16 +415,20 @@
 									</div>
 									<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 										<div class="panel-body">
-											<dl class="dl-horizontal">
-												<dt>Gender</dt>
-												<dd>{{reservation.gender | capitalize}}</dd>
-												<dt>Marital Status</dt>
-												<dd>{{reservation.status | capitalize}}</dd>
-												<dt>Age</dt>
-												<dd>{{reservation.age}}</dd>
-												<dt>Travel Group</dt>
-												<dd>{{reservation.trip.data.group.data.name}}</dd>
-											</dl>
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Gender</label>
+													<p class="small">{{reservation.gender | capitalize}}</p>
+													<label>Marital Status</label>
+													<p class="small">{{reservation.status | capitalize}}</p>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<label>Age</label>
+													<p class="small">{{reservation.age}}</p>
+													<label>Travel Group</label>
+													<p class="small">{{reservation.trip.data.group.data.name}}</p>
+												</div><!-- end col -->
+											</div><!-- end row -->
 										</div>
 									</div>
 									<div class="panel-footer" v-if="reservation.companions.data.length">

@@ -19,7 +19,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="membersSearch" debounce="250" placeholder="Search">
+								<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
@@ -334,7 +334,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="reservationsSearch" debounce="250" placeholder="Search">
+								<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
@@ -425,7 +425,7 @@
 					<form id="TeamCreateForm">
 						<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
 							<label for="createTeamCallsign" class="control-label">Team Name</label>
-							<input type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
+							<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
 						</div>
 					</form>
 				</validator>
@@ -454,7 +454,7 @@
 					<form id="SquadCreateForm">
 						<div class="form-group" :class="{'has-error': $SquadCreate.squadcallsign.invalid}">
 							<label for="createSquadCallsign" class="control-label">Group Name</label>
-							<input type="text" class="form-control" id="createSquadCallsign" placeholder="" v-validate:squadcallsign="['required']" v-model="newSquadCallsign">
+							<input @keydown.enter.prevent="newSquad" type="text" class="form-control" id="createSquadCallsign" placeholder="" v-validate:squadcallsign="['required']" v-model="newSquadCallsign">
 						</div>
 					</form>
 				</validator>
@@ -467,7 +467,7 @@
 					<form id="SquadEditForm">
 						<div class="form-group" :class="{'has-error': $SquadEdit.editsquadcallsign.invalid}">
 							<label for="createSquadCallsign" class="control-label">Group Name</label>
-							<input type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" v-validate:editsquadcallsign="['required']" v-model="editSquadCallsign">
+							<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" v-validate:editsquadcallsign="['required']" v-model="editSquadCallsign">
 						</div>
 					</form>
 				</validator>
@@ -524,6 +524,8 @@
                 selectedSquadObj: null,
                 showTeamDeleteModal: false,
                 showSquadDeleteModal: false,
+
+                lastReservationRequest: null,
             }
         },
 	    watch: {
@@ -683,7 +685,12 @@
                 });*/
 
                 // this.$refs.spinner.show();
-                return this.$http.get('reservations', { params: params }).then(function (response) {
+                return this.$http.get('reservations', { params: params, before: function(xhr) {
+                    if (this.lastReservationRequest) {
+                        this.lastReservationRequest.abort();
+                    }
+                    this.lastReservationRequest = xhr;
+                } }).then(function (response) {
                     this.reservations = response.body.data;
                     this.reservationsPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
@@ -830,9 +837,13 @@
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
                 }
+                let squadCopy = this.selectedSquadObj;
 
-                this.$http.delete('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id).then(function (response) {
-                    this.$root.$emit('showInfo', this.selectedSquadObj.callsign + ' Deleted!');
+                this.$http.delete('teams/' + squadCopy.team_id + '/squads/' + squadCopy.id).then(function (response) {
+                    this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
+                    this.currentSquads = _.reject(this.currentSquads, function (squad) {
+	                    return squad.id === squadCopy.id;
+                    });
                     this.selectedSquadObj = null;
                     this.showSquadDeleteModal = false;
                 })

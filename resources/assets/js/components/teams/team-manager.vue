@@ -703,7 +703,7 @@
                     team_id: newTeam.id
                 };
 
-                this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                this.$http.put('teams/' + squad.team_id + '/squads/' + squad.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
                     this.currentSquads = _.reject(this.currentSquads, function (sq) {
                         return sq.id === squad.id;
                     });

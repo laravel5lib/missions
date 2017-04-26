@@ -189,7 +189,8 @@
 															</div>
 														</div>
 														<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-															<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not in this team.
+															<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+															<button type="button" class="btn btn-xs btn-primary-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 														</div>
 													</div>
 												</div>
@@ -625,6 +626,22 @@
                     squad.members = response.body.data;
                 });
             },
+            assignMassToSquad(reservations, squad) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This team is currently locked');
+                    return;
+                }
+
+                // Rules for team leader group
+                if (squad.callsign === 'Team Leaders') {
+                    this.$root.$emit('showError', 'Please add leaders individually.');
+                }
+
+                this.$http.post('squads/' + squad.id + '/members', { members: reservations },
+	                { params: { include: 'companions,trip.group'} }).then(function (response) {
+                    squad.members = response.body.data;
+                });
+            },
             moveToSquad(reservation, oldSquad, newSquad, leader) {
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
@@ -913,6 +930,31 @@
                         presentIds.push(id);
                 });
                 return member.present_companions_team = companionIds.length - presentIds.length;
+            },
+            addCompanionsToSquad(member, squad) {
+                let memberIds = _.filter(_.pluck(squad.members, 'id'), function (id) { return id !== member.id; });
+                let companionIds = _.pluck(member.companions.data, 'id');
+                let presentIds = [];
+                _.each(memberIds, function (id) {
+                    if (_.contains(companionIds, id))
+                        presentIds.push(id);
+                });
+
+                // Check for limitations
+	            let availableSpace = this.currentTeam.max_group_members - squad.members.length;
+
+	            if (availableSpace < companionIds.length) {
+					this.$root.$emit('showError', 'There isn\'t enough space in this group for all ' + companionIds.length + ' companions.');
+	                return;
+	            }
+
+	            // package for mass assignment
+	            let compArray = [];
+                _.each(companionIds, function (compId) {
+                    compArray.push({ id: compId, leader: false});
+                }.bind(this));
+                this.assignMassToSquad(compArray, squad)
+
             }
 
 

@@ -28,9 +28,19 @@ class TeamableRequest extends FormRequest
         ];
 
         if ($this->isMethod('post')) {
-            $rules['ids'] = 'required|array';
+            $rules = [
+                'ids'   => 'required|array',
+                'ids.*' => 'unique:teamables,teamable_id,NULL,teamable_id,team_id,'.$this->route('id')
+            ];
         }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'ids.*.unique' => 'Attempting to add a duplicate.',
+        ];
     }
 }

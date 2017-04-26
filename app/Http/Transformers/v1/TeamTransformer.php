@@ -25,6 +25,7 @@ class TeamTransformer extends TransformerAbstract {
         return [
             'id'           => $team->id,
             'callsign'     => $team->callsign,
+            'locked'       => (boolean) $team->locked,
             'groups_count' => $team->groups_count,
             'squads_count' => $team->squads_count,
             'created_at'   => $team->created_at->toDateTimeString(),

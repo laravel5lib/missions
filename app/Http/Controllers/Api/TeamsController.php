@@ -53,7 +53,8 @@ class TeamsController extends Controller
     public function store(TeamRequest $request)
     {
         $team = $this->team->create([
-            'callsign' => $request->get('callsign')
+            'callsign' => $request->get('callsign'),
+            'locked' => $request->get('locked', false)
         ]);
 
         if ($request->has('associations')) {
@@ -92,7 +93,8 @@ class TeamsController extends Controller
         $team = $this->team->findOrFail($id);
 
         $team->update([
-            'callsign' => $request->get('callsign', $team->callsign)
+            'callsign' => $request->get('callsign', $team->callsign),
+            'locked' => $request->get('locked', $team->locked)
         ]);
 
         return $this->response->item($team, new TeamTransformer);

@@ -19,7 +19,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-lg-8 col-md-8 col-sm-7 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="membersSearch" debounce="250" placeholder="Search">
+								<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
@@ -41,6 +41,7 @@
 									<p class="text-center text-italic text-muted">This team currently has no Squads</p>
 								</template>
 
+								<!-- Team Leaders Group -->
 								<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
 									<template v-if="squad.callsign === 'Team Leaders'">
 										<div class="panel panel-default">
@@ -117,6 +118,7 @@
 									<button :disabled="isLocked" class="btn btn-xs btn-primary" @click="showSquadCreateModal = true">Add Group</button>
 								</p>
 								<hr class="divider sm">
+								<!-- Other Groups -->
 								<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
 									<template v-if="squad.callsign !== 'Team Leaders'">
 										<div class="panel panel-default">
@@ -124,12 +126,20 @@
 												<div class="row">
 													<h5 class="col-xs-8" v-text="squad.callsign"></h5>
 													<div class="col-xs-4 text-right">
-														<a @click="showSquadUpdateModal = true,selectedSquadObj = squad" class="btn btn-xs btn-default-hollow">
-															<i class="fa fa-pencil"></i>
-														</a>
-														<a @click="showSquadDeleteModal = true,selectedSquadObj = squad" class="btn btn-xs btn-default-hollow">
-															<i class="fa fa-trash"></i>
-														</a>
+														<dropdown type="default">
+															<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+																<span class="fa fa-ellipsis-h"></span>
+															</button>
+															<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																<li :class="{'disabled': isLocked}"><a @click="showSquadUpdateModal = true,selectedSquadObj = squad">Edit</a></li>
+																<template v-for="subTeam in teams">
+																	<li role="separator" class="divider" v-if="$index === 0 && teams.length > 1"></li>
+																	<li v-if="subTeam.id !== squad.team_id" :class="{'disabled': isLocked}"><a @click="moveToTeam(squad, subTeam)">Move group to {{subTeam.callsign}}</a></li>
+																</template>
+																<li role="separator" class="divider"></li>
+																<li :class="{'disabled': isLocked}"><a @click="showSquadDeleteModal = true,selectedSquadObj = squad">Delete</a></li>
+															</ul>
+														</dropdown>
 													</div>
 												</div>
 											</div>
@@ -197,7 +207,8 @@
 															</div><!-- end panel-body -->
 														</div>
 														<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-															<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not in this team.
+															<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+															<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 														</div>
 													</div>
 												</div>
@@ -346,7 +357,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="reservationsSearch" debounce="250" placeholder="Search">
+								<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
@@ -441,7 +452,7 @@
 					<form id="TeamCreateForm">
 						<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
 							<label for="createTeamCallsign" class="control-label">Team Name</label>
-							<input type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
+							<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
 						</div>
 					</form>
 				</validator>
@@ -470,7 +481,7 @@
 					<form id="SquadCreateForm">
 						<div class="form-group" :class="{'has-error': $SquadCreate.squadcallsign.invalid}">
 							<label for="createSquadCallsign" class="control-label">Group Name</label>
-							<input type="text" class="form-control" id="createSquadCallsign" placeholder="" v-validate:squadcallsign="['required']" v-model="newSquadCallsign">
+							<input @keydown.enter.prevent="newSquad" type="text" class="form-control" id="createSquadCallsign" placeholder="" v-validate:squadcallsign="['required']" v-model="newSquadCallsign">
 						</div>
 					</form>
 				</validator>
@@ -483,7 +494,7 @@
 					<form id="SquadEditForm">
 						<div class="form-group" :class="{'has-error': $SquadEdit.editsquadcallsign.invalid}">
 							<label for="createSquadCallsign" class="control-label">Group Name</label>
-							<input type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" v-validate:editsquadcallsign="['required']" v-model="editSquadCallsign">
+							<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" v-validate:editsquadcallsign="['required']" v-model="editSquadCallsign">
 						</div>
 					</form>
 				</validator>
@@ -540,6 +551,8 @@
                 selectedSquadObj: null,
                 showTeamDeleteModal: false,
                 showSquadDeleteModal: false,
+
+                lastReservationRequest: null,
             }
         },
 	    watch: {
@@ -639,6 +652,22 @@
                     squad.members = response.body.data;
                 });
             },
+            assignMassToSquad(reservations, squad) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This team is currently locked');
+                    return;
+                }
+
+                // Rules for team leader group
+                if (squad.callsign === 'Team Leaders') {
+                    this.$root.$emit('showError', 'Please add leaders individually.');
+                }
+
+                this.$http.post('squads/' + squad.id + '/members', { members: reservations },
+	                { params: { include: 'companions,trip.group'} }).then(function (response) {
+                    squad.members = response.body.data;
+                });
+            },
             moveToSquad(reservation, oldSquad, newSquad, leader) {
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
@@ -662,6 +691,25 @@
                 this.removeFromSquad(reservation, oldSquad).then(function (response) {
 	                this.assignToSquad(reservation, newSquad, leader);
                 });
+            },
+            moveToTeam(squad, newTeam) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This team is currently locked');
+                    return;
+                }
+
+                let data = {
+                    callsign: squad.callsign,
+                    team_id: newTeam.id
+                };
+
+                this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                    this.currentSquads = _.reject(this.currentSquads, function (sq) {
+                        return sq.id === squad.id;
+                    });
+                    this.$root.$emit('showSuccess', squad.callsign + ' moved to ' + newTeam.callsign);
+                });
+
             },
             removeFromSquad(memberObj, squad) {
                 if (this.isLocked) {
@@ -699,7 +747,12 @@
                 });*/
 
                 // this.$refs.spinner.show();
-                return this.$http.get('reservations', { params: params }).then(function (response) {
+                return this.$http.get('reservations', { params: params, before: function(xhr) {
+                    if (this.lastReservationRequest) {
+                        this.lastReservationRequest.abort();
+                    }
+                    this.lastReservationRequest = xhr;
+                } }).then(function (response) {
                     this.reservations = response.body.data;
                     this.reservationsPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
@@ -846,9 +899,13 @@
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
                 }
+                let squadCopy = this.selectedSquadObj;
 
-                this.$http.delete('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id).then(function (response) {
-                    this.$root.$emit('showInfo', this.selectedSquadObj.callsign + ' Deleted!');
+                this.$http.delete('teams/' + squadCopy.team_id + '/squads/' + squadCopy.id).then(function (response) {
+                    this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
+                    this.currentSquads = _.reject(this.currentSquads, function (squad) {
+	                    return squad.id === squadCopy.id;
+                    });
                     this.selectedSquadObj = null;
                     this.showSquadDeleteModal = false;
                 })
@@ -918,6 +975,31 @@
                         presentIds.push(id);
                 });
                 return member.present_companions_team = companionIds.length - presentIds.length;
+            },
+            addCompanionsToSquad(member, squad) {
+                let memberIds = _.filter(_.pluck(squad.members, 'id'), function (id) { return id !== member.id; });
+                let companionIds = _.pluck(member.companions.data, 'id');
+                let presentIds = [];
+                _.each(memberIds, function (id) {
+                    if (_.contains(companionIds, id))
+                        presentIds.push(id);
+                });
+
+                // Check for limitations
+	            let availableSpace = this.currentTeam.max_group_members - squad.members.length;
+
+	            if (availableSpace < companionIds.length) {
+					this.$root.$emit('showError', 'There isn\'t enough space in this group for all ' + companionIds.length + ' companions.');
+	                return;
+	            }
+
+	            // package for mass assignment
+	            let compArray = [];
+                _.each(companionIds, function (compId) {
+                    compArray.push({ id: compId, leader: false});
+                }.bind(this));
+                this.assignMassToSquad(compArray, squad)
+
             }
 
 

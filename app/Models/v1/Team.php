@@ -18,6 +18,11 @@ class Team extends Model
         'created_at', 'updated_at', 'deleted_at'
     ];
 
+    public function type()
+    {
+        return $this->belongsTo(TeamType::class, 'type_id');
+    }
+
     public function squads()
     {
         return $this->hasMany(TeamSquad::class);

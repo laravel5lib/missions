@@ -109,6 +109,7 @@ $api->version('v1', [
     $api->delete('teams/{id}/{teamable}/{teamableId?}', 'TeamablesController@destroy')
         ->where('teamable', 'groups|campaigns|regions');
     $api->resource('teams.squads', 'TeamSquadsController');
+    $api->resource('teams.types', 'TeamTypesController');
     $api->resource('squads.members', 'SquadMembersController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');

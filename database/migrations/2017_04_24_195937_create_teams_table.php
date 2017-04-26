@@ -14,6 +14,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('type_id')->nullable()->index();
             $table->string('callsign');
             $table->boolean('locked')->default(false);
             $table->timestamps();
@@ -33,11 +34,39 @@ class CreateTeamsTable extends Migration
             $table->timestamps();
         });
 
-        // groups, regions, campaigns
         Schema::create('teamables', function (Blueprint $table) {
             $table->uuid('team_id')->index();
             $table->uuid('teamable_id')->index();
             $table->uuid('teamable_type')->index();
+        });
+
+        Schema::create('team_types', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name')->unique();
+            $table->json('rules')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::table('teams', function (Blueprint $table) {
+            $table->foreign('type_id')
+                ->references('id')->on('team_types')
+                ->onDelete('set null');
+        });
+
+        Schema::table('team_members', function (Blueprint $table) {
+            $table->foreign('reservation_id')
+                ->references('id')->on('reservations')
+                ->onDelete('cascade');
+
+            $table->foreign('team_squad_id')
+                ->references('id')->on('team_squads')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('team_squads', function (Blueprint $table) {
+            $table->foreign('team_id')
+                ->references('id')->on('teams')
+                ->onDelete('cascade');
         });
     }
 
@@ -52,5 +81,6 @@ class CreateTeamsTable extends Migration
         Schema::drop('team_squads');
         Schema::drop('team_members');
         Schema::drop('teamables');
+        Schema::drop('team_types');
     }
 }

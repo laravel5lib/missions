@@ -37,6 +37,17 @@
         <p>@{{ message }}</p>
     </alert>
 
+    <alert :show.sync="showInfo"
+           placement="top-right"
+           :duration="3000"
+           type="info"
+           width="350px"
+           dismissable>
+        <span class="icon-info-circled alert-icon-float-left"></span>
+        <strong>FYI!</strong>
+        <p>@{{ message }}</p>
+    </alert>
+
     <alert :show.sync="showError"
            placement="top-right"
            :duration="0"

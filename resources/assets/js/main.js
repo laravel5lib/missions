@@ -769,6 +769,7 @@ new Vue({
             color: {header: '#F74451'}
         },
         showSuccess: false,
+        showInfo: false,
         showError: false,
         message: '',
     },
@@ -939,6 +940,11 @@ new Vue({
             this.showSuccess = true;
         });
 
+        this.$on('showInfo', function (msg) {
+            this.message = msg;
+            this.showInfo = true;
+        });
+
         this.$on('showError', function (msg) {
             this.message = msg;
             this.showError = true;
@@ -994,10 +1000,18 @@ new Vue({
         'showSuccess': function (msg) {
             this.message = msg;
             this.showError = false;
+            this.showInfo = false;
             this.showSuccess = true;
+        },
+        'showInfo': function (msg) {
+            this.message = msg;
+            this.showError = false;
+            this.showInfo = true;
+            this.showSuccess = false;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showInfo = false;
             this.showSuccess = false;
             this.showError = true;
         },

@@ -1,5 +1,6 @@
 <template>
 	<div class="row" style="position:relative;">
+		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-md-7">
 			<h3 v-if="currentTeam" class="">{{ currentTeam.callsign }}</h3>
 			<ul class="nav nav-tabs">
@@ -73,6 +74,8 @@
 																					</template>
 																				</template>
 																				<li role="separator" class="divider"></li>
+																				<li v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+																				<li v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																				<li><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																			</ul>
 																		</dropdown>
@@ -132,7 +135,7 @@
 																	<div class="col-xs-9">
 																		<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
 																			<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																			{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}<br>
+																			{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
 																			<label>{{ member.desired_role.name }}</label>
 																		</a>
 																	</div>
@@ -154,6 +157,8 @@
 																					</template>
 																				</template>
 																				<li role="separator" class="divider"></li>
+																				<li v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+																				<li v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																				<li><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																			</ul>
 																		</dropdown>
@@ -237,7 +242,7 @@
 
 						<hr class="divider sm">
 
-						<ul class="list-group" v-if="currentSquads">
+						<ul class="list-group" v-if="currentSquads.length">
 							<li class="list-group-item">
 								<span class="badge" v-text="leaderSquad.members.length"></span>
 								Team Leaders
@@ -411,13 +416,19 @@
 			</div>
 		</modal>
 
-		<modal title="Delete Team" small ok-text="Delete" :callback="newTeam" :show.sync="showTeamDeleteModal">
+		<modal title="Delete Team" small ok-text="Delete" :callback="deleteTeam" :show.sync="showTeamDeleteModal">
 			<div slot="modal-body" class="modal-body">
-				<validator name="TeamCreate">
-					<p v-if="selectedSquadObj">
-						Are you sure you want to delete {{selectedSquadObj.callsign}} ?
-					</p>
-				</validator>
+				<p v-if="selectedSquadObj">
+					Are you sure you want to delete {{selectedSquadObj.callsign}} ?
+				</p>
+			</div>
+		</modal>
+
+		<modal title="Delete Group" small ok-text="Delete" :callback="deleteSquad" :show.sync="showSquadDeleteModal">
+			<div slot="modal-body" class="modal-body">
+				<p v-if="selectedSquadObj">
+					Are you sure you want to delete {{selectedSquadObj.callsign}} ?
+				</p>
 			</div>
 		</modal>
 
@@ -489,8 +500,10 @@
                 newSquadCallsign: '',
                 showSquadUpdateModal: false,
                 editSquadCallsign: '',
+                editSquadTeamId: undefined,
                 selectedSquadObj: null,
                 showTeamDeleteModal: false,
+                showSquadDeleteModal: false,
             }
         },
 	    watch: {
@@ -517,7 +530,7 @@
                 return _.uniq(IDs);
             },
 		    leaderSquad() {
-                return _.findWhere(this.currentSquads, { callsign: 'Team Leaders'});
+                return this.currentSquads.length ? _.findWhere(this.currentSquads, { callsign: 'Team Leaders'}) : [];
 		    },
 		    groupLeaders() {
                 let leaders = [];
@@ -569,7 +582,7 @@
 							return member.gender === reservation.gender;
                         });
 	                    if (test){
-                            this.$emit('showError', 'Team Leaders members can not be of the same gender.');
+                            this.$root.$emit('showError', 'Team Leaders members can not be of the same gender.');
                             return;
                         }
                     }
@@ -591,7 +604,7 @@
 							return member.gender === reservation.gender;
                         });
 	                    if (test){
-                            this.$emit('showError', 'Team Leaders members can not be of the same gender.');
+                            this.$root.$emit('showError', 'Team Leaders members can not be of the same gender.');
                             return;
                         }
                     }
@@ -660,7 +673,7 @@
             },
             getSquads(){
                 let params = {
-                    include: 'members',
+                    include: 'members.companions',
                     page: this.squadsPagination.current_page,
                 };
 
@@ -691,7 +704,7 @@
                         $('.nav-tabs a[href="#reservations"]').tab('show');
                     });
                 } else {
-//                    this.$emit('showError', '');
+//                    this.$root.$emit('showError', '');
                 }
 	        },
 	        newSquad(callsign){
@@ -713,25 +726,33 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.$http.put('team/' + team.id, team).then(function (response) {
-					this.$emit('showSuccess', team.callsign + ' Updated!');
+	            this.$http.put('teams/' + team.id, team).then(function (response) {
+					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
 	        updateSquad(){
-	            this.$http.put('team/' + squad.team_id + '/squads/' + squad.id, squad).then(function (response) {
-                    this.$emit('showSuccess', squad.callsign + ' Updated!');
-                    this.selectedSquadObj = null;
+	            let data = {
+                    callsign: this.editSquadCallsign,
+                    team_id: this.editSquadTeamId
+                };
+
+	            this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data).then(function (response) {
+	                let squad = _.findWhere(this.currentSquads, { id: this.selectedSquadObj.id});
+	                squad.callsign = response.body.data.callsign;
+                    this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
+                    this.editSquadTeamId = undefined;
                     this.showSquadUpdateModal = false;
+                    this.selectedSquadObj = null;
                 });
 	        },
 	        deleteTeam(team){
-	            this.$http.delete('team/' + team.id).then(function (response) {
-                    this.$emit('showInfo', squad.callsign + ' Deleted!');
+	            this.$http.delete('teams/' + team.id).then(function (response) {
+                    this.$root.$emit('showInfo', team.callsign + ' Deleted!');
                 })
 	        },
 	        deleteSquad(){
-	            this.$http.delete('team/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id).then(function (response) {
-                    this.$emit('showInfo', this.selectedSquadObj.callsign + ' Deleted!');
+	            this.$http.delete('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id).then(function (response) {
+                    this.$root.$emit('showInfo', this.selectedSquadObj.callsign + ' Deleted!');
                     this.selectedSquadObj = null;
                     this.showSquadDeleteModal = false;
                 })
@@ -758,7 +779,28 @@
 		            total += group.members.length;
                 });
 	            return total;
-            }
+            },
+            squadHasLeader(squad) {
+	            return _.findWhere(squad.members, { leader: true });
+            },
+            demoteToMember(member, squad) {
+                this.$http.put('squads/' + squad.id + '/members/' + member.id, {
+					leader: false
+                }).then(function (response) {
+                    this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' demoted to a group member');
+	                member.leader = false;
+                    return member;
+                });
+
+            },
+            promoteToLeader(member, squad) {
+                this.$http.put('squads/' + squad.id + '/members/' + member.id, {
+                    leader: true
+                }).then(function (response) {
+                    this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' promoted to Group Leader');
+                    member.leader = true;
+                });
+            },
 
         },
         ready(){

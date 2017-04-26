@@ -1,6 +1,85 @@
 <template>
 	<div class="row" style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+				<!-- <div class="form-group">
+					<label>Tags</label>
+					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
+						   :debounce="250" placeholder="Tag, tag2, tag3...">
+				</div> -->
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Role</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="roleObj" :options="rolesOptions" label="name"
+					          placeholder="Filter Roles"></v-select>
+				</div>
+
+				<div class="form-group">
+					<label>Travel Group</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="groupsArr" :options="groupsOptions" label="name"
+					          placeholder="Filter Groups"></v-select>
+				</div>
+
+				<div class="form-group">
+					<label>Gender</label>
+					<select class="form-control input-sm" v-model="reservationFilters.gender" style="width:100%;">
+						<option value="">Any Genders</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Marital Status</label>
+					<select class="form-control input-sm" v-model="reservationFilters.status" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="single">Single</option>
+						<option value="married">Married</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Age Range</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Age Min</span>
+								<input type="number" class="form-control" number v-model="reservationsAgeMin" min="0">
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max</span>
+								<input type="number" class="form-control" number v-model="reservationsAgeMax" max="120">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Travel Companions</label>
+					<div>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" value=""> Any
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions3" v-model="reservationFilters.hasCompanions" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+			</form>
+		</aside>
 		<div class="col-md-7">
 			<h4 v-if="currentTeam" class="">{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h4>
 			<ul class="nav nav-tabs">
@@ -24,7 +103,7 @@
 							</div>
 						</div><!-- end col -->
 						<div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showFilters=!showFilters">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
 								Filters
 								<i class="fa fa-filter"></i>
 							</button>
@@ -362,7 +441,7 @@
 							</div>
 						</div><!-- end col -->
 						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showFilters=!showFilters">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
 								Filters
 								<i class="fa fa-filter"></i>
 							</button>
@@ -506,8 +585,10 @@
 
 </style>
 <script type="text/javascript">
+	import vSelect from 'vue-select';
     export default{
         name: 'team-manager',
+	    components: {vSelect},
 	    props: {
             userId: {
                 type: String,
@@ -553,9 +634,50 @@
                 showSquadDeleteModal: false,
 
                 lastReservationRequest: null,
+
+	            // Filters vars
+                showReservationsFilters: false,
+                showMembersFilters: false,
+                groupsArr: [],
+                roleObj: {},
+                rolesOptions: [],
+                groupsOptions: [],
+                // reservations filters
+	            reservationFilters: {
+                    groups: [],
+		            gender: '',
+		            status: '',
+                    hasCompanions: '',
+                    role: ''
+                },
+
+                reservationsAgeMin: 0,
+                reservationsAgeMax: 0,
             }
         },
 	    watch: {
+            // watch filters obj
+            'reservationFilters': {
+                handler: function (val) {
+                    this.reservationsPagination.current_page = 1;
+                    this.searchReservations();
+                },
+                deep: true
+            },
+            'groupsArr': function (val) {
+                this.reservationFilters.groups = _.pluck(val, 'id') || '';
+//				this.searchReservations();
+            },
+            'roleObj': function (val) {
+                this.reservationFilters.role = val.value || '';
+//				this.searchReservations();
+            },
+            'reservationsAgeMin': function (val) {
+                this.searchReservations();
+            },
+            'reservationsAgeMax': function (val) {
+                this.searchReservations();
+            },
             'reservationsSearch': function (val, oldVal) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
@@ -614,6 +736,49 @@
 			},*/
 	    },
         methods: {
+            resetFilter(){
+//                this.orderByField = 'surname';
+//                this.direction = 1;
+                this.reservationsSearch = null;
+                this.ageMin = 0;
+                this.ageMax = 120;
+                this.groupsArr = [];
+//                this.usersArr = [];
+//                this.campaignObj = null;
+                this.reservationFilters = {
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+	                role: ''
+                }
+
+
+            },
+            getRoles(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('utilities/team-roles').then(function (response) {
+                    _.each(response.body.roles, function (name, key) {
+                        this.rolesOptions.push({ value: key, name: name});
+                    }.bind(this));
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return this.rolesOptions;
+                    }
+                });
+            },
+	        getGroups(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return response.body.data;
+                    }
+                });
+            },
             canAssignToTeamLeaders(squad){
 	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.squad_leaders;
             },
@@ -741,10 +906,10 @@
                     params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
                 }
 
-                /*$.extend(params, this.filters);
+                $.extend(params, this.reservationFilters);
                 $.extend(params, {
-                    age: [ this.ageMin, this.ageMax]
-                });*/
+                    age: [this.ageMin, this.ageMax]
+                });
 
                 // this.$refs.spinner.show();
                 return this.$http.get('reservations', { params: params, before: function(xhr) {

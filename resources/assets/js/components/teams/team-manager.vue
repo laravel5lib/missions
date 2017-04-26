@@ -41,6 +41,7 @@
 									<p class="text-center">This team currently has no Squads</p>
 								</template>
 
+								<!-- Team Leaders Group -->
 								<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
 									<template v-if="squad.callsign === 'Team Leaders'">
 										<div class="panel panel-default">
@@ -113,6 +114,7 @@
 									<button :disabled="isLocked" class="btn btn-xs btn-primary" @click="showSquadCreateModal = true">Add Group</button>
 								</p>
 								<hr class="divider sm">
+								<!-- Other Groups -->
 								<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
 									<template v-if="squad.callsign !== 'Team Leaders'">
 										<div class="panel panel-default">
@@ -120,12 +122,20 @@
 												<div class="row">
 													<h5 class="col-xs-8" v-text="squad.callsign"></h5>
 													<div class="col-xs-4 text-right">
-														<a @click="showSquadUpdateModal = true,selectedSquadObj = squad" class="btn btn-xs btn-default-hollow">
-															<i class="fa fa-pencil"></i>
-														</a>
-														<a @click="showSquadDeleteModal = true,selectedSquadObj = squad" class="btn btn-xs btn-default-hollow">
-															<i class="fa fa-trash"></i>
-														</a>
+														<dropdown type="default">
+															<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+																<span class="fa fa-ellipsis-h"></span>
+															</button>
+															<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																<li :class="{'disabled': isLocked}"><a @click="showSquadUpdateModal = true,selectedSquadObj = squad">Edit</a></li>
+																<template v-for="subTeam in teams">
+																	<li role="separator" class="divider" v-if="$index === 0 && teams.length > 1"></li>
+																	<li v-if="subTeam.id !== squad.team_id" :class="{'disabled': isLocked}"><a @click="moveToTeam(squad, subTeam)">Move group to {{subTeam.callsign}}</a></li>
+																</template>
+																<li role="separator" class="divider"></li>
+																<li :class="{'disabled': isLocked}"><a @click="showSquadDeleteModal = true,selectedSquadObj = squad">Delete</a></li>
+															</ul>
+														</dropdown>
 													</div>
 												</div>
 											</div>
@@ -665,6 +675,25 @@
                 this.removeFromSquad(reservation, oldSquad).then(function (response) {
 	                this.assignToSquad(reservation, newSquad, leader);
                 });
+            },
+            moveToTeam(squad, newTeam) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This team is currently locked');
+                    return;
+                }
+
+                let data = {
+                    callsign: squad.callsign,
+                    team_id: newTeam.id
+                };
+
+                this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                    this.currentSquads = _.reject(this.currentSquads, function (sq) {
+                        return sq.id === squad.id;
+                    });
+                    this.$root.$emit('showSuccess', squad.callsign + ' moved to ' + newTeam.callsign);
+                });
+
             },
             removeFromSquad(memberObj, squad) {
                 if (this.isLocked) {

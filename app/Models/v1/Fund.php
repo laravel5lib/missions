@@ -91,6 +91,16 @@ class Fund extends Model
         return $this->morphMany(Note::class, 'noteable');
     }
 
+    public function class()
+    {
+        return $this->belongsTo(AccountingClass::class, 'class_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsTo(AccountingItem::class, 'item_id');
+    }
+
     /**
      * Reconcile the fund's balance.
      */

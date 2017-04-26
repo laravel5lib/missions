@@ -2,6 +2,8 @@
 
 namespace App\Http\Transformers\v1;
 
+use App\Models\v1\Reservation;
+use App\Models\v1\TeamMember;
 use App\Models\v1\TeamSquad;
 use League\Fractal\TransformerAbstract;
 
@@ -12,7 +14,7 @@ class TeamSquadTransformer extends TransformerAbstract {
      *
      * @var array
      */
-    protected $availableIncludes = [];
+    protected $availableIncludes = ['members'];
 
     /**
      * Transform the object into a basic array
@@ -33,5 +35,18 @@ class TeamSquadTransformer extends TransformerAbstract {
                 ]
             ]
         ];
+    }
+
+    /**
+     * Include Members
+     *
+     * @param TeamSquad $squad
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeMembers(TeamSquad $squad)
+    {
+        $members = $squad->members;
+
+        return $this->collection($members, new SquadMemberTransformer);
     }
 }

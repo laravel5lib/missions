@@ -20,7 +20,7 @@ class TeamTypeTransformer extends TransformerAbstract {
             'name'         => $type->name,
             'rules'        => $type->rules,
             'created_at'   => $type->created_at->toDateTimeString(),
-            'updated_at'   => $type->updated_at->toDateTimeString()
+            'updated_at'   => $type->updated_at->toDateTimeString(),
             'links'        => [
                 [
                     'rel' => 'self',

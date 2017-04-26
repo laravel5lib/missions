@@ -77,6 +77,8 @@ class CreateTeamsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        
         Schema::drop('teams');
         Schema::drop('team_squads');
         Schema::drop('team_members');

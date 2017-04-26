@@ -101,6 +101,7 @@ $api->version('v1', [
     $api->post('referrals/export', 'ReferralsController@export');
     $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
+    $api->resource('teams/types', 'TeamTypesController');
     $api->resource('teams', 'TeamsController');
     $api->get('teams/{id}/{teamable}', 'TeamablesController@index')
         ->where('teamable', 'groups|campaigns|regions');
@@ -109,7 +110,6 @@ $api->version('v1', [
     $api->delete('teams/{id}/{teamable}/{teamableId?}', 'TeamablesController@destroy')
         ->where('teamable', 'groups|campaigns|regions');
     $api->resource('teams.squads', 'TeamSquadsController');
-    $api->resource('teams.types', 'TeamTypesController');
     $api->resource('squads.members', 'SquadMembersController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');

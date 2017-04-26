@@ -12,7 +12,7 @@ class TeamTransformer extends TransformerAbstract {
      *
      * @var array
      */
-    protected $availableIncludes = [];
+    protected $availableIncludes = ['squads', 'groups', 'campaigns'];
 
     /**
      * Transform the object into a basic array
@@ -25,6 +25,8 @@ class TeamTransformer extends TransformerAbstract {
         return [
             'id'           => $team->id,
             'callsign'     => $team->callsign,
+            'groups_count' => $team->groups_count,
+            'squads_count' => $team->squads_count,
             'created_at'   => $team->created_at->toDateTimeString(),
             'updated_at'   => $team->updated_at->toDateTimeString(),
             'deleted_at'   => $team->deleted_at ? $team->deleted_at->toDateTimeString() : null,
@@ -35,5 +37,44 @@ class TeamTransformer extends TransformerAbstract {
                 ]
             ]
         ];
+    }
+
+    /**
+     * Include team squads.
+     * 
+     * @param  Team   $team
+     * @return Collection
+     */
+    public function includeSquads(Team $team)
+    {
+        $squads = $team->squads;
+
+        return $this->collection($squads, new TeamSquadTransformer);
+    }
+
+    /**
+     * Include groups assocated with the team.
+     * 
+     * @param  Team   $team
+     * @return Collection
+     */
+    public function includeGroups(Team $team)
+    {
+        $groups = $team->groups;
+
+        return $this->collection($groups, new GroupTransformer);
+    }
+
+    /**
+     * Include campaigns associated with the team
+     * 
+     * @param  Team   $team
+     * @return Collection
+     */
+    public function includeCampaigns(Team $team)
+    {
+        $campaigns = $team->campaigns;
+
+        return $this->collection($campaigns, new CampaignTransformer);
     }
 }

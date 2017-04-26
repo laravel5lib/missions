@@ -35,7 +35,10 @@ class TeamsController extends Controller
      */
     public function index(Request $request)
     {
-        $teams = $this->team->filter($request->all())
+        $teams = $this->team
+            ->filter($request->all())
+            ->withCount('groups')
+            ->withCount('squads')
             ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($teams, new TeamTransformer);
@@ -54,13 +57,8 @@ class TeamsController extends Controller
         ]);
 
         if ($request->has('associations')) {
-            foreach ($request->get('associations') as $associate)
-            {
-                $type = $associate['type'];
-                $id = $associate['id'];
-                
-                $team->{$type}()->attach($id);
-            }
+            
+            $team->addTeamables($request->get('associations'));
         }
 
         return $this->response->item($team, new TeamTransformer);
@@ -74,7 +72,10 @@ class TeamsController extends Controller
      */
     public function show($id)
     {
-        $team = $this->team->findOrFail($id);
+        $team = $this->team
+            ->withCount('groups')
+            ->withCount('squads')
+            ->findOrFail($id);
 
         return $this->response->item($team, new TeamTransformer);
     }

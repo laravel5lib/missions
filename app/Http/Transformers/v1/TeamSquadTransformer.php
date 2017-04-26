@@ -25,10 +25,11 @@ class TeamSquadTransformer extends TransformerAbstract {
     public function transform(TeamSquad $squad)
     {
         return [
-            'id'           => $squad->id,
-            'team_id'      => $squad->team_id,
-            'callsign'     => $squad->callsign,
-            'links'        => [
+            'id'            => $squad->id,
+            'team_id'       => $squad->team_id,
+            'callsign'      => $squad->callsign,
+            'members_count' => $squad->members_count,
+            'links'         => [
                 [
                     'rel' => 'self',
                     'uri' => 'api/teams/' . $squad->team_id . '/squads/' . $squad->id

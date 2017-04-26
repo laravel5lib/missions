@@ -32,4 +32,18 @@ class Team extends Model
     {
         return $this->morphedByMany(Campaign::class, 'teamable');
     }
+
+    public function addTeamables(array $associations)
+    {
+        collect($associations)->each(function ($teamable) {
+            $type = $teamable['type'];
+            $id = $teamable['id'];
+
+            if ($this->{$type}()->attach($id)) {
+                return true;
+            }
+
+            return false;
+        });
+    }
 }

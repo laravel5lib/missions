@@ -31,6 +31,7 @@ class TeamSquadsController extends Controller
             ->findOrFail($teamId)
             ->squads()
             ->filter($request->all())
+            ->withCount('members')
             ->get();
 
         return $this->response->collection($squads, new TeamSquadTransformer);
@@ -48,6 +49,7 @@ class TeamSquadsController extends Controller
         $squad = $this->team
             ->findOrFail($teamId)
             ->squads()
+            ->withCount('members')
             ->findOrFail($squadId);
 
         return $this->response->item($squad, new TeamSquadTransformer);

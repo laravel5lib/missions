@@ -25,6 +25,7 @@ class TeamRequest extends FormRequest
     {
         $rules = [
             'callsign' => 'required|string',
+            'locked' => 'boolean',
             'associations' => 'array',
             'associations.*.id' => 'required|string',
             'associations.*.type' => 'required|in:campaigns,groups'

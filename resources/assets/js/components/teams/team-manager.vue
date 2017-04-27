@@ -16,7 +16,7 @@
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group" v-if="isAdminRoute">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 					          :value.sync="groupsArr" :options="groupsOptions" label="name"
@@ -364,7 +364,8 @@
 							</div>
 						</div>
 
-						<button v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
+						<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
+						<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Update Settings</button>
 
 						<hr class="divider sm">
 
@@ -448,6 +449,37 @@
 						</div>
 						<div class="col-xs-12">
 							<hr class="divider inv">
+							<div>
+								<label>Active Filters</label>
+								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
+									Travel Group
+									<i class="fa fa-close"></i>
+								</span>
+								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
+									Companions
+									<i class="fa fa-close"></i>
+								</span>
+								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+									Role
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
+									Gender
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
+									Status
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMin != 0" @click="reservationsAgeMin = 0" >
+									Min. Age
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMax != 120" @click="reservationsAgeMax = 120" >
+									Max. Age
+									<i class="fa fa-close"></i>
+								</span>
+							</div>
 						</div>
 					</form>
 					<!-- Reservation Lists and Pagination -->
@@ -652,7 +684,7 @@
                 },
 
                 reservationsAgeMin: 0,
-                reservationsAgeMax: 0,
+                reservationsAgeMax: 120,
             }
         },
 	    watch: {
@@ -692,6 +724,12 @@
 
         },
 	    computed: {
+            TeamResource() {
+                let customActions = {
+                    members: { method: 'GET', url: 'teams{/teamId}/members'},
+                };
+                return this.$resource('teams{/team}{/path}{/pathId}');
+            },
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
@@ -740,8 +778,8 @@
 //                this.orderByField = 'surname';
 //                this.direction = 1;
                 this.reservationsSearch = null;
-                this.ageMin = 0;
-                this.ageMax = 120;
+                this.reservationsAgeMin = 0;
+                this.reservationsAgeMax = 120;
                 this.groupsArr = [];
 //                this.usersArr = [];
 //                this.campaignObj = null;
@@ -868,7 +906,14 @@
                     team_id: newTeam.id
                 };
 
-                this.$http.put('teams/' + squad.team_id + '/squads/' + squad.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                let params = {
+                    team: squad.team_id,
+	                path: 'squads',
+	                pathId: squad.id,
+                    include: 'companions,trip.group'
+                };
+
+                this.TeamResource.update(params , data).then(function (response) {
                     this.currentSquads = _.reject(this.currentSquads, function (sq) {
                         return sq.id === squad.id;
                     });
@@ -933,7 +978,7 @@
 
                 };
 
-                return this.$http.get('teams', { params: params}).then(function (response) {
+                return this.TeamResource.get(params).then(function (response) {
 	                this.teamsPagination = response.body.meta.pagination;
                     _.each(response.body.data, function (team) {
                         team = _.extend(team, {
@@ -950,11 +995,13 @@
             },
             getSquads(){
                 let params = {
+                    team: this.currentTeam.id,
+	                path: 'squads',
                     include: 'members.companions,members.trip.group',
                     page: this.squadsPagination.current_page,
                 };
 
-                return this.$http.get('teams/' + this.currentTeam.id + '/squads', { params: params}).then(function (response) {
+                return this.TeamResource.get(params).then(function (response) {
                     _.each(response.body.data, function (squad) {
 	                    squad.members = squad.members && squad.members.data ? squad.members.data : [];
                     });
@@ -979,13 +1026,15 @@
                         callsign: this.newTeamCallsign,
                         associations: associations
                     };
-                    this.$http.post('teams', data).then(function (response) {
+                    this.TeamResource.save(data).then(function (response) {
                         let team = _.extend(response.body.data, {
                             type: 'default',
                             squad_leaders: 2,
                             max_group_members: 5,
                             max_members: 25,
                         });
+
+                        this.teams.push(team);
 
                         this.currentTeam = team;
 
@@ -1002,7 +1051,7 @@
 	        },
 	        newSquad(callsign){
                 if (this.$SquadCreate.valid || _.isString(callsign)) {
-                    return this.$http.post('teams/' + this.currentTeam.id + '/squads', {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
+                    return this.TeamResource.save({team: this.currentTeam.id, path: 'squads', callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
                         .then(function (response) {
 							let squad = response.body.data;
 							squad.members = [];
@@ -1019,12 +1068,12 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.$http.put('teams/' + team.id, team).then(function (response) {
+	            this.TeamResource.update({team: team.id}, team).then(function (response) {
 					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
 	        updateTeamSettings(){
-	            this.$http.put('teams/' + this.currentTeam.id, this.currentTeam).then(function (response) {
+	            this.TeamResource.update({ team: this.currentTeam.id}, { callsign: this.currentTeam.callsign }).then(function (response) {
                     this.currentTeam = response.body.data;
 					this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
                 });
@@ -1040,7 +1089,14 @@
                     team_id: this.editSquadTeamId
                 };
 
-	            this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                let params = {
+                    team: this.selectedSquadObj.team_id,
+	                path: 'squads',
+	                pathId: this.selectedSquadObj.id,
+                    include: 'companions,trip.group'
+                };
+
+	            this.TeamResource.update(params, data).then(function (response) {
 	                let squad = _.findWhere(this.currentSquads, { id: this.selectedSquadObj.id});
 	                squad.callsign = response.body.data.callsign;
                     this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
@@ -1055,9 +1111,9 @@
                     return;
                 }
 
-                this.$http.delete('teams/' + team.id).then(function (response) {
+                this.TeamResource.delete({ team: team.id }).then(function (response) {
                     this.$root.$emit('showInfo', team.callsign + ' Deleted!');
-                })
+                });
 	        },
 	        deleteSquad(){
                 if (this.isLocked) {
@@ -1066,7 +1122,7 @@
                 }
                 let squadCopy = this.selectedSquadObj;
 
-                this.$http.delete('teams/' + squadCopy.team_id + '/squads/' + squadCopy.id).then(function (response) {
+                this.TeamResource.delete({team: squadCopy.team_id, path: 'squads', pathId:squadCopy.id}).then(function (response) {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
                     this.currentSquads = _.reject(this.currentSquads, function (squad) {
 	                    return squad.id === squadCopy.id;

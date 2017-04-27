@@ -9,10 +9,10 @@
 					</template>
 					<p v-else>{{ activity.name | uppercase }}</p>
 				</div>
-				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.description, client: 'description' }">
+				<div v-if="isAdminRoute" class="form-group">
 					<label for="">Description</label>
 					<template v-if="editMode">
-						<input type="text" class="form-control" v-model="activity.description" v-validate:description="['required']">
+						<input type="text" class="form-control" v-model="activity.description">
 					</template>
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
@@ -23,9 +23,9 @@
 					<input type="datetime" class="form-control hidden" v-model="activity.occurred_at | moment 'LLLL'"
 					       id="occurred_at" v-validate:occured="['required']">
 				</div>
-				<template v-if="isUpdate && editMode">
+				<!--<template v-if="isUpdate && editMode">
 					<button class="btn btn-xs btn-primary" type="button" @click="update">Update Arrival</button>
-				</template>
+				</template>-->
 			</form>
 		</validator>
 	</div>
@@ -65,6 +65,11 @@
 			    return this && _.isObject(this.activity);
 			}
         },
+	    events: {
+            'validate-itinerary'() {
+                this.resetErrors();
+            }
+	    },
         methods: {
             update(){
 				this.$http.put('activities/' + this.activity.id, this.activity).then(function (response) {
@@ -73,7 +78,7 @@
             }
         },
         ready(){
-			this.attemptSubmit = true;
+//			this.attemptSubmit = true;
         }
     }
 </script>

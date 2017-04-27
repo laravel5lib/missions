@@ -18,11 +18,12 @@
 						</div>
 
 						<template v-if="transport && transport.type === 'flight'">
-							<div class="form-group">
+							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
 								<label for="travel_methodA">Airline</label>
 								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
 								          :value.sync="selectedAirlineObj" :options="airlinesOptions" label="name"
 								          placeholder="Select Airline" v-if="editMode"></v-select>
+								<p v-else>{{ transport.name | uppercase }}</p>
 								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
 								        v-model="transport.name">
 									<option :value="airline.name" v-for="airline in airlinesOptions">
@@ -30,7 +31,6 @@
 									</option>
 									<option value="other">Other</option>
 								</select>
-								<p v-else>{{ transport.name | uppercase }}</p>
 								<template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
 									<div class="form-group">
 										<label for="">Airline</label>
@@ -103,9 +103,9 @@
 							</div>
 						</template>
 					</section>
-					<template v-if="isUpdate && editMode">
+					<!--<template v-if="isUpdate && editMode">
 						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Travel Method</button>
-					</template>
+					</template>-->
 				</form>
 		</validator>
 	</div>
@@ -163,13 +163,24 @@
             },
             noFlightNeeded(val) {
                 this.transport.domestic = false;
+            },
+            'transport.name'(val) {
+                this.$nextTick(function () {
+                    this.$validate(true);
+                });
             }
+
         },
 	    computed: {
             'isUpdate': function() {
                 return this && this.transport.hasOwnProperty('id') && _.isString(this.transport.id);
 		    }
 	    },
+        events: {
+            'validate-itinerary'() {
+                this.resetErrors();
+            }
+        },
         methods: {
             getAirlines(search, loading){
                 loading ? loading(true) : void 0;
@@ -217,7 +228,7 @@
             this.itinerant_id = this.reservationId;
 //			this.transport.campaign_id = this.campaignId;
 
-            this.attemptSubmit = true;
+//            this.attemptSubmit = true;
 
         }
     }

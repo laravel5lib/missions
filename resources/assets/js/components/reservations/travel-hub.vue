@@ -11,11 +11,12 @@
 							          placeholder="Select Airport"></v-select>
 							<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
 							        v-model="hub.name">
-								<option :value="airport.name"    v-for="airport in airportsOptions">
+								<option :value="airport.name" v-for="airport in airportsOptions">
 									{{airport.name | capitalize}}
 								</option>
 								<option value="other">Other</option>
 							</select>
+							<div class="errors-block"></div>
 						</template>
 
 						<template v-if="selectedAirportObj && selectedAirportObj.name === 'Other'">
@@ -75,7 +76,7 @@
 							          placeholder="Select Country"></v-select>
 							<select class="form-control hidden" name="airport" id="airport" v-validate:country="['required']"
 							        v-model="hub.country">
-								<option :value="country.name" v-for="country in countriesOptions">
+								<option :value="country.code" v-for="country in countriesOptions">
 									{{country.name | capitalize}}
 								</option>
 							</select>
@@ -90,9 +91,9 @@
 						<p v-else>{{ hub.call_sign | uppercase }}</p>
 					</div>
 				</template>
-				<template v-if="isUpdate && editMode">
+				<!--<template v-if="isUpdate && editMode">
 					<button class="btn btn-xs btn-primary" type="button" @click="update">Update Location</button>
-				</template>
+				</template>-->
 			</form>
 		</validator>
 	</div>
@@ -115,7 +116,7 @@
                     city: '',
                     state: '',
                     zip: '',
-                    country: '',
+                    country_code: '',
 	            }
             },
 		    transportType: {
@@ -146,6 +147,46 @@
                 return this && this.hub.hasOwnProperty('id') && _.isString(this.hub.id);
             }
         },
+        events: {
+            'validate-itinerary'() {
+                this.resetErrors();
+            }
+        },
+        watch: {
+            selectedAirportObj(val, oldVal){
+                if (val && val !== oldVal) {
+                    this.hub.name = val.name;
+                    this.hub.city = val.city;
+                    let country = _.findWhere(this.countriesOptions, { name: val.country });
+                    this.hub.country_code = country.code;
+                    this.hub.call_sign = val.iata;
+                }
+            },
+            countryObj (val, oldVal) {
+                if (val) {
+                    this.hub.country_code = val.code;
+                }
+            },
+	        transportType(val){
+                if (val !== 'flight')
+                switch (val) {
+	                case 'train':
+                        this.hub.call_sign = 'TRN';
+	                    break;
+	                case 'bus':
+                        this.hub.call_sign = 'BUS';
+	                    break;
+	                case 'vehicle':
+                        this.hub.call_sign = 'CAR';
+	                    break;
+                }
+	        },
+	        'hub.name'(val) {
+	            this.$nextTick(function () {
+		            this.$validate(true);
+                });
+	        }
+        },
         methods: {
             getAirports(search, loading){
                 loading ? loading(true) : void 0;
@@ -165,9 +206,13 @@
             },
             getCountries(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('utilities/countries', { params: { search: search} }).then(function (response) {
+                return this.$http.get('utilities/countries', { params: { search: search} }).then(function (response) {
                     this.countriesOptions = response.body.countries;
-                    loading ? loading(false) : void 0;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return this.countriesOptions;
+                    }
                 })
             },
             update(){
@@ -176,50 +221,21 @@
                 });
             }
         },
-        watch: {
-            selectedAirportObj(val, oldVal){
-                if (val && val !== oldVal) {
-                    this.hub.name = val.name;
-                    this.hub.city = val.city;
-                    this.hub.country = val.country;
-                    this.hub.call_sign = val.iata;
-                }
-            },
-            countryObj (val, oldVal) {
-                if (val) {
-                    this.hub.country = val.name;
-                }
-            },
-	        transportType(val){
-                if (val !== 'flight')
-                switch (val) {
-	                case 'train':
-                        this.hub.call_sign = 'TRN';
-	                    break;
-	                case 'bus':
-                        this.hub.call_sign = 'BUS';
-	                    break;
-	                case 'vehicle':
-                        this.hub.call_sign = 'CAR';
-	                    break;
-                }
-	        }
-        },
-	    ready(){
+        ready(){
             let self = this;
             let promises = [];
             promises.push(this.getAirports(this.hub.name, false));
-            promises.push(this.getCountries(this.hub.country, false));
+            promises.push(this.getCountries(this.hub.country_code, false));
 
             Promise.all(promises).then(function (values) {
 				// Update state data
                 // select airline
                 self.selectedAirportObj = _.findWhere(self.airportsOptions, { name: self.hub.name });
-                self.countryObj = _.findWhere(self.countriesOptions, { name: self.hub.country });
+                self.countryObj = _.findWhere(self.countriesOptions, { code: self.hub.country_code });
                 console.log(self.selectedAirportObj);
 
             });
-            this.attemptSubmit = true;
+//            this.attemptSubmit = true;
         }
     }
 </script>

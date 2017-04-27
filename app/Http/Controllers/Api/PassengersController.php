@@ -55,7 +55,7 @@ class PassengersController extends Controller
     {
         $passenger = $this->passenger->firstOrCreate([
             'transport_id' => $transportId,
-            'reservation_id' => $request->get('reservation_id')
+            'reservation_id' => $request->json('reservation_id')
         ]);
 
         return $this->response->item($passenger, new PassengerTransformer);

@@ -33,7 +33,7 @@ class TransportRequest extends FormRequest
             'campaign_id' => 'required|exists:campaigns,id'
         ];
 
-        if ($this->isMethod('Put')) {
+        if ($this->isMethod('put')) {
             $rules['type'] = 'sometimes|required|string|in:flight,bus,vehicle,train';
             $rules['vessel_no'] = 'sometimes|required|string';
             $rules['name'] = 'sometimes|required|string';

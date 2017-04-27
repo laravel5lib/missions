@@ -49,4 +49,27 @@ class TravelActivity {
         return $activity;
 
     }
+
+    public function update(array $data)
+    {
+        $data = collect($data);
+
+        try {
+            $transport = $this->api
+                ->json(array_filter($data->get('transport')))
+                ->put('transports/'.$data->get('transport')['id']);
+
+            $hub = $this->api
+                ->json(array_filter($data->get('hub')))
+                ->put('hubs/'.$data->get('hub')['id']);
+
+            $activity = $this->api
+                ->json(array_filter($data->get('activity')))
+                ->put('activities/'.$data->get('activity')['id']);
+
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+    }
 }

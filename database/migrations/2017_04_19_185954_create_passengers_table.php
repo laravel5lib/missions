@@ -16,7 +16,7 @@ class CreatePassengersTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('transport_id')->index();
             $table->uuid('reservation_id')->index();
-            $table->string('seat_no');
+            $table->string('seat_no')->nullable();
             $table->timestamps();
         });
 

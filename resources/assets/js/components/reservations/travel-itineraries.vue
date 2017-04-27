@@ -26,7 +26,7 @@
 							</label>
 						</div>
 						<accordion :one-at-atime="true" v-if="itinerary.items">
-							<panel :is-open.once="editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
+							<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
 								<div class="checkbox">
 									<label for="noTravelTo" v-if="itinerary.items.length === ($index + 2)">
 										<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transportation to the destination.

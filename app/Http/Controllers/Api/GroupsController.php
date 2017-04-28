@@ -42,7 +42,7 @@ class GroupsController extends Controller
     public function index(Request $request)
     {
         $groups = $this->group
-                    ->withCount('reservations')
+                    ->with('reservations')
                     ->filter($request->all())
                     ->paginate($request->get('per_page', 25));
 

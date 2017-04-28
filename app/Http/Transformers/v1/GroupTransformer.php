@@ -51,7 +51,7 @@ class GroupTransformer extends TransformerAbstract
             'email'        => $group->email,
             'avatar'       => $group->avatar ? image($group->avatar->source) : url('/images/placeholders/logo-placeholder.png'),
             'banner'       => $group->banner ? image($group->banner->source) : null,
-            'reservations_count' => $group->reservations_count,
+            'reservations_count' => $group->activeReservations()->count(),
             'created_at'   => $group->created_at->toDateTimeString(),
             'updated_at'   => $group->updated_at->toDateTimeString(),
             'links'        => [

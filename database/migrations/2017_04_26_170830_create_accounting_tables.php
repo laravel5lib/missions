@@ -25,7 +25,7 @@ class CreateAccountingTables extends Migration
         });
 
         Schema::table('funds', function (Blueprint $table) {
-            $table->uuid('class_id')->after('class')->nullabe();
+            $table->uuid('class_id')->after('class')->nullable();
             $table->uuid('item_id')->after('item')->nullable();
 
             $table->foreign('class_id')
@@ -46,7 +46,8 @@ class CreateAccountingTables extends Migration
     public function down()
     {
         Schema::table('funds', function (Blueprint $table) {
-            $table->dropForeign(['class_id', 'item_id']);
+            $table->dropForeign(['class_id']);
+            $table->dropForeign(['item_id']);
             $table->dropColumn(['class_id', 'item_id']);
         });
         Schema::drop('accounting_classes');

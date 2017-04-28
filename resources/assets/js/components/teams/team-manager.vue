@@ -320,10 +320,10 @@
 						<div class="form-group">
 							<label for="" class="col-sm-4 control-label">Type</label>
 							<div class="col-sm-8">
-								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.type">
-									<option value="default">Default</option>
+								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.type_id">
+									<option :value="type.id" v-for="type in teamTypes">{{type.name}}</option>
 								</select>
-								<p v-else v-text="currentTeam.type"></p>
+								<p v-else v-text="currentTeam.type.data.name"></p>
 							</div>
 						</div>
 						<div class="form-group">
@@ -565,6 +565,12 @@
 							<label for="createTeamCallsign" class="control-label">Team Name</label>
 							<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
 						</div>
+						<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
+							<label for="" class="control-label">Type</label>
+							<select class="form-control" v-model="newTeamType" v-validate:teamtype="['required']">
+								<option :value="type.id" v-for="type in teamTypes">{{type.name}}</option>
+							</select>
+						</div>
 					</form>
 				</validator>
 			</div>
@@ -617,6 +623,7 @@
 
 </style>
 <script type="text/javascript">
+	import _ from 'underscore';
 	import vSelect from 'vue-select';
     export default{
         name: 'team-manager',
@@ -638,6 +645,7 @@
         },
         data(){
             return {
+                teamTypes: [],
                 teams: [],
                 teamsPagination: { current_page: 1 },
                 reservations: [],
@@ -656,6 +664,7 @@
 
                 showTeamCreateModal: false,
                 newTeamCallsign: '',
+                newTeamType: '',
                 showSquadCreateModal: false,
                 newSquadCallsign: '',
                 showSquadUpdateModal: false,
@@ -685,6 +694,9 @@
 
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,
+
+                TeamResource: this.$resource('teams{/team}{/path}{/pathId}'),
+                TeamSquadResource: this.$resource('teams{/team}/squads/{/squad}', { team: this.currentTeam ? this.currentTeam.id : null}),
             }
         },
 	    watch: {
@@ -724,12 +736,6 @@
 
         },
 	    computed: {
-            TeamResource() {
-                let customActions = {
-                    members: { method: 'GET', url: 'teams{/teamId}/members'},
-                };
-                return this.$resource('teams{/team}{/path}{/pathId}');
-            },
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
@@ -908,12 +914,11 @@
 
                 let params = {
                     team: squad.team_id,
-	                path: 'squads',
-	                pathId: squad.id,
+	                squad: squad.id,
                     include: 'companions,trip.group'
                 };
 
-                this.TeamResource.update(params , data).then(function (response) {
+                this.TeamSquadResource.update(params , data).then(function (response) {
                     this.currentSquads = _.reject(this.currentSquads, function (sq) {
                         return sq.id === squad.id;
                     });
@@ -973,7 +978,7 @@
             },
             getTeams(){
                 let params = {
-                    include: '',
+                    include: 'type',
                     page: this.teamsPagination.current_page,
 
                 };
@@ -988,11 +993,21 @@
                             max_members: 25,
                         });
                     });
-
-
                     return this.teams = response.body.data;
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
             },
+	        getTeamTypes() {
+                return this.$http.get('teams/types').then(function (response) {
+	                return this.teamTypes = response.body.data;
+                }, function (error) {
+                    console.log(error);
+                    return error;
+                });
+	        },
             getSquads(){
                 let params = {
                     team: this.currentTeam.id,
@@ -1023,6 +1038,7 @@
                         }];
                     }
                     let data = {
+                        type_id: this.newTeamType,
                         callsign: this.newTeamCallsign,
                         associations: associations
                     };
@@ -1051,7 +1067,7 @@
 	        },
 	        newSquad(callsign){
                 if (this.$SquadCreate.valid || _.isString(callsign)) {
-                    return this.TeamResource.save({team: this.currentTeam.id, path: 'squads', callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
+                    return this.TeamSquadResource.save({team: this.currentTeam.id}, {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
                         .then(function (response) {
 							let squad = response.body.data;
 							squad.members = [];
@@ -1091,12 +1107,11 @@
 
                 let params = {
                     team: this.selectedSquadObj.team_id,
-	                path: 'squads',
-	                pathId: this.selectedSquadObj.id,
+	                squad: this.selectedSquadObj.id,
                     include: 'companions,trip.group'
                 };
 
-	            this.TeamResource.update(params, data).then(function (response) {
+	            this.TeamSquadResource.update(params, data).then(function (response) {
 	                let squad = _.findWhere(this.currentSquads, { id: this.selectedSquadObj.id});
 	                squad.callsign = response.body.data.callsign;
                     this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
@@ -1122,7 +1137,7 @@
                 }
                 let squadCopy = this.selectedSquadObj;
 
-                this.TeamResource.delete({team: squadCopy.team_id, path: 'squads', pathId:squadCopy.id}).then(function (response) {
+                this.TeamSquadResource.delete({team: squadCopy.team_id, squad:squadCopy.id}).then(function (response) {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
                     this.currentSquads = _.reject(this.currentSquads, function (squad) {
 	                    return squad.id === squadCopy.id;
@@ -1257,6 +1272,7 @@
                     }
                 }));
             }
+            promises.push(this.getTeamTypes());
             promises.push(this.getTeams());
 
             Promise.all(promises).then(function (values) {

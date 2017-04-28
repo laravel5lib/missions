@@ -3,6 +3,7 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Team;
+use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
 
 class TeamTransformer extends TransformerAbstract {
@@ -77,5 +78,18 @@ class TeamTransformer extends TransformerAbstract {
         $campaigns = $team->campaigns;
 
         return $this->collection($campaigns, new CampaignTransformer);
+    }
+
+    /**
+     * Include type associated with the team
+     *
+     * @param  Team   $team
+     * @return Item
+     */
+    public function includeType(Team $team)
+    {
+        $type = $team->type;
+
+        return $this->item($type, new TeamTypeTransformer);
     }
 }

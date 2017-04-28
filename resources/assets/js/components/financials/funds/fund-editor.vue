@@ -48,7 +48,7 @@
                     <input class="form-control" v-model="fund.class"
                            initial="off" v-validate:qbclass="{required: true}">
                 </template>
-                <p v-else>{{ fund.class }}</p>
+                <p v-else><code>{{ fund.class.name }}</code></p>
             </div>
             <div :class="{ 'has-error' : $validation.qbitem.invalid}">
                 <label>Account Item</label>
@@ -56,7 +56,7 @@
                     <input class="form-control" v-model="fund.item"
                            initial="off" v-validate:qbitem="{required: true}">
                 </template>
-                <p v-else>{{ fund.item }}</p>
+                <p v-else><code>{{ fund.item.name }}</code></p>
             </div>
             <label>Type</label>
             <p>{{ fund.type | capitalize }}</p>

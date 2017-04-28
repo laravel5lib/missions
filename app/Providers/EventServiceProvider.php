@@ -12,6 +12,8 @@ use App\Models\v1\Project;
 use App\Models\v1\Campaign;
 use App\Models\v1\Referral;
 use App\Models\v1\ProjectCause;
+use App\Models\v1\AccountingItem;
+use App\Models\v1\AccountingClass;
 use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -62,11 +64,12 @@ class EventServiceProvider extends ServiceProvider
         Trip::created(function ($trip) {
             $name = generateFundName($trip);
             $trip->fund()->create([
-                'name' => $name,
-                'slug' => generate_fund_slug($name),
+                'name'    => $name,
+                'slug'    => generate_fund_slug($name),
                 'balance' => 0,
-                'class' => generateQbClassName($trip),
-                'item' => 'Missionary Donation'
+                'class'   => AccountingClass::get($trip),
+                'item'    => AccountingItem::get($trip)
+                // 'item' => 'Missionary Donation'
             ]);
         });
 

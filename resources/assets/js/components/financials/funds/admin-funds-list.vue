@@ -142,13 +142,13 @@
                 </th>
                 <th v-if="isActive('item')" :class="{'text-primary': orderByField === 'item'}">
                     Item
-                    <i @click="setOrderByField('item')" v-if="orderByField !== 'item'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'item'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    <!-- <i @click="setOrderByField('item')" v-if="orderByField !== 'item'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'item'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i> -->
                 </th>
                 <th v-if="isActive('class')" :class="{'text-primary': orderByField === 'class'}">
                     Class
-                    <i @click="setOrderByField('class')" v-if="orderByField !== 'class'" class="fa fa-sort pull-right"></i>
-                    <i @click="direction=direction*-1" v-if="orderByField === 'class'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
+                    <!-- <i @click="setOrderByField('class')" v-if="orderByField !== 'class'" class="fa fa-sort pull-right"></i>
+                    <i @click="direction=direction*-1" v-if="orderByField === 'class'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i> -->
                 </th>
                 <th v-if="isActive('balance')" :class="{'text-primary': orderByField === 'balance'}">
                     Balance
@@ -165,10 +165,10 @@
                     <span class="label label-default" v-text="fund.type|capitalize"></span>
                 </td>
                 <td v-if="isActive('item')">
-                    {{ fund.item|capitalize }}
+                    <code>{{ fund.item.name }}</code>
                 </td>
                 <td v-if="isActive('class')">
-                    {{ fund.class|capitalize }}
+                    <code>{{ fund.class.name }}</code>
                 </td>
                 <td v-if="isActive('balance')">
                     <span v-text="fund.balance|currency" :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}"></span>
@@ -223,8 +223,8 @@
                     current_page: 1
                 },
                 search: '',
-                activeFields: ['name', 'type', 'balance'],
-                maxActiveFields: 3,
+                activeFields: ['name', 'type', 'balance', 'class'],
+                maxActiveFields: 5,
 
                 // filter vars
                 filters: {

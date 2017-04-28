@@ -1,6 +1,85 @@
 <template>
 	<div class="row" style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+				<!-- <div class="form-group">
+					<label>Tags</label>
+					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
+						   :debounce="250" placeholder="Tag, tag2, tag3...">
+				</div> -->
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Role</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="roleObj" :options="rolesOptions" label="name"
+					          placeholder="Filter Roles"></v-select>
+				</div>
+
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Travel Group</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="groupsArr" :options="groupsOptions" label="name"
+					          placeholder="Filter Groups"></v-select>
+				</div>
+
+				<div class="form-group">
+					<label>Gender</label>
+					<select class="form-control input-sm" v-model="reservationFilters.gender" style="width:100%;">
+						<option value="">Any Genders</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Marital Status</label>
+					<select class="form-control input-sm" v-model="reservationFilters.status" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="single">Single</option>
+						<option value="married">Married</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Age Range</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Age Min</span>
+								<input type="number" class="form-control" number v-model="reservationsAgeMin" min="0">
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max</span>
+								<input type="number" class="form-control" number v-model="reservationsAgeMax" max="120">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Travel Companions</label>
+					<div>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" value=""> Any
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions3" v-model="reservationFilters.hasCompanions" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+			</form>
+		</aside>
 		<div class="col-md-7">
 			<h4 v-if="currentTeam" class="">{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h4>
 			<ul class="nav nav-tabs">
@@ -24,7 +103,7 @@
 							</div>
 						</div><!-- end col -->
 						<div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showFilters=!showFilters">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
 								Filters
 								<i class="fa fa-filter"></i>
 							</button>
@@ -285,7 +364,8 @@
 							</div>
 						</div>
 
-						<button v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
+						<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
+						<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Update Settings</button>
 
 						<hr class="divider sm">
 
@@ -362,13 +442,44 @@
 							</div>
 						</div><!-- end col -->
 						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showFilters=!showFilters">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
 								Filters
 								<i class="fa fa-filter"></i>
 							</button>
 						</div>
 						<div class="col-xs-12">
 							<hr class="divider inv">
+							<div>
+								<label>Active Filters</label>
+								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
+									Travel Group
+									<i class="fa fa-close"></i>
+								</span>
+								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
+									Companions
+									<i class="fa fa-close"></i>
+								</span>
+								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+									Role
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
+									Gender
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
+									Status
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMin != 0" @click="reservationsAgeMin = 0" >
+									Min. Age
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMax != 120" @click="reservationsAgeMax = 120" >
+									Max. Age
+									<i class="fa fa-close"></i>
+								</span>
+							</div>
 						</div>
 					</form>
 					<!-- Reservation Lists and Pagination -->
@@ -506,8 +617,10 @@
 
 </style>
 <script type="text/javascript">
+	import vSelect from 'vue-select';
     export default{
         name: 'team-manager',
+	    components: {vSelect},
 	    props: {
             userId: {
                 type: String,
@@ -553,9 +666,50 @@
                 showSquadDeleteModal: false,
 
                 lastReservationRequest: null,
+
+	            // Filters vars
+                showReservationsFilters: false,
+                showMembersFilters: false,
+                groupsArr: [],
+                roleObj: {},
+                rolesOptions: [],
+                groupsOptions: [],
+                // reservations filters
+	            reservationFilters: {
+                    groups: [],
+		            gender: '',
+		            status: '',
+                    hasCompanions: '',
+                    role: ''
+                },
+
+                reservationsAgeMin: 0,
+                reservationsAgeMax: 120,
             }
         },
 	    watch: {
+            // watch filters obj
+            'reservationFilters': {
+                handler: function (val) {
+                    this.reservationsPagination.current_page = 1;
+                    this.searchReservations();
+                },
+                deep: true
+            },
+            'groupsArr': function (val) {
+                this.reservationFilters.groups = _.pluck(val, 'id') || '';
+//				this.searchReservations();
+            },
+            'roleObj': function (val) {
+                this.reservationFilters.role = val.value || '';
+//				this.searchReservations();
+            },
+            'reservationsAgeMin': function (val) {
+                this.searchReservations();
+            },
+            'reservationsAgeMax': function (val) {
+                this.searchReservations();
+            },
             'reservationsSearch': function (val, oldVal) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
@@ -570,6 +724,12 @@
 
         },
 	    computed: {
+            TeamResource() {
+                let customActions = {
+                    members: { method: 'GET', url: 'teams{/teamId}/members'},
+                };
+                return this.$resource('teams{/team}{/path}{/pathId}');
+            },
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
@@ -614,6 +774,49 @@
 			},*/
 	    },
         methods: {
+            resetFilter(){
+//                this.orderByField = 'surname';
+//                this.direction = 1;
+                this.reservationsSearch = null;
+                this.reservationsAgeMin = 0;
+                this.reservationsAgeMax = 120;
+                this.groupsArr = [];
+//                this.usersArr = [];
+//                this.campaignObj = null;
+                this.reservationFilters = {
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+	                role: ''
+                }
+
+
+            },
+            getRoles(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('utilities/team-roles').then(function (response) {
+                    _.each(response.body.roles, function (name, key) {
+                        this.rolesOptions.push({ value: key, name: name});
+                    }.bind(this));
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return this.rolesOptions;
+                    }
+                });
+            },
+	        getGroups(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return response.body.data;
+                    }
+                });
+            },
             canAssignToTeamLeaders(squad){
 	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.squad_leaders;
             },
@@ -703,7 +906,14 @@
                     team_id: newTeam.id
                 };
 
-                this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                let params = {
+                    team: squad.team_id,
+	                path: 'squads',
+	                pathId: squad.id,
+                    include: 'companions,trip.group'
+                };
+
+                this.TeamResource.update(params , data).then(function (response) {
                     this.currentSquads = _.reject(this.currentSquads, function (sq) {
                         return sq.id === squad.id;
                     });
@@ -741,10 +951,10 @@
                     params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
                 }
 
-                /*$.extend(params, this.filters);
+                $.extend(params, this.reservationFilters);
                 $.extend(params, {
-                    age: [ this.ageMin, this.ageMax]
-                });*/
+                    age: [this.ageMin, this.ageMax]
+                });
 
                 // this.$refs.spinner.show();
                 return this.$http.get('reservations', { params: params, before: function(xhr) {
@@ -768,7 +978,7 @@
 
                 };
 
-                return this.$http.get('teams', { params: params}).then(function (response) {
+                return this.TeamResource.get(params).then(function (response) {
 	                this.teamsPagination = response.body.meta.pagination;
                     _.each(response.body.data, function (team) {
                         team = _.extend(team, {
@@ -785,11 +995,13 @@
             },
             getSquads(){
                 let params = {
+                    team: this.currentTeam.id,
+	                path: 'squads',
                     include: 'members.companions,members.trip.group',
                     page: this.squadsPagination.current_page,
                 };
 
-                return this.$http.get('teams/' + this.currentTeam.id + '/squads', { params: params}).then(function (response) {
+                return this.TeamResource.get(params).then(function (response) {
                     _.each(response.body.data, function (squad) {
 	                    squad.members = squad.members && squad.members.data ? squad.members.data : [];
                     });
@@ -814,13 +1026,15 @@
                         callsign: this.newTeamCallsign,
                         associations: associations
                     };
-                    this.$http.post('teams', data).then(function (response) {
+                    this.TeamResource.save(data).then(function (response) {
                         let team = _.extend(response.body.data, {
                             type: 'default',
                             squad_leaders: 2,
                             max_group_members: 5,
                             max_members: 25,
                         });
+
+                        this.teams.push(team);
 
                         this.currentTeam = team;
 
@@ -837,7 +1051,7 @@
 	        },
 	        newSquad(callsign){
                 if (this.$SquadCreate.valid || _.isString(callsign)) {
-                    return this.$http.post('teams/' + this.currentTeam.id + '/squads', {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
+                    return this.TeamResource.save({team: this.currentTeam.id, path: 'squads', callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
                         .then(function (response) {
 							let squad = response.body.data;
 							squad.members = [];
@@ -854,12 +1068,12 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.$http.put('teams/' + team.id, team).then(function (response) {
+	            this.TeamResource.update({team: team.id}, team).then(function (response) {
 					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
 	        updateTeamSettings(){
-	            this.$http.put('teams/' + this.currentTeam.id, this.currentTeam).then(function (response) {
+	            this.TeamResource.update({ team: this.currentTeam.id}, { callsign: this.currentTeam.callsign }).then(function (response) {
                     this.currentTeam = response.body.data;
 					this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
                 });
@@ -875,7 +1089,14 @@
                     team_id: this.editSquadTeamId
                 };
 
-	            this.$http.put('teams/' + this.selectedSquadObj.team_id + '/squads/' + this.selectedSquadObj.id, data, { params: { include: 'companions,trip.group'} }).then(function (response) {
+                let params = {
+                    team: this.selectedSquadObj.team_id,
+	                path: 'squads',
+	                pathId: this.selectedSquadObj.id,
+                    include: 'companions,trip.group'
+                };
+
+	            this.TeamResource.update(params, data).then(function (response) {
 	                let squad = _.findWhere(this.currentSquads, { id: this.selectedSquadObj.id});
 	                squad.callsign = response.body.data.callsign;
                     this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
@@ -890,9 +1111,9 @@
                     return;
                 }
 
-                this.$http.delete('teams/' + team.id).then(function (response) {
+                this.TeamResource.delete({ team: team.id }).then(function (response) {
                     this.$root.$emit('showInfo', team.callsign + ' Deleted!');
-                })
+                });
 	        },
 	        deleteSquad(){
                 if (this.isLocked) {
@@ -901,7 +1122,7 @@
                 }
                 let squadCopy = this.selectedSquadObj;
 
-                this.$http.delete('teams/' + squadCopy.team_id + '/squads/' + squadCopy.id).then(function (response) {
+                this.TeamResource.delete({team: squadCopy.team_id, path: 'squads', pathId:squadCopy.id}).then(function (response) {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
                     this.currentSquads = _.reject(this.currentSquads, function (squad) {
 	                    return squad.id === squadCopy.id;

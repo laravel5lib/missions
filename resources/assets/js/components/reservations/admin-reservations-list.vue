@@ -622,7 +622,10 @@
 					outstanding: 'Outstanding',
 					deadlines: 'Other Deadlines',
 					desired_role: 'Role',
-					promocodes: 'Promo Codes'
+					promocodes: 'Promo Codes',
+					registered_at: 'Register Date',
+					updated_at: 'Last Updated',
+					dropped_at: 'Drop Date'
 				},
 				exportFilters: {},
                 lastReservationRequest: null

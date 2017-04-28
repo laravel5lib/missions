@@ -180,6 +180,7 @@ $api->version('v1', [
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
         $api->get('past-trips', 'UtilitiesController@getPastTrips');
+        $api->get('activities/types', 'UtilitiesController@getActivityTypes');
         $api->get('make-slug/{string}', function($string) {
             return ['slug' => generate_slug($string) ];
         });

@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TripTableSeeder::class);
         $this->call(ProjectTablesSeeder::class);
         $this->call(FundsTableSeeder::class);
+        $this->call(ActivityTypeSeeder::class);
 
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);

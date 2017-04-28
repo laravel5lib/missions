@@ -29,4 +29,9 @@ class Activity extends Model
     {
         return $this->morphedByMany(Hub::class, 'activitable');
     }
+
+    public function type()
+    {
+        return $this->belongsTo(ActivityType::class);
+    }
 }

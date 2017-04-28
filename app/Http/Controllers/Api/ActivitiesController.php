@@ -26,6 +26,7 @@ class ActivitiesController extends Controller
     public function index(Request $request)
     {
         $activities = $this->activity
+                           ->with('type')
                            ->filter($request->all())
                            ->paginate($request->get('per_page', 10));
 
@@ -45,7 +46,8 @@ class ActivitiesController extends Controller
             'description' => $request->json('description'),
             'occurred_at' => $request->json('occurred_at'),
             'participant_id' => $request->json('participant_id'),
-            'participant_type' => $request->json('participant_type')
+            'participant_type' => $request->json('participant_type'),
+            'activity_type_id' => $request->json('activity_type_id')
         ]);
 
         return $this->response->item($activity, new ActivityTransformer);
@@ -80,7 +82,8 @@ class ActivitiesController extends Controller
             'description' => $request->json('description', $activity->description),
             'occurred_at' => $request->json('occurred_at', $activity->occurred_at),
             'participant_id' => $request->json('participant_id', $activity->participant_id),
-            'participant_type' => $request->json('participant_type', $activity->participant_type)
+            'participant_type' => $request->json('participant_type', $activity->participant_type),
+            'activity_type_id' => $request->json('activity_type_id', $activity->activity_type_id)
         ]);
 
         return $this->response->item($activity, new ActivityTransformer);

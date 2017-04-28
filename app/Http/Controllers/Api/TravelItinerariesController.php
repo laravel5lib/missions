@@ -54,6 +54,7 @@ class TravelItinerariesController extends Controller
                 ],
                 'activity' => [
                     'name'             => $activity->get('name'),
+                    'activity_type_id' => $activity->get('activity_type_id'),
                     'description'      => $activity->get('description'),
                     'occurred_at'      => $activity->get('occurred_at'),
                     'participant_id'   => $reservation->id,

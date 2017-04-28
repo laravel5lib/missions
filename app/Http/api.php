@@ -34,10 +34,14 @@ $api->version('v1', [
     $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
 
     $api->get('download/{path}', function($path) {
-        return response()->make(Storage::disk('s3')->get($path), 200, [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => "attachment"
-            ]);
+
+        $headers = [
+            'Content-Type' => Storage::mimetype($path),
+            'Content-Disposition' => 'attachment'
+        ];
+
+        return response()->make(Storage::get($path), 200, $headers);
+
     })->where('path', '.+');
 
     $api->get('play/{path}', function($path) {

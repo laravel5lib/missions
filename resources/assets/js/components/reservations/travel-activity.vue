@@ -41,6 +41,7 @@
                 type: Object,
 	            default: {
                     name: '',
+                    activity_type_id: '',
                     description: '',
                     occurred_at: '',
 	            }

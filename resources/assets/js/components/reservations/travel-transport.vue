@@ -223,6 +223,10 @@
                     self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
                     console.log(self.selectedAirlineObj);
                 }
+                self.$nextTick(function () {
+                    self.$validate(true);
+                });
+
             });
 
             this.itinerant_id = this.reservationId;

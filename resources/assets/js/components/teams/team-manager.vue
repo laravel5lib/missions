@@ -318,15 +318,6 @@
 						</div>
 
 						<div class="form-group">
-							<label for="" class="col-sm-4 control-label">Type</label>
-							<div class="col-sm-8">
-								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.type">
-									<option value="default">Default</option>
-								</select>
-								<p v-else v-text="currentTeam.type"></p>
-							</div>
-						</div>
-						<div class="form-group">
 							<label for="" class="col-sm-4 control-label">Locked</label>
 							<div class="col-sm-8">
 								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.locked">
@@ -338,6 +329,27 @@
 						</div>
 
 						<div class="form-group">
+							<label for="" class="col-sm-4 control-label">Type</label>
+							<div class="col-sm-8">
+								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
+									<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
+								</select>
+								<p v-else v-text="currentTeam.type.data.name | capitalize"></p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-4 control-label">Rules</label>
+							<div class="col-sm-8">
+								<ul class="list-group" v-if="currentSquads.length">
+									<li class="list-group-item" v-for="(key, value) in currentTeam.type.data.rules">
+										<span class="badge" v-text="value"></span>
+										{{ key | underscoreToSpace | capitalize }}
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<!--<div class="form-group">
 							<label for="" class="col-sm-4 control-label">Team Leader</label>
 							<div v-if="isAdminRoute" class="col-sm-4"></div>
 							<div class="col-sm-4">
@@ -362,23 +374,27 @@
 								<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.max_members" min="2" max="25" value="25">
 								<p v-else v-text="currentTeam.max_members"></p>
 							</div>
+						</div>-->
+
+						<div class="form-group">
+							<div class="col-sm-4"></div>
+							<div class="col-sm-8">
+								<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
+								<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Delete Team</button>
+							</div>
 						</div>
-
-						<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
-						<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Update Settings</button>
-
 						<hr class="divider sm">
 
 						<ul class="list-group" v-if="currentSquads.length">
-							<li class="list-group-item">
+							<li class="list-group-item" v-if="leaderSquad.members">
 								<span class="badge" v-text="leaderSquad.members.length"></span>
 								Team Leaders
 							</li>
-							<li class="list-group-item">
+							<li class="list-group-item" v-if="groupLeaders">
 								<span class="badge" v-text="groupLeaders.length"></span>
 								Group Leaders
 							</li>
-							<li class="list-group-item">
+							<li class="list-group-item" v-if="totalMembers">
 								<span class="badge" v-text="totalMembers"></span>
 								Total Members
 							</li>
@@ -565,6 +581,12 @@
 							<label for="createTeamCallsign" class="control-label">Team Name</label>
 							<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
 						</div>
+						<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
+							<label for="" class="control-label">Type</label>
+							<select class="form-control" v-model="newTeamType" v-validate:teamtype="['required']">
+								<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
+							</select>
+						</div>
 					</form>
 				</validator>
 			</div>
@@ -617,6 +639,7 @@
 
 </style>
 <script type="text/javascript">
+	import _ from 'underscore';
 	import vSelect from 'vue-select';
     export default{
         name: 'team-manager',
@@ -638,6 +661,7 @@
         },
         data(){
             return {
+                teamTypes: [],
                 teams: [],
                 teamsPagination: { current_page: 1 },
                 reservations: [],
@@ -656,6 +680,7 @@
 
                 showTeamCreateModal: false,
                 newTeamCallsign: '',
+                newTeamType: '',
                 showSquadCreateModal: false,
                 newSquadCallsign: '',
                 showSquadUpdateModal: false,
@@ -685,6 +710,9 @@
 
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,
+
+                TeamResource: this.$resource('teams{/team}{/path}{/pathId}'),
+                TeamSquadResource: this.$resource('teams{/team}/squads/{/squad}', { team: this.currentTeam ? this.currentTeam.id : null}),
             }
         },
 	    watch: {
@@ -720,16 +748,10 @@
             },
 		    'currentTeam': function (val) {
 			    this.getSquads();
-            }
+            },
 
         },
 	    computed: {
-            TeamResource() {
-                let customActions = {
-                    members: { method: 'GET', url: 'teams{/teamId}/members'},
-                };
-                return this.$resource('teams{/team}{/path}{/pathId}');
-            },
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
@@ -818,7 +840,7 @@
                 });
             },
             canAssignToTeamLeaders(squad){
-	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.squad_leaders;
+	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.max_leaders;
             },
             canAssignToSquadLeader(squad){
                 return !_.some(squad.members, function (member) {
@@ -826,7 +848,7 @@
                 });
             },
             canAssignToSquad(squad){
-	            return  squad.members && squad.members.length < this.currentTeam.max_group_members;
+	            return  squad.members && squad.members.length < this.currentTeam.type.data.max_squad_members;
             },
             assignToSquad(reservation, squad, leader) {
                 if (this.isLocked) {
@@ -872,6 +894,10 @@
                 });
             },
             moveToSquad(reservation, oldSquad, newSquad, leader) {
+                if (newSquad.squads_count >= this.currentTeam.type.data.max_squad_members) {
+                    this.$root.$emit('showInfo', newSquad.name +' currently has the max number of members');
+                    return;
+                }
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
@@ -896,6 +922,11 @@
                 });
             },
             moveToTeam(squad, newTeam) {
+                if (newTeam.squads_count >= newTeam.type.data.max_squads) {
+                    this.$root.$emit('showInfo', newTeam.name +' currently has the max number of squads');
+                    return;
+                }
+
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
@@ -908,12 +939,11 @@
 
                 let params = {
                     team: squad.team_id,
-	                path: 'squads',
-	                pathId: squad.id,
+	                squad: squad.id,
                     include: 'companions,trip.group'
                 };
 
-                this.TeamResource.update(params , data).then(function (response) {
+                this.TeamSquadResource.update(params , data).then(function (response) {
                     this.currentSquads = _.reject(this.currentSquads, function (sq) {
                         return sq.id === squad.id;
                     });
@@ -922,6 +952,11 @@
 
             },
             removeFromSquad(memberObj, squad) {
+                if (this.currentSquads.length <= this.currentTeam.type.data.min_squads) {
+                    this.$root.$emit('showError', 'This team already has the min amount of ' + this.currentTeam.type.data.min_squads + ' groups');
+                    return;
+                }
+
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
@@ -973,26 +1008,28 @@
             },
             getTeams(){
                 let params = {
-                    include: '',
+                    include: 'type',
                     page: this.teamsPagination.current_page,
 
                 };
 
                 return this.TeamResource.get(params).then(function (response) {
 	                this.teamsPagination = response.body.meta.pagination;
-                    _.each(response.body.data, function (team) {
-                        team = _.extend(team, {
-                            type: 'default',
-                            squad_leaders: 2,
-                            max_group_members: 5,
-                            max_members: 25,
-                        });
-                    });
-
-
                     return this.teams = response.body.data;
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
             },
+	        getTeamTypes() {
+                return this.$http.get('teams/types').then(function (response) {
+	                return this.teamTypes = response.body.data;
+                }, function (error) {
+                    console.log(error);
+                    return error;
+                });
+	        },
             getSquads(){
                 let params = {
                     team: this.currentTeam.id,
@@ -1023,16 +1060,15 @@
                         }];
                     }
                     let data = {
+                        type_id: this.newTeamType,
                         callsign: this.newTeamCallsign,
                         associations: associations
                     };
-                    this.TeamResource.save(data).then(function (response) {
-                        let team = _.extend(response.body.data, {
-                            type: 'default',
-                            squad_leaders: 2,
-                            max_group_members: 5,
-                            max_members: 25,
-                        });
+                    let params = {
+                        include: 'type',
+                    };
+                    this.TeamResource.save(data, params).then(function (response) {
+                        let team = response.body.data;
 
                         this.teams.push(team);
 
@@ -1050,11 +1086,18 @@
                 }
 	        },
 	        newSquad(callsign){
+	            if (this.currentSquads.length >= this.currentTeam.type.data.max_squads) {
+	                this.$root.$emit('showError', 'This team already has the max amount of ' + this.currentTeam.type.data.max_squads + ' groups');
+	                return;
+	            }
+
                 if (this.$SquadCreate.valid || _.isString(callsign)) {
-                    return this.TeamResource.save({team: this.currentTeam.id, path: 'squads', callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
+                    return this.TeamSquadResource.save({team: this.currentTeam.id}, {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
                         .then(function (response) {
-							let squad = response.body.data;
-							squad.members = [];
+							let squad = _.extend(response.body.data, {
+							    members: [],
+                                members_count: 0
+                            });
 
 							if (this.currentSquads.length) {
                                 this.currentSquads.splice(1, 0, squad);
@@ -1091,12 +1134,11 @@
 
                 let params = {
                     team: this.selectedSquadObj.team_id,
-	                path: 'squads',
-	                pathId: this.selectedSquadObj.id,
+	                squad: this.selectedSquadObj.id,
                     include: 'companions,trip.group'
                 };
 
-	            this.TeamResource.update(params, data).then(function (response) {
+	            this.TeamSquadResource.update(params, data).then(function (response) {
 	                let squad = _.findWhere(this.currentSquads, { id: this.selectedSquadObj.id});
 	                squad.callsign = response.body.data.callsign;
                     this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
@@ -1116,13 +1158,19 @@
                 });
 	        },
 	        deleteSquad(){
+                if (this.currentSquads.length <= this.currentTeam.type.data.min_squads) {
+                    this.$root.$emit('showError', 'This team must have a minimum of ' + this.currentTeam.type.data.min_squads + ' groups.');
+                    return;
+                }
+
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
                 }
+
                 let squadCopy = this.selectedSquadObj;
 
-                this.TeamResource.delete({team: squadCopy.team_id, path: 'squads', pathId:squadCopy.id}).then(function (response) {
+                this.TeamSquadResource.delete({team: squadCopy.team_id, squad:squadCopy.id}).then(function (response) {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
                     this.currentSquads = _.reject(this.currentSquads, function (squad) {
 	                    return squad.id === squadCopy.id;
@@ -1134,6 +1182,12 @@
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
                 $('.nav-tabs a[href="#reservations"]').tab('show');
+            },
+            updateCurrentTeamType() {
+                if (this.currentTeam.type_id !== this.currentTeam.type.data.id) {
+                    let type = _.findWhere(this.teamTypes, {id: this.currentTeam.type_id});
+                    this.currentTeam.type.data = type;
+                }
             },
             countMembers(team) {
 	            let total = 0;
@@ -1207,7 +1261,7 @@
                 });
 
                 // Check for limitations
-	            let availableSpace = this.currentTeam.max_group_members - squad.members.length;
+	            let availableSpace = this.currentTeam.type.data.max_group_members - squad.members.length;
 
 	            if (availableSpace < companionIds.length) {
 					this.$root.$emit('showError', 'There isn\'t enough space in this group for all ' + companionIds.length + ' companions.');
@@ -1257,6 +1311,7 @@
                     }
                 }));
             }
+            promises.push(this.getTeamTypes());
             promises.push(this.getTeams());
 
             Promise.all(promises).then(function (values) {

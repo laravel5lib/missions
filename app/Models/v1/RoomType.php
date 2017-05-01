@@ -13,4 +13,11 @@ class RoomType extends Model
     protected $guarded = [];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    protected $casts = ['rules' => 'array'];
+
+    public function setRulesAttribute($value)
+    {
+        $this->attributes['rules'] = json_encode($value);
+    }
 }

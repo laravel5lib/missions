@@ -7,23 +7,16 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Room extends Model
+class RoomingPlan extends Model
 {
     use UuidForKey, SoftDeletes, Filterable;
     
     protected $guarded = [];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-
-    public function plans()
+    
+    public function rooms()
     {
-        return $this->morphedByMany(RoomingPlan::class, 'roomable');
-    }
-
-    public function occupants()
-    {
-        return $this->belongsToMany(Reservation::class, 'occupants')
-                    ->withPivot('room_leader')
-                    ->withTimestamps();
+        return $this->morphToMany(Room::class, 'roomable');
     }
 }

@@ -141,6 +141,7 @@ $api->version('v1', [
     $api->put('promotionals/{id}/restore', 'PromotionalsController@restore');
     $api->resource('promocodes', 'PromocodesController');
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
+    $api->resource('rooming-plans', 'RoomingPlansController');
     $api->resource('rooms/types', 'RoomTypesController');
     $api->resource('rooms', 'RoomsController');
 

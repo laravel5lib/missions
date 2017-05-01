@@ -27,7 +27,6 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         'trip_id'            => function() {
             return factory(App\Models\v1\Trip::class)->create()->id;
         },
-        'companion_limit'    => random_int(0, 3),
         'avatar_upload_id'   => function() {
             return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
         },

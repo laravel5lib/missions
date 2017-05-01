@@ -1122,6 +1122,11 @@
                                     id: campaign.id
                                 });
                             });
+                        else
+                            associations.push({
+                                type: 'campaigns',
+                                id: this.campaignId
+                            });
                         associations.push({
                             type: 'groups',
                             id: this.groupId

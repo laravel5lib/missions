@@ -243,10 +243,6 @@
             });
 
             this.itinerant_id = this.reservationId;
-//			this.transport.campaign_id = this.campaignId;
-
-//            this.attemptSubmit = true;
-
         }
     }
 </script>

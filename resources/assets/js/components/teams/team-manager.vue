@@ -300,7 +300,7 @@
 								<hr class="divider inv">
 								<p class="text-center text-muted"><em>Select a Team to get started or create a new one!</em></p>
 								<hr class="divider inv">
-								<p class="text-center"><a class="btn btn-link btn-sm" @click="showTeamCreateModal = true">Create A Team</a></p>
+								<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Team</a></p>
 							</template>
 						</div>
 					</div>
@@ -420,7 +420,7 @@
 				<div role="tabpanel" class="tab-pane active" id="teams">
 					<div class="row">
 						<div class="col-xs-12 text-right">
-							<button class="btn btn-primary btn-xs" @click="showTeamCreateModal = true">Create A Team</button>
+							<button class="btn btn-primary btn-xs" @click="openNewTeamModel">Create A Team</button>
 							<hr class="divider lg">
 						</div>
 						<div class="col-xs-12">
@@ -443,7 +443,7 @@
 								<hr class="divider inv">
 								<p class="text-center text-italic text-muted"><em>No Teams created yet. Create one to get started!</em></p>
 								<hr class="divider inv">
-								<p class="text-center"><a class="btn btn-link btn-sm" @click="showTeamCreateModal = true">Create A Team</a></p>
+								<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Team</a></p>
 							</template>
 						</div>
 					</div>
@@ -526,7 +526,7 @@
 																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad)"><a @click="assignToSquad(reservation, squad, false)">Team Leader</a></li>
 																</template>
 																<template v-else>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
+																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
 																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
 																</template>
 															</template>
@@ -579,7 +579,7 @@
 					<form id="TeamCreateForm">
 						<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
 							<label for="createTeamCallsign" class="control-label">Team Name</label>
-							<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallsign">
+							<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallSign">
 						</div>
 						<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
 							<label for="" class="control-label">Type</label>
@@ -587,6 +587,18 @@
 								<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
 							</select>
 						</div>
+						<!--<div class="form-group" v-if="isAdminRoute">
+							<label>Campaigns</label>
+							<v-select @keydown.enter.prevent="" multiple class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+							          :value.sync="newTeamCampaigns" :options="campaignsOptions" label="name"
+							          placeholder="Filter by Campaign"></v-select>
+						</div>
+						<div class="form-group" v-if="isAdminRoute">
+							<label>Travel Group</label>
+							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+							          :value.sync="newTeamGroup" :options="groupsOptions" label="name"
+							          placeholder="Filter Groups"></v-select>
+						</div>-->
 					</form>
 				</validator>
 			</div>
@@ -679,8 +691,11 @@
                 reservationsTrips: [],
 
                 showTeamCreateModal: false,
-                newTeamCallsign: '',
+                newTeamCallSign: '',
                 newTeamType: '',
+                newTeamCampaigns: [],
+                newTeamGroup: [],
+
                 showSquadCreateModal: false,
                 newSquadCallsign: '',
                 showSquadUpdateModal: false,
@@ -695,9 +710,12 @@
 	            // Filters vars
                 showReservationsFilters: false,
                 showMembersFilters: false,
+                campaignsArr: [],
                 groupsArr: [],
                 roleObj: {},
                 rolesOptions: [],
+	            leadershipRoles: [],
+                campaignsOptions: [],
                 groupsOptions: [],
                 // reservations filters
 	            reservationFilters: {
@@ -796,15 +814,24 @@
 			},*/
 	    },
         methods: {
+            openNewTeamModel(){
+                let campaign = _.findWhere(this.campaignsOptions, { id: this.campaignId });
+                if (campaign)
+                    this.newTeamCampaigns = [campaign];
+                let group = _.findWhere(this.groupsOptions, { id: this.groupId });
+                if (group)
+                    this.newTeamGroup = group;
+
+                this.showTeamCreateModal = true;
+            },
+            isLeadership(member){
+                return _.contains(this.leadershipRoles, member.desired_role.code);
+            },
             resetFilter(){
-//                this.orderByField = 'surname';
-//                this.direction = 1;
                 this.reservationsSearch = null;
                 this.reservationsAgeMin = 0;
                 this.reservationsAgeMax = 120;
                 this.groupsArr = [];
-//                this.usersArr = [];
-//                this.campaignObj = null;
                 this.reservationFilters = {
                     groups: [],
                     gender: '',
@@ -825,6 +852,17 @@
                         loading(false);
                     } else {
                         return this.rolesOptions;
+                    }
+                });
+            },
+            getCampaigns(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
+                    this.campaignsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return this.campaignsOptions;
                     }
                 });
             },
@@ -851,6 +889,13 @@
 	            return  squad.members && squad.members.length < this.currentTeam.type.data.max_squad_members;
             },
             assignToSquad(reservation, squad, leader) {
+                if (leader) {
+                    if (!_.contains(this.leadershipRoles, reservation.desired_role.code)) {
+                        this.$root.$emit('showInfo', 'The member is not in a leadership role');
+                        return;
+                    }
+                }
+
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
@@ -894,6 +939,13 @@
                 });
             },
             moveToSquad(reservation, oldSquad, newSquad, leader) {
+                if (leader) {
+                    if (!_.contains(this.leadershipRoles, reservation.desired_role.code)) {
+                        this.$root.$emit('showInfo', 'The member is not in a leadership role');
+                        return;
+                    }
+                }
+
                 if (newSquad.squads_count >= this.currentTeam.type.data.max_squad_members) {
                     this.$root.$emit('showInfo', newSquad.name +' currently has the max number of members');
                     return;
@@ -1047,21 +1099,37 @@
             },
 	        newTeam(){
                 if (this.$TeamCreate.valid) {
-                    let associations;
+                    let associations = [];
                     if (this.isAdminRoute) {
-                        associations = [{
-	                        type: 'campaigns',
-	                        id: this.campaignId
-                        }];
+                        if (this.newTeamCampaigns.length)
+	                        _.each(this.newTeamCampaigns, function (campaign) {
+	                            associations.push({
+	                                type: 'campaigns',
+	                                id: campaign.id
+	                            });
+                            });
+
+                        if (this.newTeamGroup)    
+                            associations.push({
+                                type: 'groups',
+                                id: this.newTeamGroup.id
+                            });
                     } else {
-                        associations = [{
+                        if (this.newTeamCampaigns.length)
+                            _.each(this.newTeamCampaigns, function (campaign) {
+                                associations.push({
+                                    type: 'campaigns',
+                                    id: campaign.id
+                                });
+                            });
+                        associations.push({
                             type: 'groups',
                             id: this.groupId
-                        }];
+                        });
                     }
                     let data = {
                         type_id: this.newTeamType,
-                        callsign: this.newTeamCallsign,
+                        callsign: this.newTeamCallSign,
                         associations: associations
                     };
                     let params = {
@@ -1215,6 +1283,11 @@
 
             },
             promoteToLeader(member, squad) {
+	            if (!_.contains(this.leadershipRoles, member.desired_role.code)) {
+                    this.$root.$emit('showInfo', 'The member is not in a leadership role');
+                    return;
+	            }
+
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;
@@ -1307,18 +1380,27 @@
 
                     if (this.reservationsFacilitator) {
 //                    this.getRequirements();
-//                    this.getRoles();
+                    this.getRoles();
                     }
                 }));
             }
             promises.push(this.getTeamTypes());
             promises.push(this.getTeams());
+            promises.push(this.getCampaigns());
+            promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
+	            this.leadershipRoles = response.body.roles;
+            }));
 
             Promise.all(promises).then(function (values) {
                 this.startUp = false;
                 this.searchReservations();
             }.bind(this));
 
+            this.$root.$on('campaign-scope', function (val) {
+                this.campaignId = val ? val.id : '';
+                this.newTeamCampaigns = [{ id: val.id }];
+                this.$root.$emit('update-title', val ? val.name : '');
+            }.bind(this));
         }
     }
 </script>

@@ -5,8 +5,13 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3 class="hidden-xs">My Teams</h3>
-                    <h3 class="text-center visible-xs">My Teams</h3>
+                    <div class="col-sm-8">
+                        <h3 class="hidden-xs"><listen-text event="update-title"></listen-text>My Teams</h3>
+                        <h3 class="text-center visible-xs"><listen-text event="update-title"></listen-text>My Teams</h3>
+                    </div>
+                    <div class="col-sm-4 text-right">
+                       <action-select :normal="false" :options="[]" :api="true" search-route="campaigns" text="Change Campaign" event="campaign-scope" :auto-select-first="true"></action-select>
+                    </div>
                 </div>
             </div>
         </div>

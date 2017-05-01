@@ -43,12 +43,6 @@
 									<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
 									<p v-else>{{ transport.vessel_no | uppercase }}</p>
 								</div>
-								<div class="form-group" v-if="isAdminRoute">
-									<label for="">Capacity</label>
-									<input type="number" number class="form-control" min="0" v-model="transport.capacity" v-if="editMode">
-									<p v-else>{{ transport.capacity | uppercase }}</p>
-								</div>
-
 							</div>
 						</template>
 
@@ -129,9 +123,7 @@
                     vessel_no: '',
                     name: '',
                     call_sign: '',
-                    domestic: true,
-                    capacity: '',
-                }
+                    domestic: true                }
 	        },
             editMode: {
                 type: Boolean,

@@ -130,8 +130,7 @@
                             vessel_no: activity.transports.data[0].vessel_no,
                             name: activity.transports.data[0].name,
                             call_sign: activity.transports.data[0].call_sign,
-                            domestic: activity.transports.data[0].domestic,
-                            capacity: activity.transports.data[0].capacity,
+                            domestic: activity.transports.data[0].domestic
                         },
                         activity: {
                             id: activity.id,
@@ -250,8 +249,7 @@
                         vessel_no: '',
                         name: '',
                         call_sign: '',
-                        domestic: true,
-                        capacity: '',
+                        domestic: true
                     },
                     activity: {
                         name: name || 'Arrive at Training Location',

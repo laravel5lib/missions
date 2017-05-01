@@ -55,6 +55,10 @@ function download_file($source)
     return url('api/download/'.$source);
 }
 
+function play_file($source) {
+    return url('api/play/'.$source);
+}
+
 function generateFundName($data)
 {
     if ($data instanceof Reservation) {

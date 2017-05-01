@@ -20,7 +20,7 @@ class ExportTransactions extends Exporter
         $columns = [
             'description' => $transaction->description,
             'transaction_type' => $transaction->type,
-            'amount' => $transaction->amount,
+            'amount' => $transaction->amountInDollars(),
             'class' => $transaction->fund->class,
             'item' => $transaction->fund->item,
             'date' => $transaction->created_at->toDateTimeString(),

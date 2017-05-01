@@ -123,11 +123,18 @@
                     vessel_no: '',
                     name: '',
                     call_sign: '',
-                    domestic: true                }
+                    domestic: true
+		        }
 	        },
             editMode: {
                 type: Boolean,
                 default: true
+            },
+            activityTypes: {
+                type: Array
+            },
+            activityType: {
+                type: String
             }
         },
         data(){
@@ -140,10 +147,16 @@
                 trainOptions: [
                     'Amtrak', 'BNSF Railway', 'Canadian National Railway', 'Canadian Pacific Railway',
                     'CSX Transportation', 'Kansas City Southern Railway', 'Norfolk Southern Railway',
-                    'Union Pacific Railroad',
+                    'Union Pacific Railroad'
                 ],
-                vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other',],
+                vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other'],
                 selectedAirlineObj: null,
+	            LABELS: {
+                    method: '',
+		            vehicle: '',
+		            bus: '',
+		            train: '',
+	            }
             }
         },
         watch: {
@@ -160,7 +173,14 @@
                 this.$nextTick(function () {
                     this.$validate(true);
                 });
-            }
+            },
+	        'transport.type'(val, oldVal) {
+                if (_.contains(this.travelTypeOptions, oldVal)) {
+                    this.transport.name = '';
+                    this.transport.vessel_no = '';
+                    this.transport.call_sign = '';
+                }
+	        }
 
         },
 	    computed: {
@@ -202,6 +222,7 @@
         },
         ready(){
             let self = this;
+
             let promises = [];
             if (self.isUpdate) {
                 let airlinesPromise = this.getAirlines(this.transport.name, false);

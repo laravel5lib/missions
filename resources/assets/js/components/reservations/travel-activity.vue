@@ -16,10 +16,10 @@
 					</template>
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
-				<div class="form-group" v-error-handler="{ value: activity.occured_at, client: 'occured' }">
-					<label for="">Date &amp; Time</label>
-					<date-picker :model.sync="activity.occurred_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="editMode"></date-picker>
-					<p v-else>{{ activity.occurred_at|moment 'LLL' }}</p>
+				<div class="form-group" v-error-handler="{ value: activity.occurred_at, client: 'occured' }">
+					<label for="" v-text="LABELS.dateTime"></label>
+					<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss'" v-if="editMode"></date-picker>
+					<p v-else>{{ activity.occurred_at | moment 'LLLL' }}</p>
 					<input type="datetime" class="form-control hidden" v-model="activity.occurred_at | moment 'LLLL'"
 					       id="occurred_at" v-validate:occured="['required']">
 				</div>
@@ -49,13 +49,21 @@
             editMode: {
                 type: Boolean,
                 default: true
-            }
+            },
+		    activityTypes: {
+                type: Array
+		    },
+		    activityType: {
+                type: String
+		    }
 	    },
         data(){
             return {
                 validatorHandle: 'TravelActivity',
 
-
+				LABELS: {
+                    dateTime: 'Date &amp; Time'
+				}
             }
         },
         computed: {
@@ -80,6 +88,18 @@
         },
         ready(){
 //			this.attemptSubmit = true;
+	        let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
+	        switch (activityType.name) {
+		        case 'arrival':
+		            this.LABELS.dateTime = 'Arriving at Date & Time';
+		            break;
+		        case 'departure':
+                    this.LABELS.dateTime = 'Departing at Date & Time';
+                    break;
+		        case 'connection':
+                    this.LABELS.dateTime = 'Connection Departs at Date & Time';
+                    break;
+	        }
         }
     }
 </script>

@@ -54,7 +54,8 @@ class TeamsController extends Controller
     {
         $team = $this->team->create([
             'callsign' => $request->get('callsign'),
-            'locked' => $request->get('locked', false)
+            'locked' => $request->get('locked', false),
+            'type_id' => $request->get('type_id')
         ]);
 
         if ($request->has('associations')) {
@@ -94,7 +95,8 @@ class TeamsController extends Controller
 
         $team->update([
             'callsign' => $request->get('callsign', $team->callsign),
-            'locked' => $request->get('locked', $team->locked)
+            'locked' => $request->get('locked', $team->locked),
+            'type_id' => $request->get('type_id', $team->type_id)
         ]);
 
         return $this->response->item($team, new TeamTransformer);

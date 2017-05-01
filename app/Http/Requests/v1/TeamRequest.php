@@ -26,6 +26,7 @@ class TeamRequest extends FormRequest
         $rules = [
             'callsign' => 'required|string',
             'locked' => 'boolean',
+            'type_id' => 'required|exists:team_types,id',
             'associations' => 'array',
             'associations.*.id' => 'required|string',
             'associations.*.type' => 'required|in:campaigns,groups'
@@ -33,6 +34,7 @@ class TeamRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $rules['callsign'] = 'sometimes|required|string';
+            $rules['type_id'] = 'sometimes|required|exists:team_types,id';
         }
 
         return $rules;

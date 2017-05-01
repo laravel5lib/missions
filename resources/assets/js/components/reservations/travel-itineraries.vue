@@ -28,7 +28,7 @@
 						<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
 							<div class="checkbox" v-if="editMode">
 								<label for="noTravelTo" v-if="isArrival(item)">
-									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transportation to the destination.
+									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="toggleDomestic(item)">I don't need international transportation to the destination.
 								</label>
 								<div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below.</div>
 							</div>
@@ -44,13 +44,13 @@
 
 					<template v-if="editMode">
 						<hr class="divider sm">
-						<button class="btn btn-sm btn-default" type="button" @click="editMode = false">Cancel</button>
-						<button class="btn btn-sm btn-default" type="button" @click="resetItinerary">Start Over</button>
-
 						<template v-if="!itinerary.id">
+							<button class="btn btn-sm btn-default" type="button" @click="resetItinerary">Start Over</button>
 							<button class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
 						</template>
 						<template v-else>
+							<button class="btn btn-sm btn-default" type="button" @click="editMode = false">Cancel</button>
+							<button class="btn btn-sm btn-default" type="button" @click="resetItinerary">Start Over</button>
 							<button class="btn btn-sm btn-primary pull-right" type="button" @click="updateItinerary(itinerary)">Update Itinerary</button>
 						</template>
 					</template>
@@ -240,7 +240,7 @@
                     items: []
                 };
                 let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-                itinerary.items.push(this.newItineraryItem('Arrive in Destination Country', arrivalTypeId.id ));
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
                 let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
                 itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
 	            this.itinerary = itinerary;
@@ -249,7 +249,7 @@
                 this.editMode = true;
                 this.itinerary.items = [];
                 let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-                this.itinerary.items.push(this.newItineraryItem('Arrive in Destination Country', arrivalTypeId.id ));
+                this.itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
                 let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
                 this.itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
             },
@@ -264,7 +264,7 @@
                         domestic: true
                     },
                     activity: {
-                        name: name || 'Arrive in Destination Country',
+                        name: name || 'Arrive at Training Location',
                         activity_type_id: activityID || this.activityTypes[0].id,
 	                    //type: type,
                         // description: '',
@@ -297,6 +297,10 @@
                     this.itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
                 }
             },
+	        toggleDomestic(item) {
+	            item.transport.domestic = !item.transport.domestic;
+	            item.activity.name = item.transport.domestic ? 'Arrive at Training Location' : 'Arrive in Destination Country'
+	        },
 	        toggleEditMode() {
 	            this.editMode = true;
 	            this.$nextTick(function () {

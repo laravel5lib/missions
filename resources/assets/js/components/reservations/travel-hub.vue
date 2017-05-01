@@ -75,13 +75,13 @@
 							          :value.sync="countryObj" :options="countriesOptions" label="name"
 							          placeholder="Select Country"></v-select>
 							<select class="form-control hidden" name="airport" id="airport" v-validate:country="['required']"
-							        v-model="hub.country">
+							        v-model="hub.country_code">
 								<option :value="country.code" v-for="country in countriesOptions">
 									{{country.name | capitalize}}
 								</option>
 							</select>
 						</template>
-						<p v-else>{{ hub.country | uppercase }}</p>
+						<p v-else>{{ hub.country_code | uppercase }}</p>
 					</div>
 					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
 						<label for="">CallSign</label>
@@ -174,6 +174,9 @@
             countryObj (val, oldVal) {
                 if (val) {
                     this.hub.country_code = val.code;
+                    this.$nextTick(function () {
+                        this.$validate(true);
+                    });
                 }
             },
 	        transportType(val){
@@ -218,7 +221,12 @@
 	            this.$nextTick(function () {
 		            this.$validate(true);
                 });
-	        }
+	        },
+	        'hub.country_code'(val) {
+	            this.$nextTick(function () {
+		            this.$validate(true);
+                });
+	        },
         },
         methods: {
             getAirports(search, loading){

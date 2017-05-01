@@ -4,7 +4,7 @@
 			<form id="TravelHubForm" novalidate>
 				<template v-if="transportType === 'flight' || transportType === ''">
 					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-						<label for="travel_methodA">Airport</label>
+						<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
 						<template v-if="editMode">
 							<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
 							          :value.sync="selectedAirportObj" :options="airportsOptions" label="name"
@@ -21,7 +21,7 @@
 
 						<template v-if="selectedAirportObj && selectedAirportObj.name === 'Other'">
 							<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-								<label for="">Airport</label>
+								<label for="">{{ LABELS[(transportType||'flight')] }}</label>
 								<template v-if="editMode">
 									<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
 								</template>
@@ -55,7 +55,7 @@
 				</template>
 				<template v-else>
 					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-						<label for="">{{ transportType === 'train' ? 'Station Name' : 'Drop off location' }}</label>
+						<label for="">{{ LABELS[(transportType||'flight')] }}</label>
 						<template v-if="editMode">
 							<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
 						</template>
@@ -91,9 +91,6 @@
 						<p v-else>{{ hub.call_sign | uppercase }}</p>
 					</div>
 				</template>
-				<!--<template v-if="isUpdate && editMode">
-					<button class="btn btn-xs btn-primary" type="button" @click="update">Update Location</button>
-				</template>-->
 			</form>
 		</validator>
 	</div>
@@ -129,7 +126,13 @@
 		    editMode: {
                 type: Boolean,
 			    default: true
-		    }
+		    },
+            activityTypes: {
+                type: Array
+            },
+            activityType: {
+                type: String
+            }
         },
         data(){
             return {
@@ -140,6 +143,12 @@
                 countriesOptions: [],
                 selectedAirportObj: null,
                 countryObj: null,
+                LABELS: {
+                    method: '',
+                    vehicle: '',
+                    bus: '',
+                    train: '',
+                }
             }
         },
         computed: {
@@ -171,13 +180,37 @@
                 if (val !== 'flight')
                 switch (val) {
 	                case 'train':
-                        this.hub.call_sign = 'TRN';
+	                    this.hub = {
+                            name: '',
+                            address: '',
+                            call_sign: 'TRN', // required
+                            city: '',
+                            state: '',
+                            zip: '',
+                            country_code: '',
+                        };
 	                    break;
 	                case 'bus':
-                        this.hub.call_sign = 'BUS';
+                        this.hub = {
+                            name: '',
+                            address: '',
+                            call_sign: 'BUS', // required
+                            city: '',
+                            state: '',
+                            zip: '',
+                            country_code: '',
+                        };
 	                    break;
 	                case 'vehicle':
-                        this.hub.call_sign = 'CAR';
+                        this.hub = {
+                            name: '',
+                            address: '',
+                            call_sign: 'CAR', // required
+                            city: '',
+                            state: '',
+                            zip: '',
+                            country_code: '',
+                        };
 	                    break;
                 }
 	        },
@@ -223,6 +256,35 @@
         },
         ready(){
             let self = this;
+
+            let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
+            switch (activityType.name) {
+                case 'arrival':
+                    this.LABELS = {
+                        flight: 'Arriving at Airport',
+                        vehicle: 'Drop off location',
+                        bus: 'Drop off location',
+                        train: 'Arriving at Station',
+                    };
+                    break;
+                case 'departure':
+                    this.LABELS = {
+                        flight: 'Depart from Airport',
+                        vehicle: 'Pick up Location',
+                        bus: 'Pick up Location',
+                        train: 'Depart from Station',
+                    };
+                    break;
+                case 'connection':
+                    this.LABELS = {
+                        flight: 'Making Connection at Airport',
+                        vehicle: 'Connection Location',
+                        bus: 'Connection Location',
+                        train: 'Making Connection at Station',
+                    };
+                    break;
+            }
+
             let promises = [];
             promises.push(this.getAirports(this.hub.name, false));
             promises.push(this.getCountries(this.hub.country_code, false));

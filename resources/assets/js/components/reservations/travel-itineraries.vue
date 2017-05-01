@@ -21,37 +21,40 @@
 					</div>
 					<div class="checkbox" v-if="editMode">
 						<label for="connectionFlight">
-							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a prior travel connection.
+							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a prior Travel Connection Prior to Arriving.
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
 						<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
-							<div class="checkbox">
+							<div class="checkbox" v-if="editMode">
 								<label for="noTravelTo" v-if="isArrival(item)">
 									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="item.transport.domestic = !item.transport.domestic">I don't need international transportation to the destination.
 								</label>
 								<div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below.</div>
 							</div>
 
-							<travel-transport v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport"></travel-transport>
+							<travel-transport v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
 
-							<travel-hub v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport.type"></travel-hub>
+							<travel-hub v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport.type" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
-							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true"></travel-activity>
+							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-activity>
 
 						</panel>
 					</accordion>
-					<hr class="divider sm">
 
-					<!--<button v-if="itinerary.id" class="btn btn-xs btn-default" @click="deleteItinerary(itinerary)">Cancel</button>-->
-					<button v-if="!itinerary.id && editMode" class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
-					<button v-else="" class="btn btn-sm btn-primary pull-right" type="button" @click="updateItinerary(itinerary)">Update Itinerary</button>
+					<template v-if="editMode">
+						<hr class="divider sm">
+						<button class="btn btn-sm btn-default" type="button" @click="editMode = false">Cancel</button>
+						<button class="btn btn-sm btn-default" type="button" @click="resetItinerary">Start Over</button>
+
+						<template v-if="!itinerary.id">
+							<button class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
+						</template>
+						<template v-else>
+							<button class="btn btn-sm btn-primary pull-right" type="button" @click="updateItinerary(itinerary)">Update Itinerary</button>
+						</template>
+					</template>
 				</div>
-
-				<!--<hr class="divider">-->
-				<!--<button type="button" class="btn btn-xs btn-primary" @click="newItinerary">-->
-				<!--New Itinerary-->
-				<!--</button>-->
 			</form>
 		</validator>
 	</div>
@@ -96,18 +99,18 @@
         },
         computed: {
             connectionPresent() {
-                return _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
 					return item.activity.activity_type_id === _.findWhere(this.activityTypes, { name: 'connection'}).id;
                 }.bind(this));
 			},
 			departurePresent() {
-                return _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
                     return item.activity.activity_type_id === _.findWhere(this.activityTypes, { name: 'departure'}).id;
                 }.bind(this));
 
             },
 			domesticArrivalPresent() {
-                return _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
                     return item.activity.activity_type_id === _.findWhere(this.activityTypes, { name: 'arrival'}).id && !!item.transport.domestic;
                 }.bind(this));
 
@@ -134,10 +137,10 @@
                         },
                         activity: {
                             id: activity.id,
-                            activity_type_id: activity.activity_type_id,
+                            activity_type_id: activity.type.id,
                             name: activity.name,
                             description: activity.description,
-                            occurred_at: activity.occured_at
+                            occurred_at: activity.occurred_at
                         },
                         hub: {
                             id: activity.hubs.data[0].id,
@@ -237,12 +240,21 @@
                     items: []
                 };
                 let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
+                itinerary.items.push(this.newItineraryItem('Arrive in Destination Country', arrivalTypeId.id ));
                 let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
-                itinerary.items.push(this.newItineraryItem('Depart from Training Location', departureTypeId.id));
+                itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
 	            this.itinerary = itinerary;
             },
+            resetItinerary(){
+                this.editMode = true;
+                this.itinerary.items = [];
+                let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
+                this.itinerary.items.push(this.newItineraryItem('Arrive in Destination Country', arrivalTypeId.id ));
+                let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
+                this.itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
+            },
 	        newItineraryItem(name, activityID){
+                // let type = _.findWhere(this.activityTypes, { id: activityID || this.activityTypes[0].id });
                 return {
                     transport: {
                         type: '',
@@ -252,8 +264,9 @@
                         domestic: true
                     },
                     activity: {
-                        name: name || 'Arrive at Training Location',
+                        name: name || 'Arrive in Destination Country',
                         activity_type_id: activityID || this.activityTypes[0].id,
+	                    //type: type,
                         // description: '',
                         occurred_at: ''
                     },
@@ -273,7 +286,7 @@
                     this.itinerary.items.splice(0, 1);
                 } else {
                     let connectionTypeId = _.findWhere(this.activityTypes, {name: 'connection'});
-                    this.itinerary.items.splice(0, 0, this.newItineraryItem('Travel Connection', connectionTypeId.id));
+                    this.itinerary.items.splice(0, 0, this.newItineraryItem('Travel Connection Prior to Arriving', connectionTypeId.id));
                 }
             },
             toggleDeparture() {
@@ -281,7 +294,7 @@
                     this.itinerary.items.pop();
                 } else {
                     let departureTypeId = _.findWhere(this.activityTypes, {name: 'departure'});
-                    this.itinerary.items.push(this.newItineraryItem('Depart from Training Location', departureTypeId.id));
+                    this.itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
                 }
             },
 	        toggleEditMode() {

@@ -3,6 +3,7 @@
 namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Team;
+use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
 
@@ -13,7 +14,7 @@ class TeamTransformer extends TransformerAbstract {
      *
      * @var array
      */
-    protected $availableIncludes = ['squads', 'groups', 'campaigns'];
+    protected $availableIncludes = ['squads', 'groups', 'campaigns', 'type'];
 
     /**
      * Transform the object into a basic array
@@ -26,6 +27,7 @@ class TeamTransformer extends TransformerAbstract {
         return [
             'id'           => $team->id,
             'callsign'     => $team->callsign,
+            'type_id'      => $team->type_id,
             'locked'       => (boolean) $team->locked,
             'groups_count' => $team->groups_count,
             'squads_count' => $team->squads_count,

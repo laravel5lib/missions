@@ -416,6 +416,10 @@ Vue.filter('mFormat', {
     }
 });
 
+Vue.filter('underscoreToSpace', function (value) {
+    return value.replace(/_/g, ' ');
+});
+
 Vue.directive('crop', {
 
     acceptStatement: true,

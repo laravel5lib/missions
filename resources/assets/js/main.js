@@ -12,6 +12,8 @@ import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
+import actionSelect from './components/action-select.vue';
+import listenText from './components/listen-text.vue';
 import donate from './components/donate.vue';
 import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
@@ -815,6 +817,8 @@ new Vue({
         fundraiserCollection,
         topNav,
         actionTrigger,
+        actionSelect,
+        listenText,
         donate,
         modalDonate,
         notes,

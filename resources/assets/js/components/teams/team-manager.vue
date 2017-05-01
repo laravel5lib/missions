@@ -878,7 +878,7 @@
                 });
             },
             canAssignToTeamLeaders(squad){
-	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.max_leaders;
+	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.rules.max_leaders;
             },
             canAssignToSquadLeader(squad){
                 return !_.some(squad.members, function (member) {
@@ -886,7 +886,7 @@
                 });
             },
             canAssignToSquad(squad){
-	            return  squad.members && squad.members.length < this.currentTeam.type.data.max_squad_members;
+	            return  squad.members && squad.members.length < this.currentTeam.type.data.rules.max_squad_members;
             },
             assignToSquad(reservation, squad, leader) {
                 if (leader) {
@@ -946,7 +946,7 @@
                     }
                 }
 
-                if (newSquad.squads_count >= this.currentTeam.type.data.max_squad_members) {
+                if (newSquad.squads_count >= this.currentTeam.type.data.rules.max_squad_members) {
                     this.$root.$emit('showInfo', newSquad.name +' currently has the max number of members');
                     return;
                 }
@@ -974,7 +974,7 @@
                 });
             },
             moveToTeam(squad, newTeam) {
-                if (newTeam.squads_count >= newTeam.type.data.max_squads) {
+                if (newTeam.squads_count >= newTeam.type.data.rules.max_squads) {
                     this.$root.$emit('showInfo', newTeam.name +' currently has the max number of squads');
                     return;
                 }
@@ -1004,8 +1004,8 @@
 
             },
             removeFromSquad(memberObj, squad) {
-                if (this.currentSquads.length <= this.currentTeam.type.data.min_squads) {
-                    this.$root.$emit('showError', 'This team already has the min amount of ' + this.currentTeam.type.data.min_squads + ' groups');
+                if (this.currentSquads.length <= this.currentTeam.type.data.rules.min_squads) {
+                    this.$root.$emit('showError', 'This team already has the min amount of ' + this.currentTeam.type.data.rules.min_squads + ' groups');
                     return;
                 }
 
@@ -1159,8 +1159,8 @@
                 }
 	        },
 	        newSquad(callsign){
-	            if (this.currentSquads.length >= this.currentTeam.type.data.max_squads) {
-	                this.$root.$emit('showError', 'This team already has the max amount of ' + this.currentTeam.type.data.max_squads + ' groups');
+	            if (this.currentSquads.length >= this.currentTeam.type.data.rules.max_squads) {
+	                this.$root.$emit('showError', 'This team already has the max amount of ' + this.currentTeam.type.data.rules.max_squads + ' groups');
 	                return;
 	            }
 
@@ -1231,8 +1231,8 @@
                 });
 	        },
 	        deleteSquad(){
-                if (this.currentSquads.length <= this.currentTeam.type.data.min_squads) {
-                    this.$root.$emit('showError', 'This team must have a minimum of ' + this.currentTeam.type.data.min_squads + ' groups.');
+                if (this.currentSquads.length <= this.currentTeam.type.data.rules.min_squads) {
+                    this.$root.$emit('showError', 'This team must have a minimum of ' + this.currentTeam.type.data.rules.min_squads + ' groups.');
                     return;
                 }
 
@@ -1339,7 +1339,7 @@
                 });
 
                 // Check for limitations
-	            let availableSpace = this.currentTeam.type.data.max_group_members - squad.members.length;
+	            let availableSpace = this.currentTeam.type.data.rules.max_group_members - squad.members.length;
 
 	            if (availableSpace < companionIds.length) {
 					this.$root.$emit('showError', 'There isn\'t enough space in this group for all ' + companionIds.length + ' companions.');

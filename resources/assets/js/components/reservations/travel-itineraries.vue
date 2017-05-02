@@ -45,18 +45,26 @@
 					<template v-if="editMode">
 						<hr class="divider sm">
 						<template v-if="!itinerary.id">
-							<button class="btn btn-sm btn-default" type="button" @click="resetItinerary">Start Over</button>
+							<button class="btn btn-sm btn-default" type="button" @click="toggleResetModal">Start Over</button>
 							<button class="btn btn-sm btn-primary pull-right" type="button" @click="saveItinerary(itinerary)">Save Itinerary</button>
 						</template>
 						<template v-else>
 							<button class="btn btn-sm btn-default" type="button" @click="editMode = false">Cancel</button>
-							<button class="btn btn-sm btn-default" type="button" @click="resetItinerary">Start Over</button>
+							<button class="btn btn-sm btn-default" type="button" @click="toggleResetModal">Start Over</button>
 							<button class="btn btn-sm btn-primary pull-right" type="button" @click="updateItinerary(itinerary)">Update Itinerary</button>
 						</template>
 					</template>
 				</div>
+
+				<modal title="Start Over" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
+					<div slot="modal-body" class="modal-body">
+						This action can't be undone.
+					</div>
+				</modal>
+
 			</form>
 		</validator>
+
 	</div>
 </template>
 <style></style>
@@ -88,7 +96,8 @@
                 editMode: true,
                 itinerary: null,
                 activityTypes: [],
-                returningOnOwn: false
+                returningOnOwn: false,
+	            showResetModal: false,
             }
         },
         watch: {
@@ -254,6 +263,12 @@
 	            return this.itinerary = itinerary;
             },
             resetItinerary(){
+                if (this.itinerary.id) {
+                    this.$http.delete('itineraries/travel/' + itinerary.id).then(function (response) {
+                        console.log('Itinerary deleted');
+                    })
+                }
+
                 this.editMode = true;
                 let itinerary = {
                     name: 'Itinerary',
@@ -267,6 +282,7 @@
                 itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
 
                 this.itinerary = itinerary;
+                this.toggleResetModal();
             },
 	        newItineraryItem(name, activityID){
                 // let type = _.findWhere(this.activityTypes, { id: activityID || this.activityTypes[0].id });
@@ -292,7 +308,7 @@
                         city: '',
                         state: '',
                         zip: '',
-                        country: '',
+                        country_code: '',
                     },
                 }
 	        },
@@ -324,6 +340,9 @@
                 }.bind(this));
 
 	        },
+            toggleResetModal(){
+	            this.showResetModal = !this.showResetModal;
+            },
             setDesignation(designation) {
                 this.$dispatch('set-document', designation);
             },

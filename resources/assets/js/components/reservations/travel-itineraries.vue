@@ -61,6 +61,7 @@
 </template>
 <style></style>
 <script type="text/javascript">
+	import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
     import vSelect from 'vue-select';
     import travelTransport from './travel-transport.vue';
@@ -155,21 +156,22 @@
                     });
                 });
 
-	            /*if (this.itinerary.items === 1) {
-	             itinerary.items.push(this.newItineraryItem('Depart from Training Location'));
-
-	             }*/
-
                 this.itinerary = itinerary;
 
                 if (this.itinerary === null)
                     this.newItinerary();
+
+                return itinerary;
             },
             getItinerary(){
                 let doc_id = this.document ? this.document.id : this.$parent.requirement.document_id;
-                this.$http.get('itineraries/' + doc_id, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    this.setupItinerary(response.body.data);
-                });
+                return this.$http.get('itineraries/' + doc_id, { params: { 'include': 'activities.hubs,activities.transports'}})
+	                .then(function (response) {
+	                    return this.setupItinerary(response.body.data);
+	                },
+                    function (response) {
+                        console.log(response);
+                    });
             },
             deleteItinerary(itinerary){
                 this.$http.delete('itineraries/travel', itinerary).then(function (response) {
@@ -197,13 +199,18 @@
                 // if (this.returningOnOwn)
                 //    itinerary.items.pop();
 
-                this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
+                return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
                     //this.itinerary = response.body.data;
-                    this.setupItinerary(response.body.data);
+                    let it = this.setupItinerary(response.body.data);
                     this.editMode = false;
                     this.setDesignation(response.body.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
-                });
+                    return it
+                },
+                    function (response) {
+                        console.log(response);
+//                        return response.body.data;
+                    });
             },
             updateItinerary(itinerary){
                 // trigger validation styles
@@ -223,15 +230,16 @@
                     return;
                 }
 
-//                if (this.returningOnOwn)
-//                    itinerary.items.pop();
-
-                this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    this.setupItinerary(response.body.data);
+                return this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
+                    let it = this.setupItinerary(response.body.data);
                     this.editMode = false;
                     this.setDesignation(response.body.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
-                });
+                    return it;
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             },
             newItinerary(itineraryName){
                 let itinerary = {
@@ -243,7 +251,7 @@
                 itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
                 let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
                 itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
-	            this.itinerary = itinerary;
+	            return this.itinerary = itinerary;
             },
             resetItinerary(){
                 this.editMode = true;
@@ -312,14 +320,17 @@
             setDesignation(designation) {
                 this.$dispatch('set-document', designation);
             },
+	        getTypes() {
+	            return this.$http.get('utilities/activities/types').then(function (response) {
+                    return this.activityTypes = response.body;
+                });
+	        },
 
         },
         ready(){
             let promises = [];
             // Get activity types
-            promises.push(this.$http.get('utilities/activities/types').then(function (response) {
-                this.activityTypes = response.body;
-            }));
+            promises.push(this.getTypes());
 
             let self = this;
             Promise.all(promises).then(function (values) {
@@ -330,8 +341,6 @@
                     self.newItinerary();
                 }
             });
-
-
         }
     }
 </script>

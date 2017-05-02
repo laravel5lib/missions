@@ -25,7 +25,9 @@ class CreateAccountingTables extends Migration
         });
 
         Schema::table('funds', function (Blueprint $table) {
+            $table->string('class')->nullable()->change();
             $table->uuid('class_id')->after('class')->nullable();
+            $table->string('item')->nullable()->change();
             $table->uuid('item_id')->after('item')->nullable();
 
             $table->foreign('class_id')

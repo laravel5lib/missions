@@ -22,14 +22,10 @@ class FundTransformer extends TransformerAbstract {
             'name'       => $fund->name,
             'balance'    => $fund->balanceInDollars(),
             'type'       => str_singular($fund->fundable_type),
-            'class'      => [
-                                'id' => $fund->accountingClass ? $fund->accountingClass->id : null,
-                                'name' => $fund->accountingClass ? $fund->accountingClass->name : null
-                            ],
-            'item'       => [
-                                'id' => $fund->accountingItem ? $fund->accountingItem->id : null,
-                                'name' => $fund->accountingItem ? $fund->accountingItem->name : null
-                            ],
+            'class'      => $fund->accountingClass ? $fund->accountingClass->name : null,
+            'class_id'   => $fund->accountingClass ? $fund->accountingClass->id : null,
+            'item'       => $fund->accountingItem ? $fund->accountingItem->name : null,
+            'item_id'    => $fund->accountingItem ? $fund->accountingItem->id : null,
             'slug'       => $fund->slug,
             'created_at' => $fund->created_at->toDateTimeString(),
             'updated_at' => $fund->updated_at->toDateTimeString(),

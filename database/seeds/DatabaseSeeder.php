@@ -16,12 +16,12 @@ class DatabaseSeeder extends Seeder
         config(['queue.default' => 'sync']);
 
         $this->call(BouncerSeeder::class);
+        $this->call(AccountingTablesSeeder::class);
         $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(TripTableSeeder::class);
         $this->call(ProjectTablesSeeder::class);
         $this->call(FundsTableSeeder::class);
-        $this->call(AccountingTablesSeeder::class);
 
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);

@@ -165,10 +165,10 @@
                     <span class="label label-default" v-text="fund.type|capitalize"></span>
                 </td>
                 <td v-if="isActive('item')">
-                    <code>{{ fund.item.name }}</code>
+                    <code>{{ fund.item }}</code>
                 </td>
                 <td v-if="isActive('class')">
-                    <code>{{ fund.class.name }}</code>
+                    <code>{{ fund.class }}</code>
                 </td>
                 <td v-if="isActive('balance')">
                     <span v-text="fund.balance|currency" :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}"></span>

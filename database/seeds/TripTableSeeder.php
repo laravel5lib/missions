@@ -259,8 +259,8 @@ class TripTableSeeder extends Seeder
             'name' => generateFundName($res),
             'slug' => str_slug(generateFundName($res)),
             'balance' => 0,
-            'class' => generateQbClassName($res),
-            'item' => 'Missionary Donation'
+            'class_id' => getAccountingClass($res)->id,
+            'item_id'  => getAccountingItem($res)->id
         ]);
 
         $res->syncCosts($costs);

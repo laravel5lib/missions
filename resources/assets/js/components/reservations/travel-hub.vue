@@ -71,15 +71,16 @@
 					<div class="form-group" v-error-handler="{ value: hub.country_code, client: 'country' }">
 						<label for="">Country</label>
 						<template v-if="editMode">
-							<v-select @keydown.enter.prevent=""  class="form-control" id="countryFilter" :debounce="250" :on-search="getCountries"
+							<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
 							          :value.sync="countryObj" :options="countriesOptions" label="name"
 							          placeholder="Select Country"></v-select>
-							<select class="form-control hidden" name="airport" id="airport" v-validate:country="['required']"
+							<select class="form-control hidden" name="country" id="country" v-validate:country="['required']"
 							        v-model="hub.country_code">
 								<option :value="country.code" v-for="country in countriesOptions">
 									{{country.name | capitalize}}
 								</option>
 							</select>
+							<div class="errors-block"></div>
 						</template>
 						<p v-else>{{ hub.country_code | uppercase }}</p>
 					</div>
@@ -171,13 +172,11 @@
                     this.hub.call_sign = val.iata;
                 }
             },
-            countryObj (val, oldVal) {
-                if (val) {
-                    this.hub.country_code = val.code;
-                    this.$nextTick(function () {
-                        this.$validate(true);
-                    });
-                }
+            'countryObj':function (val, oldVal) {
+                this.hub.country_code = _.isObject(val) ? val.code : null;
+                this.$nextTick(function () {
+                    this.$validate(true);
+                });
             },
 	        transportType(val){
                 if (val !== 'flight')
@@ -221,12 +220,7 @@
 	            this.$nextTick(function () {
 		            this.$validate(true);
                 });
-	        },
-	        'hub.country_code'(val) {
-	            this.$nextTick(function () {
-		            this.$validate(true);
-                });
-	        },
+	        }
         },
         methods: {
             getAirports(search, loading){

@@ -67,7 +67,10 @@ class ExportReservations extends Exporter
             })->all()),
             'promocodes' => implode(", ", $reservation->promocodes->map(function ($promo) {
                 return $promo->code;
-            })->all())
+            })->all()),
+            'registered_at' => $reservation->created_at->toCookieString(),
+            'updated_at' => $reservation->updated_at->toCookieString(),
+            'dropped_at' => $reservation->dropped_at ? $reservation->dropped_at->toCookieString() : null
         ];
 
         return $columns;

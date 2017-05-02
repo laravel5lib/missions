@@ -440,7 +440,7 @@
                     {value: 'LACT', name: 'Lactation Consultant', required: ['license', 'resume'], optional: ['certification']},
                     {value: 'NAST', name: 'Nurse Assistant', required: ['license', 'diploma', ], optional: []},
                     {value: 'NTEC', name: 'Nurse Tech', required: ['license', 'diploma', ], optional: []},
-                    //{value: 'NPRC', name: 'Nurse Practitioner', required: [], optional: []},
+                    {value: 'NPRC', name: 'Nurse Practitioner', required: [], optional: []},
                     {value: 'REGN', name: 'Nurse (RN)', required: ['license', 'diploma', ], optional: []},
                     {value: 'LPNN', name: 'Nurse (LPN)', required: ['license', 'diploma', ], optional: []},
                     {value: 'NCRT', name: 'Non-Certified', required: [], optional: []},

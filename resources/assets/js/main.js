@@ -75,6 +75,7 @@ import reservationRequirements from './components/reservations/reservation-requi
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
+import roomingManager from './components/rooms/rooming-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -850,6 +851,7 @@ new Vue({
         dashboardGroupReservations,
         dashboardInterestsList,
         reportsList,
+        roomingManager,
 
         // admin components
         campaignCreate,

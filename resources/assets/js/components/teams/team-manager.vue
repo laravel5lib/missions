@@ -420,7 +420,7 @@
 				<div role="tabpanel" class="tab-pane active" id="teams">
 					<div class="row">
 						<div class="col-xs-12 text-right">
-							<button class="btn btn-primary btn-xs" @click="openNewTeamModel">Create A Team</button>
+							<button class="btn btn-primary btn-sm" @click="openNewTeamModel">Create A Team</button>
 							<hr class="divider lg">
 						</div>
 						<div class="col-xs-12">
@@ -523,7 +523,7 @@
 															<li role="separator" class="divider"></li>
 															<template v-for="squad in currentSquads">
 																<template v-if="squad.callsign === 'Team Leaders'">
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad)"><a @click="assignToSquad(reservation, squad, false)">Team Leader</a></li>
+																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Team Leader</a></li>
 																</template>
 																<template v-else>
 																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
@@ -1004,11 +1004,6 @@
 
             },
             removeFromSquad(memberObj, squad) {
-                if (this.currentSquads.length <= this.currentTeam.type.data.rules.min_squads) {
-                    this.$root.$emit('showError', 'This team already has the min amount of ' + this.currentTeam.type.data.rules.min_squads + ' groups');
-                    return;
-                }
-
                 if (this.isLocked) {
                     this.$root.$emit('showInfo', 'This team is currently locked');
                     return;

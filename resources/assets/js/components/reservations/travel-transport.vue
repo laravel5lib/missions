@@ -106,6 +106,7 @@
 </template>
 <style></style>
 <script type="text/javascript">
+	import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
     import vSelect from 'vue-select';
     export default{

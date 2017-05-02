@@ -183,7 +183,7 @@
                 if (val !== 'flight')
                 switch (val) {
 	                case 'train':
-	                    this.hub = {
+	                    _.extend(this.hub, {
                             name: '',
                             address: '',
                             call_sign: 'TRN', // required
@@ -191,10 +191,10 @@
                             state: '',
                             zip: '',
                             country_code: '',
-                        };
+                        });
 	                    break;
 	                case 'bus':
-                        this.hub = {
+                        _.extend(this.hub, {
                             name: '',
                             address: '',
                             call_sign: 'BUS', // required
@@ -202,10 +202,10 @@
                             state: '',
                             zip: '',
                             country_code: '',
-                        };
+                        });
 	                    break;
 	                case 'vehicle':
-                        this.hub = {
+                        _.extend(this.hub, {
                             name: '',
                             address: '',
                             call_sign: 'CAR', // required
@@ -213,7 +213,7 @@
                             state: '',
                             zip: '',
                             country_code: '',
-                        };
+                        });
 	                    break;
                 }
 	        },

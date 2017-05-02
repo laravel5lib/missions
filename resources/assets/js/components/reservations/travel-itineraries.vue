@@ -17,7 +17,7 @@
 						<label for="returningOnOwn">
 							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="!departurePresent" @change="toggleDeparture">I don't need a returning international flight.
 						</label>
-						<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
+						<div class="alert alert-warning" v-show="!departurePresent"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
 					</div>
 					<div class="checkbox" v-if="editMode && !itinerary.id">
 						<label for="connectionFlight">

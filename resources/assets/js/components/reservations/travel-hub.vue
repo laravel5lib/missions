@@ -68,7 +68,7 @@
 						</template>
 						<p v-else>{{ hub.city | uppercase }}</p>
 					</div>
-					<div class="form-group" v-error-handler="{ value: hub.country, client: 'country' }">
+					<div class="form-group" v-error-handler="{ value: hub.country_code, client: 'country' }">
 						<label for="">Country</label>
 						<template v-if="editMode">
 							<v-select @keydown.enter.prevent=""  class="form-control" id="countryFilter" :debounce="250" :on-search="getCountries"

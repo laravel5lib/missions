@@ -107,16 +107,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3 tour-step-teams">
-                <div class="panel panel-default">
-                	  <div class="panel-heading">
-                			<h3 class="panel-title">Teams</h3>
-                	  </div>
-                	  <div class="panel-body">
-                          <a href="{{ url()->current() }}/teams" class="btn btn-primary btn-block">Manage Teams</a>
-                	  </div>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-xs-12 tour-step-trips">

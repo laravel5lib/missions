@@ -13,13 +13,13 @@
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 				<div v-if="itinerary">
-					<div class="checkbox" v-if="editMode">
+					<div class="checkbox" v-if="editMode && !itinerary.id">
 						<label for="returningOnOwn">
 							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="!departurePresent" @change="toggleDeparture">I don't need a returning international flight.
 						</label>
 						<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
 					</div>
-					<div class="checkbox" v-if="editMode">
+					<div class="checkbox" v-if="editMode && !itinerary.id">
 						<label for="connectionFlight">
 							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a prior Travel Connection Prior to Arriving.
 						</label>
@@ -255,11 +255,18 @@
             },
             resetItinerary(){
                 this.editMode = true;
-                this.itinerary.items = [];
+                let itinerary = {
+                    name: 'Itinerary',
+                    reservation_id: this.reservationId,
+                    items: []
+                };
+
                 let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-                this.itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
                 let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
-                this.itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
+                itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
+
+                this.itinerary = itinerary;
             },
 	        newItineraryItem(name, activityID){
                 // let type = _.findWhere(this.activityTypes, { id: activityID || this.activityTypes[0].id });

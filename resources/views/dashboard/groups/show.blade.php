@@ -96,6 +96,7 @@
             </div>
             <div class="col-sm-3 tour-step-managers">
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+                <a href="" class="btn btn-block btn-primary"><i class="fa fa-bed"></i> Rooming</a>
             </div>
         </div>
         <div class="row">

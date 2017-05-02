@@ -13,7 +13,7 @@ class TeamRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin();
+        return true;
     }
 
     /**
@@ -23,21 +23,20 @@ class TeamRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'region_id'                => 'required|exists:regions,id',
-            'call_sign'                => 'required',
-            'published_at'             => 'date',
-            'members'                  => 'array',
-            'members.*.team_id'        => 'required|exists:teams,id',
-            'members.*.reservation_id' => 'required|exists:reservations,id',
-            'members.*.role_id'        => 'required|exists:roles,id',
-            'members.*.group'          => 'required|string',
-            'members.*.leader'         => 'boolean',
-            'members.*.forms'          => 'array',
-            'translators'              => 'array',
-            'translators.*.id'         => 'required|exists:translators,id',
-            'translators.*.forms'      => 'array',
-            'translators.*.forms.*'    => 'in:decision,site,medical'
+        $rules = [
+            'callsign' => 'required|string',
+            'locked' => 'boolean',
+            'type_id' => 'required|exists:team_types,id',
+            'associations' => 'array',
+            'associations.*.id' => 'required|string',
+            'associations.*.type' => 'required|in:campaigns,groups'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['callsign'] = 'sometimes|required|string';
+            $rules['type_id'] = 'sometimes|required|exists:team_types,id';
+        }
+
+        return $rules;
     }
 }

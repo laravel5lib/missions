@@ -100,8 +100,16 @@ $api->version('v1', [
     $api->post('referrals/export', 'ReferralsController@export');
     $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('regions', 'RegionsController');
+    $api->resource('teams/types', 'TeamTypesController');
     $api->resource('teams', 'TeamsController');
-    $api->resource('teams.members', 'TeamMembersController');
+    $api->get('teams/{id}/{teamable}', 'TeamablesController@index')
+        ->where('teamable', 'groups|campaigns|regions');
+    $api->post('teams/{id}/{teamable}', 'TeamablesController@store')
+        ->where('teamable', 'groups|campaigns|regions');
+    $api->delete('teams/{id}/{teamable}/{teamableId?}', 'TeamablesController@destroy')
+        ->where('teamable', 'groups|campaigns|regions');
+    $api->resource('teams.squads', 'TeamSquadsController');
+    $api->resource('squads.members', 'SquadMembersController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
     $api->resource('accommodations', 'AccommodationsController');
@@ -145,6 +153,14 @@ $api->version('v1', [
     $api->resource('rooms/types', 'RoomTypesController');
     $api->resource('rooms', 'RoomsController');
 
+    $api->resource('activities', 'ActivitiesController');
+    $api->resource('itineraries/travel', 'TravelItinerariesController');
+    $api->resource('itineraries', 'ItinerariesController');
+    $api->resource('transports', 'TransportsController');
+    $api->resource('transports.activities', 'TransportActivitiesController');
+    $api->resource('hubs', 'HubsController');
+    $api->resource('hubs.activities', 'HubActivitiesController');
+
     $api->group(['prefix' => 'credentials'], function($api)
     {
         $api->resource('medical', 'MedicalCredentialsController');
@@ -166,6 +182,10 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'utilities'], function ($api) {
         $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
+        $api->get('airlines/', 'AirlineController@index');
+        $api->get('airlines/{id}', 'AirlineController@show');
+        $api->get('airports/', 'AirportController@index');
+        $api->get('airports/{iata}', 'AirportController@show');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');

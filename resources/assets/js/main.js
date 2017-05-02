@@ -12,6 +12,8 @@ import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
+import actionSelect from './components/action-select.vue';
+import listenText from './components/listen-text.vue';
 import donate from './components/donate.vue';
 import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
@@ -75,6 +77,7 @@ import reservationRequirements from './components/reservations/reservation-requi
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
+import teamManager from './components/teams/team-manager.vue';
 import roomingManager from './components/rooms/rooming-manager.vue';
 
 // admin components
@@ -135,6 +138,7 @@ import transactionDelete from './components/financials/transactions/transaction-
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
+import transports from './components/admin/transports.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -180,6 +184,7 @@ Vue.component('aside', VueStrap.aside);
 Vue.component('panel', VueStrap.panel);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
+Vue.component('dropdown', VueStrap.dropdown);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
@@ -414,6 +419,10 @@ Vue.filter('mFormat', {
     }
 });
 
+Vue.filter('underscoreToSpace', function (value) {
+    return value.replace(/_/g, ' ');
+});
+
 Vue.directive('crop', {
 
     acceptStatement: true,
@@ -453,7 +462,7 @@ Vue.directive('crop', {
                 setTimeout(self.waitForLibrary, 1000);
             }
         };*/
-        
+
         if (!_.contains(['file', 'video'], this.vm.type)) {
             // debugger;
             // this.waitForLibrary();
@@ -737,7 +746,10 @@ Vue.mixin({
     computed: {
         firstUrlSegment: function () {
             return document.location.pathname.split("/").slice(1, 2).toString();
-        }
+        },
+        isAdminRoute() {
+            return this.firstUrlSegment == 'admin';
+        },
     },
     ready() {
         function isTouchDevice() {
@@ -764,6 +776,7 @@ new Vue({
             color: {header: '#F74451'}
         },
         showSuccess: false,
+        showInfo: false,
         showError: false,
         message: '',
     },
@@ -805,6 +818,8 @@ new Vue({
         fundraiserCollection,
         topNav,
         actionTrigger,
+        actionSelect,
+        listenText,
         donate,
         modalDonate,
         notes,
@@ -850,6 +865,7 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        teamManager,
         reportsList,
         roomingManager,
 
@@ -910,7 +926,8 @@ new Vue({
         transactionDelete,
         fundManager,
         companionManager,
-        promotionals
+        promotionals,
+        transports
     },
     http: {
         headers: {
@@ -931,6 +948,11 @@ new Vue({
         this.$on('showSuccess', function (msg) {
             this.message = msg;
             this.showSuccess = true;
+        });
+
+        this.$on('showInfo', function (msg) {
+            this.message = msg;
+            this.showInfo = true;
         });
 
         this.$on('showError', function (msg) {
@@ -988,10 +1010,18 @@ new Vue({
         'showSuccess': function (msg) {
             this.message = msg;
             this.showError = false;
+            this.showInfo = false;
             this.showSuccess = true;
+        },
+        'showInfo': function (msg) {
+            this.message = msg;
+            this.showError = false;
+            this.showInfo = true;
+            this.showSuccess = false;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showInfo = false;
             this.showSuccess = false;
             this.showError = true;
         },

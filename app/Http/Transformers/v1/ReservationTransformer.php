@@ -21,7 +21,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'dues', 'fund'
+        'fundraisers', 'dues', 'fund', 'transports'
     ];
 
     /**
@@ -274,6 +274,19 @@ class ReservationTransformer extends TransformerAbstract
         $fundraisers = $reservation->fundraisers()->get();
 
         return $this->collection($fundraisers, new FundraiserTransformer);
+    }
+
+    /**
+     * Include Transports
+     *
+     * @param Reservation $reservation
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeTransports(Reservation $reservation)
+    {
+        $transports = $reservation->transports;
+
+        return $this->collection($transports, new TransportTransformer);
     }
 
     private function validateParams($params)

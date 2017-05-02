@@ -36,6 +36,16 @@
 					<p class="small">{{ getRoleName(getRole(medical_credential)) }}</p>
                     <label>Attachments</label>
                     <p class="small">{{ medical_credential.uploads.data.length }} documents</p>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>CREATED ON</label>
+                            <p class="small">{{medical_credential.created_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                         <div class="col-sm-6">
+                            <label>UPDATED ON</label>
+                            <p class="small">{{medical_credential.updated_at|moment 'lll'}}</p>
+                        </div><!-- end col -->
+                    </div><!-- end row -->
 				</div><!-- end panel-body -->
 				<div class="panel-footer" style="padding: 0;" v-if="selector">
 					<div class="btn-group btn-group-justified btn-group-sm" role="group" aria-label="...">
@@ -220,13 +230,13 @@
                 let user = response.body.data;
                 let managing = [];
 
-                if (user.facilitating.data.length) {
+                if (user.facilitating) {
                     this.isFacilitator = true;
                     let facilitating = _.pluck(user.facilitating.data, 'id');
                     this.trips = _.union(this.trips, facilitating);
                 }
 
-                if (user.managing.data.length) {
+                if (user.managing) {
                     _.each(user.managing.data, function (group) {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });

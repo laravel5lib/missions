@@ -7,6 +7,7 @@ use App\UuidForKey;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Reservations\SyncPaymentsDue;
 use Illuminate\Database\Eloquent\Collection;
@@ -84,6 +85,17 @@ class Reservation extends Model
     public function getGenderAttribute($value)
     {
         return $value ? strtolower($value) : null;
+    }
+
+    /**
+     * Get the reservation's companion limi.
+     * 
+     * @param  integer $value
+     * @return integer
+     */
+    public function getCompanionLimitAttribute($value)
+    {
+        return $value ?: ($this->trip->companion_limit ?: 0);
     }
 
     /**
@@ -258,6 +270,11 @@ class Reservation extends Model
     public function donors()
     {
         return $this->fund()->donors();
+    }
+
+    public function promocodes()
+    {
+        return $this->morphMany(Promocode::class, 'rewardable');
     }
 
     /**
@@ -484,7 +501,31 @@ class Reservation extends Model
                 'completed_at' => $item->completed_at ? $item->completed_at : null
             ];
         })->each(function($requirement) {
-            $this->requirements()->create($requirement);
+
+            // if conditions apply
+            if (RequirementCondition::where('requirement_id', $requirement['requirement_id'])->count()) {
+
+                    $matches = collect([]);
+
+                    RequirementCondition::where('requirement_id', $requirement['requirement_id'])->get()->each(function($condition) use($matches) {
+                        if ($condition->type === 'role') {
+                            $matches->push(in_array($this->desired_role, $condition->applies_to));
+                        } elseif ($condition->type === 'age') {
+                            $matches->push($this->age < (int) $condition->applies_to[0]);
+                        } else {
+                            $matches->push(false);
+                        }
+                    });
+
+                    // if all conditions match
+                    if ( ! in_array(false, $matches->all())) {
+                        $this->requirements()->create($requirement);
+                    }
+
+            } else {
+                // if not conditions apply
+                $this->requirements()->create($requirement);
+            }
         });
     }
 
@@ -641,5 +682,45 @@ class Reservation extends Model
 
         // sync all other resources
         dispatch(new ProcessReservation($this));
+    }
+
+    /**
+     * Find rewardable promotionals the 
+     * reservation can be enrolled in
+     * 
+     * @return mixed
+     */
+    public function canBeRewarded()
+    {
+        $promos = collect([]);
+
+        $this->trip->campaign
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        $this->trip
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        $this->trip->group
+             ->promotionals()
+             ->active()
+             ->hasAffiliates('reservations')
+             ->pluck('id')
+             ->each(function ($id) use($promos) {
+                $promos->push($id);
+            });
+
+        return $promos->count() ? $promos : false;
     }
 }

@@ -378,9 +378,9 @@
                     user_email: 'User Email',
                     user_primary_phone: 'User Primary Phone',
                     user_secondary_phone: 'User Secondary Phone',
-                    type: 'Trip Type',
-                    campaign: 'Campaign',
                     group: 'Group',
+                    trip_type: 'Trip Type',
+                    campaign: 'Campaign',
                     country_located: 'Country Located',
                     start_date: 'Trip Start Date',
                     end_date: 'Trip End Date',
@@ -399,19 +399,24 @@
                     state_providence: 'State/Providence',
                     zip_postal: 'Zip/Postal Code',
                     country: 'Country',
-                    // payments: 'Payments Due',
-                    // applied_costs: 'Applied Costs',
-                    // requirements: 'Travel Requirements',
+                    payments: 'Payments Due',
+                    incremental_costs: 'Incremental Costs',
+                    static_costs: 'Static Costs',
+                    optional_costs: 'Optional Costs',
+                    requirements: 'Travel Requirements',
                     percent_raised: 'Percent Raised',
                     amount_raised: 'Amount Raised',
                     outstanding: 'Outstanding',
-                    // deadlines: 'Other Deadlines'
-                    desired_role: 'Role'
+                    deadlines: 'Other Deadlines',
+                    desired_role: 'Role',
+                    registered_at: 'Register Date',
+                    updated_at: 'Last Updated'
                 },
                 exportFilters: {},
                 layout: 'list',
                 incomplete: [],
                 startUp: true,
+                lastReservationRequest: null
             }
         },
         watch: {
@@ -449,6 +454,8 @@
                 }
             },
             'per_page': function (val, oldVal) {
+                if (this.startUp)
+                    return;
                 this.updateConfig();
                 this.getReservations();
             },
@@ -508,7 +515,12 @@
 
                 this.exportFilters = params;
 
-                this.$http.get('reservations', {params: params}).then(function (response) {
+                this.$http.get('reservations', { params: params, before: function(xhr) {
+                    if (this.lastReservationRequest) {
+                        this.lastReservationRequest.abort();
+                    }
+                    this.lastReservationRequest = xhr;
+                }}).then(function (response) {
                     this.reservations = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 });

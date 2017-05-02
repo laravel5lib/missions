@@ -25,53 +25,30 @@
                     </template>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div v-error-handler="{ value: name, handle: 'name' }">
+                            <div v-error-handler="{ value: name, handle: 'name', messages: { req: 'Please enter the release holder\'s name.'} }">
                                 <label for="name" class="control-label">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" v-model="name"
                                        placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
                                        minlength="1" required>
-                                <span v-if="attemptSubmit" class="help-block">
-                                    <span v-if="
-                                            $CreateUpdateMedicalRelease.name.required || 
-                                            $CreateUpdateMedicalRelease.name.minlength"
-                                           class="help-block">
-                                        Please enter the release holder's name.
-                                    </span>
-                                </span>
+
                             </div>
                         </div>
                     </div>
                     <div class="row" v-if="!noInsurance">
                         <div class="col-sm-6">
-                            <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider' }">
+                            <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
                                 <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
                                        placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
                                        maxlength="100" minlength="1" required>
-                                <span v-if="attemptSubmit" class="help-block">
-                                    <span v-if="
-                                            $CreateUpdateMedicalRelease.provider.required || 
-                                            $CreateUpdateMedicalRelease.provider.minlength"
-                                           class="help-block">
-                                        Please enter the insurance provider's name.
-                                    </span>
-                                </span>
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no' }">
+                            <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
                                 <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
                                 <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
                                        placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
                                        maxlength="100" minlength="1" required>
-                                <span v-if="attemptSubmit" class="help-block">
-                                    <span v-if="
-                                            $CreateUpdateMedicalRelease.policy.required || 
-                                            $CreateUpdateMedicalRelease.policy.minlength"
-                                           class="help-block">
-                                        Please enter the policy number.
-                                    </span>
-                                </span>
                             </div>
                         </div>
                     </div>
@@ -82,6 +59,9 @@
                                 <label>
                                     <input type="checkbox" v-model="noInsurance"> I do not have medical insurance 
                                 </label>
+                                <span class="help-block">
+                                    Medical Insurance is not required for travel, but highly recommend.
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -294,18 +274,10 @@
                                            v-validate:emergencyname="{ required: true, minlength:1 }"
                                            minlength="1" 
                                            required>
-                                    <span v-if="attemptSubmit" class="help-block">
-                                        <span v-if="
-                                                $CreateUpdateMedicalRelease.emergencyname.required || 
-                                                $CreateUpdateMedicalRelease.emergencyname.minlength"
-                                               class="help-block">
-                                            Please enter an emergency contact name.
-                                        </span>
-                                    </span>
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail' }">
+                                <div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
                                     <label>Email</label>
                                     <input type="email" 
                                            class="form-control" 
@@ -313,18 +285,6 @@
                                            v-validate:emergencyemail="{ required: true, minlength:1, email:true }"
                                            minlength="1" 
                                            required>
-                                    <span v-if="attemptSubmit" class="help-block">
-                                        <span v-if="
-                                                $CreateUpdateMedicalRelease.emergencyemail.required || 
-                                                $CreateUpdateMedicalRelease.emergencyemail.minlength"
-                                               class="help-block">
-                                            Please enter the contact's email.
-                                        </span>
-                                        <span v-if="$CreateUpdateMedicalRelease.emergencyemail.email"
-                                               class="help-block">
-                                            Please enter a valid email address.
-                                        </span>
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -338,14 +298,7 @@
                                            v-validate:emergencyphone="{ required: true, minlength:1 }"
                                            minlength="1" 
                                            required>
-                                    <span v-if="attemptSubmit" class="help-block">
-                                        <span v-if="
-                                                $CreateUpdateMedicalRelease.emergencyphone.required || 
-                                                $CreateUpdateMedicalRelease.emergencyphone.minlength"
-                                               class="help-block">
-                                            Please enter the contact's phone number.
-                                        </span>
-                                    </span>
+
                                 </div>
                             </div>
                             <div class="col-sm-6">
@@ -362,12 +315,6 @@
                                         <option value="guardian">Guardian</option>
                                         <option value="other">Other</option>
                                     </select>
-                                    <span v-if="attemptSubmit" class="help-block">
-                                        <span v-if="$CreateUpdateMedicalRelease.emergencyrelationship.required"
-                                               class="help-block">
-                                            Please select relationship to the contact.
-                                        </span>
-                                    </span>
                                 </div>
                             </div>
                         </div>

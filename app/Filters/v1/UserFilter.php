@@ -109,6 +109,16 @@ class UserFilter extends Filter
     }
 
     /**
+     * Is a rep
+     * 
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function rep()
+    {
+        return $this->isRep();
+    }
+
+    /**
      * By facilitating.
      *
      * @param $url

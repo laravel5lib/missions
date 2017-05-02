@@ -177,6 +177,7 @@ Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
 Vue.component('panel', VueStrap.panel);
+Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
@@ -440,21 +441,21 @@ Vue.directive('crop', {
 
         let self = this;
         let vm = this.vm;
-        self.waitForLibrary = function() {
+        /*self.waitForLibrary = function() {
             if (_.isFunction(Slim)) {
                 let $wrapper = self.el;
-                debugger;
+                //debugger;
                 vm.slimAPI = new Slim($wrapper);
-
                 // send api to active componant
                 vm.$dispatch('slim-api', vm.slimAPI);
             } else {
                 setTimeout(self.waitForLibrary, 1000);
             }
-        };
-
+        };*/
+        
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            this.waitForLibrary();
+            // debugger;
+            // this.waitForLibrary();
         }
     },
 
@@ -565,10 +566,17 @@ Vue.directive('tour-guide', {
 Vue.directive('error-handler', {
     // This directive handles client-side and server-side errors.
     // It expects an object expression with three values:  { value: fieldValue, client: 'clientSideField', server: 'serverSideField' }
-    // The value property expects the actual field value to stay reactive.
-    // The client property expects the handle that the validator plugin uses for validation.
-    // The server property expects the handle that the server request rules use for validation.
-    // If the handle property is present, client and server properties will be set to this.
+
+    // PROPERTIES
+    // The `value` property expects the actual field value to stay reactive.
+    // The `client` property expects the handle that the validator plugin uses for validation.
+    // The `server` property expects the handle that the server request rules use for validation.
+    // If the `handle` property is present, client and server properties will be set to this.
+    // OPTIONAL PROPERTIES
+    // The `class` property allows you to set the error class to be set during validation.
+    // The `messages` property allows you to customize the error message the user sees based on validators
+    // i.e (`req` - required, `min` - minlength, `max` - maxlength, `email` - custom email validator)
+
     // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
     // for the field
     deep: true,
@@ -590,11 +598,12 @@ Vue.directive('error-handler', {
             // $nextTick is necessary for the component values to update first
             if (this.vm) {
                 this.vm.$nextTick(function () {
+                    // debugger;
                     let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
                     if (classTest) {
-                        $(this.el).addClass('has-error');
+                        $(this.el).addClass(value.class || 'has-error');
                     } else {
-                        $(this.el).removeClass('has-error');
+                        $(this.el).removeClass(value.class || 'has-error');
                     }
                 }.bind(this));
             }
@@ -603,37 +612,99 @@ Vue.directive('error-handler', {
         this.messages = [];
         this.handleMessages = function (value, errors) {
             // $nextTick is necessary for the component values to update first
-            if (this.vm) {
+            if (this.vm && this.vm.attemptSubmit) {
                 this.vm.$nextTick(function () {
-                    if (errors[value.server]) {
+                    //if (errors[value.server] || this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid && this.vm.attemptSubmit) {
                         // Lets first package errors to simply iterate
                         let newMessages = [];
+                    if (errors[value.server])
                         _.each(errors[value.server], function(error, index) {
                             newMessages.push("<div class='help-block server-validation-error'>" + error + "</div>");
                         });
-                        this.messages = newMessages;
 
-                        // We want to keep track of listed errors and specify their location when displayed
-                        // Search for an '.errors-block' element as child to display messages in
-                        // If it does not exist we will place the error message after the input element
-                        let errorsBlock = $(this.el).find('.errors-block') || false;
-                        if (errorsBlock) {
-                            errorsBlock.find('.server-validation-error').remove();
-                            errorsBlock.append(this.messages);
-                            // debugger
-                        } else {
-                            let inputGroup = $(this.el).find('input-group');
-                            let inputEl = $(this.el).find('input');
-                            if (inputGroup) {
-                                $(this.el).find('.server-validation-error').remove();
-                                inputGroup.after(this.messages);
+                    let genericMessage = this.vm.MESSAGES.DEFAULT;
+                    let validationObject = this.vm['$' + this.vm.validatorHandle][this.storage.client];
+                    if (_.isObject(validationObject)) {
+                        if (validationObject.required) {
+                            // Grab message from storage if it exists or use generic default
+                            // The manually set messages must be an object
+                            let reqMessage;
+                            if (this.storage.messages && this.storage.messages.req) {
+                                reqMessage = this.storage.messages.req;
                             } else {
-                                $(this.el).find('.server-validation-error').remove();
-                                inputEl.after(this.messages);
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                reqMessage = _.isObject(genericMessage) ? genericMessage.req : genericMessage;
                             }
-                            // debugger
+
+                            newMessages.push("<div class='help-block server-validation-error'>" + reqMessage + "</div>");
+                        }
+
+                        if (validationObject.minlength) {
+                            // Grab message from storage if it exists or use generic default
+                            let minMessage;
+                            if (this.storage.messages && this.storage.messages.min) {
+                                minMessage = this.storage.messages.min;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                minMessage = _.isObject(genericMessage) ? genericMessage.min : genericMessage;
+                            }
+                            if (minMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + minMessage + "</div>");
+                        }
+
+                        if (validationObject.maxlength) {
+                            // Grab message from storage if it exists or use generic default
+                            let maxMessage;
+                            if (this.storage.messages && this.storage.messages.max) {
+                                maxMessage = this.storage.messages.max;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                maxMessage = _.isObject(genericMessage) ? genericMessage.max : genericMessage;
+                            }
+                            if (maxMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + maxMessage + "</div>");
+                        }
+                        // custom email validator
+                        if (validationObject.email) {
+                            // Grab message from storage if it exists or use generic default
+                            let emailMessage;
+                            if (this.storage.messages && this.storage.messages.email) {
+                                emailMessage = this.storage.messages.email;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                emailMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
+                            }
+                            if (emailMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
                         }
                     }
+                    //console.log(newMessages);
+
+                    this.messages = newMessages;
+
+                    // We want to keep track of listed errors and specify their location when displayed
+                    // Search for an '.errors-block' element as child to display messages in
+                    // If it does not exist we will place the error message after the input element
+
+                    let errorsBlock = this.el.getElementsByClassName('errors-block')[0] || false;
+                    if (errorsBlock) {
+                        $(errorsBlock).find('.server-validation-error').remove();
+                        if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
+                            $(errorsBlock).append(this.messages);
+                    } else {
+                        let inputGroup = $(this.el).hasClass('input-group') ? this.el : this.el.getElementsByClassName('input-group')[0];
+                        let inputEl = $(this.el).find('.form-control:not(.v-select *)');
+                        if (inputGroup) {
+                            $(this.el).parent().find('.server-validation-error').remove();
+                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
+                                $(inputGroup).after(this.messages);
+                        } else {
+                            $(this.el).find('.server-validation-error').remove();
+                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
+                                inputEl.after(this.messages);
+                        }
+                    }
+                    //}
                 }.bind(this));
             }
         }
@@ -643,7 +714,6 @@ Vue.directive('error-handler', {
         if(value.handle) {
             value.client = value.server = value.handle;
         }
-
 
         // Store the value within the directive to be used outside the update function
         this.storage = value;
@@ -909,7 +979,7 @@ new Vue({
 
         startTour(){
             window.tour.start();
-        },
+        }
 
     },
     events: {

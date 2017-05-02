@@ -70,4 +70,14 @@ class Requirement extends Model
                     ->withTrashed()
                     ->withTimestamps();
     }
+
+    /**
+     * Get the requirement's conditions
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function conditions()
+    {
+        return $this->hasMany(RequirementCondition::class);
+    }
 }

@@ -185,6 +185,16 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
+    }
+
+    /**
      * Get public campaigns.
      *
      * @param $query
@@ -214,6 +224,26 @@ class Campaign extends Model
     public function reservations()
     {
         return $this->hasManyThrough(Reservation::class, Trip::class);
+    }
+
+    /**
+     * Get the campaign's links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function links()
+    {
+        return $this->morphMany(Link::class, 'linkable');
+    }
+
+    /**
+     * Get the campaign's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
     }
 
     /**

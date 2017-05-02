@@ -21,25 +21,26 @@ trait Promoteable
         $qty = 1, 
         $reward = null, 
         $expires = null,
-        $affilates = null
+        $affiliates = null
     )
     {
 
         $promotional = $this->promotionals()->create([
             'name' => $name,
             'reward' => $reward,
-            'expires_at' => $expires
+            'expires_at' => $expires,
+            'affiliates' => $affiliates
         ]);
 
-        // $promotionals->each(function ($promotional) use($qty, $affilates) {
+        // $promotionals->each(function ($promotional) use($qty, $affiliates) {
             
             $records = [];
 
             // if the promoter has rewardable items
             // then we need to determine those items
             // and loop through them assign a unique promocode to them
-            if ( ! is_null($affilates) and method_exists($this, $affilates)) {
-                $this->{$affilates}->each(function($affiliate) use($promotional, $qty) {
+            if ( ! is_null($affiliates) and method_exists($this, $affiliates)) {
+                $this->{$affiliates}->each(function($affiliate) use($promotional, $qty) {
                     $affiliate->createCode($promotional->id, $qty);
                 });
             } else {

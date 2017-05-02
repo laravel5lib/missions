@@ -28,7 +28,7 @@ class NoteRequest extends FormRequest
             'content' => 'required|string',
             'user_id' => 'required|exists:users,id',
             'noteable_id' => 'required|string',
-            'noteable_type' => 'required|in:reservations,groups,trips,projects,fundraisers,transactions,funds,users,trip_interests'
+            'noteable_type' => 'required|string'
         ];
     }
 }

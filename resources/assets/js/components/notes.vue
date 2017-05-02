@@ -133,8 +133,7 @@
                     'subject': null,
                     'content': null,
                     'noteable_id': this.id,
-                    'noteable_type': this.type,
-                    'user_id': this.user_id
+                    'noteable_type': this.type
                 },
                 page: 1,
                 pagination: { current_page: 1 },
@@ -157,6 +156,11 @@
             'search': function (val, oldVal) {
                 this.page = 1;
                 this.fetch();
+            }
+        },
+        computed: {
+            userId() {
+                return this.user_id ? this.user_id : this.$root.user.id;
             }
         },
         methods: {
@@ -203,6 +207,8 @@
             },
             create() {
                 event.preventDefault();
+                $.extend(this.selectedNote, {'user_id' : this.userId});
+
                 this.$http.post('notes', this.selectedNote).then(function () {
                     this.reset();
                     this.fetch();

@@ -9,7 +9,7 @@ class ExportReservations extends Exporter
     public function data(array $request)
     {
         $reservations = Reservation::filter($request)
-            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines')
+            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines', 'promocodes')
             ->get();
 
         return $reservations;
@@ -50,7 +50,13 @@ class ExportReservations extends Exporter
             'payments' => implode(", ", $reservation->dues->map(function($due) {
                 return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(),2).'] ('.$due->getStatus().')';
             })->all()),
-            'applied_costs' => implode(", ", $reservation->costs->map(function($cost) {
+            'incremental_costs' => implode(", ", $reservation->costs()->type('incremental')->get()->map(function($cost) {
+                return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+            })->all()),
+            'static_costs' => implode(", ", $reservation->costs()->type('static')->get()->map(function($cost) {
+                return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+            })->all()),
+            'optional_costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
                 return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
             })->all()),
             'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
@@ -58,7 +64,13 @@ class ExportReservations extends Exporter
             })->all()),
             'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
                 return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
-            })->all())
+            })->all()),
+            'promocodes' => implode(", ", $reservation->promocodes->map(function ($promo) {
+                return $promo->code;
+            })->all()),
+            'registered_at' => $reservation->created_at->toCookieString(),
+            'updated_at' => $reservation->updated_at->toCookieString(),
+            'dropped_at' => $reservation->dropped_at ? $reservation->dropped_at->toCookieString() : null
         ];
 
         return $columns;

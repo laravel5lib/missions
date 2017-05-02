@@ -98,6 +98,18 @@ class Group extends Model
     }
 
     /**
+     * Get all the group's active trip reservations.
+     * 
+     * @return Response
+     */
+    public function activeReservations()
+    {
+        return $this->reservations()->whereHas('trip', function ($trip) {
+            return $trip->active();
+        });
+    }
+
+    /**
      * Get all the group's managers.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -156,6 +168,16 @@ class Group extends Model
     public function banner()
     {
         return $this->belongsTo(Upload::class, 'banner_upload_id');
+    }
+
+    /**
+     * Get the group's promotionals.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function promotionals()
+    {
+        return $this->morphMany(Promotional::class, 'promoteable');
     }
 
     /**

@@ -39,31 +39,17 @@
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
                                placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
-                        <span v-if="attemptSubmit" class="help-block">
-                            <span v-if="
-                                    $CreateUpdatePassport.surname.required || 
-                                    $CreateUpdatePassport.surname.minlength"
-                                   class="help-block">
-                                Please provide the passport holder's surname.
-                            </span>
-                        </span>
+
                     </div>
                 </div>
             </div><!-- end row -->
-            <div class="form-group" v-error-handler="{ value: number, handle: 'number' }">
+            <div class="form-group" v-error-handler="{ value: number, handle: 'number', messages: { req: 'Please provide a valid passport number.'} }">
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Passport Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
                            placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
-                    <span v-if="attemptSubmit" class="help-block">
-                        <span v-if="
-                                $CreateUpdatePassport.number.required || 
-                                $CreateUpdatePassport.number.minlength"
-                               class="help-block">
-                            Please provide a valid passport number.
-                        </span>
-                    </span>
+
                 </div>
             </div>
 
@@ -76,42 +62,28 @@
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
                             <span v-if="attemptSubmit" class="help-block">
-                            <span v-if="$CreateUpdatePassport.expires.required"
-                                  class="help-block">
-                                Please provide the expiration date.
-                            </span>
                         </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country' }">
+            <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country', messages: { req: 'Please select country of nationality (where you were born).'} }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
-                    <span v-if="attemptSubmit" class="help-block">
-                        <span v-if="$CreateUpdatePassport.birth.required" class="help-block">
-                            Please select country of nationality (where you were born).
-                        </span>
-                    </span>
                 </div>
             </div>
-            <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship' }">
+            <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship', messages: { req: 'Please select country of citizenship.'} }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
                     <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate:citizenship="{ required: true }">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
-                    <span v-if="attemptSubmit" class="help-block">
-                        <span v-if="$CreateUpdatePassport.citizenship.required" class="help-block">
-                            Please select country of citizenship.
-                        </span>
-                    </span>
                 </div>
             </div>
             <div class="row">

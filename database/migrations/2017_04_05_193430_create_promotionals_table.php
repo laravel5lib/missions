@@ -18,6 +18,7 @@ class CreatePromotionalsTable extends Migration
             $table->integer('reward')->default(0);
             $table->uuid('promoteable_id')->nullable();
             $table->string('promoteable_type')->nullable();
+            $table->string('affiliates')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

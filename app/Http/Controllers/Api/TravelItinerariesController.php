@@ -64,7 +64,7 @@ class TravelItinerariesController extends Controller
                     'name'         => $hub->get('name'),
                     'call_sign'    => $hub->get('call_sign'),
                     'city'         => $hub->get('city'),
-                    'country_code' => country_code($hub->get('country_code')),
+                    'country_code' => $hub->get('country_code'),
                     'campaign_id'  => $reservation->trip->campaign->id
                 ]
             ]);

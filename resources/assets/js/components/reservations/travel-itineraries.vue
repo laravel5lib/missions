@@ -264,7 +264,7 @@
             },
             resetItinerary(){
                 if (this.itinerary.id) {
-                    this.$http.delete('itineraries/travel/' + itinerary.id).then(function (response) {
+                    this.$http.delete('itineraries/travel/' + this.itinerary.id).then(function (response) {
                         console.log('Itinerary deleted');
                     })
                 }

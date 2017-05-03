@@ -21,16 +21,16 @@
 					</div>
 					<div class="checkbox" v-if="editMode && !itinerary.id">
 						<label for="connectionFlight">
-							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a prior Travel Connection Prior to Arriving.
+							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a Travel Connection (i.e connecting flight, bus, etc.).
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
 						<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
 							<div class="checkbox" v-if="editMode">
 								<label for="noTravelTo" v-if="isArrival(item)">
-									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="toggleDomestic(item)">I don't need international transportation to the destination.
+									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="toggleDomestic(item)">I am traveling directly to the destination country.
 								</label>
-								<div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below.</div>
+								<div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below. Please check with your Trip Facilitator or Trip Rep to make sure this is a viable option for you.</div>
 							</div>
 
 							<travel-transport v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
@@ -212,7 +212,7 @@
                     //this.itinerary = response.body.data;
                     let it = this.setupItinerary(response.body.data);
                     this.editMode = false;
-                    this.setDesignation(response.body.data);
+                    this.setItinerary(response.body.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it
                 },
@@ -242,7 +242,7 @@
                 return this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
                     let it = this.setupItinerary(response.body.data);
                     this.editMode = false;
-                    this.setDesignation(response.body.data);
+                    this.setItinerary(response.body.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it;
                 },
@@ -265,7 +265,7 @@
             resetItinerary(){
                 if (this.itinerary.id) {
                     this.$http.delete('itineraries/travel/' + this.itinerary.id).then(function (response) {
-                        this.unsetDesignation(this.itinerary);
+                        this.unsetItinerary(this.itinerary);
                         console.log('Itinerary deleted');
                     });
                 }
@@ -318,7 +318,7 @@
                     this.itinerary.items.splice(0, 1);
                 } else {
                     let connectionTypeId = _.findWhere(this.activityTypes, {name: 'connection'});
-                    this.itinerary.items.splice(0, 0, this.newItineraryItem('Travel Connection Prior to Arriving', connectionTypeId.id));
+                    this.itinerary.items.splice(0, 0, this.newItineraryItem('Travel Connection', connectionTypeId.id));
                 }
             },
             toggleDeparture() {
@@ -344,11 +344,11 @@
             toggleResetModal(){
 	            this.showResetModal = !this.showResetModal;
             },
-            setDesignation(designation) {
-                this.$dispatch('set-document', designation);
+            setItinerary(itinerary) {
+                this.$dispatch('set-document', itinerary);
             },
-            unsetDesignation(designation) {
-                this.$dispatch('unset-document', designation);
+            unsetItinerary(itinerary) {
+                this.$dispatch('unset-document', itinerary);
             },
 	        getTypes() {
 	            return this.$http.get('utilities/activities/types').then(function (response) {

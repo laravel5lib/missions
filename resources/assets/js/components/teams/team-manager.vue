@@ -9,9 +9,9 @@
 					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 						   :debounce="250" placeholder="Tag, tag2, tag3...">
 				</div> -->
-				<div class="form-group" v-if="isAdminRoute">
+				<div class="form-group">
 					<label>Role</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="roleFilter" multiple :debounce="250" :on-search="getRoles"
 					          :value.sync="roleObj" :options="rolesOptions" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>

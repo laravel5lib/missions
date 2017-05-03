@@ -4,31 +4,30 @@
 		<!-- Plans List-->
 		<div class="col-sm-4">
 			<div class="col-xs-12 text-right">
-				<button class="btn btn-primary btn-xs" @click="openNewPlanModel">Create A Plan</button>
+				<button class="btn btn-primary btn-xs" type="button" @click="openNewPlanModel">Create A Plan</button>
 				<hr class="divider lg">
 			</div>
 
 			<div class="col-xs-12">
 				<accordion :one-at-atime="true" type="info">
-					<panel header="Room Plan" v-for="plan in plans">
+					<panel :is-open="currentPlan.name === plan.name" :header="plan.name" v-for="plan in plans" @click="currentPlan = plan">
 						<tabs>
 							<tab header="Rooms">
 								<!-- Search and Filter -->
 								<form class="form-inline row">
 									<div class="form-group col-xs-12 text-right">
-										<button class="btn btn-primary btn-xs" @click="openNewRoomModel">Add Room</button>
+										<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
 										<hr class="divider lg">
 									</div>
 
-									<div class="form-group col-xs-12">
+									<div class="form-group col-xs-8">
 										<div class="input-group input-group-sm col-xs-12">
 											<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
 											<span class="input-group-addon"><i class="fa fa-search"></i></span>
 										</div>
 									</div><!-- end col -->
-									<div class="form-group col-xs-12">
+									<div class="form-group col-xs-4">
 										<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-											Filters
 											<i class="fa fa-filter"></i>
 										</button>
 									</div>
@@ -39,7 +38,7 @@
 
 								<div class="row">
 									<div class="col-xs-12">
-										<template v-for="room in rooms">
+										<template v-for="room in currentPlan.rooms">
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h3 class="panel-title">Room Type</h3>
@@ -177,6 +176,57 @@
 				<p class="text-center text-italic text-muted"><em>Select a team to begin</em></p>
 			</template>
 		</div>
+
+		<!-- Modals -->
+		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :show.sync="showPlanModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="PlanCreate">
+					<form id="PlanCreateForm">
+						<div class="form-group" :class="{'has-error': $PlanCreate.plancallsign.invalid}">
+							<label for="createPlanCallsign" class="control-label">Plan Name</label>
+							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedPlan.name">
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal>
+
+		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :show.sync="showRoomModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="RoomCreate">
+					<form id="RoomCreateForm">
+						<div class="form-group" :class="{'has-error': $RoomCreate.roomcallsign.invalid}">
+							<label for="createRoomCallsign" class="control-label">Room Name</label>
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="createRoomCallsign" placeholder="" v-validate:roomcallsign="['required']" v-model="selectedRoom.name">
+						</div>
+						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}">
+							<label for="" class="control-label">Type</label>
+							<select class="form-control" v-model="selectedRoom.type_id" v-validate:roomtype="['required']">
+								<option :value="type.id" v-for="type in roomTypes">{{type.name | capitalize}}</option>
+							</select>
+						</div>
+						<legend>Settings</legend>
+						<div class="form-group">
+							<label>Gender</label>
+							<select class="form-control" v-model="selectedRoom.settings.gender">
+								<option :value="">Any</option>
+								<option value="male">Male</option>
+								<option value="female">Female</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<label>Relationship Status</label>
+							<select class="form-control" v-model="selectedRoom.settings.status">
+								<option :value="">Select  Status</option>
+								<option value="single">Single</option>
+								<option value="married">Married</option>
+							</select>
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal>
+
 	</div>
 </template>
 <style></style>
@@ -202,7 +252,6 @@
 
                 plans: [],
                 plansPagination: { current_page: 1 },
-                rooms: [],
                 roomsPagination: { current_page: 1 },
                 teams: [],
                 teamsPagination: { current_page: 1 },
@@ -214,10 +263,41 @@
                 currentTeam: null,
                 currentPlan: null,
 				activeRooms: [],
-                roomTypes: [],
+                roomTypes: [{
+                    id: '1',
+                    name: 'Standard Room',
+	                rules: {
+                        max_occupants: 10,
+	                },
+                },{
+                    id: '2',
+                    name: 'Double Room',
+                    rules: {
+                        max_occupants: 4,
+                    },
+                }],
 
                 // Filters vars
                 showReservationsFilters: false,
+
+	            // modal vars
+	            showPlanModal: false,
+                selectedPlan: {
+                    id: null,
+                    name: '',
+	                rooms: []
+                },
+	            showRoomModal: false,
+                selectedRoom: {
+                    id: null,
+                    type_id: null,
+                    type: null,
+                    occupants: [],
+                    settings: {
+                        gender: null,
+                        status: 'married'
+                    }
+                },
             }
         },
 	    computed: {
@@ -298,8 +378,7 @@
                 return this.$http.get('teams', { params: params }).then(function (response) {
                         this.teamsPagination = response.body.meta.pagination;
                         return this.teams = response.body.data;
-                    },
-                    function (response) {
+                    }, function (response) {
                         console.log(response);
                         return response.body.data;
                     });
@@ -307,7 +386,43 @@
 
 	        // Modal Functions
             openNewPlanModel(){
+                this.showPlanModal = true;
 
+            },
+	        newPlan() {
+                /*
+                this.$http.post('rooming-plans', this.selectedPlan).then(function (response) {
+                    this.plans.push(newPlan);
+                    this.currentPlan = newPlan;
+                    this.showPlanModal = false;
+                }, function (response) {
+                 console.log(response);
+                 return response.body.data;
+                 });
+                */
+                this.plans.push(this.selectedPlan);
+                this.currentPlan = this.selectedPlan;
+                this.showPlanModal = false;
+            },
+            openNewRoomModel(){
+                this.showRoomModal = true;
+
+            },
+	        newRoom() {
+		        /*
+		         this.$http.post('rooming-plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom).then(function (response) {
+		         this.plans.push(newPlan);
+		         this.currentPlan = newPlan;
+		         this.showPlanModal = false;
+		         }, function (response) {
+		         console.log(response);
+		         return response.body.data;
+		         });
+		         */
+
+                this.currentPlan.rooms.push(this.selectedRoom);
+                this.activeRooms.push(this.selectedRoom);
+                this.showRoomModal = false;
             },
         },
         ready(){

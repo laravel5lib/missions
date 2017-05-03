@@ -17,7 +17,7 @@
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
 				<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: activity.description, client: 'description', messages: { req: 'Please provide an explanation.'} }">
-					<label for="">Please Explain Why</label>
+					<label for="">Please explain why you don't need Missions.Me to arrange transportation.</label>
 					<template v-if="editMode">
 						<textarea type="text" class="form-control" v-model="activity.description" v-validate:description="['required']"></textarea>
 					</template>

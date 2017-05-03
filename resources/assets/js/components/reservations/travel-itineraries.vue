@@ -34,9 +34,9 @@
 							</div>
 							<div class="checkbox" v-if="editMode && !itinerary.id && isDeparture(item)">
 								<label for="returningOnOwn">
-									<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="returningOnOwn" @click="toggleReturningOnOwn(item)">I don't need a returning international flight.
+									<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="returningOnOwn" @click="toggleReturningOnOwn(item)">I am arranging my own transportation out of the destination country.
 								</label>
-								<div class="alert alert-warning" v-show="!departurePresent"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
+								<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
 							</div>
 
 							<travel-transport v-if="item.transport" v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>

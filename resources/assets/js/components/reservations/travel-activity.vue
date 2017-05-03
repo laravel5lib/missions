@@ -16,7 +16,7 @@
 					</template>
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
-				<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: activity.description, client: 'description' }">
+				<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: activity.description, client: 'description', messages: { req: 'Please provide an explanation.'} }">
 					<label for="">Please Explain Why</label>
 					<template v-if="editMode">
 						<textarea type="text" class="form-control" v-model="activity.description" v-validate:description="['required']"></textarea>

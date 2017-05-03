@@ -1388,7 +1388,11 @@
             promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
-	            this.leadershipRoles = response.body.roles;
+                let roles = [];
+                _.each(response.body.roles, function (role, code) {
+	                roles.push(code);
+                });
+	            this.leadershipRoles = roles;
             }));
 
             Promise.all(promises).then(function (values) {

@@ -31,6 +31,7 @@ return [
         'medical_credentials',
         'airport_preferenes',
         'arrival_designations',
-        'influencer_applications'
+        'influencer_applications',
+        'travel_itineraries'
     ]
 ];

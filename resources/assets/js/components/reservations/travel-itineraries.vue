@@ -265,8 +265,9 @@
             resetItinerary(){
                 if (this.itinerary.id) {
                     this.$http.delete('itineraries/travel/' + this.itinerary.id).then(function (response) {
+                        this.unsetDesignation(this.itinerary);
                         console.log('Itinerary deleted');
-                    })
+                    });
                 }
 
                 this.editMode = true;
@@ -345,6 +346,9 @@
             },
             setDesignation(designation) {
                 this.$dispatch('set-document', designation);
+            },
+            unsetDesignation(designation) {
+                this.$dispatch('unset-document', designation);
             },
 	        getTypes() {
 	            return this.$http.get('utilities/activities/types').then(function (response) {

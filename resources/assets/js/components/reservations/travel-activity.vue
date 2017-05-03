@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<validator name="TravelActivity">
+		<validator name="TravelActivity" v-if="activity">
 			<form id="TravelActivityForm" novalidate>
 				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.name, client: 'name' }">
 					<label for="">Name</label>
@@ -23,7 +23,7 @@
 					</template>
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
-				<div class="form-group" v-error-handler="{ value: activity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+				<div class="form-group" v-if="transportDomestic" v-error-handler="{ value: activity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
 					<label for="" v-text="LABELS.dateTime"></label>
 					<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss'" v-if="editMode"></date-picker>
 					<p v-else>{{ activity.occurred_at | moment 'LLLL' }}</p>

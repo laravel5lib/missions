@@ -14,30 +14,30 @@
 
 				<div v-if="itinerary">
 					<div class="checkbox" v-if="editMode && !itinerary.id">
-						<label for="returningOnOwn">
-							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="!departurePresent" @change="toggleDeparture">I don't need a returning international flight.
-						</label>
-						<div class="alert alert-warning" v-show="!departurePresent"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
-					</div>
-					<div class="checkbox" v-if="editMode && !itinerary.id">
 						<label for="connectionFlight">
 							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a Travel Connection (i.e connecting flight, bus, etc.).
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
 						<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
-							<div class="checkbox" v-if="editMode">
-								<label for="noTravelTo" v-if="isArrival(item)">
+							<div class="checkbox" v-if="editMode && isArrival(item)">
+								<label for="noTravelTo">
 									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="toggleDomestic(item)">I am traveling directly to the destination country.
 								</label>
 								<div class="alert alert-warning" v-show="!item.transport.domestic"><strong>NOTICE:</strong> By selecting this option, I am arranging my own transportation to the destination country. Please provide those details below. Please check with your Trip Facilitator or Trip Rep to make sure this is a viable option for you.</div>
 							</div>
+							<div class="checkbox" v-if="editMode && !itinerary.id && isDeparture(item)">
+								<label for="returningOnOwn">
+									<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="returningOnOwn" @click="toggleReturningOnOwn(item)">I don't need a returning international flight.
+								</label>
+								<div class="alert alert-warning" v-show="!departurePresent"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
+							</div>
 
-							<travel-transport v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
+							<travel-transport v-if="item.transport" v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
 
-							<travel-hub v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport.type" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
+							<travel-hub v-if="item.hub" v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
-							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport.domestic"></travel-activity>
+							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic"></travel-activity>
 
 						</panel>
 					</accordion>
@@ -109,13 +109,13 @@
         },
         computed: {
             connectionType(){
-                return _.findWhere(this.activityTypes, { name: 'connection'});
+                    return this ? _.findWhere(this.activityTypes, { name: 'connection'}) : null;
             },
             arrivalType(){
-                return _.findWhere(this.activityTypes, { name: 'arrival'});
+                    return this ? _.findWhere(this.activityTypes, { name: 'arrival'}) : null;
             },
             departureType(){
-                return _.findWhere(this.activityTypes, { name: 'departure'});
+                    return this ? _.findWhere(this.activityTypes, { name: 'departure'}) : null;
             },
             connectionPresent() {
                 return this.itinerary.items && _.some(this.itinerary.items, function (item) {
@@ -146,6 +146,9 @@
         methods: {
             isArrival(item) {
 				return item.activity.activity_type_id === this.arrivalType.id;
+            },
+            isDeparture(item) {
+				return item.activity.activity_type_id === this.departureType.id;
             },
             setupItinerary(itineraryObj) {
                 let itinerary = _.extend(itineraryObj, {
@@ -302,8 +305,10 @@
                     items: []
                 };
 
-                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', this.arrivalType.id ));
-                itinerary.items.push(this.newItineraryItem('Return Home', this.departureType.id));
+                let arrival = this.arrivalType;
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrival.id ));
+                let departure = this.departureType;
+                itinerary.items.push(this.newItineraryItem('Return Home', departure.id));
 
                 this.itinerary = itinerary;
                 this.toggleResetModal();
@@ -344,11 +349,35 @@
                 }
             },
             toggleDeparture() {
-	            if (this.departurePresent) {
+                if (this.departurePresent) {
                     this.itinerary.items.pop();
                 } else {
                     this.itinerary.items.push(this.newItineraryItem('Return Home', this.departureType.id));
                 }
+            },
+	        toggleReturningOnOwn(item) {
+	            if (this.returningOnOwn) {
+	                item.transport = {
+                        type: '',
+                        vessel_no: '',
+                        name: '',
+                        call_sign: '',
+                        domestic: true
+                    };
+	                item.hub = {
+                        name: '',
+                        address: '',
+                        call_sign: '',
+                        city: '',
+                        state: '',
+                        zip: '',
+                        country_code: '',
+                    };
+                } else {
+                    item.transport = undefined;
+                    item.hub = undefined;
+                }
+                return item;
             },
 	        toggleDomestic(item) {
 	            item.transport.domestic = !item.transport.domestic;
@@ -386,9 +415,9 @@
             let self = this;
             Promise.all(promises).then(function (values) {
                 // initiate computed types
-	            this.arrivalType;
-	            this.departureType;
-	            this.connectionType;
+                self.arrivalType;
+                self.departureType;
+                self.connectionType;
 
                 self.$nextTick(function () {
                     if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {

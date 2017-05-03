@@ -13,13 +13,19 @@
 				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 
 				<div v-if="itinerary">
+					<p>Please provide details about each step of your trip below.</p>
 					<div class="checkbox" v-if="editMode && !itinerary.id">
 						<label for="connectionFlight">
 							<input id="connectionFlight" type="checkbox" :checked="connectionPresent" name="connectionFlight" @change="toggleConnection"> I have a Travel Connection (i.e connecting flight, bus, etc.).
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
-						<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
+						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" v-ref:items>
+
+                            <strong slot="header">
+                                <i class="fa fa-map-marker"></i> Step : {{ item.activity.name }}
+                            </strong>
+
 							<div class="checkbox" v-if="editMode && isArrival(item)">
 								<label for="noTravelTo">
 									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="toggleDomestic(item)">I am traveling directly to the destination country.
@@ -286,8 +292,10 @@
                     reservation_id: this.reservationId,
                     items: []
                 };
-                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', this.arrivalType.id ));
-                itinerary.items.push(this.newItineraryItem('Return Home', this.departureType.id));
+                let arrival = this.arrivalType;
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrival.id ));
+                let departure = this.departureType;
+                itinerary.items.push(this.newItineraryItem('Return Home', departure.id));
 	            return this.itinerary = itinerary;
             },
             resetItinerary(){

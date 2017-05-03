@@ -33,14 +33,12 @@ class TransportTransformer extends TransformerAbstract {
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
             'call_sign'   => $transport->call_sign,
-            'departs_at'  => $transport->departs_at ? $transport->departs_at->toDateTimeString() : null,
-            'arrives_at'  => $transport->arrives_at ? $transport->arrives_at->toDateTimeString() : null,
             'created_at'  => $transport->created_at->toDateTimeString(),
             'updated_at'  => $transport->updated_at->toDateTimeString(),
             'links'       => [
                 [
                     'rel' => 'self',
-                    'uri' => '/transports/' . $transport->id,
+                    'uri' => '/api/transports/' . $transport->id,
                 ]
             ]
         ];

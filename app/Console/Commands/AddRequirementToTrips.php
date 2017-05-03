@@ -50,7 +50,7 @@ class AddRequirementToTrips extends Command
         $name = $this->anticipate('What is the requirement\'s name?', [
             'Passport', 'Visa', 'Personal Testimony', 'Pastoral Recommendation',
             'Medical Release', 'Minor Release', 'Media Credentials', 'Medical Credentials',
-            'Airport Preference', 'Arrival Designation', 'Influencer Application'
+            'Airport Preference', 'Arrival Designation', 'Influencer Application', 'Travel Itinerary'
         ]);     
         $desc = $this->ask('Please provide a short description:');
         $docType = $this->choice('What type of document?', config('requirements.document_types'));

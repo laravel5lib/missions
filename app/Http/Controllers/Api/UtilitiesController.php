@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\v1\ProjectCause;
-use App\Models\v1\ProjectInitiative;
-use App\Utilities\v1\Country;
-use Dingo\Api\Contract\Http\Request;
-use App\Utilities\v1\TeamRole;
-
 use App\Http\Requests;
+use App\Utilities\v1\Airline;
+use App\Utilities\v1\Country;
+use App\Utilities\v1\TeamRole;
+use App\Models\v1\ProjectCause;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\v1\ProjectInitiative;
+use Dingo\Api\Contract\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 
 class UtilitiesController extends Controller
 {   
@@ -49,6 +51,24 @@ class UtilitiesController extends Controller
     {
         $country = (array)Country::get($code);
         return response()->json(compact('country'));
+    }
+
+    public function getAirlines()
+    {
+        $airlineList = Airline::all();
+
+        $airlines = [];
+        foreach ($airlineList as $key => $airline) {
+            $airlines[] = ['name' => $airline, 'iata' => $key];
+        }
+
+        return response()->json(compact('airlines'));
+    }
+
+    public function getAirline($iata)
+    {
+        $airline = (array)Airline::get($iata);
+        return response()->json(compact('airline'));
     }
 
     public function getTimezones($country_code = null)
@@ -122,5 +142,10 @@ class UtilitiesController extends Controller
     public function getPastTrips()
     {
        return config('accolades.trips');
+    }
+
+    public function getActivityTypes()
+    {
+        return DB::table('activity_types')->get();
     }
 }

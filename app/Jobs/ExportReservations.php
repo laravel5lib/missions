@@ -68,6 +68,8 @@ class ExportReservations extends Exporter
             'promocodes' => implode(", ", $reservation->promocodes->map(function ($promo) {
                 return $promo->code;
             })->all()),
+            'designation' => $reservation->designation ? 
+                implode('', array_flatten($reservation->designation->content)) : 'none',
             'registered_at' => $reservation->created_at->toCookieString(),
             'updated_at' => $reservation->updated_at->toCookieString(),
             'dropped_at' => $reservation->dropped_at ? $reservation->dropped_at->toCookieString() : null

@@ -134,6 +134,7 @@ import transactionDelete from './components/financials/transactions/transaction-
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
+import transports from './components/admin/transports.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -315,6 +316,9 @@ Vue.validator('email', function (val) {
 });
 // Validate datetime inputs
 Vue.validator('datetime ', function (val) {
+    if (! val) return true;
+    if (val === 'Invalid date') return false;
+
     return moment(val).isValid();
 });
 
@@ -677,6 +681,19 @@ Vue.directive('error-handler', {
                             if (emailMessage !== genericMessage)
                                 newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
                         }
+                        // custom datetime validator
+                        if (validationObject.datetime) {
+                            // Grab message from storage if it exists or use generic default
+                            let datetimeMessage;
+                            if (this.storage.messages && this.storage.messages.datetime) {
+                                datetimeMessage = this.storage.messages.datetime;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                datetimeMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
+                            }
+                            if (datetimeMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + datetimeMessage + "</div>");
+                        }
                     }
                     //console.log(newMessages);
 
@@ -736,7 +753,10 @@ Vue.mixin({
     computed: {
         firstUrlSegment: function () {
             return document.location.pathname.split("/").slice(1, 2).toString();
-        }
+        },
+        isAdminRoute() {
+            return this.firstUrlSegment == 'admin';
+        },
     },
     ready() {
         function isTouchDevice() {
@@ -908,7 +928,8 @@ new Vue({
         transactionDelete,
         fundManager,
         companionManager,
-        promotionals
+        promotionals,
+        transports
     },
     http: {
         headers: {

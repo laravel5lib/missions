@@ -55,6 +55,9 @@ class ReservationRequirementTransformer extends TransformerAbstract
         if( ! $document) return null;
 
         switch ($requirement->document_type) {
+            case 'travel_itineraries':
+                return $this->item($document, new ItineraryTransformer);
+                break;
             case 'passports':
                 return $this->item($document, new PassportTransformer);
                 break;

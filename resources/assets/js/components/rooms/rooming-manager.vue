@@ -41,7 +41,7 @@
 										<template v-for="room in currentPlan.rooms">
 											<div class="panel panel-default">
 												<div class="panel-heading">
-													<h3 class="panel-title">Room Type</h3>
+													<h3 class="panel-title" v-text="(room.label ? (room.label + ' - ' + room.type.name) : room.type.name) | capitalize"></h3>
 												</div>
 												<div class="panel-body">
 													<div class="row">
@@ -78,12 +78,83 @@
 
 		<!-- Occupants List -->
 		<div class="col-sm-4">
-			<div class="panel panel-default">
+			<div class="panel panel-default" v-for="room in activeRooms">
 				  <div class="panel-heading">
-						<h3 class="panel-title">Occupants</h3>
+						<h3 class="panel-title">{{(room.label ? (room.label + ' - ' + room.type.name) : room.type.name) | capitalize}} Occupants</h3>
 				  </div>
 				  <div class="panel-body">
-						Panel body
+					  <template v-if="room.occupants.length">
+						  <div class="panel panel-default" v-for="member in room.occupants">
+							  <div class="panel-heading" role="tab" id="headingOne">
+								  <h4 class="panel-title">
+									  <div class="row">
+										  <div class="col-xs-9">
+											  <a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												  <img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
+												  {{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
+												  <label>{{ member.desired_role.name }}</label>
+											  </a>
+										  </div>
+										  <div class="col-xs-3 text-right action-buttons">
+											  <dropdown type="default">
+												  <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+													  <span class="fa fa-ellipsis-h"></span>
+												  </button>
+												  <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+													  <template v-for="subSquad in currentSquads">
+														  <template v-if="subSquad.callsign === 'Team Leaders'">
+															  <li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ''"></a></li>
+															  <li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+														  </template>
+														  <template v-else>
+															  <template v-if="subSquad.id !== squad.id">
+																  <li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
+																  <li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																  <li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+															  </template>
+														  </template>
+													  </template>
+													  <li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
+													  <li :class="{'disabled': isLocked}" v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+													  <li :class="{'disabled': isLocked}" v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
+													  <li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
+												  </ul>
+											  </dropdown>
+											  <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												  <i class="fa fa-angle-down"></i>
+											  </a>
+										  </div>
+									  </div>
+								  </h4>
+							  </div>
+							  <div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								  <div class="panel-body">
+									  <div class="row">
+										  <div class="col-sm-6">
+											  <label>Gender</label>
+											  <p class="small">{{member.gender | capitalize}}</p>
+											  <label>Marital Status</label>
+											  <p class="small">{{member.status | capitalize}}</p>
+										  </div><!-- end col -->
+										  <div class="col-sm-6">
+											  <label>Age</label>
+											  <p class="small">{{member.age}}</p>
+											  <label>Travel Group</label>
+											  <p class="small">{{member.trip.data.group.data.name}}</p>
+										  </div><!-- end col -->
+									  </div><!-- end row -->
+								  </div><!-- end panel-body -->
+							  </div>
+							  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+								  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+								  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
+							  </div>
+						  </div>
+					  </template>
+					  <template v-else>
+						  <hr class="divider inv">
+						  <p class="text-center text-italic text-muted"><em>No occupants in this room yet.</em></p>
+					  </template>
 				  </div>
 			</div>
 		</div>
@@ -195,16 +266,13 @@
 			<div slot="modal-body" class="modal-body">
 				<validator name="RoomCreate">
 					<form id="RoomCreateForm">
-						<div class="form-group" :class="{'has-error': $RoomCreate.roomname.invalid}">
-							<label for="createRoomCallsign" class="control-label">Room Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="createRoomCallsign" placeholder="" v-validate:roomname="['required']" v-model="selectedRoom.name">
-						</div>
 						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}">
 							<label for="" class="control-label">Type</label>
 							<select class="form-control" v-model="selectedRoom.type" v-validate:roomtype="['required']" @change="selectedRoom.type_id = selectedRoom.type.id">
 								<option :value="type" v-for="type in roomTypes">{{type.name | capitalize}}</option>
 							</select>
-							<div v-if="selectedRoom.type" class="well well-sm">
+							<hr class="divider sm">
+							<div v-if="selectedRoom.type" class="">
 								<label>Occupancy Limit</label>
 								<p class="small">{{selectedRoom.type.rules.max_occupants}}</p>
 								<label>Limited to Gender</label>
@@ -212,6 +280,10 @@
 								<label>Limited to Status</label>
 								<p class="small">{{selectedRoom.type.rules.status | capitalize}}</p>
 							</div>
+						</div>
+						<div class="form-group">
+							<label for="roomname" class="control-label">Room Name (Optional)</label>
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="roomname" v-model="selectedRoom.label">
 						</div>
 					</form>
 				</validator>
@@ -287,6 +359,7 @@
                     id: null,
                     type_id: null,
                     type: null,
+	                label: '',
                     occupants: [],
                 },
             }
@@ -450,6 +523,16 @@
             Promise.all(promises).then(function (values) {
                 this.startUp = false;
 //                this.searchReservations();
+
+	            // Add a plan for now, disable for empty state
+	            let aPlan = {
+	                id: '1',
+                    name: 'Training Location',
+                    rooms: []
+
+                };
+                this.plans.push(aPlan);
+                this.currentPlan = aPlan
             }.bind(this));
         }
     }

@@ -3,8 +3,8 @@
  */
 let $, jQuery, moment, timezone;
 $ = jQuery = window.$;
-window.moment = require('moment');
-window.timezone = require('moment-timezone');
+moment = window.moment = require('moment');
+timezone = window.timezone = require('moment-timezone');
 let localStorage = window.localStorage;
 
 import _ from 'underscore';
@@ -280,6 +280,30 @@ Vue.directive('error-handler', {
         // Handle error class and messages on element
         this.handleClass(value);
         this.handleMessages(value, this.vm.errors);
+    }
+});
+
+Vue.filter('moment', {
+    read: function (val, format, diff = false, noLocal = false) {
+
+        if (noLocal) {
+            return moment(val).format(format || 'LL'); // do not convert to local
+        }
+
+        // console.log('before: ', val);
+        var date = moment.utc(val).local().format(format || 'LL');
+
+        if (diff) {
+            date = moment.utc(val).local().fromNow();
+        }
+        // console.log('after: ', date);
+
+        return date;
+    },
+    write: function (val, oldVal) {
+        let format = 'YYYY-MM-DD HH:mm:ss';
+        // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
+        return moment(val).local().utc().format(format);
     }
 });
 

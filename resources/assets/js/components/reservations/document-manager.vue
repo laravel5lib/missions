@@ -279,6 +279,9 @@
         events: {
             'set-document': function(document) {
                 this.setDocument(document);
+            },
+            'unset-document': function(document) {
+                this.removeDocument(document);
             }
         },
         ready(){

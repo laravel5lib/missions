@@ -47,15 +47,15 @@
 													<div class="row">
 														<div class="col-sm-6">
 															<label>Occupancy Limit</label>
-															<p class="small">{{room.max | capitalize}}</p>
+															<p class="small">{{room.type.rules.max_occupants}}</p>
 															<label>Limited to Gender</label>
-															<p class="small">{{room.gender | capitalize}}</p>
+															<p class="small">{{room.type.rules.gender | capitalize}}</p>
 															<label>Limited to Status</label>
-															<p class="small">{{room.status | capitalize}}</p>
+															<p class="small">{{room.type.rules.status | capitalize}}</p>
 														</div><!-- end col -->
 														<div class="col-sm-6">
 															<label>Current Number of Occupants</label>
-															<p class="small">{{room.occupants_count}}</p>
+															<p class="small">{{room.occupants.length}}</p>
 															<label>Room Leader</label>
 															<p class="small">{{room.leader}}</p>
 														</div><!-- end col -->
@@ -182,7 +182,7 @@
 			<div slot="modal-body" class="modal-body">
 				<validator name="PlanCreate">
 					<form id="PlanCreateForm">
-						<div class="form-group" :class="{'has-error': $PlanCreate.plancallsign.invalid}">
+						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
 							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedPlan.name">
 						</div>
@@ -195,32 +195,23 @@
 			<div slot="modal-body" class="modal-body">
 				<validator name="RoomCreate">
 					<form id="RoomCreateForm">
-						<div class="form-group" :class="{'has-error': $RoomCreate.roomcallsign.invalid}">
+						<div class="form-group" :class="{'has-error': $RoomCreate.roomname.invalid}">
 							<label for="createRoomCallsign" class="control-label">Room Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="createRoomCallsign" placeholder="" v-validate:roomcallsign="['required']" v-model="selectedRoom.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="createRoomCallsign" placeholder="" v-validate:roomname="['required']" v-model="selectedRoom.name">
 						</div>
 						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}">
 							<label for="" class="control-label">Type</label>
-							<select class="form-control" v-model="selectedRoom.type_id" v-validate:roomtype="['required']">
-								<option :value="type.id" v-for="type in roomTypes">{{type.name | capitalize}}</option>
+							<select class="form-control" v-model="selectedRoom.type" v-validate:roomtype="['required']" @change="selectedRoom.type_id = selectedRoom.type.id">
+								<option :value="type" v-for="type in roomTypes">{{type.name | capitalize}}</option>
 							</select>
-						</div>
-						<legend>Settings</legend>
-						<div class="form-group">
-							<label>Gender</label>
-							<select class="form-control" v-model="selectedRoom.settings.gender">
-								<option :value="">Any</option>
-								<option value="male">Male</option>
-								<option value="female">Female</option>
-							</select>
-						</div>
-						<div class="form-group">
-							<label>Relationship Status</label>
-							<select class="form-control" v-model="selectedRoom.settings.status">
-								<option :value="">Select  Status</option>
-								<option value="single">Single</option>
-								<option value="married">Married</option>
-							</select>
+							<div v-if="selectedRoom.type" class="well well-sm">
+								<label>Occupancy Limit</label>
+								<p class="small">{{selectedRoom.type.rules.max_occupants}}</p>
+								<label>Limited to Gender</label>
+								<p class="small">{{selectedRoom.type.rules.gender | capitalize}}</p>
+								<label>Limited to Status</label>
+								<p class="small">{{selectedRoom.type.rules.status | capitalize}}</p>
+							</div>
 						</div>
 					</form>
 				</validator>
@@ -267,13 +258,17 @@
                     id: '1',
                     name: 'Standard Room',
 	                rules: {
-                        max_occupants: 10,
+                        max_occupants: 4,
+                        gender: 'male',
+                        status: 'single'
 	                },
                 },{
                     id: '2',
                     name: 'Double Room',
                     rules: {
-                        max_occupants: 4,
+                        max_occupants: 2,
+                        gender: null,
+                        status: 'married'
                     },
                 }],
 
@@ -293,10 +288,6 @@
                     type_id: null,
                     type: null,
                     occupants: [],
-                    settings: {
-                        gender: null,
-                        status: 'married'
-                    }
                 },
             }
         },

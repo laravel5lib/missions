@@ -377,7 +377,7 @@
                 },
 	            showRoomModal: false,
                 selectedRoom: {
-                    id: this.currentPlan.rooms.length + 1,
+                    id: null,
                     type_id: null,
                     type: null,
 	                label: '',
@@ -472,7 +472,11 @@
 	        // Modal Functions
             openNewPlanModel(){
                 this.showPlanModal = true;
-
+				this.selectedPlan = {
+                    id: null,
+                    name: '',
+                    rooms: []
+                };
             },
 	        newPlan() {
                 /*
@@ -486,14 +490,20 @@
                  });
                 */
                 this.selectedPlan.id = this.plans.length + 1;
-
-                this.plans.push(this.selectedPlan);
-                this.currentPlan = this.selectedPlan;
+				let plan = _.extend({}, this.selectedPlan);
+                this.plans.push(plan);
+                this.currentPlan = plan;
                 this.showPlanModal = false;
             },
             openNewRoomModel(){
                 this.showRoomModal = true;
-
+                this.selectedRoom = {
+                    id: null,
+                    type_id: null,
+                    type: null,
+                    label: '',
+                    occupants: [],
+                };
             },
 	        newRoom() {
 		        /*
@@ -508,9 +518,9 @@
 		         */
 
                 this.selectedRoom.id = this.currentPlan.rooms.length + 1;
-
-                this.currentPlan.rooms.push(this.selectedRoom);
-                this.activeRooms.push(this.selectedRoom);
+                let room = _.extend({}, this.selectedRoom);
+                this.currentPlan.rooms.push(room);
+                this.activeRooms.push(room);
                 this.showRoomModal = false;
             },
         },

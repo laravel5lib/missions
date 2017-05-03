@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<validator name="CreateUpdateMedicalCredential" @touched="onTouched">
+		<validator name="CreateUpdateMedicalCredential" @touched="onTouched" lazy>
 			<form id="CreateUpdateMedicalCredential" class="form-horizontal" novalidate>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -46,23 +46,23 @@
                     </div>
                 </div>
                 
-			    <div v-for="QA in content">
+			    <div v-for="(indexQA, QA) in content">
                     
                     <!-- start has type designation -->
 					<template v-if="QA.type && checkConditions(QA)">
                             
                         <!-- radio -->
 						<template v-if="QA.type === 'radio'">
-							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('radio' + $index), class: 'panel-danger has-error' }">
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('radio' + indexQA), class: 'panel-danger has-error' }">
 								<div class="panel-heading">
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
 									<label class="radio-inline" v-for="choice in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + $index" v-validate="['required']"> {{ choice.name }}
+										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA  " v-validate="$index === 0 ?['required'] : void 0"> {{ choice.name }}
 									</label>
 								</div>
-								<div class="panel-footer" v-show="checkForError('radio' + $index)">
+								<div class="panel-footer" v-show="checkForError('radio' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -114,7 +114,7 @@
                                     <div class="row">
     									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.allOptions">
     										<label>
-											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:participations="">
+											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:participations="$index === 0 ?{ minlength: 1 } : void 0">
 											    {{ choice.name }}
                                             </label>
     									</div>
@@ -440,7 +440,7 @@
                     {value: 'LACT', name: 'Lactation Consultant', required: ['license', 'resume'], optional: ['certification']},
                     {value: 'NAST', name: 'Nurse Assistant', required: ['license', 'diploma', ], optional: []},
                     {value: 'NTEC', name: 'Nurse Tech', required: ['license', 'diploma', ], optional: []},
-                    //{value: 'NPRC', name: 'Nurse Practitioner', required: [], optional: []},
+                    {value: 'NPRC', name: 'Nurse Practitioner', required: [], optional: []},
                     {value: 'REGN', name: 'Nurse (RN)', required: ['license', 'diploma', ], optional: []},
                     {value: 'LPNN', name: 'Nurse (LPN)', required: ['license', 'diploma', ], optional: []},
                     {value: 'NCRT', name: 'Non-Certified', required: [], optional: []},
@@ -809,7 +809,7 @@
                         //console.log(_.findWhere(credential.content, { id: 'role'}));
                         this.selectedRoleObj = _.findWhere(this.roles, { value: _.findWhere(credential.content, { id: 'role'}).a});
 
-//                        this.$activateValidator();
+                        this.$activateValidator();
                         // until uploads relationship is added...
                         // gather all uploads ids
                         let ids = [];
@@ -823,7 +823,7 @@
                         }.bind(this));
                     });
                 } else {
-//                    this.$activateValidator();
+                    this.$activateValidator();
                 }
             //}.bind(this));
         }

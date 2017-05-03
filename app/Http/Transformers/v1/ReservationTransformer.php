@@ -54,7 +54,8 @@ class ReservationTransformer extends TransformerAbstract
             'country_code'        => $reservation->country_code,
             'country_name'        => country($reservation->country_code),
             'companion_limit'     => (int) $reservation->companion_limit,
-            // 'arrival_designation' => $reservation->arrival_designation,
+            'arrival_designation' => $reservation->designation ? 
+                implode('', array_flatten($reservation->designation->content)) : 'none',
             'avatar'              => $reservation->avatar ? image($reservation->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'desired_role'        => [ 
                                         'code' => $reservation->desired_role, 

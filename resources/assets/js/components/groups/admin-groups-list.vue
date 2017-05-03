@@ -62,7 +62,7 @@
                                 </li>
                                 <li>
                                     <label class="small" style="margin-bottom: 0px;">
-                                        <input type="checkbox" v-model="reservations_count" value="trips" :disabled="maxCheck('reservations_count')"> Reservations
+                                        <input type="checkbox" v-model="reservations_count" value="trips" :disabled="maxCheck('reservations_count')"> Active Reservations
                                     </label>
                                 </li>
                             </template>
@@ -187,7 +187,7 @@
                         <i @click="direction=direction*-1" v-if="orderByField === 'public'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
                     </th>
                     <th v-if="isActive('trips')">Active Trips</th>
-                    <th v-if="isActive('reservations_count')">Reservations</th>
+                    <th v-if="isActive('reservations_count')">Active Reservations</th>
                 </template>
 
                 <th><i class="fa fa-cog"></i></th>

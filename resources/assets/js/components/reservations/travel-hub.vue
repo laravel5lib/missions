@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<validator name="TravelHub">
+		<validator name="TravelHub" v-if="hub">
 			<form id="TravelHubForm" novalidate>
 				<template v-if="transportType === 'flight' || transportType === ''">
 					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">

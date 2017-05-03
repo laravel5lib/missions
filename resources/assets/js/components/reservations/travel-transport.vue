@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<validator name="TravelTransport">
+		<validator name="TravelTransport" v-if="transport">
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<!--<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>-->

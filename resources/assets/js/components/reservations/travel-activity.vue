@@ -39,6 +39,7 @@
 </template>
 <style></style>
 <script type="text/javascript">
+    import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
     export default{
         name: 'travel-activity',
@@ -93,7 +94,10 @@
             update(){
 				this.$http.put('activities/' + this.activity.id, this.activity).then(function (response) {
 					this.$emit('showSuccess', 'Itinerary Arrival Date/Time Updated');
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             }
         },
         ready(){

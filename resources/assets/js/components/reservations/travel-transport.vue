@@ -209,17 +209,26 @@
                     } else {
                         return this.airlinesOptions;
                     }
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             },
             getAirline(reference){
                 return this.$http.get('utilities/airlines/' + reference).then(function (response) {
                     return response.body.data;
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             },
             update(){
                 this.$http.put('transports/' + this.transport.id, this.transport).then(function (response) {
                     this.$emit('showSuccess', 'Itinerary Travel Details Updated');
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             }
         },
         ready(){
@@ -233,10 +242,11 @@
                 if (self.isUpdate) {
                     // select airline
                     self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
-                    console.log(self.selectedAirlineObj);
+                    //console.log(self.selectedAirlineObj);
                 }
                 self.$nextTick(function () {
-                    self.$validate(true);
+                    if (_.isFunction(self.$validate))
+                        self.$validate(true);
                 });
 
             });

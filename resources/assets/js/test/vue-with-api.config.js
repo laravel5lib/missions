@@ -5,6 +5,8 @@ let $, jQuery, moment, timezone;
 $ = jQuery = window.$;
 moment = window.moment = require('moment');
 timezone = window.timezone = require('moment-timezone');
+require('eonasdan-bootstrap-datetimepicker');
+
 let localStorage = window.localStorage;
 
 import _ from 'underscore';

@@ -4,12 +4,12 @@
 import {Vue, RootInstance, $, jQuery, moment, timezone, _, localStorage} from '../../../vue-with-api.config';
 import nextTick from 'p-immediate';
 import test from 'ava';
-// import login from '../../../components/login.vue';
 
 //load the component with a vue instance
 RootInstance.template = '<div><travel-itineraries v-ref:test-component reservation-id="0005a7ea-f92f-371e-878a-d28423ea2cfb" ></travel-itineraries></div>';
 RootInstance.components = {'travel-itineraries': require('../../../../components/reservations/travel-itineraries.vue')};
-const vm = new Vue(RootInstance).$mount();
+document.body.insertAdjacentHTML("afterbegin", "<app></app>");
+const vm = new Vue(RootInstance).$mount('app');
 
 let travelItineraries = vm.$refs.testComponent;
 test.beforeEach('set document object', async (t) => {

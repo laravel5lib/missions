@@ -324,6 +324,23 @@ class ReservationFilter extends Filter
     }
 
     /**
+     * By arrival designation type
+     * 
+     * @param  String $type
+     * @return Builder
+     */
+    public function designation($type)
+    {   
+        if ($type === 'none') {
+            return $this->has('designation', '<', 1);
+        }
+
+        return $this->wherehas('designation', function ($designation) use ($type) {
+            return $designation->where('content', 'LIKE', "%$type%");
+        });
+    }
+
+    /**
      * By minimum amount raised.
      * 
      * @param  string/integer $amount

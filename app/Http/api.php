@@ -34,9 +34,19 @@ $api->version('v1', [
     $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
 
     $api->get('download/{path}', function($path) {
+
+        $headers = [
+            'Content-Type' => Storage::mimetype($path),
+            'Content-Disposition' => 'attachment'
+        ];
+
+        return response()->make(Storage::get($path), 200, $headers);
+
+    })->where('path', '.+');
+
+    $api->get('play/{path}', function($path) {
         return response()->make(Storage::disk('s3')->get($path), 200, [
-                'Content-Type' => 'text/csv',
-                'Content-Disposition' => "attachment"
+                'Content-Type' => 'audio/mp3'
             ]);
     })->where('path', '.+');
     
@@ -143,6 +153,14 @@ $api->version('v1', [
     $api->resource('promocodes', 'PromocodesController');
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
 
+    $api->resource('activities', 'ActivitiesController');
+    $api->resource('itineraries/travel', 'TravelItinerariesController');
+    $api->resource('itineraries', 'ItinerariesController');
+    $api->resource('transports', 'TransportsController');
+    $api->resource('transports.activities', 'TransportActivitiesController');
+    $api->resource('hubs', 'HubsController');
+    $api->resource('hubs.activities', 'HubActivitiesController');
+
     $api->group(['prefix' => 'credentials'], function($api)
     {
         $api->resource('medical', 'MedicalCredentialsController');
@@ -164,10 +182,15 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'utilities'], function ($api) {
         $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
+        $api->get('airlines/', 'AirlineController@index');
+        $api->get('airlines/{id}', 'AirlineController@show');
+        $api->get('airports/', 'AirportController@index');
+        $api->get('airports/{iata}', 'AirportController@show');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
         $api->get('past-trips', 'UtilitiesController@getPastTrips');
+        $api->get('activities/types', 'UtilitiesController@getActivityTypes');
         $api->get('make-slug/{string}', function($string) {
             return ['slug' => generate_slug($string) ];
         });

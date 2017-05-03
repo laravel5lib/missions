@@ -24,10 +24,11 @@
                 </div>
             </div>
 
-            <div class="row" v-for="QA in content">
+            <div class="row" v-for="QA in content" v-error-handler="{ value: QA.a, client: 'question' + $index, messages: { req: 'Please provide an answer.'} }">
                 <div class="col-sm-12">
-                <label class="control-label" v-text="QA.q"></label>
-                <textarea class="form-control" v-model="QA.a" rows="10"></textarea>
+                    <label class="control-label" v-text="QA.q"></label>
+                    <textarea class="form-control" v-model="QA.a" rows="10" :field="'question' + $index" v-validate="['required']"></textarea>
+                    <div class="errors-block"></div>
                 </div>
             </div>
             <hr class="divider inv">

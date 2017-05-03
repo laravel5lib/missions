@@ -134,6 +134,7 @@ import transactionDelete from './components/financials/transactions/transaction-
 import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
+import transports from './components/admin/transports.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -146,6 +147,7 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
+require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');
@@ -177,6 +179,7 @@ Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
 Vue.component('panel', VueStrap.panel);
+Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
@@ -314,6 +317,9 @@ Vue.validator('email', function (val) {
 });
 // Validate datetime inputs
 Vue.validator('datetime ', function (val) {
+    if (! val) return true;
+    if (val === 'Invalid date') return false;
+
     return moment(val).isValid();
 });
 
@@ -440,21 +446,21 @@ Vue.directive('crop', {
 
         let self = this;
         let vm = this.vm;
-        self.waitForLibrary = function() {
+        /*self.waitForLibrary = function() {
             if (_.isFunction(Slim)) {
                 let $wrapper = self.el;
                 //debugger;
                 vm.slimAPI = new Slim($wrapper);
-
                 // send api to active componant
                 vm.$dispatch('slim-api', vm.slimAPI);
             } else {
                 setTimeout(self.waitForLibrary, 1000);
             }
-        };
-
+        };*/
+        
         if (!_.contains(['file', 'video'], this.vm.type)) {
-            this.waitForLibrary();
+            // debugger;
+            // this.waitForLibrary();
         }
     },
 
@@ -565,10 +571,17 @@ Vue.directive('tour-guide', {
 Vue.directive('error-handler', {
     // This directive handles client-side and server-side errors.
     // It expects an object expression with three values:  { value: fieldValue, client: 'clientSideField', server: 'serverSideField' }
-    // The value property expects the actual field value to stay reactive.
-    // The client property expects the handle that the validator plugin uses for validation.
-    // The server property expects the handle that the server request rules use for validation.
-    // If the handle property is present, client and server properties will be set to this.
+
+    // PROPERTIES
+    // The `value` property expects the actual field value to stay reactive.
+    // The `client` property expects the handle that the validator plugin uses for validation.
+    // The `server` property expects the handle that the server request rules use for validation.
+    // If the `handle` property is present, client and server properties will be set to this.
+    // OPTIONAL PROPERTIES
+    // The `class` property allows you to set the error class to be set during validation.
+    // The `messages` property allows you to customize the error message the user sees based on validators
+    // i.e (`req` - required, `min` - minlength, `max` - maxlength, `email` - custom email validator)
+
     // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
     // for the field
     deep: true,
@@ -590,11 +603,12 @@ Vue.directive('error-handler', {
             // $nextTick is necessary for the component values to update first
             if (this.vm) {
                 this.vm.$nextTick(function () {
+                    // debugger;
                     let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
                     if (classTest) {
-                        $(this.el).addClass('has-error');
+                        $(this.el).addClass(value.class || 'has-error');
                     } else {
-                        $(this.el).removeClass('has-error');
+                        $(this.el).removeClass(value.class || 'has-error');
                     }
                 }.bind(this));
             }
@@ -603,7 +617,7 @@ Vue.directive('error-handler', {
         this.messages = [];
         this.handleMessages = function (value, errors) {
             // $nextTick is necessary for the component values to update first
-            if (this.vm) {
+            if (this.vm && this.vm.attemptSubmit) {
                 this.vm.$nextTick(function () {
                     //if (errors[value.server] || this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid && this.vm.attemptSubmit) {
                         // Lets first package errors to simply iterate
@@ -668,6 +682,19 @@ Vue.directive('error-handler', {
                             if (emailMessage !== genericMessage)
                                 newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
                         }
+                        // custom datetime validator
+                        if (validationObject.datetime) {
+                            // Grab message from storage if it exists or use generic default
+                            let datetimeMessage;
+                            if (this.storage.messages && this.storage.messages.datetime) {
+                                datetimeMessage = this.storage.messages.datetime;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                datetimeMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
+                            }
+                            if (datetimeMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + datetimeMessage + "</div>");
+                        }
                     }
                     //console.log(newMessages);
 
@@ -680,18 +707,18 @@ Vue.directive('error-handler', {
                     let errorsBlock = this.el.getElementsByClassName('errors-block')[0] || false;
                     if (errorsBlock) {
                         $(errorsBlock).find('.server-validation-error').remove();
-                        if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                        if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
                             $(errorsBlock).append(this.messages);
                     } else {
                         let inputGroup = $(this.el).hasClass('input-group') ? this.el : this.el.getElementsByClassName('input-group')[0];
                         let inputEl = $(this.el).find('.form-control:not(.v-select *)');
                         if (inputGroup) {
                             $(this.el).parent().find('.server-validation-error').remove();
-                            if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
                                 $(inputGroup).after(this.messages);
                         } else {
                             $(this.el).find('.server-validation-error').remove();
-                            if ((errors[value.server] || (this.storage.client && this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid)) && this.vm.attemptSubmit)
+                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
                                 inputEl.after(this.messages);
                         }
                     }
@@ -727,7 +754,10 @@ Vue.mixin({
     computed: {
         firstUrlSegment: function () {
             return document.location.pathname.split("/").slice(1, 2).toString();
-        }
+        },
+        isAdminRoute() {
+            return this.firstUrlSegment == 'admin';
+        },
     },
     ready() {
         function isTouchDevice() {
@@ -899,7 +929,8 @@ new Vue({
         transactionDelete,
         fundManager,
         companionManager,
-        promotionals
+        promotionals,
+        transports
     },
     http: {
         headers: {
@@ -970,7 +1001,7 @@ new Vue({
 
         startTour(){
             window.tour.start();
-        },
+        }
 
     },
     events: {

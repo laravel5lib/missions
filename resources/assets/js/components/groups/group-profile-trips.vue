@@ -43,7 +43,7 @@
         ready(){
             // this.$refs.spinner.show();
             this.resource.query().then(function(trips){
-                this.trips = trips.data.data
+                this.trips = trips.body.data
                 // this.$refs.spinner.hide();
             }, function (error) {
                 // this.$refs.spinner.hide();

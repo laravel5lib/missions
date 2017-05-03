@@ -35,12 +35,12 @@
                                 <div class="col-sm-12">
                                     <div class="collapse" id="avatarCollapse">
                                         <div class="well">
-                                            <upload-create-update v-if="!startUp" type="avatar" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="avatar" :name="id || 'avatar'" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                     <div class="collapse" id="bannerCollapse">
                                         <div class="well">
-                                            <upload-create-update v-if="!startUp" type="banner" :name="id" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="banner" :name="id || 'banner'" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
                                         </div>
                                     </div>
                                     <hr class="divider inv" />

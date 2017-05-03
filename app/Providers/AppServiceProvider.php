@@ -49,7 +49,11 @@ class AppServiceProvider extends ServiceProvider
             'media_credentials' => \App\Models\v1\Credential::class,
             'minor_releases' => \App\Models\v1\Questionnaire::class,
             'notes' => \App\Models\v1\Note::class,
-            'todos' => \App\Models\v1\Todo::class
+            'todos' => \App\Models\v1\Todo::class,
+            'transports' => \App\Models\v1\Transport::class,
+            'travel_itineraries' => \App\Models\v1\Activity::class,
+            'itineraries' => \App\Models\v1\Itinerary::class,
+            'hubs' => \App\Models\v1\Hub::class
         ]);
 
         Validator::extend('is_csv',function($attribute, $value, $params, $validator) {
@@ -96,24 +100,12 @@ class AppServiceProvider extends ServiceProvider
                     $reservation_count = 0;
                 }
 
-                $limit = collect(
+                $limit = collect([
                     ($companion_limit - $companion_count), 
                     ($reservation_limit - $reservation_count)
-                )->min();
+                ])->min();
 
                 return $limit > 0;
-
-               //  $reservation = Reservation::find($params[0]);
-               //  $reservation_within_limit = $reservation ? 
-               //         $reservation->companions->count() < $reservation->companion_limit : 
-               //         false;
-
-               //  $companion = Reservation::find($value);
-               //  $companion_within_limit = $companion ? 
-               //     $companion->companions->count() < $companion->companion_limit :
-               //     false;
-
-               // return $reservation_within_limit && $companion_within_limit;
             }
 
             return false;

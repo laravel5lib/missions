@@ -16140,8 +16140,7 @@ body {
  */
 html {
   min-height: 100%;
-  position: relative;
-  -ms-overflow-style: -ms-autohiding-scrollbar; }
+  position: relative; }
 
 body {
   font-weight: 300;

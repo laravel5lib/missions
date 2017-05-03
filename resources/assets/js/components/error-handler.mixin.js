@@ -42,13 +42,21 @@ export default {
     methods: {
         checkForError(field){
             // if user clicked submit button while the field is invalid trigger error styles 
-            return _.isString(field) && this['$' + this.validatorHandle][field].invalid && this.attemptSubmit;
+            if (this.attemptSubmit) {
+                if (_.isString(field) && this['$' + this.validatorHandle][field]) {
+                    return this['$' + this.validatorHandle][field].invalid;
+                }
+                //console.warn(field + ' does not exist in ' + this.validatorHandle);
+                return false
+            }
+            return false;
         },
         resetErrors(){
             this.errors = {};
             this.attemptSubmit = true;
         },
-    }, ready(){
+    },
+    ready(){
         if (!this.validatorHandle) {
             console.error('Please set `validatorHandle` to validator name');
         }

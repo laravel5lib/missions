@@ -66,6 +66,7 @@
     import essay from '../records/essays/essay.vue';
     import medicalsList from '../records/medicals/medicals-list.vue';
     import medical from '../records/medicals/medical.vue';
+    import travelItineraries from '../reservations/travel-itineraries.vue';
     import medicalCredentialsList from '../records/credentials/medical-credentials-list.vue';
     import medicalCredential from '../records/credentials/medical-credential.vue';
     import mediaCredentialsList from '../records/credentials/media-credentials-list.vue';
@@ -91,6 +92,7 @@
             referralsList,
             referral,
             arrivalDesignation,
+            travelItineraries,
             airportPreference,
             minorRelease,
             medicalCredentialsList,
@@ -207,6 +209,9 @@
                         break;
                     case 'arrival_designations':
                         this.questionnaire = 'arrival-designation';
+                        break;
+                    case 'travel_itineraries':
+                        this.questionnaire = 'travel-itineraries';
                         break;
                     case 'minor_releases':
                         this.questionnaire = 'minor-release';

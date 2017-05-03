@@ -96,6 +96,16 @@
             </div>
             <div class="col-sm-3 tour-step-managers">
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Planning Tools</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a href="{{ url()->current() }}/teams" class="btn btn-primary btn-block tour-step-teams">Manage Teams</a>
+                        <a href="{{ url()->current() }}/rooms" class="btn btn-block btn-primary tour-step-rooms"><i class="fa fa-bed"></i> Manage Rooming</a>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">

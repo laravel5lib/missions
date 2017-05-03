@@ -198,6 +198,7 @@
                     {value: 'passports', text: 'Passport'},
                     {value: 'referrals', text: 'Referral'},
                     {value: 'essays', text: 'Testimony'},
+                    {value: 'travel_itineraries', text: 'Travel Itinerary'},
                     {value: 'visas', text: 'Visa'}
                 ],
                 sort: 'due_at',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\v1\ProjectCause;
 use App\Models\v1\ProjectInitiative;
+use App\Utilities\v1\Airline;
 use App\Utilities\v1\Country;
 use Dingo\Api\Contract\Http\Request;
 use App\Utilities\v1\TeamRole;
@@ -49,6 +50,24 @@ class UtilitiesController extends Controller
     {
         $country = (array)Country::get($code);
         return response()->json(compact('country'));
+    }
+
+    public function getAirlines()
+    {
+        $airlineList = Airline::all();
+
+        $airlines = [];
+        foreach ($airlineList as $key => $airline) {
+            $airlines[] = ['name' => $airline, 'iata' => $key];
+        }
+
+        return response()->json(compact('airlines'));
+    }
+
+    public function getAirline($iata)
+    {
+        $airline = (array)Airline::get($iata);
+        return response()->json(compact('airline'));
     }
 
     public function getTimezones($country_code = null)

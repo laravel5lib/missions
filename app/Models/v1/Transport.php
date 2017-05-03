@@ -10,13 +10,10 @@ class Transport extends Model
 {
     use Filterable, UuidForKey;
 
-    protected $fillable = [
-        'id', 'type', 'vessel_no', 'name', 'call_sign',
-        'domestic', 'capacity', 'campaign_id'
-    ];
+    protected $guarded = [];
 
     protected $dates = [
-        'departs_at', 'arrives_at', 'created_at', 'updated_at'
+        'created_at', 'updated_at'
     ];
 
     public function campaign()
@@ -27,5 +24,20 @@ class Transport extends Model
     public function passengers()
     {
         return $this->hasMany(Passenger::class);
+    }
+
+    public function activities()
+    {
+        return $this->morphToMany(Activity::class, 'activitable');
+    }
+
+    public function addPassenger()
+    {
+        //
+    }
+
+    public function removePassenger()
+    {
+        //
     }
 }

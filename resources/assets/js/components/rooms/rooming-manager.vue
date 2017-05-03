@@ -22,7 +22,7 @@
 
 									<div class="form-group col-xs-8">
 										<div class="input-group input-group-sm col-xs-12">
-											<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
+											<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search">
 											<span class="input-group-addon"><i class="fa fa-search"></i></span>
 										</div>
 									</div><!-- end col -->
@@ -166,6 +166,24 @@
 				<option :value="team" v-for="team in teams">{{team.callsign | capitalize}}</option>
 			</select>
 			<hr class="divider lg">
+			<!-- Search and Filter -->
+			<form class="form-inline row">
+				<div class="form-group col-xs-8">
+					<div class="input-group input-group-sm col-xs-12">
+						<input type="text" class="form-control" v-model="teamMembersSearch" debounce="300" placeholder="Search">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+				</div><!-- end col -->
+				<div class="form-group col-xs-4">
+					<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
+						<i class="fa fa-filter"></i>
+					</button>
+				</div>
+				<div class="col-xs-12">
+					<hr class="divider inv">
+				</div>
+			</form>
+
 			<template v-if="currentTeam">
 				<template v-if="currentTeamMembers.length">
 					<div class="panel panel-default" v-for="member in currentTeamMembers">
@@ -345,7 +363,10 @@
                 }],
 
                 // Filters vars
+                teamMembersSearch: '',
+                roomsSearch: '',
                 showReservationsFilters: false,
+
 
 	            // modal vars
 	            showPlanModal: false,
@@ -356,7 +377,7 @@
                 },
 	            showRoomModal: false,
                 selectedRoom: {
-                    id: null,
+                    id: this.currentPlan.rooms.length + 1,
                     type_id: null,
                     type: null,
 	                label: '',
@@ -464,6 +485,8 @@
                  return response.body.data;
                  });
                 */
+                this.selectedPlan.id = this.plans.length + 1;
+
                 this.plans.push(this.selectedPlan);
                 this.currentPlan = this.selectedPlan;
                 this.showPlanModal = false;
@@ -483,6 +506,8 @@
 		         return response.body.data;
 		         });
 		         */
+
+                this.selectedRoom.id = this.currentPlan.rooms.length + 1;
 
                 this.currentPlan.rooms.push(this.selectedRoom);
                 this.activeRooms.push(this.selectedRoom);

@@ -152,15 +152,8 @@
                     items: [],
                 });
                 _.each(itineraryObj.activities.data, function (activity) {
-                    itinerary.items.push({
-                        transport: {
-                            id: activity.transports.data[0].id,
-                            type: activity.transports.data[0].type,
-                            vessel_no: activity.transports.data[0].vessel_no,
-                            name: activity.transports.data[0].name,
-                            call_sign: activity.transports.data[0].call_sign,
-                            domestic: activity.transports.data[0].domestic
-                        },
+                    // create item
+                    let item = {
                         activity: {
                             id: activity.id,
                             activity_type_id: activity.type.id,
@@ -168,7 +161,23 @@
                             description: activity.description,
                             occurred_at: activity.occurred_at
                         },
-                        hub: {
+                    };
+
+                    // add transport if it exists
+                    if (activity.transports && activity.transports.data.length) {
+                        item.transport = {
+                            id: activity.transports.data[0].id,
+                            type: activity.transports.data[0].type,
+                            vessel_no: activity.transports.data[0].vessel_no,
+                            name: activity.transports.data[0].name,
+                            call_sign: activity.transports.data[0].call_sign,
+                            domestic: activity.transports.data[0].domestic
+                        };
+                    }
+
+                    // add hub if it exists
+                    if (activity.hubs && activity.hubs.data.length) {
+                        item.hub = {
                             id: activity.hubs.data[0].id,
                             name: activity.hubs.data[0].name,
                             address: activity.hubs.data[0].address,
@@ -177,8 +186,10 @@
                             state: activity.hubs.data[0].state,
                             zip: activity.hubs.data[0].zip,
                             country_code: activity.hubs.data[0].country,
-                        },
-                    });
+                        };
+                    }
+
+                    itinerary.items.push(item);
                 });
 
                 this.itinerary = itinerary;
@@ -273,7 +284,7 @@
                     items: []
                 };
                 itinerary.items.push(this.newItineraryItem('Arrive at Training Location', this.arrivalType.id ));
-                itinerary.items.push(this.newItineraryItem('Return Home', this.departureTyp.id));
+                itinerary.items.push(this.newItineraryItem('Return Home', this.departureType.id));
 	            return this.itinerary = itinerary;
             },
             resetItinerary(){
@@ -374,12 +385,20 @@
 
             let self = this;
             Promise.all(promises).then(function (values) {
-                if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
-                    self.editMode = false;
-                    self.getItinerary();
-                } else {
-                    self.newItinerary();
-                }
+                // initiate computed types
+	            this.arrivalType;
+	            this.departureType;
+	            this.connectionType;
+
+                self.$nextTick(function () {
+                    if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
+                        self.editMode = false;
+                        self.getItinerary();
+                    } else {
+                        self.newItinerary();
+                    }
+                });
+
             });
         }
     }

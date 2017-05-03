@@ -37,7 +37,7 @@
 
 							<travel-hub v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport.type" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
-							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-activity>
+							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport.domestic"></travel-activity>
 
 						</panel>
 					</accordion>
@@ -108,28 +108,44 @@
             }
         },
         computed: {
+            connectionType(){
+                return _.findWhere(this.activityTypes, { name: 'connection'});
+            },
+            arrivalType(){
+                return _.findWhere(this.activityTypes, { name: 'arrival'});
+            },
+            departureType(){
+                return _.findWhere(this.activityTypes, { name: 'departure'});
+            },
             connectionPresent() {
                 return this.itinerary.items && _.some(this.itinerary.items, function (item) {
-					return item.activity.activity_type_id === _.findWhere(this.activityTypes, { name: 'connection'}).id;
+					return item.activity.activity_type_id === this.connectionType.id;
                 }.bind(this));
 			},
 			departurePresent() {
                 return this.itinerary.items && _.some(this.itinerary.items, function (item) {
-                    return item.activity.activity_type_id === _.findWhere(this.activityTypes, { name: 'departure'}).id;
+                    return item.activity.activity_type_id === this.departureType.id;
                 }.bind(this));
 
             },
 			domesticArrivalPresent() {
                 return this.itinerary.items && _.some(this.itinerary.items, function (item) {
-                    return item.activity.activity_type_id === _.findWhere(this.activityTypes, { name: 'arrival'}).id && !!item.transport.domestic;
+                    return item.activity.activity_type_id === this.arrivalType.id && !!item.transport.domestic;
                 }.bind(this));
 
             },
+            returningOnOwn() {
+                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                    if (item.activity.activity_type_id === this.departureType.id) {
+                       return !item.transport && !item.hub;
+                    }
+                    return false;
+                }.bind(this));
+            }
 		},
         methods: {
             isArrival(item) {
-                let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-				return item.activity.activity_type_id === arrivalTypeId.id;
+				return item.activity.activity_type_id === this.arrivalType.id;
             },
             setupItinerary(itineraryObj) {
                 let itinerary = _.extend(itineraryObj, {
@@ -256,10 +272,8 @@
                     reservation_id: this.reservationId,
                     items: []
                 };
-                let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
-                let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
-                itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', this.arrivalType.id ));
+                itinerary.items.push(this.newItineraryItem('Return Home', this.departureTyp.id));
 	            return this.itinerary = itinerary;
             },
             resetItinerary(){
@@ -277,16 +291,14 @@
                     items: []
                 };
 
-                let arrivalTypeId = _.findWhere(this.activityTypes, { name: 'arrival' });
-                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrivalTypeId.id ));
-                let departureTypeId = _.findWhere(this.activityTypes, { name: 'departure' });
-                itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
+                itinerary.items.push(this.newItineraryItem('Arrive at Training Location', this.arrivalType.id ));
+                itinerary.items.push(this.newItineraryItem('Return Home', this.departureType.id));
 
                 this.itinerary = itinerary;
                 this.toggleResetModal();
             },
 	        newItineraryItem(name, activityID){
-                // let type = _.findWhere(this.activityTypes, { id: activityID || this.activityTypes[0].id });
+//		        let type = _.findWhere(this.activityTypes, { id: activityID || this.activityTypes[0].id });
                 return {
                     transport: {
                         type: '',
@@ -317,16 +329,14 @@
 	            if (this.connectionPresent) {
                     this.itinerary.items.splice(0, 1);
                 } else {
-                    let connectionTypeId = _.findWhere(this.activityTypes, {name: 'connection'});
-                    this.itinerary.items.splice(0, 0, this.newItineraryItem('Travel Connection Prior to Arriving', connectionTypeId.id));
+                    this.itinerary.items.splice(0, 0, this.newItineraryItem('Travel Connection Prior to Arriving', this.connectionType.id));
                 }
             },
             toggleDeparture() {
 	            if (this.departurePresent) {
                     this.itinerary.items.pop();
                 } else {
-                    let departureTypeId = _.findWhere(this.activityTypes, {name: 'departure'});
-                    this.itinerary.items.push(this.newItineraryItem('Return Home', departureTypeId.id));
+                    this.itinerary.items.push(this.newItineraryItem('Return Home', this.departureType.id));
                 }
             },
 	        toggleDomestic(item) {

@@ -16,6 +16,13 @@
 					</template>
 					<p v-else>{{ activity.description | uppercase }}</p>
 				</div>
+				<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: activity.description, client: 'description' }">
+					<label for="">Please Explain Why</label>
+					<template v-if="editMode">
+						<textarea type="text" class="form-control" v-model="activity.description" v-validate:description="['required']"></textarea>
+					</template>
+					<p v-else>{{ activity.description | uppercase }}</p>
+				</div>
 				<div class="form-group" v-error-handler="{ value: activity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
 					<label for="" v-text="LABELS.dateTime"></label>
 					<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss'" v-if="editMode"></date-picker>
@@ -50,6 +57,9 @@
                 type: Boolean,
                 default: true
             },
+		    transportDomestic: {
+                type: Boolean
+		    },
 		    activityTypes: {
                 type: Array
 		    },

@@ -28,8 +28,8 @@
                     </component>
                 </div><!-- end panel-body -->
             </div>
-            <div class="panel panel-default" v-if="questionnaire">
-                <div class="panel-body">
+            <div v-if="questionnaire">
+                <div>
                     <component :is="questionnaire"
                                :document="document"
                                :reservation-id="requirement.reservation_id"

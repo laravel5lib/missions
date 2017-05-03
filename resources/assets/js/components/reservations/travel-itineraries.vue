@@ -14,6 +14,7 @@
 
 				<div v-if="itinerary">
 					<div class="checkbox" v-if="editMode && !itinerary.id">
+                        <p>Please provide details about each step of your trip below.</p>
 						<label for="returningOnOwn">
 							<input type="checkbox" id="returningOnOwn" name="returningOnOwn" :checked="!departurePresent" @change="toggleDeparture">I don't need a returning international flight.
 						</label>
@@ -25,7 +26,12 @@
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
-						<panel :is-open.once="!editMode" :header="item.activity.name" v-for="item in itinerary.items" v-ref:items>
+						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" v-ref:items>
+                            
+                            <strong slot="header">
+                                <i class="fa fa-map-marker"></i> Step : {{ item.activity.name }}
+                            </strong>
+
 							<div class="checkbox" v-if="editMode">
 								<label for="noTravelTo" v-if="isArrival(item)">
 									<input type="checkbox" id="noTravelTo" name="noTravelTo" :checked="!item.transport.domestic" @change="toggleDomestic(item)">I am traveling directly to the destination country.

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<validator name="TravelTransport">
+		<validator name="TravelTransport" v-if="transport">
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<!--<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>-->
@@ -172,7 +172,8 @@
             },
             'transport.name'(val) {
                 this.$nextTick(function () {
-                    this.$validate(true);
+                    if (_.isFunction(this.$validate))
+                        this.$validate(true);
                 });
             },
 	        'transport.type'(val, oldVal) {
@@ -225,10 +226,7 @@
             let self = this;
 
             let promises = [];
-            if (self.isUpdate) {
-                let airlinesPromise = this.getAirlines(this.transport.name, false);
-                promises.push(airlinesPromise);
-            }
+            promises.push(this.getAirlines(this.transport.name, false));
 
             Promise.all(promises).then(function (values) {
                 // Update state data

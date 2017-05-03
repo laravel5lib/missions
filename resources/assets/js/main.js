@@ -147,6 +147,7 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
+require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');

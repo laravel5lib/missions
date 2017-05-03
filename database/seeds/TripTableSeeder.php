@@ -194,7 +194,11 @@ class TripTableSeeder extends Seeder
             factory(Requirement::class, 'referral')->make(['requester_id' => $t->id]),
             factory(Requirement::class, 'testimony')->make(['requester_id' => $t->id]),
             factory(Requirement::class, 'arrival')->make(['requester_id' => $t->id]),
-            factory(Requirement::class, 'airport')->make(['requester_id' => $t->id])
+            factory(Requirement::class, 'airport')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'media-credentials')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'medical-credentials')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'influencer-application')->make(['requester_id' => $t->id]),
+            factory(Requirement::class, 'travel-itinerary')->make(['requester_id' => $t->id]),
         ])->toArray();
 
         Requirement::insert($requirements);

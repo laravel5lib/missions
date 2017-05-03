@@ -6,7 +6,7 @@ class TeamRole {
 
     protected static $leadership = [
         'GPLR' => 'Group Leader',
-        'TMLR' => 'Team Leader',
+        'TMLR' => 'Squad Leader',
         'PRDR' => 'Project Director',
         'PRAS' => 'Project Assistant',
         'CODR' => 'Country Director',

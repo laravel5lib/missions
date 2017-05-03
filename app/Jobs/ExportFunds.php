@@ -16,7 +16,7 @@ class ExportFunds extends Exporter
         return [
             'name' => $fund->name,
             'type' => $fund->fundable_type,
-            'balance' => $fund->balance,
+            'balance' => $fund->balanceInDollars(),
             'class' => $fund->class,
             'item' => $fund->item,
             'created' => $fund->created_at->toDateTimeString()

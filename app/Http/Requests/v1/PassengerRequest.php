@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
+use Dingo\Api\Http\FormRequest;
 
-class PassengerRequest extends Request
+class PassengerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class PassengerRequest extends Request
     {
         $required = [
             'reservation_id' => 'required|exists:reservations,id',
-            'transport_id'   => 'required|exists:transports,id',
+            'transport_id'   => 'sometimes|required|exists:transports,id',
         ];
 
         if ($this->isMethod('put'))

@@ -227,6 +227,26 @@ class Campaign extends Model
     }
 
     /**
+     * Get the campaign's links.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function links()
+    {
+        return $this->morphMany(Link::class, 'linkable');
+    }
+
+    /**
+     * Get the campaign's uploads.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function uploads()
+    {
+        return $this->morphToMany(Upload::class, 'uploadable');
+    }
+
+    /**
      * Get inactive campaigns.
      * 
      * @param $query

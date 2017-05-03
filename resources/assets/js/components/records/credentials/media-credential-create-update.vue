@@ -432,7 +432,6 @@
                 });
                 // HACK - to resume progress i need to force validation of roles checkboxes for now...
 //                this.$CreateUpdateMediaCredential.roles.invalid = pass;
-
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});
                 let selectedEquipment = _.findWhere(equipment.options, { value: true});

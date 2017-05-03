@@ -135,6 +135,7 @@ class ReservationsController extends Controller
             'email' => trim(strtolower($request->get('email', $reservation->email))),
             'desired_role' => $request->get('desired_role', $reservation->desired_role),
             'shirt_size' => $request->get('shirt_size', $reservation->shirt_size),
+            'companion_limit' => $request->get('companion_limit', $reservation->companion_limit),
             // 'height' => $height,
             // 'weight' => $weight,
             'trip_id' => $request->get('trip_id', $reservation->trip_id)

@@ -88,6 +88,17 @@ class Reservation extends Model
     }
 
     /**
+     * Get the reservation's companion limi.
+     * 
+     * @param  integer $value
+     * @return integer
+     */
+    public function getCompanionLimitAttribute($value)
+    {
+        return $value ?: ($this->trip->companion_limit ?: 0);
+    }
+
+    /**
      * Set the reservation's status.
      *
      * @param $value
@@ -107,6 +118,12 @@ class Reservation extends Model
     public function getStatusAttribute($value)
     {
         return $value ? strtolower($value) : null;
+    }
+
+    public function designation()
+    {
+        return $this->hasOne(Questionnaire::class, 'reservation_id')
+                    ->where('type', 'arrival_designation');
     }
 
     /**
@@ -264,6 +281,11 @@ class Reservation extends Model
     public function promocodes()
     {
         return $this->morphMany(Promocode::class, 'rewardable');
+    }
+
+    public function transports()
+    {
+        return $this->belongsToMany(Transport::class, 'passengers');
     }
 
     /**

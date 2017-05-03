@@ -264,16 +264,16 @@
                 case 'arrival':
                     this.LABELS = {
                         flight: 'Arriving at Airport',
-                        vehicle: 'Drop off location',
-                        bus: 'Drop off location',
+                        vehicle: 'Arriving at',
+                        bus: 'Bus Stop Location',
                         train: 'Arriving at Station',
                     };
                     break;
                 case 'departure':
                     this.LABELS = {
                         flight: 'Depart from Airport',
-                        vehicle: 'Pick up Location',
-                        bus: 'Pick up Location',
+                        vehicle: 'Departing from',
+                        bus: 'Bus Stop Location',
                         train: 'Depart from Station',
                     };
                     break;
@@ -281,7 +281,7 @@
                     this.LABELS = {
                         flight: 'Making Connection at Airport',
                         vehicle: 'Connection Location',
-                        bus: 'Connection Location',
+                        bus: 'Connecting Bus Stop',
                         train: 'Making Connection at Station',
                     };
                     break;

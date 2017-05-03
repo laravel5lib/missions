@@ -16,6 +16,11 @@ function country($code)
     return implode('', array_keys(App\Utilities\v1\Country::get($code)));
 }
 
+function country_code($name)
+{
+    return App\Utilities\v1\Country::getCode($name);
+}
+
 function teamRole($code)
 {
     return implode(array_values(App\Utilities\v1\TeamRole::get($code)), '');

@@ -49,7 +49,11 @@ class AppServiceProvider extends ServiceProvider
             'media_credentials' => \App\Models\v1\Credential::class,
             'minor_releases' => \App\Models\v1\Questionnaire::class,
             'notes' => \App\Models\v1\Note::class,
-            'todos' => \App\Models\v1\Todo::class
+            'todos' => \App\Models\v1\Todo::class,
+            'transports' => \App\Models\v1\Transport::class,
+            'travel_itineraries' => \App\Models\v1\Activity::class,
+            'itineraries' => \App\Models\v1\Itinerary::class,
+            'hubs' => \App\Models\v1\Hub::class
         ]);
 
         Validator::extend('is_csv',function($attribute, $value, $params, $validator) {

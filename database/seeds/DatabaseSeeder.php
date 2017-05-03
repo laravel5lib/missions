@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
         config(['mail.driver' => 'log']);
         config(['queue.default' => 'sync']);
 
+        $this->call(AirlinesTableSeeder::class);
+        $this->call(AirportsTableSeeder::class);
         $this->call(BouncerSeeder::class);
         $this->call(AccountingTablesSeeder::class);
         $this->call(UploadSeeder::class);
@@ -22,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TripTableSeeder::class);
         $this->call(ProjectTablesSeeder::class);
         $this->call(FundsTableSeeder::class);
+        $this->call(ActivityTypeSeeder::class);
 
         config(['mail.driver' => 'smtp']);
         config(['queue.default' => 'sqs']);

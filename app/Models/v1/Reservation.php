@@ -120,6 +120,12 @@ class Reservation extends Model
         return $value ? strtolower($value) : null;
     }
 
+    public function designation()
+    {
+        return $this->hasOne(Questionnaire::class, 'reservation_id')
+                    ->where('type', 'arrival_designation');
+    }
+
     /**
      * Get the user that owns the reservation.
      *
@@ -275,6 +281,11 @@ class Reservation extends Model
     public function promocodes()
     {
         return $this->morphMany(Promocode::class, 'rewardable');
+    }
+
+    public function transports()
+    {
+        return $this->belongsToMany(Transport::class, 'passengers');
     }
 
     /**

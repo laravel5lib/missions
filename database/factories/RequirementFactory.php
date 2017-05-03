@@ -112,4 +112,56 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'arrival', function (Faker\
     ]);
 });
 
+/**
+ * Media Credentials Requirement
+ */
+$factory->defineAs(App\Models\v1\Requirement::class, 'media-credentials', function (Faker\Generator $faker) use ($factory)
+{
+    $requirement = $factory->raw(App\Models\v1\Requirement::class);
+
+    return array_merge($requirement, [
+        'name'            => 'Media Credentials',
+        'document_type'   => 'media_credentials',
+    ]);
+});
+
+/**
+ * Medical Credentials Requirement
+ */
+$factory->defineAs(App\Models\v1\Requirement::class, 'medical-credentials', function (Faker\Generator $faker) use ($factory)
+{
+    $requirement = $factory->raw(App\Models\v1\Requirement::class);
+
+    return array_merge($requirement, [
+        'name'            => 'Medical Credentials',
+        'document_type'   => 'medical_credentials',
+    ]);
+});
+
+/**
+ * Influencer Application Requirement
+ */
+$factory->defineAs(App\Models\v1\Requirement::class, 'influencer-application', function (Faker\Generator $faker) use ($factory)
+{
+    $requirement = $factory->raw(App\Models\v1\Requirement::class);
+
+    return array_merge($requirement, [
+        'name'            => 'Influencer Application',
+        'document_type'   => 'influencer_applications',
+    ]);
+});
+
+/**
+ * Travel Itinerary Requirement
+ */
+$factory->defineAs(App\Models\v1\Requirement::class, 'travel-itinerary', function (Faker\Generator $faker) use ($factory)
+{
+    $requirement = $factory->raw(App\Models\v1\Requirement::class);
+
+    return array_merge($requirement, [
+        'name'            => 'Travel Itinerary',
+        'document_type'   => 'travel_itineraries',
+    ]);
+});
+
 

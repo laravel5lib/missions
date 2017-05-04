@@ -194,7 +194,7 @@
 										</div>
 									</template>
 								</template>
-								<p class=" text-right">
+								<p class=" text-right" v-if="currentSquads.length < currentTeam.type.data.rules.max_squads">
 									<button :disabled="isLocked" class="btn btn-xs btn-primary" @click="showSquadCreateModal = true">Add Group</button>
 								</p>
 								<hr class="divider sm">
@@ -1149,11 +1149,16 @@
                         let team = response.body.data;
 
                         this.teams.push(team);
+                        this.getTeams().then(function () {
+
+                        });
+                        this.currentSquads = [];
                         this.currentTeam = team;
-                        this.getTeams();
                         // Create default squads for current team
-                        this.newSquad('Team Leaders');
                         this.newSquad('Group #1');
+
+                        if (team.type.data.rules.max_squads > 1)
+                            this.newSquad('Team Leaders');
 
                         this.showTeamCreateModal = false;
                         $('.nav-tabs a[href="#reservations"]').tab('show');

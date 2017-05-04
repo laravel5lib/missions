@@ -39,7 +39,7 @@ class HubsController extends Controller
      */
     public function store(HubRequest $request)
     {
-        $hub = $this->hub->create([
+        $hub = $this->hub->firstOrCreate([
             'campaign_id' => $request->json('campaign_id'),
             'name' => $request->json('name'),
             'call_sign' => $request->json('call_sign'),

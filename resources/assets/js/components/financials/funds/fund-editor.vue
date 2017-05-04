@@ -101,7 +101,11 @@
                         console.log('validation errors');
                     } else {
                         self.$refs.spinner.show();
-                        self.$http.put('funds/' + self.id, self.fund).then(function (response) {
+                        self.$http.put('funds/' + self.id, {
+                            'name': self.fund.name,
+                            'class': self.fund.class,
+                            'item': self.fund.item
+                        }).then(function (response) {
                             self.$refs.spinner.hide();
                             self.$root.$emit('showSuccess', 'Fund updated');
                             self.editMode = false;

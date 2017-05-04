@@ -51,7 +51,7 @@
                 </form>
             </div>
         </div>
-        <div class="text-center text-muted" v-if="! stories.length">
+        <div class="text-center text-muted" v-if="!stories.length">
             <template v-if="isUser()">
                 <img class="visible-lg" style="width:40px;height:52px;position:absolute;right:60px;top:40px;" src="../images/onboard/drawn-arrow-up.png">
                 <em><h4>You haven't posted any stories yet.</h4>

@@ -5,10 +5,11 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transport extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, SoftDeletes;
 
     protected $guarded = [];
 

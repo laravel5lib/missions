@@ -18,7 +18,6 @@ $('.video-modal').on('hide.bs.modal', function(e) {
   // build scenes
   new ScrollMagic.Scene({triggerElement: "#parallax1"})
           .setTween("#parallax1 > div", {y: "80%", ease: Linear.easeNone})
-          .addIndicators()
           .addTo(controller);
 </script>
 @endsection

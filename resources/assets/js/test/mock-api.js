@@ -15,9 +15,9 @@ export default {
         // https://www.npmjs.com/package/qs
         let body = {
             // data: {
-                api_token: 'test',
-                redirect_to: null,
-                ignore_redirect: true
+            api_token: 'test',
+            redirect_to: null,
+            ignore_redirect: true
 
             // }
         };
@@ -1720,6 +1720,137 @@ export default {
                     "total_pages": 1,
                     "links": []
                 }
+    // Travel Itineraries API
+
+    //Travel Itinerary
+    ['GET *itineraries/:id'] (pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "8850333f-7cc2-4509-b6db-33c8d3e7642c",
+                "name": "Edmund Jessy Wolff's Travel Itinerary",
+                "curator_id": "0005a7ea-f92f-371e-878a-d28423ea2cfb",
+                "curator_type": "reservations",
+                "activities": {
+                    "data": [
+                        {
+                            "id": "bd0f3041-aebb-49aa-a66a-ddda26da9952",
+                            "type": {
+                                "id": "e3efa15d-d4c5-3d5a-a562-9dd84cd89290",
+                                "name": "arrival"
+                            },
+                            "name": "Arrive in Miami",
+                            "description": null,
+                            "participant_id": "0005a7ea-f92f-371e-878a-d28423ea2cfb",
+                            "participant_type": "reservations",
+                            "occurred_at": "2017-07-21 15:45:00",
+                            "created_at": "2017-04-21 18:14:34",
+                            "updated_at": "2017-04-21 18:14:34",
+                            "deleted_at": null,
+                            "hubs": {
+                                "data": [
+                                    {
+                                        "id": "0d5463b0-6067-4432-bb7c-6d4e8a94ad6f",
+                                        "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+                                        "name": "Miami International Airport",
+                                        "call_sign": null,
+                                        "address": null,
+                                        "city": "Miami",
+                                        "state": null,
+                                        "zip": null,
+                                        "country_code": null,
+                                        "created_at": "2017-04-21 18:14:34",
+                                        "updated_at": "2017-04-21 18:14:34"
+                                    }
+                                ]
+                            },
+                            "transports": {
+                                "data": [
+                                    {
+                                        "id": "b8d20208-8f44-470f-a05c-ef26fd299a2f",
+                                        "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+                                        "type": "flight",
+                                        "vessel_no": "DL100",
+                                        "name": "Delta Airlines",
+                                        "domestic": true,
+                                        "capacity": 9999,
+                                        "call_sign": null,
+                                        "created_at": "2017-04-21 18:14:34",
+                                        "updated_at": "2017-04-21 18:14:34",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "/api/transports/b8d20208-8f44-470f-a05c-ef26fd299a2f"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "id": "97b10296-c983-43cb-bb69-b321fee23845",
+                            "type": {
+                                "id": "1282bca0-3e6d-3a42-b821-13437fd75603",
+                                "name": "departure"
+                            },
+                            "name": "Depart Miami",
+                            "description": null,
+                            "participant_id": "0005a7ea-f92f-371e-878a-d28423ea2cfb",
+                            "participant_type": "reservations",
+                            "occurred_at": "2017-07-29 08:30:00",
+                            "created_at": "2017-04-21 18:14:34",
+                            "updated_at": "2017-04-21 18:14:34",
+                            "deleted_at": null,
+                            "hubs": {
+                                "data": [
+                                    {
+                                        "id": "dd3dfe88-ed7c-4890-bcc2-97f27585337a",
+                                        "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+                                        "name": "Miami International Airport",
+                                        "call_sign": null,
+                                        "address": null,
+                                        "city": "Miami",
+                                        "state": null,
+                                        "zip": null,
+                                        "country_code": null,
+                                        "created_at": "2017-04-21 18:14:34",
+                                        "updated_at": "2017-04-21 18:14:34"
+                                    }
+                                ]
+                            },
+                            "transports": {
+                                "data": [
+                                    {
+                                        "id": "57a8af30-207f-4806-a4ba-5af52cf70f0e",
+                                        "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+                                        "type": "flight",
+                                        "vessel_no": "DL200",
+                                        "name": "Delta Airlines",
+                                        "domestic": true,
+                                        "capacity": 9999,
+                                        "call_sign": null,
+                                        "created_at": "2017-04-21 18:14:34",
+                                        "updated_at": "2017-04-21 18:14:34",
+                                        "links": [
+                                            {
+                                                "rel": "self",
+                                                "uri": "/api/transports/57a8af30-207f-4806-a4ba-5af52cf70f0e"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "updated_at": "2017-04-21 18:14:34",
+                "created_at": "2017-04-21 18:14:34",
+                "deleted_at": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "/api/itineraries/8850333f-7cc2-4509-b6db-33c8d3e7642c"
+                    }
+                ]
             }
         };
 
@@ -1760,6 +1891,16 @@ export default {
                 }
             }
         };
+
+    // UTILITIES API
+    ['GET *utilities/activities/types'] (pathMatch, query, request) {
+        let body = [{
+            "id": "e3efa15d-d4c5-3d5a-a562-9dd84cd89290",
+            "name": "arrival"
+        }, {
+            "id": "a2d80ae5-b8ac-3368-93ae-eb6748e6b9d6",
+            "name": "connection"
+        }, {"id": "1282bca0-3e6d-3a42-b821-13437fd75603", "name": "departure"}];
 
         return {
             body: body,

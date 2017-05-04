@@ -5,7 +5,7 @@
         <i class="fa fa-file-pdf-o"></i> {{ $name }}
     </a>
     @elseif ($upload->find($id)->type == 'audio')
-    <a href="{{ download_file($upload->find($id)->source)}}" target="_blank">
+    <a href="{{ play_file($upload->find($id)->source)}}" target="_blank">
         <i class="fa fa-file-audio-o"></i> {{ $name }}
     </a>
     @else

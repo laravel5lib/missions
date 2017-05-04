@@ -49,7 +49,15 @@ class TransportsController extends Controller
      */
     public function store(TransportRequest $request)
     {
-        $transport = $this->transport->create($request->all());
+        $transport = $this->transport->firstOrCreate([
+            'type' => $request->json('type'),
+            'vessel_no' => strtoupper(trim($request->json('vessel_no'))),
+            'name' => $request->json('name'),
+            'call_sign' => $request->json('call_sign'),
+            'domestic' => $request->json('domestic'),
+            'capacity' => $request->json('capacity'),
+            'campaign_id' => $request->json('campaign_id')
+        ]);
 
         return $this->response->item($transport, new TransportTransformer);
     }
@@ -78,7 +86,15 @@ class TransportsController extends Controller
     {
         $transport = $this->transport->findOrFail($id);
 
-        $transport->update($request->all());
+        $transport->update([
+            'type' => $request->json('type', $transport->type),
+            'vessel_no' => $request->json('vessel_no', $transport->vessel_no),
+            'name' => $request->json('name', $transport->name),
+            'call_sign' => $request->json('call_sign', $transport->call_sign),
+            'domestic' => $request->json('domestic', $transport->domestic),
+            'capacity' => $request->json('capacity', $transport->capacity),
+            'campaign_id' => $request->json('campaign_id', $transport->campaign_id)
+        ]);
 
         return $this->response->item($transport, new TransportTransformer);
     }

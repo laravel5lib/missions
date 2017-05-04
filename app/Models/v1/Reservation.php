@@ -120,6 +120,12 @@ class Reservation extends Model
         return $value ? strtolower($value) : null;
     }
 
+    public function designation()
+    {
+        return $this->hasOne(Questionnaire::class, 'reservation_id')
+                    ->where('type', 'arrival_designation');
+    }
+
     /**
      * Get the user that owns the reservation.
      *
@@ -156,7 +162,7 @@ class Reservation extends Model
     public function companionReservations()
     {
         return $this->belongsToMany(Reservation::class, 'companions', 'companion_id')
-                    ->withPivot('relationship');
+                    ->withPivot('relationship')->distinct();
     }
 
     /**

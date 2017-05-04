@@ -6,6 +6,7 @@ use App\Models\v1\Slug;
 use App\Models\v1\Trip;
 use App\Models\v1\Project;
 use App\Models\v1\Campaign;
+use App\Services\Accounting;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\ProjectCause;
@@ -152,6 +153,24 @@ function generateQbClassName($data)
     if ($data instanceof Campaign) {
         return $data->name . ' - General';
     }
+}
+
+function getAccountingClass($instance)
+{
+    $accounting = new Accounting;
+
+    $class = $accounting->getOrMakeClass($instance);
+
+    return $class;
+}
+
+function getAccountingItem($instance)
+{
+    $accounting = new Accounting;
+
+    $class = $accounting->getOrMakeItem($instance);
+
+    return $class;
 }
 
 /**

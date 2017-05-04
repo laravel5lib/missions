@@ -1495,13 +1495,8 @@
             promises.push(this.getRoles());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
                 let roles = [];
-<<<<<<< HEAD
-                _.each(response.body.roles, function (role, code) {
-	                roles.push(code);
-=======
 	            _.each(response.body.roles, function (role, code) {
 		            roles.push(code);
->>>>>>> feature-team-manager
                 });
 	            this.leadershipRoles = roles;
             }));

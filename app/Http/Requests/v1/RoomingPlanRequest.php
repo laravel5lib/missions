@@ -23,11 +23,22 @@ class RoomingPlanRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'campaign_id' => 'required|exists:campaigns,id',
             'group_id' => 'required|exists:groups,id',
             'name' => 'required|string',
             'short_desc' => 'string'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules = [
+                'campaign_id' => 'sometimes|required|exists:campaigns,id',
+                'group_id' => 'sometimes|required|exists:groups,id',
+                'name' => 'sometimes|required|string',
+                'short_desc' => 'string'
+            ];
+        }
+
+        return $rules;
     }
 }

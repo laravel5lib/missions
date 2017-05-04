@@ -13,7 +13,14 @@ class RoomingPlanTransformer extends TransformerAbstract
             'name'       => $plan->name,
             'short_desc' => $plan->short_desc,
             'created_at' => $plan->created_at->toDateTimeString(),
-            'updated_at' => $plan->updated_at->toDateTimeString()
+            'updated_at' => $plan->updated_at->toDateTimeString(),
+            'deleted_at' => $plan->deleted_at ? $plan->deleted_at->toDateTimeString() : null,
+            'links'      => [
+                [
+                    'rel' => 'self',
+                    'uri' => '/api/rooming-plans/' . $plan->id,
+                ]
+            ],
         ];
     }
 }

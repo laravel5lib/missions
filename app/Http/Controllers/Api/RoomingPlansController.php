@@ -28,9 +28,7 @@ class RoomingPlansController extends Controller
     {
         $plans = $this->plan
                       ->filter($request)
-                      ->get($request->get('per_page', 10));
-
-        return $plans;
+                      ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($plans, new RoomingPlanTransformer);
     }
@@ -71,7 +69,7 @@ class RoomingPlansController extends Controller
      */
     public function update(RoomingPlanRequest $request, $id)
     {
-        $plan = $this->plan->find($id)->update($request);
+        $plan = $this->plan->find($id)->modify($request);
 
         return $this->response->item($plan, new RoomingPlanTransformer);
     }

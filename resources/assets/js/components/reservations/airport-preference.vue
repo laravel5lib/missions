@@ -14,9 +14,9 @@
                         <label>1st Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
                                   :value.sync="choiceOneObj" :options="airportsOptions" label="name"
-                                  placeholder="Select Choice One" v-if="editMode"></v-select>
+                                  placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_one"
-                               class="form-control" maxlength="3"
+                               class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
                         <p v-else>({{ choice_one | uppercase }}) <span v-if="choiceOneObj">{{ choiceOneObj.name | uppercase }}</span></p>
                     </div>
@@ -24,9 +24,9 @@
                         <label>2nd Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
                                   :value.sync="choiceTwoObj" :options="airportsOptions" label="name"
-                                  placeholder="Select Choice Two" v-if="editMode"></v-select>
+                                  placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_two"
-                               class="form-control" maxlength="3"
+                               class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
                         <p v-else>({{ choice_two | uppercase }}) <span v-if="choiceTwoObj">{{ choiceTwoObj.name | uppercase }}</span></p>
                     </div>
@@ -34,9 +34,9 @@
                         <label>3rd Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
                                   :value.sync="choiceThreeObj" :options="airportsOptions" label="name"
-                                  placeholder="Select Choice Three" v-if="editMode"></v-select>
+                                  placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_three"
-                               class="form-control" maxlength="3"
+                               class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
                         <p v-else>({{ choice_three | uppercase }}) <span v-if="choiceThreeObj">{{ choiceThreeObj.name | uppercase }}</span></p>
                     </div>

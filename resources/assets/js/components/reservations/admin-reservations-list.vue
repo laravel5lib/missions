@@ -76,6 +76,17 @@
 				</div>
 				<!-- end cost/payments -->
 
+				<div class="form-group">
+					<label>Arrival Designation</label>
+					<select  class="form-control input-sm" v-model="filters.designation">
+						<option value="">Any</option>
+						<option value="eastern">Eastern</option>
+						<option value="western">Western</option>
+						<option value="international">International</option>
+						<option value="none">None</option>
+					</select>
+				</div>
+
 				<!-- Requirements -->
 				<div class="form-group">
 				<label>Requirements</label>
@@ -276,6 +287,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="designation" :disabled="maxCheck('designation')"> Designation
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="requirements" :disabled="maxCheck('requirements')"> Requirements
 								</label>
 							</li>
@@ -347,6 +363,10 @@
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName != ''" @click="filters.todoName = '', filters.todoStatus = null" >
 				{{ todo }}
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.designation != ''" @click="filters.designation = ''" >
+				Designation
 				<i class="fa fa-close"></i>
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.requirementName != ''" @click="filters.requirementName = '', filters.requirementStatus = ''" >
@@ -431,6 +451,9 @@
 						<i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('designation')">
+						Designation
+					</th>
 					<th v-if="isActive('requirements')">
 						Requirements
 					</th>
@@ -457,6 +480,7 @@
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
 					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
+					<td v-if="isActive('designation')" v-text="reservation.arrival_designation|capitalize"></td>
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
 							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
@@ -579,6 +603,7 @@
 					due: '',
 					todoName: '',
 					todoStatus: null,
+					designation: '',
 					requirementName: '',
 					requirementStatus: '',
 					dueName: '',
@@ -612,6 +637,7 @@
 					state_providence: 'State/Providence',
 					zip_postal: 'Zip/Postal Code',
 					country: 'Country',
+					designation: 'Arrival Designation',
 					payments: 'Payments Due',
 					incremental_costs: 'Incremental Costs',
 					static_costs: 'Static Costs',
@@ -622,7 +648,10 @@
 					outstanding: 'Outstanding',
 					deadlines: 'Other Deadlines',
 					desired_role: 'Role',
-					promocodes: 'Promo Codes'
+					promocodes: 'Promo Codes',
+					registered_at: 'Register Date',
+					updated_at: 'Last Updated',
+					dropped_at: 'Drop Date'
 				},
 				exportFilters: {},
                 lastReservationRequest: null
@@ -757,6 +786,7 @@
 						hasCompanions: this.filters.hasCompanions,
 						todoName: this.filters.todoName,
 						todoStatus: this.filters.todoStatus,
+						designation: this.filters.designation,
 						requirementName: this.filters.requirementName,
 						requirementStatus: this.filters.requirementStatus,
 						dueName: this.filters.dueName,
@@ -798,6 +828,7 @@
 					hasCompanions: null,
 					todoName: '',
 					todoStatus: null,
+					designation: '',
 					requirementName: '',
 					requirementStatus: '',
 					rep: '',
@@ -817,7 +848,7 @@
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund',
-					search: this.search.trim(),
+					search: this.search ? this.search.trim() : this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')

@@ -36,6 +36,10 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <p>{{ requirement.short_desc }}</p>
+                        <hr class="divider sm">
+                    </div>
+                    <div class="panel-body">
                         <document-manager :reservation-id="id"
                                           :requirement-id="requirement.id"
                                           :requirement="requirement"

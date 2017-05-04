@@ -28,14 +28,18 @@ class ActivityRequest extends FormRequest
             'description' => 'string|max:200',
             'occurred_at' => 'required|date',
             'participant_id' => 'required|string',
-            'participant_type' => 'required|string'
+            'participant_type' => 'required|string',
+            'activity_type_id' => 'required|string|exists:activity_types,id'
         ];
 
         if ($this->isMethod('put')) {
             $rules = [
                 'name' => 'sometimes|required|string|max:100',
                 'description' => 'string|max:200',
-                'occurred_at' => 'sometimes|required|date'
+                'occurred_at' => 'sometimes|required|date',
+                'participant_id' => 'sometimes|required|string',
+                'participant_type' => 'sometimes|required|string',
+                'activity_type_id' => 'sometimes|required|string|exists:activity_types,id'
             ];
         }
 

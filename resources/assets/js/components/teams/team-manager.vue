@@ -925,7 +925,8 @@
                     leader: leader || false,
                 }, { params: { include: 'companions,trip.group'} }).then(function (response) {
                     squad.members = response.body.data;
-                    squad.members_count = squad.members.length
+                    squad.members_count = squad.members.length;
+                    this.currentTeam.members_count++;
                 });
             },
             assignMassToSquad(reservations, squad) {
@@ -1008,6 +1009,7 @@
                     });
                     this.currentTeam.squads_count--;
                     newTeam.squads_count++;
+                    newTeam.members_count += squad.members_count;
                     this.$root.$emit('showSuccess', squad.callsign + ' moved to ' + newTeam.callsign);
                 });
 
@@ -1023,7 +1025,8 @@
 	                    squad.members = _.reject(squad.members, function (member) {
 		                    return member.id === memberObj.id;
                         });
-                        squad.members_count = squad.members.length
+                        squad.members_count = squad.members.length;
+                        this.currentTeam.members_count--;
                     });
             },
             searchReservations(){
@@ -1261,6 +1264,7 @@
                     this.selectedSquadObj = null;
                     this.showSquadDeleteModal = false;
                     this.currentTeam.squads_count--;
+                    this.currentTeam.members_count -= squadCopy.members_count;
                 });
 	        },
 	        makeTeamCurrent(team){

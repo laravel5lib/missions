@@ -215,11 +215,11 @@ class TripTableSeeder extends Seeder
             
             $r->user->slug()->create(['url' => generate_slug($r->user->name)]);
 
-            $companion = factory(Companion::class)->make([
-                'reservation_id' => $r->id,
-                'companion_id' => $reservations->random()->pluck('id')->first()
-            ])->toArray();
-            Companion::insert($companion);
+            // $companion = factory(Companion::class)->make([
+            //     'reservation_id' => $r->id,
+            //     'companion_id' => $reservations->random()->pluck('id')->first()
+            // ])->toArray();
+            // Companion::insert($companion);
 
             $note = factory(Note::class)->make([
                 'noteable_id' => $r->id, 

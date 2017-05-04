@@ -1901,6 +1901,7 @@ export default {
             "id": "a2d80ae5-b8ac-3368-93ae-eb6748e6b9d6",
             "name": "connection"
         }, {"id": "1282bca0-3e6d-3a42-b821-13437fd75603", "name": "departure"}];
+
         return {
             body: body,
             status: 200,

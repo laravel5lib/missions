@@ -4,12 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "336a4af012fb53bc8211af06bde73ad6",
-    "content-hash": "d29acebcc18b1d0b1aba4f89c3f05371",
-=======
     "content-hash": "4a2041a8e9cdeacc2449d752b893eb81",
->>>>>>> develop
     "packages": [
         {
             "name": "aws/aws-sdk-php",

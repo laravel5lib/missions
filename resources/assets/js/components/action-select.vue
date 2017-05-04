@@ -1,16 +1,17 @@
 <template>
-    <template v-if="normal">
-        <select class="form-control" @change="execute" :multiple="multiple" v-model="selectedOptions">
-            <option value="" class="select-placeholder">{{text}}</option>
-            <option :value="option" v-for="option in options">{{option[label]}}</option>
-        </select>
-    </template>
-    <template v-else>
-        <v-select @keydown.enter.prevent="" :multiple="multiple" class="form-control" :debounce="debounce" :on-search="getOptions"
-                  :value.sync="selectedOptions" :options="options" :label="label" :on-change="execute"
-                  :placeholder="text"></v-select>
-    </template>
-
+    <div>
+        <template v-if="normal">
+            <select class="form-control" @change="execute" :multiple="multiple" v-model="selectedOptions">
+                <option value="" class="select-placeholder">{{text}}</option>
+                <option :value="option" v-for="option in options">{{option[label]}}</option>
+            </select>
+        </template>
+        <template v-else>
+            <v-select @keydown.enter.prevent="" :multiple="multiple" class="form-control" :debounce="debounce" :on-search="getOptions"
+                      :value.sync="selectedOptions" :options="options" :label="label" :on-change="execute"
+                      :placeholder="text"></v-select>
+        </template>
+    </div>
 </template>
 <script type="text/javascript">
     import _ from 'underscore';

@@ -301,9 +301,12 @@
 				this.$validate('tags', true);
 			},
 			// Toggle ui states
-			'uiSelector': function (val) {
+			'uiSelector': function (val, oldVal) {
 				if (val === 1) {
 					this.searchUploads();
+				}
+				if (oldVal === 0 && val === 2) {
+				    this.loadCropper();
 				}
 			},
 			// Pagination Functionality
@@ -398,7 +401,8 @@
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
 					// update slim editor ratio
-					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
+					if (this.slimAPI[0])
+						this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){

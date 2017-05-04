@@ -44,7 +44,7 @@
            width="350px"
            dismissable>
         <span class="icon-info-circled alert-icon-float-left"></span>
-        <strong>FYI!</strong>
+        <strong>Hey!</strong>
         <p>@{{ message }}</p>
     </alert>
 

@@ -61,7 +61,7 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="isAdminRoute">
+				<div class="form-group">
 					<label>Travel Companions</label>
 					<div>
 						<label class="radio-inline">
@@ -80,8 +80,11 @@
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
 		</aside>
+		<div class="col-xs-12 text-center" v-if="currentTeam">
+			<h1>{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h1>
+			<hr class="divider red-small">
+		</div>
 		<div class="col-md-7">
-			<h4 v-if="currentTeam" class="">{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h4>
 			<ul class="nav nav-tabs">
 				<li role="presentation" class="active">
 					<a href="#members" data-toggle="pill">Members <span class="badge" v-text="totalMembers"></span></a>
@@ -1388,7 +1391,11 @@
             promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
-	            this.leadershipRoles = response.body.roles;
+	            let roles = [];
+                _.each(response.body.roles, function (role, code) {
+                    roles.push(code);
+                });
+                this.leadershipRoles = roles;
             }));
 
             Promise.all(promises).then(function (values) {

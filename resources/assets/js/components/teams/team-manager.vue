@@ -11,7 +11,7 @@
 				</div> -->
 				<div class="form-group">
 					<label>Role</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="roleFilter" multiple :debounce="250" :on-search="getRoles"
+					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
 					          :value.sync="roleObj" :options="rolesOptions" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
@@ -717,7 +717,7 @@
                 showMembersFilters: false,
                 campaignsArr: [],
                 groupsArr: [],
-                roleObj: {},
+                roleObj: null,
                 rolesOptions: [],
 	            leadershipRoles: [],
                 campaignsOptions: [],
@@ -752,7 +752,7 @@
 //				this.searchReservations();
             },
             'roleObj': function (val) {
-                this.reservationFilters.role = val.value || '';
+                this.reservationFilters.role = val ? val.value : '';
 //				this.searchReservations();
             },
             'reservationsAgeMin': function (val) {
@@ -1387,16 +1387,12 @@
                     }
 
                     this.includeReservationsManaging = true;
-
-                    if (this.reservationsFacilitator) {
-//                    this.getRequirements();
-                    this.getRoles();
-                    }
                 }));
             }
             promises.push(this.getTeamTypes());
             promises.push(this.getTeams());
             promises.push(this.getCampaigns());
+            promises.push(this.getRoles());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
                 let roles = [];
 	            _.each(response.body.roles, function (role, code) {

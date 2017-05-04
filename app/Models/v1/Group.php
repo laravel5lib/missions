@@ -98,6 +98,18 @@ class Group extends Model
     }
 
     /**
+     * Get all the group's active trip reservations.
+     * 
+     * @return Response
+     */
+    public function activeReservations()
+    {
+        return $this->reservations()->whereHas('trip', function ($trip) {
+            return $trip->active();
+        });
+    }
+
+    /**
      * Get all the group's managers.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

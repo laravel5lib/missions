@@ -41,7 +41,7 @@ class ProcessReservation extends Job
     public function handle()
     {
         if ($this->costs) {
-            $this->reservation->syncCosts($this->costs);
+            $this->reservation->syncCosts(array_filter($this->costs));
         } else {
             $active = $this->reservation->trip->activeCosts()->get();
 

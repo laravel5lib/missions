@@ -150,6 +150,7 @@ window.marked = require('marked');
 require('gsap');
 window.ScrollMagic = require('scrollmagic');
 require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
+require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');
@@ -320,6 +321,9 @@ Vue.validator('email', function (val) {
 });
 // Validate datetime inputs
 Vue.validator('datetime ', function (val) {
+    if (! val) return true;
+    if (val === 'Invalid date') return false;
+
     return moment(val).isValid();
 });
 
@@ -461,7 +465,7 @@ Vue.directive('crop', {
                 setTimeout(self.waitForLibrary, 1000);
             }
         };*/
-
+        
         if (!_.contains(['file', 'video'], this.vm.type)) {
             // debugger;
             // this.waitForLibrary();
@@ -685,6 +689,19 @@ Vue.directive('error-handler', {
                             }
                             if (emailMessage !== genericMessage)
                                 newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
+                        }
+                        // custom datetime validator
+                        if (validationObject.datetime) {
+                            // Grab message from storage if it exists or use generic default
+                            let datetimeMessage;
+                            if (this.storage.messages && this.storage.messages.datetime) {
+                                datetimeMessage = this.storage.messages.datetime;
+                            } else {
+                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
+                                datetimeMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
+                            }
+                            if (datetimeMessage !== genericMessage)
+                                newMessages.push("<div class='help-block server-validation-error'>" + datetimeMessage + "</div>");
                         }
                     }
                     //console.log(newMessages);

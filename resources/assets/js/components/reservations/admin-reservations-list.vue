@@ -3,11 +3,6 @@
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
-				<!-- <div class="form-group">
-					<label>Tags</label>
-					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-						   :debounce="250" placeholder="Tag, tag2, tag3...">
-				</div> -->
 				<div class="form-group">
 					<label>Groups</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
@@ -81,6 +76,17 @@
 				</div>
 				<!-- end cost/payments -->
 
+				<div class="form-group">
+					<label>Arrival Designation</label>
+					<select  class="form-control input-sm" v-model="filters.designation">
+						<option value="">Any</option>
+						<option value="eastern">Eastern</option>
+						<option value="western">Western</option>
+						<option value="international">International</option>
+						<option value="none">None</option>
+					</select>
+				</div>
+
 				<!-- Requirements -->
 				<div class="form-group">
 				<label>Requirements</label>
@@ -130,9 +136,9 @@
 				<label>Trip Rep</label>
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
-						<option v-for="(key, option) in repOptions" v-bind:value="key">
-					    {{ option.name | capitalize }}
-					  </option>
+						<option v-for="option in repOptions" v-bind:value="option.id">
+					    	{{ option.name | capitalize }}
+					  	</option>
 					</select>
 				</div>
 				<!-- end trip rep -->
@@ -281,6 +287,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="designation" :disabled="maxCheck('designation')"> Designation
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="requirements" :disabled="maxCheck('requirements')"> Requirements
 								</label>
 							</li>
@@ -352,6 +363,10 @@
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName != ''" @click="filters.todoName = '', filters.todoStatus = null" >
 				{{ todo }}
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.designation != ''" @click="filters.designation = ''" >
+				Designation
 				<i class="fa fa-close"></i>
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.requirementName != ''" @click="filters.requirementName = '', filters.requirementStatus = ''" >
@@ -436,6 +451,9 @@
 						<i @click="setOrderByField('email')" v-if="orderByField !== 'email'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'email'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('designation')">
+						Designation
+					</th>
 					<th v-if="isActive('requirements')">
 						Requirements
 					</th>
@@ -462,6 +480,7 @@
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
 					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
+					<td v-if="isActive('designation')" v-text="reservation.arrival_designation|capitalize"></td>
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
 							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
@@ -584,6 +603,7 @@
 					due: '',
 					todoName: '',
 					todoStatus: null,
+					designation: '',
 					requirementName: '',
 					requirementStatus: '',
 					dueName: '',
@@ -617,15 +637,21 @@
 					state_providence: 'State/Providence',
 					zip_postal: 'Zip/Postal Code',
 					country: 'Country',
+					designation: 'Arrival Designation',
 					payments: 'Payments Due',
-					applied_costs: 'Applied Costs',
+					incremental_costs: 'Incremental Costs',
+					static_costs: 'Static Costs',
+					optional_costs: 'Optional Costs',
 					requirements: 'Travel Requirements',
 					percent_raised: 'Percent Raised',
 					amount_raised: 'Amount Raised',
 					outstanding: 'Outstanding',
 					deadlines: 'Other Deadlines',
 					desired_role: 'Role',
-					promocodes: 'Promo Codes'
+					promocodes: 'Promo Codes',
+					registered_at: 'Register Date',
+					updated_at: 'Last Updated',
+					dropped_at: 'Drop Date'
 				},
 				exportFilters: {},
                 lastReservationRequest: null
@@ -672,28 +698,14 @@
 			'campaignObj': function (val) {
 				this.filters.campaign = val ? val.id : '';
 			},
-			'reservations': function (val) {
-				if (val.length) {
-					// use object/dictionary instead of array
-					let arr = {};
-					for (let index in val) {
-						// duplicate rep ids will be overwritten
-						if(val[index].rep)
-							arr[val[index].rep.data.id] = val[index].rep.data;
-					}
-					this.repOptions = arr;
-				}
-			},
 			'shirtSizeArr': function (val) {
 				this.filters.shirtSize = _.pluck(val, 'id') || '';
 			},
 			'groupsArr': function (val) {
 				this.filters.groups = _.pluck(val, 'id') || '';
-//				this.searchReservations();
 			},
 			'usersArr': function (val) {
 				this.filters.user = _.pluck(val, 'id') || '';
-//				this.searchReservations();
 			},
 			'tagsString': function (val) {
 				let tags = val.split(/[\s,]+/);
@@ -722,16 +734,10 @@
                 this.pagination.current_page = 1;
                 this.searchReservations();
 			},
-			/*'page': function (val, oldVal) {
-				this.searchReservations();
-			},*/
 			'per_page': function (val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
-			},
-			/*'groups':function () {
-				this.searchReservations();
-			}*/
+			}
         },
         methods: {
         	getIncomplete(reservation) {
@@ -780,6 +786,7 @@
 						hasCompanions: this.filters.hasCompanions,
 						todoName: this.filters.todoName,
 						todoStatus: this.filters.todoStatus,
+						designation: this.filters.designation,
 						requirementName: this.filters.requirementName,
 						requirementStatus: this.filters.requirementStatus,
 						dueName: this.filters.dueName,
@@ -821,6 +828,7 @@
 					hasCompanions: null,
 					todoName: '',
 					todoStatus: null,
+					designation: '',
 					requirementName: '',
 					requirementStatus: '',
 					rep: '',
@@ -840,7 +848,7 @@
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
 					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund',
-					search: this.search.trim(),
+					search: this.search ? this.search.trim() : this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,
 					sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
@@ -873,7 +881,6 @@
 			},
 			searchReservations(){
 				let params = this.getListSettings();
-				// this.$refs.spinner.show();
 				this.$http.get('reservations', {params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();
@@ -881,15 +888,10 @@
                     this.lastReservationRequest = xhr;
                 }}).then(function (response) {
 					let self = this;
-					// _.each(response.body.data, function (reservation) {
-					// 	reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
-					// }, this);
 					this.reservations = response.body.data;
 					this.pagination = response.body.meta.pagination;
-					// this.$refs.spinner.hide();
 				}).then(function () {
 					this.updateConfig();
-					// this.$refs.spinner.hide();
 				});
 			},
 			getGroups(search, loading){
@@ -934,6 +936,14 @@
 					this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
 				});
 			},
+			getReps(){
+                return this.$http.get('users', { params: {
+					'rep': true,
+					'per_page': 100
+				}}).then(function (response) {
+					this.repOptions = response.body.data;
+				});
+			},
 			getRequirements(){
                 return this.$http.get('requirements', { params: {
 					'type': 'trips',
@@ -968,6 +978,7 @@
             let costsPromise = this.getCosts();
             let reqsPromise = this.getRequirements();
             let todosPromise = this.getTodos();
+            let repsPromise = this.getReps();
 
 			// assign values from url search
 			if (window.location.search !== '') {
@@ -983,7 +994,7 @@
 				}.bind(this));
 			}
 
-			Promise.all([groupsPromise, campaignsPromise, costsPromise, reqsPromise, todosPromise]).then(function () {
+			Promise.all([groupsPromise, campaignsPromise, costsPromise, reqsPromise, todosPromise, repsPromise]).then(function () {
                 this.searchReservations();
             }.bind(this));
 

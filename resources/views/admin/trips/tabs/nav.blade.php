@@ -8,5 +8,6 @@
         <li class="{{ $tab === 'facilitators' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/facilitators' }}">Facilitators</a></li>
         <li class="{{ $tab === 'todos' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/todos' }}">Todos</a></li>
         <li class="{{ $tab === 'notes' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/notes' }}">Notes</a></li>
+        <li class="{{ $tab === 'resources' ? 'active' : '' }}"><a href="{{ url('admin/trips/' . $trip->id) . '/resources' }}">Resources</a></li>
     </ul>
 </div>

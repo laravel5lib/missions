@@ -23,7 +23,7 @@ class HubRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'campaign_id' => 'required|string|exists:campaigns,id',
             'name' => 'required|string',
             'call_sign' => 'string',
@@ -33,5 +33,12 @@ class HubRequest extends FormRequest
             'zip' => 'string',
             'country_code' => 'string'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules['campaign_id'] = 'sometimes|required|string|exists:campaigns,id';
+            $rules['name'] = 'sometimes|required|string';
+        }
+
+        return $rules;
     }
 }

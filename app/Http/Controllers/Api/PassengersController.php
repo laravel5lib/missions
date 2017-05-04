@@ -24,8 +24,6 @@ class PassengersController extends Controller
      */
     public function __construct(Passenger $passenger)
     {
-        // $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
         $this->passenger = $passenger;
     }
 
@@ -55,9 +53,10 @@ class PassengersController extends Controller
      */
     public function store($transportId, PassengerRequest $request)
     {
-        $passenger = new Passenger($request->all());
-        $passenger->transport_id = $transportId;
-        $passenger->save();
+        $passenger = $this->passenger->firstOrCreate([
+            'transport_id' => $transportId,
+            'reservation_id' => $request->json('reservation_id')
+        ]);
 
         return $this->response->item($passenger, new PassengerTransformer);
     }

@@ -1,7 +1,7 @@
 @extends('admin.layouts.default')
 
 @section('styles')
-    {{--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/2.0.4/css/Jcrop.min.css" type="text/css">--}}
+    <link rel="stylesheet" href="/css/slim.css" type="text/css">
 @endsection
 @section('scripts')
     <script src="/js/slim.js"></script>

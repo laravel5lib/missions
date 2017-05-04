@@ -1,44 +1,96 @@
 <?php
 namespace App\Services\Rooming;
 
-use App\Models\v1\RoomingPlan as Model;
+use Illuminate\Http\Request;
+use App\Http\Requests\v1\RoomingPlanRequest;
+use App\Models\v1\RoomingPlan as RoomingModel;
 
 class RoomingPlan
 {
     protected $plan;
 
-    function __construct(Model $plan)
+    function __construct(RoomingModel $plan)
     {
         $this->plan = $plan;
     }
 
+    /**
+     * Find a plan by it's id.
+     * 
+     * @param  String $id
+     * @return $this
+     */
     public function find($id)
     {
-        $this->plan->find($id);
+        $this->plan->whereId($id);
 
         return $this;
     }
 
-    public function filter($request)
+    /**
+     * Filter plans by request.
+     * 
+     * @param  Request $request
+     * @return $this
+     */
+    public function filter(Request $request)
     {
-        $this->plan->filter($request);
+        $this->plan->filter($request->all());
 
         return $this;
     }
 
-    public function get()
+    /**
+     * Return the plan results
+     * 
+     * @param  integer $perPage
+     * @return EloquentCollection
+     */
+    public function get($perPage = 10)
     {
-        return $this->plan->paginate(10);
+        // if ($this->plan) 
+        //     return $this->plan->paginate($perPage);
+
+        return $this->plan->paginate($perPage);
     }
 
-    public function make($request)
+    /**
+     * Make a new plan and save in storage.
+     * 
+     * @param  RoomingPlanRequest $request
+     * @return EloquentCollection
+     */
+    public function make(RoomingPlanRequest $request)
     {
-        $plan = $this->plan->create([]);
+        $plan = $this->plan->create([
+            'name'        => trim($request->get('name')),
+            'short_desc'  => trim($request->get('short_desc', 'no description')),
+            'group_id'    => $request->get('group_id'),
+            'campaign_id' => $request->get('campaign_id')
+        ]);
+
+        return $plan;
     }
 
-    public function modify($request)
+    /**
+     * Modify an existing plan and update in storage.
+     * 
+     * @param  RoomingPlanRequest $request
+     * @return EloquentCollection
+     */
+    protected function modify(RoomingPlanRequest $request)
     {
-        $plan = $this->plan->update([]);
+        if ( ! $this->plan->id)
+            throw new \Exception('Bad Method Call');
+
+        $plan = $this->plan->update([
+            'name'        => trim($request->get('name', $this->plan->name)),
+            'short_desc'  => trim($request->get('short_desc', $this->plan->short_desc)),
+            'group_id'    => $request->get('group_id'),
+            'campaign_id' => $request->get('campaign_id')
+        ]);
+
+        return $plan;
     }
 
     public function lock()
@@ -71,11 +123,9 @@ class RoomingPlan
 
     public function copy()
     {
-        $plan = $this->plan->get();
+        // $plan = $this->plan->get();
 
-        // $copy = new Model;
-
-        // $copy->create([
+        // $copy = RoomingModel::create([
         //     'name' = $request->get('name', $plan->name),
         //     'group_id' => $plan->group_id,
         //     'campaign_id' => $plan->campaign_id,
@@ -83,12 +133,12 @@ class RoomingPlan
         //     'locked' => $plan->locked
         // ]);
 
-        $rooms = $plan->rooms()->pluck('id')->toArray();
+        // $rooms = $plan->rooms()->pluck('id')->toArray();
 
-        $copy->rooms()->attach($rooms);
+        // $copy->rooms()->attach($rooms);
     }
 
-    public function destroy()
+    public function delete()
     {
         $this->plan->rooms()->detach();
         $this->plan->delete();

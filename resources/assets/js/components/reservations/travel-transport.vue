@@ -233,7 +233,6 @@
         },
         ready(){
             let self = this;
-
             let promises = [];
             promises.push(this.getAirlines(this.transport.name, false));
 

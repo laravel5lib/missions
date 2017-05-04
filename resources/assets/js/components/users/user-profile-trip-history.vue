@@ -132,6 +132,7 @@
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
+					return this.accolades;
                 });
             },
             filterAccolades(){
@@ -144,7 +145,7 @@
 			},
             searchTrips() {
 				return this.$http.get('utilities/past-trips').then(function(response) {
-					this.trips = response.body;
+					return this.trips = response.body;
 				});
             }
         },

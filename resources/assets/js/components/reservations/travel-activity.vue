@@ -101,7 +101,6 @@
             }
         },
         ready(){
-//			this.attemptSubmit = true;
 	        let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
 	        switch (activityType.name) {
 		        case 'arrival':

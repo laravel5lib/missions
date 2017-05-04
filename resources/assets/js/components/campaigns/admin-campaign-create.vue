@@ -126,13 +126,13 @@
 						<div class="collapse" id="avatarCollapse">
 							<div class="well">
 								<upload-create-update type="avatar" :lock-type="true" :is-child="true"
-								                      :tags="['campaign']"></upload-create-update>
+								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 						<div class="collapse" id="bannerCollapse">
 							<div class="well">
 								<upload-create-update type="banner" :lock-type="true" :is-child="true"
-								                      :tags="['campaign']"></upload-create-update>
+								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 					</div><!-- end col -->
@@ -168,8 +168,6 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
-//				errors: {},
-
 				name: null,
 				country: null,
 				country_code: null,
@@ -179,7 +177,6 @@
 				published_at: null,
 				page_url: null,
 				page_src: null,
-//				attemptSubmit: false,
 				selectedAvatar: null,
 				avatar_upload_id: null,
 				selectedBanner: null,
@@ -199,9 +196,9 @@
 				if (typeof val === 'string') {
 					// pre-populate slug
 					this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } })
-							.then(function (response) {
-								this.page_url = response.body.slug;
-							});
+						.then(function (response) {
+							this.page_url = response.body.slug;
+						});
 				}
 			}
 		},
@@ -259,10 +256,8 @@
 			}
 		},
 		ready(){
-			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
-				// this.$refs.spinner.hide();
 			});
 		}
 	}

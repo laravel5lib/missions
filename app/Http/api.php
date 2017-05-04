@@ -161,8 +161,10 @@ $api->version('v1', [
     $api->resource('promocodes', 'PromocodesController');
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
     $api->resource('rooming-plans', 'RoomingPlansController');
-    $api->resource('rooms/types', 'RoomTypesController');
-    $api->resource('rooms', 'RoomsController');
+    $api->resource('rooming-plans/{id}/rooms', 'RoomsController');
+    $api->resource('room-types', 'RoomTypesController');
+    // $api->resources('rooms/{id}/occupants', 'RoomOccupantsController');
+    // $api->resource('accommodations/{id}/rooms', 'AccomodationRoomsController');
 
     $api->resource('activities', 'ActivitiesController');
     $api->resource('itineraries/travel', 'TravelItinerariesController');

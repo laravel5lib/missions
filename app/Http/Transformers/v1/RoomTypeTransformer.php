@@ -18,7 +18,7 @@ class RoomTypeTransformer extends TransformerAbstract
         return [
             'id'         => $type->id,
             'name'       => $type->name,
-            'occupancy'  => (int) $type->occupancy,
+            'rules'      => $type->rules,
             'created_at' => $type->created_at->toDateTimeString(),
             'updated_at' => $type->updated_at->toDateTimeString(),
             'deleted_at' => $type->deleted_at ? $type->deleted_at->toDateTimeString() : null,

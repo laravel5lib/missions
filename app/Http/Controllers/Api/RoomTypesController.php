@@ -37,7 +37,7 @@ class RoomTypesController extends Controller
     {
         $type = $this->type->create([
             'name' => $request->get('name'),
-            'occupancy' => $request->get('occupancy', 1)
+            'rules' => $request->get('rules')
         ]);
 
         return $this->response->item($type, new RoomTypeTransformer);
@@ -49,7 +49,7 @@ class RoomTypesController extends Controller
 
         $type->update([
             'name' => $request->get('name', $type->name),
-            'occupancy' => $request->get('occupancy', $type->occupancy)
+            'rules' => $request->get('rules', $type->rules)
         ]);
 
         return $this->response->item($type, new RoomTypeTransformer);

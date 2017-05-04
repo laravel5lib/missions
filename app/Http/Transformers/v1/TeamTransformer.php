@@ -24,6 +24,8 @@ class TeamTransformer extends TransformerAbstract {
      */
     public function transform(Team $team)
     {
+        $team->load('squads.members');
+
         return [
             'id'           => $team->id,
             'callsign'     => $team->callsign,
@@ -31,6 +33,7 @@ class TeamTransformer extends TransformerAbstract {
             'locked'       => (boolean) $team->locked,
             'groups_count' => $team->groups_count,
             'squads_count' => $team->squads_count,
+            'members_count'=> $team->squads->lists('members')->collapse()->count(),
             'created_at'   => $team->created_at->toDateTimeString(),
             'updated_at'   => $team->updated_at->toDateTimeString(),
             'deleted_at'   => $team->deleted_at ? $team->deleted_at->toDateTimeString() : null,

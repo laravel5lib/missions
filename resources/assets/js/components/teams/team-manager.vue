@@ -1005,6 +1005,8 @@
                     this.currentSquads = _.reject(this.currentSquads, function (sq) {
                         return sq.id === squad.id;
                     });
+                    this.currentTeam.squads_count--;
+                    newTeam.squads_count++;
                     this.$root.$emit('showSuccess', squad.callsign + ' moved to ' + newTeam.callsign);
                 });
 
@@ -1146,9 +1148,8 @@
                         let team = response.body.data;
 
                         this.teams.push(team);
-
                         this.currentTeam = team;
-
+                        this.getTeams();
                         // Create default squads for current team
                         this.newSquad('Team Leaders');
                         this.newSquad('Group #1');
@@ -1179,6 +1180,7 @@
 							} else {
                                 this.currentSquads.push(squad);
 							}
+                            this.currentTeam.squads_count++;
 
                             this.showSquadCreateModal = false;
                             return squad;
@@ -1252,7 +1254,8 @@
                     });
                     this.selectedSquadObj = null;
                     this.showSquadDeleteModal = false;
-                })
+                    this.currentTeam.squads_count--;
+                });
 	        },
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
@@ -1407,9 +1410,12 @@
             }.bind(this));
 
             this.$root.$on('campaign-scope', function (val) {
-                this.campaignId = val ? val.id : '';
-                this.newTeamCampaigns = [{ id: val.id }];
-                this.$root.$emit('update-title', val ? val.name : '');
+                if(val) {
+                    this.campaignId = val ? val.id : '';
+                    this.newTeamCampaigns = [{id: val.id}];
+                    this.$root.$emit('update-title', val ? val.name : '');
+                }
+                this.searchReservations();
             }.bind(this));
         }
     }

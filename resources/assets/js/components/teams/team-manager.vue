@@ -905,13 +905,13 @@
                 if (squad.callsign === 'Team Leaders') {
                     if (squad.members.length) {
                         let test = false;
-						test = _.some(squad.members, function (member) {
+						/*test = _.some(squad.members, function (member) {
 							return member.gender === reservation.gender;
                         });
 	                    if (test){
                             this.$root.$emit('showError', 'Team Leaders members can not be of the same gender.');
                             return;
-                        }
+                        }*/
                     }
                 }
 
@@ -1348,8 +1348,7 @@
                 }.bind(this));
                 this.assignMassToSquad(compArray, squad)
 
-            }
-
+            },
 
         },
         ready(){
@@ -1388,7 +1387,11 @@
             promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
-	            this.leadershipRoles = response.body.roles;
+                let roles = [];
+	            _.each(response.body.roles, function (role, code) {
+		            roles.push(code);
+                });
+	            this.leadershipRoles = roles;
             }));
 
             Promise.all(promises).then(function (values) {

@@ -908,7 +908,7 @@
                 // Rules for team leader group
                 if (squad.callsign === 'Team Leaders') {
                     if (squad.members.length) {
-                        let test = false;
+                        //let test = false;
 						/*test = _.some(squad.members, function (member) {
 							return member.gender === reservation.gender;
                         });
@@ -924,6 +924,7 @@
                     leader: leader || false,
                 }, { params: { include: 'companions,trip.group'} }).then(function (response) {
                     squad.members = response.body.data;
+                    squad.members_count = squad.members.length
                 });
             },
             assignMassToSquad(reservations, squad) {
@@ -940,6 +941,7 @@
                 this.$http.post('squads/' + squad.id + '/members', { members: reservations },
 	                { params: { include: 'companions,trip.group'} }).then(function (response) {
                     squad.members = response.body.data;
+                    squad.members_count = squad.members.length
                 });
             },
             moveToSquad(reservation, oldSquad, newSquad, leader) {
@@ -1018,6 +1020,7 @@
 	                    squad.members = _.reject(squad.members, function (member) {
 		                    return member.id === memberObj.id;
                         });
+                        squad.members_count = squad.members.length
                     });
             },
             searchReservations(){

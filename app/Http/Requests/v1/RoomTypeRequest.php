@@ -25,12 +25,12 @@ class RoomTypeRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|unique:room_types,name',
-            'occupancy' => 'required|integer|min:1'
+            'rules.occupancy' => 'required|integer|min:1'
         ];
 
         if ($this->isMethod('put')) {
             $rules['name'] = 'sometimes|required|string|unique:room_types,name,'.$this->route('types');
-            $rules['occupancy'] = 'sometimes|required|integer|min:1';
+            $rules['rules.occupancy'] = 'sometimes|required|integer|min:1';
         }
 
         return $rules;

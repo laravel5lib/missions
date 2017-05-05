@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests;
-use App\Models\v1\Room;
+use App\Services\Rooming\Room;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\RoomRequest;
@@ -18,49 +18,44 @@ class RoomsController extends Controller
         $this->room = $room;
     }
 
-    public function index(Request $request)
+    public function index($planId, Request $request)
     {
         $rooms = $this->room
-            ->filter($request->all())
-            ->paginate($request->get('per_page', 10));
+                      ->inPlan($planId)
+                      ->filter($request->all())
+                      ->paginate($request->get('per_page'));
 
         return $this->response->paginator($rooms, new RoomTransformer);
     }
 
-    public function show($id)
+    public function show($planId, $id)
     {
-        $room = $this->room->findOrFail($id);
+        $room = $this->room->inPlan($planId)->find($id)->get();
 
         return $this->response->item($room, new RoomTransformer);
     }
 
-    public function store(RoomRequest $request)
+    public function store($planId, RoomRequest $request)
     {
-        $room = $this->room->create([
-            'label' => $request->get('label'),
-            'room_type_id' => $request->get('room_type_id')
-        ]);
+        $room = $this->room->make($request)->forPlan($planId)->get();
 
         return $this->response->item($room, new RoomTransformer);
     }
 
-    public function update(RoomRequest $request, $id)
+    public function update($planId, $id, RoomRequest $request)
     {
-        $room = $this->room->findOrFail($id);
-
-        $room->update([
-            'label' => $request->get('label', $room->label),
-            'room_type_id' => $request->get('room_type_id', $room->room_type_id)
-        ]);
+        $room = $this->room
+                     ->inPlan($planId)
+                     ->find($id)
+                     ->modify($request)
+                     ->get();
 
         return $this->response->item($room, new RoomTransformer);
     }
 
-    public function destroy($id)
+    public function destroy($planId, $id)
     {
-        $room = $this->room->findOrFail($id);
-
-        $room->delete();
+        $room->inPlan($planId)->find($id)->delete();
 
         return $this->response->noContent();
     }

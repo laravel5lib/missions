@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Rooming;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\RoomTypeRequest;
 use App\Http\Transformers\v1\RoomTypeTransformer;
 
-class RoomTypesController extends Controller
+class TypesController extends Controller
 {   
     /**
      * The room type instance

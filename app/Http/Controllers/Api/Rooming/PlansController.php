@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Rooming;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Services\Rooming\RoomingPlan;
+use App\Repositories\Rooming\Plan;
 use App\Http\Requests\v1\RoomingPlanRequest;
 use App\Http\Transformers\v1\RoomingPlanTransformer;
 
-class RoomingPlansController extends Controller
+class PlansController extends Controller
 {
     protected $plan;
 
-    function __construct(RoomingPlan $plan)
+    function __construct(Plan $plan)
     {
         $this->plan = $plan;
     }

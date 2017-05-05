@@ -28,8 +28,8 @@
                     </component>
                 </div><!-- end panel-body -->
             </div>
-            <div class="panel panel-default" v-if="questionnaire">
-                <div class="panel-body">
+            <div v-if="questionnaire">
+                <div>
                     <component :is="questionnaire"
                                :document="document"
                                :reservation-id="requirement.reservation_id"
@@ -66,6 +66,7 @@
     import essay from '../records/essays/essay.vue';
     import medicalsList from '../records/medicals/medicals-list.vue';
     import medical from '../records/medicals/medical.vue';
+    import travelItineraries from '../reservations/travel-itineraries.vue';
     import medicalCredentialsList from '../records/credentials/medical-credentials-list.vue';
     import medicalCredential from '../records/credentials/medical-credential.vue';
     import mediaCredentialsList from '../records/credentials/media-credentials-list.vue';
@@ -91,6 +92,7 @@
             referralsList,
             referral,
             arrivalDesignation,
+            travelItineraries,
             airportPreference,
             minorRelease,
             medicalCredentialsList,
@@ -208,6 +210,9 @@
                     case 'arrival_designations':
                         this.questionnaire = 'arrival-designation';
                         break;
+                    case 'travel_itineraries':
+                        this.questionnaire = 'travel-itineraries';
+                        break;
                     case 'minor_releases':
                         this.questionnaire = 'minor-release';
                         break;
@@ -279,6 +284,9 @@
         events: {
             'set-document': function(document) {
                 this.setDocument(document);
+            },
+            'unset-document': function(document) {
+                this.removeDocument(document);
             }
         },
         ready(){

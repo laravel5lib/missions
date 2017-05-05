@@ -36,8 +36,13 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <p>{{ requirement.short_desc }}</p>
+                        <hr class="divider sm">
+                    </div>
+                    <div class="panel-body">
                         <document-manager :reservation-id="id"
                                           :requirement-id="requirement.id"
+                                          :requirement="requirement"
                                           :user-id="userId">
                         </document-manager>
                     </div>
@@ -184,6 +189,7 @@
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
+                    include: 'document',
                     //sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
                 };
 

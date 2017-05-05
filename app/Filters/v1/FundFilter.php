@@ -15,14 +15,14 @@ class FundFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['name', 'balance', 'class', 'item'];
+    public $sortable = ['name', 'balance'];
 
     /**
      * Fields that can be searched.
      *
      * @var array
      */
-    public $searchable = ['name', 'class', 'item'];
+    public $searchable = ['name', 'accountingClass.name', 'accountingItem.name'];
 
     /**
      * From minimum balance amount.

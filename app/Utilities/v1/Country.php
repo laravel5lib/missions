@@ -278,6 +278,13 @@ class Country {
         return $result;
     }
 
+    public static function getCode($name)
+    {
+        $result = array_where(static::$countries, function($key, $value) use($name) {
+            return $key === trim($name);
+        });
+    }
+
     /**
      * Return a comma seperated string of country codes
      * 

@@ -152,6 +152,16 @@ $api->version('v1', [
     $api->put('promotionals/{id}/restore', 'PromotionalsController@restore');
     $api->resource('promocodes', 'PromocodesController');
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
+    $api->resource('accounting/classes', 'AccountingClassesController');
+    $api->resource('accounting/items', 'AccountingItemsController');
+
+    $api->resource('activities', 'ActivitiesController');
+    $api->resource('itineraries/travel', 'TravelItinerariesController');
+    $api->resource('itineraries', 'ItinerariesController');
+    $api->resource('transports', 'TransportsController');
+    $api->resource('transports.activities', 'TransportActivitiesController');
+    $api->resource('hubs', 'HubsController');
+    $api->resource('hubs.activities', 'HubActivitiesController');
 
     $api->group(['prefix' => 'credentials'], function($api)
     {
@@ -174,10 +184,15 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'utilities'], function ($api) {
         $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
+        $api->get('airlines/', 'AirlineController@index');
+        $api->get('airlines/{id}', 'AirlineController@show');
+        $api->get('airports/', 'AirportController@index');
+        $api->get('airports/{iata}', 'AirportController@show');
         $api->get('countries', 'UtilitiesController@getCountries');
         $api->get('countries/{code}', 'UtilitiesController@getCountry');
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
         $api->get('past-trips', 'UtilitiesController@getPastTrips');
+        $api->get('activities/types', 'UtilitiesController@getActivityTypes');
         $api->get('make-slug/{string}', function($string) {
             return ['slug' => generate_slug($string) ];
         });

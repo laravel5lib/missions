@@ -72,8 +72,8 @@ class ReservationEventListener {
             'name' => $name,
             'slug' => generate_fund_slug($name),
             'balance' => 0,
-            'class_id' => getAccountingClass($reservation)->id,
-            'item_id'  => getAccountingItem($reservation)->id
+            'class_id' => getAccountingClass($event->reservation)->id,
+            'item_id'  => getAccountingItem($event->reservation)->id
         ]);
 
         dispatch(new SetupFunding($event->reservation));

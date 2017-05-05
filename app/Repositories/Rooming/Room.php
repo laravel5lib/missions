@@ -1,8 +1,8 @@
 <?php
-namespace App\Services\Rooming;
 
-use App\Models\v1\RoomingPlan;
-use App\Models\v1\Accommodation;
+namespace App\Repositories\Rooming;
+
+use Illuminate\Http\Request;
 use App\Models\v1\Room as RoomModel;
 use App\Http\Requests\v1\RoomRequest;
 
@@ -10,13 +10,11 @@ class Room {
 
     protected $room;
     protected $plan;
-    protected $hotel;
 
-    function __construct(RoomModel $room, RoomingPlan $plan, Accommodation $hotel)
+    function __construct(RoomModel $room, Plan $plan)
     {
         $this->room = $room;
         $this->plan = $plan;
-        $this->hotel = $hotel;
     }
 
     /**
@@ -27,7 +25,7 @@ class Room {
      */
     public function inPlan($id)
     {
-        $this->plan = $this->plan->withTrashed()->findOrFail($id);
+        $this->plan = $this->plan->find($id)->get();
 
         return $this->plan->rooms();
     }

@@ -25,7 +25,7 @@ class RoomTypeTransformer extends TransformerAbstract
             'links'      => [
                 [
                     'rel' => 'self',
-                    'uri' => 'api/rooms/types/' . $type->id,
+                    'uri' => '/api/rooming/types/' . $type->id,
                 ]
             ]
         ];

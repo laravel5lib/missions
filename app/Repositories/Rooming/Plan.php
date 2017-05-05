@@ -1,15 +1,16 @@
 <?php
-namespace App\Services\Rooming;
+
+namespace App\Repositories\Rooming;
 
 use Illuminate\Http\Request;
+use App\Models\v1\RoomingPlan;
 use App\Http\Requests\v1\RoomingPlanRequest;
-use App\Models\v1\RoomingPlan as RoomingModel;
 
-class RoomingPlan
+class Plan 
 {
     protected $plan;
 
-    function __construct(RoomingModel $plan)
+    function __construct(RoomingPlan $plan)
     {
         $this->plan = $plan;
     }
@@ -167,7 +168,7 @@ class RoomingPlan
     {
         $plan = $this->plan;
 
-        $copy = RoomingModel::create([
+        $copy = RoomingPlan::create([
             'name' => $request->get('name', $plan->name),
             'group_id' => $plan->group_id,
             'campaign_id' => $plan->campaign_id,
@@ -192,4 +193,5 @@ class RoomingPlan
 
         return true;
     }
+
 }

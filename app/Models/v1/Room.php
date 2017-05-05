@@ -15,6 +15,11 @@ class Room extends Model
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
+    public function type()
+    {
+        return $this->belongsTo(RoomType::class, 'room_type_id');
+    }
+
     public function plans()
     {
         return $this->morphedByMany(RoomingPlan::class, 'roomable');

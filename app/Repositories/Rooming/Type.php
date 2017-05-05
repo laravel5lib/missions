@@ -6,7 +6,8 @@ use App\Models\v1\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Requests\v1\RoomTypeRequest;
 
-class Type {
+class Type 
+{
 
     /**
      * Instance of RoomType Model.

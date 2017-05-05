@@ -113,8 +113,8 @@
                         self.$refs.spinner.show();
                         self.$http.put('funds/' + self.id, {
                             'name': self.fund.name,
-                            'class': self.fund.class,
-                            'item': self.fund.item
+                            'class_id': self.fund.class_id,
+                            'item_id': self.fund.item_id
                         }).then(function (response) {
                             self.$refs.spinner.hide();
                             self.$root.$emit('showSuccess', 'Fund updated');

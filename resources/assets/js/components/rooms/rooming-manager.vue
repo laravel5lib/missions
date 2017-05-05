@@ -72,7 +72,7 @@
 									</div>
 								</tab>
 								<tab header="Plan Details">
-
+									<button class="btn btn-block btn-default btn-sm" type="button" @click="openDeletePlanModal">Delete Plan</button>
 								</tab>
 							</tabs>
 						</panel>
@@ -327,6 +327,15 @@
 			</div>
 		</modal>
 
+		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+			<div slot="modal-body" class="modal-body">
+				<p v-if="currentPlan">
+					Are you sure you want to delete plan: "{{currentPlan.name}}" ?
+				</p>
+			</div>
+		</modal>
+
+
 	</div>
 </template>
 <style></style>
@@ -393,6 +402,7 @@
 
 	            // modal vars
 	            showPlanModal: false,
+                showPlanDeleteModal: false,
                 selectedPlan: {
                     name: '',
 	                rooms: []
@@ -464,7 +474,7 @@
             },
             getPlans(){
                 let params = {
-                    // include: '',
+	                include: 'rooms',
                     page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming-plans', { params: params }).then(function (response) {
@@ -533,10 +543,26 @@
 			         return response.body.data;
 		         });
             },
+            openDeletePlanModal() {
+                this.showPlanDeleteModal = true;
+            },
+            deletePlan() {
+                let plan = _.extend({}, this.currentPlan);
+                this.$http.delete('rooming-plans/' + plan.id).then(function (response) {
+                    this.showPlanDeleteModal = false;
+                    this.$root.$emit('showInfo', plan.name + ' Deleted!');
+                    this.plans = _.reject(this.plans, function (obj) {
+	                    return plan.id === obj.id;
+                    });
+                    this.currentplan = this.plans.length ? this.plans[0] : null;
+                });
+
+            }
         },
         ready(){
             let promises = [];
             if (this.isAdminRoute) {
+
             } else {
                 promises.push(this.$http.get('users/' + this.userId, {
                     params: {include: 'facilitating,managing.trips'}

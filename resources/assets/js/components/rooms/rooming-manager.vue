@@ -442,7 +442,7 @@
                 });
             },
             getRoomTypes(){
-                return this.$http.get('room-types').then(function (response) {
+                return this.$http.get('rooming/types').then(function (response) {
                         return this.roomTypes = response.body.data;
                     },
                     function (response) {

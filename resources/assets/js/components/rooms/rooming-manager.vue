@@ -455,7 +455,7 @@
 	                include: 'rooms',
                     page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming-plans', { params: params }).then(function (response) {
+                return this.$http.get('rooming/plans', { params: params }).then(function (response) {
                         this.plansPagination = response.body.meta.pagination;
                         return this.plans = response.body.data;
                     },
@@ -491,7 +491,7 @@
                 };
             },
 	        newPlan() {
-                this.$http.post('rooming-plans', this.selectedPlan).then(function (response) {
+                this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
 	                let plan = response.body.data;
                     this.plans.push(plan);
                     this.currentPlan = plan;
@@ -511,7 +511,7 @@
                 };
             },
 	        newRoom() {
-		         this.$http.post('rooming-plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom).then(function (response) {
+		         this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom).then(function (response) {
                      let room = response.body.data;
                      this.showRoomModal = false;
                      this.currentPlan.rooms.push(room);
@@ -526,7 +526,7 @@
             },
             deletePlan() {
                 let plan = _.extend({}, this.currentPlan);
-                this.$http.delete('rooming-plans/' + plan.id).then(function (response) {
+                this.$http.delete('rooming/plans/' + plan.id).then(function (response) {
                     this.showPlanDeleteModal = false;
                     this.$root.$emit('showInfo', plan.name + ' Deleted!');
                     this.plans = _.reject(this.plans, function (obj) {

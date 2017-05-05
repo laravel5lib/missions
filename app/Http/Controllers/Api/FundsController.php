@@ -95,7 +95,6 @@ class FundsController extends Controller
         $fund->update([
             'name' => $request->get('name', $fund->name),
             'slug' => $request->get('slug', $fund->slug),
-            'balance' => $request->get('balance', $fund->balance),
             'fundable_id' => $request->get('fundable_id', $fund->fundable_id),
             'fundable_type' => $request->get('fundable_type', $fund->fundable_type),
             'class_id' => $request->get('class_id', $fund->class_id),

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Rooming;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Rooming\Plan;
+use App\Repositories\Rooming\Interfaces\Plan;
 use App\Http\Requests\v1\RoomingPlanRequest;
 use App\Http\Transformers\v1\RoomingPlanTransformer;
 

@@ -5,8 +5,9 @@ namespace App\Repositories\Rooming;
 use App\Models\v1\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Requests\v1\RoomTypeRequest;
+use App\Repositories\Rooming\Interfaces\Type;
 
-class Type 
+class EloquentType implements Type
 {
 
     /**
@@ -123,4 +124,15 @@ class Type
         return $this->type->paginate($perPage);
     }
 
+    /**
+     * Delete the room type.
+     * 
+     * @return boolean
+     */
+    public function delete()
+    {
+        $this->type->delete();
+
+        return true;
+    }
 }

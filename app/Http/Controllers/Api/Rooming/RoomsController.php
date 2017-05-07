@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\Rooming;
 
 use App\Http\Requests;
-use App\Repositories\Rooming\Room;
+use App\Repositories\Rooming\Interfaces\Room;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\RoomRequest;

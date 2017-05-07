@@ -5,8 +5,9 @@ namespace App\Repositories\Rooming;
 use Illuminate\Http\Request;
 use App\Models\v1\RoomingPlan;
 use App\Http\Requests\v1\RoomingPlanRequest;
+use App\Repositories\Rooming\Interfaces\Plan;
 
-class Plan 
+class EloquentPlan implements Plan
 {
     protected $plan;
 
@@ -134,7 +135,7 @@ class Plan
      * @param  String $accomodationId
      * @return mixed
      */
-    public function useForAccommodation($accomodationId)
+    public function useForAccommodation($accommodationId)
     {
         $rooms = $this->plan->rooms();
 
@@ -149,7 +150,7 @@ class Plan
      * @param  String $accomodationId
      * @return mixed
      */
-    public function stopUseForAccommodation($accomodationId)
+    public function stopUseForAccommodation($accommodationId)
     {
         $rooms = $this->plan->rooms();
 

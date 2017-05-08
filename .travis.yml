@@ -13,6 +13,7 @@ services:
 before_script:
 - mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
 - composer install --dev --prefer-source --no-interaction
+- php artisan migrate:refresh --seed --force
 - rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
 - npm install --global gulp-cli
 - yarn
@@ -22,3 +23,9 @@ env:
   - TRAVIS_NODE_VERSION="6"
 notifications:
   email: false
+  slack:
+    rooms:
+      secure: VCYayy1eqf/0TcCCgQ6M/QQf+gpagPktymX7nyOiemgjEUoXJX16whhgkDuZxBXq6rfs+QJROQUxbc6gl6aQuwrrptdXVu2XbSGFphbXh8gqd9lnqZd4vH+XQdJbuES6DhKHHEOZ+bcI+saoDUfhln9MGsR1D7KSvjbLnIyE6hWAnJ5hNC6PYusoR2nK5KSVvaraxHexcs3kp+upoKjrbnU2ApPFAvn7CUYCaMx37BW6amVnqMWqtsyhVAUO1yRzNkgHZUnHEm4qoVupQrqMKQktctUqjs81VqHmNfkhwTHn0a7XVmVdFOFkskaCjTKL4NUSKr2JCukUQT5MHwRWlxF5VHI+4Ttod91OlqPoYhD5FWqHN6cdX6Smtjq9MAbNM28J3foYYoXjB0PCE7BybeOn5ZU3snhoe7+K1vEQi0qAi2lPoxCO+nZZim2S3fsGcYSPO/teEGFXUzLtw7yrS/zpyqtyfitDLvp4rsCQYpp2UN+v5D5FuaRt9yj2Y5sj1Y3vRuGEckH65tuFxwStUiYGZxVoFvR4ATn8ViUnz5gVQpVzgR1YyCBdDHb2u+c2eRTpvoNOH4E1wsw9ByNI8LoPzf2MZupqYI5AEfsjnI/wA7pxXgumW5eybDTdW8CBajxpP2HrOvF0BSQYRRJ99HdyhddsBZ3C11zCwJdCLq0=
+    on_failure: always
+    on_success: change
+    on_pull_requests: false

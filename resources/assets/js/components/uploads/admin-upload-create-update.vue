@@ -141,7 +141,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-    import Slim from '../../../../../public/js/slim.commonjs';
+//    import Slim from '../../../../../public/js/slim.commonjs';
     import jQuery from 'jquery';
     import _ from 'underscore';
     import vSelect from 'vue-select'

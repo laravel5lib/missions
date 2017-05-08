@@ -126,13 +126,13 @@
 						<div class="collapse" id="avatarCollapse">
 							<div class="well">
 								<upload-create-update type="avatar" :lock-type="true" :is-child="true"
-								                      :tags="['campaign']"></upload-create-update>
+								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 						<div class="collapse" id="bannerCollapse">
 							<div class="well">
 								<upload-create-update type="banner" :lock-type="true" :is-child="true"
-								                      :tags="['campaign']"></upload-create-update>
+								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 					</div><!-- end col -->

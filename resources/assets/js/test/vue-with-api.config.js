@@ -16,7 +16,9 @@ Vue.use(require('vue-cookie'));
 Vue.use(require('vue-resource'));
 import VueResourceMock from 'vue-resource-mock-api'
 import MockData from './mock-api'
-Vue.use(VueResourceMock, { routes: MockData, matchOptions: { segmentValueCharset: 'a-zA-Z0-9.,-_%', segmentNameStartChar: ':' }});
+Vue.use(VueResourceMock, { routes: MockData, matchOptions: {
+    segmentValueCharset: 'a-zA-Z0-9.,-_%',
+}});
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push(function(request, next) {
 

@@ -141,7 +141,10 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import vSelect from 'vue-select'
+    import Slim from '../../../../../public/js/slim.commonjs';
+    import jQuery from 'jquery';
+    import _ from 'underscore';
+    import vSelect from 'vue-select'
     import errorHandler from'../error-handler.mixin';
     export default{
         name: 'upload-create-update',
@@ -539,7 +542,10 @@
 				this.$http.get('uploads', { params: params }).then(function (response) {
 					this.uploads = response.body.data;
 					this.pagination = response.body.meta.pagination;
-				})
+					return this.uploads;
+				}, function (response) {
+					return response
+                });
 			},
 			selectExisting(upload){
 				// Assumes this is a child component
@@ -562,7 +568,7 @@
                     setTimeout(function () {
                         self.slimAPI = new Slim.parse(self.$el);
                         if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
-                            self.adjustSelectByType()
+                            self.adjustSelectByType();
                         } else {
                             self.slimAPI[0].ratio = 'free';
                         }

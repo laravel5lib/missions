@@ -193,7 +193,8 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import vSelect from "vue-select";
+    import _ from 'underscore';
+    import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
 	export default{
@@ -348,7 +349,6 @@
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();
 			});
-
 		}
 	}
 

@@ -186,12 +186,12 @@
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
-						<div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
+						<!-- <div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
 								Filters
 								<i class="fa fa-filter"></i>
 							</button>
-						</div>
+						</div> -->
 						<div class="col-xs-12">
 							<hr class="divider inv">
 						</div>
@@ -212,6 +212,9 @@
 												<h3 class="panel-title" v-text="squad.callsign"></h3>
 											</div>
 											<div class="panel-body">
+												<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_squad_leaders">
+															Complete! You've filled all the positions.
+												</div>
 												<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
 													<div class="panel panel-default" v-for="member in squad.members">
 														<div class="panel-heading" role="tab" id="headingOne">
@@ -306,8 +309,11 @@
 														</dropdown>
 													</div>
 												</div>
-											</div>
+											</div><!-- end panel-heading -->
 											<div class="panel-body">
+												<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_squad_members">
+															Complete! You've filled all the positions.
+												</div>
 												<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
 													<div class="panel panel-default" v-for="member in squad.members">
 														<div class="panel-heading" role="tab" id="headingOne">
@@ -393,18 +399,21 @@
 				</div>
 				<div role="tabpanel" class="tab-pane" id="teamdetails">
 					<form class="form-horizontal" v-if="currentTeam">
-						<div class="form-group">
-							<label for="" class="col-sm-4 control-label">Name</label>
-							<div class="col-sm-8">
+						<div class="row">
+							<div class="col-sm-6">
+								<label for="" class="control-label">Name</label>
 								<input v-if="isAdminRoute" type="text" class="form-control"  placeholder="Name" v-model="currentTeam.callsign">
 								<p v-else v-text="currentTeam.callsign"></p>
 							</div>
-
-						</div>
-
-						<div class="form-group">
-							<label for="" class="col-sm-4 control-label">Locked</label>
-							<div class="col-sm-8">
+							<div class="col-sm-4">
+								<label for="" class="control-label">Type</label>
+								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
+									<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
+								</select>
+								<p v-else v-text="currentTeam.type.data.name | capitalize"></p>
+							</div>
+							<div class="col-sm-2">
+								<label for="" class="control-label">Locked</label>
 								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.locked">
 									<option :value="true">Yes</option>
 									<option :value="false">No</option>
@@ -412,23 +421,33 @@
 								<p v-else v-text="currentTeam.locked ? 'Yes' : 'No'"></p>
 							</div>
 						</div>
-
+						<hr class="divider">
 						<div class="form-group">
-							<label for="" class="col-sm-4 control-label">Type</label>
-							<div class="col-sm-8">
-								<select v-if="isAdminRoute" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
-									<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
-								</select>
-								<p v-else v-text="currentTeam.type.data.name | capitalize"></p>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-4 control-label">Rules</label>
-							<div class="col-sm-8">
+							<div class="col-sm-6">
+								<label class="control-label">Assignment Rules</label>
+								<hr class="divider sm inv">
 								<ul class="list-group" v-if="currentSquads.length">
 									<li class="list-group-item" v-for="(key, value) in currentTeam.type.data.rules">
 										<span class="badge" v-text="value"></span>
 										{{ key | underscoreToSpace | capitalize }}
+									</li>
+								</ul>
+							</div>
+							<div class="col-sm-6">
+								<label class="control-label">Currently Assigned</label>
+								<hr class="divider sm inv">
+								<ul class="list-group" v-if="currentSquads.length">
+									<li class="list-group-item" v-if="leaderSquad.members">
+										<span class="badge" v-text="leaderSquad.members.length"></span>
+										Team Leaders
+									</li>
+									<li class="list-group-item" v-if="groupLeaders">
+										<span class="badge" v-text="groupLeaders.length"></span>
+										Group Leaders
+									</li>
+									<li class="list-group-item" v-if="totalMembers">
+										<span class="badge" v-text="totalMembers"></span>
+										Total Members
 									</li>
 								</ul>
 							</div>
@@ -462,28 +481,11 @@
 						</div>-->
 
 						<div class="form-group">
-							<div class="col-sm-4"></div>
-							<div class="col-sm-8">
+							<div class="col-sm-12">
 								<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
 								<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Delete Team</button>
 							</div>
 						</div>
-						<hr class="divider sm">
-
-						<ul class="list-group" v-if="currentSquads.length">
-							<li class="list-group-item" v-if="leaderSquad.members">
-								<span class="badge" v-text="leaderSquad.members.length"></span>
-								Team Leaders
-							</li>
-							<li class="list-group-item" v-if="groupLeaders">
-								<span class="badge" v-text="groupLeaders.length"></span>
-								Group Leaders
-							</li>
-							<li class="list-group-item" v-if="totalMembers">
-								<span class="badge" v-text="totalMembers"></span>
-								Total Members
-							</li>
-						</ul>
 					</form>
 				</div>
 			</div>
@@ -556,15 +558,15 @@
 							<hr class="divider inv">
 							<div>
 								<label>Active Filters</label>
-								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
 									Travel Group
 									<i class="fa fa-close"></i>
 								</span>
-								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
 									Companions
 									<i class="fa fa-close"></i>
 								</span>
-								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
 									Role
 									<i class="fa fa-close"></i>
 								</span>

@@ -6,17 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests\v1\RoomingPlanRequest;
 
 interface Plan {
-    public function filter(Request $request);
-    public function find($id);
-    public function make(RoomingPlanRequest $request);
-    public function modify(RoomingPlanRequest $request);
-    public function get();
-    public function all();
-    public function paginate($perPage);
-    public function delete();
-    public function lock();
-    public function unlock();
-    public function copy(Request $request);
-    public function useForAccommodation($accommodationId);
-    public function stopUseForAccommodation($accommodationId);
+    public function filter(array $data);
+    public function getById($id);
+    public function create(array $data);
+    public function update(array $data, $id);
+    public function getAll();
+    public function paginate($perPage, $columns);
+    public function delete($ids);
+    public function lock($id);
+    public function unlock($id);
+    public function addRooms($rooms, $id);
+    public function removeRooms($rooms, $id);
 }

@@ -163,9 +163,9 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'rooming'], function($api) {
         $api->resource('plans', 'Rooming\PlansController');
-        $api->resource('plans/{id}/rooms', 'Rooming\Plans\RoomsController');
         $api->resource('types', 'Rooming\TypesController');
         $api->resource('rooms', 'Rooming\RoomsController');
+        $api->resource('{roomableType}/{roomableId}/rooms', 'Rooming\Roomable\RoomsController');
     });
 
     $api->resource('activities', 'ActivitiesController');

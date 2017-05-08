@@ -54,6 +54,16 @@ class RoomType extends Model
         return $value ? (array) json_decode($value) : [];
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = snake_case($value);
+    }
+
+    public function getNameAttribute($value)
+    {
+        return ucwords(str_replace('_', ' ', $value));
+    }
+
     /**
      * Get the rules for the room type.
      * 

@@ -2,93 +2,24 @@
 
 namespace App\Repositories\Rooming;
 
-use Illuminate\Http\Request;
+use App\Traits\Roomable;
 use App\Models\v1\RoomingPlan;
-use App\Http\Requests\v1\RoomingPlanRequest;
+use App\Repositories\EloquentRepository;
 use App\Repositories\Rooming\Interfaces\Plan;
 
-class EloquentPlan implements Plan
+class EloquentPlan extends EloquentRepository implements Plan
 {
-    protected $plan;
+    use Roomable;
 
-    function __construct(RoomingPlan $plan)
+    protected $model;
+
+    protected $attributes = [
+        'name', 'short_desc', 'group_id', 'campaign_id'
+    ];
+
+    function __construct(RoomingPlan $model)
     {
-        $this->plan = $plan;
-    }
-
-    /**
-     * Filter plans by request.
-     * 
-     * @param  Request $request
-     * @return $this
-     */
-    public function filter(Request $request)
-    {
-        $this->plan->filter($request->all());
-
-        return $this;
-    }
-
-    /**
-     * Find a plan by it's id.
-     * 
-     * @param  String $id
-     * @return $this
-     */
-    public function find($id)
-    {
-        $this->plan = $this->plan->withTrashed()->findOrFail($id);
-
-        return $this;
-    }
-
-    /**
-     * Return plan.
-     * 
-     * @return Mixed
-     */
-    public function get()
-    {
-        return $this->plan;
-    }
-
-    /**
-     * Get all plans.
-     * 
-     * @return EloquentCollection
-     */
-    public function all()
-    {
-        return $this->plan->all();
-    }
-
-    /**
-     * Return paginated plans.
-     * 
-     * @param  integer $perPage
-     * @return EloquentCollection
-     */
-    public function paginate($perPage = 10)
-    {
-        return $this->plan->paginate($perPage);
-    }
-
-    /**
-     * Make a new plan and save in storage.
-     * 
-     * @param  RoomingPlanRequest $request
-     * @return EloquentCollection
-     */
-    public function make(RoomingPlanRequest $request)
-    {
-        $plan = $this->plan->create([
-            'name'        => trim($request->get('name')),
-            'short_desc'  => trim($request->get('short_desc', 'no description')),
-            'group_id'    => $request->get('group_id'),
-            'campaign_id' => $request->get('campaign_id')
-        ]);
-
-        return $plan;
+        $this->model = $model;
     }
 
     /**
@@ -97,16 +28,13 @@ class EloquentPlan implements Plan
      * @param  RoomingPlanRequest $request
      * @return EloquentCollection
      */
-    public function modify(RoomingPlanRequest $request)
+    public function update(array $data, $id, $attribute = 'id')
     {
-        $this->plan->update([
-            'name'        => trim($request->get('name', $this->plan->name)),
-            'short_desc'  => trim($request->get('short_desc', $this->plan->short_desc)),
-            'group_id'    => $request->get('group_id', $this->plan->group_id),
-            'campaign_id' => $request->get('campaign_id', $this->plan->campaign_id)
-        ]);
+        $plan = $this->getById($id);
 
-        return $this->plan;
+        $plan->update($this->sanitize($data));
+
+        return $plan;
     }
 
     /**
@@ -114,9 +42,13 @@ class EloquentPlan implements Plan
      * 
      * @return Mixed
      */
-    public function lock()
+    public function lock($id)
     {
-        return $this->plan->update(['locked' => true]);
+        $plan = $this->getById($id);
+
+        $plan->update(['locked' => true]);
+
+        return $plan;
     }
 
     /**
@@ -124,75 +56,13 @@ class EloquentPlan implements Plan
      * 
      * @return Mixed
      */
-    public function unlock()
+    public function unlock($id)
     {
-        return $this->plan->update(['locked' => true]);
-    }
+        $plan = $this->getById($id);
 
-    /**
-     * Use a plan with the given accommodation.
-     * 
-     * @param  String $accomodationId
-     * @return mixed
-     */
-    public function useForAccommodation($accommodationId)
-    {
-        $rooms = $this->plan->rooms();
+        $plan->update(['locked' => true]);
 
-        foreach ($rooms as $room) {
-            $room->accomodations()->attach($accomodationId);
-        }
-    }
-
-    /**
-     * Stop using a plan with the given accommodation.
-     * 
-     * @param  String $accomodationId
-     * @return mixed
-     */
-    public function stopUseForAccommodation($accommodationId)
-    {
-        $rooms = $this->plan->rooms();
-
-        foreach ($rooms as $room) {
-            $room->accomodations()->detach($accomodationId);
-        }
-    }
-
-    /**
-     * Copy a rooming plan with rooms.
-     * 
-     * @param  Request $request
-     * @return Mixed
-     */
-    public function copy(Request $request)
-    {
-        $plan = $this->plan;
-
-        $copy = RoomingPlan::create([
-            'name' => $request->get('name', $plan->name),
-            'group_id' => $plan->group_id,
-            'campaign_id' => $plan->campaign_id,
-            'short_desc' => $plan->short_desc,
-            'locked' => $plan->locked
-        ]);
-
-        $rooms = $plan->rooms()->pluck('id')->toArray();
-
-        $copy->rooms()->attach($rooms);
-    }
-
-    /**
-     * Delete a rooming plan.
-     * 
-     * @return Boolean
-     */
-    public function delete()
-    {
-        $this->plan->rooms()->detach();
-        $this->plan->delete();
-
-        return true;
+        return $plan;
     }
 
 }

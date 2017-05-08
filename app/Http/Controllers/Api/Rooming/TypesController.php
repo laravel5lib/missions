@@ -37,7 +37,7 @@ class TypesController extends Controller
     public function index(Request $request)
     {
         $types = $this->type
-                      ->filter($request)
+                      ->filter($request->all())
                       ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($types, new RoomTypeTransformer);
@@ -51,7 +51,7 @@ class TypesController extends Controller
      */
     public function show($id)
     {
-        $type = $this->type->find($id)->get();
+        $type = $this->type->getById($id);
 
         return $this->response->item($type, new RoomTypeTransformer);
     }
@@ -64,7 +64,10 @@ class TypesController extends Controller
      */
     public function store(RoomTypeRequest $request)
     {
-        $type = $this->type->make($request)->get();
+        $type = $this->type->create([
+            'name' => $request->get('name'),
+            'rules' => $request->get('rules')
+        ]);
 
         return $this->response->item($type, new RoomTypeTransformer);
     }
@@ -78,7 +81,10 @@ class TypesController extends Controller
      */
     public function update(RoomTypeRequest $request, $id)
     {
-        $type = $this->type->find($id)->modify($request)->get();
+        $type = $this->type->update([
+            'name' => $request->get('name'),
+            'rules' => $request->get('rules')
+        ], $id);
 
         return $this->response->item($type, new RoomTypeTransformer);
     }
@@ -91,7 +97,7 @@ class TypesController extends Controller
      */
     public function destroy($id)
     {
-        $type = $this->type->find($id)->delete();
+        $type = $this->type->delete($id);
 
         return $this->response->noContent();
     }

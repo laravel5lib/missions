@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api\Rooming;
 
-use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Rooming\Interfaces\Plan;
 use App\Http\Requests\v1\RoomingPlanRequest;
+use App\Repositories\Rooming\Interfaces\Plan;
 use App\Http\Transformers\v1\RoomingPlanTransformer;
 
 class PlansController extends Controller
@@ -27,7 +26,7 @@ class PlansController extends Controller
     public function index(Request $request)
     {
         $plans = $this->plan
-                      ->filter($request)
+                      ->filter($request->all())
                       ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($plans, new RoomingPlanTransformer);
@@ -40,9 +39,9 @@ class PlansController extends Controller
      * @param  Request $request
      * @return Dingo\Api\Http\Response
      */
-    public function show($id, Request $request)
+    public function show($id)
     {
-        $plan = $this->plan->find($id)->get();
+        $plan = $this->plan->getById($id);
 
         return $this->response->item($plan, new RoomingPlanTransformer);
     }
@@ -55,7 +54,12 @@ class PlansController extends Controller
      */
     public function store(RoomingPlanRequest $request)
     {
-        $plan = $this->plan->make($request);
+        $plan = $this->plan->create([
+            'name'        => $request->get('name'),
+            'short_desc'  => $request->get('short_desc', 'no description'),
+            'group_id'    => $request->get('group_id'),
+            'campaign_id' => $request->get('campaign_id')
+        ]);
 
         return $this->response->item($plan, new RoomingPlanTransformer); 
     }
@@ -69,7 +73,12 @@ class PlansController extends Controller
      */
     public function update(RoomingPlanRequest $request, $id)
     {
-        $plan = $this->plan->find($id)->modify($request);
+        $plan = $this->plan->update([
+            'name'        => $request->get('name'),
+            'short_desc'  => $request->get('short_desc'),
+            'group_id'    => $request->get('group_id'),
+            'campaign_id' => $request->get('campaign_id')
+        ], $id);
 
         return $this->response->item($plan, new RoomingPlanTransformer);
     }
@@ -82,7 +91,7 @@ class PlansController extends Controller
      */
     public function destroy($id)
     {
-        $this->plan->find($id)->delete();
+        $this->plan->delete($id);
 
         return $this->response->noContent();
     }

@@ -2,21 +2,12 @@
 
 namespace App\Repositories\Rooming\Interfaces;
 
-use Illuminate\Http\Request;
-use App\Http\Requests\v1\RoomRequest;
-
 interface Room {
-    public function filter(Request $request);
-    public function find($id);
-    public function make(RoomRequest $request);
-    public function modify(RoomRequest $request);
-    public function get();
-    public function all();
+    public function filter(array $data);
+    public function getById($id);
+    public function create(array $data);
+    public function update(array $data, $id, $attribute);
+    public function getAll();
     public function paginate($perPage);
-    public function delete();
-    public function inPlan($planId);
-    public function forPlan($planId);
-    public function addToPlan($planId);
-    public function removeFromPlan($planId);
-    public function moveToPlan($planId);
+    public function delete($ids);
 }

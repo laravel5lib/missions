@@ -23,4 +23,38 @@ class RoomFilter extends Filter
      * @var array
      */
     public $searchable = ['label'];
+
+    /**
+     * Filter rooms assigned to plans.
+     * 
+     * @param  array|integer $ids
+     * @return query
+     */
+    public function plans($ids)
+    {
+        return $this->whereHas('plans', function ($plan) use ($ids) {
+
+            $plan->whereRoomableType('plans');
+
+            if (is_array($ids)) {
+                return $plan->whereIn('roomable_id', $ids);
+            }
+
+            return $plan->whereRoomableId($ids);
+        });
+    }
+
+    /**
+     * Filter by room type.
+     * 
+     * @param  string $type
+     * @return query
+     */
+    public function type($type)
+    {
+        return $this->where('room_type_id', $type)
+                    ->orWhereHas('type', function ($query) use ($type) {
+                        return $query->where('name', strtolower($type));
+                    });
+    }
 }

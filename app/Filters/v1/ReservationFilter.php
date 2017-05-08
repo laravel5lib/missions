@@ -379,4 +379,16 @@ class ReservationFilter extends Filter
     {
         //
     }
+
+    public function rooms($ids)
+    {
+        return $this->whereHas('rooms', function($room) use($ids) {
+
+            if (is_array($ids)) {
+                return $room->whereIn('id', $ids);
+            }
+
+            return $room->where('id', $ids);
+        });
+    }
 }

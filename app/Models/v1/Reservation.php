@@ -299,6 +299,18 @@ class Reservation extends Model
     }
 
     /**
+     * Get the reservation's room assignments.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'occupants')
+                    ->withPivot('room_leader')
+                    ->withTimestamps();
+    }
+
+    /**
      * Get the name on the reservation.
      *
      * @return string

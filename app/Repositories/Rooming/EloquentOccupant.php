@@ -3,13 +3,25 @@
 namespace App\Repositories\Rooming;
 
 use App\Models\v1\Reservation;
+use App\Repositories\EloquentRepository;
+use App\Repositories\Rooming\Interfaces\Occupant;
 
-class EloquentOccupant implements Occupant
+class EloquentOccupant extends EloquentRepository implements Occupant
 {   
-    protected $occupant;
+    protected $model;
     
-    function __construct(Reservation $occupant)
+    function __construct(Reservation $model)
     {
-        $this->occupant = $occupant;
+        $this->model = $model;
+    }
+
+    public function promote($roomId, $id)
+    {
+        //
+    }
+
+    public function demote($roomId, $id)
+    {
+        //
     }
 }

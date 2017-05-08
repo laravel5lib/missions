@@ -166,6 +166,7 @@ $api->version('v1', [
         $api->resource('types', 'Rooming\TypesController');
         $api->resource('rooms', 'Rooming\RoomsController');
         $api->resource('{roomableType}/{roomableId}/rooms', 'Rooming\Roomable\RoomsController');
+        $api->resource('rooms/{roomId}/occupants', 'Rooming\RoomOccupantsController');
     });
 
     $api->resource('activities', 'ActivitiesController');

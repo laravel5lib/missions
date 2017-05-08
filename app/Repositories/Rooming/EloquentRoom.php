@@ -16,4 +16,22 @@ class EloquentRoom extends EloquentRepository implements Room {
     {
         $this->model = $room;
     }
+
+    public function addOccupants($id, $occupants)
+    {
+        $room = $this->getById($id);
+
+        $room->occupants()->attach($occupants);
+
+        return true;
+    }
+
+    public function removeOccupants($id, $occupants)
+    {
+        $room = $this->getById($id);
+
+        $room->occupants()->detach($occupants);
+
+        return false;
+    }
 }

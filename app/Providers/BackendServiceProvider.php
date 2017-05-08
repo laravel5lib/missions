@@ -25,5 +25,9 @@ class BackendServiceProvider extends ServiceProvider
             'App\Repositories\Rooming\Interfaces\Room',
             'App\Repositories\Rooming\EloquentRoom'
         );
+        $this->app->bind(
+            'App\Repositories\Rooming\Interfaces\Occupant',
+            'App\Repositories\Rooming\EloquentOccupant'
+        );
     }
 }

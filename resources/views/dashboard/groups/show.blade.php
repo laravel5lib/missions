@@ -102,8 +102,8 @@
                         <h3 class="panel-title">Planning Tools</h3>
                     </div>
                     <div class="panel-body">
-                        <a href="{{ url()->current() }}/teams" class="btn btn-primary btn-block tour-step-teams">Manage Teams</a>
-                        <a href="{{ url()->current() }}/rooms" class="btn btn-block btn-primary tour-step-rooms"><i class="fa fa-bed"></i> Manage Rooming</a>
+                        <a href="{{ url()->current() }}/teams" class="btn btn-primary btn-block tour-step-teams"><i class="fa fa-address-book icon-left"></i> Manage Teams</a>
+                        <a href="{{ url()->current() }}/rooms" class="btn btn-block btn-primary tour-step-rooms"><i class="fa fa-bed icon-left"></i> Manage Rooming</a>
                     </div>
                 </div>
             </div>

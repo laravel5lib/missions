@@ -6,8 +6,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="col-sm-8">
-                        <h3 class="hidden-xs">My Rooming Plans</h3>
-                        <h3 class="text-center visible-xs">My Rooming Plans</h3>
+                        <h3 class="hidden-xs">Rooming Plans</h3>
+                        <h3 class="text-center visible-xs">Rooming Plans</h3>
                     </div>
                     <div class="col-sm-4 text-right">
                         {{--<action-select :normal="false" :options="[]" :api="true" search-route="campaigns" text="Change Campaign" event="campaign-scope" :auto-select-first="true"></action-select>--}}
@@ -20,11 +20,12 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <accordion :one-at-atime="true" type="default">
-                    <div class="well well-default">
+                <div class="panel-heading">
+                        <h6 class="text-uppercase"><a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Room Management Made Simple <span class="pull-right"><i class="fa fa-close"></i></span></a></h6>
+                    </div><!-- end panel-heading -->
+                    <div class="panel-body panel-collapse collapse in" id="collapseOne">
                         <div class="row">
                             <div class="col-xs-12 col-sm-4">
-                                <h5 class="text-uppercase">Room Management Made Simple</h5>
                                 <p class="small">Missions.Me has created a system to help you manage your teams. Add missionaries to specific teams using this simple tool.</p>
                             </div><!-- end col -->
                             <div class="col-xs-12 col-sm-8">
@@ -45,8 +46,8 @@
                                 </div><!-- end row -->
                             </div><!-- end col -->
                         </div><!-- end row -->
-                    </div><!-- end well -->
-                </accordion>
+                    </div><!-- end panel-body -->
+                </div><!-- end panel -->
             </div>
         </div>
         <rooming-manager user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></rooming-manager>

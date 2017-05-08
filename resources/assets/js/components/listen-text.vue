@@ -9,10 +9,6 @@
                 type: String,
                 default: ''
             },
-            separator: {
-                type: String,
-                default: ' - '
-            },
             event: {
                 type: String,
                 required: true

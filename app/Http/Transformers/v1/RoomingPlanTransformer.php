@@ -18,7 +18,7 @@ class RoomingPlanTransformer extends TransformerAbstract
             'links'      => [
                 [
                     'rel' => 'self',
-                    'uri' => '/api/rooming-plans/' . $plan->id,
+                    'uri' => '/api/rooming/plans/' . $plan->id,
                 ]
             ],
         ];

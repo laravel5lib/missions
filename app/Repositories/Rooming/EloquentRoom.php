@@ -1,33 +1,33 @@
 <?php
-namespace App\Services\Rooming;
 
-use App\Models\v1\RoomingPlan;
-use App\Models\v1\Accommodation;
+namespace App\Repositories\Rooming;
+
+use Illuminate\Http\Request;
 use App\Models\v1\Room as RoomModel;
 use App\Http\Requests\v1\RoomRequest;
+use App\Repositories\Rooming\Interfaces\Plan;
+use App\Repositories\Rooming\Interfaces\Room;
 
-class Room {
+class EloquentRoom implements Room {
 
     protected $room;
     protected $plan;
-    protected $hotel;
 
-    function __construct(RoomModel $room, RoomingPlan $plan, Accommodation $hotel)
+    function __construct(RoomModel $room, Plan $plan)
     {
         $this->room = $room;
         $this->plan = $plan;
-        $this->hotel = $hotel;
     }
 
     /**
      * Get rooms in plan.
      * 
-     * @param  String $id
+     * @param  String $planId
      * @return EloquentCollection
      */
-    public function inPlan($id)
+    public function inPlan($planId)
     {
-        $this->plan = $this->plan->withTrashed()->findOrFail($id);
+        $this->plan = $this->plan->find($planId)->get();
 
         return $this->plan->rooms();
     }
@@ -145,23 +145,23 @@ class Room {
     /**
      * Alias of addToPlan
      * 
-     * @param  String $id
+     * @param  String $planId
      * @return $this
      */
-    public function forPlan($id)
+    public function forPlan($planId)
     {
-        return $this->addToPlan($id);
+        return $this->addToPlan($planId);
     }
 
     /**
      * Add room to a plan.
      * 
-     * @param String $id
+     * @param String $planId
      * @return $this
      */
-    public function addToPlan($id)
+    public function addToPlan($planId)
     {
-        $this->room->plans()->attach($id);
+        $this->room->plans()->attach($planId);
 
         return $this;
     }
@@ -169,12 +169,12 @@ class Room {
     /**
      * Remove room from a plan.
      * 
-     * @param  String $id
+     * @param  String $planId
      * @return $this
      */
-    public function removeFromPlan($id)
+    public function removeFromPlan($planId)
     {
-        $this->room->plans()->detach($id);
+        $this->room->plans()->detach($planId);
 
         return $this;
     }

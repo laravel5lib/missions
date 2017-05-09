@@ -14,7 +14,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('type_id')->nullable();
+            $table->uuid('type_id');
             $table->string('callsign');
             $table->boolean('locked')->default(false);
             $table->timestamps();
@@ -47,12 +47,6 @@ class CreateTeamsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('teams', function ($table) {
-            $table->foreign('type_id')
-                ->references('id')->on('team_types')
-                ->onDelete('set null');
-        });
-
         Schema::table('team_members', function ($table) {
             $table->foreign('reservation_id')
                 ->references('id')->on('reservations')
@@ -66,6 +60,12 @@ class CreateTeamsTable extends Migration
         Schema::table('team_squads', function ($table) {
             $table->foreign('team_id')
                 ->references('id')->on('teams')
+                ->onDelete('cascade');
+        });
+
+        Schema::table('teams', function ($table) {
+            $table->foreign('type_id')
+                ->references('id')->on('team_types')
                 ->onDelete('cascade');
         });
     }

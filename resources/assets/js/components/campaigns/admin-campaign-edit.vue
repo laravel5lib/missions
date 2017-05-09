@@ -206,8 +206,6 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
-//				errors: [],
-
 				name: null,
 				country_code: null,
 				short_desc: null,
@@ -218,7 +216,6 @@
 				published_at_time: null,
 				page_url: null,
 				page_src: null,
-//				attemptSubmit: false,
 				selectedAvatar: { source: null },
 				avatar_upload_id: null,
 				selectedBanner: { source: null },

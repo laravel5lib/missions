@@ -170,8 +170,6 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
-//				errors: {},
-
 				name: null,
 				country: null,
 				country_code: null,
@@ -181,7 +179,6 @@
 				published_at: null,
 				page_url: null,
 				page_src: null,
-//				attemptSubmit: false,
 				selectedAvatar: null,
 				avatar_upload_id: null,
 				selectedBanner: null,
@@ -201,9 +198,9 @@
 				if (typeof val === 'string') {
 					// pre-populate slug
 					this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } })
-							.then(function (response) {
-								this.page_url = response.body.slug;
-							});
+						.then(function (response) {
+							this.page_url = response.body.slug;
+						});
 				}
 			}
 		},

@@ -75,7 +75,7 @@ abstract class EloquentRepository
      */
     public function delete($ids)
     {
-        return $this->model->delete($ids);
+        return $this->model->destroy($ids);
     }
 
     /**

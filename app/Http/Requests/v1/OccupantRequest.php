@@ -23,11 +23,22 @@ class OccupantRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules =  [
             'reservation_id'   => 'required_without:reservations|exists:reservations,id',
             'reservations'     => 'array',
             'reservations.*'   => 'required|string',
             'room_leader'      => 'boolean'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules = [
+                'reservation_id'   => 'sometimes|required_without:reservations|exists:reservations,id',
+                'reservations'     => 'array',
+                'reservations.*'   => 'sometimes|required|string',
+                'room_leader'      => 'required|boolean'
+            ];
+        }
+
+        return $rules;
     }
 }

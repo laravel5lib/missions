@@ -34,7 +34,7 @@ class Room extends Model
 
     public function validateOccupants($occupants)
     {
-        $occupants = is_array($occupants) ?: [$occupants];
+        $occupants = is_array($occupants) ? $occupants : [$occupants];
 
         $occupants = Reservation::whereIn('id', $occupants)->get();
 
@@ -67,6 +67,9 @@ class Room extends Model
 
     private function assertSameGender($occupants)
     {
+        if ($occupants->pluck('gender')->unique()->count() > 1)
+            throw new \Exception('Occupants must be of the same gender.');
+
         $currentOccupant = $this->occupants()->first();
 
         if ( ! $this->type->rules()->same_gender || ! $currentOccupant)

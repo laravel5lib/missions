@@ -45,18 +45,26 @@
             <div :class="{ 'has-error' : $validation.qbclass.invalid}">
                 <label>Account Class</label>
                 <template v-if="editMode">
-                    <input class="form-control" v-model="fund.class"
+                    <select class="form-control" v-model="fund.class_id"
                            initial="off" v-validate:qbclass="{required: true}">
+                       <option v-for="class in accountingClasses" v-bind:value="class.id">
+                            {{ class.name }}
+                       </option>
+                    </select>
                 </template>
-                <p v-else>{{ fund.class }}</p>
+                <p v-else><code>{{ fund.class }}</code></p>
             </div>
             <div :class="{ 'has-error' : $validation.qbitem.invalid}">
                 <label>Account Item</label>
                 <template v-if="editMode">
-                    <input class="form-control" v-model="fund.item"
+                    <select class="form-control" v-model="fund.item_id"
                            initial="off" v-validate:qbitem="{required: true}">
+                       <option v-for="item in accountingItems" v-bind:value="item.id">
+                            {{ item.name }}
+                       </option>
+                    </select>
                 </template>
-                <p v-else>{{ fund.item }}</p>
+                <p v-else><code>{{ fund.item }}</code></p>
             </div>
             <label>Type</label>
             <p>{{ fund.type | capitalize }}</p>
@@ -82,7 +90,9 @@
         data(){
             return{
                 fund: {},
-                editMode: false
+                editMode: false,
+                accountingClasses: [],
+                accountingItems: []
             }
         },
         methods: {
@@ -103,8 +113,8 @@
                         self.$refs.spinner.show();
                         self.$http.put('funds/' + self.id, {
                             'name': self.fund.name,
-                            'class': self.fund.class,
-                            'item': self.fund.item
+                            'class_id': self.fund.class_id,
+                            'item_id': self.fund.item_id
                         }).then(function (response) {
                             self.$refs.spinner.hide();
                             self.$root.$emit('showSuccess', 'Fund updated');
@@ -131,6 +141,14 @@
         },
         ready() {
             this.fetch();
+            
+            this.$http.get('accounting/classes').then(function (response) {
+                this.accountingClasses = response.body.data;
+            });
+
+            this.$http.get('accounting/items').then(function (response) {
+                this.accountingItems = response.body.data;
+            });
         }
     }
 </script>

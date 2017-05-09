@@ -286,7 +286,7 @@
 								</p>
 								<hr class="divider sm">
 								<!-- Other Groups -->
-								<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
+								<template v-for="(tgIndex, squad) in currentSquads | orderBy 'callsign' | filterBy membersSearch">
 									<template v-if="squad.callsign !== 'Team Leaders'">
 										<div class="panel panel-default">
 											<div class="panel-heading">
@@ -1277,13 +1277,8 @@
                                 members_count: 0
                             });
 
-							if (this.currentSquads.length) {
-                                this.currentSquads.splice(1, 0, squad);
-							} else {
-                                this.currentSquads.push(squad);
-							}
+	                        this.currentSquads.push(squad);
                             this.currentTeam.squads_count++;
-
                             this.showSquadCreateModal = false;
                             return squad;
                         });

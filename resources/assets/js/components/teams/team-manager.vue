@@ -212,7 +212,7 @@
 												<h3 class="panel-title" v-text="squad.callsign"></h3>
 											</div>
 											<div class="panel-body">
-												<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_squad_leaders">
+												<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_leaders">
 															Complete! You've filled all the positions.
 												</div>
 												<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">

@@ -66,8 +66,8 @@ class RoomsController extends Controller
         $this->room
              ->filter([$roomableType => $roomableId])
              ->delete($id);
-
-        (new ManageRooms($roomableType, $roomableId))->remove($room->id);
+             
+        (new ManageRooms($roomableType, $roomableId))->remove($id);
 
         return $this->response->noContent();
     }

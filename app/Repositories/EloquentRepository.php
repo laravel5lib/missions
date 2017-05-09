@@ -62,7 +62,9 @@ abstract class EloquentRepository
      */
     public function update(array $data, $id, $attribute = "id")
     {
-        return $this->model->where($attribute, '=', $id)->update($this->sanitize($data));
+        $this->model->where($attribute, '=', $id)->update($this->sanitize($data));
+
+        return $this->getById($id);
     }
 
     /**
@@ -73,7 +75,7 @@ abstract class EloquentRepository
      */
     public function delete($ids)
     {
-        return $this->model->destroy($ids);
+        return $this->model->delete($ids);
     }
 
     /**

@@ -233,11 +233,11 @@
 																				<span class="fa fa-ellipsis-h"></span>
 																			</button>
 																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																				<template v-for="subSquad in currentSquads">
+																				<template v-for="subSquad in currentSquads | orderBy 'callsign'">
 																					<template v-if="subSquad.callsign !== 'Team Leaders'">
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																					</template>
 																				</template>
 																				<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
@@ -332,16 +332,16 @@
 																				<span class="fa fa-ellipsis-h"></span>
 																			</button>
 																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																				<template v-for="subSquad in currentSquads">
+																				<template v-for="subSquad in currentSquads | orderBy 'callsign'">
 																					<template v-if="subSquad.callsign === 'Team Leaders'">
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ''"></a></li>
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																					</template>
 																					<template v-else>
 																						<template v-if="subSquad.id !== squad.id">
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
+																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																						</template>
 																					</template>
 																				</template>
@@ -612,7 +612,7 @@
 														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 															<li class="dropdown-header">Assign To Team</li>
 															<li role="separator" class="divider"></li>
-															<template v-for="squad in currentSquads">
+															<template v-for="squad in currentSquads | orderBy 'callsign'">
 																<template v-if="squad.callsign === 'Team Leaders'">
 																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Team Leader</a></li>
 																</template>

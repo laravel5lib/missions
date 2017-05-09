@@ -36,4 +36,10 @@ class GroupsController extends Controller
         $trip = $this->api->get('trips/' . $id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
         return view('dashboard.groups.trips.show', compact('group', 'groupId', 'trip', 'id', 'tab'));
     }
+    public function teams($groupId)
+    {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $this->api->get('groups/' . $groupId);
+        return view('dashboard.groups.teams.index', compact('group', 'groupId'));
+    }
 }

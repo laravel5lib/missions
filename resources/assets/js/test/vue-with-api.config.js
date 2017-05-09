@@ -109,6 +109,7 @@ Vue.component('aside', VueStrap.aside);
 Vue.component('panel', VueStrap.panel);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
+Vue.component('dropdown', VueStrap.dropdown);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
@@ -369,10 +370,20 @@ let RootInstance = {
     events: {
         'showSuccess': function (msg) {
             this.message = msg;
+            this.showError = false;
+            this.showInfo = false;
             this.showSuccess = true;
+        },
+        'showInfo': function (msg) {
+            this.message = msg;
+            this.showError = false;
+            this.showInfo = true;
+            this.showSuccess = false;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showInfo = false;
+            this.showSuccess = false;
             this.showError = true;
         },
         'userHasLoggedIn': function (user) {

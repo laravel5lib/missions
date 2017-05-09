@@ -1691,7 +1691,34 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
+    // Teams API
 
+    ['GET *teams'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
+                    "callsign": "Team #1",
+                    "created_at": "2017-04-25 16:26:15",
+                    "updated_at": "2017-04-25 16:26:15",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
     // Travel Itineraries API
 
     //Travel Itinerary
@@ -1835,7 +1862,34 @@ export default {
         }
 
     },
-
+    ['GET *teams(/:team)(/:path)(/:pathId)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
+                    "callsign": "Team #1",
+                    "created_at": "2017-04-25 16:26:15",
+                    "updated_at": "2017-04-25 16:26:15",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
     // UTILITIES API
     ['GET *utilities/activities/types'] (pathMatch, query, request) {
         let body = [{
@@ -1855,5 +1909,7 @@ export default {
         }
 
     },
+
+    // mock influencer
 
 }

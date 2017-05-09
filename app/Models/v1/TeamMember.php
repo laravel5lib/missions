@@ -10,9 +10,7 @@ class TeamMember extends Model
 {
     use Filterable, UuidForKey;
 
-    protected $fillable = [
-      'team_id', 'reservation_id', 'role_id', 'group', 'leader', 'forms'
-    ];
+    protected $guarded = [];
 
     protected $dates = [
       'created_at', 'updated_at'

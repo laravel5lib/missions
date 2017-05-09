@@ -27,6 +27,7 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     // Group Routes...
     $this->resource('groups', 'Dashboard\GroupsController', ['only' => ['index', 'show', 'edit']]);
     $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trips');
+    $this->get('groups/{groupId}/teams', 'Dashboard\GroupsController@teams');
 
     // Records Routes...
     $this->get('records/{tab?}', function($tab = 'passports') {

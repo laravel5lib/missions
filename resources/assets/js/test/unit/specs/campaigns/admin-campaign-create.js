@@ -15,7 +15,6 @@ const vm = new Vue(RootInstance).$mount('app');
 
 let adminCampaignCreate = vm.$refs.testComponent;
 
-test('ready state', async (t) => {
-    await nextTick();
+test('ready state', (t) => {
     t.true(adminCampaignCreate.countries.length > 0);
 });

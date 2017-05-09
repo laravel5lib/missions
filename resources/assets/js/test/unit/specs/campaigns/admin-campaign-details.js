@@ -13,7 +13,6 @@ const vm = new Vue(RootInstance).$mount('app');
 
 let adminCampaignDetails = vm.$refs.testComponent;
 
-test('campaign loaded', async (t) => {
-    await nextTick();
+test('campaign loaded', (t) => {
     t.truthy(adminCampaignDetails.campaign.hasOwnProperty('id'));
 });

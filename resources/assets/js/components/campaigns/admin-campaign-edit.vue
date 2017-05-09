@@ -292,7 +292,8 @@
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
-						// this.$refs.spinner.hide();
+                        console.log(response);
+                        return error
 					});
 				} else {
 					this.showError = true;
@@ -303,7 +304,10 @@
 				// this.$refs.spinner.show();
 				this.resource.delete({id: this.campaignId}).then(function(response) {
 					window.location.href = '/admin/campaigns/'
-				});
+				}, function (response) {
+                    console.log(response);
+                    return response
+                });
 			}
 		},
 		events:{
@@ -326,7 +330,10 @@
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
-			});
+			}, function (response) {
+                console.log(response);
+                return response
+            });
 
 			// get campaign data
 			this.resource.get({id: this.campaignId}).then(function(response) {
@@ -345,7 +352,10 @@
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();
-			});
+			}, function (response) {
+                console.log(response);
+                return response
+            });
 		}
 	}
 

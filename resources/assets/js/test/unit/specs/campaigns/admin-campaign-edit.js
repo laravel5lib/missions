@@ -15,11 +15,18 @@ const vm = new Vue(RootInstance).$mount('app');
 
 let adminCampaignEdit = vm.$refs.testComponent;
 
-test('campaign loaded', async (t) => {
-    await nextTick();
+test('campaign loaded', (t) => {
     t.truthy(adminCampaignEdit.name !== null);
 });
 
 test('after loading data, fields are valid', (t) => {
     t.true(adminCampaignEdit.$UpdateCampaign.valid);
+});
+
+test('validate dates', (t) => {
+    t.true(moment(adminCampaignEdit.started_at).isValid() && moment(adminCampaignEdit.ended_at).isValid() && moment(adminCampaignEdit.published_at).isValid())
+});
+
+test('validate country object', (t) => {
+    t.true(adminCampaignEdit.countryCodeObj.hasOwnProperty('code') && adminCampaignEdit.countryCodeObj.hasOwnProperty('name') && adminCampaignEdit.country_code === adminCampaignEdit.countryCodeObj.code);
 });

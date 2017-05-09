@@ -548,7 +548,8 @@
 					this.pagination = response.body.meta.pagination;
 					return this.uploads;
 				}, function (response) {
-					return response
+                    console.log(response);
+                    return response
                 });
 			},
 			selectExisting(upload){
@@ -601,7 +602,10 @@
                     this.src = upload.source;
 
                     this.loadCropper();
-				});
+				}, function (response) {
+                    console.log(response);
+                    return response
+                });
 			} else {
                 this.loadCropper();
 			}

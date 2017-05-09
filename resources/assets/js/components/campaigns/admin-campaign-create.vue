@@ -259,7 +259,9 @@
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
 				// this.$refs.spinner.hide();
-			});
+			}, function (response) {
+                console.log(response);
+            });
 		}
 	}
 </script> 

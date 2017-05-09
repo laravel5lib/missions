@@ -12,6 +12,8 @@ class CreateTeamsTable extends Migration
      */
     public function up()
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('team_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->unique();
@@ -68,6 +70,8 @@ class CreateTeamsTable extends Migration
                 ->references('id')->on('teams')
                 ->onDelete('cascade');
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**
@@ -84,5 +88,7 @@ class CreateTeamsTable extends Migration
         Schema::dropIfExists('team_squads');
         Schema::dropIfExists('team_members');
         Schema::dropIfExists('teamables');
+
+        Schema::enableForeignKeyConstraints();
     }
 }

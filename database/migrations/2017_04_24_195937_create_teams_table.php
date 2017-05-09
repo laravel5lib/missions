@@ -14,7 +14,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('type_id')->index();
+            $table->uuid('type_id')->nullable();
             $table->string('callsign');
             $table->boolean('locked')->default(false);
             $table->timestamps();
@@ -23,13 +23,13 @@ class CreateTeamsTable extends Migration
 
         Schema::create('team_squads', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('team_id')->index();
+            $table->uuid('team_id');
             $table->string('callsign');
         });
 
         Schema::create('team_members', function (Blueprint $table) {
-            $table->uuid('reservation_id')->index();
-            $table->uuid('team_squad_id')->index();
+            $table->uuid('reservation_id');
+            $table->uuid('team_squad_id');
             $table->boolean('leader');
             $table->timestamps();
         });
@@ -47,13 +47,13 @@ class CreateTeamsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('teams', function (Blueprint $table) {
+        Schema::table('teams', function ($table) {
             $table->foreign('type_id')
                 ->references('id')->on('team_types')
                 ->onDelete('set null');
         });
 
-        Schema::table('team_members', function (Blueprint $table) {
+        Schema::table('team_members', function ($table) {
             $table->foreign('reservation_id')
                 ->references('id')->on('reservations')
                 ->onDelete('cascade');
@@ -63,7 +63,7 @@ class CreateTeamsTable extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('team_squads', function (Blueprint $table) {
+        Schema::table('team_squads', function ($table) {
             $table->foreign('team_id')
                 ->references('id')->on('teams')
                 ->onDelete('cascade');
@@ -79,10 +79,10 @@ class CreateTeamsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
         
-        Schema::drop('teams');
-        Schema::drop('team_squads');
-        Schema::drop('team_members');
-        Schema::drop('teamables');
-        Schema::drop('team_types');
+        Schema::dropIfExists('teams');
+        Schema::dropIfExists('team_squads');
+        Schema::dropIfExists('team_members');
+        Schema::dropIfExists('teamables');
+        Schema::dropIfExists('team_types');
     }
 }

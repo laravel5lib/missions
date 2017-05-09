@@ -14,7 +14,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('type_id');
+            $table->uuid('type_id')->nullable();
             $table->string('callsign');
             $table->boolean('locked')->default(false);
             $table->timestamps();
@@ -64,9 +64,10 @@ class CreateTeamsTable extends Migration
         });
 
         Schema::table('teams', function ($table) {
+            $table->engine = 'InnoDB';
             $table->foreign('type_id')
                 ->references('id')->on('team_types')
-                ->onDelete('cascade');
+                ->onDelete('set null');
         });
     }
 

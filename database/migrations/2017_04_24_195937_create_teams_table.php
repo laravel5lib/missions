@@ -59,21 +59,21 @@ class CreateTeamsTable extends Migration
         });
 
         Schema::create('team_members', function (Blueprint $table) {
-            // $table->uuid('team_squad_id');
+            $table->uuid('team_squad_id');
             $table->uuid('reservation_id');
             $table->boolean('leader')->default(false);
             $table->timestamps();
         });
 
-        // Schema::table('team_members', function ($table) {
-        //     $table->foreign('reservation_id')
-        //         ->references('id')->on('reservations')
-        //         ->onDelete('cascade');
+        Schema::table('team_members', function ($table) {
+            $table->foreign('reservation_id')
+                ->references('id')->on('reservations')
+                ->onDelete('cascade');
 
-        //     $table->foreign('team_squad_id')
-        //         ->references('id')->on('team_squads')
-        //         ->onDelete('cascade');
-        // });
+            $table->foreign('team_squad_id')
+                ->references('id')->on('team_squads')
+                ->onDelete('cascade');
+        });
     }
 
     /**

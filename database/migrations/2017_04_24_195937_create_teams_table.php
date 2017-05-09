@@ -12,8 +12,6 @@ class CreateTeamsTable extends Migration
      */
     public function up()
     {
-        Schema::disableForeignKeyConstraints();
-
         Schema::create('team_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->unique();
@@ -55,23 +53,21 @@ class CreateTeamsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('team_members', function ($table) {
-            $table->foreign('reservation_id')
-                ->references('id')->on('reservations')
-                ->onDelete('cascade');
+        // Schema::table('team_members', function ($table) {
+        //     $table->foreign('reservation_id')
+        //         ->references('id')->on('reservations')
+        //         ->onDelete('cascade');
 
-            $table->foreign('team_squad_id')
-                ->references('id')->on('team_squads')
-                ->onDelete('cascade');
-        });
+        //     $table->foreign('team_squad_id')
+        //         ->references('id')->on('team_squads')
+        //         ->onDelete('cascade');
+        // });
 
         Schema::create('teamables', function (Blueprint $table) {
             $table->uuid('team_id')->index();
             $table->uuid('teamable_id')->index();
             $table->string('teamable_type');
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**

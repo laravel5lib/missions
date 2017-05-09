@@ -46,6 +46,12 @@ class CreateTeamsTable extends Migration
                 ->onDelete('cascade');
         });
 
+        Schema::create('teamables', function (Blueprint $table) {
+            $table->uuid('team_id')->index();
+            $table->uuid('teamable_id')->index();
+            $table->string('teamable_type');
+        });
+
         Schema::create('team_members', function (Blueprint $table) {
             $table->uuid('reservation_id')->nullable();
             $table->uuid('team_squad_id')->nullable();
@@ -53,20 +59,14 @@ class CreateTeamsTable extends Migration
             $table->timestamps();
         });
 
-        // Schema::table('team_members', function ($table) {
-        //     $table->foreign('reservation_id')
-        //         ->references('id')->on('reservations')
-        //         ->onDelete('cascade');
+        Schema::table('team_members', function ($table) {
+            $table->foreign('reservation_id')
+                ->references('id')->on('reservations')
+                ->onDelete('cascade');
 
-        //     $table->foreign('team_squad_id')
-        //         ->references('id')->on('team_squads')
-        //         ->onDelete('cascade');
-        // });
-
-        Schema::create('teamables', function (Blueprint $table) {
-            $table->uuid('team_id')->index();
-            $table->uuid('teamable_id')->index();
-            $table->string('teamable_type');
+            $table->foreign('team_squad_id')
+                ->references('id')->on('team_squads')
+                ->onDelete('cascade');
         });
     }
 

@@ -14,7 +14,7 @@ class CreateTeamsTable extends Migration
     {
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('type_id')->nullable()->index();
+            $table->uuid('type_id')->index();
             $table->string('callsign');
             $table->boolean('locked')->default(false);
             $table->timestamps();
@@ -37,7 +37,7 @@ class CreateTeamsTable extends Migration
         Schema::create('teamables', function (Blueprint $table) {
             $table->uuid('team_id')->index();
             $table->uuid('teamable_id')->index();
-            $table->uuid('teamable_type')->index();
+            $table->string('teamable_type');
         });
 
         Schema::create('team_types', function (Blueprint $table) {

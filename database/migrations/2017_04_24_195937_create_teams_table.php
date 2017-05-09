@@ -12,6 +12,13 @@ class CreateTeamsTable extends Migration
      */
     public function up()
     {
+        Schema::create('team_members', function (Blueprint $table) {
+            $table->uuid('reservation_id')->nullable();
+            $table->uuid('team_squad_id')->nullable();
+            $table->boolean('leader');
+            $table->timestamps();
+        });
+        
         Schema::create('team_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name')->unique();
@@ -50,13 +57,6 @@ class CreateTeamsTable extends Migration
             $table->uuid('team_id')->index();
             $table->uuid('teamable_id')->index();
             $table->string('teamable_type');
-        });
-
-        Schema::create('team_members', function (Blueprint $table) {
-            $table->uuid('reservation_id')->nullable();
-            $table->uuid('team_squad_id')->nullable();
-            $table->boolean('leader');
-            $table->timestamps();
         });
 
         Schema::table('team_members', function ($table) {

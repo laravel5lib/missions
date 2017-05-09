@@ -12,6 +12,13 @@ class CreateTeamsTable extends Migration
      */
     public function up()
     {
+        Schema::create('team_types', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name')->unique();
+            $table->json('rules')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('teams', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('type_id')->nullable();
@@ -40,11 +47,10 @@ class CreateTeamsTable extends Migration
             $table->string('teamable_type');
         });
 
-        Schema::create('team_types', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name')->unique();
-            $table->json('rules')->nullable();
-            $table->timestamps();
+        Schema::table('teams', function ($table) {
+            $table->foreign('type_id')
+                ->references('id')->on('team_types')
+                ->onDelete('set null');
         });
 
         Schema::table('team_members', function ($table) {
@@ -62,13 +68,6 @@ class CreateTeamsTable extends Migration
                 ->references('id')->on('teams')
                 ->onDelete('cascade');
         });
-
-        Schema::table('teams', function ($table) {
-            $table->engine = 'InnoDB';
-            $table->foreign('type_id')
-                ->references('id')->on('team_types')
-                ->onDelete('set null');
-        });
     }
 
     /**
@@ -80,10 +79,10 @@ class CreateTeamsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
         
+        Schema::dropIfExists('team_types');
         Schema::dropIfExists('teams');
         Schema::dropIfExists('team_squads');
         Schema::dropIfExists('team_members');
         Schema::dropIfExists('teamables');
-        Schema::dropIfExists('team_types');
     }
 }

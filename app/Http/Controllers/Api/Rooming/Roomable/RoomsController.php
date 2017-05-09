@@ -32,9 +32,7 @@ class RoomsController extends Controller
 
     public function show($roomableType, $roomableId, $id)
     {
-        $request->merge([$roomableType => $roomableId]);
-
-        $room = $this->room->filter($request->all())->getByid($id);
+        $room = $this->room->filter([$roomableType => $roomableId])->getByid($id);
 
         return $this->response->item($room, new RoomTransformer);
     }

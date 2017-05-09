@@ -21,13 +21,13 @@ class OccupantTransformer extends TransformerAbstract {
             'age'              => $occupant->age,
             'gender'           => $occupant->gender,
             'status'           => $occupant->status,
-            'room_leader'      => (bool) $occupant->pivot ? $occupant->pivot->room_leader : false,
-            'created_at'       => $occupant->created_at->toDateTimeString(),
-            'updated_at'       => $occupant->updated_at->toDateTimeString(),
+            'room_leader'      => (bool) $occupant->pivot->room_leader,
+            'created_at'       => $occupant->pivot->created_at->toDateTimeString(),
+            'updated_at'       => $occupant->pivot->updated_at->toDateTimeString(),
             'links'            => [
                 [
                     'rel' => 'self',
-                    'uri' => '/rooms/' . $occupant->room_id . '/occupants/' . $occupant->id
+                    'uri' => '/rooms/' . $occupant->pivot->room_id . '/occupants/' . $occupant->id
                 ]
             ]
         ];

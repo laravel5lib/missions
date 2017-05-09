@@ -5,53 +5,75 @@ namespace App\Http\Controllers\Api\Rooming;
 use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Rooming\Interfaces\Room;
+use App\Http\Requests\v1\OccupantRequest;
 use App\Http\Transformers\v1\OccupantTransformer;
 use App\Repositories\Rooming\Interfaces\Occupant;
 
 class RoomOccupantsController extends Controller
 {
-    function __construct(Occupant $occupant, Room $room)
+    protected $occupant;
+
+    function __construct(Occupant $occupant)
     {
         $this->occupant = $occupant;
-        $this->room = $room;
     }
 
+    /**
+     * Get all occupants in the room.
+     * 
+     * @param  string  $roomId
+     * @param  Request $request
+     * @return Response
+     */
     public function index($roomId, Request $request)
     {
-        $request->merge(['rooms' => $roomId]);
+        $occupants = $this->occupant->getAll($roomId);
 
-        $occupants = $this->occupant
-                          ->filter($request->all())
-                          ->paginate($request->get('per_page'));
-
-        return $this->response->paginator($occupants, new OccupantTransformer);
+        return $this->response->collection($occupants, new OccupantTransformer);
     }
 
+    /**
+     * Get specific occupant in room.
+     * 
+     * @param  string $roomId
+     * @param  string $reservationId
+     * @return Response
+     */
     public function show($roomId, $reservationId)
     {
-        $occupant = $this->occupant
-                          ->filter(['rooms' => $roomId])
-                          ->getById($reservationId);
+        $occupant = $this->occupant->getById($roomId, $reservationId);
 
         return $this->response->item($occupant, new OccupantTransformer);
     }
 
-    public function store($roomId, Request $request)
+    /**
+     * Add a new occupant to the room.
+     * 
+     * @param  string  $roomId
+     * @param  Request $request
+     * @return Response
+     */
+    public function store($roomId, OccupantRequest $request)
     {
         $reservations = $request->get('reservations') ?: $request->get('reservation_id');
 
-        $this->room->addOccupants($roomId, $reservations);
+        $this->occupant->create($reservations, $roomId);
 
-        return $this->response->created();
+        $occupants = $this->occupant->getAll($roomId);
+
+        return $this->response->collection($occupants, new OccupantTransformer);
     }
 
-    public function update($roomId, $reservationId, Request $request)
+    /**
+     * Update the occupant in the room.
+     * 
+     * @param  string  $roomId
+     * @param  string  $reservationId
+     * @param  Request $request
+     * @return Response
+     */
+    public function update($roomId, $reservationId, OccupantRequest $request)
     {
-        $occupant = $this->occupant
-                         ->filter(['rooms' => $roomId])
-                         ->getById($reservationId);
-
         if ($request->has('room_leader')) {
 
             $isLeader = $request->get('room_leader');
@@ -61,14 +83,23 @@ class RoomOccupantsController extends Controller
 
         }
 
+        $occupant = $this->occupant->getById($roomId, $reservationId);
+
         return $this->response->item($occupant, new OccupantTransformer);
     }
 
+    /**
+     * Remove the occupant from the room.
+     * 
+     * @param  string $roomId
+     * @param  string $reservationId
+     * @return Response
+     */
     public function destroy($roomId, $reservationId = null)
     {   
         $reservations = $reservationId ?: $request->get('reservations');
 
-        $this->room->removeOccupants($roomId, $reservations);
+        $this->occupant->delete($roomId, $reservations);
 
         return $this->response->noContent();
     }

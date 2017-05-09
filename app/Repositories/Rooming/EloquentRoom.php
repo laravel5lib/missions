@@ -17,21 +17,18 @@ class EloquentRoom extends EloquentRepository implements Room {
         $this->model = $room;
     }
 
-    public function addOccupants($id, $occupants)
+    public function getAll()
     {
-        $room = $this->getById($id);
-
-        $room->occupants()->attach($occupants);
-
-        return true;
+        return $this->model->withCount('occupants')->all();
     }
 
-    public function removeOccupants($id, $occupants)
+    public function getById($id)
     {
-        $room = $this->getById($id);
+        return $this->model->withTrashed()->withCount('occupants')->findOrFail($id);
+    }
 
-        $room->occupants()->detach($occupants);
-
-        return false;
+    public function paginate($perPage = 15, $columns = array('*'))
+    {
+        return $this->model->withCount('occupants')->paginate($perPage, $columns);
     }
 }

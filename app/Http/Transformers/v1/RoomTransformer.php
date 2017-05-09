@@ -11,7 +11,7 @@ class RoomTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = ['type'];
+    protected $availableIncludes = ['type', 'occupants'];
 
     /**
      * Transform the object into a basic array
@@ -43,5 +43,12 @@ class RoomTransformer extends TransformerAbstract
         $type = $room->type;
 
         return $this->item($type, new RoomTypeTransformer);
+    }
+
+    public function includeOccupants(Room $room)
+    {
+        $occupants = $room->occupants;
+
+        return $this->collection($occupants, new OccupantTransformer);
     }
 }

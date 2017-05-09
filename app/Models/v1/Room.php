@@ -31,4 +31,66 @@ class Room extends Model
                     ->withPivot('room_leader')
                     ->withTimestamps();
     }
+
+    public function validateOccupants($occupants)
+    {
+        $occupants = is_array($occupants) ?: [$occupants];
+
+        $occupants = Reservation::whereIn('id', $occupants)->get();
+
+        $this->assertUniqueToRoom($occupants);
+        $this->assertWithinOccupancyLimit($occupants);
+        $this->assertSameGender($occupants);
+        $this->assertMarriedOnly($occupants);
+    }
+
+    private function assertUniqueToRoom($occupants)
+    {
+        $currentOccupants = $this->occupants()->pluck('id')->all();
+
+        collect($occupants)->each(function ($occupant) use ($currentOccupants) {
+            if (in_array($occupant->id, $currentOccupants))
+                throw new \Exception("$occupant->given_names $occupant->surname is already in this room.");
+        });
+    }
+
+    private function assertWithinOccupancyLimit($occupants)
+    {
+        $limit = $this->type->rules()->occupancy_limit;
+
+        if ($limit <= $this->occupants()->count())
+            throw new \Exception('This room is full.');
+
+        if ($limit < count($occupants))
+            throw new \Exception("Can not add more than $limit occupants.");
+    }
+
+    private function assertSameGender($occupants)
+    {
+        $currentOccupant = $this->occupants()->first();
+
+        if ( ! $this->type->rules()->same_gender || ! $currentOccupant)
+            return true;
+
+        $notMatching = collect($occupants)->reject(function ($occupant) use ($currentOccupant) {
+            return $occupant->gender == $currentOccupant->gender;
+        })->count();
+
+        if ($notMatching > 0)
+            throw new \Exception('Occupants must be of the same gender.');
+    
+    }
+
+    private function assertMarriedOnly($occupants)
+    {
+        if ( ! $this->type->rules()->married_only)
+            return true;
+
+        $notMatching = collect($occupants)->reject(function ($occupant) {
+            return $occupant->status == 'married';
+        })->count();
+
+        if ($notMatching > 0)
+            throw new \Exception('Occupants must be married.');
+    }
 }

@@ -30,29 +30,29 @@ class CreateTeamsTable extends Migration
             $table->softDeletes();
         });
 
+        Schema::table('teams', function ($table) {
+            $table->foreign('type_id')
+                ->references('id')->on('team_types')
+                ->onDelete('set null');
+        });
+
         Schema::create('team_squads', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('team_id');
             $table->string('callsign');
         });
 
+        Schema::table('team_squads', function ($table) {
+            $table->foreign('team_id')
+                ->references('id')->on('teams')
+                ->onDelete('cascade');
+        });
+
         Schema::create('team_members', function (Blueprint $table) {
-            $table->uuid('reservation_id');
-            $table->uuid('team_squad_id');
+            $table->uuid('reservation_id')->nullable();
+            $table->uuid('team_squad_id')->nullable();
             $table->boolean('leader');
             $table->timestamps();
-        });
-
-        Schema::create('teamables', function (Blueprint $table) {
-            $table->uuid('team_id')->index();
-            $table->uuid('teamable_id')->index();
-            $table->string('teamable_type');
-        });
-
-        Schema::table('teams', function ($table) {
-            $table->foreign('type_id')
-                ->references('id')->on('team_types')
-                ->onDelete('set null');
         });
 
         Schema::table('team_members', function ($table) {
@@ -65,10 +65,10 @@ class CreateTeamsTable extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::table('team_squads', function ($table) {
-            $table->foreign('team_id')
-                ->references('id')->on('teams')
-                ->onDelete('cascade');
+        Schema::create('teamables', function (Blueprint $table) {
+            $table->uuid('team_id')->index();
+            $table->uuid('teamable_id')->index();
+            $table->string('teamable_type');
         });
 
         Schema::enableForeignKeyConstraints();

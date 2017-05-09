@@ -62,11 +62,11 @@ class EventServiceProvider extends ServiceProvider
         Trip::created(function ($trip) {
             $name = generateFundName($trip);
             $trip->fund()->create([
-                'name' => $name,
-                'slug' => generate_fund_slug($name),
+                'name'    => $name,
+                'slug'    => generate_fund_slug($name),
                 'balance' => 0,
-                'class' => generateQbClassName($trip),
-                'item' => 'Missionary Donation'
+                'class_id' => getAccountingClass($trip)->id,
+                'item_id'  => getAccountingItem($trip)->id
             ]);
         });
 
@@ -76,8 +76,8 @@ class EventServiceProvider extends ServiceProvider
                 'name' => $name,
                 'slug' => generate_fund_slug($name),
                 'balance' => 0,
-                'class' => generateQbClassName($campaign),
-                'item' => 'General Donation'
+                'class_id' => getAccountingClass($campaign)->id,
+                'item_id'  => getAccountingItem($campaign)->id
             ]);
         });
 
@@ -87,8 +87,8 @@ class EventServiceProvider extends ServiceProvider
                 'name' => $name,
                 'slug' => generate_fund_slug($name),
                 'balance' => 0,
-                'class' => str_plural($project->initiative->cause->name),
-                'item' => $project->name .' - '. $project->initiative->cause->name
+                'class_id' => getAccountingClass($project)->id,
+                'item_id'  => getAccountingItem($project)->id
             ]);
             $fund->fundraisers()->create([
                 'name' => $name,
@@ -109,8 +109,8 @@ class EventServiceProvider extends ServiceProvider
                 'name' => $name,
                 'slug' => generate_fund_slug($name),
                 'balance' => 0,
-                'class' => str_plural($cause->name),
-                'item' => 'General Donation'
+                'class_id' => getAccountingClass($cause)->id,
+                'item_id'  => getAccountingItem($cause)->id
             ]);
         });
 

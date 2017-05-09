@@ -71,8 +71,8 @@ class FundsController extends Controller
             'balance' => $request->get('balance', 0),
             'fundable_id' => $request->get('fundable_id'),
             'fundable_type' => $request->get('fundable_type'),
-            'class' => $request->get('class'),
-            'item' => $request->get('item')
+            'class_id' => $request->get('class_id'),
+            'item_id' => $request->get('item_id')
         ]);
 
         if ($request->has('tags'))
@@ -95,11 +95,10 @@ class FundsController extends Controller
         $fund->update([
             'name' => $request->get('name', $fund->name),
             'slug' => $request->get('slug', $fund->slug),
-            'balance' => $request->get('balance', $fund->balance),
             'fundable_id' => $request->get('fundable_id', $fund->fundable_id),
             'fundable_type' => $request->get('fundable_type', $fund->fundable_type),
-            'class' => $request->get('class', $fund->class),
-            'item' => $request->get('item', $fund->item)
+            'class_id' => $request->get('class_id', $fund->class_id),
+            'item_id' => $request->get('item_id', $fund->item_id)
         ]);
 
         if ($request->has('tags'))

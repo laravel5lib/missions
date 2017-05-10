@@ -81,9 +81,13 @@ class SquadMembersController extends Controller
     {
         $squad = $this->squad->findOrFail($squadId);
 
-        $squad->members()->updateExistingPivot($memberId, ['leader' => $request->get('leader')]);
-
         $member = $squad->members()->findOrFail($memberId);
+
+        $squad->members()
+              ->updateExistingPivot($memberId, [
+                    'leader' => $request->get('leader', $member->pivot->leader),
+                    'team_squad_id' => $request->get('team_squad_id', $squadId)
+                ]);
 
         return $this->response->item($member, new SquadMemberTransformer);
     }

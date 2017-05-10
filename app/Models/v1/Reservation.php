@@ -127,6 +127,18 @@ class Reservation extends Model
     }
 
     /**
+     * Team squads the reservation is assigned to.
+     * 
+     * @return BelongsToMany
+     */
+    public function squads()
+    {
+        return $this->belongsToMany(TeamSquad::class, 'team_members')
+                    ->withPivot('leader')
+                    ->withTimestamps();
+    }
+
+    /**
      * Get the user that owns the reservation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

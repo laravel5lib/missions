@@ -391,4 +391,14 @@ class ReservationFilter extends Filter
             return $room->where('id', $ids);
         });
     }
+
+    public function inSquad()
+    {
+        return $this->has('squads');
+    }
+
+    public function noSquad()
+    {
+        return $this->has('squads', '<', 1);
+    }
 }

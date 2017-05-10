@@ -12,6 +12,11 @@ document.body.insertAdjacentHTML("afterbegin", "<app></app>");
 const vm = new Vue(RootInstance).$mount('app');
 
 let travelItineraries = vm.$refs.testComponent;
+
+test('activity types array fetched', (t) => {
+    t.true(_.isArray(travelItineraries) && travelItineraries.length >= 3);
+});
+
 test.before('set document object', async (t) => {
     travelItineraries.document = { id: '8850333f-7cc2-4509-b6db-33c8d3e7642c' };
     await nextTick();

@@ -436,12 +436,20 @@
 
                 }
 
-                if (this.activeRoom.occupants_count >= this.currentPlan.type.data.rules.occupancy_limit) {
+                if (this.activeRoom.occupants_count >= this.activeRoom.type.data.rules.occupancy_limit) {
                     this.$root.$emit('showInfo', this.activeRoom.label +' currently has the max number of occupants');
                     return;
                 }
-                return this.$http.post('rooming/' + this.activeRoom.id + '/occupants').then(function (response) {
-	                debugger;
+
+                let data = {
+                    reservation_id: member.id,
+                    room_leader: leader,
+                };
+
+                return this.$http.post('rooming/' + this.activeRoom.id + '/occupants', data,  { params: { } }).then(function (response) {
+	                let occupant = response.body.data;
+	                this.activeRoom.occupants.push(occupant);
+                    this.activeRoom.occupant_count++;
                 });
             },
             searchReservations(){
@@ -538,11 +546,11 @@
             },
             getOccupants(){
                 let params = {
-                    plans: new Array(this.currentPlan.id),
-	                include: 'type',
+//                    plans: new Array(this.currentPlan.id),
+//	                include: 'type',
                     // page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
+                return this.$http.get('rooming/rooms/' + this.activeRoom.id + '/occupants', { params: params }).then(function (response) {
                         this.currentPlan.rooms = response.body.data
                         //console.log(response.body.data);
 //                        this.plansPagination = response.body.meta.pagination;

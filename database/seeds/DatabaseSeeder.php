@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AirportsTableSeeder::class);
         $this->call(TeamTypeTableSeeder::class);
         $this->call(BouncerSeeder::class);
+        $this->call(AccountingTablesSeeder::class);
         $this->call(UploadSeeder::class);
         $this->call(UserTableSeeder::class);
         $this->call(TripTableSeeder::class);

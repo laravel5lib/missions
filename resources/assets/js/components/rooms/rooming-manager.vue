@@ -40,29 +40,55 @@
 									<div class="row">
 										<div class="col-xs-12" v-if="currentPlan">
 											<template v-if="currentPlan.rooms.length">
-												<div class="panel panel-default" v-for="room in currentPlan.rooms">
+												<!-- List group List-->
+												<div class="list-group">
+													<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
+														<h4 class="list-group-item-heading" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h4>
+														<div class="list-group-item-text">
+															<div class="row">
+																<div class="col-sm-6">
+																	<label>Occupancy Limit</label>
+																	<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
+																	<label>Limited to Gender</label>
+																	<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
+																	<label>Limited to Status</label>
+																	<p class="small">{{room.type.data.rules.status | capitalize}}</p>
+																</div><!-- end col -->
+																<div class="col-sm-6">
+																	<label>Current Number of Occupants</label>
+																	<p class="small">{{room.occupants_count}}</p>
+																	<label>Room Leader</label>
+																	<p class="small">{{room.leader}}</p>
+																</div><!-- end col -->
+															</div><!-- end row -->
+														</div>
+													</div>
+												</div>
+
+												<!-- Panel List -->
+												<!--<div class="panel panel-default" v-for="room in currentPlan.rooms">
 													<div class="panel-heading">
-														<h3 class="panel-title" v-text="(room.label ? (room.label + ' - ' + room.type.name) : room.type.name) | capitalize"></h3>
+														<h3 class="panel-title" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h3>
 													</div>
 													<div class="panel-body">
 														<div class="row">
 															<div class="col-sm-6">
 																<label>Occupancy Limit</label>
-																<p class="small">{{room.type.rules.occupancy_limit}}</p>
-																<label>Limited to Gender</label>
-																<p class="small">{{room.type.rules.gender | capitalize}}</p>
+																<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
+																<label>Limit ed to Gender</label>
+																<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
 																<label>Limited to Status</label>
-																<p class="small">{{room.type.rules.status | capitalize}}</p>
-															</div><!-- end col -->
+																<p class="small">{{room.type.data.rules.status | capitalize}}</p>
+															</div>&lt;!&ndash; end col &ndash;&gt;
 															<div class="col-sm-6">
 																<label>Current Number of Occupants</label>
-																<p class="small">{{room.occupants.length}}</p>
+																<p class="small">{{room.occupants_count}}</p>
 																<label>Room Leader</label>
 																<p class="small">{{room.leader}}</p>
-															</div><!-- end col -->
-														</div><!-- end row -->
+															</div>&lt;!&ndash; end col &ndash;&gt;
+														</div>&lt;!&ndash; end row &ndash;&gt;
 													</div>
-												</div>
+												</div>-->
 											</template>
 											<template v-else>
 												<hr class="divider inv">
@@ -91,22 +117,22 @@
 
 		<!-- Occupants List -->
 		<div class="col-sm-4">
-			<template v-if="activeRooms.length">
-				<div class="panel panel-default" v-for="room in activeRooms">
+			<template v-if="activeRoom">
+				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">{{(room.label ? (room.label + ' - ' + room.type.name) : room.type.name) | capitalize}} Occupants</h3>
+						<h3 class="panel-title">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}}: Occupants</h3>
 					</div>
 					<div class="panel-body">
-						<template v-if="room.occupants.length">
-							<div class="panel panel-default" v-for="member in room.occupants">
+						<template v-if="activeRoom.occupants_count">
+							<div class="panel panel-default" v-for="member in activeRoom.occupants">
 								<div class="panel-heading" role="tab" id="headingOne">
 									<h4 class="panel-title">
 										<div class="row">
 											<div class="col-xs-9">
 												<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
 													<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
-													<label>{{ member.desired_role.name }}</label>
+													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span><br>
+													<!--<label>{{ member.desired_role.name }}</label>-->
 												</a>
 											</div>
 											<div class="col-xs-3 text-right action-buttons">
@@ -115,21 +141,10 @@
 														<span class="fa fa-ellipsis-h"></span>
 													</button>
 													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-														<template v-for="subSquad in currentSquads">
-															<template v-if="subSquad.callsign === 'Team Leaders'">
-																<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ''"></a></li>
-																<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-															</template>
-															<template v-else>
-																<template v-if="subSquad.id !== squad.id">
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-																</template>
-															</template>
-														</template>
-														<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-														<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
+														<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
+														<li v-if="!member.room_leader && !activeRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+														<li role="separator" class="divider"></li>
+														<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.activeRoom)">Remove</a></li>
 													</ul>
 												</dropdown>
 												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -151,16 +166,16 @@
 											<div class="col-sm-6">
 												<label>Age</label>
 												<p class="small">{{member.age}}</p>
-												<label>Travel Group</label>
-												<p class="small">{{member.trip.data.group.data.name}}</p>
+												<!--<label>Travel Group</label>
+												<p class="small">{{member.trip.data.group.data.name}}</p>-->
 											</div><!-- end col -->
 										</div><!-- end row -->
 									</div><!-- end panel-body -->
 								</div>
-								<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+								<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
 									<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
 									<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-								</div>
+								</div>-->
 							</div>
 						</template>
 						<template v-else>
@@ -171,7 +186,7 @@
 				</div>
 			</template>
 			<template v-else>
-
+				<p class="text-center">No room selected</p>
 			</template>
 
 		</div>
@@ -204,7 +219,7 @@
 			<template v-if="currentTeam">
 				<template v-if="currentTeamMembers.length">
 					<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-						<div class="panel panel-default" v-for="member in currentTeamMembers">
+						<div class="panel panel-default" v-for="member in currentTeamMembers" v-show="true">
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h4 class="panel-title">
 									<div class="row">
@@ -221,19 +236,10 @@
 													<span class="fa fa-ellipsis-h"></span>
 												</button>
 												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-													<template v-for="subSquad in currentSquads">
-														<template v-if="subSquad.callsign === 'Team Leaders'">
-															<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ''"></a></li>
-															<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-														</template>
-														<template v-else>
-															<template v-if="subSquad.id !== squad.id">
-																<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-															</template>
-														</template>
-													</template>
+													<li class="dropdown-header">Assign To Room</li>
+													<li role="separator" class="divider"></li>
+													<li :class="{'disabled': isLocked}" v-if="activeRoom"><a @click="addToRoom(member, true)">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}} as leader</a></li>
+													<li :class="{'disabled': isLocked}" v-if="activeRoom"><a @click="addToRoom(member, false)" v-text="(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize"></a></li>
 												</ul>
 											</dropdown>
 											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -369,7 +375,7 @@
 
                 currentTeam: null,
                 currentPlan: null,
-				activeRooms: [],
+				activeRoom: null,
                 roomTypes: [],
 
                 // Filters vars
@@ -394,19 +400,109 @@
                 },
             }
         },
+	    watch: {
+            currentPlan(val) {
+                val.rooms = val.rooms || [];
+	            this.getRooms();
+            },
+            activeRoom(val) {
+                //val.rooms = val.rooms || [];
+	            this.getOccupants();
+            },
+	    },
 	    computed: {
+            planOccupants() {
+                let excludedIDs = [];
+                if (_.isObject(this.currentPlan) && this.currentPlan.rooms) {
+                    _.each(this.currentPlan.rooms, function (room) {
+                        let arr = room.occupants.hasOwnProperty('data') ? room.occupants.data : room.occupants;
+                        excludedIDs = _.union(excludedIDs, _.pluck(arr, 'id'));
+                    });
+                    excludedIDs = _.uniq(excludedIDs);
+                }
+                return excludedIDs;
+            },
             currentTeamMembers() {
                 let members = [];
+                let self = this;
                 if (_.isObject(this.currentTeam))
 	                _.each(this.currentTeam.squads.data, function (squad) {
 						_.each(squad.members.data, function (member) {
-							members.push(member);
+						    if (!_.contains(self.planOccupants, member.id))
+								members.push(member);
 	                    });
 	                });
+
                 return members;
-            }
+            },
+		    activeRoomHasLeader() {
+                return this.activeRoom && this.roomHasLeader(this.activeRoom);
+		    }
 	    },
         methods: {
+            promoteToLeader(occupant) {
+                let data = {
+                    reservation_id: occupant.id,
+                    room_leader: true,
+                };
+                this.$http.put('rooming/rooms/' + this.activeRoom.id + '/occupants/' + occupant.id, data)
+                    .then(function (response) {
+						return occupant.room_leader = response.body.data.room_leader;
+                    })
+            },
+            demoteToOccupant(occupant) {
+                let data = {
+                    reservation_id: occupant.id,
+                    room_leader: false,
+                };
+                this.$http.put('rooming/rooms/' + this.activeRoom.id + '/occupants/' + occupant.id, data)
+	                .then(function (response) {
+                        return occupant.room_leader = response.body.data.room_leader;
+                    });
+            },
+            setActiveRoom(room) {
+                this.activeRoom = room;
+            },
+            roomHasLeader(room) {
+                return _.some(room.occupants, function (occupant) {
+	                return occupant.room_leader;
+                });
+            },
+            removeFromRoom(occupant, room) {
+                return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {
+                    room.occupants = _.reject(room.occupants, function (member) {
+                        return member.id === occupant.id;
+                    });
+                    room.occupants_count--;
+                    this.currentPlan.occupants_count--;
+                    return response.body;
+                });
+            },
+            addToRoom(occupant, leader) {
+                if (leader && this.roomHasLeader(this.activeRoom)) {
+                    this.$root.$emit('showInfo', 'This room already has a leader');
+                    return;
+                }
+
+                if (this.activeRoom.occupants_count >= this.activeRoom.type.data.rules.occupancy_limit) {
+                    this.$root.$emit('showInfo', this.activeRoom.label +' currently has the max number of occupants');
+                    return;
+                }
+
+                let data = {
+                    reservation_id: occupant.id,
+                    room_leader: leader,
+                };
+
+                return this.$http.post('rooming/rooms/' + this.activeRoom.id + '/occupants', data,  { params: { } }).then(function (response) {
+	                let occupants = response.body.data;
+	                this.activeRoom.occupants = occupants;
+                    this.activeRoom.occupant_count = occupants.length;
+                    this.currentPlan.occupants_count++;
+                }, function (response) {
+	                this.$root.$emit('showError', response.body.message)
+                });
+            },
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions',
@@ -452,12 +548,64 @@
             },
             getPlans(){
                 let params = {
-	                include: 'rooms',
                     page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/plans', { params: params }).then(function (response) {
+	                    _.each(response.body.data, function (plan) {
+		                    plan.rooms = [];
+	                    });
                         this.plansPagination = response.body.meta.pagination;
                         return this.plans = response.body.data;
+                    },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
+            },
+            getAllRooms(plans){
+                let params = {
+                    plans: plans,
+	                include: 'type',
+                    // page: this.plansPagination.current_page,
+                };
+                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
+                        console.log(response.body.data)
+//                        this.plansPagination = response.body.meta.pagination;
+//                        return this.plans = response.body.data;
+                    },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
+            },
+            getRooms(){
+                let params = {
+                    plans: new Array(this.currentPlan.id),
+	                include: 'type,occupants',
+                    // page: this.plansPagination.current_page,
+                };
+                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
+                        this.currentPlan.rooms = response.body.data
+                        //console.log(response.body.data);
+//                        this.plansPagination = response.body.meta.pagination;
+//                        return this.plans = response.body.data;
+                    },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
+            },
+            getOccupants(){
+                let params = {
+//                    plans: new Array(this.currentPlan.id),
+//	                include: 'type',
+                    // page: this.plansPagination.current_page,
+                };
+                return this.$http.get('rooming/rooms/' + this.activeRoom.id + '/occupants', { params: params }).then(function (response) {
+                        this.activeRoom.occupants = response.body.data
+                        //console.log(response.body.data);
+//                        this.plansPagination = response.body.meta.pagination;
+//                        return this.plans = response.body.data;
                     },
                     function (response) {
                         console.log(response);
@@ -491,11 +639,12 @@
                 };
             },
 	        newPlan() {
-                this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
+                return this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
 	                let plan = response.body.data;
+	                plan.rooms = [];
                     this.plans.push(plan);
-                    this.currentPlan = plan;
                     this.showPlanModal = false;
+                    return this.currentPlan = plan;
                 }, function (response) {
                     console.log(response);
                     return response.body.data;
@@ -511,11 +660,12 @@
                 };
             },
 	        newRoom() {
-		         this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom).then(function (response) {
+		         return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom, { params: { include: 'type'}}).then(function (response) {
                      let room = response.body.data;
                      this.showRoomModal = false;
                      this.currentPlan.rooms.push(room);
-                     this.activeRooms.push(room);
+                     //_.some()
+                     return this.activeRoom = room;
 		         }, function (response) {
 			         console.log(response);
 			         return response.body.data;
@@ -562,7 +712,10 @@
                 }));
             }
 
-            promises.push(this.getPlans());
+            promises.push(this.getPlans().then(function (plans) {
+                //let pIds = _.pluck(plans, 'id');
+	            //this.getAllRooms(pIds);
+            }));
             promises.push(this.getRoomTypes());
             promises.push(this.getTeams());
 //            promises.push(this.getRoles());

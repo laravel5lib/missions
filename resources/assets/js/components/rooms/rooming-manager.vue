@@ -42,7 +42,7 @@
 											<template v-if="currentPlan.rooms.length">
 												<!-- List group List-->
 												<div class="list-group">
-													<div @click="activeRoom = room" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
+													<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
 														<h4 class="list-group-item-heading" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h4>
 														<div class="list-group-item-text">
 															<div class="row">
@@ -131,8 +131,8 @@
 											<div class="col-xs-9">
 												<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
 													<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
-													<label>{{ member.desired_role.name }}</label>
+													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span><br>
+													<!--<label>{{ member.desired_role.name }}</label>-->
 												</a>
 											</div>
 											<div class="col-xs-3 text-right action-buttons">
@@ -141,21 +141,10 @@
 														<span class="fa fa-ellipsis-h"></span>
 													</button>
 													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-														<template v-for="subSquad in currentSquads">
-															<template v-if="subSquad.callsign === 'Team Leaders'">
-																<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ''"></a></li>
-																<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-															</template>
-															<template v-else>
-																<template v-if="subSquad.id !== squad.id">
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																	<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
-																</template>
-															</template>
-														</template>
-														<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-														<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
+														<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
+														<li v-if="!member.room_leader && !activeRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+														<li role="separator" class="divider"></li>
+														<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.activeRoom)">Remove</a></li>
 													</ul>
 												</dropdown>
 												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -177,16 +166,16 @@
 											<div class="col-sm-6">
 												<label>Age</label>
 												<p class="small">{{member.age}}</p>
-												<label>Travel Group</label>
-												<p class="small">{{member.trip.data.group.data.name}}</p>
+												<!--<label>Travel Group</label>
+												<p class="small">{{member.trip.data.group.data.name}}</p>-->
 											</div><!-- end col -->
 										</div><!-- end row -->
 									</div><!-- end panel-body -->
 								</div>
-								<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+								<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
 									<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
 									<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-								</div>
+								</div>-->
 							</div>
 						</template>
 						<template v-else>
@@ -247,7 +236,10 @@
 													<span class="fa fa-ellipsis-h"></span>
 												</button>
 												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-													<li :class="{'disabled': isLocked}"><a @click="addToRoom(member)" v-text="'Add to ' + (activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize"></a></li>
+													<li class="dropdown-header">Assign To Room</li>
+													<li role="separator" class="divider"></li>
+													<li :class="{'disabled': isLocked}" v-if="activeRoom"><a @click="addToRoom(member, true)">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}} as leader</a></li>
+													<li :class="{'disabled': isLocked}" v-if="activeRoom"><a @click="addToRoom(member, false)" v-text="(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize"></a></li>
 												</ul>
 											</dropdown>
 											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -419,21 +411,77 @@
             },
 	    },
 	    computed: {
+            planOccupants() {
+                let excludedIDs = [];
+                if (_.isObject(this.currentPlan) && this.currentPlan.rooms) {
+                    _.each(this.currentPlan.rooms, function (room) {
+                        let arr = room.occupants.hasOwnProperty('data') ? room.occupants.data : room.occupants;
+                        excludedIDs = _.union(excludedIDs, _.pluck(arr, 'id'));
+                    });
+                    excludedIDs = _.uniq(excludedIDs);
+                }
+                return excludedIDs;
+            },
             currentTeamMembers() {
                 let members = [];
+                let self = this;
                 if (_.isObject(this.currentTeam))
 	                _.each(this.currentTeam.squads.data, function (squad) {
 						_.each(squad.members.data, function (member) {
-							members.push(member);
+						    if (!_.contains(self.planOccupants, member.id))
+								members.push(member);
 	                    });
 	                });
+
                 return members;
-            }
+            },
+		    activeRoomHasLeader() {
+                return this.activeRoom && this.roomHasLeader(this.activeRoom);
+		    }
 	    },
         methods: {
-            addToRoom(member, leader) {
-                if (leader) {
-
+            promoteToLeader(occupant) {
+                let data = {
+                    reservation_id: occupant.id,
+                    room_leader: true,
+                };
+                this.$http.put('rooming/rooms/' + this.activeRoom.id + '/occupants/' + occupant.id, data)
+                    .then(function (response) {
+						return occupant.room_leader = response.body.data.room_leader;
+                    })
+            },
+            demoteToOccupant(occupant) {
+                let data = {
+                    reservation_id: occupant.id,
+                    room_leader: false,
+                };
+                this.$http.put('rooming/rooms/' + this.activeRoom.id + '/occupants/' + occupant.id, data)
+	                .then(function (response) {
+                        return occupant.room_leader = response.body.data.room_leader;
+                    });
+            },
+            setActiveRoom(room) {
+                this.activeRoom = room;
+            },
+            roomHasLeader(room) {
+                return _.some(room.occupants, function (occupant) {
+	                return occupant.room_leader;
+                });
+            },
+            removeFromRoom(occupant, room) {
+                return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {
+                    room.occupants = _.reject(room.occupants, function (member) {
+                        return member.id === occupant.id;
+                    });
+                    room.occupants_count--;
+                    this.currentPlan.occupants_count--;
+                    return response.body;
+                });
+            },
+            addToRoom(occupant, leader) {
+                if (leader && this.roomHasLeader(this.activeRoom)) {
+                    this.$root.$emit('showInfo', 'This room already has a leader');
+                    return;
                 }
 
                 if (this.activeRoom.occupants_count >= this.activeRoom.type.data.rules.occupancy_limit) {
@@ -442,14 +490,17 @@
                 }
 
                 let data = {
-                    reservation_id: member.id,
+                    reservation_id: occupant.id,
                     room_leader: leader,
                 };
 
-                return this.$http.post('rooming/' + this.activeRoom.id + '/occupants', data,  { params: { } }).then(function (response) {
-	                let occupant = response.body.data;
-	                this.activeRoom.occupants.push(occupant);
-                    this.activeRoom.occupant_count++;
+                return this.$http.post('rooming/rooms/' + this.activeRoom.id + '/occupants', data,  { params: { } }).then(function (response) {
+	                let occupants = response.body.data;
+	                this.activeRoom.occupants = occupants;
+                    this.activeRoom.occupant_count = occupants.length;
+                    this.currentPlan.occupants_count++;
+                }, function (response) {
+	                this.$root.$emit('showError', response.body.message)
                 });
             },
             searchReservations(){
@@ -551,7 +602,7 @@
                     // page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/rooms/' + this.activeRoom.id + '/occupants', { params: params }).then(function (response) {
-                        this.currentPlan.rooms = response.body.data
+                        this.activeRoom.occupants = response.body.data
                         //console.log(response.body.data);
 //                        this.plansPagination = response.body.meta.pagination;
 //                        return this.plans = response.body.data;

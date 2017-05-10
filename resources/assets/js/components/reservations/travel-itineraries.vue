@@ -115,13 +115,16 @@
         },
         computed: {
             connectionType(){
-                    return this ? _.findWhere(this.activityTypes, { name: 'connection'}) : null;
+                if (this)
+                    return _.findWhere(this.activityTypes, { name: 'connection'});
             },
             arrivalType(){
-                    return this ? _.findWhere(this.activityTypes, { name: 'arrival'}) : null;
+                if (this)
+                    return _.findWhere(this.activityTypes, { name: 'arrival'});
             },
             departureType(){
-                    return this ? _.findWhere(this.activityTypes, { name: 'departure'}) : null;
+                if (this)
+                    return _.findWhere(this.activityTypes, { name: 'departure'});
             },
             connectionPresent() {
                 return this.itinerary.items && _.some(this.itinerary.items, function (item) {
@@ -423,10 +426,11 @@
             let self = this;
             Promise.all(promises).then(function (values) {
                 // initiate computed types
-                self.arrivalType;
-                self.departureType;
-                self.connectionType;
-
+                let arrival = self.arrivalType;
+                let departure = self.departureType;
+                let connection = self.connectionType;
+                return [arrival, departure, connection];
+            }).then(function () {
                 self.$nextTick(function () {
                     if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
                         self.editMode = false;
@@ -435,7 +439,6 @@
                         self.newItinerary();
                     }
                 });
-
             });
         }
     }

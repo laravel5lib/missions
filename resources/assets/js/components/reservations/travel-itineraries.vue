@@ -115,13 +115,16 @@
         },
         computed: {
             connectionType(){
-                    return this ? _.findWhere(this.activityTypes, { name: 'connection'}) : null;
+                if (this)
+                    return _.findWhere(this.activityTypes, { name: 'connection'});
             },
             arrivalType(){
-                    return this ? _.findWhere(this.activityTypes, { name: 'arrival'}) : null;
+                if (this)
+                    return _.findWhere(this.activityTypes, { name: 'arrival'});
             },
             departureType(){
-                    return this ? _.findWhere(this.activityTypes, { name: 'departure'}) : null;
+                if (this)
+                    return _.findWhere(this.activityTypes, { name: 'departure'});
             },
             connectionPresent() {
                 return this.itinerary.items && _.some(this.itinerary.items, function (item) {
@@ -292,9 +295,12 @@
                     reservation_id: this.reservationId,
                     items: []
                 };
+                console.info('Activity Types: ', this.activityTypes);
                 let arrival = _.findWhere(this.activityTypes, { name: 'arrival'});
+                console.info('Arrival: ', arrival);
                 itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrival.id ));
                 let departure = _.findWhere(this.activityTypes, { name: 'departure'});
+                console.info('Departure: ', departure);
                 itinerary.items.push(this.newItineraryItem('Return Home', departure.id));
 	            return this.itinerary = itinerary;
             },
@@ -423,10 +429,11 @@
             let self = this;
             Promise.all(promises).then(function (values) {
                 // initiate computed types
-                self.arrivalType;
-                self.departureType;
-                self.connectionType;
-
+                let arrival = self.arrivalType;
+                let departure = self.departureType;
+                let connection = self.connectionType;
+                return [arrival, departure, connection];
+            }).then(function () {
                 self.$nextTick(function () {
                     if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
                         self.editMode = false;
@@ -435,7 +442,6 @@
                         self.newItinerary();
                     }
                 });
-
             });
         }
     }

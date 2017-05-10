@@ -159,6 +159,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\PromocodesServiceProvider::class,
         App\Providers\BackendServiceProvider::class,
+        App\Providers\AccountingServiceProvider::class,
 
         /*
          * Third Party Providers...

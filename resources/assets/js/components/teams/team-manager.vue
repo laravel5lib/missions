@@ -186,12 +186,12 @@
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
-						<div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
+						<!-- <div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
 								Filters
 								<i class="fa fa-filter"></i>
 							</button>
-						</div>
+						</div> -->
 						<div class="col-xs-12">
 							<hr class="divider inv">
 						</div>
@@ -212,7 +212,7 @@
 												<h3 class="panel-title" v-text="squad.callsign"></h3>
 											</div>
 											<div class="panel-body">
-												<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_squad_leaders">
+												<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_leaders">
 															Complete! You've filled all the positions.
 												</div>
 												<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
@@ -233,11 +233,11 @@
 																				<span class="fa fa-ellipsis-h"></span>
 																			</button>
 																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																				<template v-for="subSquad in currentSquads">
+																				<template v-for="subSquad in currentSquads | orderBy 'callsign'">
 																					<template v-if="subSquad.callsign !== 'Team Leaders'">
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																					</template>
 																				</template>
 																				<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
@@ -286,7 +286,7 @@
 								</p>
 								<hr class="divider sm">
 								<!-- Other Groups -->
-								<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
+								<template v-for="(tgIndex, squad) in currentSquads | orderBy 'callsign' | filterBy membersSearch">
 									<template v-if="squad.callsign !== 'Team Leaders'">
 										<div class="panel panel-default">
 											<div class="panel-heading">
@@ -332,16 +332,16 @@
 																				<span class="fa fa-ellipsis-h"></span>
 																			</button>
 																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																				<template v-for="subSquad in currentSquads">
+																				<template v-for="subSquad in currentSquads | orderBy 'callsign'">
 																					<template v-if="subSquad.callsign === 'Team Leaders'">
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ''"></a></li>
-																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																						<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																					</template>
 																					<template v-else>
 																						<template v-if="subSquad.id !== squad.id">
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(member)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
-																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(member)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Team Leaders</a></li>
+																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
+																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																						</template>
 																					</template>
 																				</template>
@@ -558,15 +558,15 @@
 							<hr class="divider inv">
 							<div>
 								<label>Active Filters</label>
-								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
 									Travel Group
 									<i class="fa fa-close"></i>
 								</span>
-								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
 									Companions
 									<i class="fa fa-close"></i>
 								</span>
-								<span v-if="isAdminRoute" style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
 									Role
 									<i class="fa fa-close"></i>
 								</span>
@@ -612,7 +612,7 @@
 														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 															<li class="dropdown-header">Assign To Team</li>
 															<li role="separator" class="divider"></li>
-															<template v-for="squad in currentSquads">
+															<template v-for="squad in currentSquads | orderBy 'callsign'">
 																<template v-if="squad.callsign === 'Team Leaders'">
 																	<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Team Leader</a></li>
 																</template>
@@ -1277,13 +1277,8 @@
                                 members_count: 0
                             });
 
-							if (this.currentSquads.length) {
-                                this.currentSquads.splice(1, 0, squad);
-							} else {
-                                this.currentSquads.push(squad);
-							}
+	                        this.currentSquads.push(squad);
                             this.currentTeam.squads_count++;
-
                             this.showSquadCreateModal = false;
                             return squad;
                         });

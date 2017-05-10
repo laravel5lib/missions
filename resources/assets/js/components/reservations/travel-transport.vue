@@ -233,7 +233,7 @@
                 if (self.isUpdate) {
                     // select airline
                     self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
-                    console.log(self.selectedAirlineObj);
+                    //console.log(self.selectedAirlineObj);
                 }
                 self.$nextTick(function () {
                     self.$validate(true);

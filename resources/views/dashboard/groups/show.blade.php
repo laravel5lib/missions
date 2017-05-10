@@ -36,76 +36,72 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-9">
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="#">Details</a></li>
+                    <li role="presentation tour-step-teams"><a href="{{ url()->current() }}/teams">Team Management</a></li>
+                    <li role="presentation"><a href="{{ url()->current() }}/rooms">Rooming Plans</a></li>
+                </ul>
+
                 <div class="panel panel-default">
-                	  <div class="panel-heading">
-                			<h5>{{ $group->name }} <small>&middot; Details</small></h5>
-                	  </div>
-                	  <div class="panel-body">
-                			<div class="col-sm-8">
-                                <label>Description</label>
-                                <p>{{ $group->description }}</p>
-                                <hr class="divider">
-                                <div class="row">
-                                    <div class="col-sm-6 text-center">
-                                        <label>Type</label>
-                                        <p>{{ $group->type }}</p>
-                                    </div>
-                                    <div class="col-sm-6 text-center">
-                                        <label>Status</label>
-                                        <p>{{ $group->public ? 'Public': 'Private' }}</p>
-                                    </div>
+                    <div class="panel-heading">
+                        <h5>{{ $group->name }} <small>&middot; Details</small></h5>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-8">
+                            <label>Description</label>
+                            <p>{{ $group->description }}</p>
+                            <hr class="divider">
+                            <div class="row">
+                                <div class="col-sm-6 text-center">
+                                    <label>Type</label>
+                                    <p>{{ $group->type }}</p>
                                 </div>
-                                <hr class="divider">
-                                <div class="row">
-                                    <div class="col-sm-12 text-center">
-                                        <div class="well">
-                                            <label>Url slug</label>
-                                            @if($group->public)
-                                                <h4 class="hidden-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></h4>
-                                                <p class="visible-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></p>
-                                            @else
-                                                <h4 class="text-strike text-muted hidden-xs">http://missions.me/{{ $group->slug->url }}</h4>
-                                                <p class="text-strike text-muted visible-xs">http://missions.me/{{ $group->slug->url }}</p>
-                                            @endif
-                                        </div>
+                                <div class="col-sm-6 text-center">
+                                    <label>Status</label>
+                                    <p>{{ $group->public ? 'Public': 'Private' }}</p>
+                                </div>
+                            </div>
+                            <hr class="divider">
+                            <div class="row">
+                                <div class="col-sm-12 text-center">
+                                    <div class="well">
+                                        <label>Url slug</label>
+                                        @if($group->public)
+                                            <h4 class="hidden-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></h4>
+                                            <p class="visible-xs"><a href="/{{ $group->slug->url }}">http://missions.me/{{ $group->slug->url }}</a></p>
+                                        @else
+                                            <h4 class="text-strike text-muted hidden-xs">http://missions.me/{{ $group->slug->url }}</h4>
+                                            <p class="text-strike text-muted visible-xs">http://missions.me/{{ $group->slug->url }}</p>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4 panel panel-default">
-                                <div class="panel-body">
-                                    <label>Phone 1</label>
-                                    <p>{{ $group->phone_one }}</p>
-                                    <label>Phone 2</label>
-                                    <p>{{ $group->phone_two or 'Not Available' }}</p>
-                                    <label>Email Address</label>
-                                    <p>{{ $group->email or 'Not Available' }}</p>
-                                    <label>Address</label>
-                                    <p>
-                                        {{ $group->address_one or 'Not Available' }}@if($group->address_one)<br>@endif
-                                        {{ $group->address_two }}@if($group->address_two)<br>@endif
-                                        {{ $group->city }}{{ ($group->city && $group->state) ? ',' : '' }} {{ $group->state }} {{ $group->zip }}
-                                    </p>
-                                    <label>Country</label>
-                                    <p>{{ country($group->country_code) }}</p>
-                                    <label>Timezone</label>
-                                    <p>{{ $group->timezone }}</p>
-                                </div>
+                        </div>
+                        <div class="col-sm-4 panel panel-default">
+                            <div class="panel-body">
+                                <label>Phone 1</label>
+                                <p>{{ $group->phone_one }}</p>
+                                <label>Phone 2</label>
+                                <p>{{ $group->phone_two or 'Not Available' }}</p>
+                                <label>Email Address</label>
+                                <p>{{ $group->email or 'Not Available' }}</p>
+                                <label>Address</label>
+                                <p>
+                                    {{ $group->address_one or 'Not Available' }}@if($group->address_one)<br>@endif
+                                    {{ $group->address_two }}@if($group->address_two)<br>@endif
+                                    {{ $group->city }}{{ ($group->city && $group->state) ? ',' : '' }} {{ $group->state }} {{ $group->zip }}
+                                </p>
+                                <label>Country</label>
+                                <p>{{ country($group->country_code) }}</p>
+                                <label>Timezone</label>
+                                <p>{{ $group->timezone }}</p>
                             </div>
-                	  </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-3 tour-step-managers">
                 <admin-group-managers group-id="{{ $group->id }}"></admin-group-managers>
-            </div>
-            <div class="col-sm-3 tour-step-teams">
-                <div class="panel panel-default">
-                	  <div class="panel-heading">
-                			<h3 class="panel-title">Teams</h3>
-                	  </div>
-                	  <div class="panel-body">
-                          <a href="{{ url()->current() }}/teams" class="btn btn-primary btn-block">Manage Teams</a>
-                	  </div>
-                </div>
             </div>
         </div>
         <div class="row">

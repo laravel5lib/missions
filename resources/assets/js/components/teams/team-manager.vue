@@ -1144,9 +1144,25 @@
                     }
                 }
 
-                this.removeFromSquad(reservation, oldSquad).then(function (response) {
+                this.$http.put('squads/' + oldSquad.id + '/members/' + reservation.id, { team_squad_id: newSquad.id, leader: leader }, { params: { include: 'trip.group,companions'}})
+	                .then(function (response) {
+                        console.log(response);
+		                // update old squad
+                        oldSquad.members = _.reject(oldSquad.members, function (member) {
+                            return member.id === reservation.id;
+                        });
+                        oldSquad.members_count = oldSquad.members.length;
+		                // update new Squad
+                        newSquad.members.push(response.body.data);
+                        newSquad.members_count = newSquad.members.length;
+                    }, function (response) {
+                        console.log(response);
+	                    return response;
+	                });
+
+                /*this.removeFromSquad(reservation, oldSquad).then(function (response) {
 	                this.assignToSquad(reservation, newSquad, leader);
-                });
+                });*/
             },
             moveToTeam(squad, newTeam) {
                 if (newTeam.squads_count >= newTeam.type.data.rules.max_squads) {

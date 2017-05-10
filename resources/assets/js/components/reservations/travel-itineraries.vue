@@ -295,9 +295,12 @@
                     reservation_id: this.reservationId,
                     items: []
                 };
+                console.info('Activity Types: ', this.activityTypes);
                 let arrival = _.findWhere(this.activityTypes, { name: 'arrival'});
+                console.info('Arrival: ', arrival);
                 itinerary.items.push(this.newItineraryItem('Arrive at Training Location', arrival.id ));
                 let departure = _.findWhere(this.activityTypes, { name: 'departure'});
+                console.info('Departure: ', departure);
                 itinerary.items.push(this.newItineraryItem('Return Home', departure.id));
 	            return this.itinerary = itinerary;
             },

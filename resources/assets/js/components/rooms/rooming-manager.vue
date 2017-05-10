@@ -124,12 +124,13 @@
 					</div>
 					<div class="panel-body">
 						<template v-if="activeRoom.occupants_count">
-							<div class="panel panel-default" v-for="member in activeRoom.occupants">
+							<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
+								<div class="panel panel-default" v-for="member in activeRoom.occupants">
 								<div class="panel-heading" role="tab" id="headingOne">
 									<h4 class="panel-title">
 										<div class="row">
 											<div class="col-xs-9">
-												<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
 													<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
 													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span><br>
 													<!--<label>{{ member.desired_role.name }}</label>-->
@@ -147,14 +148,14 @@
 														<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.activeRoom)">Remove</a></li>
 													</ul>
 												</dropdown>
-												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
 													<i class="fa fa-angle-down"></i>
 												</a>
 											</div>
 										</div>
 									</h4>
 								</div>
-								<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								<div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div class="panel-body">
 										<div class="row">
 											<div class="col-sm-6">
@@ -176,6 +177,7 @@
 									<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
 									<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 								</div>-->
+							</div>
 							</div>
 						</template>
 						<template v-else>
@@ -224,7 +226,7 @@
 								<h4 class="panel-title">
 									<div class="row">
 										<div class="col-xs-9">
-											<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
 												<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
 												{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
 												<label>{{ member.desired_role.name }}</label>

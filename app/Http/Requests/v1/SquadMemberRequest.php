@@ -34,7 +34,8 @@ class SquadMemberRequest extends FormRequest
         if ($this->isMethod('put')) {
             $rules = [
                 'id' => 'sometimes|required_without:members|string|exists:reservations,id|unique:team_members,reservation_id,NULL,reservation_id,team_squad_id,' . $this->route('squads'),
-                'leader' => 'required|boolean'
+                'leader' => 'boolean',
+                'team_squad_id' => 'string|exists:team_squads,id'
             ];
         }
 

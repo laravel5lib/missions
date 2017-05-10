@@ -379,4 +379,14 @@ class ReservationFilter extends Filter
     {
         //
     }
+
+    public function inSquad()
+    {
+        return $this->has('squads');
+    }
+
+    public function noSquad()
+    {
+        return $this->has('squads', '<', 1);
+    }
 }

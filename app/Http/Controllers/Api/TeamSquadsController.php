@@ -64,12 +64,13 @@ class TeamSquadsController extends Controller
      */
     public function store(TeamSquadRequest $request, $teamId)
     {
-        $squad = $this->team
-            ->findOrFail($teamId)
-            ->squads()
-            ->create([
-                'callsign' => $request->get('callsign')
-            ]);
+        $team = $this->team->findOrFail($teamId);
+
+        $team->validateSquads()->validate();
+
+        $squad = $team->squads()->create([
+            'callsign' => $request->get('callsign')
+        ]);
 
         return $this->response->item($squad, new TeamSquadTransformer);
     }
@@ -91,10 +92,13 @@ class TeamSquadsController extends Controller
 
     public function destroy($teamId, $squadId)
     {
-        $squad = $this->team
-            ->findOrFail($teamId)
-            ->squads()
-            ->findOrFail($squadId);
+        $team = $this->team->findOrFail($teamId);
+
+        $squad = $team->squads()->findOrFail($squadId);
+
+        $team->validateSquads()
+             ->assertMeetsMinimumSquads()
+             ->done();
 
         $squad->delete();
 

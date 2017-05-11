@@ -312,9 +312,9 @@
 																	</div><!-- end row -->
 																</div>
 															</div>
-															<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-																<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this squad.
-																<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
+															<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+																<i class=" fa fa-info-circle"></i> {{member.present_companions}} companions not in group &middot; {{companionsPresentTeam(member)}} not on this squad.
+																<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(member, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
 															</div>
 														</div>
 													</div>
@@ -322,7 +322,7 @@
 											</div>
 										</template>
 									</template>
-									<p class=" text-right" v-if="currentSquads.length < currentTeam.type.data.rules.max_squads">
+									<p class=" text-right" v-if="currentSquads.length < currentTeam.type.data.rules.max_groups">
 										<button :disabled="isLocked" class="btn btn-xs btn-primary" @click="showSquadCreateModal = true">Add Group</button>
 									</p>
 									<hr class="divider sm">
@@ -352,7 +352,7 @@
 													</div>
 												</div><!-- end panel-heading -->
 												<div class="panel-body">
-													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_squad_members">
+													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_group_members">
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
@@ -425,9 +425,9 @@
 																	</div><!-- end row -->
 																</div><!-- end panel-body -->
 															</div>
-															<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-																<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this squad.
-																<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
+															<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+																<i class=" fa fa-info-circle"></i> {{member.present_companions}} companions not in this group &middot; {{companionsPresentTeam(member)}} not on this squad.
+																<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(member, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
 															</div>
 														</div>
 													</div>
@@ -469,15 +469,19 @@
 									</select>
 									<p v-else v-text="currentTeam.locked ? 'Yes' : 'No'"></p>
 								</div>
-								<div class="col-sm-2 text-right">
-									<hr class="divider inv">
-									<a @click="editTeamMode = !editTeamMode;">
-										<i class="fa fa-edit fa-2x"></i>
+								<div class="col-sm-2" v-if="!editTeamMode">
+									<label class="control-label"><i class="fa fa-cog"></i>
+									<a @click="editTeamMode = true;">
+										Edit
 									</a>
+									</label>
 								</div>
-								<div class="col-sm-12" v-if="isAdminRoute || editTeamMode">
+								<div class="col-sm-12 text-right" v-if="editTeamMode">
 									<hr class="divider inv">
-									<button type="button" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Squad Settings</button>
+									<a class="btn btn-default btn-sm" @click="editTeamMode = false;">
+										Cancel
+									</a>
+									<button type="button" class="btn btn-primary btn-sm" @click="updateTeamSettings">Save Changes</button>
 									<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Delete Squad</button>
 								</div>
 							</div>
@@ -1058,7 +1062,7 @@
                 });
             },
             canAssignToSquad(squad){
-	            return  squad.members && squad.members.length < this.currentTeam.type.data.rules.max_squad_members;
+	            return  squad.members && squad.members.length < this.currentTeam.type.data.rules.max_group_members;
             },
             assignToSquad(reservation, squad, leader) {
                 if (leader) {
@@ -1121,7 +1125,7 @@
                     }
                 }
 
-                if (newSquad.squads_count >= this.currentTeam.type.data.rules.max_squad_members) {
+                if (newSquad.squads_count >= this.currentTeam.type.data.rules.max_group_members) {
                     this.$root.$emit('showInfo', newSquad.name +' currently has the max number of members');
                     return;
                 }
@@ -1165,7 +1169,7 @@
                 });*/
             },
             moveToTeam(squad, newTeam) {
-                if (newTeam.squads_count >= newTeam.type.data.rules.max_squads) {
+                if (newTeam.squads_count >= newTeam.type.data.rules.max_groups) {
                     this.$root.$emit('showInfo', newTeam.name +' currently has the max number of squads');
                     return;
                 }
@@ -1344,7 +1348,7 @@
                         // Create default squads for current team
                         this.newSquad('Group #1');
 
-                        if (team.type.data.rules.max_squads > 1)
+                        if (team.type.data.rules.max_groups > 1)
                             this.newSquad('Squad Leaders');
 
                         this.showTeamCreateModal = false;
@@ -1355,8 +1359,8 @@
                 }
 	        },
 	        newSquad(callsign){
-	            if (this.currentSquads.length >= this.currentTeam.type.data.rules.max_squads) {
-	                this.$root.$emit('showError', 'This squad already has the max amount of ' + this.currentTeam.type.data.rules.max_squads + ' groups');
+	            if (this.currentSquads.length >= this.currentTeam.type.data.rules.max_groups) {
+	                this.$root.$emit('showError', 'This squad already has the max amount of ' + this.currentTeam.type.data.rules.max_groups + ' groups');
 	                return;
 	            }
 
@@ -1424,8 +1428,8 @@
                 });
 	        },
 	        deleteSquad(){
-                if (this.currentSquads.length <= this.currentTeam.type.data.rules.min_squads) {
-                    this.$root.$emit('showError', 'This squad must have a minimum of ' + this.currentTeam.type.data.rules.min_squads + ' groups.');
+                if (this.currentSquads.length <= this.currentTeam.type.data.rules.min_groups) {
+                    this.$root.$emit('showError', 'This squad must have a minimum of ' + this.currentTeam.type.data.rules.min_groups + ' groups.');
                     return;
                 }
 

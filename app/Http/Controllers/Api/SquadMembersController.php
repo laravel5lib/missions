@@ -70,10 +70,14 @@ class SquadMembersController extends Controller
             })->all();
 
         }
+
+        $squad->validateMembers($members)->validate();
         
         $squad->members()->attach($members);
 
-        return $this->response->collection($squad->members, new SquadMemberTransformer);
+        $members = $squad->members()->get();
+
+        return $this->response->collection($members, new SquadMemberTransformer);
     }
 
 

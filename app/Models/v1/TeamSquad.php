@@ -5,6 +5,7 @@ namespace App\Models\v1;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Teams\ValidatesMembers;
 
 class TeamSquad extends Model
 {
@@ -24,5 +25,10 @@ class TeamSquad extends Model
         return $this->belongsToMany(Reservation::class, 'team_members')
                     ->withPivot('leader')
                     ->withTimestamps();
+    }
+
+    public function validateMembers(array $members)
+    {
+        return new ValidatesMembers(collect($members), $this);
     }
 }

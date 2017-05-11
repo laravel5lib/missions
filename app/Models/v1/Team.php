@@ -5,6 +5,7 @@ namespace App\Models\v1;
 use Carbon\Carbon;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use App\Services\Teams\ValidatesSquads;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -36,6 +37,11 @@ class Team extends Model
     public function campaigns()
     {
         return $this->morphedByMany(Campaign::class, 'teamable');
+    }
+
+    public function validateSquads()
+    {
+        return new ValidatesSquads($this);
     }
 
     public function addTeamables(array $associations)

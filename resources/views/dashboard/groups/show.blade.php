@@ -33,15 +33,12 @@
     </div>
 </div>
 <hr class="divider inv lg">
+
+@include('dashboard.groups.tabs', ['active' => 'details']);
+
     <div class="container">
         <div class="row">
             <div class="col-sm-9">
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="#">Details</a></li>
-                    <li role="presentation tour-step-teams"><a href="{{ url()->current() }}/teams">Team Management</a></li>
-                    <li role="presentation"><a href="{{ url()->current() }}/rooms">Rooming Plans</a></li>
-                </ul>
-
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5>{{ $group->name }} <small>&middot; Details</small></h5>

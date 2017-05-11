@@ -101,6 +101,10 @@
                         this.selectedOptions = this.options[0];
                 });
 
+                this.$root.$on('update-select-options', function (val) {
+                    this.getOptions()
+                }.bind(this));
+
             }
         }
     }

@@ -517,11 +517,14 @@
 									<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 										<div class="row">
 											<div class="col-xs-6">
-												{{ team.callsign | capitalize }}
-												<span class="label label-info" v-text="team.type.data.name | capitalize"></span>
-												<span v-if="team.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
+												<h5 style="margin-top:2px;margin-bottom:0;">{{ team.callsign | capitalize }}</h5>
+												<p style="margin-bottom:0;" class="small text-muted">
+													<span v-text="team.type.data.name | capitalize"></span>
+													<span v-if="team.locked"> &middot; <i class="fa fa-lock"></i> Locked</span>
+												</p>
 											</div>
-											<div class="col-xs-6 text-right">Members: {{ team.members_count || 0 }}</div>
+											<div class="col-xs-6 text-right"><h6 class="small">Members &middot; {{ team.members_count || 0 }}</h6>
+											</div>
 										</div>
 									</a>
 								</ul>

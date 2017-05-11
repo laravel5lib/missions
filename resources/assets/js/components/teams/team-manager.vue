@@ -502,7 +502,7 @@
 									<label class="control-label">Currently Assigned</label>
 									<hr class="divider sm inv">
 									<ul class="list-group" v-if="currentSquadGroups.length">
-										<li class="list-group-item" v-if="leaderSquad.members">
+										<li class="list-group-item" v-if="leaderSquad && leaderSquad.members">
 											<span class="badge" v-text="leaderSquad.members.length"></span>
 											Squad Leaders
 										</li>
@@ -955,7 +955,7 @@
                 return _.uniq(IDs);
             },
 		    leaderSquad() {
-                return this.currentSquadGroups.length ? _.findWhere(this.currentSquadGroups, { callsign: 'Squad Leaders'}) : [];
+                return this.currentSquadGroups.length ? _.findWhere(this.currentSquadGroups, { callsign: 'Squad Leaders'}) : null;
 		    },
 		    groupLeaders() {
                 let leaders = [];

@@ -38,11 +38,15 @@ class TeamTypesController extends Controller
      */
     public function store(TeamTypeRequest $request)
     {
-        $rules = $request->except('name');
+        $rules = $this->type->rules();
+
+        foreach ($request->get('rules') as $key => $value) {
+            $rules->set($key, $value ?: 0);
+        }
 
         $type = $this->type->create([
             'name' => $request->get('name'),
-            'rules' => $rules
+            'rules' => $rules->all()
         ]);
 
         return $this->response->item($type, new TeamTypeTransformer);
@@ -72,11 +76,11 @@ class TeamTypesController extends Controller
     {
         $type = $this->type->findOrFail($id);
 
-        $rules = collect($type->rules)->merge($request->except('name'));
+        $rules = $request->get('rules', $type->rules()->all());
 
         $type->update([
             'name' => $request->get('name', $type->name),
-            'rules' => $rules
+            'rules' => $type->rules()->merge($rules)->all()
         ]);
 
         return $this->response->item($type, new TeamTypeTransformer);

@@ -10,12 +10,12 @@ $factory->define(App\Models\v1\TeamType::class, function(Faker\Generator $faker)
             'max_members' => 25,
             'min_leaders' => 2,
             'max_leaders' => 2,
-            'min_squads'  => 2,
-            'max_squads'  => 10,
-            'min_squad_members' => 2,
-            'max_squad_members' => 5,
-            'min_squad_leaders' => 1,
-            'max_squad_leaders' => 1
+            'min_groups'  => 2,
+            'max_groups'  => 10,
+            'min_group_members' => 2,
+            'max_group_members' => 5,
+            'min_group_leaders' => 1,
+            'max_group_leaders' => 1
         ]
     ];
 });
@@ -30,12 +30,12 @@ $factory->defineAs(App\Models\v1\TeamType::class, 'ministry', function(Faker\Gen
             'max_members' => 25,
             'min_leaders' => 2,
             'max_leaders' => 2,
-            'min_squads'  => 2,
-            'max_squads'  => 10,
-            'min_squad_members' => 2,
-            'max_squad_members' => 5,
-            'min_squad_leaders' => 1,
-            'max_squad_leaders' => 1
+            'min_groups'  => 2,
+            'max_groups'  => 10,
+            'min_group_members' => 2,
+            'max_group_members' => 5,
+            'min_group_leaders' => 1,
+            'max_group_leaders' => 1
         ]
     ];
 });
@@ -50,12 +50,12 @@ $factory->defineAs(App\Models\v1\TeamType::class, 'medical', function(Faker\Gene
             'max_members' => 25,
             'min_leaders' => 1,
             'max_leaders' => 2,
-            'min_squads'  => 1,
-            'max_squads'  => 1,
-            'min_squad_members' => 10,
-            'max_squad_members' => 25,
-            'min_squad_leaders' => 0,
-            'max_squad_leaders' => 0
+            'min_groups'  => 1,
+            'max_groups'  => 1,
+            'min_group_members' => 10,
+            'max_group_members' => 25,
+            'min_group_leaders' => 0,
+            'max_group_leaders' => 0
         ]
     ];
 });
@@ -70,12 +70,12 @@ $factory->defineAs(App\Models\v1\TeamType::class, 'leadership', function(Faker\G
             'max_members' => 10,
             'min_leaders' => 2,
             'max_leaders' => 2,
-            'min_squads'  => 1,
-            'max_squads'  => 1,
-            'min_squad_members' => 2,
-            'max_squad_members' => 10,
-            'min_squad_leaders' => 1,
-            'max_squad_leaders' => 1
+            'min_groups'  => 1,
+            'max_groups'  => 1,
+            'min_group_members' => 2,
+            'max_group_members' => 10,
+            'min_group_leaders' => 1,
+            'max_group_leaders' => 1
         ]
     ];
 });

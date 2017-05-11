@@ -4,25 +4,25 @@
 			<div class="col-sm-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h6 class="text-uppercase"><a data-toggle="collapse" href="#collapseHints" aria-expanded="true" aria-controls="collapseHints">Team Management Made Simple <span class="pull-right"><i class="fa" :class="{ 'fa-chevron-up': toggleHintsCollapse, 'fa-chevron-down': !toggleHintsCollapse}"></i></span></a></h6>
+						<h6 class="text-uppercase"><a data-toggle="collapse" href="#collapseHints" aria-expanded="true" aria-controls="collapseHints">Squad Management Made Simple <span class="pull-right"><i class="fa" :class="{ 'fa-chevron-up': toggleHintsCollapse, 'fa-chevron-down': !toggleHintsCollapse}"></i></span></a></h6>
 					</div><!-- end panel-heading -->
 					<div class="panel-body panel-collapse collapse in" id="collapseHints">
 						<div class="row">
 							<div class="col-xs-12 col-sm-4">
 								<h6 class="text-uppercase" style="margin-top:0px;">Follow these simple steps</h6>
-								<p class="small">Missions.Me has created a system to help you manage your teams. Add missionaries to specific teams using this simple tool.</p>
+								<p class="small">Missions.Me has created a system to help you manage your squads. Add missionaries to specific squads using this simple tool.</p>
 							</div><!-- end col -->
 							<div class="col-xs-12 col-sm-8">
 								<div class="row">
 									<div class="col-xs-12 col-sm-6">
-										<p class="small"><strong>Step 1</strong> Create and name your new team.</p>
-										<p class="small"><strong>Step 2</strong> Assign Team Members using the dropdown menu on reservations.</p>
-										<p class="small"><strong>Step 3</strong> Assign a Team Leader.</p>
+										<p class="small"><strong>Step 1</strong> Create and name your new squad.</p>
+										<p class="small"><strong>Step 2</strong> Assign Squad Members using the dropdown menu on reservations.</p>
+										<p class="small"><strong>Step 3</strong> Assign a Squad Leader.</p>
 									</div><!-- end col -->
 									<div class="col-xs-12 col-sm-6">
 										<p class="small"><strong>Step 4</strong> Assign a Group Leader.</p>
-										<p class="small"><strong>Step 5</strong> Add Team Members to groups.</p>
-										<p class="small"><strong>Step 6</strong> Create more groups and teams then repeat!</p>
+										<p class="small"><strong>Step 5</strong> Add Squad Members to groups.</p>
+										<p class="small"><strong>Step 6</strong> Create more groups and squads then repeat!</p>
 									</div><!-- end col -->
 								</div><!-- end row -->
 							</div><!-- end col -->
@@ -239,7 +239,7 @@
 
 									<!-- Squad Leaders Group -->
 									<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
-										<template v-if="squad.callsign === 'Team Leaders'">
+										<template v-if="squad.callsign === 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h3 class="panel-title">Squad Leaders</h3>
@@ -267,7 +267,7 @@
 																				</button>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																					<template v-for="subSquad in currentSquads | orderBy 'callsign'">
-																						<template v-if="subSquad.callsign !== 'Team Leaders'">
+																						<template v-if="subSquad.callsign !== 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Squad Leaders</a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
@@ -328,7 +328,7 @@
 									<hr class="divider sm">
 									<!-- Other Groups -->
 									<template v-for="(tgIndex, squad) in currentSquads | orderBy 'callsign' | filterBy membersSearch">
-										<template v-if="squad.callsign !== 'Team Leaders'">
+										<template v-if="squad.callsign !== 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<div class="row">
@@ -374,7 +374,7 @@
 																				</button>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																					<template v-for="subSquad in currentSquads | orderBy 'callsign'">
-																						<template v-if="subSquad.callsign === 'Team Leaders'">
+																						<template v-if="subSquad.callsign === 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
 																						</template>
@@ -556,7 +556,7 @@
 			<div class="col-md-5">
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active">
-						<a href="#teams" data-toggle="pill">Teams <span class="badge" v-text="teamsPagination.total"></span></a>
+						<a href="#teams" data-toggle="pill">Squads <span class="badge" v-text="teamsPagination.total"></span></a>
 					</li>
 					<li role="presentation">
 						<a href="#reservations" data-toggle="pill">Reservations <span class="badge" v-text="reservationsPagination.total"></span></a>
@@ -593,7 +593,7 @@
 								</template>
 								<template v-else>
 									<hr class="divider inv">
-									<p class="text-center text-italic text-muted"><em>No Teams created yet. Create one to get started!</em></p>
+									<p class="text-center text-italic text-muted"><em>No Squads created yet. Create one to get started!</em></p>
 									<hr class="divider inv">
 									<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
 								</template>
@@ -674,7 +674,7 @@
 																<li class="dropdown-header">Assign To Squad</li>
 																<li role="separator" class="divider"></li>
 																<template v-for="squad in currentSquads | orderBy 'callsign'">
-																	<template v-if="squad.callsign === 'Team Leaders'">
+																	<template v-if="squad.callsign === 'Squad Leaders'">
 																		<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Squad Leader</a></li>
 																	</template>
 																	<template v-else>
@@ -951,7 +951,7 @@
                 return _.uniq(IDs);
             },
 		    leaderSquad() {
-                return this.currentSquads.length ? _.findWhere(this.currentSquads, { callsign: 'Team Leaders'}) : [];
+                return this.currentSquads.length ? _.findWhere(this.currentSquads, { callsign: 'Squad Leaders'}) : [];
 		    },
 		    groupLeaders() {
                 let leaders = [];
@@ -1050,7 +1050,7 @@
                 });
             },
             canAssignToTeamLeaders(squad){
-	            return squad.callsign === 'Team Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.rules.max_leaders;
+	            return squad.callsign === 'Squad Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.rules.max_leaders;
             },
             canAssignToSquadLeader(squad){
                 return !_.some(squad.members, function (member) {
@@ -1074,7 +1074,7 @@
                 }
 
                 // Rules for team leader group
-                if (squad.callsign === 'Team Leaders') {
+                if (squad.callsign === 'Squad Leaders') {
                     if (squad.members.length) {
                         //let test = false;
 						/*test = _.some(squad.members, function (member) {
@@ -1103,7 +1103,7 @@
                 }
 
                 // Rules for team leader group
-                if (squad.callsign === 'Team Leaders') {
+                if (squad.callsign === 'Squad Leaders') {
                     this.$root.$emit('showError', 'Please add leaders individually.');
                 }
 
@@ -1131,7 +1131,7 @@
                 }
 
                 // Rules for team leader group
-                if (newSquad.callsign === 'Team Leaders') {
+                if (newSquad.callsign === 'Squad Leaders') {
                     if (newSquad.members.length) {
                         let test = false;
 						test = _.some(newSquad.members, function (member) {
@@ -1345,7 +1345,7 @@
                         this.newSquad('Group #1');
 
                         if (team.type.data.rules.max_squads > 1)
-                            this.newSquad('Team Leaders');
+                            this.newSquad('Squad Leaders');
 
                         this.showTeamCreateModal = false;
                         $('.nav-tabs a[href="#reservations"]').tab('show');

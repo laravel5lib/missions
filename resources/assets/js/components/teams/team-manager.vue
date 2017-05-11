@@ -451,7 +451,7 @@
 							<div class="row">
 								<div class="col-sm-4">
 									<label for="" class="control-label">Name</label>
-									<input v-if="isAdminRoute || editTeamMode" type="text" class="form-control"  placeholder="Name" v-model="currentTeam.callsign">
+									<input v-if="isAdminRoute || editTeamMode" type="text" class="form-control input-sm"  placeholder="Name" v-model="currentTeam.callsign">
 									<p v-else v-text="currentTeam.callsign"></p>
 								</div>
 								<div class="col-sm-4">

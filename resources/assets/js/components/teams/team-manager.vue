@@ -1021,9 +1021,11 @@
             getRoles(search, loading){
                 loading ? loading(true) : void 0;
                 return this.$http.get('utilities/team-roles').then(function (response) {
+                    let roles = [];
                     _.each(response.body.roles, function (name, key) {
-                        this.rolesOptions.push({ value: key, name: name});
-                    }.bind(this));
+                        roles.push({ value: key, name: name});
+                    });
+                    this.rolesOptions = roles;
                     if (loading) {
                         loading(false);
                     } else {

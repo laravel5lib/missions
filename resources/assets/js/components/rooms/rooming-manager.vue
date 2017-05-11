@@ -150,7 +150,7 @@
 			<!-- Plans List-->
 			<!--<div class="col-sm-6">
 				<div class="col-xs-12 text-right">
-					<button class="btn btn-primary btn-xs" type="button" @click="openNewPlanModel">Create A Plan</button>
+					<button class="btn btn-primary btn-xs" type="button" @click="openNewPlanModal">Create A Plan</button>
 					<hr class="divider lg">
 				</div>
 
@@ -254,7 +254,7 @@
 						<hr class="divider inv">
 						<p class="text-center text-muted"><em>Create a new plan to get started!</em></p>
 						<hr class="divider inv">
-						<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewPlanModel">Create A Plan</a></p>
+						<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewPlanModal">Create A Plan</a></p>
 					</template>
 
 				</div>
@@ -701,7 +701,7 @@
             },
 
 	        // Modal Functions
-            openNewPlanModel(){
+            openNewPlanModal(){
                 this.showPlanModal = true;
 				this.selectedPlan = {
                     name: '',
@@ -718,6 +718,7 @@
 	                plan.rooms = [];
                     this.plans.push(plan);
                     this.showPlanModal = false;
+                    this.$root.$emit('update-select-options');
                     return this.currentPlan = plan;
                 }, function (response) {
                     console.log(response);
@@ -812,6 +813,10 @@
                 val.rooms = val.rooms || [];
                 this.currentPlan = val || null;
 //                this.$root.$emit('update-title', val || null);
+            }.bind(this));
+
+            this.$root.$on('create-plan', function (val) {
+                this.openNewPlanModal();
             }.bind(this));
 
         }

@@ -1,29 +1,21 @@
 <template>
-    <div>
-        <template v-if="normal">
-            <select class="form-control" @change="execute" :multiple="multiple" v-model="selectedOptions">
-                <option value="" class="select-placeholder">{{text}}</option>
-                <option :value="option" v-for="option in options">{{option[label]}}</option>
-            </select>
-        </template>
-        <template v-else>
-            <v-select @keydown.enter.prevent="" :multiple="multiple" class="form-control" :debounce="debounce" :on-search="getOptions"
-                      :value.sync="selectedOptions" :options="options" :label="label" :on-change="execute"
-                      :placeholder="text"></v-select>
-        </template>
+	<!--<strap-select :placeholder="text" :options="options" options-label="name" options-value="id" :value.sync="selectedVal" :multiple="multiple" required close-on-select></strap-select>-->
+    <div class="btn-group">
+        <button type="button" class="btn btn-white-hollow dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{selectedOptions ? selectedOptions[label] : text}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a @click="selectedOptions = option" v-for="option in options">{{option[label]}} <i v-if="selectedOptions && selectedOptions[label] === option[label]" class="fa fa-check"></i></a></li>
+        </ul>
     </div>
 </template>
 <script type="text/javascript">
     import _ from 'underscore';
     import vSelect from 'vue-select';
     export default{
-        name: 'action-select',
+        name: 'action-dropdown-select',
         components: {vSelect},
         props: {
-            multiple: {
-                type: Boolean,
-                default: false
-            },
             debounce: {
                 type: Number,
                 default: 250
@@ -52,10 +44,6 @@
                 type: Boolean,
                 default: false
             },
-            normal: {
-                type: Boolean,
-                default: false
-            },
             api: {
                 type: Boolean,
                 default: false
@@ -74,9 +62,6 @@
         },
         watch: {
             selectedOptions(val){
-                if (this.normal) {
-                    $('.select-placeholder').remove();
-                }
                 this.$root.$emit(this.event, val);
             }
         },

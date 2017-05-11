@@ -12,6 +12,7 @@ import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
+import actionDropdownSelect from './components/action-dropdown-select.vue';
 import actionSelect from './components/action-select.vue';
 import listenText from './components/listen-text.vue';
 import donate from './components/donate.vue';
@@ -186,6 +187,7 @@ Vue.component('panel', VueStrap.panel);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('dropdown', VueStrap.dropdown);
+Vue.component('strap-select', VueStrap.select);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
@@ -835,6 +837,7 @@ new Vue({
         fundraiserCollection,
         topNav,
         actionTrigger,
+        actionDropdownSelect,
         actionSelect,
         listenText,
         donate,

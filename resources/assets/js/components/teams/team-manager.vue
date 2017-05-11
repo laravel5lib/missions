@@ -232,13 +232,13 @@
 						<!-- Squad Groups List -->
 						<div class="row">
 							<div class="col-xs-12">
-								<template v-if="currentTeam && currentSquads">
-									<template v-if="currentSquads && !currentSquads.length">
+								<template v-if="currentTeam && currentSquadGroups">
+									<template v-if="currentSquadGroups && !currentSquadGroups.length">
 										<p class="text-center text-italic text-muted">This squad currently has no Squads</p>
 									</template>
 
 									<!-- Squad Leaders Group -->
-									<template v-for="(tgIndex, squad) in currentSquads | filterBy membersSearch">
+									<template v-for="(tgIndex, squad) in currentSquadGroups | filterBy membersSearch">
 										<template v-if="squad.callsign === 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -266,7 +266,7 @@
 																					<span class="fa fa-ellipsis-h"></span>
 																				</button>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<template v-for="subSquad in currentSquads | orderBy 'callsign'">
+																					<template v-for="subSquad in currentSquadGroups | orderBy 'callsign'">
 																						<template v-if="subSquad.callsign !== 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Squad Leaders</a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
@@ -322,12 +322,12 @@
 											</div>
 										</template>
 									</template>
-									<p class=" text-right" v-if="currentSquads.length < currentTeam.type.data.rules.max_groups">
+									<p class=" text-right" v-if="currentSquadGroups.length < currentTeam.type.data.rules.max_groups">
 										<button :disabled="isLocked" class="btn btn-xs btn-primary" @click="showSquadCreateModal = true">Add Group</button>
 									</p>
 									<hr class="divider sm">
 									<!-- Other Groups -->
-									<template v-for="(tgIndex, squad) in currentSquads | orderBy 'callsign' | filterBy membersSearch">
+									<template v-for="(tgIndex, squad) in currentSquadGroups | orderBy 'callsign' | filterBy membersSearch">
 										<template v-if="squad.callsign !== 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -373,7 +373,7 @@
 																					<span class="fa fa-ellipsis-h"></span>
 																				</button>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<template v-for="subSquad in currentSquads | orderBy 'callsign'">
+																					<template v-for="subSquad in currentSquadGroups | orderBy 'callsign'">
 																						<template v-if="subSquad.callsign === 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
@@ -491,7 +491,7 @@
 								<div class="col-sm-6">
 									<label class="control-label">Assignment Rules</label>
 									<hr class="divider sm inv">
-									<ul class="list-group" v-if="currentSquads.length">
+									<ul class="list-group" v-if="currentSquadGroups.length">
 										<li class="list-group-item" v-for="(key, value) in currentTeam.type.data.rules">
 											<span class="badge" v-text="value"></span>
 											{{ key | underscoreToSpace | capitalize }}
@@ -501,8 +501,8 @@
 								<div class="col-sm-6">
 									<label class="control-label">Currently Assigned</label>
 									<hr class="divider sm inv">
-									<ul class="list-group" v-if="currentSquads.length">
-										<li class="list-group-item" v-if="leaderSquad.members">
+									<ul class="list-group" v-if="currentSquadGroups.length">
+										<li class="list-group-item" v-if="leaderSquad && leaderSquad.members">
 											<span class="badge" v-text="leaderSquad.members.length"></span>
 											Squad Leaders
 										</li>
@@ -677,7 +677,7 @@
 															<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																<li class="dropdown-header">Assign To Squad</li>
 																<li role="separator" class="divider"></li>
-																<template v-for="squad in currentSquads | orderBy 'callsign'">
+																<template v-for="squad in currentSquadGroups | orderBy 'callsign'">
 																	<template v-if="squad.callsign === 'Squad Leaders'">
 																		<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Squad Leader</a></li>
 																	</template>
@@ -848,7 +848,7 @@
                 reservationsPerPage: 10,
                 reservationsPagination: { current_page: 1 },
 	            currentTeam: null,
-	            currentSquads: [],
+	            currentSquadGroups: [],
                 squadsPagination: { current_page: 1 },
 	            group: null,
                 startUp: true,
@@ -949,24 +949,24 @@
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
-	                _.each(this.currentSquads, function (squad) {
+	                _.each(this.currentSquadGroups, function (squad) {
 		                IDs = _.union(IDs, _.pluck(squad.members, 'id'));
 	                });
                 return _.uniq(IDs);
             },
 		    leaderSquad() {
-                return this.currentSquads.length ? _.findWhere(this.currentSquads, { callsign: 'Squad Leaders'}) : [];
+                return this.currentSquadGroups.length ? _.findWhere(this.currentSquadGroups, { callsign: 'Squad Leaders'}) : null;
 		    },
 		    groupLeaders() {
                 let leaders = [];
-                leaders.push(_.filter(this.currentSquads, function (squad) {
+                leaders.push(_.filter(this.currentSquadGroups, function (squad) {
 	                return _.findWhere(squad.members, { leader: true});
                 }));
                 return leaders;
 		    },
             totalMembers() {
                 let members = 0;
-                _.each(this.currentSquads, function (squad) {
+                _.each(this.currentSquadGroups, function (squad) {
 	                members += squad.members.length;
                 });
                 return members;
@@ -976,14 +976,14 @@
 		    }
             /*missionaries() {
 				let leaders = [];
-				leaders.push(_.filter(this.currentSquads, function (squad) {
+				leaders.push(_.filter(this.currentSquadGroups, function (squad) {
 					return _.findWhere(squad.members, { desired_role: { code: 'MISS'}}) || _.findWhere(squad.members, { desired_role: { code: 'MINR'}});
 				}));
 				return leaders;
 			},
 			influencers() {
 				let leaders = [];
-				leaders.push(_.filter(this.currentSquads, function (squad) {
+				leaders.push(_.filter(this.currentSquadGroups, function (squad) {
 					return _.findWhere(squad.members, { desired_role: { code: 'INFL'}});
 				}));
 				return leaders;
@@ -1193,7 +1193,7 @@
                 };
 
                 this.TeamSquadResource.update(params , data).then(function (response) {
-                    this.currentSquads = _.reject(this.currentSquads, function (sq) {
+                    this.currentSquadGroups = _.reject(this.currentSquadGroups, function (sq) {
                         return sq.id === squad.id;
                     });
                     this.currentTeam.squads_count--;
@@ -1292,7 +1292,7 @@
                     _.each(response.body.data, function (squad) {
 	                    squad.members = squad.members && squad.members.data ? squad.members.data : [];
                     });
-                    return this.currentSquads = response.body.data;
+                    return this.currentSquadGroups = response.body.data;
                 });
             },
 	        newTeam(){
@@ -1345,7 +1345,7 @@
                         this.getTeams().then(function () {
 
                         });
-                        this.currentSquads = [];
+                        this.currentSquadGroups = [];
                         this.currentTeam = team;
                         // Create default squads for current team
                         this.newSquad('Group #1');
@@ -1361,7 +1361,7 @@
                 }
 	        },
 	        newSquad(callsign){
-	            if (this.currentSquads.length >= this.currentTeam.type.data.rules.max_groups) {
+	            if (this.currentSquadGroups.length >= this.currentTeam.type.data.rules.max_groups) {
 	                this.$root.$emit('showError', 'This squad already has the max amount of ' + this.currentTeam.type.data.rules.max_groups + ' groups');
 	                return;
 	            }
@@ -1374,7 +1374,7 @@
                                 members_count: 0
                             });
 
-	                        this.currentSquads.push(squad);
+	                        this.currentSquadGroups.push(squad);
                             this.currentTeam.squads_count++;
                             this.showSquadCreateModal = false;
                             return squad;
@@ -1411,7 +1411,7 @@
                 };
 
 	            this.TeamSquadResource.update(params, data).then(function (response) {
-	                let squad = _.findWhere(this.currentSquads, { id: this.selectedSquadObj.id});
+	                let squad = _.findWhere(this.currentSquadGroups, { id: this.selectedSquadObj.id});
 	                squad.callsign = response.body.data.callsign;
                     this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
                     this.editSquadTeamId = undefined;
@@ -1430,7 +1430,7 @@
                 });
 	        },
 	        deleteSquad(){
-                if (this.currentSquads.length <= this.currentTeam.type.data.rules.min_groups) {
+                if (this.currentSquadGroups.length <= this.currentTeam.type.data.rules.min_groups) {
                     this.$root.$emit('showError', 'This squad must have a minimum of ' + this.currentTeam.type.data.rules.min_groups + ' groups.');
                     return;
                 }
@@ -1444,7 +1444,7 @@
 
                 this.TeamSquadResource.delete({team: squadCopy.team_id, squad:squadCopy.id}).then(function (response) {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
-                    this.currentSquads = _.reject(this.currentSquads, function (squad) {
+                    this.currentSquadGroups = _.reject(this.currentSquadGroups, function (squad) {
 	                    return squad.id === squadCopy.id;
                     });
                     this.selectedSquadObj = null;
@@ -1518,7 +1518,7 @@
             },
             companionsPresentTeam(member) {
 	            let memberIds = [];
-                _.each(this.currentSquads, function (squad) {
+                _.each(this.currentSquadGroups, function (squad) {
                     memberIds = _.union(memberIds, (_.pluck(squad.members, 'id')));
                 });
                 memberIds = _.filter(memberIds, function (id) { return id !== member.id; });
@@ -1540,11 +1540,37 @@
                 });
 
                 // Check for limitations
+	            // Available Space
 	            let availableSpace = this.currentTeam.type.data.rules.max_group_members - squad.members.length;
-
 	            if (availableSpace < companionIds.length) {
 					this.$root.$emit('showError', 'There isn\'t enough space in this group for all ' + companionIds.length + ' companions.');
 	                return;
+	            }
+
+	            // Leadership Position
+	            if (squad.callsign === 'Squad Leaders') {
+	                let testLeadership = _.some(member.companions.data, function (companion) {
+		                return !_.contains(this.leadershipRoles, companion.desired_role.code)
+                    });
+
+	                if (testLeadership) {
+	                    this.$root.$emit('showError', 'Some companions do not have a leadership role');
+	                    return;
+	                }
+	            }
+
+	            // Detect companions in other groups and remove them
+	            if (member.present_companions_team) {
+                    _.each(this.currentSquadGroups, function (group) {
+                        let companionObj;
+                        _.each(companionIds, function (companionId) {
+	                        companionObj = _.findWhere(group.members, {id: companionId});
+	                        if (companionObj) {
+	                            this.removeFromSquad(companionObj, group);
+	                        }
+                        });
+
+                    });
 	            }
 
 	            // package for mass assignment

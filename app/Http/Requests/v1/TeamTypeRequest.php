@@ -25,7 +25,7 @@ class TeamTypeRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|unique:team_types,name',
-            'rules' => 'array',
+            'rules' => 'required|array',
             'rules.*' => 'integer'
         ];
 

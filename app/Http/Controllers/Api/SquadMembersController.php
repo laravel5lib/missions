@@ -70,10 +70,14 @@ class SquadMembersController extends Controller
             })->all();
 
         }
+
+        $squad->validateMembers($members)->validate();
         
         $squad->members()->attach($members);
 
-        return $this->response->collection($squad->members, new SquadMemberTransformer);
+        $members = $squad->members()->get();
+
+        return $this->response->collection($members, new SquadMemberTransformer);
     }
 
 
@@ -81,9 +85,13 @@ class SquadMembersController extends Controller
     {
         $squad = $this->squad->findOrFail($squadId);
 
-        $squad->members()->updateExistingPivot($memberId, ['leader' => $request->get('leader')]);
-
         $member = $squad->members()->findOrFail($memberId);
+
+        $squad->members()
+              ->updateExistingPivot($memberId, [
+                    'leader' => $request->get('leader', $member->pivot->leader),
+                    'team_squad_id' => $request->get('team_squad_id', $squadId)
+                ]);
 
         return $this->response->item($member, new SquadMemberTransformer);
     }

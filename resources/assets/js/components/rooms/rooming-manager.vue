@@ -1,196 +1,265 @@
 <template>
 	<div class="row" style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<!-- Plans List-->
-		<div class="col-sm-4">
-			<div class="col-xs-12 text-right">
-				<button class="btn btn-primary btn-xs" type="button" @click="openNewPlanModel">Create A Plan</button>
-				<hr class="divider lg">
+
+		<div class="col-sm-8">
+
+		    <!-- Occupants List -->
+		    <template v-if="activeRoom">
+			  <div class="panel panel-default">
+				  <div class="panel-heading">
+					  <h3 class="panel-title">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}}: Occupants</h3>
+				  </div>
+				  <div class="panel-body">
+					  <div class="row">
+						  <div class="col-sm-6">
+							  <label>Occupancy Limit</label>
+							  <p class="small">{{activeRoom.type.data.rules.occupancy_limit}}</p>
+							  <label>Limited to Gender</label>
+							  <p class="small">{{activeRoom.type.data.rules.gender | capitalize}}</p>
+							  <label>Limited to Status</label>
+							  <p class="small">{{activeRoom.type.data.rules.status | capitalize}}</p>
+						  </div><!-- end col -->
+						  <div class="col-sm-6">
+							  <label>Current Number of Occupants</label>
+							  <p class="small">{{activeRoom.occupants_count}}</p>
+							  <label>Room Leader</label>
+							  <p class="small" v-if="activeRoomHasLeader">{{ activeRoomHasLeader.surname }}, {{ activeRoomHasLeader.given_names | capitalize }}</p>
+							  <p class="small" v-else>None Set</p>
+						  </div><!-- end col -->
+					  </div><!-- end row -->
+					  <h4 class="text-center">Room Details</h4>
+					  <template v-if="activeRoom.occupants.length">
+						  <div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
+							  <div class="panel panel-default" v-for="member in activeRoom.occupants">
+								  <div class="panel-heading" role="tab" id="headingOne">
+									  <h4 class="panel-title">
+										  <div class="row">
+											  <div class="col-xs-9">
+												  <a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+													  <img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
+													  {{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span><br>
+													  <!--<label>{{ member.desired_role.name }}</label>-->
+												  </a>
+											  </div>
+											  <div class="col-xs-3 text-right action-buttons">
+												  <dropdown type="default">
+													  <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+														  <span class="fa fa-ellipsis-h"></span>
+													  </button>
+													  <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+														  <li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
+														  <li v-if="!member.room_leader && !activeRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+														  <li role="separator" class="divider"></li>
+														  <li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.activeRoom)">Remove</a></li>
+													  </ul>
+												  </dropdown>
+												  <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+													  <i class="fa fa-angle-down"></i>
+												  </a>
+											  </div>
+										  </div>
+									  </h4>
+								  </div>
+								  <div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+									  <div class="panel-body">
+										  <div class="row">
+											  <div class="col-sm-6">
+												  <label>Gender</label>
+												  <p class="small">{{member.gender | capitalize}}</p>
+												  <label>Marital Status</label>
+												  <p class="small">{{member.status | capitalize}}</p>
+											  </div><!-- end col -->
+											  <div class="col-sm-6">
+												  <label>Age</label>
+												  <p class="small">{{member.age}}</p>
+												  <!--<label>Travel Group</label>
+												  <p class="small">{{member.trip.data.group.data.name}}</p>-->
+											  </div><!-- end col -->
+										  </div><!-- end row -->
+									  </div><!-- end panel-body -->
+								  </div>
+								  <!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+									  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+									  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
+								  </div>-->
+							  </div>
+						  </div>
+					  </template>
+					  <template v-else>
+						  <hr class="divider inv">
+						  <p class="text-center text-italic text-muted"><em>No occupants in this room yet.</em></p>
+					  </template>
+				  </div>
+			  </div>
+		  </template>
+		    <template v-else>
+			    <div class="well">
+				    <p class="text-center">No room selected</p>
+			    </div>
+
+		    </template>
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<!-- Search and Filter -->
+					<form class="form-inline row">
+						<div class="form-group col-xs-12 text-right">
+							<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
+							<hr class="divider lg">
+						</div>
+
+						<div class="form-group col-xs-8">
+							<div class="input-group input-group-sm col-xs-12">
+								<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</div><!-- end col -->
+						<div class="form-group col-xs-4">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
+								<i class="fa fa-filter"></i>
+							</button>
+						</div>
+						<div class="col-xs-12">
+							<hr class="divider inv">
+						</div>
+					</form>
+
+					<div class="row">
+						<div class="col-xs-12" v-if="currentPlan">
+							<template v-if="currentRooms.length">
+								<!-- List group List-->
+								<div class="list-group">
+									<a @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentRooms" style="cursor: pointer;">
+										{{(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize}}
+										<span v-if="room.type.data.rules.occupancy_limit === room.occupants_count" class="label label-info">Full</span>
+									</a>
+								</div>
+							</template>
+							<template v-else>
+								<hr class="divider inv">
+								<p class="text-center text-muted"><em>Create a room to get started!</em></p>
+							</template>
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div class="col-xs-12">
-				<template v-if="plans.length">
-					<accordion :one-at-atime="true" type="info">
-						<panel :is-open="currentPlan && currentPlan.id === plan.id" :header="plan.name" v-for="plan in plans" @click="currentPlan = plan">
-							<tabs>
-								<tab header="Rooms">
-									<!-- Search and Filter -->
-									<form class="form-inline row">
-										<div class="form-group col-xs-12 text-right">
-											<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
-											<hr class="divider lg">
-										</div>
 
-										<div class="form-group col-xs-8">
-											<div class="input-group input-group-sm col-xs-12">
-												<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search">
-												<span class="input-group-addon"><i class="fa fa-search"></i></span>
+
+			<!-- Plans List-->
+			<!--<div class="col-sm-6">
+				<div class="col-xs-12 text-right">
+					<button class="btn btn-primary btn-xs" type="button" @click="openNewPlanModel">Create A Plan</button>
+					<hr class="divider lg">
+				</div>
+
+				<div class="col-xs-12">
+					<template v-if="plans.length">
+						<accordion :one-at-atime="true" type="info">
+							<panel :is-open="currentPlan && currentPlan.id === plan.id" :header="plan.name" v-for="plan in plans" @click="currentPlan = plan">
+								<tabs>
+									<tab header="Rooms">
+										&lt;!&ndash; Search and Filter &ndash;&gt;
+										<form class="form-inline row">
+											<div class="form-group col-xs-12 text-right">
+												<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
+												<hr class="divider lg">
 											</div>
-										</div><!-- end col -->
-										<div class="form-group col-xs-4">
-											<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-												<i class="fa fa-filter"></i>
-											</button>
-										</div>
-										<div class="col-xs-12">
-											<hr class="divider inv">
-										</div>
-									</form>
 
-									<div class="row">
-										<div class="col-xs-12" v-if="currentPlan">
-											<template v-if="currentPlan.rooms.length">
-												<!-- List group List-->
-												<div class="list-group">
-													<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
-														<h4 class="list-group-item-heading" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h4>
-														<div class="list-group-item-text">
+											<div class="form-group col-xs-8">
+												<div class="input-group input-group-sm col-xs-12">
+													<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search">
+													<span class="input-group-addon"><i class="fa fa-search"></i></span>
+												</div>
+											</div>&lt;!&ndash; end col &ndash;&gt;
+											<div class="form-group col-xs-4">
+												<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
+													<i class="fa fa-filter"></i>
+												</button>
+											</div>
+											<div class="col-xs-12">
+												<hr class="divider inv">
+											</div>
+										</form>
+
+										<div class="row">
+											<div class="col-xs-12" v-if="currentPlan">
+												<template v-if="currentPlan.rooms.length">
+													&lt;!&ndash; List group List&ndash;&gt;
+													<div class="list-group">
+														<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
+															<h4 class="list-group-item-heading" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h4>
+															<div class="list-group-item-text">
+																<div class="row">
+																	<div class="col-sm-6">
+																		<label>Occupancy Limit</label>
+																		<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
+																		<label>Limited to Gender</label>
+																		<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
+																		<label>Limited to Status</label>
+																		<p class="small">{{room.type.data.rules.status | capitalize}}</p>
+																	</div>&lt;!&ndash; end col &ndash;&gt;
+																	<div class="col-sm-6">
+																		<label>Current Number of Occupants</label>
+																		<p class="small">{{room.occupants_count}}</p>
+																		<label>Room Leader</label>
+																		<p class="small">{{room.leader}}</p>
+																	</div>&lt;!&ndash; end col &ndash;&gt;
+																</div>&lt;!&ndash; end row &ndash;&gt;
+															</div>
+														</div>
+													</div>
+
+													&lt;!&ndash; Panel List &ndash;&gt;
+													&lt;!&ndash;<div class="panel panel-default" v-for="room in currentPlan.rooms">
+														<div class="panel-heading">
+															<h3 class="panel-title" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h3>
+														</div>
+														<div class="panel-body">
 															<div class="row">
 																<div class="col-sm-6">
 																	<label>Occupancy Limit</label>
 																	<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
-																	<label>Limited to Gender</label>
+																	<label>Limit ed to Gender</label>
 																	<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
 																	<label>Limited to Status</label>
 																	<p class="small">{{room.type.data.rules.status | capitalize}}</p>
-																</div><!-- end col -->
+																</div>&lt;!&ndash; end col &ndash;&gt;
 																<div class="col-sm-6">
 																	<label>Current Number of Occupants</label>
 																	<p class="small">{{room.occupants_count}}</p>
 																	<label>Room Leader</label>
 																	<p class="small">{{room.leader}}</p>
-																</div><!-- end col -->
-															</div><!-- end row -->
+																</div>&lt;!&ndash; end col &ndash;&gt;
+															</div>&lt;!&ndash; end row &ndash;&gt;
 														</div>
-													</div>
-												</div>
-
-												<!-- Panel List -->
-												<!--<div class="panel panel-default" v-for="room in currentPlan.rooms">
-													<div class="panel-heading">
-														<h3 class="panel-title" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h3>
-													</div>
-													<div class="panel-body">
-														<div class="row">
-															<div class="col-sm-6">
-																<label>Occupancy Limit</label>
-																<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
-																<label>Limit ed to Gender</label>
-																<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
-																<label>Limited to Status</label>
-																<p class="small">{{room.type.data.rules.status | capitalize}}</p>
-															</div>&lt;!&ndash; end col &ndash;&gt;
-															<div class="col-sm-6">
-																<label>Current Number of Occupants</label>
-																<p class="small">{{room.occupants_count}}</p>
-																<label>Room Leader</label>
-																<p class="small">{{room.leader}}</p>
-															</div>&lt;!&ndash; end col &ndash;&gt;
-														</div>&lt;!&ndash; end row &ndash;&gt;
-													</div>
-												</div>-->
-											</template>
-											<template v-else>
-												<hr class="divider inv">
-												<p class="text-center text-muted"><em>Create a room to get started!</em></p>
-											</template>
-										</div>
-									</div>
-								</tab>
-								<tab header="Plan Details">
-									<button class="btn btn-block btn-default btn-sm" type="button" @click="openDeletePlanModal">Delete Plan</button>
-								</tab>
-							</tabs>
-						</panel>
-					</accordion>
-				</template>
-				<template v-else>
-					<hr class="divider inv">
-					<p class="text-center text-muted"><em>Create a new plan to get started!</em></p>
-					<hr class="divider inv">
-					<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewPlanModel">Create A Plan</a></p>
-				</template>
-
-			</div>
-
-		</div>
-
-		<!-- Occupants List -->
-		<div class="col-sm-4">
-			<template v-if="activeRoom">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}}: Occupants</h3>
-					</div>
-					<div class="panel-body">
-						<template v-if="activeRoom.occupants_count">
-							<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
-								<div class="panel panel-default" v-for="member in activeRoom.occupants">
-								<div class="panel-heading" role="tab" id="headingOne">
-									<h4 class="panel-title">
-										<div class="row">
-											<div class="col-xs-9">
-												<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-													<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span><br>
-													<!--<label>{{ member.desired_role.name }}</label>-->
-												</a>
-											</div>
-											<div class="col-xs-3 text-right action-buttons">
-												<dropdown type="default">
-													<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-														<span class="fa fa-ellipsis-h"></span>
-													</button>
-													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-														<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
-														<li v-if="!member.room_leader && !activeRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
-														<li role="separator" class="divider"></li>
-														<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.activeRoom)">Remove</a></li>
-													</ul>
-												</dropdown>
-												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-													<i class="fa fa-angle-down"></i>
-												</a>
+													</div>&ndash;&gt;
+												</template>
+												<template v-else>
+													<hr class="divider inv">
+													<p class="text-center text-muted"><em>Create a room to get started!</em></p>
+												</template>
 											</div>
 										</div>
-									</h4>
-								</div>
-								<div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-									<div class="panel-body">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Gender</label>
-												<p class="small">{{member.gender | capitalize}}</p>
-												<label>Marital Status</label>
-												<p class="small">{{member.status | capitalize}}</p>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<label>Age</label>
-												<p class="small">{{member.age}}</p>
-												<!--<label>Travel Group</label>
-												<p class="small">{{member.trip.data.group.data.name}}</p>-->
-											</div><!-- end col -->
-										</div><!-- end row -->
-									</div><!-- end panel-body -->
-								</div>
-								<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-									<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-									<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-								</div>-->
-							</div>
-							</div>
-						</template>
-						<template v-else>
-							<hr class="divider inv">
-							<p class="text-center text-italic text-muted"><em>No occupants in this room yet.</em></p>
-						</template>
-					</div>
+									</tab>
+									<tab header="Plan Details">
+										<button class="btn btn-block btn-default btn-sm" type="button" @click="openDeletePlanModal">Delete Plan</button>
+									</tab>
+								</tabs>
+							</panel>
+						</accordion>
+					</template>
+					<template v-else>
+						<hr class="divider inv">
+						<p class="text-center text-muted"><em>Create a new plan to get started!</em></p>
+						<hr class="divider inv">
+						<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewPlanModel">Create A Plan</a></p>
+					</template>
+
 				</div>
-			</template>
-			<template v-else>
-				<p class="text-center">No room selected</p>
-			</template>
 
+			</div>-->
 		</div>
 
 		<!-- Teams Select & Members List -->
@@ -337,7 +406,6 @@
 			</div>
 		</modal>
 
-
 	</div>
 </template>
 <style></style>
@@ -377,6 +445,7 @@
 
                 currentTeam: null,
                 currentPlan: null,
+	            currentRooms: [],
 				activeRoom: null,
                 roomTypes: [],
 
@@ -405,12 +474,14 @@
 	    watch: {
             currentPlan(val) {
                 val.rooms = val.rooms || [];
-	            this.getRooms();
+                //this.$nextTick(function () {
+                    this.getRooms(val);
+                //});
             },
             activeRoom(val) {
                 //val.rooms = val.rooms || [];
 	            this.getOccupants();
-            },
+            }
 	    },
 	    computed: {
             planOccupants() {
@@ -438,7 +509,10 @@
                 return members;
             },
 		    activeRoomHasLeader() {
-                return this.activeRoom && this.roomHasLeader(this.activeRoom);
+                if (this.activeRoom && this.roomHasLeader(this.activeRoom)) {
+                    let leader = _.findWhere(this.activeRoom.occupants, { room_leader: true });
+                    return leader || false;
+                } else return false;
 		    }
 	    },
         methods: {
@@ -499,7 +573,7 @@
                 return this.$http.post('rooming/rooms/' + this.activeRoom.id + '/occupants', data,  { params: { } }).then(function (response) {
 	                let occupants = response.body.data;
 	                this.activeRoom.occupants = occupants;
-                    this.activeRoom.occupant_count = occupants.length;
+                    this.activeRoom.occupants_count = occupants.length;
                     this.currentPlan.occupants_count++;
                 }, function (response) {
 	                this.$root.$emit('showError', response.body.message)
@@ -552,7 +626,7 @@
                 let params = {
                     page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming/plans', { params: params }).then(function (response) {
+	                return this.$http.get('rooming/plans', { params: params }).then(function (response) {
 	                    _.each(response.body.data, function (plan) {
 		                    plan.rooms = [];
 	                    });
@@ -580,17 +654,18 @@
                         return response.body.data;
                     });
             },
-            getRooms(){
+            getRooms(plan){
+                plan = plan || this.currentPlan;
                 let params = {
-                    plans: new Array(this.currentPlan.id),
+                    plans: new Array(plan.id),
 	                include: 'type,occupants',
                     // page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
-                        this.currentPlan.rooms = response.body.data
-                        //console.log(response.body.data);
-//                        this.plansPagination = response.body.meta.pagination;
-//                        return this.plans = response.body.data;
+                return this.$http.get('rooming/rooms', { params: params })
+	                .then(function (response) {
+                        plan.rooms = response.body.data;
+		                if (plan.id === this.currentPlan.id)
+		                    this.currentRooms = response.body.data;
                     },
                     function (response) {
                         console.log(response);
@@ -605,9 +680,6 @@
                 };
                 return this.$http.get('rooming/rooms/' + this.activeRoom.id + '/occupants', { params: params }).then(function (response) {
                         this.activeRoom.occupants = response.body.data
-                        //console.log(response.body.data);
-//                        this.plansPagination = response.body.meta.pagination;
-//                        return this.plans = response.body.data;
                     },
                     function (response) {
                         console.log(response);
@@ -653,6 +725,11 @@
                 });
             },
             openNewRoomModel(){
+                if (!this.currentPlan) {
+                    this.$root.$emit('showInfo', 'Please select a plan first.');
+                    return;
+                }
+
                 this.showRoomModal = true;
                 this.selectedRoom = {
                     room_type_id: null,
@@ -665,7 +742,8 @@
 		         return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom, { params: { include: 'type'}}).then(function (response) {
                      let room = response.body.data;
                      this.showRoomModal = false;
-                     this.currentPlan.rooms.push(room);
+                     //this.currentPlan.rooms.push(room);
+                     this.currentRooms.push(room);
                      //_.some()
                      return this.activeRoom = room;
 		         }, function (response) {
@@ -728,6 +806,12 @@
             this.$root.$on('campaign-scope', function (val) {
                 this.campaignId = val ? val.id : '';
                 this.$root.$emit('update-title', val ? val.name : '');
+            }.bind(this));
+
+            this.$root.$on('plan-scope', function (val) {
+                val.rooms = val.rooms || [];
+                this.currentPlan = val || null;
+//                this.$root.$emit('update-title', val || null);
             }.bind(this));
 
         }

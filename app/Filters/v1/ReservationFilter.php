@@ -380,16 +380,57 @@ class ReservationFilter extends Filter
         //
     }
 
-    public function rooms($ids)
+    /**
+     * Has no room for the given accomodation or plan.
+     * 
+     * @param  String $roomable Accommodation or Plan
+     * @return Builder
+     */
+    public function hasRoom($roomable)
+    {   
+        // grab the parameters seperated by "|" pipe
+        $param = preg_split('/\|+/', $roomable);
+
+        // check for existence of value after "|" pipe
+        if (isset($param[1])) {
+            // query reservations that have rooms
+            return $this->wherehas('rooms', function($room) use ($param) {
+                // query a room in plan or accomodation
+                return $room->whereHas($param[0], function($query) use($param) {
+                    return $query->where('id', $param[1]);
+                });
+            });
+        }
+
+        // if no value exists after the "|" pipe, only use first value
+        return $this->has($param[0]);
+    }
+
+    /**
+     * Has no room for the given accomodation or plan.
+     * 
+     * @param  String $roomable Accommodation or Plan
+     * @return Builder
+     */
+    public function noRoom($roomable)
     {
-        return $this->whereHas('rooms', function($room) use($ids) {
+        // grab the parameters seperated by "|" pipe
+        $param = preg_split('/\|+/', $roomable);
 
-            if (is_array($ids)) {
-                return $room->whereIn('id', $ids);
-            }
+        // check for existence of value after "|" pipe
+        if (isset($param[1])) {
+            // query reservations that have rooms
+            return $this->wherehas('rooms', function($room) use ($param) {
+                // query a room in plan or accomodation
+                return $room->whereHas($param[0], function($query) use($param) {
+                    return $query->where('id', '<>', $param[1]);
+                });
+                // or query reservations that do not have rooms
+            })->orHas('rooms', '<', 1);
+        }
 
-            return $room->where('id', $ids);
-        });
+        // if no value exists after the "|" pipe, only use first value
+        return $this->has($param[0], '<', 1);
     }
 
     public function inSquad()

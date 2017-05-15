@@ -5,33 +5,33 @@
 		<div class="col-sm-8">
 
 		    <!-- Occupants List -->
-		    <template v-if="activeRoom">
+		    <template v-if="currentRoom">
 			  <div class="panel panel-default">
 				  <div class="panel-heading">
-					  <h3 class="panel-title">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}}: Occupants</h3>
+					  <h3 class="panel-title">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}}: Occupants</h3>
 				  </div>
 				  <div class="panel-body">
 					  <div class="row">
 						  <div class="col-sm-6">
 							  <label>Occupancy Limit</label>
-							  <p class="small">{{activeRoom.type.data.rules.occupancy_limit}}</p>
+							  <p class="small">{{currentRoom.type.data.rules.occupancy_limit}}</p>
 							  <label>Limited to Gender</label>
-							  <p class="small">{{activeRoom.type.data.rules.gender | capitalize}}</p>
+							  <p class="small">{{currentRoom.type.data.rules.gender | capitalize}}</p>
 							  <label>Limited to Status</label>
-							  <p class="small">{{activeRoom.type.data.rules.status | capitalize}}</p>
+							  <p class="small">{{currentRoom.type.data.rules.status | capitalize}}</p>
 						  </div><!-- end col -->
 						  <div class="col-sm-6">
 							  <label>Current Number of Occupants</label>
-							  <p class="small">{{activeRoom.occupants_count}}</p>
+							  <p class="small">{{currentRoom.occupants_count}}</p>
 							  <label>Room Leader</label>
-							  <p class="small" v-if="activeRoomHasLeader">{{ activeRoomHasLeader.surname }}, {{ activeRoomHasLeader.given_names | capitalize }}</p>
+							  <p class="small" v-if="currentRoomHasLeader">{{ currentRoomHasLeader.surname }}, {{ currentRoomHasLeader.given_names | capitalize }}</p>
 							  <p class="small" v-else>None Set</p>
 						  </div><!-- end col -->
 					  </div><!-- end row -->
 					  <h4 class="text-center">Room Details</h4>
-					  <template v-if="activeRoom.occupants.length">
+					  <template v-if="currentRoom.occupants.length">
 						  <div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
-							  <div class="panel panel-default" v-for="member in activeRoom.occupants">
+							  <div class="panel panel-default" v-for="member in currentRoom.occupants">
 								  <div class="panel-heading" role="tab" id="headingOne">
 									  <h4 class="panel-title">
 										  <div class="row">
@@ -49,9 +49,9 @@
 													  </button>
 													  <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 														  <li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
-														  <li v-if="!member.room_leader && !activeRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+														  <li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
 														  <li role="separator" class="divider"></li>
-														  <li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.activeRoom)">Remove</a></li>
+														  <li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
 													  </ul>
 												  </dropdown>
 												  <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -130,7 +130,7 @@
 							<template v-if="currentRooms.length">
 								<!-- List group List-->
 								<div class="list-group">
-									<a @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentRooms" style="cursor: pointer;">
+									<a @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentRooms" style="cursor: pointer;">
 										{{(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize}}
 										<span v-if="room.type.data.rules.occupancy_limit === room.occupants_count" class="label label-info">Full</span>
 									</a>
@@ -188,7 +188,7 @@
 												<template v-if="currentPlan.rooms.length">
 													&lt;!&ndash; List group List&ndash;&gt;
 													<div class="list-group">
-														<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': activeRoom && activeRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
+														<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
 															<h4 class="list-group-item-heading" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h4>
 															<div class="list-group-item-text">
 																<div class="row">
@@ -309,8 +309,8 @@
 												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 													<li class="dropdown-header">Assign To Room</li>
 													<li role="separator" class="divider"></li>
-													<li :class="{'disabled': isLocked}" v-if="activeRoom"><a @click="addToRoom(member, true)">{{(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize}} as leader</a></li>
-													<li :class="{'disabled': isLocked}" v-if="activeRoom"><a @click="addToRoom(member, false)" v-text="(activeRoom.label ? (activeRoom.label + ' - ' + activeRoom.type.data.name) : activeRoom.type.data.name) | capitalize"></a></li>
+													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
+													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
 												</ul>
 											</dropdown>
 											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -446,7 +446,7 @@
                 currentTeam: null,
                 currentPlan: null,
 	            currentRooms: [],
-				activeRoom: null,
+				currentRoom: null,
                 roomTypes: [],
 
                 // Filters vars
@@ -476,11 +476,13 @@
                 val.rooms = val.rooms || [];
                 //this.$nextTick(function () {
                     this.getRooms(val);
+                    this.getTeams();
                 //});
             },
-            activeRoom(val) {
+            currentRoom(val) {
                 //val.rooms = val.rooms || [];
 	            this.getOccupants();
+	            this.getTeams();
             }
 	    },
 	    computed: {
@@ -508,9 +510,9 @@
 
                 return members;
             },
-		    activeRoomHasLeader() {
-                if (this.activeRoom && this.roomHasLeader(this.activeRoom)) {
-                    let leader = _.findWhere(this.activeRoom.occupants, { room_leader: true });
+		    currentRoomHasLeader() {
+                if (this.currentRoom && this.roomHasLeader(this.currentRoom)) {
+                    let leader = _.findWhere(this.currentRoom.occupants, { room_leader: true });
                     return leader || false;
                 } else return false;
 		    }
@@ -521,7 +523,7 @@
                     reservation_id: occupant.id,
                     room_leader: true,
                 };
-                this.$http.put('rooming/rooms/' + this.activeRoom.id + '/occupants/' + occupant.id, data)
+                this.$http.put('rooming/rooms/' + this.currentRoom.id + '/occupants/' + occupant.id, data)
                     .then(function (response) {
 						return occupant.room_leader = response.body.data.room_leader;
                     })
@@ -531,13 +533,13 @@
                     reservation_id: occupant.id,
                     room_leader: false,
                 };
-                this.$http.put('rooming/rooms/' + this.activeRoom.id + '/occupants/' + occupant.id, data)
+                this.$http.put('rooming/rooms/' + this.currentRoom.id + '/occupants/' + occupant.id, data)
 	                .then(function (response) {
                         return occupant.room_leader = response.body.data.room_leader;
                     });
             },
             setActiveRoom(room) {
-                this.activeRoom = room;
+                this.currentRoom = room;
             },
             roomHasLeader(room) {
                 return _.some(room.occupants, function (occupant) {
@@ -554,14 +556,14 @@
                     return response.body;
                 });
             },
-            addToRoom(occupant, leader) {
-                if (leader && this.roomHasLeader(this.activeRoom)) {
+            addToRoom(occupant, leader, room) {
+                if (leader && this.roomHasLeader(room)) {
                     this.$root.$emit('showInfo', 'This room already has a leader');
                     return;
                 }
 
-                if (this.activeRoom.occupants_count >= this.activeRoom.type.data.rules.occupancy_limit) {
-                    this.$root.$emit('showInfo', this.activeRoom.label +' currently has the max number of occupants');
+                if (room.occupants_count >= room.type.data.rules.occupancy_limit) {
+                    this.$root.$emit('showInfo', room.label +' currently has the max number of occupants');
                     return;
                 }
 
@@ -570,10 +572,10 @@
                     room_leader: leader,
                 };
 
-                return this.$http.post('rooming/rooms/' + this.activeRoom.id + '/occupants', data,  { params: { } }).then(function (response) {
+                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { } }).then(function (response) {
 	                let occupants = response.body.data;
-	                this.activeRoom.occupants = occupants;
-                    this.activeRoom.occupants_count = occupants.length;
+	                room.occupants = occupants;
+                    room.occupants_count = occupants.length;
                     this.currentPlan.occupants_count++;
                 }, function (response) {
 	                this.$root.$emit('showError', response.body.message)
@@ -678,8 +680,8 @@
 //	                include: 'type',
                     // page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming/rooms/' + this.activeRoom.id + '/occupants', { params: params }).then(function (response) {
-                        this.activeRoom.occupants = response.body.data
+                return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then(function (response) {
+                        this.currentRoom.occupants = response.body.data
                     },
                     function (response) {
                         console.log(response);
@@ -691,6 +693,11 @@
                     include: 'squads.members.companions,squads.members.trip.group,type',
                     page: this.teamsPagination.current_page,
                 };
+
+                if (_.isObject(this.currentPlan) && this.currentPlan.id) {
+                    params.include = 'squads.members:noRoom(plans|' + this.currentPlan.id + ').companions,squads.members.trip.group,type';
+                }
+
                 return this.$http.get('teams', { params: params }).then(function (response) {
                         this.teamsPagination = response.body.meta.pagination;
                         return this.teams = response.body.data;
@@ -746,7 +753,7 @@
                      //this.currentPlan.rooms.push(room);
                      this.currentRooms.push(room);
                      //_.some()
-                     return this.activeRoom = room;
+                     return this.currentRoom = room;
 		         }, function (response) {
 			         console.log(response);
 			         return response.body.data;

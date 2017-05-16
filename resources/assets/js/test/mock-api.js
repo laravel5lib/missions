@@ -5,6 +5,8 @@ let Settings = {
     delay: 0
 };
 
+import _ from 'underscore';
+
 export default {
 
     // Get api token
@@ -868,7 +870,7 @@ export default {
     },
 
     // Users API
-    ['GET *users/:id?include=:include'] (pathMatch, query, request) {
+    ['GET *users/:id(?include=:include)'] (pathMatch, query, request) {
         // before respond, you can check the path and query parameters with `pathMatch` & `query`
         // powered by 'url-pattern' & 'qs'
         // https://www.npmjs.com/package/url-pattern
@@ -1692,6 +1694,55 @@ export default {
         }
     },
 
+    ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
+        // before respond, you can check the path and query parameters with `pathMatch` & `query`
+        // powered by 'url-pattern' & 'qs'
+        // https://www.npmjs.com/package/url-pattern
+        // https://www.npmjs.com/package/qs
+        let body = {
+            "data": [{
+                "name": "trip_history",
+                "display_name": "Trip History",
+                "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
+                "created_at": "2017-05-05 15:01:44",
+                "updated_at": "2017-05-05 15:01:44"
+            }]
+        };
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
+    ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
+        // before respond, you can check the path and query parameters with `pathMatch` & `query`
+        // powered by 'url-pattern' & 'qs'
+        // https://www.npmjs.com/package/url-pattern
+        // https://www.npmjs.com/package/qs
+        let body = {
+            "data": [{
+                "name": "countries_visited",
+                "display_name": "Countries Visited",
+                "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
+                    "code": "vg",
+                    "name": "Virgin Islands (British)"
+                }, {"code": "bj", "name": "Benin"}],
+                "created_at": "2017-05-05 15:01:44",
+                "updated_at": "2017-05-05 15:01:44"
+            }]
+        };
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
     // Teams API
 
     ['GET *teams'](pathMatch, query, request) {
@@ -1730,13 +1781,341 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
-            // Travel Itineraries API
-    ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {"data":[{"name":"trip_history","display_name":"Trip History","items":["2012 Bangkok, Thailand","2006 Cap Haitien, Haiti","2012 Lima, Peru","2011 Croix-de-Bouquet, Haiti"],"created_at":"2017-05-05 15:01:44","updated_at":"2017-05-05 15:01:44"}]};
+    ['GET *teams(/:team)(/:path)(/:pathId)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
+                    "callsign": "Team #1",
+                    "created_at": "2017-04-25 16:26:15",
+                    "updated_at": "2017-04-25 16:26:15",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    // Rooming API
+    // Types
+    ['GET *rooming/types(/:type)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                    "name": "family standard",
+                    "rules": {
+                        "same_gender": false,
+                        "married_only": false,
+                        "occupancy_limit": 4
+                    },
+                    "created_at": "2017-05-05 19:13:16",
+                    "updated_at": "2017-05-05 19:13:16",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                        }
+                    ]
+                },
+                {
+                    "id": "45d67733-8b03-442f-b24b-0ebcc8681dc7",
+                    "name": "double",
+                    "rules": {
+                        "same_gender": false,
+                        "married_only": false,
+                        "occupancy_limit": 2
+                    },
+                    "created_at": "2017-05-05 18:52:44",
+                    "updated_at": "2017-05-05 18:52:44",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/types/45d67733-8b03-442f-b24b-0ebcc8681dc7"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 5,
+                    "count": 5,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        if (pathMatch.type) {
+            body.data = _.findWhere(body.data, {id: pathMatch.type});
+            delete body.meta;
+        }
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    // Plans
+    ['GET *rooming/plans(/:plan)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "6d3ec4f6-7585-4d72-b48a-ec7cb82e3abe",
+                    "name": "Test Rooming Plan",
+                    "short_desc": "A custom description",
+                    "created_at": "2017-05-04 17:52:54",
+                    "updated_at": "2017-05-04 19:09:51"
+                },
+                {
+                    "id": "b198a66b-24d9-4f94-a5b3-6efa34c12c50",
+                    "name": "Another Rooming Plan",
+                    "short_desc": "no description",
+                    "created_at": "2017-05-04 19:12:32",
+                    "updated_at": "2017-05-04 19:12:32"
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 2,
+                    "count": 2,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.plan) {
+            body.data = _.findWhere(body.data, {id: pathMatch.plan});
+            delete body.meta;
+        }
+
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    ['POST *rooming/plans'] (pathMatch, query, request) {
+        let body = {
+            data: {
+                "id": "30434478-1fa2-4902-a96b-b4434110507e",
+                "name": "Test New Rooming Plan",
+                "short_desc": "A custom description",
+                "created_at": "2017-05-04 17:52:54",
+                "updated_at": "2017-05-04 19:09:51"
+            }
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    ['GET *rooming/plans/:plan/rooms(/:room)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
+                    "type": "Standard",
+                    "label": null,
+                    "occupants_count": 1,
+                    "created_at": "2017-05-08 19:02:06",
+                    "updated_at": "2017-05-08 19:02:06",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
+                        }
+                    ]
+                },
+                {
+                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
+                    "type": "Married (double)",
+                    "label": null,
+                    "occupants_count": 4,
+                    "created_at": "2017-05-08 19:01:46",
+                    "updated_at": "2017-05-08 19:01:46",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 4,
+                    "count": 4,
+                    "per_page": 15,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        if (pathMatch.room) {
+            body.data = _.findWhere(body.data, {id: pathMatch.room});
+            delete body.meta;
+        }
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    ['POST *rooming/plans/:plan/rooms(/:room)'](pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "a4c704f0-f5f7-4c6c-8134-e0e67232305a",
+                "type": request.body.type.name,
+                "label": request.body.label,
+                "occupants_count": 0,
+                "created_at": "2017-05-08 19:02:06",
+                "updated_at": "2017-05-08 19:02:06",
+                "deleted_at": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "/api/rooming/rooms/a4c704f0-f5f7-4c6c-8134-e0e67232305a"
+                    }
+                ]
+            }
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    // Rooms
+    ['GET *rooming/rooms'] (pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "601395e6-3635-4001-b2df-f800a6349669",
+                "type": "Triple",
+                "label": null,
+                "occupants_count": null,
+                "created_at": "2017-05-09 16:44:22",
+                "updated_at": "2017-05-09 16:44:22",
+                "deleted_at": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "/api/rooming/rooms/601395e6-3635-4001-b2df-f800a6349669"
+                    }
+                ]
+            }
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *rooming/rooms(/:room)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
+                    "type": "Standard",
+                    "label": null,
+                    "occupants_count": 1,
+                    "created_at": "2017-05-08 19:02:06",
+                    "updated_at": "2017-05-08 19:02:06",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
+                        }
+                    ]
+                },
+                {
+                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
+                    "type": "Married (double)",
+                    "label": null,
+                    "occupants_count": 4,
+                    "created_at": "2017-05-08 19:01:46",
+                    "updated_at": "2017-05-08 19:01:46",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 4,
+                    "count": 4,
+                    "per_page": 15,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.room) {
+            body.data = _.findWhere(body.data, {id: pathMatch.room});
+            delete body.meta;
+        }
+
         return {
             body: body,
             status: 200,
@@ -1746,22 +2125,8 @@ export default {
         }
     },
 
-    ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {"data":[{"name":"countries_visited","display_name":"Countries Visited","items":[{"code":"jo","name":"Jordan"},{"code":"ci","name":"Cote d'Ivoire"},{"code":"vg","name":"Virgin Islands (British)"},{"code":"bj","name":"Benin"}],"created_at":"2017-05-05 15:01:44","updated_at":"2017-05-05 15:01:44"}]};
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
 
-    // Travel Itinerary API
+    // Travel Itineraries API
     ['GET *itineraries/:id'] (pathMatch, query, request) {
         let body = {
             "data": {
@@ -1902,23 +2267,201 @@ export default {
         }
 
     },
-    ['GET *teams(/:team)(/:path)(/:pathId)'](pathMatch, query, request) {
+
+    // Campaigns API
+    ['GET *campaigns(/:campaign)'] (pathMatch, query, request) {
         let body = {
-            "data": [
-                {
-                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
-                    "callsign": "Team #1",
-                    "created_at": "2017-04-25 16:26:15",
-                    "updated_at": "2017-04-25 16:26:15",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+            "data": [{
+                "id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                "name": "1Nation1Day 2017",
+                "country": "Nicaragua",
+                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
+                "page_url": "1n1d17",
+                "page_src": "_1n1d2017",
+                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "avatar_upload_id": "10238fcd-7d2e-4056-93ea-e7405196fbd0",
+                "banner": null,
+                "banner_upload_id": null,
+                "started_at": "2017-07-22 00:00:00",
+                "ended_at": "2017-07-30 22:59:59",
+                "status": "Published",
+                "groups_count": 10,
+                "published_at": "2016-01-01 00:00:00",
+                "created_at": "2017-05-05 15:01:44",
+                "updated_at": "2017-05-05 15:03:33",
+                "links": [{"rel": "self", "uri": "\/campaigns\/5830c58b-a183-49ec-a61e-a3c748b33c28"}],
+                "trips": {
+                    "data": [{
+                        "id": "19706ed3-1db9-45f1-b29e-b75e8a5ad76d",
+                        "group_id": "120d15bb-e82a-3e40-9a55-a1c22b6b3ade",
+                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                        "rep_id": "a79c0feb-b593-4bef-a2c4-53cc30b1be83",
+                        "rep": "Alex Waelchi",
+                        "spots": 84,
+                        "status": "active",
+                        "starting_cost": "1758.00",
+                        "companion_limit": 3,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "ministry",
+                        "difficulty": "level 3",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["medical professionals", "women", "men", "business professionals"],
+                        "team_roles": ["POLI", "MDFG", "OTEC", "MCDR"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. .. .\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
+                        "public": true,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-05 15:01:55",
+                        "updated_at": "2017-05-05 15:02:02",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/19706ed3-1db9-45f1-b29e-b75e8a5ad76d"}],
+                        "group": {
+                            "data": {
+                                "id": "120d15bb-e82a-3e40-9a55-a1c22b6b3ade",
+                                "status": "approved",
+                                "name": "Stoltenberg-Cormier",
+                                "type": "youth",
+                                "timezone": "America\/Kentucky\/Monticello",
+                                "description": "Cheshire Cat,' said Alice: '--where's the Duchess?' 'Hush! Hush!' said the Rabbit in a low, hurried tone. He looked at.",
+                                "url": "stoltenberg-cormier",
+                                "public": true,
+                                "address_one": "6925 Zachariah Estate",
+                                "address_two": "21801",
+                                "city": "East Jane",
+                                "state": "Oklahoma",
+                                "zip": null,
+                                "country_code": "br",
+                                "country_name": "Brazil",
+                                "phone_one": "14859053488",
+                                "phone_two": "8544454907",
+                                "email": "amira41@example.net",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-05 15:01:44",
+                                "updated_at": "2017-05-05 15:02:05",
+                                "links": [{"rel": "self", "uri": "\/groups\/120d15bb-e82a-3e40-9a55-a1c22b6b3ade"}]
+                            }
                         }
-                    ]
+                    }, {
+                        "id": "2012984c-67b7-489f-a51b-45912895f53e",
+                        "group_id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
+                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                        "rep_id": "33b6bbdf-986b-424d-9d1c-1dd5d80e31bc",
+                        "rep": "Sabrina Kreiger",
+                        "spots": 316,
+                        "status": "active",
+                        "starting_cost": "1843.00",
+                        "companion_limit": 1,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "leader",
+                        "difficulty": "level 2",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["teens", "pastors", "medical professionals", "women"],
+                        "team_roles": ["PRAS", "NAST", "DIET", "CRDO"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders...",
+                        "public": true,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-05 15:02:38",
+                        "updated_at": "2017-05-05 15:02:42",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/2012984c-67b7-489f-a51b-45912895f53e"}],
+                        "group": {
+                            "data": {
+                                "id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
+                                "status": "approved",
+                                "name": "Toy-Braun",
+                                "type": "business",
+                                "timezone": "America\/Porto_Velho",
+                                "description": "I was going a journey, I should think you'll feel it a little ledge of rock, and, as there was silence for some.",
+                                "url": "toy-braun",
+                                "public": true,
+                                "address_one": "488 Mattie Mountain Apt. 518",
+                                "address_two": "45254",
+                                "city": null,
+                                "state": null,
+                                "zip": null,
+                                "country_code": "ie",
+                                "country_name": "Ireland",
+                                "phone_one": "3285255388",
+                                "phone_two": "9218561719260",
+                                "email": "hjerde@example.org",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-05 15:01:44",
+                                "updated_at": "2017-05-05 15:02:49",
+                                "links": [{"rel": "self", "uri": "\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]
+                            }
+                        }
+                    }, {
+                        "id": "e2d3a383-58b9-434e-a6d5-22062395f3a7",
+                        "group_id": "e73e385a-435c-3ff1-a45c-2eb1db19a92b",
+                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                        "rep_id": "41e21866-80fb-4bb8-afcd-401087a70710",
+                        "rep": "Lily Conroy",
+                        "spots": 284,
+                        "status": "active",
+                        "starting_cost": "1754.00",
+                        "companion_limit": 2,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "family",
+                        "difficulty": "level 1",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["women", "business professionals", "men", "medical professionals"],
+                        "team_roles": ["MDSN", "ETEC", "DENT", "DENH"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+...",
+                        "public": true,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-05 15:03:00",
+                        "updated_at": "2017-05-05 15:03:04",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/f4fd2275-d972-4323-979f-2099ea17a15a"}],
+                        "group": {
+                            "data": {
+                                "id": "e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e",
+                                "status": "approved",
+                                "name": "Ruecker, Gerlach and Paucek",
+                                "type": "nonprofit",
+                                "timezone": "Asia\/Baku",
+                                "description": "And mentioned me to him: She gave me a pair of the shepherd boy--and the sneeze of the tea--' 'The twinkling of the.",
+                                "url": "ruecker-gerlach-and-paucek",
+                                "public": true,
+                                "address_one": "67251 Smith Overpass Apt. 318",
+                                "address_two": null,
+                                "city": null,
+                                "state": null,
+                                "zip": "05589-5101",
+                                "country_code": "tv",
+                                "country_name": "Tuvalu",
+                                "phone_one": "975420450588447",
+                                "phone_two": "",
+                                "email": "leo.mcclure@example.com",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-05 15:01:44",
+                                "updated_at": "2017-05-05 15:03:11",
+                                "links": [{"rel": "self", "uri": "\/groups\/e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e"}]
+                            }
+                        }
+                    }]
                 }
-            ],
+            }],
             "meta": {
                 "pagination": {
                     "total": 1,
@@ -1926,23 +2469,15 @@ export default {
                     "per_page": 10,
                     "current_page": 1,
                     "total_pages": 1,
-                    "links": []
+                    "links": {"next": "https:\/\/missions.dev\/api\/campaigns?page=2"}
                 }
             }
         };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
+
+        if (pathMatch.campaign) {
+            body.data = _.findWhere (body.data, {id: pathMatch.campaign});
+            delete body.meta;
         }
-
-    },
-
-    // Travel Itinerary API
-    ['GET *campaigns(/:id)'] (pathMatch, query, request) {
-        let body = {"data":{"id":"5830c58b-a183-49ec-a61e-a3c748b33c28","name":"1Nation1Day 2017","country":"Nicaragua","description":"1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.","page_url":"1n1d17","page_src":"_1n1d2017","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","avatar_upload_id":"10238fcd-7d2e-4056-93ea-e7405196fbd0","banner":null,"banner_upload_id":null,"started_at":"2017-07-22 00:00:00","ended_at":"2017-07-30 22:59:59","status":"Published","groups_count":10,"published_at":"2016-01-01 00:00:00","created_at":"2017-05-05 15:01:44","updated_at":"2017-05-05 15:03:33","links":[{"rel":"self","uri":"\/campaigns\/5830c58b-a183-49ec-a61e-a3c748b33c28"}],"trips":{"data":[{"id":"19706ed3-1db9-45f1-b29e-b75e8a5ad76d","group_id":"120d15bb-e82a-3e40-9a55-a1c22b6b3ade","campaign_id":"5830c58b-a183-49ec-a61e-a3c748b33c28","rep_id":"a79c0feb-b593-4bef-a2c4-53cc30b1be83","rep":"Alex Waelchi","spots":84,"status":"active","starting_cost":"1758.00","companion_limit":3,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"ministry","difficulty":"level 3","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["medical professionals","women","men","business professionals"],"team_roles":["POLI","MDFG","OTEC","MCDR"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. .. .\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-05-05 15:01:55","updated_at":"2017-05-05 15:02:02","tags":[],"links":[{"rel":"self","uri":"\/trips\/19706ed3-1db9-45f1-b29e-b75e8a5ad76d"}],"group":{"data":{"id":"120d15bb-e82a-3e40-9a55-a1c22b6b3ade","status":"approved","name":"Stoltenberg-Cormier","type":"youth","timezone":"America\/Kentucky\/Monticello","description":"Cheshire Cat,' said Alice: '--where's the Duchess?' 'Hush! Hush!' said the Rabbit in a low, hurried tone. He looked at.","url":"stoltenberg-cormier","public":true,"address_one":"6925 Zachariah Estate","address_two":"21801","city":"East Jane","state":"Oklahoma","zip":null,"country_code":"br","country_name":"Brazil","phone_one":"14859053488","phone_two":"8544454907","email":"amira41@example.net","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-05-05 15:01:44","updated_at":"2017-05-05 15:02:05","links":[{"rel":"self","uri":"\/groups\/120d15bb-e82a-3e40-9a55-a1c22b6b3ade"}]}}},{"id":"2012984c-67b7-489f-a51b-45912895f53e","group_id":"4bbde7eb-dfe2-3b08-84be-f3bcad4c969a","campaign_id":"5830c58b-a183-49ec-a61e-a3c748b33c28","rep_id":"33b6bbdf-986b-424d-9d1c-1dd5d80e31bc","rep":"Sabrina Kreiger","spots":316,"status":"active","starting_cost":"1843.00","companion_limit":1,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"leader","difficulty":"level 2","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["teens","pastors","medical professionals","women"],"team_roles":["PRAS","NAST","DIET","CRDO"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders...","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-05-05 15:02:38","updated_at":"2017-05-05 15:02:42","tags":[],"links":[{"rel":"self","uri":"\/trips\/2012984c-67b7-489f-a51b-45912895f53e"}],"group":{"data":{"id":"4bbde7eb-dfe2-3b08-84be-f3bcad4c969a","status":"approved","name":"Toy-Braun","type":"business","timezone":"America\/Porto_Velho","description":"I was going a journey, I should think you'll feel it a little ledge of rock, and, as there was silence for some.","url":"toy-braun","public":true,"address_one":"488 Mattie Mountain Apt. 518","address_two":"45254","city":null,"state":null,"zip":null,"country_code":"ie","country_name":"Ireland","phone_one":"3285255388","phone_two":"9218561719260","email":"hjerde@example.org","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-05-05 15:01:44","updated_at":"2017-05-05 15:02:49","links":[{"rel":"self","uri":"\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]}}},{"id":"e2d3a383-58b9-434e-a6d5-22062395f3a7","group_id":"e73e385a-435c-3ff1-a45c-2eb1db19a92b","campaign_id":"5830c58b-a183-49ec-a61e-a3c748b33c28","rep_id":"41e21866-80fb-4bb8-afcd-401087a70710","rep":"Lily Conroy","spots":284,"status":"active","starting_cost":"1754.00","companion_limit":2,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"family","difficulty":"level 1","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["women","business professionals","men","medical professionals"],"team_roles":["MDSN","ETEC","DENT","DENH"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+...","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-05-05 15:03:00","updated_at":"2017-05-05 15:03:04","tags":[],"links":[{"rel":"self","uri":"\/trips\/f4fd2275-d972-4323-979f-2099ea17a15a"}],"group":{"data":{"id":"e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e","status":"approved","name":"Ruecker, Gerlach and Paucek","type":"nonprofit","timezone":"Asia\/Baku","description":"And mentioned me to him: She gave me a pair of the shepherd boy--and the sneeze of the tea--' 'The twinkling of the.","url":"ruecker-gerlach-and-paucek","public":true,"address_one":"67251 Smith Overpass Apt. 318","address_two":null,"city":null,"state":null,"zip":"05589-5101","country_code":"tv","country_name":"Tuvalu","phone_one":"975420450588447","phone_two":"","email":"leo.mcclure@example.com","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-05-05 15:01:44","updated_at":"2017-05-05 15:03:11","links":[{"rel":"self","uri":"\/groups\/e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e"}]}}}]}}};
 
         return {
             body: body,
@@ -1959,18 +2494,99 @@ export default {
         let body;
         switch (request.params.type) {
             case 'avatar':
-                body = {"data":[],"meta":{"pagination":{"total":0,"count":0,"per_page":6,"current_page":1,"total_pages":0,"links":[]}}};
+                body = {
+                    "data": [],
+                    "meta": {
+                        "pagination": {
+                            "total": 0,
+                            "count": 0,
+                            "per_page": 6,
+                            "current_page": 1,
+                            "total_pages": 0,
+                            "links": []
+                        }
+                    }
+                };
                 break;
             case 'banner':
                 body = {
-                    "data":[
-                        {"id":"12132232-7ad5-4756-9b4f-c6c4fcfd9c8f","source":"https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg","name":"1n1d17_speak","type":"banner","meta":null,"created_at":"2017-05-05 15:01:43","updated_at":"2017-05-05 15:01:43","tags":["Fundraiser","User","Group","Campaign"],"links":[{"rel":"self","uri":"\/uploads\/12132232-7ad5-4756-9b4f-c6c4fcfd9c8f"}]},
-                        {"id":"2d0cadf4-52d9-4efc-af40-ff20e37adc5d","source":"https:\/\/missions.dev\/api\/images\/banners\/1n1d17-vision3-2560x800.jpg","name":"1n1d17_vision3","type":"banner","meta":null,"created_at":"2017-05-05 15:01:43","updated_at":"2017-05-05 15:01:43","tags":["Fundraiser","User","Group","Campaign"],"links":[{"rel":"self","uri":"\/uploads\/2d0cadf4-52d9-4efc-af40-ff20e37adc5d"}]},
-                        {"id":"31dcc58f-0f57-4b5c-ba56-d4321850afe6","source":"https:\/\/missions.dev\/api\/images\/banners\/1n1d17-water-2560x800.jpg","name":"1n1d17_water","type":"banner","meta":null,"created_at":"2017-05-05 15:01:43","updated_at":"2017-05-05 15:01:43","tags":["Fundraiser","User","Group","Campaign"],"links":[{"rel":"self","uri":"\/uploads\/31dcc58f-0f57-4b5c-ba56-d4321850afe6"}]},
-                        {"id":"59fb9992-1937-473d-b9f7-b5bde5b6ae52","source":"https:\/\/missions.dev\/api\/images\/banners\/gen-ban-9-2560x800.jpg","name":"gen_ban_9","type":"banner","meta":null,"created_at":"2017-05-05 15:01:43","updated_at":"2017-05-05 15:01:43","tags":["Fundraiser","User","Group","Campaign"],"links":[{"rel":"self","uri":"\/uploads\/59fb9992-1937-473d-b9f7-b5bde5b6ae52"}]},
-                        {"id":"643c932b-3bcc-42b5-b884-9a1ff1b8f8e7","source":"https:\/\/missions.dev\/api\/images\/banners\/gen-ban-6-2560x800.jpg","name":"gen_ban_6","type":"banner","meta":null,"created_at":"2017-05-05 15:01:43","updated_at":"2017-05-05 15:01:43","tags":["Fundraiser","User","Group","Campaign"],"links":[{"rel":"self","uri":"\/uploads\/643c932b-3bcc-42b5-b884-9a1ff1b8f8e7"}]},
-                        {"id":"648fa5d0-84ba-43c6-8042-b217954fae25","source":"https:\/\/missions.dev\/api\/images\/banners\/gen-ban-4-2560x800.jpg","name":"gen_ban_4","type":"banner","meta":null,"created_at":"2017-05-05 15:01:43","updated_at":"2017-05-05 15:01:43","tags":["Fundraiser","User","Group","Campaign"],"links":[{"rel":"self","uri":"\/uploads\/648fa5d0-84ba-43c6-8042-b217954fae25"}]}],
-                    "meta":{"pagination":{"total":18,"count":6,"per_page":6,"current_page":1,"total_pages":3,"links":{"next":"https:\/\/missions.dev\/api\/uploads?page=2"}}}
+                    "data": [
+                        {
+                            "id": "12132232-7ad5-4756-9b4f-c6c4fcfd9c8f",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
+                            "name": "1n1d17_speak",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/12132232-7ad5-4756-9b4f-c6c4fcfd9c8f"}]
+                        },
+                        {
+                            "id": "2d0cadf4-52d9-4efc-af40-ff20e37adc5d",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-vision3-2560x800.jpg",
+                            "name": "1n1d17_vision3",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/2d0cadf4-52d9-4efc-af40-ff20e37adc5d"}]
+                        },
+                        {
+                            "id": "31dcc58f-0f57-4b5c-ba56-d4321850afe6",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-water-2560x800.jpg",
+                            "name": "1n1d17_water",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/31dcc58f-0f57-4b5c-ba56-d4321850afe6"}]
+                        },
+                        {
+                            "id": "59fb9992-1937-473d-b9f7-b5bde5b6ae52",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-9-2560x800.jpg",
+                            "name": "gen_ban_9",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/59fb9992-1937-473d-b9f7-b5bde5b6ae52"}]
+                        },
+                        {
+                            "id": "643c932b-3bcc-42b5-b884-9a1ff1b8f8e7",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-6-2560x800.jpg",
+                            "name": "gen_ban_6",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/643c932b-3bcc-42b5-b884-9a1ff1b8f8e7"}]
+                        },
+                        {
+                            "id": "648fa5d0-84ba-43c6-8042-b217954fae25",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-4-2560x800.jpg",
+                            "name": "gen_ban_4",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/648fa5d0-84ba-43c6-8042-b217954fae25"}]
+                        }],
+                    "meta": {
+                        "pagination": {
+                            "total": 18,
+                            "count": 6,
+                            "per_page": 6,
+                            "current_page": 1,
+                            "total_pages": 3,
+                            "links": {"next": "https:\/\/missions.dev\/api\/uploads?page=2"}
+                        }
+                    }
                 };
                 break;
         }
@@ -1984,7 +2600,6 @@ export default {
         }
 
     },
-
 
     // Utilities API
     ['GET *utilities/activities/types'] (pathMatch, query, request) {
@@ -2557,7 +3172,276 @@ export default {
     },
 
     ['GET *utilities/countries'] (pathMatch, query, request) {
-        let body = {"countries":[{"name":"United States","code":"us"},{"name":"Afghanistan","code":"af"},{"name":"Albania","code":"al"},{"name":"Algeria","code":"dz"},{"name":"American Samoa","code":"as"},{"name":"Andorra","code":"ad"},{"name":"Angola","code":"ao"},{"name":"Anguilla","code":"ai"},{"name":"Antarctica","code":"aq"},{"name":"Antigua and Barbuda","code":"ag"},{"name":"Argentina","code":"ar"},{"name":"Armenia","code":"am"},{"name":"Aruba","code":"aw"},{"name":"Australia","code":"au"},{"name":"Austria","code":"at"},{"name":"Azerbaijan","code":"az"},{"name":"Bahamas","code":"bs"},{"name":"Bahrain","code":"bh"},{"name":"Bangladesh","code":"bd"},{"name":"Barbados","code":"bb"},{"name":"Belarus","code":"by"},{"name":"Belgium","code":"be"},{"name":"Belize","code":"bz"},{"name":"Benin","code":"bj"},{"name":"Bermuda","code":"bm"},{"name":"Bhutan","code":"bt"},{"name":"Bolivia","code":"bo"},{"name":"Bosnia and Herzegovina","code":"ba"},{"name":"Botswana","code":"bw"},{"name":"Bouvet Island","code":"bv"},{"name":"Brazil","code":"br"},{"name":"British Indian Ocean Territory","code":"io"},{"name":"Brunei Darussalam","code":"bn"},{"name":"Bulgaria","code":"bg"},{"name":"Burkina Faso","code":"bf"},{"name":"Burundi","code":"bi"},{"name":"Cambodia","code":"kh"},{"name":"Cameroon","code":"cm"},{"name":"Canada","code":"ca"},{"name":"Cabo Verde","code":"cv"},{"name":"Cayman Islands","code":"ky"},{"name":"Central African Republic","code":"cf"},{"name":"Chad","code":"td"},{"name":"Chile","code":"cl"},{"name":"China","code":"cn"},{"name":"Christmas Island","code":"cx"},{"name":"Cocos (Keeling) Islands","code":"cc"},{"name":"Colombia","code":"co"},{"name":"Comoros","code":"km"},{"name":"Congo","code":"cg"},{"name":"Congo, the Democratic Republic of the","code":"cd"},{"name":"Cook Islands","code":"ck"},{"name":"Costa Rica","code":"cr"},{"name":"Cote d'Ivoire","code":"ci"},{"name":"Croatia (Hrvatska)","code":"hr"},{"name":"Cuba","code":"cu"},{"name":"Cura\u00e7ao","code":"cw"},{"name":"Cyprus","code":"cy"},{"name":"Czech Republic","code":"cz"},{"name":"Denmark","code":"dk"},{"name":"Djibouti","code":"dj"},{"name":"Dominica","code":"dm"},{"name":"Dominican Republic","code":"do"},{"name":"Dutch Caribbean","code":"bq"},{"name":"East Timor","code":"tl"},{"name":"Ecuador","code":"ec"},{"name":"Egypt","code":"eg"},{"name":"El Salvador","code":"sv"},{"name":"Equatorial Guinea","code":"gq"},{"name":"Eritrea","code":"er"},{"name":"Estonia","code":"ee"},{"name":"Ethiopia","code":"et"},{"name":"Falkland Islands (Malvinas)","code":"fk"},{"name":"Faroe Islands","code":"fo"},{"name":"Fiji","code":"fj"},{"name":"Finland","code":"fi"},{"name":"France","code":"fr"},{"name":"French Guiana","code":"gf"},{"name":"French Polynesia","code":"pf"},{"name":"French Southern Territories","code":"tf"},{"name":"Gabon","code":"ga"},{"name":"Gambia","code":"gm"},{"name":"Georgia","code":"ge"},{"name":"Germany","code":"de"},{"name":"Ghana","code":"gh"},{"name":"Gibraltar","code":"gi"},{"name":"Greece","code":"gr"},{"name":"Greenland","code":"gl"},{"name":"Grenada","code":"gd"},{"name":"Guadeloupe","code":"gp"},{"name":"Guam","code":"gu"},{"name":"Guatemala","code":"gt"},{"name":"Guinea","code":"gn"},{"name":"Guinea-Bissau","code":"gw"},{"name":"Guyana","code":"gy"},{"name":"Haiti","code":"ht"},{"name":"Heard and Mc Donald Islands","code":"hm"},{"name":"Holy See (Vatican City State)","code":"va"},{"name":"Honduras","code":"hn"},{"name":"Hong Kong","code":"hk"},{"name":"Hungary","code":"hu"},{"name":"Iceland","code":"is"},{"name":"India","code":"in"},{"name":"Indonesia","code":"id"},{"name":"Iran (Islamic Republic of)","code":"ir"},{"name":"Iraq","code":"iq"},{"name":"Ireland","code":"ie"},{"name":"Israel","code":"il"},{"name":"Italy","code":"it"},{"name":"Jamaica","code":"jm"},{"name":"Japan","code":"jp"},{"name":"Jordan","code":"jo"},{"name":"Kazakhstan","code":"kz"},{"name":"Kenya","code":"ke"},{"name":"Kiribati","code":"ki"},{"name":"Korea, Democratic People's Republic of","code":"kp"},{"name":"Korea, Republic of","code":"kr"},{"name":"Kuwait","code":"kw"},{"name":"Kyrgyzstan","code":"kg"},{"name":"Lao, People's Democratic Republic","code":"la"},{"name":"Latvia","code":"lv"},{"name":"Lebanon","code":"lb"},{"name":"Lesotho","code":"ls"},{"name":"Liberia","code":"lr"},{"name":"Libyan Arab Jamahiriya","code":"ly"},{"name":"Liechtenstein","code":"li"},{"name":"Lithuania","code":"lt"},{"name":"Luxembourg","code":"lu"},{"name":"Macao","code":"mo"},{"name":"Macedonia, The Former Yugoslav Republic of","code":"mk"},{"name":"Madagascar","code":"mg"},{"name":"Malawi","code":"mw"},{"name":"Malaysia","code":"my"},{"name":"Maldives","code":"mv"},{"name":"Mali","code":"ml"},{"name":"Malta","code":"mt"},{"name":"Marshall Islands","code":"mh"},{"name":"Martinique","code":"mq"},{"name":"Mauritania","code":"mr"},{"name":"Mauritius","code":"mu"},{"name":"Mayotte","code":"yt"},{"name":"Mexico","code":"mx"},{"name":"Micronesia, Federated States of","code":"fm"},{"name":"Moldova, Republic of","code":"md"},{"name":"Monaco","code":"mc"},{"name":"Mongolia","code":"mn"},{"name":"Montserrat","code":"ms"},{"name":"Morocco","code":"ma"},{"name":"Mozambique","code":"mz"},{"name":"Myanmar","code":"mm"},{"name":"Namibia","code":"na"},{"name":"Nauru","code":"nr"},{"name":"Nepal","code":"np"},{"name":"Netherlands","code":"nl"},{"name":"Netherlands Antilles","code":"an"},{"name":"New Caledonia","code":"nc"},{"name":"New Zealand","code":"nz"},{"name":"Nicaragua","code":"ni"},{"name":"Niger","code":"ne"},{"name":"Nigeria","code":"ng"},{"name":"Niue","code":"nu"},{"name":"Norfolk Island","code":"nf"},{"name":"Northern Mariana Islands","code":"mp"},{"name":"Norway","code":"no"},{"name":"Oman","code":"om"},{"name":"Pakistan","code":"pk"},{"name":"Palau","code":"pw"},{"name":"Panama","code":"pa"},{"name":"Papua New Guinea","code":"pg"},{"name":"Paraguay","code":"py"},{"name":"Peru","code":"pe"},{"name":"Philippines","code":"ph"},{"name":"Pitcairn","code":"pn"},{"name":"Poland","code":"pl"},{"name":"Portugal","code":"pt"},{"name":"Puerto Rico","code":"pr"},{"name":"Qatar","code":"qa"},{"name":"Reunion","code":"re"},{"name":"Romania","code":"ro"},{"name":"Russian Federation","code":"ru"},{"name":"Rwanda","code":"rw"},{"name":"Saint Kitts and Nevis","code":"kn"},{"name":"Saint Lucia","code":"lc"},{"name":"Saint Vincent and the Grenadines","code":"vc"},{"name":"Samoa","code":"ws"},{"name":"San Marino","code":"sm"},{"name":"Sao Tome and Principe","code":"st"},{"name":"Saudi Arabia","code":"sa"},{"name":"Senegal","code":"sn"},{"name":"Seychelles","code":"sc"},{"name":"Sierra Leone","code":"sl"},{"name":"Singapore","code":"sg"},{"name":"Slovakia (Slovak Republic)","code":"sk"},{"name":"Slovenia","code":"si"},{"name":"Solomon Islands","code":"sb"},{"name":"Somalia","code":"so"},{"name":"South Africa","code":"za"},{"name":"South Georgia and the South Sandwich Islands","code":"gs"},{"name":"Spain","code":"es"},{"name":"Sri Lanka","code":"lk"},{"name":"St. Helena","code":"sh"},{"name":"St. Pierre and Miquelon","code":"pm"},{"name":"Sudan","code":"sd"},{"name":"Suriname","code":"sr"},{"name":"Svalbard and Jan Mayen Islands","code":"sj"},{"name":"Swaziland","code":"sz"},{"name":"Sweden","code":"se"},{"name":"Switzerland","code":"ch"},{"name":"Syrian Arab Republic","code":"sy"},{"name":"Taiwan, Province of China","code":"tw"},{"name":"Tajikistan","code":"tj"},{"name":"Tanzania, United Republic of","code":"tz"},{"name":"Thailand","code":"th"},{"name":"Togo","code":"tg"},{"name":"Tokelau","code":"tk"},{"name":"Tonga","code":"to"},{"name":"Trinidad and Tobago","code":"tt"},{"name":"Tunisia","code":"tn"},{"name":"Turkey","code":"tr"},{"name":"Turkmenistan","code":"tm"},{"name":"Turks and Caicos Islands","code":"tc"},{"name":"Tuvalu","code":"tv"},{"name":"Uganda","code":"ug"},{"name":"Ukraine","code":"ua"},{"name":"United Arab Emirates","code":"ae"},{"name":"United Kingdom","code":"gb"},{"name":"United States Minor Outlying Islands","code":"um"},{"name":"Uruguay","code":"uy"},{"name":"Uzbekistan","code":"uz"},{"name":"Vanuatu","code":"vu"},{"name":"Venezuela","code":"ve"},{"name":"Vietnam","code":"vn"},{"name":"Virgin Islands (British)","code":"vg"},{"name":"Virgin Islands (U.S.)","code":"vi"},{"name":"Wallis and Futuna Islands","code":"wf"},{"name":"Western Sahara","code":"eh"},{"name":"Yemen","code":"ye"},{"name":"Serbia","code":"yu"},{"name":"Zambia","code":"zm"},{"name":"Zimbabwe","code":"zw"}]};
+        let body = {
+            "countries": [{"name": "United States", "code": "us"}, {
+                "name": "Afghanistan",
+                "code": "af"
+            }, {"name": "Albania", "code": "al"}, {"name": "Algeria", "code": "dz"}, {
+                "name": "American Samoa",
+                "code": "as"
+            }, {"name": "Andorra", "code": "ad"}, {"name": "Angola", "code": "ao"}, {
+                "name": "Anguilla",
+                "code": "ai"
+            }, {"name": "Antarctica", "code": "aq"}, {"name": "Antigua and Barbuda", "code": "ag"}, {
+                "name": "Argentina",
+                "code": "ar"
+            }, {"name": "Armenia", "code": "am"}, {"name": "Aruba", "code": "aw"}, {
+                "name": "Australia",
+                "code": "au"
+            }, {"name": "Austria", "code": "at"}, {"name": "Azerbaijan", "code": "az"}, {
+                "name": "Bahamas",
+                "code": "bs"
+            }, {"name": "Bahrain", "code": "bh"}, {"name": "Bangladesh", "code": "bd"}, {
+                "name": "Barbados",
+                "code": "bb"
+            }, {"name": "Belarus", "code": "by"}, {"name": "Belgium", "code": "be"}, {
+                "name": "Belize",
+                "code": "bz"
+            }, {"name": "Benin", "code": "bj"}, {"name": "Bermuda", "code": "bm"}, {
+                "name": "Bhutan",
+                "code": "bt"
+            }, {"name": "Bolivia", "code": "bo"}, {"name": "Bosnia and Herzegovina", "code": "ba"}, {
+                "name": "Botswana",
+                "code": "bw"
+            }, {"name": "Bouvet Island", "code": "bv"}, {
+                "name": "Brazil",
+                "code": "br"
+            }, {"name": "British Indian Ocean Territory", "code": "io"}, {
+                "name": "Brunei Darussalam",
+                "code": "bn"
+            }, {"name": "Bulgaria", "code": "bg"}, {"name": "Burkina Faso", "code": "bf"}, {
+                "name": "Burundi",
+                "code": "bi"
+            }, {"name": "Cambodia", "code": "kh"}, {"name": "Cameroon", "code": "cm"}, {
+                "name": "Canada",
+                "code": "ca"
+            }, {"name": "Cabo Verde", "code": "cv"}, {
+                "name": "Cayman Islands",
+                "code": "ky"
+            }, {"name": "Central African Republic", "code": "cf"}, {"name": "Chad", "code": "td"}, {
+                "name": "Chile",
+                "code": "cl"
+            }, {"name": "China", "code": "cn"}, {
+                "name": "Christmas Island",
+                "code": "cx"
+            }, {"name": "Cocos (Keeling) Islands", "code": "cc"}, {"name": "Colombia", "code": "co"}, {
+                "name": "Comoros",
+                "code": "km"
+            }, {"name": "Congo", "code": "cg"}, {
+                "name": "Congo, the Democratic Republic of the",
+                "code": "cd"
+            }, {"name": "Cook Islands", "code": "ck"}, {"name": "Costa Rica", "code": "cr"}, {
+                "name": "Cote d'Ivoire",
+                "code": "ci"
+            }, {"name": "Croatia (Hrvatska)", "code": "hr"}, {"name": "Cuba", "code": "cu"}, {
+                "name": "Cura\u00e7ao",
+                "code": "cw"
+            }, {"name": "Cyprus", "code": "cy"}, {"name": "Czech Republic", "code": "cz"}, {
+                "name": "Denmark",
+                "code": "dk"
+            }, {"name": "Djibouti", "code": "dj"}, {"name": "Dominica", "code": "dm"}, {
+                "name": "Dominican Republic",
+                "code": "do"
+            }, {"name": "Dutch Caribbean", "code": "bq"}, {"name": "East Timor", "code": "tl"}, {
+                "name": "Ecuador",
+                "code": "ec"
+            }, {"name": "Egypt", "code": "eg"}, {"name": "El Salvador", "code": "sv"}, {
+                "name": "Equatorial Guinea",
+                "code": "gq"
+            }, {"name": "Eritrea", "code": "er"}, {"name": "Estonia", "code": "ee"}, {
+                "name": "Ethiopia",
+                "code": "et"
+            }, {"name": "Falkland Islands (Malvinas)", "code": "fk"}, {
+                "name": "Faroe Islands",
+                "code": "fo"
+            }, {"name": "Fiji", "code": "fj"}, {"name": "Finland", "code": "fi"}, {
+                "name": "France",
+                "code": "fr"
+            }, {"name": "French Guiana", "code": "gf"}, {
+                "name": "French Polynesia",
+                "code": "pf"
+            }, {"name": "French Southern Territories", "code": "tf"}, {"name": "Gabon", "code": "ga"}, {
+                "name": "Gambia",
+                "code": "gm"
+            }, {"name": "Georgia", "code": "ge"}, {"name": "Germany", "code": "de"}, {
+                "name": "Ghana",
+                "code": "gh"
+            }, {"name": "Gibraltar", "code": "gi"}, {"name": "Greece", "code": "gr"}, {
+                "name": "Greenland",
+                "code": "gl"
+            }, {"name": "Grenada", "code": "gd"}, {"name": "Guadeloupe", "code": "gp"}, {
+                "name": "Guam",
+                "code": "gu"
+            }, {"name": "Guatemala", "code": "gt"}, {"name": "Guinea", "code": "gn"}, {
+                "name": "Guinea-Bissau",
+                "code": "gw"
+            }, {"name": "Guyana", "code": "gy"}, {"name": "Haiti", "code": "ht"}, {
+                "name": "Heard and Mc Donald Islands",
+                "code": "hm"
+            }, {"name": "Holy See (Vatican City State)", "code": "va"}, {
+                "name": "Honduras",
+                "code": "hn"
+            }, {"name": "Hong Kong", "code": "hk"}, {"name": "Hungary", "code": "hu"}, {
+                "name": "Iceland",
+                "code": "is"
+            }, {"name": "India", "code": "in"}, {"name": "Indonesia", "code": "id"}, {
+                "name": "Iran (Islamic Republic of)",
+                "code": "ir"
+            }, {"name": "Iraq", "code": "iq"}, {"name": "Ireland", "code": "ie"}, {
+                "name": "Israel",
+                "code": "il"
+            }, {"name": "Italy", "code": "it"}, {"name": "Jamaica", "code": "jm"}, {
+                "name": "Japan",
+                "code": "jp"
+            }, {"name": "Jordan", "code": "jo"}, {"name": "Kazakhstan", "code": "kz"}, {
+                "name": "Kenya",
+                "code": "ke"
+            }, {"name": "Kiribati", "code": "ki"}, {
+                "name": "Korea, Democratic People's Republic of",
+                "code": "kp"
+            }, {"name": "Korea, Republic of", "code": "kr"}, {"name": "Kuwait", "code": "kw"}, {
+                "name": "Kyrgyzstan",
+                "code": "kg"
+            }, {"name": "Lao, People's Democratic Republic", "code": "la"}, {
+                "name": "Latvia",
+                "code": "lv"
+            }, {"name": "Lebanon", "code": "lb"}, {"name": "Lesotho", "code": "ls"}, {
+                "name": "Liberia",
+                "code": "lr"
+            }, {"name": "Libyan Arab Jamahiriya", "code": "ly"}, {
+                "name": "Liechtenstein",
+                "code": "li"
+            }, {"name": "Lithuania", "code": "lt"}, {"name": "Luxembourg", "code": "lu"}, {
+                "name": "Macao",
+                "code": "mo"
+            }, {"name": "Macedonia, The Former Yugoslav Republic of", "code": "mk"}, {
+                "name": "Madagascar",
+                "code": "mg"
+            }, {"name": "Malawi", "code": "mw"}, {"name": "Malaysia", "code": "my"}, {
+                "name": "Maldives",
+                "code": "mv"
+            }, {"name": "Mali", "code": "ml"}, {"name": "Malta", "code": "mt"}, {
+                "name": "Marshall Islands",
+                "code": "mh"
+            }, {"name": "Martinique", "code": "mq"}, {"name": "Mauritania", "code": "mr"}, {
+                "name": "Mauritius",
+                "code": "mu"
+            }, {"name": "Mayotte", "code": "yt"}, {
+                "name": "Mexico",
+                "code": "mx"
+            }, {"name": "Micronesia, Federated States of", "code": "fm"}, {
+                "name": "Moldova, Republic of",
+                "code": "md"
+            }, {"name": "Monaco", "code": "mc"}, {"name": "Mongolia", "code": "mn"}, {
+                "name": "Montserrat",
+                "code": "ms"
+            }, {"name": "Morocco", "code": "ma"}, {"name": "Mozambique", "code": "mz"}, {
+                "name": "Myanmar",
+                "code": "mm"
+            }, {"name": "Namibia", "code": "na"}, {"name": "Nauru", "code": "nr"}, {
+                "name": "Nepal",
+                "code": "np"
+            }, {"name": "Netherlands", "code": "nl"}, {
+                "name": "Netherlands Antilles",
+                "code": "an"
+            }, {"name": "New Caledonia", "code": "nc"}, {"name": "New Zealand", "code": "nz"}, {
+                "name": "Nicaragua",
+                "code": "ni"
+            }, {"name": "Niger", "code": "ne"}, {"name": "Nigeria", "code": "ng"}, {
+                "name": "Niue",
+                "code": "nu"
+            }, {"name": "Norfolk Island", "code": "nf"}, {
+                "name": "Northern Mariana Islands",
+                "code": "mp"
+            }, {"name": "Norway", "code": "no"}, {"name": "Oman", "code": "om"}, {
+                "name": "Pakistan",
+                "code": "pk"
+            }, {"name": "Palau", "code": "pw"}, {"name": "Panama", "code": "pa"}, {
+                "name": "Papua New Guinea",
+                "code": "pg"
+            }, {"name": "Paraguay", "code": "py"}, {"name": "Peru", "code": "pe"}, {
+                "name": "Philippines",
+                "code": "ph"
+            }, {"name": "Pitcairn", "code": "pn"}, {"name": "Poland", "code": "pl"}, {
+                "name": "Portugal",
+                "code": "pt"
+            }, {"name": "Puerto Rico", "code": "pr"}, {"name": "Qatar", "code": "qa"}, {
+                "name": "Reunion",
+                "code": "re"
+            }, {"name": "Romania", "code": "ro"}, {"name": "Russian Federation", "code": "ru"}, {
+                "name": "Rwanda",
+                "code": "rw"
+            }, {"name": "Saint Kitts and Nevis", "code": "kn"}, {
+                "name": "Saint Lucia",
+                "code": "lc"
+            }, {"name": "Saint Vincent and the Grenadines", "code": "vc"}, {
+                "name": "Samoa",
+                "code": "ws"
+            }, {"name": "San Marino", "code": "sm"}, {
+                "name": "Sao Tome and Principe",
+                "code": "st"
+            }, {"name": "Saudi Arabia", "code": "sa"}, {"name": "Senegal", "code": "sn"}, {
+                "name": "Seychelles",
+                "code": "sc"
+            }, {"name": "Sierra Leone", "code": "sl"}, {
+                "name": "Singapore",
+                "code": "sg"
+            }, {"name": "Slovakia (Slovak Republic)", "code": "sk"}, {
+                "name": "Slovenia",
+                "code": "si"
+            }, {"name": "Solomon Islands", "code": "sb"}, {"name": "Somalia", "code": "so"}, {
+                "name": "South Africa",
+                "code": "za"
+            }, {"name": "South Georgia and the South Sandwich Islands", "code": "gs"}, {
+                "name": "Spain",
+                "code": "es"
+            }, {"name": "Sri Lanka", "code": "lk"}, {
+                "name": "St. Helena",
+                "code": "sh"
+            }, {"name": "St. Pierre and Miquelon", "code": "pm"}, {"name": "Sudan", "code": "sd"}, {
+                "name": "Suriname",
+                "code": "sr"
+            }, {"name": "Svalbard and Jan Mayen Islands", "code": "sj"}, {
+                "name": "Swaziland",
+                "code": "sz"
+            }, {"name": "Sweden", "code": "se"}, {"name": "Switzerland", "code": "ch"}, {
+                "name": "Syrian Arab Republic",
+                "code": "sy"
+            }, {"name": "Taiwan, Province of China", "code": "tw"}, {
+                "name": "Tajikistan",
+                "code": "tj"
+            }, {"name": "Tanzania, United Republic of", "code": "tz"}, {"name": "Thailand", "code": "th"}, {
+                "name": "Togo",
+                "code": "tg"
+            }, {"name": "Tokelau", "code": "tk"}, {"name": "Tonga", "code": "to"}, {
+                "name": "Trinidad and Tobago",
+                "code": "tt"
+            }, {"name": "Tunisia", "code": "tn"}, {"name": "Turkey", "code": "tr"}, {
+                "name": "Turkmenistan",
+                "code": "tm"
+            }, {"name": "Turks and Caicos Islands", "code": "tc"}, {"name": "Tuvalu", "code": "tv"}, {
+                "name": "Uganda",
+                "code": "ug"
+            }, {"name": "Ukraine", "code": "ua"}, {"name": "United Arab Emirates", "code": "ae"}, {
+                "name": "United Kingdom",
+                "code": "gb"
+            }, {"name": "United States Minor Outlying Islands", "code": "um"}, {
+                "name": "Uruguay",
+                "code": "uy"
+            }, {"name": "Uzbekistan", "code": "uz"}, {"name": "Vanuatu", "code": "vu"}, {
+                "name": "Venezuela",
+                "code": "ve"
+            }, {"name": "Vietnam", "code": "vn"}, {
+                "name": "Virgin Islands (British)",
+                "code": "vg"
+            }, {"name": "Virgin Islands (U.S.)", "code": "vi"}, {
+                "name": "Wallis and Futuna Islands",
+                "code": "wf"
+            }, {"name": "Western Sahara", "code": "eh"}, {"name": "Yemen", "code": "ye"}, {
+                "name": "Serbia",
+                "code": "yu"
+            }, {"name": "Zambia", "code": "zm"}, {"name": "Zimbabwe", "code": "zw"}]
+        };
         return {
             body: body,
             status: 200,
@@ -2569,7 +3453,469 @@ export default {
     },
 
     ['GET *utilities/airlines'] (pathMatch, query, request) {
-        let body = {"data":[{"id":"004f1cd7-dfb8-4871-9f5b-61a67a1836ef","name":"Virgin Nigeria Airways","alias":"","iata":"VK","icao":"VGN","call_sign":"VIRGIN NIGERIA","country":"Nigeria","active":"Y"},{"id":"006a540f-0926-41e7-8544-7c849277b5bf","name":"City Connexion Airlines","alias":"","iata":"G3","icao":"CIX","call_sign":"CONNEXION","country":"Burundi","active":"Y"},{"id":"00b25023-5285-4722-b913-3d4f6d647188","name":"Jet2.com","alias":"","iata":"LS","icao":"EXS","call_sign":"CHANNEX","country":"United Kingdom","active":"Y"},{"id":"00c53c06-2484-4209-9044-8e508fda2711","name":"Air Ivoire","alias":"","iata":"VU","icao":"VUN","call_sign":"AIRIVOIRE","country":"Ivory Coast","active":"Y"},{"id":"00d33740-2e2d-41d8-9658-993c0265c2d8","name":"ALAK","alias":"","iata":"J4","icao":null,"call_sign":"","country":"Russia","active":"Y"},{"id":"0112b2ab-c78d-44d0-84dd-c7613966bef2","name":"Spring Airlines","alias":"","iata":"9S","icao":"CQH","call_sign":"AIR SPRING","country":"China","active":"Y"},{"id":"01bd58dd-5251-4e8b-9062-caee85b856d1","name":"ScotAirways","alias":"","iata":"","icao":"SAY","call_sign":"SUCKLING","country":"United Kingdom","active":"Y"},{"id":"01c71d29-6bb7-42ac-b0eb-a6e9795d0463","name":"YES Airways","alias":"","iata":"","icao":"YEP","call_sign":"","country":"Poland","active":"Y"},{"id":"01caf7bc-850b-4e09-9e86-dcb628e90375","name":"TransHolding System","alias":"","iata":"YO","icao":"TYS","call_sign":"","country":"Brazil","active":"Y"},{"id":"0230cab0-2bd0-47a5-bbbb-c6bae2f4bc74","name":"Alliance Airlines","alias":"","iata":"QQ","icao":"UTY","call_sign":"UNITY","country":"Australia","active":"Y"},{"id":"02597a3a-5a9b-4c2e-8db7-b51ffec98874","name":"Eastok Avia","alias":"","iata":"","icao":"EAA","call_sign":"","country":"Kyrgyzstan","active":"Y"},{"id":"02882b23-4651-45a1-95c7-7f70f3770bc1","name":"Jc royal.britannica","alias":"","iata":"","icao":"JRB","call_sign":"","country":"United Kingdom","active":"Y"},{"id":"02c14f3f-9a9f-4f86-a42d-6e9d0991fe58","name":"Wizz Air Ukraine","alias":"","iata":"WU","icao":"WAU","call_sign":"WIZZAIR UKRAINE","country":"Ukraine","active":"Y"},{"id":"02d94f31-b0b3-47e8-ad9e-79cfb8767db4","name":"Go2Sky","alias":"","iata":"","icao":"RLX","call_sign":"RELAX","country":"Slovakia","active":"Y"},{"id":"031e55b6-d0fa-4898-b7ac-bdb7bfd127c8","name":"Dominicana de Aviaci","alias":"","iata":"DO","icao":"DOA","call_sign":"DOMINICANA","country":"Dominican Republic","active":"Y"},{"id":"04864b09-1ead-4653-9de4-7c81401f3734","name":"VASP","alias":"","iata":"VP","icao":"VSP","call_sign":"VASP","country":"Brazil","active":"Y"},{"id":"04d2b4c2-abc6-473e-94c6-647ba8b23a8b","name":"WestJet Encore","alias":"Encore","iata":"WR","icao":"WEN","call_sign":"Encore","country":"Canada","active":"Y"},{"id":"04e4bf98-ba41-4c2f-9a41-ed9a75316104","name":"Ocean Air","alias":"","iata":"","icao":"BCN","call_sign":"BLUE OCEAN","country":"Mauritania","active":"Y"},{"id":"050e8b65-b24b-4c99-a91a-39c367f91ffe","name":"Islena De Inversiones","alias":"","iata":"WC","icao":"ISV","call_sign":"","country":"Honduras","active":"Y"},{"id":"052e6f14-0552-4ad0-8db4-6dcf7ddddd54","name":"Transilvania","alias":"","iata":"","icao":"TNS","call_sign":"","country":"Romania","active":"Y"},{"id":"057396f7-032d-4313-844f-96bf2210b28f","name":"American Eagle Airlines","alias":"","iata":"MQ","icao":"EGF","call_sign":"EAGLE FLIGHT","country":"United States","active":"Y"},{"id":"0579ce92-50fe-42e7-bc70-51751b0471e6","name":"Sky Regional Airlines","alias":"","iata":"","icao":"SKV","call_sign":"Maple","country":"Canada","active":"Y"},{"id":"05a714ca-dcb9-4fe5-aa8b-78e65e05478a","name":"TransRussiaAirlines","alias":"TransRus","iata":"1E","icao":"RGG","call_sign":"","country":"Russia","active":"Y"},{"id":"05aa66ac-f880-45e9-8d82-5e876a5dd82b","name":"Austrian Airlines","alias":"","iata":"OS","icao":"AUA","call_sign":"AUSTRIAN","country":"Austria","active":"Y"},{"id":"064d8027-e2e9-4986-921c-5482257aea3e","name":"Transair","alias":"","iata":"","icao":"TTZ","call_sign":"","country":"Canada","active":"Y"},{"id":"06b21881-1ed3-401f-ad5b-1c74f88ae5b7","name":"Bering Air","alias":"","iata":"8E","icao":"BRG","call_sign":"BERING AIR","country":"United States","active":"Y"},{"id":"06bf43d6-a8b3-492d-b430-192d641fa651","name":"Macair Airlines","alias":"","iata":"CC","icao":"MCK","call_sign":"","country":"Australia","active":"Y"},{"id":"070e17d9-44c8-487e-afe7-f5af8a33d009","name":"Carpatair","alias":"","iata":"V3","icao":"KRP","call_sign":"CARPATAIR","country":"Romania","active":"Y"},{"id":"07331d71-3ff6-45c1-94fc-fb87e76150b9","name":"Northwestern Air","alias":"","iata":"J3","icao":"PLR","call_sign":"POLARIS","country":"Canada","active":"Y"},{"id":"07346213-1476-43e7-8e30-9a5f4e75c660","name":"Dubrovnik Air","alias":"","iata":"","icao":"DBK","call_sign":"SEAGULL","country":"Croatia","active":"Y"},{"id":"07442bd3-fd44-4923-bea9-e82e6176cba0","name":"All Nippon Airways","alias":"ANA All Nippon Airways","iata":"NH","icao":"ANA","call_sign":"ALL NIPPON","country":"Japan","active":"Y"},{"id":"07c5c2c7-5898-4810-be69-2cbe4b4381a0","name":"United States Air Force","alias":"","iata":"","icao":"AIO","call_sign":"AIR CHIEF","country":"United States","active":"Y"},{"id":"07dff140-9c4c-42a1-9035-7ab615c331e6","name":"China Northwest Airlines (WH)","alias":"","iata":"WH","icao":null,"call_sign":"","country":"China","active":"Y"},{"id":"07eb87de-1db3-49f6-92f5-894ae4c0ffd7","name":"Abu Dhabi Amiri Flight","alias":"","iata":"MO","icao":"AUH","call_sign":"SULTAN","country":"United Arab Emirates","active":"Y"},{"id":"080ea9f2-57e4-4453-8b71-eeee4577eab0","name":"China Southern Airlines","alias":"","iata":"CZ","icao":"CSN","call_sign":"CHINA SOUTHERN","country":"China","active":"Y"},{"id":"0836341d-caf1-4575-9538-db802c907847","name":"Primera Air","alias":"","iata":"PF","icao":null,"call_sign":"PRIMERA","country":"Iceland","active":"Y"},{"id":"084a8ea1-ce51-4f9d-b7ba-8c578caa229e","name":"Airlink (SAA)","alias":"","iata":"4Z","icao":null,"call_sign":"","country":"South Africa","active":"Y"},{"id":"0884cebf-782c-4855-8538-96ddca5eca01","name":"Spicejet","alias":"","iata":"SG","icao":"SEJ","call_sign":"SPICEJET","country":"India","active":"Y"},{"id":"088b0651-5a3c-4484-932c-7d2ca4fc7c95","name":"Skyjet Airlines","alias":"","iata":"UQ","icao":"SJU","call_sign":"SKYJET","country":"Uganda","active":"Y"},{"id":"088bff98-b7d1-4de1-8735-d2a97c40a7a0","name":"Nauru Air Corporation","alias":"","iata":"ON","icao":"RON","call_sign":"AIR NAURU","country":"Nauru","active":"Y"},{"id":"0894f80f-5cb1-4b75-a6d9-37be5e2e476a","name":"Polet Airlines (Priv)","alias":"","iata":"YQ","icao":null,"call_sign":"","country":"Russia","active":"Y"},{"id":"08af9fe4-68ab-4e7e-86d9-0cbe8487bf19","name":"STP Airways","alias":"","iata":"8F","icao":"STP","call_sign":"SAOTOME AIRWAYS","country":"Sao Tome and Principe","active":"Y"},{"id":"09048e91-2b86-4cda-b3f7-5a154db0557b","name":"UTair Aviation","alias":"","iata":"UT","icao":"UTA","call_sign":"UTAIR","country":"Russia","active":"Y"},{"id":"091f0789-4692-4ef7-9e0e-4181f0991b48","name":"Frontier Airlines","alias":"","iata":"F9","icao":"FFT","call_sign":"FRONTIER FLIGHT","country":"United States","active":"Y"},{"id":"0955ec55-1185-4e2a-9442-df5c16d804e4","name":"China United","alias":"","iata":"KN","icao":null,"call_sign":"","country":"China","active":"Y"},{"id":"09951dbb-444a-45e0-8fa7-b413ee5cbfa3","name":"WebJet Linhas A","alias":"","iata":"WJ","icao":"WEB","call_sign":"WEB-BRASIL","country":"Brazil","active":"Y"},{"id":"09a734a6-0e4e-4bc9-9f0f-025a9af30245","name":"Air Explore","alias":"","iata":"","icao":"AXE","call_sign":"","country":"Slovakia","active":"Y"},{"id":"0a2f01ba-bd60-48f6-a2dd-4c0731f27e48","name":"Mal\u00c3\u00a9v","alias":"","iata":"MA","icao":"MAH","call_sign":"MALEV","country":"Hungary","active":"Y"},{"id":"0a38f88d-418e-438f-8f8a-2d9058bbbffe","name":"Caucasus Airlines","alias":"","iata":"NS","icao":null,"call_sign":"","country":"Georgia","active":"Y"},{"id":"0a458305-ae3e-4d17-a18c-cb098ecfee01","name":"Eurowings","alias":"","iata":"EW","icao":"EWG","call_sign":"EUROWINGS","country":"Germany","active":"Y"}],"meta":{"pagination":{"total":1251,"count":50,"per_page":50,"current_page":1,"total_pages":26,"links":{"next":"https:\/\/missions.dev\/api\/utilities\/airlines?page=2"}}}};
+        let body = {
+            "data": [{
+                "id": "004f1cd7-dfb8-4871-9f5b-61a67a1836ef",
+                "name": "Virgin Nigeria Airways",
+                "alias": "",
+                "iata": "VK",
+                "icao": "VGN",
+                "call_sign": "VIRGIN NIGERIA",
+                "country": "Nigeria",
+                "active": "Y"
+            }, {
+                "id": "006a540f-0926-41e7-8544-7c849277b5bf",
+                "name": "City Connexion Airlines",
+                "alias": "",
+                "iata": "G3",
+                "icao": "CIX",
+                "call_sign": "CONNEXION",
+                "country": "Burundi",
+                "active": "Y"
+            }, {
+                "id": "00b25023-5285-4722-b913-3d4f6d647188",
+                "name": "Jet2.com",
+                "alias": "",
+                "iata": "LS",
+                "icao": "EXS",
+                "call_sign": "CHANNEX",
+                "country": "United Kingdom",
+                "active": "Y"
+            }, {
+                "id": "00c53c06-2484-4209-9044-8e508fda2711",
+                "name": "Air Ivoire",
+                "alias": "",
+                "iata": "VU",
+                "icao": "VUN",
+                "call_sign": "AIRIVOIRE",
+                "country": "Ivory Coast",
+                "active": "Y"
+            }, {
+                "id": "00d33740-2e2d-41d8-9658-993c0265c2d8",
+                "name": "ALAK",
+                "alias": "",
+                "iata": "J4",
+                "icao": null,
+                "call_sign": "",
+                "country": "Russia",
+                "active": "Y"
+            }, {
+                "id": "0112b2ab-c78d-44d0-84dd-c7613966bef2",
+                "name": "Spring Airlines",
+                "alias": "",
+                "iata": "9S",
+                "icao": "CQH",
+                "call_sign": "AIR SPRING",
+                "country": "China",
+                "active": "Y"
+            }, {
+                "id": "01bd58dd-5251-4e8b-9062-caee85b856d1",
+                "name": "ScotAirways",
+                "alias": "",
+                "iata": "",
+                "icao": "SAY",
+                "call_sign": "SUCKLING",
+                "country": "United Kingdom",
+                "active": "Y"
+            }, {
+                "id": "01c71d29-6bb7-42ac-b0eb-a6e9795d0463",
+                "name": "YES Airways",
+                "alias": "",
+                "iata": "",
+                "icao": "YEP",
+                "call_sign": "",
+                "country": "Poland",
+                "active": "Y"
+            }, {
+                "id": "01caf7bc-850b-4e09-9e86-dcb628e90375",
+                "name": "TransHolding System",
+                "alias": "",
+                "iata": "YO",
+                "icao": "TYS",
+                "call_sign": "",
+                "country": "Brazil",
+                "active": "Y"
+            }, {
+                "id": "0230cab0-2bd0-47a5-bbbb-c6bae2f4bc74",
+                "name": "Alliance Airlines",
+                "alias": "",
+                "iata": "QQ",
+                "icao": "UTY",
+                "call_sign": "UNITY",
+                "country": "Australia",
+                "active": "Y"
+            }, {
+                "id": "02597a3a-5a9b-4c2e-8db7-b51ffec98874",
+                "name": "Eastok Avia",
+                "alias": "",
+                "iata": "",
+                "icao": "EAA",
+                "call_sign": "",
+                "country": "Kyrgyzstan",
+                "active": "Y"
+            }, {
+                "id": "02882b23-4651-45a1-95c7-7f70f3770bc1",
+                "name": "Jc royal.britannica",
+                "alias": "",
+                "iata": "",
+                "icao": "JRB",
+                "call_sign": "",
+                "country": "United Kingdom",
+                "active": "Y"
+            }, {
+                "id": "02c14f3f-9a9f-4f86-a42d-6e9d0991fe58",
+                "name": "Wizz Air Ukraine",
+                "alias": "",
+                "iata": "WU",
+                "icao": "WAU",
+                "call_sign": "WIZZAIR UKRAINE",
+                "country": "Ukraine",
+                "active": "Y"
+            }, {
+                "id": "02d94f31-b0b3-47e8-ad9e-79cfb8767db4",
+                "name": "Go2Sky",
+                "alias": "",
+                "iata": "",
+                "icao": "RLX",
+                "call_sign": "RELAX",
+                "country": "Slovakia",
+                "active": "Y"
+            }, {
+                "id": "031e55b6-d0fa-4898-b7ac-bdb7bfd127c8",
+                "name": "Dominicana de Aviaci",
+                "alias": "",
+                "iata": "DO",
+                "icao": "DOA",
+                "call_sign": "DOMINICANA",
+                "country": "Dominican Republic",
+                "active": "Y"
+            }, {
+                "id": "04864b09-1ead-4653-9de4-7c81401f3734",
+                "name": "VASP",
+                "alias": "",
+                "iata": "VP",
+                "icao": "VSP",
+                "call_sign": "VASP",
+                "country": "Brazil",
+                "active": "Y"
+            }, {
+                "id": "04d2b4c2-abc6-473e-94c6-647ba8b23a8b",
+                "name": "WestJet Encore",
+                "alias": "Encore",
+                "iata": "WR",
+                "icao": "WEN",
+                "call_sign": "Encore",
+                "country": "Canada",
+                "active": "Y"
+            }, {
+                "id": "04e4bf98-ba41-4c2f-9a41-ed9a75316104",
+                "name": "Ocean Air",
+                "alias": "",
+                "iata": "",
+                "icao": "BCN",
+                "call_sign": "BLUE OCEAN",
+                "country": "Mauritania",
+                "active": "Y"
+            }, {
+                "id": "050e8b65-b24b-4c99-a91a-39c367f91ffe",
+                "name": "Islena De Inversiones",
+                "alias": "",
+                "iata": "WC",
+                "icao": "ISV",
+                "call_sign": "",
+                "country": "Honduras",
+                "active": "Y"
+            }, {
+                "id": "052e6f14-0552-4ad0-8db4-6dcf7ddddd54",
+                "name": "Transilvania",
+                "alias": "",
+                "iata": "",
+                "icao": "TNS",
+                "call_sign": "",
+                "country": "Romania",
+                "active": "Y"
+            }, {
+                "id": "057396f7-032d-4313-844f-96bf2210b28f",
+                "name": "American Eagle Airlines",
+                "alias": "",
+                "iata": "MQ",
+                "icao": "EGF",
+                "call_sign": "EAGLE FLIGHT",
+                "country": "United States",
+                "active": "Y"
+            }, {
+                "id": "0579ce92-50fe-42e7-bc70-51751b0471e6",
+                "name": "Sky Regional Airlines",
+                "alias": "",
+                "iata": "",
+                "icao": "SKV",
+                "call_sign": "Maple",
+                "country": "Canada",
+                "active": "Y"
+            }, {
+                "id": "05a714ca-dcb9-4fe5-aa8b-78e65e05478a",
+                "name": "TransRussiaAirlines",
+                "alias": "TransRus",
+                "iata": "1E",
+                "icao": "RGG",
+                "call_sign": "",
+                "country": "Russia",
+                "active": "Y"
+            }, {
+                "id": "05aa66ac-f880-45e9-8d82-5e876a5dd82b",
+                "name": "Austrian Airlines",
+                "alias": "",
+                "iata": "OS",
+                "icao": "AUA",
+                "call_sign": "AUSTRIAN",
+                "country": "Austria",
+                "active": "Y"
+            }, {
+                "id": "064d8027-e2e9-4986-921c-5482257aea3e",
+                "name": "Transair",
+                "alias": "",
+                "iata": "",
+                "icao": "TTZ",
+                "call_sign": "",
+                "country": "Canada",
+                "active": "Y"
+            }, {
+                "id": "06b21881-1ed3-401f-ad5b-1c74f88ae5b7",
+                "name": "Bering Air",
+                "alias": "",
+                "iata": "8E",
+                "icao": "BRG",
+                "call_sign": "BERING AIR",
+                "country": "United States",
+                "active": "Y"
+            }, {
+                "id": "06bf43d6-a8b3-492d-b430-192d641fa651",
+                "name": "Macair Airlines",
+                "alias": "",
+                "iata": "CC",
+                "icao": "MCK",
+                "call_sign": "",
+                "country": "Australia",
+                "active": "Y"
+            }, {
+                "id": "070e17d9-44c8-487e-afe7-f5af8a33d009",
+                "name": "Carpatair",
+                "alias": "",
+                "iata": "V3",
+                "icao": "KRP",
+                "call_sign": "CARPATAIR",
+                "country": "Romania",
+                "active": "Y"
+            }, {
+                "id": "07331d71-3ff6-45c1-94fc-fb87e76150b9",
+                "name": "Northwestern Air",
+                "alias": "",
+                "iata": "J3",
+                "icao": "PLR",
+                "call_sign": "POLARIS",
+                "country": "Canada",
+                "active": "Y"
+            }, {
+                "id": "07346213-1476-43e7-8e30-9a5f4e75c660",
+                "name": "Dubrovnik Air",
+                "alias": "",
+                "iata": "",
+                "icao": "DBK",
+                "call_sign": "SEAGULL",
+                "country": "Croatia",
+                "active": "Y"
+            }, {
+                "id": "07442bd3-fd44-4923-bea9-e82e6176cba0",
+                "name": "All Nippon Airways",
+                "alias": "ANA All Nippon Airways",
+                "iata": "NH",
+                "icao": "ANA",
+                "call_sign": "ALL NIPPON",
+                "country": "Japan",
+                "active": "Y"
+            }, {
+                "id": "07c5c2c7-5898-4810-be69-2cbe4b4381a0",
+                "name": "United States Air Force",
+                "alias": "",
+                "iata": "",
+                "icao": "AIO",
+                "call_sign": "AIR CHIEF",
+                "country": "United States",
+                "active": "Y"
+            }, {
+                "id": "07dff140-9c4c-42a1-9035-7ab615c331e6",
+                "name": "China Northwest Airlines (WH)",
+                "alias": "",
+                "iata": "WH",
+                "icao": null,
+                "call_sign": "",
+                "country": "China",
+                "active": "Y"
+            }, {
+                "id": "07eb87de-1db3-49f6-92f5-894ae4c0ffd7",
+                "name": "Abu Dhabi Amiri Flight",
+                "alias": "",
+                "iata": "MO",
+                "icao": "AUH",
+                "call_sign": "SULTAN",
+                "country": "United Arab Emirates",
+                "active": "Y"
+            }, {
+                "id": "080ea9f2-57e4-4453-8b71-eeee4577eab0",
+                "name": "China Southern Airlines",
+                "alias": "",
+                "iata": "CZ",
+                "icao": "CSN",
+                "call_sign": "CHINA SOUTHERN",
+                "country": "China",
+                "active": "Y"
+            }, {
+                "id": "0836341d-caf1-4575-9538-db802c907847",
+                "name": "Primera Air",
+                "alias": "",
+                "iata": "PF",
+                "icao": null,
+                "call_sign": "PRIMERA",
+                "country": "Iceland",
+                "active": "Y"
+            }, {
+                "id": "084a8ea1-ce51-4f9d-b7ba-8c578caa229e",
+                "name": "Airlink (SAA)",
+                "alias": "",
+                "iata": "4Z",
+                "icao": null,
+                "call_sign": "",
+                "country": "South Africa",
+                "active": "Y"
+            }, {
+                "id": "0884cebf-782c-4855-8538-96ddca5eca01",
+                "name": "Spicejet",
+                "alias": "",
+                "iata": "SG",
+                "icao": "SEJ",
+                "call_sign": "SPICEJET",
+                "country": "India",
+                "active": "Y"
+            }, {
+                "id": "088b0651-5a3c-4484-932c-7d2ca4fc7c95",
+                "name": "Skyjet Airlines",
+                "alias": "",
+                "iata": "UQ",
+                "icao": "SJU",
+                "call_sign": "SKYJET",
+                "country": "Uganda",
+                "active": "Y"
+            }, {
+                "id": "088bff98-b7d1-4de1-8735-d2a97c40a7a0",
+                "name": "Nauru Air Corporation",
+                "alias": "",
+                "iata": "ON",
+                "icao": "RON",
+                "call_sign": "AIR NAURU",
+                "country": "Nauru",
+                "active": "Y"
+            }, {
+                "id": "0894f80f-5cb1-4b75-a6d9-37be5e2e476a",
+                "name": "Polet Airlines (Priv)",
+                "alias": "",
+                "iata": "YQ",
+                "icao": null,
+                "call_sign": "",
+                "country": "Russia",
+                "active": "Y"
+            }, {
+                "id": "08af9fe4-68ab-4e7e-86d9-0cbe8487bf19",
+                "name": "STP Airways",
+                "alias": "",
+                "iata": "8F",
+                "icao": "STP",
+                "call_sign": "SAOTOME AIRWAYS",
+                "country": "Sao Tome and Principe",
+                "active": "Y"
+            }, {
+                "id": "09048e91-2b86-4cda-b3f7-5a154db0557b",
+                "name": "UTair Aviation",
+                "alias": "",
+                "iata": "UT",
+                "icao": "UTA",
+                "call_sign": "UTAIR",
+                "country": "Russia",
+                "active": "Y"
+            }, {
+                "id": "091f0789-4692-4ef7-9e0e-4181f0991b48",
+                "name": "Frontier Airlines",
+                "alias": "",
+                "iata": "F9",
+                "icao": "FFT",
+                "call_sign": "FRONTIER FLIGHT",
+                "country": "United States",
+                "active": "Y"
+            }, {
+                "id": "0955ec55-1185-4e2a-9442-df5c16d804e4",
+                "name": "China United",
+                "alias": "",
+                "iata": "KN",
+                "icao": null,
+                "call_sign": "",
+                "country": "China",
+                "active": "Y"
+            }, {
+                "id": "09951dbb-444a-45e0-8fa7-b413ee5cbfa3",
+                "name": "WebJet Linhas A",
+                "alias": "",
+                "iata": "WJ",
+                "icao": "WEB",
+                "call_sign": "WEB-BRASIL",
+                "country": "Brazil",
+                "active": "Y"
+            }, {
+                "id": "09a734a6-0e4e-4bc9-9f0f-025a9af30245",
+                "name": "Air Explore",
+                "alias": "",
+                "iata": "",
+                "icao": "AXE",
+                "call_sign": "",
+                "country": "Slovakia",
+                "active": "Y"
+            }, {
+                "id": "0a2f01ba-bd60-48f6-a2dd-4c0731f27e48",
+                "name": "Mal\u00c3\u00a9v",
+                "alias": "",
+                "iata": "MA",
+                "icao": "MAH",
+                "call_sign": "MALEV",
+                "country": "Hungary",
+                "active": "Y"
+            }, {
+                "id": "0a38f88d-418e-438f-8f8a-2d9058bbbffe",
+                "name": "Caucasus Airlines",
+                "alias": "",
+                "iata": "NS",
+                "icao": null,
+                "call_sign": "",
+                "country": "Georgia",
+                "active": "Y"
+            }, {
+                "id": "0a458305-ae3e-4d17-a18c-cb098ecfee01",
+                "name": "Eurowings",
+                "alias": "",
+                "iata": "EW",
+                "icao": "EWG",
+                "call_sign": "EUROWINGS",
+                "country": "Germany",
+                "active": "Y"
+            }],
+            "meta": {
+                "pagination": {
+                    "total": 1251,
+                    "count": 50,
+                    "per_page": 50,
+                    "current_page": 1,
+                    "total_pages": 26,
+                    "links": {"next": "https:\/\/missions.dev\/api\/utilities\/airlines?page=2"}
+                }
+            }
+        };
         return {
             body: body,
             status: 200,
@@ -2581,7 +3927,7 @@ export default {
     },
 
     ['GET *utilities/timezones'] (pathMatch, query, request) {
-        let body = {"timezones":["Africa\/Abidjan","Africa\/Accra","Africa\/Addis_Ababa","Africa\/Algiers","Africa\/Asmara","Africa\/Bamako","Africa\/Bangui","Africa\/Banjul","Africa\/Bissau","Africa\/Blantyre","Africa\/Brazzaville","Africa\/Bujumbura","Africa\/Cairo","Africa\/Casablanca","Africa\/Ceuta","Africa\/Conakry","Africa\/Dakar","Africa\/Dar_es_Salaam","Africa\/Djibouti","Africa\/Douala","Africa\/El_Aaiun","Africa\/Freetown","Africa\/Gaborone","Africa\/Harare","Africa\/Johannesburg","Africa\/Juba","Africa\/Kampala","Africa\/Khartoum","Africa\/Kigali","Africa\/Kinshasa","Africa\/Lagos","Africa\/Libreville","Africa\/Lome","Africa\/Luanda","Africa\/Lubumbashi","Africa\/Lusaka","Africa\/Malabo","Africa\/Maputo","Africa\/Maseru","Africa\/Mbabane","Africa\/Mogadishu","Africa\/Monrovia","Africa\/Nairobi","Africa\/Ndjamena","Africa\/Niamey","Africa\/Nouakchott","Africa\/Ouagadougou","Africa\/Porto-Novo","Africa\/Sao_Tome","Africa\/Tripoli","Africa\/Tunis","Africa\/Windhoek","America\/Adak","America\/Anchorage","America\/Anguilla","America\/Antigua","America\/Araguaina","America\/Argentina\/Buenos_Aires","America\/Argentina\/Catamarca","America\/Argentina\/Cordoba","America\/Argentina\/Jujuy","America\/Argentina\/La_Rioja","America\/Argentina\/Mendoza","America\/Argentina\/Rio_Gallegos","America\/Argentina\/Salta","America\/Argentina\/San_Juan","America\/Argentina\/San_Luis","America\/Argentina\/Tucuman","America\/Argentina\/Ushuaia","America\/Aruba","America\/Asuncion","America\/Atikokan","America\/Bahia","America\/Bahia_Banderas","America\/Barbados","America\/Belem","America\/Belize","America\/Blanc-Sablon","America\/Boa_Vista","America\/Bogota","America\/Boise","America\/Cambridge_Bay","America\/Campo_Grande","America\/Cancun","America\/Caracas","America\/Cayenne","America\/Cayman","America\/Chicago","America\/Chihuahua","America\/Costa_Rica","America\/Creston","America\/Cuiaba","America\/Curacao","America\/Danmarkshavn","America\/Dawson","America\/Dawson_Creek","America\/Denver","America\/Detroit","America\/Dominica","America\/Edmonton","America\/Eirunepe","America\/El_Salvador","America\/Fort_Nelson","America\/Fortaleza","America\/Glace_Bay","America\/Godthab","America\/Goose_Bay","America\/Grand_Turk","America\/Grenada","America\/Guadeloupe","America\/Guatemala","America\/Guayaquil","America\/Guyana","America\/Halifax","America\/Havana","America\/Hermosillo","America\/Indiana\/Indianapolis","America\/Indiana\/Knox","America\/Indiana\/Marengo","America\/Indiana\/Petersburg","America\/Indiana\/Tell_City","America\/Indiana\/Vevay","America\/Indiana\/Vincennes","America\/Indiana\/Winamac","America\/Inuvik","America\/Iqaluit","America\/Jamaica","America\/Juneau","America\/Kentucky\/Louisville","America\/Kentucky\/Monticello","America\/Kralendijk","America\/La_Paz","America\/Lima","America\/Los_Angeles","America\/Lower_Princes","America\/Maceio","America\/Managua","America\/Manaus","America\/Marigot","America\/Martinique","America\/Matamoros","America\/Mazatlan","America\/Menominee","America\/Merida","America\/Metlakatla","America\/Mexico_City","America\/Miquelon","America\/Moncton","America\/Monterrey","America\/Montevideo","America\/Montserrat","America\/Nassau","America\/New_York","America\/Nipigon","America\/Nome","America\/Noronha","America\/North_Dakota\/Beulah","America\/North_Dakota\/Center","America\/North_Dakota\/New_Salem","America\/Ojinaga","America\/Panama","America\/Pangnirtung","America\/Paramaribo","America\/Phoenix","America\/Port-au-Prince","America\/Port_of_Spain","America\/Porto_Velho","America\/Puerto_Rico","America\/Rainy_River","America\/Rankin_Inlet","America\/Recife","America\/Regina","America\/Resolute","America\/Rio_Branco","America\/Santarem","America\/Santiago","America\/Santo_Domingo","America\/Sao_Paulo","America\/Scoresbysund","America\/Sitka","America\/St_Barthelemy","America\/St_Johns","America\/St_Kitts","America\/St_Lucia","America\/St_Thomas","America\/St_Vincent","America\/Swift_Current","America\/Tegucigalpa","America\/Thule","America\/Thunder_Bay","America\/Tijuana","America\/Toronto","America\/Tortola","America\/Vancouver","America\/Whitehorse","America\/Winnipeg","America\/Yakutat","America\/Yellowknife","Antarctica\/Casey","Antarctica\/Davis","Antarctica\/DumontDUrville","Antarctica\/Macquarie","Antarctica\/Mawson","Antarctica\/McMurdo","Antarctica\/Palmer","Antarctica\/Rothera","Antarctica\/Syowa","Antarctica\/Troll","Antarctica\/Vostok","Arctic\/Longyearbyen","Asia\/Aden","Asia\/Almaty","Asia\/Amman","Asia\/Anadyr","Asia\/Aqtau","Asia\/Aqtobe","Asia\/Ashgabat","Asia\/Baghdad","Asia\/Bahrain","Asia\/Baku","Asia\/Bangkok","Asia\/Barnaul","Asia\/Beirut","Asia\/Bishkek","Asia\/Brunei","Asia\/Chita","Asia\/Choibalsan","Asia\/Colombo","Asia\/Damascus","Asia\/Dhaka","Asia\/Dili","Asia\/Dubai","Asia\/Dushanbe","Asia\/Gaza","Asia\/Hebron","Asia\/Ho_Chi_Minh","Asia\/Hong_Kong","Asia\/Hovd","Asia\/Irkutsk","Asia\/Jakarta","Asia\/Jayapura","Asia\/Jerusalem","Asia\/Kabul","Asia\/Kamchatka","Asia\/Karachi","Asia\/Kathmandu","Asia\/Khandyga","Asia\/Kolkata","Asia\/Krasnoyarsk","Asia\/Kuala_Lumpur","Asia\/Kuching","Asia\/Kuwait","Asia\/Macau","Asia\/Magadan","Asia\/Makassar","Asia\/Manila","Asia\/Muscat","Asia\/Nicosia","Asia\/Novokuznetsk","Asia\/Novosibirsk","Asia\/Omsk","Asia\/Oral","Asia\/Phnom_Penh","Asia\/Pontianak","Asia\/Pyongyang","Asia\/Qatar","Asia\/Qyzylorda","Asia\/Rangoon","Asia\/Riyadh","Asia\/Sakhalin","Asia\/Samarkand","Asia\/Seoul","Asia\/Shanghai","Asia\/Singapore","Asia\/Srednekolymsk","Asia\/Taipei","Asia\/Tashkent","Asia\/Tbilisi","Asia\/Tehran","Asia\/Thimphu","Asia\/Tokyo","Asia\/Ulaanbaatar","Asia\/Urumqi","Asia\/Ust-Nera","Asia\/Vientiane","Asia\/Vladivostok","Asia\/Yakutsk","Asia\/Yekaterinburg","Asia\/Yerevan","Atlantic\/Azores","Atlantic\/Bermuda","Atlantic\/Canary","Atlantic\/Cape_Verde","Atlantic\/Faroe","Atlantic\/Madeira","Atlantic\/Reykjavik","Atlantic\/South_Georgia","Atlantic\/St_Helena","Atlantic\/Stanley","Australia\/Adelaide","Australia\/Brisbane","Australia\/Broken_Hill","Australia\/Currie","Australia\/Darwin","Australia\/Eucla","Australia\/Hobart","Australia\/Lindeman","Australia\/Lord_Howe","Australia\/Melbourne","Australia\/Perth","Australia\/Sydney","Europe\/Amsterdam","Europe\/Andorra","Europe\/Astrakhan","Europe\/Athens","Europe\/Belgrade","Europe\/Berlin","Europe\/Bratislava","Europe\/Brussels","Europe\/Bucharest","Europe\/Budapest","Europe\/Busingen","Europe\/Chisinau","Europe\/Copenhagen","Europe\/Dublin","Europe\/Gibraltar","Europe\/Guernsey","Europe\/Helsinki","Europe\/Isle_of_Man","Europe\/Istanbul","Europe\/Jersey","Europe\/Kaliningrad","Europe\/Kiev","Europe\/Lisbon","Europe\/Ljubljana","Europe\/London","Europe\/Luxembourg","Europe\/Madrid","Europe\/Malta","Europe\/Mariehamn","Europe\/Minsk","Europe\/Monaco","Europe\/Moscow","Europe\/Oslo","Europe\/Paris","Europe\/Podgorica","Europe\/Prague","Europe\/Riga","Europe\/Rome","Europe\/Samara","Europe\/San_Marino","Europe\/Sarajevo","Europe\/Simferopol","Europe\/Skopje","Europe\/Sofia","Europe\/Stockholm","Europe\/Tallinn","Europe\/Tirane","Europe\/Ulyanovsk","Europe\/Uzhgorod","Europe\/Vaduz","Europe\/Vatican","Europe\/Vienna","Europe\/Vilnius","Europe\/Volgograd","Europe\/Warsaw","Europe\/Zagreb","Europe\/Zaporozhye","Europe\/Zurich","Indian\/Antananarivo","Indian\/Chagos","Indian\/Christmas","Indian\/Cocos","Indian\/Comoro","Indian\/Kerguelen","Indian\/Mahe","Indian\/Maldives","Indian\/Mauritius","Indian\/Mayotte","Indian\/Reunion","Pacific\/Apia","Pacific\/Auckland","Pacific\/Bougainville","Pacific\/Chatham","Pacific\/Chuuk","Pacific\/Easter","Pacific\/Efate","Pacific\/Enderbury","Pacific\/Fakaofo","Pacific\/Fiji","Pacific\/Funafuti","Pacific\/Galapagos","Pacific\/Gambier","Pacific\/Guadalcanal","Pacific\/Guam","Pacific\/Honolulu","Pacific\/Johnston","Pacific\/Kiritimati","Pacific\/Kosrae","Pacific\/Kwajalein","Pacific\/Majuro","Pacific\/Marquesas","Pacific\/Midway","Pacific\/Nauru","Pacific\/Niue","Pacific\/Norfolk","Pacific\/Noumea","Pacific\/Pago_Pago","Pacific\/Palau","Pacific\/Pitcairn","Pacific\/Pohnpei","Pacific\/Port_Moresby","Pacific\/Rarotonga","Pacific\/Saipan","Pacific\/Tahiti","Pacific\/Tarawa","Pacific\/Tongatapu","Pacific\/Wake","Pacific\/Wallis","UTC"]};
+        let body = {"timezones": ["Africa\/Abidjan", "Africa\/Accra", "Africa\/Addis_Ababa", "Africa\/Algiers", "Africa\/Asmara", "Africa\/Bamako", "Africa\/Bangui", "Africa\/Banjul", "Africa\/Bissau", "Africa\/Blantyre", "Africa\/Brazzaville", "Africa\/Bujumbura", "Africa\/Cairo", "Africa\/Casablanca", "Africa\/Ceuta", "Africa\/Conakry", "Africa\/Dakar", "Africa\/Dar_es_Salaam", "Africa\/Djibouti", "Africa\/Douala", "Africa\/El_Aaiun", "Africa\/Freetown", "Africa\/Gaborone", "Africa\/Harare", "Africa\/Johannesburg", "Africa\/Juba", "Africa\/Kampala", "Africa\/Khartoum", "Africa\/Kigali", "Africa\/Kinshasa", "Africa\/Lagos", "Africa\/Libreville", "Africa\/Lome", "Africa\/Luanda", "Africa\/Lubumbashi", "Africa\/Lusaka", "Africa\/Malabo", "Africa\/Maputo", "Africa\/Maseru", "Africa\/Mbabane", "Africa\/Mogadishu", "Africa\/Monrovia", "Africa\/Nairobi", "Africa\/Ndjamena", "Africa\/Niamey", "Africa\/Nouakchott", "Africa\/Ouagadougou", "Africa\/Porto-Novo", "Africa\/Sao_Tome", "Africa\/Tripoli", "Africa\/Tunis", "Africa\/Windhoek", "America\/Adak", "America\/Anchorage", "America\/Anguilla", "America\/Antigua", "America\/Araguaina", "America\/Argentina\/Buenos_Aires", "America\/Argentina\/Catamarca", "America\/Argentina\/Cordoba", "America\/Argentina\/Jujuy", "America\/Argentina\/La_Rioja", "America\/Argentina\/Mendoza", "America\/Argentina\/Rio_Gallegos", "America\/Argentina\/Salta", "America\/Argentina\/San_Juan", "America\/Argentina\/San_Luis", "America\/Argentina\/Tucuman", "America\/Argentina\/Ushuaia", "America\/Aruba", "America\/Asuncion", "America\/Atikokan", "America\/Bahia", "America\/Bahia_Banderas", "America\/Barbados", "America\/Belem", "America\/Belize", "America\/Blanc-Sablon", "America\/Boa_Vista", "America\/Bogota", "America\/Boise", "America\/Cambridge_Bay", "America\/Campo_Grande", "America\/Cancun", "America\/Caracas", "America\/Cayenne", "America\/Cayman", "America\/Chicago", "America\/Chihuahua", "America\/Costa_Rica", "America\/Creston", "America\/Cuiaba", "America\/Curacao", "America\/Danmarkshavn", "America\/Dawson", "America\/Dawson_Creek", "America\/Denver", "America\/Detroit", "America\/Dominica", "America\/Edmonton", "America\/Eirunepe", "America\/El_Salvador", "America\/Fort_Nelson", "America\/Fortaleza", "America\/Glace_Bay", "America\/Godthab", "America\/Goose_Bay", "America\/Grand_Turk", "America\/Grenada", "America\/Guadeloupe", "America\/Guatemala", "America\/Guayaquil", "America\/Guyana", "America\/Halifax", "America\/Havana", "America\/Hermosillo", "America\/Indiana\/Indianapolis", "America\/Indiana\/Knox", "America\/Indiana\/Marengo", "America\/Indiana\/Petersburg", "America\/Indiana\/Tell_City", "America\/Indiana\/Vevay", "America\/Indiana\/Vincennes", "America\/Indiana\/Winamac", "America\/Inuvik", "America\/Iqaluit", "America\/Jamaica", "America\/Juneau", "America\/Kentucky\/Louisville", "America\/Kentucky\/Monticello", "America\/Kralendijk", "America\/La_Paz", "America\/Lima", "America\/Los_Angeles", "America\/Lower_Princes", "America\/Maceio", "America\/Managua", "America\/Manaus", "America\/Marigot", "America\/Martinique", "America\/Matamoros", "America\/Mazatlan", "America\/Menominee", "America\/Merida", "America\/Metlakatla", "America\/Mexico_City", "America\/Miquelon", "America\/Moncton", "America\/Monterrey", "America\/Montevideo", "America\/Montserrat", "America\/Nassau", "America\/New_York", "America\/Nipigon", "America\/Nome", "America\/Noronha", "America\/North_Dakota\/Beulah", "America\/North_Dakota\/Center", "America\/North_Dakota\/New_Salem", "America\/Ojinaga", "America\/Panama", "America\/Pangnirtung", "America\/Paramaribo", "America\/Phoenix", "America\/Port-au-Prince", "America\/Port_of_Spain", "America\/Porto_Velho", "America\/Puerto_Rico", "America\/Rainy_River", "America\/Rankin_Inlet", "America\/Recife", "America\/Regina", "America\/Resolute", "America\/Rio_Branco", "America\/Santarem", "America\/Santiago", "America\/Santo_Domingo", "America\/Sao_Paulo", "America\/Scoresbysund", "America\/Sitka", "America\/St_Barthelemy", "America\/St_Johns", "America\/St_Kitts", "America\/St_Lucia", "America\/St_Thomas", "America\/St_Vincent", "America\/Swift_Current", "America\/Tegucigalpa", "America\/Thule", "America\/Thunder_Bay", "America\/Tijuana", "America\/Toronto", "America\/Tortola", "America\/Vancouver", "America\/Whitehorse", "America\/Winnipeg", "America\/Yakutat", "America\/Yellowknife", "Antarctica\/Casey", "Antarctica\/Davis", "Antarctica\/DumontDUrville", "Antarctica\/Macquarie", "Antarctica\/Mawson", "Antarctica\/McMurdo", "Antarctica\/Palmer", "Antarctica\/Rothera", "Antarctica\/Syowa", "Antarctica\/Troll", "Antarctica\/Vostok", "Arctic\/Longyearbyen", "Asia\/Aden", "Asia\/Almaty", "Asia\/Amman", "Asia\/Anadyr", "Asia\/Aqtau", "Asia\/Aqtobe", "Asia\/Ashgabat", "Asia\/Baghdad", "Asia\/Bahrain", "Asia\/Baku", "Asia\/Bangkok", "Asia\/Barnaul", "Asia\/Beirut", "Asia\/Bishkek", "Asia\/Brunei", "Asia\/Chita", "Asia\/Choibalsan", "Asia\/Colombo", "Asia\/Damascus", "Asia\/Dhaka", "Asia\/Dili", "Asia\/Dubai", "Asia\/Dushanbe", "Asia\/Gaza", "Asia\/Hebron", "Asia\/Ho_Chi_Minh", "Asia\/Hong_Kong", "Asia\/Hovd", "Asia\/Irkutsk", "Asia\/Jakarta", "Asia\/Jayapura", "Asia\/Jerusalem", "Asia\/Kabul", "Asia\/Kamchatka", "Asia\/Karachi", "Asia\/Kathmandu", "Asia\/Khandyga", "Asia\/Kolkata", "Asia\/Krasnoyarsk", "Asia\/Kuala_Lumpur", "Asia\/Kuching", "Asia\/Kuwait", "Asia\/Macau", "Asia\/Magadan", "Asia\/Makassar", "Asia\/Manila", "Asia\/Muscat", "Asia\/Nicosia", "Asia\/Novokuznetsk", "Asia\/Novosibirsk", "Asia\/Omsk", "Asia\/Oral", "Asia\/Phnom_Penh", "Asia\/Pontianak", "Asia\/Pyongyang", "Asia\/Qatar", "Asia\/Qyzylorda", "Asia\/Rangoon", "Asia\/Riyadh", "Asia\/Sakhalin", "Asia\/Samarkand", "Asia\/Seoul", "Asia\/Shanghai", "Asia\/Singapore", "Asia\/Srednekolymsk", "Asia\/Taipei", "Asia\/Tashkent", "Asia\/Tbilisi", "Asia\/Tehran", "Asia\/Thimphu", "Asia\/Tokyo", "Asia\/Ulaanbaatar", "Asia\/Urumqi", "Asia\/Ust-Nera", "Asia\/Vientiane", "Asia\/Vladivostok", "Asia\/Yakutsk", "Asia\/Yekaterinburg", "Asia\/Yerevan", "Atlantic\/Azores", "Atlantic\/Bermuda", "Atlantic\/Canary", "Atlantic\/Cape_Verde", "Atlantic\/Faroe", "Atlantic\/Madeira", "Atlantic\/Reykjavik", "Atlantic\/South_Georgia", "Atlantic\/St_Helena", "Atlantic\/Stanley", "Australia\/Adelaide", "Australia\/Brisbane", "Australia\/Broken_Hill", "Australia\/Currie", "Australia\/Darwin", "Australia\/Eucla", "Australia\/Hobart", "Australia\/Lindeman", "Australia\/Lord_Howe", "Australia\/Melbourne", "Australia\/Perth", "Australia\/Sydney", "Europe\/Amsterdam", "Europe\/Andorra", "Europe\/Astrakhan", "Europe\/Athens", "Europe\/Belgrade", "Europe\/Berlin", "Europe\/Bratislava", "Europe\/Brussels", "Europe\/Bucharest", "Europe\/Budapest", "Europe\/Busingen", "Europe\/Chisinau", "Europe\/Copenhagen", "Europe\/Dublin", "Europe\/Gibraltar", "Europe\/Guernsey", "Europe\/Helsinki", "Europe\/Isle_of_Man", "Europe\/Istanbul", "Europe\/Jersey", "Europe\/Kaliningrad", "Europe\/Kiev", "Europe\/Lisbon", "Europe\/Ljubljana", "Europe\/London", "Europe\/Luxembourg", "Europe\/Madrid", "Europe\/Malta", "Europe\/Mariehamn", "Europe\/Minsk", "Europe\/Monaco", "Europe\/Moscow", "Europe\/Oslo", "Europe\/Paris", "Europe\/Podgorica", "Europe\/Prague", "Europe\/Riga", "Europe\/Rome", "Europe\/Samara", "Europe\/San_Marino", "Europe\/Sarajevo", "Europe\/Simferopol", "Europe\/Skopje", "Europe\/Sofia", "Europe\/Stockholm", "Europe\/Tallinn", "Europe\/Tirane", "Europe\/Ulyanovsk", "Europe\/Uzhgorod", "Europe\/Vaduz", "Europe\/Vatican", "Europe\/Vienna", "Europe\/Vilnius", "Europe\/Volgograd", "Europe\/Warsaw", "Europe\/Zagreb", "Europe\/Zaporozhye", "Europe\/Zurich", "Indian\/Antananarivo", "Indian\/Chagos", "Indian\/Christmas", "Indian\/Cocos", "Indian\/Comoro", "Indian\/Kerguelen", "Indian\/Mahe", "Indian\/Maldives", "Indian\/Mauritius", "Indian\/Mayotte", "Indian\/Reunion", "Pacific\/Apia", "Pacific\/Auckland", "Pacific\/Bougainville", "Pacific\/Chatham", "Pacific\/Chuuk", "Pacific\/Easter", "Pacific\/Efate", "Pacific\/Enderbury", "Pacific\/Fakaofo", "Pacific\/Fiji", "Pacific\/Funafuti", "Pacific\/Galapagos", "Pacific\/Gambier", "Pacific\/Guadalcanal", "Pacific\/Guam", "Pacific\/Honolulu", "Pacific\/Johnston", "Pacific\/Kiritimati", "Pacific\/Kosrae", "Pacific\/Kwajalein", "Pacific\/Majuro", "Pacific\/Marquesas", "Pacific\/Midway", "Pacific\/Nauru", "Pacific\/Niue", "Pacific\/Norfolk", "Pacific\/Noumea", "Pacific\/Pago_Pago", "Pacific\/Palau", "Pacific\/Pitcairn", "Pacific\/Pohnpei", "Pacific\/Port_Moresby", "Pacific\/Rarotonga", "Pacific\/Saipan", "Pacific\/Tahiti", "Pacific\/Tarawa", "Pacific\/Tongatapu", "Pacific\/Wake", "Pacific\/Wallis", "UTC"]};
         return {
             body: body,
             status: 200,
@@ -2593,7 +3939,7 @@ export default {
     },
 
     ['GET *utilities/past-trips'] (pathMatch, query, request) {
-        let body = ["2004 Puerto Plata, Dominican Rep.","2005 Iquitos, Peru","2005 Leon, Nicaragua","2005 Cusco, Peru","2006 Belo Horizonte, Brazil","2006 Azua, Dominican Rep.","2006 Cap Haitien, Haiti","2007 Escuintla, Guatemala","2007 El Progreso, Honduras","2007 Cap-Hatien, Haiti","2008 Shillong, India","2008 Barahona, Dominican Rep.","2008 Puerto Cortes, Honduras","2008 Santa Cruz, Bolivia","2009 Managua, Nicaragua","2009 Petionville, Haiti","2010 Kurnool, India","2010 San Cristobal, Dominican Rep.","2010 Lima, Peru","2010 Warangal, India","2011 Meteti, Panama","2011 Andra Pradesh, India","2011 Lima, Peru","2011 Amazon River, Peru","2011 Croix-de-Bouquet, Haiti","2011 Bhimavaram, India","2012 Buriram, Thailand","2012 La Ceiba, Honduras","2012 Patna, India","2012 Quito, Ecuador","2012 Bangkok, Thailand","2012 Lima, Peru","2012 Hyderabad, India","2013 Patna, India","2013 1Nation1Day Honduras","2013 Hyderabad, India","2014 Yoro, Honduras","2014 Roatan, Honduras","2014 Kumasi, Ghana","2014 Lima, Peru","2014 Kathmandu, Nepal","2015 India","2015 1Nation1Day Dominican Republic","2015 Christmas in India","2016 India","2016 Ecuador","2016 Nicaragua","2016 Honduras 1N1D Follow up","2016 Nepal","2016 Christmas in India"];
+        let body = ["2004 Puerto Plata, Dominican Rep.", "2005 Iquitos, Peru", "2005 Leon, Nicaragua", "2005 Cusco, Peru", "2006 Belo Horizonte, Brazil", "2006 Azua, Dominican Rep.", "2006 Cap Haitien, Haiti", "2007 Escuintla, Guatemala", "2007 El Progreso, Honduras", "2007 Cap-Hatien, Haiti", "2008 Shillong, India", "2008 Barahona, Dominican Rep.", "2008 Puerto Cortes, Honduras", "2008 Santa Cruz, Bolivia", "2009 Managua, Nicaragua", "2009 Petionville, Haiti", "2010 Kurnool, India", "2010 San Cristobal, Dominican Rep.", "2010 Lima, Peru", "2010 Warangal, India", "2011 Meteti, Panama", "2011 Andra Pradesh, India", "2011 Lima, Peru", "2011 Amazon River, Peru", "2011 Croix-de-Bouquet, Haiti", "2011 Bhimavaram, India", "2012 Buriram, Thailand", "2012 La Ceiba, Honduras", "2012 Patna, India", "2012 Quito, Ecuador", "2012 Bangkok, Thailand", "2012 Lima, Peru", "2012 Hyderabad, India", "2013 Patna, India", "2013 1Nation1Day Honduras", "2013 Hyderabad, India", "2014 Yoro, Honduras", "2014 Roatan, Honduras", "2014 Kumasi, Ghana", "2014 Lima, Peru", "2014 Kathmandu, Nepal", "2015 India", "2015 1Nation1Day Dominican Republic", "2015 Christmas in India", "2016 India", "2016 Ecuador", "2016 Nicaragua", "2016 Honduras 1N1D Follow up", "2016 Nepal", "2016 Christmas in India"];
         return {
             body: body,
             status: 200,

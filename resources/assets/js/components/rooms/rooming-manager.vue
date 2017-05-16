@@ -581,40 +581,6 @@
 	                this.$root.$emit('showError', response.body.message)
                 });
             },
-            searchReservations(){
-                let params = {
-                    include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions',
-                    search: this.reservationsSearch,
-                    per_page: this.reservationsPerPage,
-                    page: this.reservationsPagination.current_page,
-                    current: true,
-                    ignore: this.excludeReservationIds,
-                };
-                if (this.isAdminRoute) {
-                    params.campaign = this.campaignId;
-                } else {
-                    params.groups = new Array(this.groupId);
-                    params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
-                }
-                /*$.extend(params, this.reservationFilters);
-                $.extend(params, {
-                    age: [this.ageMin, this.ageMax]
-                });*/
-                // this.$refs.spinner.show();
-                return this.$http.get('reservations', { params: params, before: function(xhr) {
-                    if (this.lastReservationRequest) {
-                        this.lastReservationRequest.abort();
-                    }
-                    this.lastReservationRequest = xhr;
-                } }).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.reservationsPagination = response.body.meta.pagination;
-                    // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
-            },
             getRoomTypes(){
                 return this.$http.get('rooming/types').then(function (response) {
                         return this.roomTypes = response.body.data;
@@ -780,24 +746,7 @@
             if (this.isAdminRoute) {
 
             } else {
-                promises.push(this.$http.get('users/' + this.userId, {
-                    params: {include: 'facilitating,managing.trips'}
-                }).then(function (response) {
-                    let user = response.body.data;
-                    let managing = [];
-                    if (user.facilitating.data.length) {
-                        this.reservationsFacilitator = true;
-                        let facilitating = _.pluck(user.facilitating.data, 'id');
-                        this.reservationsTrips = _.union(this.reservationsTrips, facilitating);
-                    }
-                    if (user.managing.data.length) {
-                        _.each(user.managing.data, function (group) {
-                            managing = _.union(managing, _.pluck(group.trips.data, 'id'));
-                        });
-                        this.reservationsTrips = _.union(this.reservationsTrips, managing);
-                    }
-                    this.includeReservationsManaging = true;
-                }));
+
             }
 
             promises.push(this.getPlans().then(function (plans) {

@@ -17,6 +17,7 @@
 	}
 </style>
 <script type="text/javascript">
+	import $ from 'jquery';
     /**
      * The array of names of the tooltip messages of the datetime picker.
      *

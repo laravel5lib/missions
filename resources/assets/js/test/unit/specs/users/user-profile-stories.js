@@ -9,7 +9,8 @@ import test from 'ava';
 //load the component with a vue instance
 RootInstance.template = '<div><user-profile-stories v-ref:test-component :id="userId"></user-profile-stories></div>';
 RootInstance.components = { 'user-profile-stories': require('../../../../components/users/user-profile-stories.vue') };
-const vm = new Vue(RootInstance).$mount();
+document.body.insertAdjacentHTML("afterbegin", "<app></app>");
+const vm = new Vue(RootInstance).$mount('app');
 
 let userProfileStoriesComponent = vm.$refs.testComponent;
 

@@ -98,6 +98,7 @@
 </template>
 <style></style>
 <script type="text/javascript">
+    import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
     import vSelect from 'vue-select';
     export default{
@@ -232,12 +233,18 @@
                     } else {
                         return this.airportsOptions;
                     }
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             },
             getAirport(reference){
                 return this.$http.get('utilities/airports/' + reference).then(function (response) {
                     return response.body.data;
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             },
             getCountries(search, loading){
                 loading ? loading(true) : void 0;
@@ -248,12 +255,19 @@
                     } else {
                         return this.countriesOptions;
                     }
-                })
+                },
+                    function (response) {
+                        console.log(response);
+                        return response;
+                    })
             },
             update(){
                 this.$http.put('hubs/' + this.hub.id, this.hub).then(function (response) {
                     this.$emit('showSuccess', 'Itinerary Station Updated');
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
             }
         },
         ready(){
@@ -296,10 +310,7 @@
                 // select airline
                 self.selectedAirportObj = _.findWhere(self.airportsOptions, { name: self.hub.name });
                 self.countryObj = _.findWhere(self.countriesOptions, { code: self.hub.country_code });
-                console.log(self.selectedAirportObj);
-
             });
-//            this.attemptSubmit = true;
         }
     }
 </script>

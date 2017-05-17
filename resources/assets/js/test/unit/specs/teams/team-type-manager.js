@@ -14,16 +14,17 @@ const vm = new Vue(RootInstance).$mount('app');
 
 let TeamTypeManager = vm.$refs.testComponent;
 
-test('teamTypes Array populated', t => {
-    t.truthy(this.teamTypes.length);
+test('teamTypes Array populated', (t) => {
+    t.truthy(TeamTypeManager.teamTypes.length);
 });
 
-test('edit form populates', t => {
+test('edit form populates', (t) => {
     TeamTypeManager.editType(TeamTypeManager.teamTypes[0]);
     t.true(TeamTypeManager.editTypeMode );
     t.isNot(TeamTypeManager.currentType.name, '');
 });
 
-test('form is valid', t => {
+test('form is valid', async (t) => {
+    await nextTick();
     t.true(TeamTypeManager.$TypeForm.valid);
 });

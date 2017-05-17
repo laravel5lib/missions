@@ -12,19 +12,19 @@ RootInstance.components = { 'teamManager': require('../../../../components/teams
 document.body.insertAdjacentHTML("afterbegin", "<app></app>");
 const vm = new Vue(RootInstance).$mount('app');
 
-let teamManagerComponent = vm.$refs.testComponent;
+let TeamManagerComponent = vm.$refs.testComponent;
 
-test.before('handle ready', async (t) => {
-    teamManagerComponent.isAdminRoute = true;
+/*test.before('handle ready', async (t) => {
+ TeamManagerComponent.isAdminRoute = true;
     await nextTick();
-});
+});*/
 
-test('get list of teams', (t) => {
-    teamManagerComponent.getTeams().then(result => {
+/*test('get list of teams', (t) => {
+ TeamManagerComponent.getTeams().then(result => {
         debugger;
     }, result => {
         debugger
     });
-});
+});*/
 
 

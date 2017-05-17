@@ -556,7 +556,6 @@
 				</div>
 			</div>
 
-
 			<div class="col-md-5">
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active">
@@ -767,7 +766,6 @@
 					</validator>
 				</div>
 			</modal>
-
 			<modal title="Delete Squad" small ok-text="Delete" :callback="deleteTeam" :show.sync="showTeamDeleteModal">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
@@ -775,7 +773,6 @@
 					</p>
 				</div>
 			</modal>
-
 			<modal title="Delete Group" small ok-text="Delete" :callback="deleteSquad" :show.sync="showSquadDeleteModal">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
@@ -783,7 +780,6 @@
 					</p>
 				</div>
 			</modal>
-
 			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :show.sync="showSquadCreateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadCreate">
@@ -796,7 +792,6 @@
 					</validator>
 				</div>
 			</modal>
-
 			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :show.sync="showSquadUpdateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadEdit" v-if="selectedSquadObj">

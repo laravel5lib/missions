@@ -9,7 +9,8 @@ import test from 'ava';
 //load the component with a vue instance
 RootInstance.template = '<div><team-manager v-ref:test-component ></team-manager></div>';
 RootInstance.components = { 'teamManager': require('../../../../components/teams/team-manager.vue') };
-const vm = new Vue(RootInstance).$mount();
+document.body.insertAdjacentHTML("afterbegin", "<app></app>");
+const vm = new Vue(RootInstance).$mount('app');
 
 let teamManagerComponent = vm.$refs.testComponent;
 

@@ -16,6 +16,7 @@ class OccupantTransformer extends TransformerAbstract {
     {
         return [
             'id'               => $occupant->id,
+            'avatar'           => $occupant->avatar ? image($occupant->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'given_names'      => $occupant->given_names,
             'surname'          => $occupant->surname,
             'age'              => $occupant->age,

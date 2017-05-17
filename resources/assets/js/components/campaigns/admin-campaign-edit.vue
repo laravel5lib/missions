@@ -193,7 +193,8 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import vSelect from "vue-select";
+    import _ from 'underscore';
+    import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
 	export default{
@@ -205,8 +206,6 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
-//				errors: [],
-
 				name: null,
 				country_code: null,
 				short_desc: null,
@@ -217,7 +216,6 @@
 				published_at_time: null,
 				page_url: null,
 				page_src: null,
-//				attemptSubmit: false,
 				selectedAvatar: { source: null },
 				avatar_upload_id: null,
 				selectedBanner: { source: null },
@@ -294,7 +292,8 @@
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
-						// this.$refs.spinner.hide();
+                        console.log(response);
+                        return error
 					});
 				} else {
 					this.showError = true;
@@ -305,7 +304,10 @@
 				// this.$refs.spinner.show();
 				this.resource.delete({id: this.campaignId}).then(function(response) {
 					window.location.href = '/admin/campaigns/'
-				});
+				}, function (response) {
+                    console.log(response);
+                    return response
+                });
 			}
 		},
 		events:{
@@ -328,7 +330,10 @@
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
-			});
+			}, function (response) {
+                console.log(response);
+                return response
+            });
 
 			// get campaign data
 			this.resource.get({id: this.campaignId}).then(function(response) {
@@ -347,8 +352,10 @@
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();
-			});
-
+			}, function (response) {
+                console.log(response);
+                return response
+            });
 		}
 	}
 

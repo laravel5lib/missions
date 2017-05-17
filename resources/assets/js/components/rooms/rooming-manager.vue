@@ -16,9 +16,15 @@
 							  <label>Occupancy Limit</label>
 							  <p class="small">{{currentRoom.type.data.rules.occupancy_limit}}</p>
 							  <label>Limited to Gender</label>
-							  <p class="small">{{currentRoom.type.data.rules.gender | capitalize}}</p>
+							  <p class="small">
+								  <template v-if="currentRoom.type.data.rules.gender"></template>
+								    Yes<span v-if="currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+								  <template v-else>
+									  No
+								  </template>
+							  </p>
 							  <label>Limited to Status</label>
-							  <p class="small">{{currentRoom.type.data.rules.status | capitalize}}</p>
+							  <p class="small">{{currentRoom.type.data.rules.married_only ? 'Married Only' : 'No' }}</p>
 						  </div><!-- end col -->
 						  <div class="col-sm-6">
 							  <label>Current Number of Occupants</label>
@@ -79,10 +85,10 @@
 										  </div><!-- end row -->
 									  </div><!-- end panel-body -->
 								  </div>
-								  <!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+								  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
 									  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-									  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-								  </div>-->
+									  <!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
+								  </div>
 							  </div>
 						  </div>
 					  </template>
@@ -338,7 +344,7 @@
 									</div><!-- end row -->
 								</div><!-- end panel-body -->
 							</div>
-							<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+							<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length">
 								<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
 								<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 							</div>
@@ -546,6 +552,30 @@
 	                return occupant.room_leader;
                 });
             },
+            companionsPresentRoom(member, room) {
+                let memberIds = _.filter(_.pluck(room.occupants, 'id'), function (id) { return id !== member.id; });
+                let companionIds = _.pluck(member.companions.data, 'id');
+                let presentIds = [];
+                _.each(memberIds, function (id) {
+                    if (_.contains(companionIds, id))
+                        presentIds.push(id);
+                });
+                return member.present_companions = companionIds.length - presentIds.length;
+            },
+            companionsPresentTeam(member) {
+                let memberIds = [];
+                //_.each(this.currentSquadGroups, function (squad) {
+                    memberIds = _.pluck(this.currentTeamMembers, 'id');
+                //});
+                memberIds = _.filter(memberIds, function (id) { return id !== member.id; });
+                let companionIds = _.pluck(member.companions.data, 'id');
+                let presentIds = [];
+                _.each(memberIds, function (id) {
+                    if (_.contains(companionIds, id))
+                        presentIds.push(id);
+                });
+                return member.present_companions_team = companionIds.length - presentIds.length;
+            },
             removeFromRoom(occupant, room) {
                 return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {
                     room.occupants = _.reject(room.occupants, function (member) {
@@ -579,40 +609,6 @@
                     this.currentPlan.occupants_count++;
                 }, function (response) {
 	                this.$root.$emit('showError', response.body.message)
-                });
-            },
-            searchReservations(){
-                let params = {
-                    include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions',
-                    search: this.reservationsSearch,
-                    per_page: this.reservationsPerPage,
-                    page: this.reservationsPagination.current_page,
-                    current: true,
-                    ignore: this.excludeReservationIds,
-                };
-                if (this.isAdminRoute) {
-                    params.campaign = this.campaignId;
-                } else {
-                    params.groups = new Array(this.groupId);
-                    params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
-                }
-                /*$.extend(params, this.reservationFilters);
-                $.extend(params, {
-                    age: [this.ageMin, this.ageMax]
-                });*/
-                // this.$refs.spinner.show();
-                return this.$http.get('reservations', { params: params, before: function(xhr) {
-                    if (this.lastReservationRequest) {
-                        this.lastReservationRequest.abort();
-                    }
-                    this.lastReservationRequest = xhr;
-                } }).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.reservationsPagination = response.body.meta.pagination;
-                    // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
                 });
             },
             getRoomTypes(){
@@ -780,24 +776,7 @@
             if (this.isAdminRoute) {
 
             } else {
-                promises.push(this.$http.get('users/' + this.userId, {
-                    params: {include: 'facilitating,managing.trips'}
-                }).then(function (response) {
-                    let user = response.body.data;
-                    let managing = [];
-                    if (user.facilitating.data.length) {
-                        this.reservationsFacilitator = true;
-                        let facilitating = _.pluck(user.facilitating.data, 'id');
-                        this.reservationsTrips = _.union(this.reservationsTrips, facilitating);
-                    }
-                    if (user.managing.data.length) {
-                        _.each(user.managing.data, function (group) {
-                            managing = _.union(managing, _.pluck(group.trips.data, 'id'));
-                        });
-                        this.reservationsTrips = _.union(this.reservationsTrips, managing);
-                    }
-                    this.includeReservationsManaging = true;
-                }));
+
             }
 
             promises.push(this.getPlans().then(function (plans) {

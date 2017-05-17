@@ -42,6 +42,20 @@
 						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 							   :debounce="250" placeholder="Tag, tag2, tag3...">
 					</div> -->
+
+					<div class="form-group" v-if="isAdminRoute">
+						<label>Trip Type</label>
+						<select  class="form-control input-sm" v-model="reservationFilters.type">
+							<option value="">Any Type</option>
+							<option value="ministry">Ministry</option>
+							<option value="family">Family</option>
+							<option value="international">International</option>
+							<option value="media">Media</option>
+							<option value="medical">Medical</option>
+							<option value="leader">Leader</option>
+						</select>
+					</div>
+
 					<div class="form-group">
 						<label>Role</label>
 						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
@@ -880,7 +894,8 @@
                 groupsOptions: [],
                 // reservations filters
 	            reservationFilters: {
-                    groups: [],
+                    type: '',
+		            groups: [],
 		            gender: '',
 		            status: '',
                     hasCompanions: '',

@@ -85,10 +85,10 @@
 										  </div><!-- end row -->
 									  </div><!-- end panel-body -->
 								  </div>
-								  <!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+								  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
 									  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-									  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-								  </div>-->
+									  <!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
+								  </div>
 							  </div>
 						  </div>
 					  </template>
@@ -344,7 +344,7 @@
 									</div><!-- end row -->
 								</div><!-- end panel-body -->
 							</div>
-							<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+							<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length">
 								<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
 								<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 							</div>
@@ -551,6 +551,30 @@
                 return _.some(room.occupants, function (occupant) {
 	                return occupant.room_leader;
                 });
+            },
+            companionsPresentRoom(member, room) {
+                let memberIds = _.filter(_.pluck(room.occupants, 'id'), function (id) { return id !== member.id; });
+                let companionIds = _.pluck(member.companions.data, 'id');
+                let presentIds = [];
+                _.each(memberIds, function (id) {
+                    if (_.contains(companionIds, id))
+                        presentIds.push(id);
+                });
+                return member.present_companions = companionIds.length - presentIds.length;
+            },
+            companionsPresentTeam(member) {
+                let memberIds = [];
+                //_.each(this.currentSquadGroups, function (squad) {
+                    memberIds = _.pluck(this.currentTeamMembers, 'id');
+                //});
+                memberIds = _.filter(memberIds, function (id) { return id !== member.id; });
+                let companionIds = _.pluck(member.companions.data, 'id');
+                let presentIds = [];
+                _.each(memberIds, function (id) {
+                    if (_.contains(companionIds, id))
+                        presentIds.push(id);
+                });
+                return member.present_companions_team = companionIds.length - presentIds.length;
             },
             removeFromRoom(occupant, room) {
                 return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {

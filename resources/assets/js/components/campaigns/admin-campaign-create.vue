@@ -156,6 +156,8 @@
 
 </template>
 <script type="text/javascript">
+	import jQuery from 'jquery';
+    import _ from 'underscore';
 	import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
@@ -203,10 +205,6 @@
 			}
 		},
 		methods: {
-			/*checkForError(field){
-				// if user clicked submit button while the field is invalid trigger error styles 
-				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
-			},*/
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 			},
@@ -232,6 +230,7 @@
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
+						// TODO use global alert
 						// this.$refs.spinner.hide();
 					});
 				} else {
@@ -256,9 +255,13 @@
 			}
 		},
 		ready(){
+			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
-			});
+				// this.$refs.spinner.hide();
+			}, function (response) {
+                console.log(response);
+            });
 		}
 	}
 </script> 

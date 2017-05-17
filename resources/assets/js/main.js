@@ -78,6 +78,7 @@ import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
 import teamManager from './components/teams/team-manager.vue';
+import teamTypeManager from './components/teams/team-type-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -159,7 +160,6 @@ require('bootstrap-sass');
 // require('tether');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
-
 
 window.AOS = require('aos');
 AOS.init();
@@ -882,6 +882,7 @@ new Vue({
         dashboardGroupReservations,
         dashboardInterestsList,
         teamManager,
+        teamTypeManager,
         reportsList,
 
         // admin components

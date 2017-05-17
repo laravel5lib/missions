@@ -42,6 +42,20 @@
 						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 							   :debounce="250" placeholder="Tag, tag2, tag3...">
 					</div> -->
+
+					<div class="form-group" v-if="isAdminRoute">
+						<label>Trip Type</label>
+						<select  class="form-control input-sm" v-model="reservationFilters.type">
+							<option value="">Any Type</option>
+							<option value="ministry">Ministry</option>
+							<option value="family">Family</option>
+							<option value="international">International</option>
+							<option value="media">Media</option>
+							<option value="medical">Medical</option>
+							<option value="leader">Leader</option>
+						</select>
+					</div>
+
 					<div class="form-group">
 						<label>Role</label>
 						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
@@ -556,7 +570,6 @@
 				</div>
 			</div>
 
-
 			<div class="col-md-5">
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active">
@@ -767,7 +780,6 @@
 					</validator>
 				</div>
 			</modal>
-
 			<modal title="Delete Squad" small ok-text="Delete" :callback="deleteTeam" :show.sync="showTeamDeleteModal">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
@@ -775,7 +787,6 @@
 					</p>
 				</div>
 			</modal>
-
 			<modal title="Delete Group" small ok-text="Delete" :callback="deleteSquad" :show.sync="showSquadDeleteModal">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
@@ -783,7 +794,6 @@
 					</p>
 				</div>
 			</modal>
-
 			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :show.sync="showSquadCreateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadCreate">
@@ -796,7 +806,6 @@
 					</validator>
 				</div>
 			</modal>
-
 			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :show.sync="showSquadUpdateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadEdit" v-if="selectedSquadObj">
@@ -818,6 +827,7 @@
 </style>
 <script type="text/javascript">
 	import _ from 'underscore';
+	import $ from 'jquery';
 	import vSelect from 'vue-select';
     export default{
         name: 'team-manager',
@@ -885,7 +895,8 @@
                 groupsOptions: [],
                 // reservations filters
 	            reservationFilters: {
-                    groups: [],
+                    type: '',
+		            groups: [],
 		            gender: '',
 		            status: '',
                     hasCompanions: '',
@@ -1589,27 +1600,7 @@
             if (this.isAdminRoute) {
 
             } else {
-                promises.push(this.$http.get('users/' + this.userId, {
-                    params: {include: 'facilitating,managing.trips'}
-                }).then(function (response) {
-                    let user = response.body.data;
-                    let managing = [];
 
-                    if (user.facilitating.data.length) {
-                        this.reservationsFacilitator = true;
-                        let facilitating = _.pluck(user.facilitating.data, 'id');
-                        this.reservationsTrips = _.union(this.reservationsTrips, facilitating);
-                    }
-
-                    if (user.managing.data.length) {
-                        _.each(user.managing.data, function (group) {
-                            managing = _.union(managing, _.pluck(group.trips.data, 'id'));
-                        });
-                        this.reservationsTrips = _.union(this.reservationsTrips, managing);
-                    }
-
-                    this.includeReservationsManaging = true;
-                }));
             }
             promises.push(this.getTeamTypes());
             promises.push(this.getTeams());
@@ -1621,6 +1612,9 @@
 		            roles.push(code);
                 });
 	            this.leadershipRoles = roles;
+            }, function (error) {
+                console.log(error);
+                return error;
             }));
 
             Promise.all(promises).then(function (values) {

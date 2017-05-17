@@ -327,10 +327,11 @@
 
 <script type="text/javascript">
     import $ from 'jquery';
+    import _ from 'underscore';
     import moment from 'moment';
     import timezone from 'moment-timezone';
     import vSelect from "vue-select";
-    module.exports = {
+    export default {
         name: 'login',
         components: {vSelect},
         data: function () {
@@ -513,11 +514,17 @@
 
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.body.countries;
-            });
+            },
+                function (response) {
+                    console.log(response);
+                });
 
             this.$http.get('utilities/timezones').then(function (response) {
                 this.timezones = response.body.timezones;
-            });
+            },
+                function (response) {
+                    console.log(response);
+                });
 
             if (this.isChildComponent) {
                 // After reload from login / registration

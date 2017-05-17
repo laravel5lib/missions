@@ -9,7 +9,8 @@ import test from 'ava';
 //load the component with a vue instance
 RootInstance.template = '<div><login v-ref:test-component></login></div>';
 RootInstance.components = { 'login' : require('../../../components/login.vue') };
-const vm = new Vue(RootInstance).$mount();
+document.body.insertAdjacentHTML("afterbegin", "<app></app>");
+const vm = new Vue(RootInstance).$mount('app');
 
 let loginComponent = vm.$refs.testComponent;
 let event = {

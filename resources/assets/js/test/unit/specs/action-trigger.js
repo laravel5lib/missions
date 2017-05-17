@@ -8,6 +8,7 @@ import test from 'ava';
 import ActionTrigger from '../../../components/action-trigger.vue';
 
 //load the component with a vue instance
+document.body.insertAdjacentHTML("afterbegin", "<app></app>");
 const vm = new Vue({
     template: '<div><action-trigger v-ref:test-component :text="text" :event="event" :icon="icon" :size="size"></action-trigger></div>',
     components: {
@@ -30,8 +31,7 @@ const vm = new Vue({
             this.action();
         })
     }
-}).$mount();
-
+}).$mount('app');
 let trigger = vm.$refs.testComponent;
 
 test.beforeEach('set variables', (t) => {

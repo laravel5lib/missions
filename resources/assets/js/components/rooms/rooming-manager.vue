@@ -16,9 +16,15 @@
 							  <label>Occupancy Limit</label>
 							  <p class="small">{{currentRoom.type.data.rules.occupancy_limit}}</p>
 							  <label>Limited to Gender</label>
-							  <p class="small">{{currentRoom.type.data.rules.gender | capitalize}}</p>
+							  <p class="small">
+								  <template v-if="currentRoom.type.data.rules.gender"></template>
+								    Yes<span v-if="currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+								  <template v-else>
+									  No
+								  </template>
+							  </p>
 							  <label>Limited to Status</label>
-							  <p class="small">{{currentRoom.type.data.rules.status | capitalize}}</p>
+							  <p class="small">{{currentRoom.type.data.rules.married_only ? 'Married Only' : 'No' }}</p>
 						  </div><!-- end col -->
 						  <div class="col-sm-6">
 							  <label>Current Number of Occupants</label>

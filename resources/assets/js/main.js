@@ -214,7 +214,7 @@ Vue.http.interceptors.push(function(request, next) {
     // modify request
     var token, headers;
 
-    token = 'Bearer ' + $.cookie('api_token');
+    token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
     headers = request.headers || (request.headers = {});
 
@@ -758,6 +758,9 @@ Vue.mixin({
         isAdminRoute() {
             return this.firstUrlSegment == 'admin';
         },
+        isDashboardRoute() {
+            return this.firstUrlSegment == 'dashboard';
+        },
     },
     ready() {
         function isTouchDevice() {
@@ -795,7 +798,7 @@ new Vue({
             return this.$cookie.get('impersonate');
         },
         user() {
-            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(localStorage.getItem('user'));
+            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
         },
     },
     components: {
@@ -980,6 +983,14 @@ new Vue({
             // Save user info
             this.user = user;
             this.authenticated = true;
+        },
+        fetchUser() {
+            if (localStorage.hasOwnProperty('user')) {
+                JSON.parse(localStorage.getItem('user'))
+            } else {
+                if (this.isAdminRoute || this.isDashboardRoute)
+                    window.location = '/logout';
+            }
         },
         getImpersonatedUser: function () {
             if (this.impersonatedUser !== null) {

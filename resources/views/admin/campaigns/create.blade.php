@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/css/slim.css" type="text/css">
 @endsection
 @section('scripts')
-    <script src="/js/slim.js"></script>
+    {{--<script src="/js/slim.js"></script>--}}
 @endsection
 
 @section('content')

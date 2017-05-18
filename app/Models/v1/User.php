@@ -694,7 +694,7 @@ class User extends Authenticatable implements JWTSubject
              ->pluck('requirements')
              ->flatten()
              ->reject(function($item) {
-                 $item->status = 'incomplete' || 'attention';
+                 return $item->status == 'complete';
              })
              ->sortBy('due_at');
 

@@ -989,12 +989,10 @@ new Vue({
                 return JSON.parse(localStorage.getItem('user'))
             } else {
                 let that = this;
-                that.$http.get('users/me?include=roles,abilities')
+                this.$http.get('users/me?include=roles,abilities')
                     .then(function (response) {
                             that.$root.$emit('userHasLoggedIn', response.body.data);
-                            // that.$dispatch('userHasLoggedIn', response.body.data);
                             return response.body.data;
-
                         },
                         function (response) {
                             if (this.isAdminRoute || this.isDashboardRoute)

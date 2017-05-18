@@ -986,7 +986,7 @@ new Vue({
         },
         fetchUser() {
             if (localStorage.hasOwnProperty('user')) {
-                JSON.parse(localStorage.getItem('user'))
+                return JSON.parse(localStorage.getItem('user'))
             } else {
                 if (this.isAdminRoute || this.isDashboardRoute)
                     window.location = '/logout';

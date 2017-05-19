@@ -115,7 +115,12 @@ class UtilitiesController extends Controller
         ];
 
         Mail::queue('emails.speaker', ['data' => $data], function ($m) use ($data) {
-            $m->to('go@missions.me', 'Missions.me')->subject('Speaker Request from Missions.Me Visitor!');
+            $m->to('mail@missions.me', 'Missions.me')
+              ->cc('dominicrusso@me.com', 'Dominic Russo')
+              ->cc('cat@missions.me', 'Cat Keena')
+              ->cc('jedidiah@missions.me', 'Jedidiah Thurner')
+              ->cc('gabe@missions.me', 'Gabe Bahlhorn')
+              ->subject('Speaker Request from Missions.Me Visitor!');
         });
 
     }

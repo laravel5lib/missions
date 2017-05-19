@@ -487,7 +487,8 @@
             },
             currentRoom(val) {
                 //val.rooms = val.rooms || [];
-	            this.getOccupants();
+	            if (val)
+	                this.getOccupants();
 	            this.getTeams();
             }
 	    },
@@ -662,6 +663,7 @@
                 return this.$http.get('rooming/rooms', { params: params })
 	                .then(function (response) {
                         plan.rooms = response.body.data;
+                        debugger
 		                if (plan.id === this.currentPlan.id)
 		                    this.currentRooms = response.body.data;
                     },

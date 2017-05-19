@@ -2051,7 +2051,26 @@ export default {
         let body = {
             "data": {
                 "id": "a4c704f0-f5f7-4c6c-8134-e0e67232305a",
-                "type": request.body.type.name,
+                "type": {
+                    "data": {
+                        "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                        "name": "family standard",
+                        "rules": {
+                            "same_gender": false,
+                            "married_only": false,
+                            "occupancy_limit": 4
+                        },
+                        "created_at": "2017-05-05 19:13:16",
+                        "updated_at": "2017-05-05 19:13:16",
+                        "deleted_at": null,
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                            }
+                        ]
+                    }
+                },
                 "label": request.body.label,
                 "occupants_count": 0,
                 "created_at": "2017-05-08 19:02:06",

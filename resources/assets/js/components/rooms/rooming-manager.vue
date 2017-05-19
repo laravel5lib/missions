@@ -18,7 +18,7 @@
 							  <label>Limited to Gender</label>
 							  <p class="small">
 								  <template v-if="currentRoom.type.data.rules.gender"></template>
-								    Yes<span v-if="currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+								    Yes<span v-if="currentRoom.occupants && currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
 								  <template v-else>
 									  No
 								  </template>
@@ -35,7 +35,7 @@
 						  </div><!-- end col -->
 					  </div><!-- end row -->
 					  <h4 class="text-center">Room Details</h4>
-					  <template v-if="currentRoom.occupants.length">
+					  <template v-if="currentRoom.occupants && currentRoom.occupants.length">
 						  <div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
 							  <div class="panel panel-default" v-for="member in currentRoom.occupants">
 								  <div class="panel-heading" role="tab" id="headingOne">

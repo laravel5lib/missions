@@ -112,7 +112,7 @@
 						<label>Travel Companions</label>
 						<div>
 							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" value=""> Any
+								<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" :value=""> Any
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
@@ -308,10 +308,10 @@
 																			<p class="small">{{member.gender | capitalize}}</p>
 																			<label>Marital Status</label>
 																			<p class="small">{{member.status | capitalize}}</p>
-																			<template v-if="reservation.companions.data.length">
+																			<template v-if="member.companions.data.length">
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
-																					<li v-for="companion in reservation.companions.data">
+																					<li v-for="companion in member.companions.data">
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
 																					</li>
 																				</ul>
@@ -421,10 +421,10 @@
 																			<p class="small">{{member.gender | capitalize}}</p>
 																			<label>Marital Status</label>
 																			<p class="small">{{member.status | capitalize}}</p>
-																			<template v-if="reservation.companions.data.length">
+																			<template v-if="member.companions.data.length">
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
-																					<li v-for="companion in reservation.companions.data">
+																					<li v-for="companion in member.companions.data">
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
 																					</li>
 																				</ul>
@@ -899,7 +899,7 @@
 		            groups: [],
 		            gender: '',
 		            status: '',
-                    hasCompanions: '',
+                    hasCompanions: null,
                     role: ''
                 },
 	            membersFilters: {
@@ -1318,7 +1318,7 @@
 	                            });
                             });
 
-                        if (this.newTeamGroup)    
+                        if (this.newTeamGroup && this.newTeamGroup.id)
                             associations.push({
                                 type: 'groups',
                                 id: this.newTeamGroup.id
@@ -1336,10 +1336,12 @@
                                 type: 'campaigns',
                                 id: this.campaignId
                             });
-                        associations.push({
-                            type: 'groups',
-                            id: this.groupId
-                        });
+                        if (this.groupId) {
+                            associations.push({
+                                type: 'groups',
+                                id: this.groupId
+                            });
+                        }
                     }
                     let data = {
                         type_id: this.newTeamType,
@@ -1598,7 +1600,9 @@
             let self = this;
             let promises = [];
             if (this.isAdminRoute) {
-
+                //campaign already scoped
+                this.newTeamCampaigns = [{id: this.campaignId}];
+                promises.push(this.getGroups());
             } else {
 
             }

@@ -79,7 +79,9 @@ test('set active room', t => {
 });
 
 test('finding room leader', t => {
-    t.notThrows(RoomingManager.roomHasLeader(RoomingManager.currentRoom));
+    t.notThrows(function () {
+        RoomingManager.roomHasLeader(RoomingManager.currentRoom)
+    });
 });
 
 // TODO test add/remove occupants to rooms

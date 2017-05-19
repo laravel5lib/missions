@@ -311,6 +311,9 @@ Vue.filter('moment', {
         return moment(val).local().utc().format(format);
     }
 });
+Vue.filter('underscoreToSpace', function (value) {
+    return value.replace(/_/g, ' ');
+});
 
 let RootInstance = {
     http: {

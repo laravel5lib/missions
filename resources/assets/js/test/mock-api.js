@@ -1956,7 +1956,26 @@ export default {
             "data": [
                 {
                     "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
-                    "type": "Standard",
+                    "type": {
+                        "data": {
+                            "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                            "name": "family standard",
+                            "rules": {
+                                "same_gender": false,
+                                "married_only": false,
+                                "occupancy_limit": 4
+                            },
+                            "created_at": "2017-05-05 19:13:16",
+                            "updated_at": "2017-05-05 19:13:16",
+                            "deleted_at": null,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                                }
+                            ]
+                        }
+                    },
                     "label": null,
                     "occupants_count": 1,
                     "created_at": "2017-05-08 19:02:06",
@@ -1971,7 +1990,26 @@ export default {
                 },
                 {
                     "id": "6f38147e-f876-4b68-9970-7b90354cd519",
-                    "type": "Married (double)",
+                    "type": {
+                        data: {
+                            "id": "45d67733-8b03-442f-b24b-0ebcc8681dc7",
+                            "name": "double",
+                            "rules": {
+                                "same_gender": false,
+                                "married_only": false,
+                                "occupancy_limit": 2
+                            },
+                            "created_at": "2017-05-05 18:52:44",
+                            "updated_at": "2017-05-05 18:52:44",
+                            "deleted_at": null,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "/api/rooming/types/45d67733-8b03-442f-b24b-0ebcc8681dc7"
+                                }
+                            ]
+                        }
+                    },
                     "label": null,
                     "occupants_count": 4,
                     "created_at": "2017-05-08 19:01:46",
@@ -2013,7 +2051,26 @@ export default {
         let body = {
             "data": {
                 "id": "a4c704f0-f5f7-4c6c-8134-e0e67232305a",
-                "type": request.body.type.name,
+                "type": {
+                    "data": {
+                        "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                        "name": "family standard",
+                        "rules": {
+                            "same_gender": false,
+                            "married_only": false,
+                            "occupancy_limit": 4
+                        },
+                        "created_at": "2017-05-05 19:13:16",
+                        "updated_at": "2017-05-05 19:13:16",
+                        "deleted_at": null,
+                        "links": [
+                            {
+                                "rel": "self",
+                                "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                            }
+                        ]
+                    }
+                },
                 "label": request.body.label,
                 "occupants_count": 0,
                 "created_at": "2017-05-08 19:02:06",
@@ -2038,24 +2095,95 @@ export default {
 
     },
     // Rooms
-    ['GET *rooming/rooms'] (pathMatch, query, request) {
+    ['GET *rooming/rooms(/:room)'] (pathMatch, query, request) {
         let body = {
-            "data": {
-                "id": "601395e6-3635-4001-b2df-f800a6349669",
-                "type": "Triple",
-                "label": null,
-                "occupants_count": null,
-                "created_at": "2017-05-09 16:44:22",
-                "updated_at": "2017-05-09 16:44:22",
-                "deleted_at": null,
-                "links": [
-                    {
-                        "rel": "self",
-                        "uri": "/api/rooming/rooms/601395e6-3635-4001-b2df-f800a6349669"
-                    }
-                ]
+            "data": [
+                {
+                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
+                    "type": {
+                        "data": {
+                            "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                            "name": "family standard",
+                            "rules": {
+                                "same_gender": false,
+                                "married_only": false,
+                                "occupancy_limit": 4
+                            },
+                            "created_at": "2017-05-05 19:13:16",
+                            "updated_at": "2017-05-05 19:13:16",
+                            "deleted_at": null,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                                }
+                            ]
+                        }
+                    },
+                    "label": null,
+                    "occupants_count": 1,
+                    "created_at": "2017-05-08 19:02:06",
+                    "updated_at": "2017-05-08 19:02:06",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
+                        }
+                    ]
+                },
+                {
+                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
+                    "type": {
+                        "data": {
+                            "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                            "name": "family standard",
+                            "rules": {
+                                "same_gender": false,
+                                "married_only": false,
+                                "occupancy_limit": 4
+                            },
+                            "created_at": "2017-05-05 19:13:16",
+                            "updated_at": "2017-05-05 19:13:16",
+                            "deleted_at": null,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                                }
+                            ]
+                        }
+                    },
+                    "label": null,
+                    "occupants_count": 4,
+                    "created_at": "2017-05-08 19:01:46",
+                    "updated_at": "2017-05-08 19:01:46",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 4,
+                    "count": 4,
+                    "per_page": 15,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
             }
         };
+
+        if (pathMatch.room) {
+            body.data = _.findWhere(body.data, {id: pathMatch.room});
+            delete body.meta;
+        }
+
 
         return {
             body: body,
@@ -2085,7 +2213,26 @@ export default {
                 },
                 {
                     "id": "6f38147e-f876-4b68-9970-7b90354cd519",
-                    "type": "Married (double)",
+                    "type": {
+                        data: {
+                            "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                            "name": "family standard",
+                            "rules": {
+                                "same_gender": false,
+                                "married_only": false,
+                                "occupancy_limit": 4
+                            },
+                            "created_at": "2017-05-05 19:13:16",
+                            "updated_at": "2017-05-05 19:13:16",
+                            "deleted_at": null,
+                            "links": [
+                                {
+                                    "rel": "self",
+                                    "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                                }
+                            ]
+                        }
+                    },
                     "label": null,
                     "occupants_count": 4,
                     "created_at": "2017-05-08 19:01:46",
@@ -2124,7 +2271,60 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
+    // Occupants
+    ['GET *rooming/rooms/:room/occupants(/:occupant)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "00278bf7-f1a6-3fc9-b863-8f42c41ab3c9",
+                    "given_names": "Lourdes Davon",
+                    "surname": "Weimann",
+                    "age": 46,
+                    "gender": "female",
+                    "status": "married",
+                    "room_leader": false,
+                    "created_at": "2017-05-09 15:21:17",
+                    "updated_at": "2017-05-09 15:21:17",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80/occupants/00278bf7-f1a6-3fc9-b863-8f42c41ab3c9"
+                        }
+                    ]
+                },
+                {
+                    "id": "00c91cff-87ab-3a49-b741-f2a47c7d3a2f",
+                    "given_names": "Cleo Alexane",
+                    "surname": "Ondricka",
+                    "age": 52,
+                    "gender": "female",
+                    "status": "single",
+                    "room_leader": true,
+                    "created_at": "2017-05-09 17:12:45",
+                    "updated_at": "2017-05-09 17:12:45",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80/occupants/00c91cff-87ab-3a49-b741-f2a47c7d3a2f"
+                        }
+                    ]
+                }
+            ]
+        };
 
+        if (pathMatch.occupant) {
+            body.data = _.findWhere(body.data, {id: pathMatch.occupant});
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
 
     // Travel Itineraries API
     ['GET *itineraries/:id'] (pathMatch, query, request) {

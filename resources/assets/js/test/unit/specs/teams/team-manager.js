@@ -14,17 +14,17 @@ const vm = new Vue(RootInstance).$mount('app');
 
 let TeamManagerComponent = vm.$refs.testComponent;
 
-/*test.before('handle ready', async (t) => {
+test.before('handle ready', async (t) => {
  TeamManagerComponent.isAdminRoute = true;
     await nextTick();
-});*/
+});
 
-/*test('get list of teams', (t) => {
+test('get list of teams', (t) => {
  TeamManagerComponent.getTeams().then(result => {
         debugger;
     }, result => {
         debugger
     });
-});*/
+});
 
 

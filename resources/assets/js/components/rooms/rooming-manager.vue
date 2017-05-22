@@ -6,6 +6,7 @@
 
 		    <!-- Occupants List -->
 		    <template v-if="currentRoom">
+<<<<<<< HEAD
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5>{{(currentRoom.label ? (currentRoom.label + ' &middot; ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} <span class="small">&middot; Details</span></h5>
@@ -29,7 +30,7 @@
 							<div class="col-sm-5 text-right">
 								<p class="small" style="margin:3px 0;">
 									  <template v-if="currentRoom.type.data.rules.gender"></template>
-									    Yes<span v-if="currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+									    Yes<span v-if="currentRoom.occupants && currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
 									  <template v-else>
 										  No
 									  </template>
@@ -569,7 +570,8 @@
             },
             currentRoom(val) {
                 //val.rooms = val.rooms || [];
-	            this.getOccupants();
+	            if (val)
+	                this.getOccupants();
 	            this.getTeams();
             }
 	    },

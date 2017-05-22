@@ -1468,7 +1468,8 @@
 	        },
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
-                $('.nav-tabs a[href="#reservations"]').tab('show');
+	            if (_.isFunction($.fn.tab))
+                    $('.nav-tabs a[href="#reservations"]').tab('show');
             },
             updateCurrentTeamType() {
                 if (this.currentTeam.type_id !== this.currentTeam.type.data.id) {

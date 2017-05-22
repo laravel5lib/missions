@@ -6,109 +6,151 @@
 
 		    <!-- Occupants List -->
 		    <template v-if="currentRoom">
-			  <div class="panel panel-default">
-				  <div class="panel-heading">
-					  <h5>{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}}: Occupants</h5>
-				  </div>
-				  <div class="panel-body">
-					  <div class="row">
-						  <div class="col-sm-6">
-							  <label>Occupancy Limit</label>
-							  <p class="small">{{currentRoom.type.data.rules.occupancy_limit}}</p>
-							  <label>Limited to Gender</label>
-							  <p class="small">
-								  <template v-if="currentRoom.type.data.rules.gender"></template>
-								    Yes<span v-if="currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
-								  <template v-else>
-									  No
-								  </template>
-							  </p>
-							  <label>Limited to Status</label>
-							  <p class="small">{{currentRoom.type.data.rules.married_only ? 'Married Only' : 'No' }}</p>
-						  </div><!-- end col -->
-						  <div class="col-sm-6">
-							  <label>Current Number of Occupants</label>
-							  <p class="small">{{currentRoom.occupants_count}}</p>
-							  <label>Room Leader</label>
-							  <p class="small" v-if="currentRoomHasLeader">{{ currentRoomHasLeader.surname }}, {{ currentRoomHasLeader.given_names | capitalize }}</p>
-							  <p class="small" v-else>None Set</p>
-						  </div><!-- end col -->
-					  </div><!-- end row -->
-					  <h5>Room Occupants</h5>
-					  <hr class="divider">
-						  <template v-if="currentRoom.occupants.length">
-							  <div id="occupantsAccordion" role="tablist" aria-multiselectable="true">
-								  <div class="panel panel-default" v-for="member in currentRoom.occupants">
-									  <div class="panel-heading" role="tab" id="headingOne">
-										  <h5 class="panel-title">
-											  <div class="row">
-												  <div class="col-xs-7">
-													  <a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-														  <img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-														  {{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span><br>
-														  <!--<label>{{ member.desired_role.name }}</label>-->
-													  </a>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5>{{(currentRoom.label ? (currentRoom.label + ' &middot; ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} <span class="small">&middot; Details</span></h5>
+				</div><!-- end panel-heading -->
+				<div class="panel-body">
+				<div class="row">
+					<div class="col-sm-5">
+						<div class="row">
+							<div class="col-sm-8">
+								<label>Occupancy Limit</label>
+							</div><!-- end col -->
+							<div class="col-sm-4 text-right">
+								<p class="small" style="margin:3px 0;">{{currentRoom.type.data.rules.occupancy_limit}}</p>
+							</div><!-- end col -->
+						</div><!-- end row -->
+						<hr class="divider sm">
+						<div class="row">
+							<div class="col-sm-7">
+								<label>Limited to Gender</label>
+							</div><!-- end col -->
+							<div class="col-sm-5 text-right">
+								<p class="small" style="margin:3px 0;">
+									  <template v-if="currentRoom.type.data.rules.gender"></template>
+									    Yes<span v-if="currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+									  <template v-else>
+										  No
+									  </template>
+								</p>
+							</div><!-- end col -->
+						</div><!-- end row -->
+						<hr class="divider sm">
+						<div class="row">
+							<div class="col-sm-8">
+								  <label>Limited to Status</label>
+							</div><!-- end col -->
+							<div class="col-sm-4 text-right">
+								<p class="small" style="margin:3px 0;">{{currentRoom.type.data.rules.married_only ? 'Married Only' : 'No' }}</p>
+							</div><!-- end col -->
+						</div><!-- end row -->
+						<hr class="divider sm">
+						<div class="row">
+							<div class="col-sm-8">
+								<label>Current Occupants</label>
+							</div><!-- end col -->
+							<div class="col-sm-4 text-right">
+								<p class="small" style="margin:3px 0;">{{currentRoom.occupants_count}}</p>
+							</div><!-- end col -->
+						</div><!-- end row -->
+						<hr class="divider sm">
+						<div class="row">
+							<div class="col-sm-12">
+								<label>Room Leader</label>
+								<p class="small" style="margin:3px 0;" v-if="currentRoomHasLeader">{{ currentRoomHasLeader.surname }}, {{ currentRoomHasLeader.given_names | capitalize }}</p>
+								<p class="small" style="margin:3px 0;" v-else>None Set</p>
+							</div><!-- end col -->
+						</div><!-- end row -->
+					</div><!-- end col -->
+					<div class="col-sm-7">
+						<label>Room Occupants</label>
+						<hr class="divider sm">
+							<template v-if="currentRoom.occupants.length">
+								  <div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
+									  <div class="panel panel-default" v-for="member in currentRoom.occupants | orderBy 'surname'">
+										  <div class="panel-heading" role="tab" id="headingOne">
+											  <h5 class="panel-title">
+												  <div class="row">
+													  <div class="col-xs-8">
+														  <!--<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+															  <img :src="member.avatar" class="img-circle img-xs av-left">
+															  {{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span>
+														  </a>-->
+														<div class="media">
+														    <div class="media-left" style="padding-right:0;">
+														        <a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+														        	<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.room_leader">RL</span>
+														        </a>
+														    </div>
+														    <div class="media-body" style="vertical-align:middle;">
+														        <h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+														            <p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+														    </div><!-- end media-body -->
+														</div><!-- end media -->
+													  </div>
+													  <div class="col-xs-4 text-right action-buttons">
+														  <dropdown type="default">
+															  <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+																  <span class="fa fa-ellipsis-h"></span>
+															  </button>
+															  <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+																  <li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
+																  <li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+																  <li role="separator" class="divider"></li>
+																  <li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
+															  </ul>
+														  </dropdown>
+														  <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+															  <i class="fa fa-angle-down"></i>
+														  </a>
+													  </div>
 												  </div>
-												  <div class="col-xs-5 text-right action-buttons">
-													  <dropdown type="default">
-														  <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-															  <span class="fa fa-ellipsis-h"></span>
-														  </button>
-														  <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-															  <li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
-															  <li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
-															  <li role="separator" class="divider"></li>
-															  <li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
-														  </ul>
-													  </dropdown>
-													  <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-														  <i class="fa fa-angle-down"></i>
-													  </a>
-												  </div>
-											  </div>
-										  </h5>
+											  </h5>
+										  </div>
+										  <div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+											  <div class="panel-body">
+												  <div class="row">
+													  <div class="col-sm-2">
+													  	  <label>Age</label>
+														  <p class="small">{{member.age}}</p>
+														  <!--<label>Travel Group</label>
+														  <p class="small">{{member.trip.data.group.data.name}}</p>-->
+													  </div><!-- end col -->
+													  <div class="col-sm-3">
+													  	  <label>Gender</label>
+														  <p class="small">{{member.gender | capitalize}}</p>
+													  </div><!-- end col -->
+													  <div class="col-sm-6">
+														  <label>Marital Status</label>
+														  <p class="small">{{member.status | capitalize}}</p>
+													  </div><!-- end col -->
+												  </div><!-- end row -->
+											  </div><!-- end panel-body -->
+										  </div>
+										  <!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+											  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+											  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
+										  </div>-->
 									  </div>
-									  <div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-										  <div class="panel-body">
-											  <div class="row">
-												  <div class="col-sm-2">
-												  	  <label>Age</label>
-													  <p class="small">{{member.age}}</p>
-													  <!--<label>Travel Group</label>
-													  <p class="small">{{member.trip.data.group.data.name}}</p>-->
-												  </div><!-- end col -->
-												  <div class="col-sm-3">
-												  	  <label>Gender</label>
-													  <p class="small">{{member.gender | capitalize}}</p>
-												  </div><!-- end col -->
-												  <div class="col-sm-6">
-													  <label>Marital Status</label>
-													  <p class="small">{{member.status | capitalize}}</p>
-												  </div><!-- end col -->
-											  </div><!-- end row -->
-										  </div><!-- end panel-body -->
-									  </div>
-									  <!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
+									  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
 										  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-										  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-									  </div>-->
+										  <!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
+									  </div>
 								  </div>
-								  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
-									  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-									  <!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
-								  </div>
-							  </div>
-						  </template>
-					  <template v-else>
-						  <hr class="divider inv">
-						  <p class="text-center text-italic text-muted"><em>No occupants in this room yet.</em></p>
-					  </template>
-				  </div>
-			  </div>
+						  	</template>
+						<template v-else>
+							<hr class="divider inv">
+							<p class="text-center text-italic text-muted" style="padding:0 10px;"><em>This room is empty! Add occupants from your squad's list to fill the room.</em></p>
+						</template>
+					</div><!-- end col -->
+				</div><!-- end row -->
+				</div><!-- end panel-body -->
+			</div><!-- end panel -->
 		  </template>
 		    <template v-else>
 			    <div class="well">
-				    <p class="text-center">No room selected</p>
+				    <p style="margin-top:8px;" class="text-center text-muted"><em>Select a room to view details.</em></p>
 			    </div>
 
 		    </template>
@@ -143,9 +185,10 @@
 							<template v-if="currentRooms.length">
 								<!-- List group List-->
 								<div class="list-group">
-									<a @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentRooms" style="cursor: pointer;">
-										{{(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize}}
-										<span v-if="room.type.data.rules.occupancy_limit === room.occupants_count" class="label label-info">Full</span>
+									<a @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentRooms | orderBy 'label'" style="cursor: pointer;">
+										{{(room.label ? (room.label + ' &middot; ' + room.type.data.name) : room.type.data.name) | capitalize}}
+										<span v-if="room.type.data.rules.occupancy_limit === room.occupants_count" class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">Full</span>
+										<span v-if="room.type.data.rules.occupancy_limit > room.occupants_count" class="badge text-uppercase" style="font-size:10px;line-height:1.4;letter-spacing: 0;">{{room.occupants_count}}</span>
 									</a>
 								</div>
 							</template>
@@ -278,7 +321,7 @@
 		<!-- Teams Select & Members List -->
 		<div class="col-sm-4">
 			<select class="form-control input-sm" v-model="currentTeam">
-				<option :value="" v-if="!currentTeam">Select Team</option>
+				<option :value="" v-if="!currentTeam">Select Squad</option>
 				<option :value="team" v-for="team in teams">{{team.callsign | capitalize}}</option>
 			</select>
 			<hr class="divider lg">
@@ -303,16 +346,27 @@
 			<template v-if="currentTeam">
 				<template v-if="currentTeamMembers.length">
 					<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-						<div class="panel panel-default" v-for="member in currentTeamMembers" v-show="true">
+						<div class="panel panel-default" v-for="member in currentTeamMembers | orderBy 'surname'" v-show="true">
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h5 class="panel-title">
 									<div class="row">
 										<div class="col-xs-9">
-												<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-												<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-												{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
+												<div class="media">
+												    <div class="media-left" style="padding-right:0;">
+												        <a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												            <img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+												        </a>
+												    </div>
+												    <div class="media-body" style="vertical-align:middle;">
+												        <h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+												            <p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+												    </div><!-- end media-body -->
+												</div><!-- end media -->
+											<!-- <a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+												<img :src="member.avatar" class="img-circle img-xs av-left">
+												{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="small" v-if="member.leader">&middot; GL</span><br>
 												<label>{{ member.desired_role.name }}</label>
-											</a>
+											</a> -->
 										</div>
 										<div class="col-xs-3 text-right action-buttons">
 											<dropdown type="default">
@@ -338,15 +392,36 @@
 									<div class="row">
 										<div class="col-sm-6">
 											<label>Gender</label>
-											<p class="small">{{member.gender | capitalize}}</p>
-											<label>Marital Status</label>
-											<p class="small">{{member.status | capitalize}}</p>
 										</div><!-- end col -->
 										<div class="col-sm-6">
+											<p class="small" style="margin:3px 0;">{{member.gender | capitalize}}</p>
+										</div><!-- end col -->
+									</div><!-- end row -->
+									<hr class="divider sm">
+									<div class="row">
+										<div class="col-sm-6">
+											<label>Marital Status</label>
+										</div><!-- end col -->
+										<div class="col-sm-6">
+											<p class="small" style="margin:3px 0;">{{member.status | capitalize}}</p>
+										</div><!-- end col -->
+									</div><!-- end row -->
+									<hr class="divider sm">
+									<div class="row">
+										<div class="col-sm-6">
 											<label>Age</label>
-											<p class="small">{{member.age}}</p>
+										</div><!-- end col -->
+										<div class="col-sm-6">
+											<p class="small" style="margin:3px 0;">{{member.age}}</p>
+										</div><!-- end col -->
+									</div><!-- end row -->
+									<hr class="divider sm">
+									<div class="row">
+										<div class="col-sm-6">
 											<label>Travel Group</label>
-											<p class="small">{{member.trip.data.group.data.name}}</p>
+										</div><!-- end col -->
+										<div class="col-sm-6">
+											<p class="small" style="margin:3px 0;">{{member.trip.data.group.data.name}}</p>
 										</div><!-- end col -->
 									</div><!-- end row -->
 								</div><!-- end panel-body -->
@@ -367,7 +442,7 @@
 			</template>
 			<template v-else>
 				<hr class="divider inv">
-				<p class="text-center text-italic text-muted"><em>Select a team to begin</em></p>
+				<p class="text-center text-italic text-muted"><em>Select a squad to begin.</em></p>
 			</template>
 		</div>
 

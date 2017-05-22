@@ -20,6 +20,7 @@ elixir(function(mix) {
     mix.browserify('main.js');
     mix.copy('resources/assets/js/vendor.js', 'public/js/vendor.js');
     mix.copy('resources/assets/js/vendors/slim.jquery.min.js', 'public/js/slim.js');
+    mix.copy('resources/assets/js/vendors/slim.commonjs.js', 'public/js/slim.commonjs.js');
     mix.copy('resources/assets/js/vendors/slim.min.css', 'public/css/slim.css');
     // move fonts to public folder
     mix.copy('node_modules/font-awesome/fonts', 'public/build/fonts');

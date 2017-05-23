@@ -6,7 +6,6 @@
 
 		    <!-- Occupants List -->
 		    <template v-if="currentRoom">
-<<<<<<< HEAD
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5>{{(currentRoom.label ? (currentRoom.label + ' &middot; ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} <span class="small">&middot; Details</span></h5>
@@ -29,8 +28,9 @@
 							</div><!-- end col -->
 							<div class="col-sm-5 text-right">
 								<p class="small" style="margin:3px 0;">
-									  <template v-if="currentRoom.type.data.rules.gender"></template>
-									    Yes<span v-if="currentRoom.occupants && currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+									  <template v-if="currentRoom.type.data.rules.gender">
+									    Yes <span v-if="currentRoom.occupants && currentRoom.occupants.length">, {{currentRoom.occupants[0].gender | capitalize}}</span>
+									  </template>
 									  <template v-else>
 										  No
 									  </template>
@@ -160,8 +160,14 @@
 				<div class="panel-body">
 					<!-- Search and Filter -->
 					<form class="form-inline row">
-						<div class="form-group col-xs-12 text-right">
+						<div class="from-group col-xs-6 text-left">
+							<h5>Rooms</h5>
+						</div>
+						<div class="form-group col-xs-6 text-right">
 							<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
+						</div>
+
+						<div class="form-group col-xs-12">
 							<hr class="divider lg">
 						</div>
 

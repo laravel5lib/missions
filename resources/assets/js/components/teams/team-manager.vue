@@ -45,6 +45,17 @@
 						          placeholder="Filter Group"></v-select>
 					</div>
 
+					<div class="form-group">
+						<label>Arrival Designation</label>
+						<select  class="form-control input-sm" v-model="teamFilters.designation">
+							<option value="">Any</option>
+							<option value="eastern">Eastern</option>
+							<option value="western">Western</option>
+							<option value="international">International</option>
+							<option value="none">None</option>
+						</select>
+					</div>
+
 					<hr class="divider inv sm">
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetTeamFilter()"><i class="fa fa-times"></i> Reset Team Filters</button>
 				</form>
@@ -932,6 +943,7 @@
                 groupsOptions: [],
                 teamFilters: {
                     group: '',
+                    designation: '',
                 },
                 // reservations filters
 	            reservationFilters: {
@@ -1341,7 +1353,8 @@
                     include: 'type',
                     page: this.teamsPagination.current_page,
 	                search: this.teamsSearch,
-	                group: this.teamFilters.group
+	                group: this.teamFilters.group,
+                    designation: this.teamFilters.designation,
                 };
 
                 return this.TeamResource.get(params).then(function (response) {

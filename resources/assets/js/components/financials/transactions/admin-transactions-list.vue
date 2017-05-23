@@ -368,7 +368,7 @@
                     maxAmount: null,
                     type: null,
                     maxDate: '',
-                    minDate: null,
+                    minDate: '',
                     payment: null
                 },
                 showFilters: false,
@@ -489,8 +489,8 @@
                         minAmount: null,
                         maxAmount: null,
                         type: '',
-                        maxDate: null,
-                        minDate: null,
+                        maxDate: '',
+                        minDate: '',
                     }
                 });
             },

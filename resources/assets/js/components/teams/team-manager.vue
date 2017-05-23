@@ -769,13 +769,16 @@
 								<v-select @keydown.enter.prevent="" multiple class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 										  :value.sync="newTeamCampaigns" :options="campaignsOptions" label="name"
 										  placeholder="Filter by Campaign"></v-select>
-							</div>
-							<div class="form-group" v-if="isAdminRoute">
+							</div>-->
+							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 										  :value.sync="newTeamGroup" :options="groupsOptions" label="name"
-										  placeholder="Filter Groups"></v-select>
-							</div>-->
+										  placeholder="Assign Travel Group"></v-select>
+								<select class="hidden" v-model="newTeamGroup" v-validate:teamgroup="['required']">
+									<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+								</select>
+							</div>
 						</form>
 					</validator>
 				</div>
@@ -870,7 +873,7 @@
                 newTeamCallSign: '',
                 newTeamType: '',
                 newTeamCampaigns: [],
-                newTeamGroup: [],
+                newTeamGroup: null,
 
                 showSquadCreateModal: false,
                 newSquadCallsign: '',
@@ -918,6 +921,7 @@
 
 	            editTeamMode: false,
                 toggleHintsCollapse: true,
+                storageName: 'TravelGroupSquads',
             }
         },
 	    watch: {
@@ -953,6 +957,7 @@
             },
 		    'currentTeam': function (val) {
 			    this.getSquads();
+			    this.updateConfig();
             },
 
         },
@@ -1001,7 +1006,12 @@
 			},*/
 	    },
         methods: {
-            openNewTeamModel(){
+            updateConfig(){
+                localStorage[this.storageName] = JSON.stringify({
+					currentTeam: this.currentTeam.id,
+                });
+            },
+	        openNewTeamModel(){
                 let campaign = _.findWhere(this.campaignsOptions, { id: this.campaignId });
                 if (campaign)
                     this.newTeamCampaigns = [campaign];
@@ -1595,7 +1605,6 @@
                 this.assignMassToSquad(compArray, squad)
 
             },
-
         },
         ready(){
             let self = this;
@@ -1642,6 +1651,12 @@
             Promise.all(promises).then(function (values) {
                 this.startUp = false;
                 this.searchReservations();
+
+                // load view state
+                if (localStorage[this.storageName]) {
+                    let config = JSON.parse(localStorage[this.storageName]);
+                    this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                }
             }.bind(this));
 
             this.$root.$on('campaign-scope', function (val) {

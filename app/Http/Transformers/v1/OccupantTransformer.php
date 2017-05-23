@@ -21,6 +21,10 @@ class OccupantTransformer extends TransformerAbstract {
             'surname'          => $occupant->surname,
             'age'              => $occupant->age,
             'gender'           => $occupant->gender,
+            'desired_role'     => [
+                'code' =>       $occupant->desired_role,
+                'name' =>       teamRole($occupant->desired_role)
+            ],
             'status'           => $occupant->status,
             'room_leader'      => (bool) $occupant->pivot->room_leader,
             'created_at'       => $occupant->pivot->created_at->toDateTimeString(),

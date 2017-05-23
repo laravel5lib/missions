@@ -6,7 +6,6 @@
 
 		    <!-- Occupants List -->
 		    <template v-if="currentRoom">
-<<<<<<< HEAD
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5>{{(currentRoom.label ? (currentRoom.label + ' &middot; ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} <span class="small">&middot; Details</span></h5>
@@ -67,7 +66,7 @@
 					<div class="col-sm-7">
 						<label>Room Occupants</label>
 						<hr class="divider sm">
-							<template v-if="currentRoom.occupants.length">
+							<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 								  <div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
 									  <div class="panel panel-default" v-for="member in currentRoom.occupants | orderBy 'surname'">
 										  <div class="panel-heading" role="tab" id="headingOne">
@@ -133,10 +132,10 @@
 											  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
 											  <button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 										  </div>-->
-									  </div>
-									  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
-										  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-										  <!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
+										  <div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
+											  <i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+											  <!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
+										  </div>
 									  </div>
 								  </div>
 						  	</template>
@@ -800,17 +799,22 @@
                 };
             },
 	        newPlan() {
-                return this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
-	                let plan = response.body.data;
-	                plan.rooms = [];
-                    this.plans.push(plan);
-                    this.showPlanModal = false;
-                    this.$root.$emit('update-select-options');
-                    return this.currentPlan = plan;
-                }, function (response) {
-                    console.log(response);
-                    return response.body.data;
-                });
+                if (this.$PlanCreate.valid) {
+                    return this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
+                        let plan = response.body.data;
+                        plan.rooms = [];
+                        this.plans.push(plan);
+                        this.showPlanModal = false;
+                        this.$root.$emit('update-select-options');
+                        return this.currentPlan = plan;
+                    }, function (response) {
+                        console.log(response);
+                        this.$root.$emit('showError', response.body.message);
+                        return response.body.data;
+                    });
+                } else {
+                    this.$root.$emit('showError', 'Please provide a name for the new plan');
+                }
             },
             openNewRoomModel(){
                 if (!this.currentPlan) {
@@ -827,17 +831,22 @@
                 };
             },
 	        newRoom() {
-		         return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms' , this.selectedRoom, { params: { include: 'type'}}).then(function (response) {
-                     let room = response.body.data;
-                     this.showRoomModal = false;
-                     //this.currentPlan.rooms.push(room);
-                     this.currentRooms.push(room);
-                     //_.some()
-                     return this.currentRoom = room;
-		         }, function (response) {
-			         console.log(response);
-			         return response.body.data;
-		         });
+                if (this.$RoomCreate.valid) {
+                    return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type'}}).then(function (response) {
+                        let room = response.body.data;
+                        this.showRoomModal = false;
+                        //this.currentPlan.rooms.push(room);
+                        this.currentRooms.push(room);
+                        //_.some()
+                        return this.currentRoom = room;
+                    }, function (response) {
+                        console.log(response);
+                        this.$root.$emit('showError', response.body.message);
+                        return response.body.data;
+                    });
+                } else {
+                    this.$root.$emit('showError', 'Please select a room type');
+                }
             },
             openDeletePlanModal() {
                 this.showPlanDeleteModal = true;

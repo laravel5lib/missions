@@ -34,6 +34,21 @@
 
 		<div class="row" style="position:relative;">
 			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<aside :show.sync="showTeamsFilters" placement="left" header="Team Filters" :width="375">
+				<hr class="divider inv sm">
+				<form class="col-sm-12">
+
+					<div class="form-group" v-if="isAdminRoute">
+						<label>Travel Group</label>
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+						          :value.sync="groupObj" :options="groupsOptions" label="name"
+						          placeholder="Filter Group"></v-select>
+					</div>
+
+					<hr class="divider inv sm">
+					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetTeamFilter()"><i class="fa fa-times"></i> Reset Team Filters</button>
+				</form>
+			</aside>
 			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
@@ -584,10 +599,27 @@
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane active" id="teams">
 						<div class="row">
+							<template v-if="isAdminRoute">
+								<div class="col-xs-6">
+									<div class="input-group input-group-sm col-xs-12">
+										<input type="text" class="form-control" v-model="teamsSearch" debounce="300" placeholder="Search">
+										<span class="input-group-addon"><i class="fa fa-search"></i></span>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<button class="btn btn-primary btn-sm btn-block" @click="showTeamsFilters = true;">Filter</button>
+								</div>
+							</template>
+
 							<div class="col-xs-12 text-right">
+								<hr class="divider sm inv">
 								<button class="btn btn-primary btn-sm" @click="openNewTeamModel">Create A Squad</button>
-								<hr class="divider lg">
 							</div>
+
+							<div class="col-xs-12">
+								<hr class="divider sm">
+							</div>
+
 							<div class="col-xs-12">
 								<template v-if="teams.length">
 									<ul class="list-group">
@@ -822,7 +854,6 @@
 				</div>
 			</modal>
 		</div>
-
 	</div>
 </template>
 <style>
@@ -857,6 +888,7 @@
                 teamsPagination: { current_page: 1 },
                 reservations: [],
                 membersSearch: '',
+                teamsSearch: '',
                 reservationsSearch: '',
                 reservationsPerPage: 10,
                 reservationsPagination: { current_page: 1 },
@@ -887,15 +919,20 @@
                 lastReservationRequest: null,
 
 	            // Filters vars
+                showTeamsFilters: false,
                 showReservationsFilters: false,
                 showMembersFilters: false,
                 campaignsArr: [],
                 groupsArr: [],
+                groupObj: null,
                 roleObj: null,
                 rolesOptions: [],
 	            leadershipRoles: [],
                 campaignsOptions: [],
                 groupsOptions: [],
+                teamFilters: {
+                    group: '',
+                },
                 // reservations filters
 	            reservationFilters: {
                     type: '',
@@ -926,6 +963,13 @@
         },
 	    watch: {
             // watch filters obj
+            'teamFilters': {
+                handler: function (val) {
+                    this.teamsPagination.current_page = 1;
+                    this.getTeams();
+                },
+                deep: true
+            },
             'reservationFilters': {
                 handler: function (val) {
                     this.reservationsPagination.current_page = 1;
@@ -937,6 +981,10 @@
                 this.reservationFilters.groups = _.pluck(val, 'id') || '';
 //				this.searchReservations();
             },
+            'groupObj': function (val) {
+                this.teamFilters.group = val ? val.id : '';
+//				this.searchReservations();
+            },
             'roleObj': function (val) {
                 this.reservationFilters.role = val ? val.value : '';
 //				this.searchReservations();
@@ -946,6 +994,10 @@
             },
             'reservationsAgeMax': function (val) {
                 this.searchReservations();
+            },
+            'teamsSearch': function (val, oldVal) {
+                this.teamsPagination.current_page = 1;
+                this.getTeams();
             },
             'reservationsSearch': function (val, oldVal) {
                 this.reservationsPagination.current_page = 1;
@@ -1038,6 +1090,13 @@
                 }
 
 
+            },
+            resetTeamFilter(){
+                this.teamsSearch = null;
+                this.groupObj = null;
+                this.teamFilters = {
+                    group: '',
+                }
             },
             getRoles(search, loading){
                 loading ? loading(true) : void 0;
@@ -1281,7 +1340,8 @@
                 let params = {
                     include: 'type',
                     page: this.teamsPagination.current_page,
-
+	                search: this.teamsSearch,
+	                group: this.teamFilters.group
                 };
 
                 return this.TeamResource.get(params).then(function (response) {

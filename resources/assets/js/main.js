@@ -361,12 +361,14 @@ Vue.filter('percentage', {
 Vue.filter('moment', {
     read: function (val, format, diff = false, noLocal = false) {
 
+        if (!val) return val;
+
         if (noLocal) {
             return moment(val).format(format || 'LL'); // do not convert to local
         }
 
         // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val).local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -378,7 +380,8 @@ Vue.filter('moment', {
     write: function (val, oldVal) {
         let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return moment(val).local().utc().format(format);
+        if (!val) return val;
+            return moment(val).local().utc().format(format);
     }
 });
 

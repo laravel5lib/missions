@@ -1605,7 +1605,24 @@
                 this.newTeamCampaigns = [{id: this.campaignId}];
                 promises.push(this.getGroups());
             } else {
-
+                promises.push(this.$http.get('users/' + this.userId, {
+                    params: {include: 'facilitating,managing.trips'}
+                }).then(function (response) {
+                    let user = response.body.data;
+                    let managing = [];
+                    if (user.facilitating.data.length) {
+                        this.reservationsFacilitator = true;
+                        let facilitating = _.pluck(user.facilitating.data, 'id');
+                        this.reservationsTrips = _.union(this.reservationsTrips, facilitating);
+                    }
+                    if (user.managing.data.length) {
+                        _.each(user.managing.data, function (group) {
+                            managing = _.union(managing, _.pluck(group.trips.data, 'id'));
+                        });
+                        this.reservationsTrips = _.union(this.reservationsTrips, managing);
+                    }
+                    this.includeReservationsManaging = true;
+                }));
             }
             promises.push(this.getTeamTypes());
             promises.push(this.getTeams());

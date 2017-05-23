@@ -668,9 +668,31 @@ class Reservation extends Model
      */
     public function drop()
     {
-        $this->fund ? $this->fund->archive() : null;
+        $this->archiveFund()
+             ->removeFromSquads();
 
         $this->delete();
+    }
+
+    /**
+     * Archive the Reservation's Fund.
+     */
+    public function archiveFund()
+    {
+        if ($this->fund)
+            $this->fund->archive();
+
+        return $this;
+    }
+
+    /**
+     * Remove the reservation from all squads.
+     */
+    public function removeFromSquads()
+    {
+        $this->squads()->detach();
+
+        return $this;
     }
 
     /**

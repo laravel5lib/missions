@@ -21,7 +21,7 @@ class TeamablesController extends Controller
 
     public function index($teamableType, $teamableId, Request $request)
     {
-        $request->merge([$teamableType => $teamableId]);
+        $request->merge([str_singular($teamableType) => $teamableId]);
 
         $teams = $this->team
                       ->filter($request->all())

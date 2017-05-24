@@ -2,6 +2,7 @@
 namespace App\Services\Teams;
 
 use App\Models\v1\Group;
+use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 
 class ManageTeams

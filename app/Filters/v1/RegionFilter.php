@@ -16,7 +16,7 @@ class RegionFilter extends Filter
      * @var array
      */
     public $sortable = [
-        'name', 'country_code', 'call_sign', 'created_at', 'updated_at'
+        'name', 'country_code', 'callsign', 'created_at', 'updated_at'
     ];
 
     /**
@@ -25,44 +25,11 @@ class RegionFilter extends Filter
      * @var array
      */
     public $searchable = [
-        'name', 'call_sign', 'accommodations.name'
+        'name', 'callsign'
     ];
 
-    /**
-     * Filter by country code
-     *
-     * @param $codes
-     * @return mixed
-     */
-    public function countries($codes)
+    public function country($code)
     {
-        return $this->whereIn('country_code', $codes);
-    }
-
-    /**
-     * Between number of teams.
-     *
-     * @param $teams
-     * @return mixed
-     */
-    public function teams($teams)
-    {
-        if(count($teams) < 2) return $this;
-
-        return $this->has('teams', '>=', $teams[0])
-                    ->has('teams', '<=', $teams[1]);
-    }
-
-    /**
-     * If has accommodations.
-     *
-     * @param $hasAccommodations
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function hasAccommodations($hasAccommodations)
-    {
-        return $hasAccommodations == 'yes' ?
-            $this->has('accommodations') :
-            $this->has('accommodations', '<', 1);
+        return $this->whereCountryCode(trim(strtolower($code)));
     }
 }

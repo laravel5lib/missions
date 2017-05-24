@@ -14,7 +14,7 @@ class RegionRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user()->isAdmin();
+        return true;
     }
 
     /**
@@ -24,27 +24,21 @@ class RegionRequest extends FormRequest
      */
     public function rules()
     {
-        $required = [
+        $rules = [
             'name'         => 'required|string|max:100',
-            'country_code' => 'required|in:' . Country::codes(),
-            'call_sign'    => 'required|string|max:50',
-            'campaign_id'  => 'required|exists:campaigns,id'
+            'country_code' => 'sometimes|required|in:' . Country::codes(),
+            'call_sign'    => 'sometimes|required|string|max:50'
         ];
 
         if ($this->isMethod('put'))
         {
-            $required = [
+            $rules = [
                 'name'         => 'sometimes|required|string|max:100',
                 'country_code' => 'sometimes|required|in:' . Country::codes(),
-                'call_sign'    => 'sometimes|required|string|max:50',
-                'campaign_id'  => 'sometimes|required|exists:campaigns,id'
+                'call_sign'    => 'sometimes|required|string|max:50'
             ];
         }
 
-        $optional = [
-            'tags' => 'array'
-        ];
-
-        return $rules = $required + $optional;
+        return $rules;
     }
 }

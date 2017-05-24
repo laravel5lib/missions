@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Teams;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\TeamRequest;

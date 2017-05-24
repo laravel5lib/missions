@@ -43,4 +43,9 @@ class Region extends Model
     {
         return $this->belongsTo(Campaign::class);
     }
+
+    public function teams()
+    {
+        return $this->morphToMany(Team::class, 'teamable');
+    }
 }

@@ -43,7 +43,9 @@ class TeamsEndpointTest extends TestCase
     /** @test */
     public function creates_a_new_team()
     {
-        $this->post('api/teams', ['callsign' => 'Team #1'])
+        $type = factory(App\Models\v1\TeamType::class, 'ministry')->create();
+
+        $this->post('api/teams', ['callsign' => 'Team #1', 'type_id' => $type->id])
              ->assertResponseOk()
              ->seeInDatabase('teams', ['callsign' => 'Team #1'])
              ->seeJson([

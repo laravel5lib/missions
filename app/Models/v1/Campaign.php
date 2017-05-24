@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\Team;
 use App\Models\v1\Region;
 use App\Traits\Rewardable;
 use App\Traits\Promoteable;
@@ -121,6 +122,11 @@ class Campaign extends Model
     public function regions()
     {
         return $this->hasMany(Region::class);
+    }
+
+    public function teams()
+    {
+        return $this->morphToMany(Team::class, 'teamable');
     }
 
     /**

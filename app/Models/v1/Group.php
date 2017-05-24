@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\Team;
 use App\Scopes\PublicScope;
 use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
@@ -85,6 +86,11 @@ class Group extends Model
     public function trips()
     {
         return $this->hasMany(Trip::class);
+    }
+
+    public function teams()
+    {
+        return $this->morphToMany(Team::class, 'teamable');
     }
 
     /**

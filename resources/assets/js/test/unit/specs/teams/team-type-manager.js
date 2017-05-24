@@ -21,7 +21,7 @@ test('teamTypes Array populated', (t) => {
 test('edit form populates', (t) => {
     TeamTypeManager.editType(TeamTypeManager.teamTypes[0]);
     t.true(TeamTypeManager.editTypeMode );
-    t.isNot(TeamTypeManager.currentType.name, '');
+    t.not(TeamTypeManager.currentType.name, '');
 });
 
 test('form is valid', async (t) => {

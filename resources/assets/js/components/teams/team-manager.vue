@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="row">
+		<div class="row" v-if="!isAdminRoute">
 			<div class="col-sm-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -43,17 +43,6 @@
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 						          :value.sync="groupObj" :options="groupsOptions" label="name"
 						          placeholder="Filter Group"></v-select>
-					</div>
-
-					<div class="form-group">
-						<label>Arrival Designation</label>
-						<select  class="form-control input-sm" v-model="teamFilters.designation">
-							<option value="">Any</option>
-							<option value="eastern">Eastern</option>
-							<option value="western">Western</option>
-							<option value="international">International</option>
-							<option value="none">None</option>
-						</select>
 					</div>
 
 					<hr class="divider inv sm">
@@ -942,8 +931,7 @@
                 campaignsOptions: [],
                 groupsOptions: [],
                 teamFilters: {
-                    group: '',
-                    designation: '',
+                    group: ''
                 },
                 // reservations filters
 	            reservationFilters: {

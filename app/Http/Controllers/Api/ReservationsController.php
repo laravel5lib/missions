@@ -115,6 +115,8 @@ class ReservationsController extends Controller
      */
     public function update(ReservationRequest $request, $id)
     {
+        // TODO: Refactor to Repository to hide complex implementation
+        
         $reservation = $this->reservation->withTrashed()->findOrFail($id);
 
         $reservation->update([

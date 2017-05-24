@@ -110,7 +110,7 @@ $api->version('v1', [
     $api->resource('referrals', 'ReferralsController');
     $api->post('referrals/export', 'ReferralsController@export');
     $api->post('referrals/import', 'ReferralsController@import');
-    $api->resource('regions', 'RegionsController');
+    $api->resource('campaigns.regions', 'RegionsController');
     $api->resource('teams/types', 'TeamTypesController');
     $api->resource('teams', 'TeamsController');
     $api->get('teams/{id}/{teamable}', 'TeamablesController@index')

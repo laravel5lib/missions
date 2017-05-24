@@ -50,11 +50,7 @@ class Team extends Model
             $type = $teamable['type'];
             $id = $teamable['id'];
 
-            if ($this->{$type}()->attach($id)) {
-                return true;
-            }
-
-            return false;
+            $this->{$type}()->attach($id);
         });
     }
 }

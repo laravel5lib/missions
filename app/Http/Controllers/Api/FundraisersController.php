@@ -95,7 +95,7 @@ class FundraisersController extends Controller
             ]);
         }
         
-        $donors->sortByDesc('total_donated');
+        $donors = $donors->sortByDesc('total_donated');
 
         $count = $donors->count();
 

@@ -80,6 +80,7 @@ import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
 import teamManager from './components/teams/team-manager.vue';
 import roomingManager from './components/rooms/rooming-manager.vue';
+import teamTypeManager from './components/teams/team-type-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -161,7 +162,6 @@ require('bootstrap-sass');
 // require('tether');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
-
 
 window.AOS = require('aos');
 AOS.init();
@@ -368,12 +368,14 @@ Vue.filter('percentage', {
 Vue.filter('moment', {
     read: function (val, format, diff = false, noLocal = false) {
 
+        if (!val) return val;
+
         if (noLocal) {
             return moment(val).format(format || 'LL'); // do not convert to local
         }
 
         // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val).local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -385,7 +387,8 @@ Vue.filter('moment', {
     write: function (val, oldVal) {
         let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return moment(val).local().utc().format(format);
+        if (!val) return val;
+            return moment(val).local().utc().format(format);
     }
 });
 
@@ -889,6 +892,7 @@ new Vue({
         dashboardGroupReservations,
         dashboardInterestsList,
         teamManager,
+        teamTypeManager,
         reportsList,
         roomingManager,
 

@@ -3,6 +3,7 @@
 namespace App\Models\v1;
 
 use App\UuidForKey;
+use App\Models\v1\Region;
 use App\Traits\Rewardable;
 use App\Traits\Promoteable;
 use Conner\Tagging\Taggable;
@@ -115,6 +116,11 @@ class Campaign extends Model
         }
 
         return 'Draft';
+    }
+
+    public function regions()
+    {
+        return $this->hasMany(Region::class);
     }
 
     /**

@@ -1808,6 +1808,19 @@ export default {
                     "links": []
                 }
             }
+    ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
+        // before respond, you can check the path and query parameters with `pathMatch` & `query`
+        // powered by 'url-pattern' & 'qs'
+        // https://www.npmjs.com/package/url-pattern
+        // https://www.npmjs.com/package/qs
+        let body = {
+            "data": [{
+                "name": "trip_history",
+                "display_name": "Trip History",
+                "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
+                "created_at": "2017-05-05 15:01:44",
+                "updated_at": "2017-05-05 15:01:44"
+            }]
         };
         return {
             body: body,
@@ -1876,6 +1889,23 @@ export default {
             body.data = _.findWhere(body.data, {id: pathMatch.type});
             delete body.meta;
         }
+    ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
+        // before respond, you can check the path and query parameters with `pathMatch` & `query`
+        // powered by 'url-pattern' & 'qs'
+        // https://www.npmjs.com/package/url-pattern
+        // https://www.npmjs.com/package/qs
+        let body = {
+            "data": [{
+                "name": "countries_visited",
+                "display_name": "Countries Visited",
+                "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
+                    "code": "vg",
+                    "name": "Virgin Islands (British)"
+                }, {"code": "bj", "name": "Benin"}],
+                "created_at": "2017-05-05 15:01:44",
+                "updated_at": "2017-05-05 15:01:44"
+            }]
+        };
         return {
             body: body,
             status: 200,
@@ -2326,6 +2356,1339 @@ export default {
 
     },
 
+    // Reservations API
+    ['GET *reservations(/:reservation)']  (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                "id": "013cdd56-d377-34c2-b46c-a7cf8f76d9c8",
+                "given_names": "Ashtyn Jordane",
+                "surname": "Adams",
+                "gender": "male",
+                "status": "married",
+                "shirt_size": "L",
+                "shirt_size_name": "Large",
+                "age": 50,
+                "birthday": "1966-12-28",
+                "email": "desmond20@example.net",
+                "phone_one": "931819923573370",
+                "phone_two": "16413440144",
+                "address": "140 Arnulfo Neck Suite 883\nJuneland, WI 02009-0461",
+                "city": "Nikolausborough",
+                "state": null,
+                "zip": "40393",
+                "country_code": "kh",
+                "country_name": "Cambodia",
+                "companion_limit": 2,
+                "arrival_designation": "none",
+                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "desired_role": {"code": "NUTR", "name": "Nutrionist"},
+                "total_cost": "2024.00",
+                "total_raised": "100.00",
+                "percent_raised": 5,
+                "total_owed": "1924.00",
+                "created_at": "2017-05-15 14:10:50",
+                "updated_at": "2017-05-15 14:10:52",
+                "deleted_at": null,
+                "tags": ["vip", "media"],
+                "links": [{"rel": "self", "uri": "\/api\/reservations\/013cdd56-d377-34c2-b46c-a7cf8f76d9c8"}],
+                "user": {
+                    "data": {
+                        "id": "edb57920-8c0d-49a3-a535-409758bbfc6f",
+                        "name": "Sophie Cummings",
+                        "email": "hokuneva@example.net",
+                        "password": "$2y$10$I.IKYIbiR.uvUp51OhGlE.5Ib2BVaiyoQSsQQAdG40wwNhgiR3RjS",
+                        "alt_email": "linda.crooks@example.com",
+                        "gender": "male",
+                        "status": "single",
+                        "birthday": "1958-01-23",
+                        "phone_one": null,
+                        "phone_two": null,
+                        "address": "2818 Dorothy Light Suite 462",
+                        "city": "Port Rubytown",
+                        "state": null,
+                        "zip": null,
+                        "country_code": "am",
+                        "country_name": "Armenia",
+                        "shirt_size": "",
+                        "timezone": "America\/Detroit",
+                        "bio": null,
+                        "url": "sophie-cummings",
+                        "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
+                        "avatar_upload_id": "5b67ee33-6178-44f1-8391-89086a9825b1",
+                        "banner": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
+                        "public": false,
+                        "created_at": "2017-05-15 14:10:50",
+                        "updated_at": "2017-05-15 14:10:50",
+                        "links": [{"rel": "self", "uri": "\/users\/edb57920-8c0d-49a3-a535-409758bbfc6f"}]
+                    }
+                },
+                "trip": {
+                    "data": {
+                        "id": "0eac4053-7d79-47f9-bd91-f59d916269f4",
+                        "group_id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                        "campaign_id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                        "rep_id": "2f445c6e-dc71-4c73-ae0b-31cef080eb88",
+                        "rep": "Deonte Emard",
+                        "spots": 348,
+                        "status": "active",
+                        "starting_cost": "1874.00",
+                        "companion_limit": 2,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "medical",
+                        "difficulty": "level 3",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["families", "medical professionals", "pastors", "women"],
+                        "team_roles": ["LACT", "MDSP", "CHRA", "POLI"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
+                        "public": false,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-15 14:10:46",
+                        "updated_at": "2017-05-15 14:10:54",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/0eac4053-7d79-47f9-bd91-f59d916269f4"}],
+                        "campaign": {
+                            "data": {
+                                "id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                                "name": "1Nation1Day 2017",
+                                "country": "Nicaragua",
+                                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
+                                "page_url": "1n1d17",
+                                "page_src": "_1n1d2017",
+                                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                                "avatar_upload_id": "b4a5ad85-4fa9-4d74-9765-42c445f91c38",
+                                "banner": null,
+                                "banner_upload_id": null,
+                                "started_at": "2017-07-22 00:00:00",
+                                "ended_at": "2017-07-30 22:59:59",
+                                "status": "Published",
+                                "groups_count": 10,
+                                "published_at": "2016-01-01 00:00:00",
+                                "created_at": "2017-05-15 14:09:06",
+                                "updated_at": "2017-05-15 14:10:58",
+                                "links": [{"rel": "self", "uri": "\/campaigns\/54ba518e-a8c3-4e3f-b3a9-4797df585020"}]
+                            }
+                        },
+                        "group": {
+                            "data": {
+                                "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                                "status": "approved",
+                                "name": "Lemke, Ruecker and Schamberger",
+                                "type": "youth",
+                                "timezone": "America\/Paramaribo",
+                                "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
+                                "url": "lemke-ruecker-and-schamberger",
+                                "public": true,
+                                "address_one": "61200 Ward Common",
+                                "address_two": null,
+                                "city": null,
+                                "state": "Hawaii",
+                                "zip": "18276-8333",
+                                "country_code": "kg",
+                                "country_name": "Kyrgyzstan",
+                                "phone_one": "18248126371",
+                                "phone_two": "",
+                                "email": "doyle.madie@example.com",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-15 14:09:06",
+                                "updated_at": "2017-05-15 14:10:58",
+                                "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                            }
+                        }
+                    }
+                },
+                "costs": {
+                    "data": [{
+                        "cost_id": "f139f68d-f09e-4249-84f0-1232c63fda71",
+                        "name": "General Registration",
+                        "description": "Standard cost to register.",
+                        "amount": "1774.00",
+                        "active_at": "2017-03-01 00:00:00",
+                        "type": "incremental",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "locked": false,
+                        "links": [{"rel": "self", "uri": "\/api\/costs\/f139f68d-f09e-4249-84f0-1232c63fda71"}],
+                        "payments": {
+                            "data": [{
+                                "id": "829d7873-5397-43dc-ade9-be9ac391bb6c",
+                                "amount_owed": "887.00",
+                                "percent_owed": 50,
+                                "due_at": "2018-03-01 00:00:00",
+                                "grace_period": 2,
+                                "upfront": false
+                            }, {
+                                "id": "a1999f4f-b277-47e9-846c-969a53ba9a2d",
+                                "amount_owed": "887.00",
+                                "percent_owed": 50,
+                                "due_at": "2017-09-01 00:00:00",
+                                "grace_period": 2,
+                                "upfront": false
+                            }]
+                        }
+                    }, {
+                        "cost_id": "369cdd25-457d-4d35-b1cc-206a526916e9",
+                        "name": "Deposit",
+                        "description": "Non-refundable, non-transferable amount required to secure your initial spot on the trip.",
+                        "amount": "100.00",
+                        "active_at": "2016-01-01 00:00:00",
+                        "type": "static",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "locked": false,
+                        "links": [{"rel": "self", "uri": "\/api\/costs\/369cdd25-457d-4d35-b1cc-206a526916e9"}],
+                        "payments": {
+                            "data": [{
+                                "id": "f5b17512-2db5-420d-a7cd-9640f5b1d9ab",
+                                "amount_owed": "100.00",
+                                "percent_owed": 100,
+                                "due_at": null,
+                                "grace_period": 2,
+                                "upfront": true
+                            }]
+                        }
+                    }, {
+                        "cost_id": "b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec",
+                        "name": "Triple Room Request",
+                        "description": "Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.",
+                        "amount": "150.00",
+                        "active_at": "2016-01-01 00:00:00",
+                        "type": "optional",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "locked": false,
+                        "links": [{"rel": "self", "uri": "\/api\/costs\/b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec"}],
+                        "payments": {
+                            "data": [{
+                                "id": "7e292f6c-ba37-4a83-b7cb-80da97a5a6bc",
+                                "amount_owed": "150.00",
+                                "percent_owed": 100,
+                                "due_at": "2017-07-01 00:00:00",
+                                "grace_period": 2,
+                                "upfront": false
+                            }]
+                        }
+                    }]
+                },
+                "companions": {"data": []},
+                "fundraisers": {
+                    "data": [{
+                        "id": "c8ade54c-30ff-47a4-a252-9e47eff54eeb",
+                        "name": "Send Ashtyn Jordane Adams to Nicaragua",
+                        "type": "general",
+                        "fund_id": "d944730e-2b24-4737-93a5-2e4621e318bc",
+                        "goal_amount": "2024.00",
+                        "raised_amount": "100.00",
+                        "raised_percent": 5,
+                        "donors_count": 1,
+                        "sponsor_id": "edb57920-8c0d-49a3-a535-409758bbfc6f",
+                        "sponsor_type": "users",
+                        "url": "nicaragua-2017-700",
+                        "public": true,
+                        "show_donors": true,
+                        "status": "open",
+                        "description": "I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.\n\nIn preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?\n\nI sincerely appreciate your prayerful consideration in helping make this trip possible.",
+                        "started_at": "2017-05-15 14:10:50",
+                        "ended_at": "2017-07-22 00:00:00",
+                        "created_at": "2017-05-15 14:10:52",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "tags": [],
+                        "links": [{
+                            "rel": "self",
+                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb"
+                        }, {
+                            "rel": "donors",
+                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb\/donors"
+                        }, {
+                            "rel": "donations",
+                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb\/donations"
+                        }]
+                    }]
+                }
+            },
+                {
+                "id": "013e8643-fdf2-308b-bdbb-0621249fa4d1",
+                "given_names": "Cydney Tavares",
+                "surname": "Hodkiewicz",
+                "gender": "male",
+                "status": "single",
+                "shirt_size": "XXXL",
+                "shirt_size_name": "Extra Large x3",
+                "age": 36,
+                "birthday": "1980-09-26",
+                "email": "oconnell.jewel@example.net",
+                "phone_one": "9064648988644",
+                "phone_two": "19947471916761",
+                "address": "7018 Zena Viaduct\nEast Aracely, FL 79536",
+                "city": "Lake Hudson",
+                "state": null,
+                "zip": "26002",
+                "country_code": "it",
+                "country_name": "Italy",
+                "companion_limit": 2,
+                "arrival_designation": "none",
+                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                "desired_role": {"code": "NAST", "name": "Nurse Assistant"},
+                "total_cost": "2024.00",
+                "total_raised": "100.00",
+                "percent_raised": 5,
+                "total_owed": "1924.00",
+                "created_at": "2017-05-15 14:10:51",
+                "updated_at": "2017-05-15 14:10:53",
+                "deleted_at": null,
+                "tags": ["medical", "media"],
+                "links": [{"rel": "self", "uri": "\/api\/reservations\/013e8643-fdf2-308b-bdbb-0621249fa4d1"}],
+                "user": {
+                    "data": {
+                        "id": "65611de2-35f9-4263-87e3-83d01d2730ec",
+                        "name": "Burdette Crooks",
+                        "email": "mose22@example.net",
+                        "password": "$2y$10$0QzDT0GTOdFcEMKJj.0oQOdQ9wJ9oKFhfJQYXXkRHQ9DM2HlD0cvW",
+                        "alt_email": "zvon@example.net",
+                        "gender": "female",
+                        "status": "married",
+                        "birthday": "1967-01-06",
+                        "phone_one": "17874836866",
+                        "phone_two": "2406750342145",
+                        "address": null,
+                        "city": "Pollichhaven",
+                        "state": "Hawaii",
+                        "zip": "80201-9077",
+                        "country_code": "cx",
+                        "country_name": "Christmas Island",
+                        "shirt_size": "",
+                        "timezone": "America\/Detroit",
+                        "bio": null,
+                        "url": "burdette-crooks",
+                        "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                        "avatar_upload_id": "821687c6-b7f0-4193-981b-8b971ebde288",
+                        "banner": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
+                        "public": false,
+                        "created_at": "2017-05-15 14:10:52",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "links": [{"rel": "self", "uri": "\/users\/65611de2-35f9-4263-87e3-83d01d2730ec"}]
+                    }
+                },
+                "trip": {
+                    "data": {
+                        "id": "0eac4053-7d79-47f9-bd91-f59d916269f4",
+                        "group_id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                        "campaign_id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                        "rep_id": "2f445c6e-dc71-4c73-ae0b-31cef080eb88",
+                        "rep": "Deonte Emard",
+                        "spots": 348,
+                        "status": "active",
+                        "starting_cost": "1874.00",
+                        "companion_limit": 2,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "medical",
+                        "difficulty": "level 3",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["families", "medical professionals", "pastors", "women"],
+                        "team_roles": ["LACT", "MDSP", "CHRA", "POLI"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
+                        "public": false,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-15 14:10:46",
+                        "updated_at": "2017-05-15 14:10:54",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/0eac4053-7d79-47f9-bd91-f59d916269f4"}],
+                        "campaign": {
+                            "data": {
+                                "id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                                "name": "1Nation1Day 2017",
+                                "country": "Nicaragua",
+                                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
+                                "page_url": "1n1d17",
+                                "page_src": "_1n1d2017",
+                                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                                "avatar_upload_id": "b4a5ad85-4fa9-4d74-9765-42c445f91c38",
+                                "banner": null,
+                                "banner_upload_id": null,
+                                "started_at": "2017-07-22 00:00:00",
+                                "ended_at": "2017-07-30 22:59:59",
+                                "status": "Published",
+                                "groups_count": 10,
+                                "published_at": "2016-01-01 00:00:00",
+                                "created_at": "2017-05-15 14:09:06",
+                                "updated_at": "2017-05-15 14:10:58",
+                                "links": [{"rel": "self", "uri": "\/campaigns\/54ba518e-a8c3-4e3f-b3a9-4797df585020"}]
+                            }
+                        },
+                        "group": {
+                            "data": {
+                                "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                                "status": "approved",
+                                "name": "Lemke, Ruecker and Schamberger",
+                                "type": "youth",
+                                "timezone": "America\/Paramaribo",
+                                "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
+                                "url": "lemke-ruecker-and-schamberger",
+                                "public": true,
+                                "address_one": "61200 Ward Common",
+                                "address_two": null,
+                                "city": null,
+                                "state": "Hawaii",
+                                "zip": "18276-8333",
+                                "country_code": "kg",
+                                "country_name": "Kyrgyzstan",
+                                "phone_one": "18248126371",
+                                "phone_two": "",
+                                "email": "doyle.madie@example.com",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-15 14:09:06",
+                                "updated_at": "2017-05-15 14:10:58",
+                                "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                            }
+                        }
+                    }
+                },
+                "costs": {
+                    "data": [{
+                        "cost_id": "f139f68d-f09e-4249-84f0-1232c63fda71",
+                        "name": "General Registration",
+                        "description": "Standard cost to register.",
+                        "amount": "1774.00",
+                        "active_at": "2017-03-01 00:00:00",
+                        "type": "incremental",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "locked": false,
+                        "links": [{"rel": "self", "uri": "\/api\/costs\/f139f68d-f09e-4249-84f0-1232c63fda71"}],
+                        "payments": {
+                            "data": [{
+                                "id": "829d7873-5397-43dc-ade9-be9ac391bb6c",
+                                "amount_owed": "887.00",
+                                "percent_owed": 50,
+                                "due_at": "2018-03-01 00:00:00",
+                                "grace_period": 2,
+                                "upfront": false
+                            }, {
+                                "id": "a1999f4f-b277-47e9-846c-969a53ba9a2d",
+                                "amount_owed": "887.00",
+                                "percent_owed": 50,
+                                "due_at": "2017-09-01 00:00:00",
+                                "grace_period": 2,
+                                "upfront": false
+                            }]
+                        }
+                    }, {
+                        "cost_id": "369cdd25-457d-4d35-b1cc-206a526916e9",
+                        "name": "Deposit",
+                        "description": "Non-refundable, non-transferable amount required to secure your initial spot on the trip.",
+                        "amount": "100.00",
+                        "active_at": "2016-01-01 00:00:00",
+                        "type": "static",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "locked": false,
+                        "links": [{"rel": "self", "uri": "\/api\/costs\/369cdd25-457d-4d35-b1cc-206a526916e9"}],
+                        "payments": {
+                            "data": [{
+                                "id": "f5b17512-2db5-420d-a7cd-9640f5b1d9ab",
+                                "amount_owed": "100.00",
+                                "percent_owed": 100,
+                                "due_at": null,
+                                "grace_period": 2,
+                                "upfront": true
+                            }]
+                        }
+                    }, {
+                        "cost_id": "b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec",
+                        "name": "Triple Room Request",
+                        "description": "Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.",
+                        "amount": "150.00",
+                        "active_at": "2016-01-01 00:00:00",
+                        "type": "optional",
+                        "updated_at": "2017-05-15 14:10:52",
+                        "locked": false,
+                        "links": [{"rel": "self", "uri": "\/api\/costs\/b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec"}],
+                        "payments": {
+                            "data": [{
+                                "id": "7e292f6c-ba37-4a83-b7cb-80da97a5a6bc",
+                                "amount_owed": "150.00",
+                                "percent_owed": 100,
+                                "due_at": "2017-07-01 00:00:00",
+                                "grace_period": 2,
+                                "upfront": false
+                            }]
+                        }
+                    }]
+                },
+                "companions": {"data": []},
+                "fundraisers": {
+                    "data": [{
+                        "id": "2062b1ff-ea5d-4a64-a167-1a28847239fe",
+                        "name": "Send Cydney Tavares Hodkiewicz to Nicaragua",
+                        "type": "general",
+                        "fund_id": "74ec2cec-80cb-4540-8222-3adead95c770",
+                        "goal_amount": "2024.00",
+                        "raised_amount": "100.00",
+                        "raised_percent": 5,
+                        "donors_count": 1,
+                        "sponsor_id": "65611de2-35f9-4263-87e3-83d01d2730ec",
+                        "sponsor_type": "users",
+                        "url": "nicaragua-2017-701",
+                        "public": true,
+                        "show_donors": true,
+                        "status": "open",
+                        "description": "I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.\n\nIn preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?\n\nI sincerely appreciate your prayerful consideration in helping make this trip possible.",
+                        "started_at": "2017-05-15 14:10:51",
+                        "ended_at": "2017-07-22 00:00:00",
+                        "created_at": "2017-05-15 14:10:53",
+                        "updated_at": "2017-05-15 14:10:53",
+                        "tags": [],
+                        "links": [{
+                            "rel": "self",
+                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe"
+                        }, {
+                            "rel": "donors",
+                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe\/donors"
+                        }, {
+                            "rel": "donations",
+                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe\/donations"
+                        }]
+                    }]
+                }
+            },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 2,
+                    "count": 2,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": {"next": "https:\/\/missions.dev\/api\/reservations?page=2"}
+                }
+            }
+        };
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    // Teams API
+    ['GET *teams/types(/:type)'](pathMatch, query, request) {
+        let body = {
+            "data": [{
+                "id": "08c4d947-75fc-4a02-9e89-bb18c8e20d86",
+                "name": "leadership",
+                "rules": {
+                    "max_groups": 1,
+                    "min_groups": 1,
+                    "max_leaders": 2,
+                    "max_members": 10,
+                    "min_leaders": 2,
+                    "min_members": 2,
+                    "max_group_leaders": 1,
+                    "max_group_members": 10,
+                    "min_group_leaders": 1,
+                    "min_group_members": 2
+                },
+                "created_at": "2017-05-15 14:09:04",
+                "updated_at": "2017-05-17 00:48:39",
+                "links": [{"rel": "self", "uri": "api\/teams\/types\/08c4d947-75fc-4a02-9e89-bb18c8e20d86"}]
+            }, {
+                "id": "47a9b515-3a9a-4f93-86ef-557b9bd1ffda",
+                "name": "medical",
+                "rules": {
+                    "max_groups": 1,
+                    "min_groups": 1,
+                    "max_leaders": 2,
+                    "max_members": 25,
+                    "min_leaders": 1,
+                    "min_members": 10,
+                    "max_group_leaders": 0,
+                    "max_group_members": 25,
+                    "min_group_leaders": 0,
+                    "min_group_members": 10
+                },
+                "created_at": "2017-05-15 14:09:04",
+                "updated_at": "2017-05-15 14:09:04",
+                "links": [{"rel": "self", "uri": "api\/teams\/types\/47a9b515-3a9a-4f93-86ef-557b9bd1ffda"}]
+            }, {
+                "id": "6860a7eb-7276-43be-902f-d49fe7c3757a",
+                "name": "test",
+                "rules": {
+                    "max_squads": 10,
+                    "min_squads": 2,
+                    "max_leaders": 2,
+                    "max_members": 25,
+                    "min_leaders": 2,
+                    "min_members": 25,
+                    "max_squad_leaders": 1,
+                    "max_squad_members": 5,
+                    "min_squad_leaders": 1,
+                    "min_squad_members": 2
+                },
+                "created_at": "2017-05-17 00:33:48",
+                "updated_at": "2017-05-17 00:33:48",
+                "links": [{"rel": "self", "uri": "api\/teams\/types\/6860a7eb-7276-43be-902f-d49fe7c3757a"}]
+            }, {
+                "id": "8ff8caaf-b8f2-4ba8-87db-e86f33b8495f",
+                "name": "ministry",
+                "rules": {
+                    "max_groups": 10,
+                    "min_groups": 2,
+                    "max_leaders": 2,
+                    "max_members": 25,
+                    "min_leaders": 2,
+                    "min_members": 10,
+                    "max_group_leaders": 1,
+                    "max_group_members": 5,
+                    "min_group_leaders": 1,
+                    "min_group_members": 2
+                },
+                "created_at": "2017-05-15 14:09:04",
+                "updated_at": "2017-05-15 14:09:04",
+                "links": [{"rel": "self", "uri": "api\/teams\/types\/8ff8caaf-b8f2-4ba8-87db-e86f33b8495f"}]
+            }]
+        };
+        if (pathMatch.type) {
+            body.data = _.findWhere(body.data, {id: pathMatch.type});
+            delete body.meta;
+        }
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    // Campaigns API
+    ['GET *campaigns(/:campaign)'] (pathMatch, query, request) {
+        let body = {
+            "data": [{
+                "id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                "name": "1Nation1Day 2017",
+                "country": "Nicaragua",
+                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
+                "page_url": "1n1d17",
+                "page_src": "_1n1d2017",
+                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "avatar_upload_id": "10238fcd-7d2e-4056-93ea-e7405196fbd0",
+                "banner": null,
+                "banner_upload_id": null,
+                "started_at": "2017-07-22 00:00:00",
+                "ended_at": "2017-07-30 22:59:59",
+                "status": "Published",
+                "groups_count": 10,
+                "published_at": "2016-01-01 00:00:00",
+                "created_at": "2017-05-05 15:01:44",
+                "updated_at": "2017-05-05 15:03:33",
+                "links": [{"rel": "self", "uri": "\/campaigns\/5830c58b-a183-49ec-a61e-a3c748b33c28"}],
+                "trips": {
+                    "data": [{
+                        "id": "19706ed3-1db9-45f1-b29e-b75e8a5ad76d",
+                        "group_id": "120d15bb-e82a-3e40-9a55-a1c22b6b3ade",
+                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                        "rep_id": "a79c0feb-b593-4bef-a2c4-53cc30b1be83",
+                        "rep": "Alex Waelchi",
+                        "spots": 84,
+                        "status": "active",
+                        "starting_cost": "1758.00",
+                        "companion_limit": 3,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "ministry",
+                        "difficulty": "level 3",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["medical professionals", "women", "men", "business professionals"],
+                        "team_roles": ["POLI", "MDFG", "OTEC", "MCDR"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. .. .\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
+                        "public": true,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-05 15:01:55",
+                        "updated_at": "2017-05-05 15:02:02",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/19706ed3-1db9-45f1-b29e-b75e8a5ad76d"}],
+                        "group": {
+                            "data": {
+                                "id": "120d15bb-e82a-3e40-9a55-a1c22b6b3ade",
+                                "status": "approved",
+                                "name": "Stoltenberg-Cormier",
+                                "type": "youth",
+                                "timezone": "America\/Kentucky\/Monticello",
+                                "description": "Cheshire Cat,' said Alice: '--where's the Duchess?' 'Hush! Hush!' said the Rabbit in a low, hurried tone. He looked at.",
+                                "url": "stoltenberg-cormier",
+                                "public": true,
+                                "address_one": "6925 Zachariah Estate",
+                                "address_two": "21801",
+                                "city": "East Jane",
+                                "state": "Oklahoma",
+                                "zip": null,
+                                "country_code": "br",
+                                "country_name": "Brazil",
+                                "phone_one": "14859053488",
+                                "phone_two": "8544454907",
+                                "email": "amira41@example.net",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-05 15:01:44",
+                                "updated_at": "2017-05-05 15:02:05",
+                                "links": [{"rel": "self", "uri": "\/groups\/120d15bb-e82a-3e40-9a55-a1c22b6b3ade"}]
+                            }
+    ['GET *teams'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
+                    "callsign": "Team #1",
+                    "type": {
+                        "data": {
+                            "id": "08c4d947-75fc-4a02-9e89-bb18c8e20d86",
+                            "name": "leadership",
+                            "rules": {
+                                "max_groups": 1,
+                                "min_groups": 1,
+                                "max_leaders": 2,
+                                "max_members": 10,
+                                "min_leaders": 2,
+                                "min_members": 2,
+                                "max_group_leaders": 1,
+                                "max_group_members": 10,
+                                "min_group_leaders": 1,
+                                "min_group_members": 2
+                            },
+                            "created_at": "2017-05-15 14:09:04",
+                            "updated_at": "2017-05-17 00:48:39",
+                            "links": [{"rel": "self", "uri": "api\/teams\/types\/08c4d947-75fc-4a02-9e89-bb18c8e20d86"}]
+                        }
+                    },
+                    "created_at": "2017-04-25 16:26:15",
+                    "updated_at": "2017-04-25 16:26:15",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+                        }
+                    }, {
+                        "id": "2012984c-67b7-489f-a51b-45912895f53e",
+                        "group_id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
+                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                        "rep_id": "33b6bbdf-986b-424d-9d1c-1dd5d80e31bc",
+                        "rep": "Sabrina Kreiger",
+                        "spots": 316,
+                        "status": "active",
+                        "starting_cost": "1843.00",
+                        "companion_limit": 1,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "leader",
+                        "difficulty": "level 2",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["teens", "pastors", "medical professionals", "women"],
+                        "team_roles": ["PRAS", "NAST", "DIET", "CRDO"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders...",
+                        "public": true,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-05 15:02:38",
+                        "updated_at": "2017-05-05 15:02:42",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/2012984c-67b7-489f-a51b-45912895f53e"}],
+                        "group": {
+                            "data": {
+                                "id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
+                                "status": "approved",
+                                "name": "Toy-Braun",
+                                "type": "business",
+                                "timezone": "America\/Porto_Velho",
+                                "description": "I was going a journey, I should think you'll feel it a little ledge of rock, and, as there was silence for some.",
+                                "url": "toy-braun",
+                                "public": true,
+                                "address_one": "488 Mattie Mountain Apt. 518",
+                                "address_two": "45254",
+                                "city": null,
+                                "state": null,
+                                "zip": null,
+                                "country_code": "ie",
+                                "country_name": "Ireland",
+                                "phone_one": "3285255388",
+                                "phone_two": "9218561719260",
+                                "email": "hjerde@example.org",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-05 15:01:44",
+                                "updated_at": "2017-05-05 15:02:49",
+                                "links": [{"rel": "self", "uri": "\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]
+                            }
+                        }
+                    }, {
+                        "id": "e2d3a383-58b9-434e-a6d5-22062395f3a7",
+                        "group_id": "e73e385a-435c-3ff1-a45c-2eb1db19a92b",
+                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                        "rep_id": "41e21866-80fb-4bb8-afcd-401087a70710",
+                        "rep": "Lily Conroy",
+                        "spots": 284,
+                        "status": "active",
+                        "starting_cost": "1754.00",
+                        "companion_limit": 2,
+                        "reservations": 0,
+                        "country_code": "ni",
+                        "country_name": "Nicaragua",
+                        "type": "family",
+                        "difficulty": "level 1",
+                        "started_at": "2017-07-22",
+                        "ended_at": "2017-07-30",
+                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                        "prospects": ["women", "business professionals", "men", "medical professionals"],
+                        "team_roles": ["MDSN", "ETEC", "DENT", "DENH"],
+                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+...",
+                        "public": true,
+                        "published_at": "2016-02-01 00:00:00",
+                        "closed_at": "2017-07-15 00:00:00",
+                        "created_at": "2017-05-05 15:03:00",
+                        "updated_at": "2017-05-05 15:03:04",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/trips\/f4fd2275-d972-4323-979f-2099ea17a15a"}],
+                        "group": {
+                            "data": {
+                                "id": "e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e",
+                                "status": "approved",
+                                "name": "Ruecker, Gerlach and Paucek",
+                                "type": "nonprofit",
+                                "timezone": "Asia\/Baku",
+                                "description": "And mentioned me to him: She gave me a pair of the shepherd boy--and the sneeze of the tea--' 'The twinkling of the.",
+                                "url": "ruecker-gerlach-and-paucek",
+                                "public": true,
+                                "address_one": "67251 Smith Overpass Apt. 318",
+                                "address_two": null,
+                                "city": null,
+                                "state": null,
+                                "zip": "05589-5101",
+                                "country_code": "tv",
+                                "country_name": "Tuvalu",
+                                "phone_one": "975420450588447",
+                                "phone_two": "",
+                                "email": "leo.mcclure@example.com",
+                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                "banner": null,
+                                "reservations_count": 75,
+                                "created_at": "2017-05-05 15:01:44",
+                                "updated_at": "2017-05-05 15:03:11",
+                                "links": [{"rel": "self", "uri": "\/groups\/e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e"}]
+                            }
+                        }
+                    }]
+                }
+            }],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": {"next": "https:\/\/missions.dev\/api\/campaigns?page=2"}
+                }
+            }
+        };
+
+        if (pathMatch.campaign) {
+            body.data = _.findWhere (body.data, {id: pathMatch.campaign});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    // Uploads API
+    ['GET *uploads(/:id)'] (pathMatch, query, request) {
+        let body;
+        switch (request.params.type) {
+            case 'avatar':
+                body = {
+                    "data": [],
+                    "meta": {
+                        "pagination": {
+                            "total": 0,
+                            "count": 0,
+                            "per_page": 6,
+                            "current_page": 1,
+                            "total_pages": 0,
+                            "links": []
+                        }
+                    }
+                };
+                break;
+            case 'banner':
+                body = {
+                    "data": [
+                        {
+                            "id": "12132232-7ad5-4756-9b4f-c6c4fcfd9c8f",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
+                            "name": "1n1d17_speak",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/12132232-7ad5-4756-9b4f-c6c4fcfd9c8f"}]
+                        },
+                        {
+                            "id": "2d0cadf4-52d9-4efc-af40-ff20e37adc5d",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-vision3-2560x800.jpg",
+                            "name": "1n1d17_vision3",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/2d0cadf4-52d9-4efc-af40-ff20e37adc5d"}]
+                        },
+                        {
+                            "id": "31dcc58f-0f57-4b5c-ba56-d4321850afe6",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-water-2560x800.jpg",
+                            "name": "1n1d17_water",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/31dcc58f-0f57-4b5c-ba56-d4321850afe6"}]
+                        },
+                        {
+                            "id": "59fb9992-1937-473d-b9f7-b5bde5b6ae52",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-9-2560x800.jpg",
+                            "name": "gen_ban_9",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/59fb9992-1937-473d-b9f7-b5bde5b6ae52"}]
+                        },
+                        {
+                            "id": "643c932b-3bcc-42b5-b884-9a1ff1b8f8e7",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-6-2560x800.jpg",
+                            "name": "gen_ban_6",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/643c932b-3bcc-42b5-b884-9a1ff1b8f8e7"}]
+                        },
+                        {
+                            "id": "648fa5d0-84ba-43c6-8042-b217954fae25",
+                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-4-2560x800.jpg",
+                            "name": "gen_ban_4",
+                            "type": "banner",
+                            "meta": null,
+                            "created_at": "2017-05-05 15:01:43",
+                            "updated_at": "2017-05-05 15:01:43",
+                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
+                            "links": [{"rel": "self", "uri": "\/uploads\/648fa5d0-84ba-43c6-8042-b217954fae25"}]
+                        }],
+                    "meta": {
+                        "pagination": {
+                            "total": 18,
+                            "count": 6,
+                            "per_page": 6,
+                            "current_page": 1,
+                            "total_pages": 3,
+                            "links": {"next": "https:\/\/missions.dev\/api\/uploads?page=2"}
+                        }
+                    }
+                };
+                break;
+    ['GET *teams(/:team)(/:path)(/:pathId)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
+                    "callsign": "Team #1",
+                    "type": {
+                        "data": {
+                            "id": "08c4d947-75fc-4a02-9e89-bb18c8e20d86",
+                            "name": "leadership",
+                            "rules": {
+                                "max_groups": 1,
+                                "min_groups": 1,
+                                "max_leaders": 2,
+                                "max_members": 10,
+                                "min_leaders": 2,
+                                "min_members": 2,
+                                "max_group_leaders": 1,
+                                "max_group_members": 10,
+                                "min_group_leaders": 1,
+                                "min_group_members": 2
+                            },
+                            "created_at": "2017-05-15 14:09:04",
+                            "updated_at": "2017-05-17 00:48:39",
+                            "links": [{"rel": "self", "uri": "api\/teams\/types\/08c4d947-75fc-4a02-9e89-bb18c8e20d86"}]
+                        }
+                    },
+                    "created_at": "2017-04-25 16:26:15",
+                    "updated_at": "2017-04-25 16:26:15",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    // Rooming API
+    // Types
+    ['GET *rooming/types(/:type)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
+                    "name": "family standard",
+                    "rules": {
+                        "same_gender": false,
+                        "married_only": false,
+                        "occupancy_limit": 4
+                    },
+                    "created_at": "2017-05-05 19:13:16",
+                    "updated_at": "2017-05-05 19:13:16",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
+                        }
+                    ]
+                },
+                {
+                    "id": "45d67733-8b03-442f-b24b-0ebcc8681dc7",
+                    "name": "double",
+                    "rules": {
+                        "same_gender": false,
+                        "married_only": false,
+                        "occupancy_limit": 2
+                    },
+                    "created_at": "2017-05-05 18:52:44",
+                    "updated_at": "2017-05-05 18:52:44",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/types/45d67733-8b03-442f-b24b-0ebcc8681dc7"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 5,
+                    "count": 5,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        if (pathMatch.type) {
+            body.data = _.findWhere(body.data, {id: pathMatch.type});
+            delete body.meta;
+        }
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    // Plans
+    ['GET *rooming/plans(/:plan)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "6d3ec4f6-7585-4d72-b48a-ec7cb82e3abe",
+                    "name": "Test Rooming Plan",
+                    "short_desc": "A custom description",
+                    "created_at": "2017-05-04 17:52:54",
+                    "updated_at": "2017-05-04 19:09:51"
+                },
+                {
+                    "id": "b198a66b-24d9-4f94-a5b3-6efa34c12c50",
+                    "name": "Another Rooming Plan",
+                    "short_desc": "no description",
+                    "created_at": "2017-05-04 19:12:32",
+                    "updated_at": "2017-05-04 19:12:32"
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 2,
+                    "count": 2,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.plan) {
+            body.data = _.findWhere(body.data, {id: pathMatch.plan});
+            delete body.meta;
+        }
+
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    ['POST *rooming/plans'] (pathMatch, query, request) {
+        let body = {
+            data: {
+                "id": "30434478-1fa2-4902-a96b-b4434110507e",
+                "name": "Test New Rooming Plan",
+                "short_desc": "A custom description",
+                "created_at": "2017-05-04 17:52:54",
+                "updated_at": "2017-05-04 19:09:51"
+            }
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    ['GET *rooming/plans/:plan/rooms(/:room)'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
+                    "type": "Standard",
+                    "label": null,
+                    "occupants_count": 1,
+                    "created_at": "2017-05-08 19:02:06",
+                    "updated_at": "2017-05-08 19:02:06",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
+                        }
+                    ]
+                },
+                {
+                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
+                    "type": "Married (double)",
+                    "label": null,
+                    "occupants_count": 4,
+                    "created_at": "2017-05-08 19:01:46",
+                    "updated_at": "2017-05-08 19:01:46",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 4,
+                    "count": 4,
+                    "per_page": 15,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        if (pathMatch.room) {
+            body.data = _.findWhere(body.data, {id: pathMatch.room});
+            delete body.meta;
+        }
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    ['POST *rooming/plans/:plan/rooms(/:room)'](pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "a4c704f0-f5f7-4c6c-8134-e0e67232305a",
+                "type": request.body.type.name,
+                "label": request.body.label,
+                "occupants_count": 0,
+                "created_at": "2017-05-08 19:02:06",
+                "updated_at": "2017-05-08 19:02:06",
+                "deleted_at": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "/api/rooming/rooms/a4c704f0-f5f7-4c6c-8134-e0e67232305a"
+                    }
+                ]
+            }
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+    // Rooms
+    ['GET *rooming/rooms'] (pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "601395e6-3635-4001-b2df-f800a6349669",
+                "type": "Triple",
+                "label": null,
+                "occupants_count": null,
+                "created_at": "2017-05-09 16:44:22",
+                "updated_at": "2017-05-09 16:44:22",
+                "deleted_at": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "/api/rooming/rooms/601395e6-3635-4001-b2df-f800a6349669"
+                    }
+                ]
+            }
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *rooming/rooms(/:room)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
+                    "type": "Standard",
+                    "label": null,
+                    "occupants_count": 1,
+                    "created_at": "2017-05-08 19:02:06",
+                    "updated_at": "2017-05-08 19:02:06",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
+                        }
+                    ]
+                },
+                {
+                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
+                    "type": "Married (double)",
+                    "label": null,
+                    "occupants_count": 4,
+                    "created_at": "2017-05-08 19:01:46",
+                    "updated_at": "2017-05-08 19:01:46",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 4,
+                    "count": 4,
+                    "per_page": 15,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.room) {
+            body.data = _.findWhere(body.data, {id: pathMatch.room});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
+
     // Travel Itineraries API
     ['GET *itineraries/:id'] (pathMatch, query, request) {
         let body = {
@@ -2675,7 +4038,7 @@ export default {
         };
 
         if (pathMatch.campaign) {
-            body.data = _.findWhere (body.data, {id: pathMatch.campaign});
+            body.data = _.findWhere(body.data, {id: pathMatch.campaign});
             delete body.meta;
         }
 
@@ -4140,6 +5503,89 @@ export default {
 
     ['GET *utilities/past-trips'] (pathMatch, query, request) {
         let body = ["2004 Puerto Plata, Dominican Rep.", "2005 Iquitos, Peru", "2005 Leon, Nicaragua", "2005 Cusco, Peru", "2006 Belo Horizonte, Brazil", "2006 Azua, Dominican Rep.", "2006 Cap Haitien, Haiti", "2007 Escuintla, Guatemala", "2007 El Progreso, Honduras", "2007 Cap-Hatien, Haiti", "2008 Shillong, India", "2008 Barahona, Dominican Rep.", "2008 Puerto Cortes, Honduras", "2008 Santa Cruz, Bolivia", "2009 Managua, Nicaragua", "2009 Petionville, Haiti", "2010 Kurnool, India", "2010 San Cristobal, Dominican Rep.", "2010 Lima, Peru", "2010 Warangal, India", "2011 Meteti, Panama", "2011 Andra Pradesh, India", "2011 Lima, Peru", "2011 Amazon River, Peru", "2011 Croix-de-Bouquet, Haiti", "2011 Bhimavaram, India", "2012 Buriram, Thailand", "2012 La Ceiba, Honduras", "2012 Patna, India", "2012 Quito, Ecuador", "2012 Bangkok, Thailand", "2012 Lima, Peru", "2012 Hyderabad, India", "2013 Patna, India", "2013 1Nation1Day Honduras", "2013 Hyderabad, India", "2014 Yoro, Honduras", "2014 Roatan, Honduras", "2014 Kumasi, Ghana", "2014 Lima, Peru", "2014 Kathmandu, Nepal", "2015 India", "2015 1Nation1Day Dominican Republic", "2015 Christmas in India", "2016 India", "2016 Ecuador", "2016 Nicaragua", "2016 Honduras 1N1D Follow up", "2016 Nepal", "2016 Christmas in India"];
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    ['GET *utilities/team-roles(/:type)'] (pathMatch, query, request) {
+        let roles = {
+            leadership: {
+                "GPLR": "Group Leader",
+                "TMLR": "Squad Leader",
+                "PRDR": "Project Director",
+                "PRAS": "Project Assistant",
+                "CODR": "Country Director",
+                "SSPK": "Stadium Speaker",
+                "MCDR": "Medical Clinic Director"
+            },
+
+            general: {
+                "MISS": "Missionary (13+)",
+                "MINR": "Missionary (Child 8-12)",
+                "PAST": "Pastor",
+                "POLI": "Politican",
+                "BUSP": "Business Professional",
+                "MEDI": "Media Professional",
+                "MDPF": "Medical Professional",
+                "INFL": "Influencer",
+                "WATR": "Clean Water Team Member"
+            },
+            medical: {
+                "MDPF": "Medical Professional",
+                "MDSG": "Medical Student",
+                "MDSN": "Medical Student: Nursing",
+                "MDSP": "Medical Student: Pre-Med",
+                "MDSD": "Medical Student: Dental",
+                "RESP": "Respitory Therapist",
+                "PHYA": "Physican's Assistant",
+                "PHYT": "Physical Therapist",
+                "PHAT": "Pharmacy Tech",
+                "PHAA": "Pharmacy Assistant",
+                "PHAR": "Pharmacist",
+                "OTEC": "Optometry Tech",
+                "ODOC": "Optometry Doctor",
+                "OAST": "Optical Assistant",
+                "DIET": "Dietitian",
+                "NUTR": "Nutrionist",
+                "LACT": "Lactation Consultant",
+                "NAST": "Nurse Assistant",
+                "NTEC": "Nurse Tech",
+                "NPRC": "Nurse Practitioner",
+                "REGN": "Nurse (RN)",
+                "LPNN": "Nurse (LPN)",
+                "NCRT": "Non-Certified",
+                "MEDA": "Medical Assistant",
+                "LVNN": "LVN",
+                "HEDU": "Health Education",
+                "ETEC": "EMT",
+                "MDFG": "Doctor (OB\/GYN)",
+                "MDOC": "Doctor (MD)",
+                "DDOC": "Doctor (DO)",
+                "DENT": "Dentist (DDS)",
+                "DENH": "Dental Hygienist",
+                "DENA": "Dental Assistant",
+                "CHRA": "Chiropractor Assistant",
+                "CHRO": "Chiropractor",
+                "RDIO": "Radiologist",
+                "CRDO": "Cardiologist",
+                "ANES": "Anesthesiologist",
+                "PRAY": "Prayer Team"
+            },
+        };
+
+        let body = {};
+        if(pathMatch.type) {
+            body.roles = roles[pathMatch.type]
+        } else {
+            body.roles = _.extend({}, roles.leadership, roles.general, roles.medical);
+        }
+
         return {
             body: body,
             status: 200,

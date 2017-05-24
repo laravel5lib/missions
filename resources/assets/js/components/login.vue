@@ -331,7 +331,7 @@
     import moment from 'moment';
     import timezone from 'moment-timezone';
     import vSelect from "vue-select";
-    module.exports = {
+    export default {
         name: 'login',
         components: {vSelect},
         data: function () {

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="row">
+		<div class="row" v-if="!isAdminRoute">
 			<div class="col-sm-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -34,6 +34,21 @@
 
 		<div class="row" style="position:relative;">
 			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<aside :show.sync="showTeamsFilters" placement="left" header="Team Filters" :width="375">
+				<hr class="divider inv sm">
+				<form class="col-sm-12">
+
+					<div class="form-group" v-if="isAdminRoute">
+						<label>Travel Group</label>
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+						          :value.sync="groupObj" :options="groupsOptions" label="name"
+						          placeholder="Filter Group"></v-select>
+					</div>
+
+					<hr class="divider inv sm">
+					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetTeamFilter()"><i class="fa fa-times"></i> Reset Team Filters</button>
+				</form>
+			</aside>
 			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
@@ -42,6 +57,20 @@
 						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
 							   :debounce="250" placeholder="Tag, tag2, tag3...">
 					</div> -->
+
+					<div class="form-group" v-if="isAdminRoute">
+						<label>Trip Type</label>
+						<select  class="form-control input-sm" v-model="reservationFilters.type">
+							<option value="">Any Type</option>
+							<option value="ministry">Ministry</option>
+							<option value="family">Family</option>
+							<option value="international">International</option>
+							<option value="media">Media</option>
+							<option value="medical">Medical</option>
+							<option value="leader">Leader</option>
+						</select>
+					</div>
+
 					<div class="form-group">
 						<label>Role</label>
 						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
@@ -98,7 +127,7 @@
 						<label>Travel Companions</label>
 						<div>
 							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" value=""> Any
+								<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" :value=""> Any
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
@@ -294,10 +323,10 @@
 																			<p class="small">{{member.gender | capitalize}}</p>
 																			<label>Marital Status</label>
 																			<p class="small">{{member.status | capitalize}}</p>
-																			<template v-if="reservation.companions.data.length">
+																			<template v-if="member.companions.data.length">
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
-																					<li v-for="companion in reservation.companions.data">
+																					<li v-for="companion in member.companions.data">
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
 																					</li>
 																				</ul>
@@ -407,10 +436,10 @@
 																			<p class="small">{{member.gender | capitalize}}</p>
 																			<label>Marital Status</label>
 																			<p class="small">{{member.status | capitalize}}</p>
-																			<template v-if="reservation.companions.data.length">
+																			<template v-if="member.companions.data.length">
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
-																					<li v-for="companion in reservation.companions.data">
+																					<li v-for="companion in member.companions.data">
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
 																					</li>
 																				</ul>
@@ -556,7 +585,6 @@
 				</div>
 			</div>
 
-
 			<div class="col-md-5">
 				<ul class="nav nav-tabs">
 					<li role="presentation" class="active">
@@ -571,10 +599,27 @@
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane active" id="teams">
 						<div class="row">
+							<template v-if="isAdminRoute">
+								<div class="col-xs-6">
+									<div class="input-group input-group-sm col-xs-12">
+										<input type="text" class="form-control" v-model="teamsSearch" debounce="300" placeholder="Search">
+										<span class="input-group-addon"><i class="fa fa-search"></i></span>
+									</div>
+								</div>
+								<div class="col-xs-6">
+									<button class="btn btn-primary btn-sm btn-block" @click="showTeamsFilters = true;">Filter</button>
+								</div>
+							</template>
+
 							<div class="col-xs-12 text-right">
+								<hr class="divider sm inv">
 								<button class="btn btn-primary btn-sm" @click="openNewTeamModel">Create A Squad</button>
-								<hr class="divider lg">
 							</div>
+
+							<div class="col-xs-12">
+								<hr class="divider sm">
+							</div>
+
 							<div class="col-xs-12">
 								<template v-if="teams.length">
 									<ul class="list-group">
@@ -756,18 +801,20 @@
 								<v-select @keydown.enter.prevent="" multiple class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 										  :value.sync="newTeamCampaigns" :options="campaignsOptions" label="name"
 										  placeholder="Filter by Campaign"></v-select>
-							</div>
-							<div class="form-group" v-if="isAdminRoute">
+							</div>-->
+							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 										  :value.sync="newTeamGroup" :options="groupsOptions" label="name"
-										  placeholder="Filter Groups"></v-select>
-							</div>-->
+										  placeholder="Assign Travel Group"></v-select>
+								<select class="hidden" v-model="newTeamGroup" v-validate:teamgroup="['required']">
+									<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+								</select>
+							</div>
 						</form>
 					</validator>
 				</div>
 			</modal>
-
 			<modal title="Delete Squad" small ok-text="Delete" :callback="deleteTeam" :show.sync="showTeamDeleteModal">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
@@ -775,7 +822,6 @@
 					</p>
 				</div>
 			</modal>
-
 			<modal title="Delete Group" small ok-text="Delete" :callback="deleteSquad" :show.sync="showSquadDeleteModal">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
@@ -783,7 +829,6 @@
 					</p>
 				</div>
 			</modal>
-
 			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :show.sync="showSquadCreateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadCreate">
@@ -796,7 +841,6 @@
 					</validator>
 				</div>
 			</modal>
-
 			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :show.sync="showSquadUpdateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadEdit" v-if="selectedSquadObj">
@@ -810,7 +854,6 @@
 				</div>
 			</modal>
 		</div>
-
 	</div>
 </template>
 <style>
@@ -818,6 +861,7 @@
 </style>
 <script type="text/javascript">
 	import _ from 'underscore';
+	import $ from 'jquery';
 	import vSelect from 'vue-select';
     export default{
         name: 'team-manager',
@@ -844,6 +888,7 @@
                 teamsPagination: { current_page: 1 },
                 reservations: [],
                 membersSearch: '',
+                teamsSearch: '',
                 reservationsSearch: '',
                 reservationsPerPage: 10,
                 reservationsPagination: { current_page: 1 },
@@ -860,7 +905,7 @@
                 newTeamCallSign: '',
                 newTeamType: '',
                 newTeamCampaigns: [],
-                newTeamGroup: [],
+                newTeamGroup: null,
 
                 showSquadCreateModal: false,
                 newSquadCallsign: '',
@@ -874,21 +919,27 @@
                 lastReservationRequest: null,
 
 	            // Filters vars
+                showTeamsFilters: false,
                 showReservationsFilters: false,
                 showMembersFilters: false,
                 campaignsArr: [],
                 groupsArr: [],
+                groupObj: null,
                 roleObj: null,
                 rolesOptions: [],
 	            leadershipRoles: [],
                 campaignsOptions: [],
                 groupsOptions: [],
+                teamFilters: {
+                    group: ''
+                },
                 // reservations filters
 	            reservationFilters: {
-                    groups: [],
+                    type: '',
+		            groups: [],
 		            gender: '',
 		            status: '',
-                    hasCompanions: '',
+                    hasCompanions: null,
                     role: ''
                 },
 	            membersFilters: {
@@ -907,10 +958,18 @@
 
 	            editTeamMode: false,
                 toggleHintsCollapse: true,
+                storageName: 'TravelGroupSquads',
             }
         },
 	    watch: {
             // watch filters obj
+            'teamFilters': {
+                handler: function (val) {
+                    this.teamsPagination.current_page = 1;
+                    this.getTeams();
+                },
+                deep: true
+            },
             'reservationFilters': {
                 handler: function (val) {
                     this.reservationsPagination.current_page = 1;
@@ -920,6 +979,10 @@
             },
             'groupsArr': function (val) {
                 this.reservationFilters.groups = _.pluck(val, 'id') || '';
+//				this.searchReservations();
+            },
+            'groupObj': function (val) {
+                this.teamFilters.group = val ? val.id : '';
 //				this.searchReservations();
             },
             'roleObj': function (val) {
@@ -932,6 +995,10 @@
             'reservationsAgeMax': function (val) {
                 this.searchReservations();
             },
+            'teamsSearch': function (val, oldVal) {
+                this.teamsPagination.current_page = 1;
+                this.getTeams();
+            },
             'reservationsSearch': function (val, oldVal) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
@@ -942,6 +1009,7 @@
             },
 		    'currentTeam': function (val) {
 			    this.getSquads();
+			    this.updateConfig();
             },
 
         },
@@ -990,7 +1058,12 @@
 			},*/
 	    },
         methods: {
-            openNewTeamModel(){
+            updateConfig(){
+                localStorage[this.storageName] = JSON.stringify({
+					currentTeam: this.currentTeam.id,
+                });
+            },
+	        openNewTeamModel(){
                 let campaign = _.findWhere(this.campaignsOptions, { id: this.campaignId });
                 if (campaign)
                     this.newTeamCampaigns = [campaign];
@@ -1017,6 +1090,13 @@
                 }
 
 
+            },
+            resetTeamFilter(){
+                this.teamsSearch = null;
+                this.groupObj = null;
+                this.teamFilters = {
+                    group: '',
+                }
             },
             getRoles(search, loading){
                 loading ? loading(true) : void 0;
@@ -1260,7 +1340,9 @@
                 let params = {
                     include: 'type',
                     page: this.teamsPagination.current_page,
-
+	                search: this.teamsSearch,
+	                group: this.teamFilters.group,
+                    designation: this.teamFilters.designation,
                 };
 
                 return this.TeamResource.get(params).then(function (response) {
@@ -1307,7 +1389,7 @@
 	                            });
                             });
 
-                        if (this.newTeamGroup)    
+                        if (this.newTeamGroup && this.newTeamGroup.id)
                             associations.push({
                                 type: 'groups',
                                 id: this.newTeamGroup.id
@@ -1325,10 +1407,12 @@
                                 type: 'campaigns',
                                 id: this.campaignId
                             });
-                        associations.push({
-                            type: 'groups',
-                            id: this.groupId
-                        });
+                        if (this.groupId) {
+                            associations.push({
+                                type: 'groups',
+                                id: this.groupId
+                            });
+                        }
                     }
                     let data = {
                         type_id: this.newTeamType,
@@ -1455,7 +1539,8 @@
 	        },
 	        makeTeamCurrent(team){
 	            this.currentTeam = team;
-                $('.nav-tabs a[href="#reservations"]').tab('show');
+	            if (_.isFunction($.fn.tab))
+                    $('.nav-tabs a[href="#reservations"]').tab('show');
             },
             updateCurrentTeamType() {
                 if (this.currentTeam.type_id !== this.currentTeam.type.data.id) {
@@ -1581,33 +1666,31 @@
                 this.assignMassToSquad(compArray, squad)
 
             },
-
         },
         ready(){
             let self = this;
             let promises = [];
             if (this.isAdminRoute) {
-
+                //campaign already scoped
+                this.newTeamCampaigns = [{id: this.campaignId}];
+                promises.push(this.getGroups());
             } else {
                 promises.push(this.$http.get('users/' + this.userId, {
                     params: {include: 'facilitating,managing.trips'}
                 }).then(function (response) {
                     let user = response.body.data;
                     let managing = [];
-
                     if (user.facilitating.data.length) {
                         this.reservationsFacilitator = true;
                         let facilitating = _.pluck(user.facilitating.data, 'id');
                         this.reservationsTrips = _.union(this.reservationsTrips, facilitating);
                     }
-
                     if (user.managing.data.length) {
                         _.each(user.managing.data, function (group) {
                             managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                         });
                         this.reservationsTrips = _.union(this.reservationsTrips, managing);
                     }
-
                     this.includeReservationsManaging = true;
                 }));
             }
@@ -1621,11 +1704,20 @@
 		            roles.push(code);
                 });
 	            this.leadershipRoles = roles;
+            }, function (error) {
+                console.log(error);
+                return error;
             }));
 
             Promise.all(promises).then(function (values) {
                 this.startUp = false;
                 this.searchReservations();
+
+                // load view state
+                if (localStorage[this.storageName]) {
+                    let config = JSON.parse(localStorage[this.storageName]);
+                    this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                }
             }.bind(this));
 
             this.$root.$on('campaign-scope', function (val) {

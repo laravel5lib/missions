@@ -255,6 +255,7 @@
 			}
 		},
 		ready(){
+			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
 				// this.$refs.spinner.hide();

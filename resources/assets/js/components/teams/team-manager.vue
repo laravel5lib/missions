@@ -1538,9 +1538,11 @@
                 });
 	        },
 	        makeTeamCurrent(team){
-	            this.currentTeam = team;
-	            if (_.isFunction($.fn.tab))
-                    $('.nav-tabs a[href="#reservations"]').tab('show');
+	        	if (team) {
+	        		this.currentTeam = team;
+		            if (_.isFunction($.fn.tab))
+	                    $('.nav-tabs a[href="#reservations"]').tab('show');
+	        	}
             },
             updateCurrentTeamType() {
                 if (this.currentTeam.type_id !== this.currentTeam.type.data.id) {
@@ -1716,7 +1718,9 @@
                 // load view state
                 if (localStorage[this.storageName]) {
                     let config = JSON.parse(localStorage[this.storageName]);
-                    this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                    if (config.currentTeam) {
+                    	this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                    }
                 }
             }.bind(this));
 

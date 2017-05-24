@@ -39,6 +39,11 @@ class Team extends Model
         return $this->morphedByMany(Campaign::class, 'teamable');
     }
 
+    public function regions()
+    {
+        return $this->morphedByMany(Region::class, 'teamable');
+    }
+
     public function validateSquads()
     {
         return new ValidatesSquads($this);

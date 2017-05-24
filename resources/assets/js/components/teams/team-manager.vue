@@ -1716,7 +1716,8 @@
                 // load view state
                 if (localStorage[this.storageName]) {
                     let config = JSON.parse(localStorage[this.storageName]);
-                    this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                    if (config.currentTeam)
+                        this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
                 }
             }.bind(this));
 

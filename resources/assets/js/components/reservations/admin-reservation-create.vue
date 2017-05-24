@@ -168,7 +168,8 @@
                     user_id: this.userData.id,
 					trip_id: this.tripId,
                     companion_limit: this.companion_limit,
-                    costs: _.union(this.tripCosts.incremental, this.selectedOptions, this.tripCosts.static),
+                    costs: _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static),
+                    desired_role: this.userInfo.desired_role.value
                 };
 
                 if (this.userData && this.userData.donor_id) {

@@ -244,13 +244,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
-                    <label class="control-label" for="infoAddress">Address 1</label>
-                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-                </div>
-                <div class="col-sm-6">
-                    <label class="control-label" for="infoAddress2">Address 2</label>
-                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
+                <div class="col-sm-12">
+                    <label class="control-label" for="infoAddress">Address</label>
+                    <input type="text" class="form-control" v-model="address" id="infoAddress" placeholder="Street Address">
                 </div>
             </div>
 
@@ -367,8 +363,7 @@
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
-                address_one: '',
-                address_two: '',
+                address: '',
                 city: '',
                 state: '',
                 zip: '',
@@ -410,7 +405,7 @@
             },
             birthday() {
                 return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL')
+                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
                         : null;
             }
         },
@@ -431,13 +426,13 @@
                         password: this.password,
                         password_confirmation: this.password_confirmation,
                         bio: this.bio,
+                        birthday: this.birthday,
                         type: this.type,
                         country_code: this.country_code,
                         timezone: this.timezone,
                         phone_one: this.phone_one,
                         phone_two: this.phone_two,
-                        address_one: this.address_one,
-                        address_two: this.address_two,
+                        address: this.address,
                         city: this.city,
                         state: this.state,
                         zip: this.zip,

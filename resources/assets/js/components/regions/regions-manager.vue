@@ -378,22 +378,11 @@
 										<h5 class="panel-title">
 											<div class="row">
 												<div class="col-xs-9">
-													<div class="media">
-														<div class="media-left" style="padding-right:0;">
-															<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
-															</a>
-														</div>
-														<div class="media-body" style="vertical-align:middle;">
-															<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-															<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
-														</div><!-- end media-body -->
-													</div><!-- end media -->
-													<!-- <a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-														<img :src="member.avatar" class="img-circle img-xs av-left">
-														{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="small" v-if="member.leader">&middot; GL</span><br>
-														<label>{{ member.desired_role.name }}</label>
-													</a> -->
+													<a role="button" data-toggle="collapse" :data-parent="'#regionsAccordion' + $index" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+														<!--<img :src="member.avatar" class="img-circle img-xs av-left">-->
+														{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams.data.length || 0 }} Teams</span><br>
+														<label>{{ region.country.name }}</label>
+													</a>
 												</div>
 												<div class="col-xs-3 text-right action-buttons">
 													<dropdown type="default">
@@ -414,48 +403,27 @@
 											</div>
 										</h5>
 									</div>
-									<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+									<div :id="'regionItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 										<div class="panel-body">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Gender</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.gender | capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Marital Status</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.status | capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Age</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.age}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Travel Group</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.trip.data.group.data.name}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
+											<template v-if="region.teams.data.length">
+												<div class="row">
+													<div class="col-sm-6">
+														<label>Travel Groups</label>
+													</div><!-- end col -->
+													<div class="col-sm-6">
+														<ul style="margin:3px 0;">
+															<template v-for="team in region.teams.data">
+																<li class="small" v-for="group in team.groups.data">
+																	{{ group.name | capitalize }}
+																</li>
+															</template>
+														</ul>
+													</div><!-- end col -->
+												</div><!-- end row -->
+												<hr class="divider sm">
+											</template>
+
 										</div><!-- end panel-body -->
-									</div>
-									<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length">
-										<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-										<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 									</div>
 								</div>
 							</div>
@@ -796,13 +764,14 @@
             },
             getRegions(){
                 let params = {
-                    include: '',
+                    campaign: this.campaignId,
+                    include: 'teams.groups',
                     page: this.regionsPagination.current_page,
 	                search: this.regionsSearch,
 	                country: this.regionsFilters.country,
                 };
 
-                return this.RegionsResource.get({ campaign: this.campaignId}, params).then(function (response) {
+                return this.RegionsResource.get(params).then(function (response) {
                     this.regionsPagination = response.body.meta.pagination;
                     return this.regions = response.body.data;
                 }, function (response) {

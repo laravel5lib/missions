@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model.sync="filters.minDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.minDate" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model.sync="filters.maxDate|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.maxDate" v-if="filters"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -367,7 +367,7 @@
                     minAmount: null,
                     maxAmount: null,
                     type: null,
-                    maxDate: '',
+                    maxDate: null,
                     minDate: null,
                     payment: null
                 },
@@ -401,7 +401,7 @@
             // watch filters obj
             'filters': {
                 handler: function (val) {
-                    console.log(val);
+//                    console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
@@ -457,7 +457,7 @@
                         type: this.filters.type,
                     }
                 });
-
+//                console.log(JSON.parse(localStorage[this.storageName]));
             },
             isActive(field){
                 return _.contains(this.activeFields, field);
@@ -521,7 +521,6 @@
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
                 this.$http.get('transactions', { params: params }).then(function (response) {
-                    let self = this;
                     this.transactions = response.body.data;
                     this.pagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
@@ -541,8 +540,8 @@
         ready() {
             // load view state
             if (localStorage[this.storageName]) {
-                this.filters.minDate = '';
-                this.filters.maxDate = '';
+                this.filters.minDate = null;
+                this.filters.maxDate = null;
 
                 let config = JSON.parse(localStorage[this.storageName]);
                 this.activeFields = config.activeFields;

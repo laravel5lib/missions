@@ -218,7 +218,7 @@ Vue.http.interceptors.push(function(request, next) {
     // modify request
     var token, headers;
 
-    token = 'Bearer ' + $.cookie('api_token');
+    token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
     headers = request.headers || (request.headers = {});
 
@@ -365,12 +365,14 @@ Vue.filter('percentage', {
 Vue.filter('moment', {
     read: function (val, format, diff = false, noLocal = false) {
 
+        if (!val) return val;
+
         if (noLocal) {
             return moment(val).format(format || 'LL'); // do not convert to local
         }
 
         // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val).local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -382,7 +384,8 @@ Vue.filter('moment', {
     write: function (val, oldVal) {
         let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return moment(val).local().utc().format(format);
+        if (!val) return val;
+            return moment(val).local().utc().format(format);
     }
 });
 
@@ -766,6 +769,9 @@ Vue.mixin({
         isAdminRoute() {
             return this.firstUrlSegment == 'admin';
         },
+        isDashboardRoute() {
+            return this.firstUrlSegment == 'dashboard';
+        },
     },
     ready() {
         function isTouchDevice() {
@@ -804,7 +810,7 @@ new Vue({
             return this.$cookie.get('impersonate');
         },
         user() {
-            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(localStorage.getItem('user'));
+            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
         },
     },
     components: {
@@ -998,6 +1004,22 @@ new Vue({
             // Save user info
             this.user = user;
             this.authenticated = true;
+        },
+        fetchUser() {
+            if (localStorage.hasOwnProperty('user')) {
+                return JSON.parse(localStorage.getItem('user'))
+            } else {
+                let that = this;
+                this.$http.get('users/me?include=roles,abilities')
+                    .then(function (response) {
+                            that.$root.$emit('userHasLoggedIn', response.body.data);
+                            return response.body.data;
+                        },
+                        function (response) {
+                            if (this.isAdminRoute || this.isDashboardRoute)
+                                window.location = '/logout';
+                        });
+            }
         },
         getImpersonatedUser: function () {
             if (this.impersonatedUser !== null) {

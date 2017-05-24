@@ -90,7 +90,7 @@
                             <p>{{ $user->phone_two }}</p>
 
                             <label>Street</label>
-                            <p>{{ $user->street }}</p>
+                            <p>{{ $user->address }}</p>
 
                             <label>City</label>
                             <p>{{ $user->city }}</p>

@@ -1,7 +1,7 @@
 <template>
 	<div class="row" style="position:relative;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<aside :show.sync="showRegionsFilters" placement="left" header="Team Filters" :width="375">
+		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
@@ -373,60 +373,57 @@
 
 					<template v-if="regions.length">
 						<div class="panel-group" id="regionsAccordion" role="tablist" aria-multiselectable="true">
-								<div class="panel panel-default" v-for="region in regions | orderBy 'name'" v-show="true">
-									<div class="panel-heading" role="tab" id="headingOne">
-										<h5 class="panel-title">
-											<div class="row">
-												<div class="col-xs-9">
-													<a role="button" data-toggle="collapse" :data-parent="'#regionsAccordion' + $index" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-														<!--<img :src="member.avatar" class="img-circle img-xs av-left">-->
-														{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams.data.length || 0 }} Teams</span><br>
-														<label>{{ region.country.name }}</label>
-													</a>
-												</div>
-												<div class="col-xs-3 text-right action-buttons">
-													<dropdown type="default">
-														<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-															<span class="fa fa-ellipsis-h"></span>
-														</button>
-														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-															<li class="dropdown-header">Assign To Room</li>
-															<li role="separator" class="divider"></li>
-															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
-														</ul>
-													</dropdown>
-													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-														<i class="fa fa-angle-down"></i>
-													</a>
-												</div>
+							<div class="panel panel-default" v-for="region in regions | orderBy 'name'">
+								<div class="panel-heading" role="tab" id="headingOne">
+									<h5 class="panel-title">
+										<div class="row">
+											<div class="col-xs-9">
+												<a role="button" data-toggle="collapse" :data-parent="'#regionsAccordion' + $index" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams.data.length || 0 }} Teams</span><br>
+													<label>{{ region.country.name }}</label>
+												</a>
 											</div>
-										</h5>
-									</div>
-									<div :id="'regionItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-										<div class="panel-body">
-											<template v-if="region.teams.data.length">
-												<div class="row">
-													<div class="col-sm-6">
-														<label>Travel Groups</label>
-													</div><!-- end col -->
-													<div class="col-sm-6">
-														<ul style="margin:3px 0;">
-															<template v-for="team in region.teams.data">
-																<li class="small" v-for="group in team.groups.data">
-																	{{ group.name | capitalize }}
-																</li>
-															</template>
-														</ul>
-													</div><!-- end col -->
-												</div><!-- end row -->
-												<hr class="divider sm">
-											</template>
-
-										</div><!-- end panel-body -->
-									</div>
+											<div class="col-xs-3 text-right action-buttons">
+												<dropdown type="default">
+													<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+														<span class="fa fa-ellipsis-h"></span>
+													</button>
+													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+														<!--<li class="dropdown-header">Assign To Room</li>-->
+														<li><a @click="openRegionEditModal(region)"><i class="fa fa-pencil"></i> Edit</a></li>
+														<li role="separator" class="divider"></li>
+														<li><a @click="openRegionDeleteModal(region)"><i class="fa fa-trash"></i> Delete</a></li>
+													</ul>
+												</dropdown>
+												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#regionAccordion" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+													<i class="fa fa-angle-down"></i>
+												</a>
+											</div>
+										</div>
+									</h5>
+								</div>
+								<div :id="'regionItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+									<div class="panel-body">
+										<div class="row">
+											<div class="col-sm-6">
+												<label>Travel Groups</label>
+											</div><!-- end col -->
+											<div class="col-sm-6">
+												<ul style="margin:3px 0;" v-if="region.teams.data.length">
+													<template v-for="team in region.teams.data">
+														<li class="small" v-for="group in team.groups.data">
+															{{ group.name | capitalize }}
+														</li>
+													</template>
+												</ul>
+												<p class="small" v-else>None</p>
+											</div><!-- end col -->
+										</div><!-- end row -->
+										<hr class="divider sm">
+									</div><!-- end panel-body -->
 								</div>
 							</div>
+						</div>
 					</template>
 					<template v-else>
 						<hr class="divider inv">
@@ -558,7 +555,7 @@
 		</div>
 
 		<!-- Modals -->
-		<modal title="Create a new Plan" small ok-text="Create" :callback="createRegion" :show.sync="showRegionModal">
+		<modal title="Create a Region" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :show.sync="showRegionModal">
 			<div slot="modal-body" class="modal-body" v-if="selectedRegion">
 				<validator name="RegionCreate">
 					<form id="RegionCreateForm">
@@ -605,10 +602,10 @@
 				</validator>
 			</div>
 		</modal>
-		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+		<modal title="Delete Region" small ok-text="Delete" :callback="openRegionDeleteModal" :show.sync="showRegionDeleteModal">
 			<div slot="modal-body" class="modal-body">
-				<p v-if="currentPlan">
-					Are you sure you want to delete plan: "{{currentPlan.name}}" ?
+				<p v-if="selectedRegion">
+					Are you sure you want to delete region: "{{selectedRegion.name}}" ?
 				</p>
 			</div>
 		</modal>
@@ -617,6 +614,7 @@
 <style></style>
 <script type="text/javascript">
     import _ from 'underscore';
+    import $ from 'jquery';
     import vSelect from 'vue-select';
     import utilities from '../utilities.mixin'
     export default{
@@ -673,12 +671,12 @@
                 roomsSearch: '',
                 showReservationsFilters: false,
 
-
                 // modal vars
                 showRegionModal: false,
+                editRegionModal: false,
+                showRegionDeleteModal: false,
                 selectedRegion: null,
 
-                showPlanDeleteModal: false,
                 showRoomModal: false,
                 selectedRoom: {
                     room_type_id: null,
@@ -785,19 +783,53 @@
                 this.showRegionModal = true;
                 this.selectedRegion = this.regionFactory();
             },
+            openRegionEditModal(region){
+                this.showRegionModal = true;
+                this.editRegionModal = true;
+                this.selectedRegion = region;
+            },
             createRegion() {
+                if (this.editRegionModal)
+                    return this.updateRegion();
+
                 this.selectedRegion.country_code = this.selectedRegion.country.code;
                 delete this.selectedRegion.country;
 
                 if (!this.selectedRegion.call_sign)
                     delete this.selectedRegion.call_sign;
 
-                return this.RegionsResource.save({ campaign: this.campaignId }, this.selectedRegion).then(function (response) {
+
+                return this.RegionsResource.save({ campaign: this.campaignId, include: 'teams.groups', }, this.selectedRegion).then(function (response) {
                     let region = response.body.data;
                     this.regions.push(region);
                     this.showRegionModal = false;
                     this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
                     return this.currentRegion = region;
+                }, function (response) {
+                    console.log(response);
+                    this.$root.$emit('showError', response.body.message);
+                    return response.body.data;
+                });
+            },
+            updateRegion() {
+                this.selectedRegion.country_code = this.selectedRegion.country.code;
+                delete this.selectedRegion.country;
+
+                if (!this.selectedRegion.call_sign)
+                    delete this.selectedRegion.call_sign;
+
+                let data = {
+                    name: this.selectedRegion.name,
+                    country_code: this.selectedRegion.country_code,
+                    call_sign: this.selectedRegion.call_sign,
+                };
+
+                this.RegionsResource.update({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups', }, data).then(function (response) {
+                    let region = response.body.data;
+                    this.showRegionModal = false;
+                    this.editRegionModal = false;
+                    this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
+                    return region;
                 }, function (response) {
                     console.log(response);
                     this.$root.$emit('showError', response.body.message);
@@ -831,10 +863,11 @@
                     return response.body.data;
                 });
             },
-            openDeletePlanModal() {
-                this.showPlanDeleteModal = true;
+            openRegionDeleteModal(region) {
+                this.showRegionDeleteModal = true;
+                this.selectedRegion = region;
             },
-            deletePlan() {
+            deleteRegion() {
                 let plan = _.extend({}, this.currentPlan);
                 this.$http.delete('rooming/plans/' + plan.id).then(function (response) {
                     this.showPlanDeleteModal = false;

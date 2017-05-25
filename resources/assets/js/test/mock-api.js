@@ -2721,54 +2721,26 @@ export default {
     },
     ['POST *rooming/rooms(/:room)'] (pathMatch, query, request) {
         let body = {
-            "data": [
-                {
-                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
-                    "type": "Standard",
-                    "label": null,
-                    "occupants_count": 1,
-                    "created_at": "2017-05-08 19:02:06",
-                    "updated_at": "2017-05-08 19:02:06",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
-                        }
-                    ]
+            "data": {
+                "id": "b115f955-4fcc-45e9-bc87-fb79cfd8ef5c",
+                "name": "Matagalpa",
+                "callsign": null,
+                "country": {
+                    "code": "ni",
+                    "name": "Nicaragua"
                 },
-                {
-                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
-                    "type": "Married (double)",
-                    "label": null,
-                    "occupants_count": 4,
-                    "created_at": "2017-05-08 19:01:46",
-                    "updated_at": "2017-05-08 19:01:46",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
-                        }
-                    ]
-                },
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 4,
-                    "count": 4,
-                    "per_page": 15,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
+                "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
+                "created_at": "2017-05-24 01:53:42",
+                "updated_at": "2017-05-24 01:53:42",
+                "deleted_at": null,
+                "links": [
+                    {
+                        "rel": "self",
+                        "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/b115f955-4fcc-45e9-bc87-fb79cfd8ef5c"
+                    }
+                ]
             }
         };
-
-        if (pathMatch.room) {
-            body.data = _.findWhere(body.data, {id: pathMatch.room});
-            delete body.meta;
-        }
 
         return {
             body: body,
@@ -3141,6 +3113,102 @@ export default {
             delay: Settings.delay, // millisecond
         }
 
+    },
+    ['GET *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "1f2aad09-7188-466e-9a02-cfd0261403b5",
+                    "name": "Leon",
+                    "call_sign": "Blue",
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
+                    "created_at": "2017-05-24 01:42:55",
+                    "updated_at": "2017-05-24 01:42:55",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/1f2aad09-7188-466e-9a02-cfd0261403b5"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.region) {
+            body.data = _.findWhere(body.data, {id: pathMatch.region});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "1f2aad09-7188-466e-9a02-cfd0261403b5",
+                    "name": "Leon",
+                    "call_sign": "Blue",
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
+                    "created_at": "2017-05-24 01:42:55",
+                    "updated_at": "2017-05-24 01:42:55",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/1f2aad09-7188-466e-9a02-cfd0261403b5"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.region) {
+            body.data = _.findWhere(body.data, {id: pathMatch.region});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
     },
 
     // Uploads API

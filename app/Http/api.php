@@ -111,16 +111,16 @@ $api->version('v1', [
     $api->post('referrals/export', 'ReferralsController@export');
     $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('campaigns.regions', 'RegionsController');
-    $api->resource('teams/types', 'TeamTypesController');
-    $api->resource('teams', 'TeamsController');
-    $api->get('teams/{id}/{teamable}', 'TeamablesController@index')
-        ->where('teamable', 'groups|campaigns|regions');
-    $api->post('teams/{id}/{teamable}', 'TeamablesController@store')
-        ->where('teamable', 'groups|campaigns|regions');
-    $api->delete('teams/{id}/{teamable}/{teamableId?}', 'TeamablesController@destroy')
-        ->where('teamable', 'groups|campaigns|regions');
-    $api->resource('teams.squads', 'TeamSquadsController');
-    $api->resource('squads.members', 'SquadMembersController');
+
+    $api->group(['namespace' => 'Teams'], function($api)
+    {
+        $api->resource('teams/types', 'TeamTypesController');
+        $api->resource('teams', 'TeamsController');
+        $api->resource('{teamable_type}/{teamable_id}/teams', 'TeamablesController');
+        $api->resource('teams.squads', 'TeamSquadsController');
+        $api->resource('squads.members', 'SquadMembersController');
+    });
+
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
     $api->resource('accommodations', 'AccommodationsController');

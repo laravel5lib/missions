@@ -55,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
             'itineraries' => \App\Models\v1\Itinerary::class,
             'hubs' => \App\Models\v1\Hub::class,
             'plans' => \App\Models\v1\RoomingPlan::class,
-            'rooms' => \App\Models\v1\Room::class
+            'rooms' => \App\Models\v1\Room::class,
             'regions' => \App\Models\v1\Region::class
         ]);
 

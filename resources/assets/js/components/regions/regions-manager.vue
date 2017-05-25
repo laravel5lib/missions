@@ -16,6 +16,27 @@
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRegionFilter"><i class="fa fa-times"></i> Reset Region Filters</button>
 			</form>
 		</aside>
+		<aside :show.sync="showSquadsFilters" placement="left" header="Squad Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+
+				<div class="form-group">
+					<label>Travel Group</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="squadsFilters.group" :options="groupsOptions" label="name"
+					          placeholder="Filter by Group"></v-select>
+				</div>
+				<div class="form-group">
+					<label>Region</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250"
+					          :value.sync="squadsFilters.region" :options="regions" label="name"
+					          placeholder="Filter by Region"></v-select>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetSquadFilter"><i class="fa fa-times"></i> Reset Squad Filters</button>
+			</form>
+		</aside>
 
 		<div class="col-sm-8">
 
@@ -340,7 +361,7 @@
 			</div>-->
 		</div>
 
-		<!-- Regions Select & Members List -->
+		<!-- Regions Select & Squads List -->
 		<div class="col-sm-4">
 			<select class="form-control input-sm" v-model="currentRegion">
 				<option :value="" v-if="!currentRegion">Select Squad</option>
@@ -348,7 +369,7 @@
 			</select>
 			<hr class="divider lg">
 			<tabs>
-				<tab header="Regions">
+				<tab :header="'Regions <span class=\'badge badge-default\'>' + (regions.length || 0) +'</span>'">
 					<!-- Search and Filter Regions -->
 					<form class="form-inline row">
 						<div class="form-group col-xs-8">
@@ -378,7 +399,7 @@
 									<h5 class="panel-title">
 										<div class="row">
 											<div class="col-xs-9">
-												<a role="button" data-toggle="collapse" :data-parent="'#regionsAccordion' + $index" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+												<a role="button" @click="makeCurrentRegion(region)">
 													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams && region.teams.data.length ? region.teams.data.length : 0 }} Teams</span><br>
 													<label>{{ region.country.name }}</label>
 												</a>
@@ -432,124 +453,51 @@
 				</tab>
 				<tab header="Squads">
 					<!-- Search and Filter -->
-					<form class="form-inline row">
+					<form class="form-inline row" @submit.prevent>
 						<div class="form-group col-xs-8">
-							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="teamMembersSearch" debounce="300" placeholder="Search">
+							<div class="input-group input-group-sm">
+								<input type="text" class="form-control" v-model="squadsSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
-						</div><!-- end col -->
+						</div>
 						<div class="form-group col-xs-4">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showSquadsFilters = true;">
 								<i class="fa fa-filter"></i>
 							</button>
 						</div>
 						<div class="col-xs-12">
-							<hr class="divider inv">
+							<hr class="divider sm">
 						</div>
 					</form>
+					<div class="row">
+						<div class="col-xs-12">
+							<template v-if="squads.length">
+								<ul class="list-group">
 
-					<template v-if="currentRegion">
-						<template v-if="currentRegionMembers.length">
-							<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-								<div class="panel panel-default" v-for="member in currentRegionMembers | orderBy 'surname'" v-show="true">
-									<div class="panel-heading" role="tab" id="headingOne">
-										<h5 class="panel-title">
-											<div class="row">
-												<div class="col-xs-9">
-													<div class="media">
-														<div class="media-left" style="padding-right:0;">
-															<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
-															</a>
-														</div>
-														<div class="media-body" style="vertical-align:middle;">
-															<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-															<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
-														</div><!-- end media-body -->
-													</div><!-- end media -->
-													<!-- <a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-														<img :src="member.avatar" class="img-circle img-xs av-left">
-														{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="small" v-if="member.leader">&middot; GL</span><br>
-														<label>{{ member.desired_role.name }}</label>
-													</a> -->
-												</div>
-												<div class="col-xs-3 text-right action-buttons">
-													<dropdown type="default">
-														<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-															<span class="fa fa-ellipsis-h"></span>
-														</button>
-														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-															<li class="dropdown-header">Assign To Room</li>
-															<li role="separator" class="divider"></li>
-															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
-														</ul>
-													</dropdown>
-													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-														<i class="fa fa-angle-down"></i>
-													</a>
-												</div>
+									<a class="list-group-item" :class="{'active': currentSquad === squad}" v-for="squad in squads">
+										<div class="row">
+											<div class="col-xs-6">
+												{{ squad.callsign | capitalize }}
+												<span class="label label-info" v-text="squad.type.data.name | capitalize"></span>
+												<span v-if="squad.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
 											</div>
-										</h5>
-									</div>
-									<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-										<div class="panel-body">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Gender</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.gender | capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Marital Status</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.status | capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Age</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.age}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Travel Group</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.trip.data.group.data.name}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-										</div><!-- end panel-body -->
-									</div>
-									<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length">
-										<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-										<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-									</div>
+											<div class="col-xs-6 text-right">Members: {{ squad.members_count || 0 }}</div>
+										</div>
+									</a>
+								</ul>
+								<div class="col-xs-12 text-center">
+									<pagination :pagination.sync="squadsPagination" :callback="getSquads"></pagination>
 								</div>
-							</div>
-						</template>
-						<template v-else>
-							<hr class="divider inv">
-							<p class="text-center text-italic text-muted"><em>No members in {{currentRegion.callsign}}. Select another team or add them using the team manager!</em></p>
-							<hr class="divider inv">
-							<p class="text-center"><a class="btn btn-link btn-sm" href="regions">Manage Regions</a></p>
-						</template>
-					</template>
-					<template v-else>
-						<hr class="divider inv">
-						<p class="text-center text-italic text-muted"><em>Select a squad to begin.</em></p>
-					</template>
+
+							</template>
+							<template v-else>
+								<hr class="divider inv">
+								<p class="text-center text-italic text-muted"><em>No Squads created yet. Create one to get started!</em></p>
+								<!--<hr class="divider inv">-->
+								<!--<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewSquadModel">Create A Squad</a></p>-->
+							</template>
+						</div>
+					</div>
 				</tab>
 			</tabs>
 		</div>
@@ -645,10 +593,15 @@
             return {
                 startUp: true,
 
-                plans: [],
-                plansPagination: { current_page: 1 },
-                roomsPagination: { current_page: 1 },
-
+                squads: [],
+                squadsPagination: { current_page: 1 },
+                squadsSearch: '',
+                showSquadsFilters: false,
+                squadsFilters: {
+                    group: null,
+//                    campaign: null,
+                    region: null,
+                },
                 regions: [],
                 regionsPagination: { current_page: 1 },
                 regionsSearch: '',
@@ -669,9 +622,9 @@
                 roomTypes: [],
 
                 // Filters vars
-                teamMembersSearch: '',
                 roomsSearch: '',
                 showReservationsFilters: false,
+                groupsOptions: [],
 
                 // modal vars
                 showRegionModal: false,
@@ -695,6 +648,10 @@
                 this.regionsPagination.current_page = 1;
                 this.getRegions();
             },
+            squadsSearch(val) {
+                this.squadsPagination.current_page = 1;
+                this.getSquads();
+            },
             regionsFilters: {
                 handler: function (val) {
                     this.regionsPagination.current_page = 1;
@@ -702,18 +659,15 @@
                 },
                 deep: true
             },
-            currentPlan(val) {
-                val.rooms = val.rooms || [];
-                //this.$nextTick(function () {
-                this.getRooms(val);
-                this.getRegions();
-                //});
+            squadsFilters: {
+                handler: function (val) {
+                    this.squadsPagination.current_page = 1;
+                    this.getSquads();
+                },
+                deep: true
             },
-            currentRoom(val) {
-                //val.rooms = val.rooms || [];
-                if (val)
-                    this.getOccupants();
-                this.getRegions();
+            currentRegion(val) {
+	            this.getSquads();
             }
         },
         computed: {
@@ -759,7 +713,13 @@
             },
             resetRegionFilter(){
                 this.regionsFilters = {
-                    country: null
+                    country: null,
+                };
+            },
+            resetSquadFilter(){
+                this.squadsFilters = {
+                    group: null,
+                    region: null,
                 };
             },
             getRegions(){
@@ -779,6 +739,44 @@
                     return response.body.data;
                 });
             },
+	        makeCurrentRegion(region) {
+                this.currentRegion = region;
+	        },
+	        getSquads(){
+                let params = {
+                    include: 'type',
+                    page: this.squadsPagination.current_page,
+                    search: this.squadsSearch,
+	                campaign: this.campaignId,
+	                // region: this.currentRegion.id
+                };
+                params = _.extend(params, {
+					group: _.isObject(this.squadsFilters.group) ? this.squadsFilters.group.id : null,
+                    region: _.isObject(this.squadsFilters.region) ? this.squadsFilters.region.id : null,
+
+                });
+
+                return this.$http.get('teams', { params: params}).then(function (response) {
+                        this.squadsPagination = response.body.meta.pagination;
+                        return this.squads = response.body.data;
+                    },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
+	        },
+            getGroups(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return response.body.data;
+                    }
+                });
+            },
+
 
             // Modal Functions
             openRegionModal(){

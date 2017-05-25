@@ -59,57 +59,25 @@
 							<div class="col-sm-5">
 								<div class="row">
 									<div class="col-sm-8">
-										<label>Occupancy Limit</label>
+										<label>Country</label>
 									</div><!-- end col -->
 									<div class="col-sm-4 text-right">
-										<p class="small" style="margin:3px 0;">{{currentRegion.type.data.rules.occupancy_limit}}</p>
-									</div><!-- end col -->
-								</div><!-- end row -->
-								<hr class="divider sm">
-								<div class="row">
-									<div class="col-sm-7">
-										<label>Limited to Gender</label>
-									</div><!-- end col -->
-									<div class="col-sm-5 text-right">
-										<p class="small" style="margin:3px 0;">
-											<template v-if="currentRegion.type.data.rules.gender">
-												Yes <span v-if="currentRegion.occupants && currentRegion.occupants.length">, {{currentRegion.occupants[0].gender | capitalize}}</span>
-											</template>
-											<template v-else>
-												No
-											</template>
-										</p>
+										<p class="small" style="margin:3px 0;">{{currentRegion.country.name}}</p>
 									</div><!-- end col -->
 								</div><!-- end row -->
 								<hr class="divider sm">
 								<div class="row">
 									<div class="col-sm-8">
-										<label>Limited to Status</label>
+										<label>Callsign</label>
 									</div><!-- end col -->
 									<div class="col-sm-4 text-right">
-										<p class="small" style="margin:3px 0;">{{currentRegion.type.data.rules.married_only ? 'Married Only' : 'No' }}</p>
+										<p class="small" style="margin:3px 0;">{{currentRegion.callsign || 'None Set'}}</p>
 									</div><!-- end col -->
 								</div><!-- end row -->
-								<hr class="divider sm">
-								<div class="row">
-									<div class="col-sm-8">
-										<label>Current Occupants</label>
-									</div><!-- end col -->
-									<div class="col-sm-4 text-right">
-										<p class="small" style="margin:3px 0;">{{currentRegion.occupants_count}}</p>
-									</div><!-- end col -->
-								</div><!-- end row -->
-								<hr class="divider sm">
-								<div class="row">
-									<div class="col-sm-12">
-										<label>Room Leader</label>
-										<p class="small" style="margin:3px 0;" v-if="currentRegionHasLeader">{{ currentRegionHasLeader.surname }}, {{ currentRegionHasLeader.given_names | capitalize }}</p>
-										<p class="small" style="margin:3px 0;" v-else>None Set</p>
-									</div><!-- end col -->
-								</div><!-- end row -->
+
 							</div><!-- end col -->
 							<div class="col-sm-7">
-								<label>Region Squads</label>
+								<label>Region Squads <span v-if="currentRegion.teams" class="badge badge-primary" v-text="currentRegion.teams.data.length"></span></label>
 								<hr class="divider sm">
 								<template v-if="currentRegion.teams.data.length">
 									<div class="list-group">
@@ -117,11 +85,11 @@
 											<div class="row">
 												<div class="col-xs-9">
 													{{ squad.callsign | capitalize }} &middot; <span class="small">Members: {{ squad.members_count || 0 }}</span><br>
-													<span class="label label-info" v-text="squad.type.data.name | capitalize"></span>
+													<span v-if="squad.type" class="label label-info" v-text="squad.type.data.name | capitalize"></span>
 													<span v-if="squad.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-3 text-right">
-													<tooltip effect="scale" placement="top" content="Remove from Region">
+													<tooltip effect="scale" placement="left" content="Remove from Region">
 														<a class="btn btn-xs btn-primary-hollow" @click="removeFromRegion(squad)">
 															<i class="fa fa-minus"></i>
 														</a>
@@ -179,7 +147,7 @@
 										<div class="row">
 											<div class="col-xs-9">
 												<a role="button" @click="makeCurrentRegion(region)">
-													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams && region.teams.data.length ? region.teams.data.length : 0 }} Teams</span><br>
+													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams && region.teams.data.length ? region.teams.data.length : 0 }} Squads</span><br>
 													<label>{{ region.country.name }}</label>
 												</a>
 											</div>
@@ -189,7 +157,6 @@
 														<span class="fa fa-ellipsis-h"></span>
 													</button>
 													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-														<!--<li class="dropdown-header">Assign To Room</li>-->
 														<li><a @click="openRegionEditModal(region)"><i class="fa fa-pencil"></i> Edit</a></li>
 														<li role="separator" class="divider"></li>
 														<li><a @click="openRegionDeleteModal(region)"><i class="fa fa-trash"></i> Delete</a></li>
@@ -211,9 +178,12 @@
 											<div class="col-sm-6">
 												<ul style="margin:3px 0;" v-if="region.teams && region.teams.data.length">
 													<template v-for="team in region.teams.data">
-														<li class="small" v-for="group in team.groups.data">
-															{{ group.name | capitalize }}
-														</li>
+														<template v-if="team.groups">
+															<li class="small" v-for="group in team.groups.data">
+																{{ group.name | capitalize }}
+															</li>
+														</template>
+
 													</template>
 												</ul>
 												<p class="small" v-else>None</p>
@@ -264,7 +234,7 @@
 										<span v-if="squad.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
 									</div>
 									<div class="col-xs-3 text-right">
-										<tooltip effect="scale" placement="top" :content="!this.currentRegion ? 'Select a Region' : 'Add to Region'">
+										<tooltip effect="scale" placement="left" :content="!this.currentRegion ? 'Select a Region' : 'Add to Region'">
 											<a class="btn btn-xs btn-primary-hollow" @click="addToRegion(squad)" :class="{ 'disabled': !this.currentRegion}">
 												<i class="fa fa-plus"></i>
 											</a>
@@ -524,11 +494,11 @@
                     page: this.squadsPagination.current_page,
                     search: this.squadsSearch,
 	                campaign: this.campaignId,
-	                // region: this.currentRegion.id
                 };
-                params.group = this.squadsFilters && _.isObject(this.squadsFilters.group) ? this.squadsFilters.group.id : null
+                params.type = this.squadsFilters.type || null;
+                params.group = _.isObject(this.squadsFilters.group) ? this.squadsFilters.group.id : null;
 
-                if (this.squadsFilters && _.isObject(this.squadsFilters.region)) {
+                if (_.isObject(this.squadsFilters.region)) {
                     params.region = this.squadsFilters.region.id
                 } else {
                     params.unassigned = 'region';

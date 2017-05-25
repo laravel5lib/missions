@@ -379,7 +379,7 @@
 										<div class="row">
 											<div class="col-xs-9">
 												<a role="button" data-toggle="collapse" :data-parent="'#regionsAccordion' + $index" :href="'#regionItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams.data.length || 0 }} Teams</span><br>
+													{{ region.name | capitalize }} <span class="small">&middot; {{ region.teams && region.teams.data.length ? region.teams.data.length : 0 }} Teams</span><br>
 													<label>{{ region.country.name }}</label>
 												</a>
 											</div>
@@ -409,7 +409,7 @@
 												<label>Travel Groups</label>
 											</div><!-- end col -->
 											<div class="col-sm-6">
-												<ul style="margin:3px 0;" v-if="region.teams.data.length">
+												<ul style="margin:3px 0;" v-if="region.teams && region.teams.data.length">
 													<template v-for="team in region.teams.data">
 														<li class="small" v-for="group in team.groups.data">
 															{{ group.name | capitalize }}
@@ -577,6 +577,15 @@
 				</validator>
 			</div>
 		</modal>
+		<modal title="Delete Region" small ok-text="Delete" :callback="deleteRegion" :show.sync="showRegionDeleteModal">
+			<div slot="modal-body" class="modal-body">
+				<p v-if="selectedRegion">
+					Are you sure you want to delete region: "{{selectedRegion.name}}" ?
+				</p>
+			</div>
+		</modal>
+
+
 		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :show.sync="showRoomModal">
 			<div slot="modal-body" class="modal-body">
 				<validator name="RoomCreate">
@@ -602,19 +611,12 @@
 				</validator>
 			</div>
 		</modal>
-		<modal title="Delete Region" small ok-text="Delete" :callback="openRegionDeleteModal" :show.sync="showRegionDeleteModal">
-			<div slot="modal-body" class="modal-body">
-				<p v-if="selectedRegion">
-					Are you sure you want to delete region: "{{selectedRegion.name}}" ?
-				</p>
-			</div>
-		</modal>
 	</div>
 </template>
 <style></style>
 <script type="text/javascript">
     import _ from 'underscore';
-    import $ from 'jquery';
+    //import $ from 'jquery';
     import vSelect from 'vue-select';
     import utilities from '../utilities.mixin'
     export default{
@@ -788,6 +790,10 @@
                 this.editRegionModal = true;
                 this.selectedRegion = region;
             },
+            openRegionDeleteModal(region) {
+                this.showRegionDeleteModal = true;
+                this.selectedRegion = region;
+            },
             createRegion() {
                 if (this.editRegionModal)
                     return this.updateRegion();
@@ -836,6 +842,22 @@
                     return response.body.data;
                 });
             },
+            deleteRegion() {
+                let region = _.extend({}, this.selectedRegion);
+                this.RegionsResource.delete({ campaign: this.campaignId, region: this.selectedRegion.id}).then(function (response) {
+                    this.showRegionDeleteModal = false;
+                    this.$root.$emit('showInfo', region.name + ' Deleted!');
+                    this.regions = _.reject(this.regions, function (obj) {
+                        return region.id === obj.id;
+                    });
+                    this.currentRegion = this.region.length ? this.region[0] : null;
+                }, function (response) {
+                    this.$root.$emit('showError', response.body.message);
+                }).then(function () {
+                    this.selectedRegion = null;
+                });
+
+            },
             openNewRoomModel(){
                 if (!this.currentPlan) {
                     this.$root.$emit('showInfo', 'Please select a plan first.');
@@ -863,22 +885,6 @@
                     return response.body.data;
                 });
             },
-            openRegionDeleteModal(region) {
-                this.showRegionDeleteModal = true;
-                this.selectedRegion = region;
-            },
-            deleteRegion() {
-                let plan = _.extend({}, this.currentPlan);
-                this.$http.delete('rooming/plans/' + plan.id).then(function (response) {
-                    this.showPlanDeleteModal = false;
-                    this.$root.$emit('showInfo', plan.name + ' Deleted!');
-                    this.plans = _.reject(this.plans, function (obj) {
-                        return plan.id === obj.id;
-                    });
-                    this.currentplan = this.plans.length ? this.plans[0] : null;
-                });
-
-            }
         },
         ready(){
             let promises = [];

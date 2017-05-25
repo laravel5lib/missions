@@ -30,6 +30,7 @@ class CardRequest extends FormRequest
             'exp_month' => 'required_with:string',
             'exp_year'  => 'required_with:number|digits:4',
             'cvc'       => 'required_with:number|digits_between:3,4',
+            'zip'       => 'required_with:number'
         ];
 
         if ($this->isMethod('put'))
@@ -40,7 +41,8 @@ class CardRequest extends FormRequest
                 'number'     => 'sometimes|required_without:card_id|string',
                 'exp_month'  => 'sometimes|required_with:number|string',
                 'exp_year'   => 'sometimes|required_with:number|digits:4',
-                'cvc'        => 'sometimes|required_with:number|digits_between:3,4'
+                'cvc'        => 'sometimes|required_with:number|digits_between:3,4',
+                'zip'        => 'sometimes|required_with:number'
             ];
         }
 

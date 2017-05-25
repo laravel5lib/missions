@@ -21,6 +21,13 @@
 			<form class="col-sm-12">
 
 				<div class="form-group">
+					<label for="" class="control-label">Type</label>
+					<select class="form-control" v-model="squadsFilters.type">
+						<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
+					</select>
+				</div>
+
+				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 					          :value.sync="squadsFilters.group" :options="groupsOptions" label="name"
@@ -532,8 +539,6 @@
 				</p>
 			</div>
 		</modal>
-
-
 		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :show.sync="showRoomModal">
 			<div slot="modal-body" class="modal-body">
 				<validator name="RoomCreate">
@@ -625,6 +630,7 @@
                 roomsSearch: '',
                 showReservationsFilters: false,
                 groupsOptions: [],
+                squadTypes: [],
 
                 // modal vars
                 showRegionModal: false,
@@ -742,7 +748,15 @@
 	        makeCurrentRegion(region) {
                 this.currentRegion = region;
 	        },
-	        getSquads(){
+            getTeamTypes() {
+                return this.$http.get('teams/types').then(function (response) {
+                    return this.squadTypes = response.body.data;
+                }, function (error) {
+                    console.log(error);
+                    return error;
+                });
+            },
+            getSquads(){
                 let params = {
                     include: 'type',
                     page: this.squadsPagination.current_page,
@@ -750,11 +764,13 @@
 	                campaign: this.campaignId,
 	                // region: this.currentRegion.id
                 };
-                params = _.extend(params, {
-					group: _.isObject(this.squadsFilters.group) ? this.squadsFilters.group.id : null,
-                    region: _.isObject(this.squadsFilters.region) ? this.squadsFilters.region.id : null,
+                params.group = _.isObject(this.squadsFilters.group) ? this.squadsFilters.group.id : null
 
-                });
+                if (_.isObject(this.squadsFilters.region)) {
+                    params.region = this.squadsFilters.region.id
+                } else {
+                    params.unassigned = 'region';
+                }
 
                 return this.$http.get('teams', { params: params}).then(function (response) {
                         this.squadsPagination = response.body.meta.pagination;
@@ -893,6 +909,7 @@
             }
 
             promises.push(this.getCountries());
+            promises.push(this.getTeamTypes());
             promises.push(this.getRegions());
             Promise.all(promises).then(function (values) {
                 this.startUp = false;

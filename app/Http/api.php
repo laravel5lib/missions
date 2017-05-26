@@ -123,8 +123,6 @@ $api->version('v1', [
 
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
-    $api->resource('regions.accommodations', 'AccommodationsController');
-    $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
     $api->resource('funds', 'FundsController');
     $api->post('funds/export', 'FundsController@export');
@@ -162,6 +160,7 @@ $api->version('v1', [
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
     $api->resource('accounting/classes', 'AccountingClassesController');
     $api->resource('accounting/items', 'AccountingItemsController');
+    $api->resource('regions.accommodations', 'AccommodationsController');
 
     $api->group(['prefix' => 'rooming'], function($api) {
         $api->resource('plans', 'Rooming\PlansController');
@@ -169,6 +168,7 @@ $api->version('v1', [
         $api->resource('rooms', 'Rooming\RoomsController');
         $api->resource('{roomableType}/{roomableId}/rooms', 'Rooming\Roomable\RoomsController');
         $api->resource('rooms/{roomId}/occupants', 'Rooming\RoomOccupantsController');
+        $api->resource('{roomableType}/{roomableId}/plans', 'Rooming\Roomable\UtilizedPlansController');
     });
 
     $api->resource('activities', 'ActivitiesController');

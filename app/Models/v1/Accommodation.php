@@ -54,9 +54,4 @@ class Accommodation extends Model
         return ucwords($value);
     }
 
-    public function setShortDescAttribute($value)
-    {
-        $this->attributes['short_desc'] = trim($value);
-    }
-
 }

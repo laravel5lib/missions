@@ -48,7 +48,7 @@ class CreateRoomsTable extends Migration
 
         // rooming plans, accomodations
         Schema::create('roomables', function (Blueprint $table) {
-            $table->uuid('room_id')->primary();
+            $table->uuid('room_id')->index();
             $table->uuid('roomable_id')->index();
             $table->string('roomable_type');
         });

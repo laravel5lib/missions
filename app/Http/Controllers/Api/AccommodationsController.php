@@ -86,6 +86,8 @@ class AccommodationsController extends Controller
      */
     public function update($regionId, $id, AccommodationRequest $request)
     {
+        $accommodation = $this->accommodation->getById($id);
+        
         $accommodation = $this->accommodation->filter(['region' => $regionId])->update([
             'name' => $request->get('name', $accommodation->name),
             'address_one' => $request->get('address_one', $accommodation->address_one),

@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
 use App\Utilities\v1\Country;
+use App\Http\Requests\Request;
+use Dingo\Api\Http\FormRequest;
 
-class AccommodationRequest extends Request
+class AccommodationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

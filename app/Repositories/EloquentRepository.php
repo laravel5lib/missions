@@ -142,7 +142,7 @@ abstract class EloquentRepository
      * @param  array  $data
      * @return array
      */
-    private function sanitize(array $data)
+    public function sanitize(array $data)
     {
         return collect($data)->filter(function($value, $key) {
             return in_array($key, $this->attributes) 

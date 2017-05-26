@@ -24,13 +24,4 @@ class EloquentAccommodation extends EloquentRepository implements Accommodation
         $this->model = $model;
     }
 
-    public function update(array $data, $id, $attribute = 'id')
-    {
-        $accommodation = $this->getById($id);
-
-        $accommodation->update($this->sanitize($data));
-
-        return $accommodation;
-    }
-
 }

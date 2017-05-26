@@ -12,7 +12,7 @@ class UtilizedPlansController extends Controller
     public function store($roomableType, $roomableId, Request $request)
     {
         $manager = new ManagePlans($roomableType, $roomableId);
-        $manager->use($request->get('ids'));
+        $manager->use($request->get('plan_ids'));
 
         return $this->response->created();
     }

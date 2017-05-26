@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests;
 use App\Models\v1\Region;
 use Illuminate\Http\Request;
-use App\Models\v1\Accommodation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\AccommodationRequest;
 use App\Http\Transformers\v1\AccommodationTransformer;
+use App\Repositories\Rooming\Interfaces\Accommodation;
 
 class AccommodationsController extends Controller
 {
@@ -35,8 +35,9 @@ class AccommodationsController extends Controller
      */
     public function index($regionId, Request $request)
     {
+        $request->merge(['region' => $regionId]);
+
         $accommodation = $this->accommodation
-                              ->whereRegionId($regionId)
                               ->filter($request->all())
                               ->paginate($request->get('per_page', 10));
 
@@ -51,14 +52,14 @@ class AccommodationsController extends Controller
      */
     public function store($regionId, Region $region, AccommodationRequest $request)
     {
-        $region = $region->findOrFail($regionId);
-
-        if (! $request->has('country_code')) 
+        if (! $request->has('country_code')) {
+            $region = $region->findOrFail($regionId);
             $request->merge(['country_code' => $region->country_code]);
+        }
 
-        $accommodation = $region->accommodations()->create(
-            $request->only('name', 'address_one', 'address_two', 'city','state', 
-                'zip', 'phone', 'fax', 'country_code', 'email', 'url', 'region_id', 'short_desc'));
+        $request->merge(['region_id' => $regionId]);
+
+        $accommodation = $this->accommodation->create($request->all());
 
         return $this->response->item($accommodation, new AccommodationTransformer);
     }
@@ -71,7 +72,7 @@ class AccommodationsController extends Controller
      */
     public function show($regionId, $id)
     {
-        $accommodation = $this->accommodation->whereRegionId($regionId)->findOrFail($id);
+        $accommodation = $this->accommodation->filter(['region' => $regionId])->getById($id);
 
         return $this->response->item($accommodation, new AccommodationTransformer);
     }
@@ -85,9 +86,7 @@ class AccommodationsController extends Controller
      */
     public function update($regionId, $id, AccommodationRequest $request)
     {
-        $accommodation = $this->accommodation->whereRegionId($regionId)->findOrFail($id);
-
-        $accommodation->update([
+        $accommodation = $this->accommodation->filter(['region' => $regionId])->update([
             'name' => $request->get('name', $accommodation->name),
             'address_one' => $request->get('address_one', $accommodation->address_one),
             'address_two' => $request->get('address_two', $accommodation->address_two),
@@ -101,7 +100,7 @@ class AccommodationsController extends Controller
             'url' => $request->get('url', $accommodation->url),
             'region_id' => $request->get('region_id', $accommodation->region_id),
             'short_desc' => $request->get('short_desc', $accommodation->short_desc)
-        ]);
+        ], $id);
 
         return $this->response->item($accommodation, new AccommodationTransformer);
     }
@@ -114,9 +113,7 @@ class AccommodationsController extends Controller
      */
     public function destroy($regionId, $id)
     {
-        $accommodation = $this->accommodation->whereRegionId($regionId)->findOrFail($id);
-
-        $accommodation->delete();
+        $this->accommodation->delete($id);
 
         return $this->response->noContent();
     }

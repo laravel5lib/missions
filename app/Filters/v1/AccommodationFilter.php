@@ -23,4 +23,9 @@ class AccommodationFilter extends Filter
      * @var array
      */
     public $searchable = ['name'];
+
+    public function region($id)
+    {
+        return $this->where('region_id', $id);
+    }
 }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests;
+use App\Models\v1\Region;
+use Illuminate\Http\Request;
+use App\Models\v1\Accommodation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\AccommodationRequest;
 use App\Http\Transformers\v1\AccommodationTransformer;
-use App\Models\v1\Accommodation;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 
 class AccommodationsController extends Controller
 {
@@ -25,8 +25,6 @@ class AccommodationsController extends Controller
     public function __construct(Accommodation $accommodation)
     {
         $this->accommodation = $accommodation;
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -35,9 +33,10 @@ class AccommodationsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index(Request $request)
+    public function index($regionId, Request $request)
     {
         $accommodation = $this->accommodation
+                              ->whereRegionId($regionId)
                               ->filter($request->all())
                               ->paginate($request->get('per_page', 10));
 
@@ -50,9 +49,16 @@ class AccommodationsController extends Controller
      * @param AccommodationRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function store(AccommodationRequest $request)
+    public function store($regionId, Region $region, AccommodationRequest $request)
     {
-        $accommodation = $this->accommodation->create($request->all());
+        $region = $region->findOrFail($regionId);
+
+        if (! $request->has('country_code')) 
+            $request->merge(['country_code' => $region->country_code]);
+
+        $accommodation = $region->accommodations()->create(
+            $request->only('name', 'address_one', 'address_two', 'city','state', 
+                'zip', 'phone', 'fax', 'country_code', 'email', 'url', 'region_id', 'short_desc'));
 
         return $this->response->item($accommodation, new AccommodationTransformer);
     }
@@ -63,9 +69,9 @@ class AccommodationsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function show($id)
+    public function show($regionId, $id)
     {
-        $accommodation = $this->accommodation->findOrFail($id);
+        $accommodation = $this->accommodation->whereRegionId($regionId)->findOrFail($id);
 
         return $this->response->item($accommodation, new AccommodationTransformer);
     }
@@ -77,11 +83,25 @@ class AccommodationsController extends Controller
      * @param AccommodationRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function update($id, AccommodationRequest $request)
+    public function update($regionId, $id, AccommodationRequest $request)
     {
-        $accommodation = $this->accommodation->findOrFail($id);
+        $accommodation = $this->accommodation->whereRegionId($regionId)->findOrFail($id);
 
-        $accommodation->update($request->all());
+        $accommodation->update([
+            'name' => $request->get('name', $accommodation->name),
+            'address_one' => $request->get('address_one', $accommodation->address_one),
+            'address_two' => $request->get('address_two', $accommodation->address_two),
+            'city' => $request->get('city', $accommodation->city),
+            'state' => $request->get('state', $accommodation->state),
+            'zip' => $request->get('zip', $accommodation->zip),
+            'phone' => $request->get('phone', $accommodation->phone),
+            'fax' => $request->get('fax', $accommodation->fax),
+            'country_code' => $request->get('country_code', $accommodation->country_code),
+            'email' => $request->get('email', $accommodation->email),
+            'url' => $request->get('url', $accommodation->url),
+            'region_id' => $request->get('region_id', $accommodation->region_id),
+            'short_desc' => $request->get('short_desc', $accommodation->short_desc)
+        ]);
 
         return $this->response->item($accommodation, new AccommodationTransformer);
     }
@@ -92,9 +112,9 @@ class AccommodationsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function destroy($id)
+    public function destroy($regionId, $id)
     {
-        $accommodation = $this->accommodation->findOrFail($id);
+        $accommodation = $this->accommodation->whereRegionId($regionId)->findOrFail($id);
 
         $accommodation->delete();
 

@@ -123,7 +123,7 @@ $api->version('v1', [
 
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
-    $api->resource('accommodations', 'AccommodationsController');
+    $api->resource('regions.accommodations', 'AccommodationsController');
     $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
     $api->resource('funds', 'FundsController');

@@ -26,7 +26,10 @@ class AccommodationTransformer extends TransformerAbstract {
     {
         return [
             'id'           => $accommodation->id,
+            'region_id'    => $accommodation->region_id,
             'name'         => $accommodation->name,
+            'rooms_count'     => $accommodation->roomsCount()->all(),
+            'occupants_count' => $accommodation->occupantsCount()->total(),
             'address_one'  => $accommodation->address_one,
             'address_two'  => $accommodation->address_two,
             'city'         => $accommodation->city,
@@ -34,20 +37,20 @@ class AccommodationTransformer extends TransformerAbstract {
             'zip'          => $accommodation->zip,
             'phone'        => $accommodation->phone,
             'fax'          => $accommodation->fax,
-            'country_code' => $accommodation->country_code,
-            'country_name' => country($accommodation->country_code),
+            'country'      => [
+                                'code' => $accommodation->country_code,
+                                'name' => country($accommodation->country_code)
+                              ],
             'email'        => $accommodation->email,
             'url'          => $accommodation->url,
-            'region_id'    => $accommodation->region_id,
             'short_desc'   => $accommodation->short_desc,
-            'check_in_at'  => $accommodation->check_in_at ? $accommodation->check_in_at->toDateTimeString() : null,
-            'check_out_at' => $accommodation->check_out_at ? $accommodation->check_out_at->toDateTimeString() : null,
             'created_at'   => $accommodation->created_at->toDateTimeString(),
             'updated_at'   => $accommodation->updated_at->toDateTimeString(),
+            'deleted_at'   => $accommodation->deleted_at ? $accommodation->deleted_at->toDateTimeString() : null,
             'links'        => [
                 [
                     'rel' => 'self',
-                    'uri' => '/accommodations/' . $accommodation->id
+                    'uri' => '/api/regions/'.$accommodation->region_id.'/accommodations/' . $accommodation->id
                 ]
             ]
         ];

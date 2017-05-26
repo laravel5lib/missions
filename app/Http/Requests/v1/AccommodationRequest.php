@@ -26,15 +26,14 @@ class AccommodationRequest extends Request
     {
         $required = [
             'name'         => 'required|string',
-            'country_code' => 'required|in:' . Country::codes(),
-            'region_id'    => 'required|exists:regions,id'
+            'country_code' => 'in:' . Country::codes()
         ];
 
         if ($this->isMethod('put'))
         {
             $required = [
                 'name'         => 'sometimes|required|string',
-                'country_code' => 'sometimes|required|in:' . Country::codes(),
+                'country_code' => 'in:' . Country::codes(),
                 'region_id'    => 'sometimes|required|exists:regions,id',
             ];
         }
@@ -50,8 +49,6 @@ class AccommodationRequest extends Request
             'email'        => 'email',
             'url'          => 'string',
             'short_desc'   => 'string',
-            'check_in_at'  => 'date',
-            'check_out_at' => 'date',
             'tags'         => 'array'
         ];
 

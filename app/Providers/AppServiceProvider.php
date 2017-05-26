@@ -56,7 +56,8 @@ class AppServiceProvider extends ServiceProvider
             'hubs' => \App\Models\v1\Hub::class,
             'plans' => \App\Models\v1\RoomingPlan::class,
             'rooms' => \App\Models\v1\Room::class,
-            'regions' => \App\Models\v1\Region::class
+            'regions' => \App\Models\v1\Region::class,
+            'accommodations' => \App\Models\v1\Accommodation::class
         ]);
 
         Validator::extend('is_csv',function($attribute, $value, $params, $validator) {

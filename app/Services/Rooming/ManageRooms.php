@@ -3,6 +3,7 @@
 namespace App\Services\Rooming;
 
 use App\Repositories\Rooming\Interfaces\Plan;
+use App\Repositories\Rooming\Interfaces\Accommodation;
 
 class ManageRooms
 {
@@ -47,7 +48,8 @@ class ManageRooms
     private function getRepository()
     {
         $repositories = [
-            'plans' => Plan::class
+            'plans' => Plan::class,
+            'accommodations' => Accommodation::class
         ];
 
         return app()->make($repositories[$this->roomableType]);

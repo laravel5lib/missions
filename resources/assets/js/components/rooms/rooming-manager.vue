@@ -908,6 +908,7 @@
                     if (config.currentPlan) {
                         let plan = _.findWhere(this.plans, { id: config.currentPlan});
                         this.currentPlan = plan;
+                        this.$root.$emit('select-select-option', plan.id, 'id');
                     }
                 }
             }.bind(this));

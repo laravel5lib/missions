@@ -37,14 +37,9 @@ class RoomsController extends Controller
         return $this->response->item($room, new RoomTransformer);
     }
 
-    public function store($roomableType, $roomableId, RoomRequest $request)
+    public function store($roomableType, $roomableId, Request $request)
     {
-        $room = $this->room->create([
-            'room_type_id' => $request->get('room_type_id'),
-            'label'        => $request->get('label')
-        ]);
-
-        (new ManageRooms($roomableType, $roomableId))->add($room->id);
+        (new ManageRooms($roomableType, $roomableId))->add($request->get('room_ids'));
 
         return $this->response->item($room, new RoomTransformer);
     }
@@ -63,10 +58,6 @@ class RoomsController extends Controller
 
     public function destroy($roomableType, $roomableId, $id)
     {
-        $this->room
-             ->filter([$roomableType => $roomableId])
-             ->delete($id);
-             
         (new ManageRooms($roomableType, $roomableId))->remove($id);
 
         return $this->response->noContent();

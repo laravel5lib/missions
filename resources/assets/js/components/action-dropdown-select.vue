@@ -105,6 +105,14 @@
                     this.getOptions()
                 }.bind(this));
 
+                this.$root.$on('select-select-option', function (val, property) {
+                    this.selectedOptions = _.findWhere(this.options, { id: val });
+                }.bind(this));
+
+                this.$root.$on('select-select-options', function (val, property) {
+                    this.selectedOptions = _.some()
+                }.bind(this));
+
             }
         }
     }

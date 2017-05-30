@@ -61,7 +61,7 @@
 									<div class="row">
 										<div class="col-xs-6">
 											<label>Room Occupants</label>
-											<div class="label label-info" v-if="currentRoom.type.data.rules.gender">Same Gender</div>
+											<div class="label label-info" v-if="currentRoom.type.data.rules.same_gender">Same Gender</div>
 											<div class="label label-info" v-if="currentRoom.type.data.rules.married_only">Must be Married</div>
 										</div>
 										<div class="col-xs-6 text-right">
@@ -918,8 +918,10 @@
                     let config = JSON.parse(localStorage[this.storageName]);
                     if (config.currentPlan) {
                         let plan = _.findWhere(this.plans, { id: config.currentPlan});
-                        this.currentPlan = plan;
-                        this.$root.$emit('select-options:select', plan.id, 'id');
+                        if (plan) {
+                            this.currentPlan = plan;
+                            this.$root.$emit('select-options:select', plan.id, 'id');
+                        }
                     }
                 }
             }.bind(this));

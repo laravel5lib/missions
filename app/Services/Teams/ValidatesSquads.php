@@ -42,6 +42,8 @@ class ValidatesSquads
         if ($count < $this->rules->min_groups) {
             throw new \Exception("The squad must have a minimum of $this->rules->min_groups group(s).");
         }
+
+        return $this;
     }
 
     public function done()

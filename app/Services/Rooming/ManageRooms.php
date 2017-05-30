@@ -24,8 +24,7 @@ class ManageRooms
      */
     public function add($rooms)
     {
-        return $this->getRepository()
-                    ->addRooms($rooms, $this->roomableId);
+        $this->getRepository()->addRooms($rooms, $this->roomableId);
     }
 
     /**
@@ -36,8 +35,7 @@ class ManageRooms
      */
     public function remove($rooms)
     {
-        return $this->getRepository()
-                    ->removeRooms($rooms, $this->roomableId);
+        $this->getRepository()->removeRooms($rooms, $this->roomableId);
     }
 
     /**

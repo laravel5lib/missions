@@ -173,6 +173,9 @@
 		    search() {
                 this.getRoomingPlans();
 		    },
+            per_page() {
+                this.getRoomingPlans();
+		    },
 	    },
         methods: {
             resetFilters(){

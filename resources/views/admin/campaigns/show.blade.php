@@ -33,17 +33,52 @@
                 <li role="presentation" class="{{ $tab == 'trips' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/trips') }}">Trips</a>
                 </li>
+                <li role="presentation" class="{{ $tab == 'teams' ? 'active' : '' }} dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Teams <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Overview</a></li>
+                        <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/teams') }}">Rosters</a></li>
+                        <li class="{{ $tab == 'team-types' ? 'active' : '' }}">
+                            <a href="{{ url('admin/campaigns/'.$campaign->id.'/team-types') }}">Team Types</a>
+                        </li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rooming <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Overview</a></li>
+                        <li><a href="#">Room Assignments</a></li>
+                        <li><a href="#">Accommodations</a></li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      Regions <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Overview</a></li>
+                        <li><a href="#">Accommodations</a></li>
+                        <li><a href="#">Team Assignments</a></li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Transportation <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Overview</a></li>
+                        <li><a href="#">Transports</a></li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Itineraries <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Overview</a></li>
+                    </ul>
+                </li>
                 <li role="presentation" class="{{ $tab == 'details' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/details') }}">Details</a>
                 </li>
                 <li role="presentation" class="{{ $tab == 'promotionals' ? 'active' : '' }}">
-                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/promotionals') }}">Promotionals</a>
-                </li>
-                <li role="presentation" class="{{ $tab == 'teams' ? 'active' : '' }}">
-                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/teams') }}">Teams</a>
-                </li>
-                <li role="presentation" class="{{ $tab == 'team-types' ? 'active' : '' }}">
-                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/team-types') }}">Team Types</a>
+                    <a href="{{ url('admin/campaigns/'.$campaign->id.'/promotionals') }}">Promos</a>
                 </li>
             </ul>
         </div>

@@ -3,7 +3,6 @@
 		<validator name="TravelTransport" v-if="transport">
 				<form id="TravelTransportForm" novalidate >
 					<section>
-						<!--<button class="btn btn-xs btn-default-hollow small pull-right"><i class="fa fa-trash"></i> Delete</button>-->
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
 							<label for="travel_methodA">Travel Method</label>
 							<template v-if="editMode">
@@ -90,16 +89,8 @@
 
 								<p v-else>{{ transport.name | uppercase }}</p>
 							</div>
-							<div class="form-group">
-								<label for="">Vehicle Color (if known)</label>
-								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-								<p v-else>{{ transport.vessel_no | uppercase }}</p>
-							</div>
 						</template>
 					</section>
-					<!--<template v-if="isUpdate && editMode">
-						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Travel Method</button>
-					</template>-->
 				</form>
 		</validator>
 	</div>

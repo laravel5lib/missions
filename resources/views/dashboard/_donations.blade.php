@@ -9,7 +9,7 @@
                 <tr onclick="location.href='{{ url('/dashboard/reservations/'.$donation->fund->fundable->id.'/funding') }}'">
                     <td style="padding:5px 15px;vertical-align:middle;">
                         <h4 class="text-success" style="margin:0px;">${{ number_format($donation->amountInDollars(), 2) }} <small> from @if($donation->anonymous) Anonymous Donor @else {{ $donation->donor->name }} @endif</h4>
-                        <span class="small">{{ $donation->description }}</span class="small">
+                        <span class="small">{{ $donation->description }}</span>
                         {{-- <span class="small">from {{ $donation->donor->name }}</span></td> --}}
                     <td class="text-right text-muted" style="vertical-align:middle;font-size:10px;">{{ $donation->created_at->diffForHumans() }}</td>
                 </tr>

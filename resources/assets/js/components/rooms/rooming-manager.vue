@@ -583,23 +583,28 @@
                 val.rooms = val.rooms || [];
                 //this.$nextTick(function () {
                 this.updateConfig();
+                this.currentRoom = null;
                 this.getRooms(val);
 	            this.getTeams();
                 //});
             },
-            currentRoom(val) {
-                //val.rooms = val.rooms || [];
-	            if (val)
-	                this.getOccupants();
-	            this.getTeams();
-                this.updateConfig();
+            currentRoom: {
+                handler(val, oldVal) {
+                    //val.rooms = val.rooms || [];
+                    if (val && (!oldVal || val.occupants_count !== oldVal.occupants_count))
+                        this.getOccupants();
+                    this.getTeams();
+                    this.updateConfig();
+                },
+	            deep: true
+
             }
 	    },
 	    computed: {
             planOccupants() {
                 let excludedIDs = [];
-                if (_.isObject(this.currentPlan) && this.currentPlan.rooms) {
-                    _.each(this.currentPlan.rooms, function (room) {
+                if (_.isObject(this.currentPlan) && this.currentRooms) {
+                    _.each(this.currentRooms, function (room) {
                         let arr = room.occupants.hasOwnProperty('data') ? room.occupants.data : room.occupants;
                         excludedIDs = _.union(excludedIDs, _.pluck(arr, 'id'));
                     });
@@ -772,7 +777,7 @@
 	                .then(function (response) {
                         plan.rooms = response.body.data;
 		                if (plan.id === this.currentPlan.id)
-		                    this.currentRooms = response.body.data;
+		                    return this.currentRooms = response.body.data;
                     },
                     function (response) {
                         console.log(response);
@@ -800,7 +805,7 @@
                 };
 
                 if (_.isObject(this.currentPlan) && this.currentPlan.id) {
-                    params.include = 'squads.members:noRoom(plans|' + this.currentPlan.id + ').companions,squads.members.trip.group,type';
+                    params.include = 'squads.members:noRoom(plans|' + this.currentPlan.id + '),squads.members.companions,squads.members.trip.group,type';
                 }
 
                 return this.$http.get('teams', { params: params }).then(function (response) {
@@ -831,7 +836,7 @@
                         plan.rooms = [];
                         this.plans.push(plan);
                         this.showPlanModal = false;
-                        this.$root.$emit('update-select-options');
+                        this.$root.$emit('select-options:update', plan.id, 'id');
                         return this.currentPlan = plan;
                     }, function (response) {
                         console.log(response);
@@ -858,13 +863,12 @@
             },
 	        newRoom() {
                 if (this.$RoomCreate.valid) {
-                    return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type'}}).then(function (response) {
+                    return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type,occupants'}}).then(function (response) {
                         let room = response.body.data;
                         this.showRoomModal = false;
-                        //this.currentPlan.rooms.push(room);
-                        this.currentRooms.push(room);
-                        //_.some()
-                        return this.currentRoom = room;
+                        return this.getRooms().then(function (rooms) {
+                            return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id})
+                        });
                     }, function (response) {
                         console.log(response);
                         this.$root.$emit('showError', response.body.message);
@@ -915,7 +919,7 @@
                     if (config.currentPlan) {
                         let plan = _.findWhere(this.plans, { id: config.currentPlan});
                         this.currentPlan = plan;
-                        this.$root.$emit('select-select-option', plan.id, 'id');
+                        this.$root.$emit('select-options:select', plan.id, 'id');
                     }
                 }
             }.bind(this));

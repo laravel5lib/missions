@@ -101,15 +101,18 @@
                         this.selectedOptions = this.options[0];
                 });
 
-                this.$root.$on('update-select-options', function (val) {
-                    this.getOptions()
+                this.$root.$on('select-options:update', function (val, property) {
+                    this.getOptions().then(function () {
+                        this.$root.$emit('select-options:updated');
+                        this.selectedOptions = _.findWhere(this.options, { id: val });
+                    })
                 }.bind(this));
 
-                this.$root.$on('select-select-option', function (val, property) {
+                this.$root.$on('select-options:select', function (val, property) {
                     this.selectedOptions = _.findWhere(this.options, { id: val });
                 }.bind(this));
 
-                this.$root.$on('select-select-options', function (val, property) {
+                this.$root.$on('select-options:select-array', function (val, property) {
                     this.selectedOptions = _.some()
                 }.bind(this));
 

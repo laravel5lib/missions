@@ -66,7 +66,7 @@ class RegionTransformer extends TransformerAbstract {
      * Include Teams
      *
      * @param Region $region
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeTeams(Region $region)
     {

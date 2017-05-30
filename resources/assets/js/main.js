@@ -81,6 +81,7 @@ import reportsList from './components/reports/reports-list.vue';
 import teamManager from './components/teams/team-manager.vue';
 import roomingManager from './components/rooms/rooming-manager.vue';
 import teamTypeManager from './components/teams/team-type-manager.vue';
+import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -893,6 +894,7 @@ new Vue({
         dashboardInterestsList,
         teamManager,
         teamTypeManager,
+        regionsManager,
         reportsList,
         roomingManager,
 

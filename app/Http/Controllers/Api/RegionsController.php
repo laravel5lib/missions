@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\RegionRequest;
 use App\Http\Transformers\v1\RegionTransformer;
@@ -112,7 +113,10 @@ class RegionsController extends Controller
              ->whereCampaignId($campaignId)
              ->findOrFail($id);
 
-        $region->delete();
+        DB::transaction(function() use($region) {
+            $region->teams()->detach();
+            $region->delete();
+        });
 
         return $this->response->noContent();
     }

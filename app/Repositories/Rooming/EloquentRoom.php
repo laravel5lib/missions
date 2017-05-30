@@ -19,7 +19,7 @@ class EloquentRoom extends EloquentRepository implements Room {
 
     public function getAll()
     {
-        return $this->model->withCount('occupants')->all();
+        return $this->model->withCount('occupants')->get();
     }
 
     public function getById($id)

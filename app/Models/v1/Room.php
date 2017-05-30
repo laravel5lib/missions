@@ -25,6 +25,11 @@ class Room extends Model
         return $this->morphedByMany(RoomingPlan::class, 'roomable');
     }
 
+    public function accommodations()
+    {
+        return $this->morphedByMany(Accommodation::class, 'roomable');
+    }
+
     public function occupants()
     {
         return $this->belongsToMany(Reservation::class, 'occupants')

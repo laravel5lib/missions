@@ -9,13 +9,15 @@ class RoomingPlanTransformer extends TransformerAbstract
     public function transform(RoomingPlan $plan)
     {
         return [
-            'id'         => $plan->id,
-            'name'       => $plan->name,
-            'short_desc' => $plan->short_desc,
-            'created_at' => $plan->created_at->toDateTimeString(),
-            'updated_at' => $plan->updated_at->toDateTimeString(),
-            'deleted_at' => $plan->deleted_at ? $plan->deleted_at->toDateTimeString() : null,
-            'links'      => [
+            'id'          => $plan->id,
+            'name'        => $plan->name,
+            'short_desc'  => $plan->short_desc,
+            'rooms_count' => $plan->roomsCount()->all(),
+            'occupants_count' => $plan->occupantsCount()->total(),
+            'created_at'  => $plan->created_at->toDateTimeString(),
+            'updated_at'  => $plan->updated_at->toDateTimeString(),
+            'deleted_at'  => $plan->deleted_at ? $plan->deleted_at->toDateTimeString() : null,
+            'links'       => [
                 [
                     'rel' => 'self',
                     'uri' => '/api/rooming/plans/' . $plan->id,

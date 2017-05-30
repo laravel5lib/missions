@@ -44,6 +44,20 @@ class RoomFilter extends Filter
         });
     }
 
+    public function accommodations($ids)
+    {
+        return $this->whereHas('accommodations', function ($accommodation) use ($ids) {
+
+            $accommodation->whereRoomableType('accommodations');
+
+            if (is_array($ids)) {
+                return $accommodation->whereIn('roomable_id', $ids);
+            }
+
+            return $accommodation->whereRoomableId($ids);
+        });
+    }
+
     /**
      * Filter by room type.
      * 

@@ -15,12 +15,17 @@ class AccommodationFilter extends Filter
      *
      * @var array
      */
-    public $sortable = [];
+    public $sortable = ['name', 'created_at', 'updated_at'];
 
     /**
      * Fields that can be searched.
      *
      * @var array
      */
-    public $searchable = [];
+    public $searchable = ['name'];
+
+    public function region($id)
+    {
+        return $this->where('region_id', $id);
+    }
 }

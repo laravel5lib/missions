@@ -48,4 +48,9 @@ class Region extends Model
     {
         return $this->morphToMany(Team::class, 'teamable');
     }
+
+    public function accommodations()
+    {
+        return $this->hasMany(Accommodation::class);
+    }
 }

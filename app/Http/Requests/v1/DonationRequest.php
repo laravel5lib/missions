@@ -51,6 +51,7 @@ class DonationRequest extends FormRequest
             'card.exp_month'     => 'required_with:card|string',
             'card.exp_year'      => 'required_with:card|digits:4',
             'card.cvc'           => 'required_with:card|digits_between:3,4',
+            'card.zip'           => 'required_with:card'
         ];
 
         if ($this->isMethod('put')) {
@@ -66,6 +67,7 @@ class DonationRequest extends FormRequest
                 'card'               => 'array',
                 'card.card_id'       => 'string',
                 'card.cardholder'    => 'required_with:card|string',
+                'card.zip'           => 'required_with:card'
             ];
         }
 

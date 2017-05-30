@@ -14,7 +14,7 @@ trait Roomable
     {
         $model = $this->getByid($id);
 
-        $model->rooms()->attach($rooms);
+        $model->rooms()->sync($rooms, false);
 
         return true;
     }

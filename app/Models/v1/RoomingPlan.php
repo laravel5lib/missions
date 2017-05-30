@@ -2,7 +2,9 @@
 
 namespace App\Models\v1;
 
+use App\RoomCount;
 use App\UuidForKey;
+use App\OccupantCount;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,5 +20,15 @@ class RoomingPlan extends Model
     public function rooms()
     {
         return $this->morphToMany(Room::class, 'roomable');
+    }
+
+    public function roomsCount()
+    {
+        return new RoomCount($this);
+    }
+
+    public function occupantsCount()
+    {
+        return new OccupantCount($this);
     }
 }

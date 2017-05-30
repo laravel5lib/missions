@@ -918,8 +918,10 @@
                     let config = JSON.parse(localStorage[this.storageName]);
                     if (config.currentPlan) {
                         let plan = _.findWhere(this.plans, { id: config.currentPlan});
-                        this.currentPlan = plan;
-                        this.$root.$emit('select-options:select', plan.id, 'id');
+                        if (plan) {
+                            this.currentPlan = plan;
+                            this.$root.$emit('select-options:select', plan.id, 'id');
+                        }
                     }
                 }
             }.bind(this));

@@ -4,184 +4,17 @@
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
-					<label>Groups</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-					          :value.sync="groupsArr" :options="groupsOptions" label="name"
-					          placeholder="Filter Groups"></v-select>
+					<label>Travel Group</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+					          :value.sync="filters.group" :options="groupsOptions" label="name"
+					          placeholder="Filter by Group"></v-select>
 				</div>
-				<div class="form-group">
-					<label>Managing Users</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-					          :value.sync="usersArr" :options="usersOptions" label="name"
-					          placeholder="Filter Users"></v-select>
-				</div>
+
 				<div class="form-group" v-if="!tripId">
 					<label>Campaign</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-					          :value.sync="campaignObj" :options="campaignOptions" label="name"
+					          :value.sync="filters.campaign" :options="campaignsOptions" label="name"
 					          placeholder="Filter by Campaign"></v-select>
-				</div>
-
-				<div class="form-group">
-					<label>Trip Type</label>
-					<select  class="form-control input-sm" v-model="filters.type">
-						<option value="">Any Type</option>
-						<option value="ministry">Ministry</option>
-						<option value="family">Family</option>
-						<option value="international">International</option>
-						<option value="media">Media</option>
-						<option value="medical">Medical</option>
-						<option value="leader">Leader</option>
-					</select>
-				</div>
-
-				<div class="form-group">
-					<label>Gender</label>
-					<select class="form-control input-sm" v-model="filters.gender" style="width:100%;">
-						<option value="">Any Genders</option>
-						<option value="male">Male</option>
-						<option value="female">Female</option>
-					</select>
-				</div>
-
-				<div class="form-group">
-					<label>Marital Status</label>
-					<select class="form-control input-sm" v-model="filters.status" style="width:100%;">
-						<option value="">Any Status</option>
-						<option value="single">Single</option>
-						<option value="married">Married</option>
-					</select>
-				</div>
-
-				<!-- Cost/Payments -->
-				<div class="form-group">
-					<label>Applied Cost</label>
-					<select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
-						<option value="">Any Cost</option>
-						<option v-for="option in dueOptions" v-bind:value="option">
-							{{ option }}
-						</option>
-					</select>
-				</div>
-				<div class="form-group" v-if="filters.dueName">
-					<label>Payment Status</label>
-					<select class="form-control input-sm" v-model="filters.dueStatus" style="width:100%;">
-						<option value="">Any Status</option>
-						<option value="overdue">Overdue</option>
-						<option value="late">Late</option>
-						<option value="extended">Extended</option>
-						<option value="paid">Paid</option>
-						<option value="pending">Pending</option>
-					</select>
-				</div>
-				<!-- end cost/payments -->
-
-				<div class="form-group">
-					<label>Arrival Designation</label>
-					<select  class="form-control input-sm" v-model="filters.designation">
-						<option value="">Any</option>
-						<option value="eastern">Eastern</option>
-						<option value="western">Western</option>
-						<option value="international">International</option>
-						<option value="none">None</option>
-					</select>
-				</div>
-
-				<!-- Requirements -->
-				<div class="form-group">
-					<label>Requirements</label>
-					<select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
-						<option value="">Any Requirement</option>
-						<option v-for="option in requirementOptions" v-bind:value="option">
-							{{ option }}
-						</option>
-					</select>
-				</div>
-				<div class="form-group" v-if="filters.requirementName">
-					<select class="form-control input-sm" v-model="filters.requirementStatus" style="width:100%;">
-						<option value="">Any Status</option>
-						<option value="incomplete">Incomplete</option>
-						<option value="reviewing">Reviewing</option>
-						<option value="attention">Attention</option>
-						<option value="complete">Complete</option>
-					</select>
-				</div>
-				<!-- end requirements -->
-
-				<!-- Todos -->
-				<div class="form-group">
-					<label>Todos</label>
-					<select class="form-control input-sm" v-model="filters.todoName" style="width:100%;">
-						<option value="">Any Todo</option>
-						<option v-for="option in todoOptions" v-bind:value="option">
-							{{ option }}
-						</option>
-					</select>
-				</div>
-				<div class="form-group" v-if="filters.todoName">
-					<label class="radio-inline">
-						<input type="radio" name="companions" id="companions1" v-model="filters.todoStatus" :value="null"> Any
-					</label>
-					<label class="radio-inline">
-						<input type="radio" name="companions" id="companions2" v-model="filters.todoStatus" value="complete"> Complete
-					</label>
-					<label class="radio-inline">
-						<input type="radio" name="companions" id="companions3" v-model="filters.todoStatus" value="incomplete"> Incomplete
-					</label>
-				</div>
-				<!-- end todos -->
-
-				<!-- Trip Rep -->
-				<div class="form-group">
-					<label>Trip Rep</label>
-					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
-						<option value="">Any Rep</option>
-						<option v-for="option in repOptions" v-bind:value="option.id">
-							{{ option.name | capitalize }}
-						</option>
-					</select>
-				</div>
-				<!-- end trip rep -->
-
-				<div class="form-group">
-					<label>Shirt Size</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
-					          :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
-				</div>
-
-				<div class="form-group">
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Age Range</label>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Age Min</span>
-								<input type="number" class="form-control" number v-model="ageMin" min="0">
-							</div>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Max</span>
-								<input type="number" class="form-control" number v-model="ageMax" max="120">
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="form-group">
-					<label>Travel Companions</label>
-					<div>
-						<label class="radio-inline">
-							<input type="radio" name="companions" id="companions1" v-model="filters.hasCompanions" :value="null"> Any
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="companions" id="companions2" v-model="filters.hasCompanions" value="yes"> Yes
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
-						</label>
-					</div>
 				</div>
 
 				<hr class="divider inv sm">
@@ -189,19 +22,126 @@
 			</form>
 		</aside>
 
+		<div class="row">
+			<div class="col-sm-12">
+				<form class="form-inline" novalidate>
+					<div class="form-inline" style="display: inline-block;">
+						<div class="form-group">
+							<label>Show</label>
+							<select class="form-control  input-sm" v-model="per_page">
+								<option v-for="option in perPageOptions" :value="option">{{option}}</option>
+							</select>
+						</div>
+					</div>
+					<div class="input-group input-group-sm">
+						<input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
+						<span class="input-group-addon"><i class="fa fa-search"></i></span>
+					</div>
+					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+						Filters
+						<i class="fa fa-filter"></i>
+					</button>
+				</form>
+			</div>
+		</div>
+		<hr class="divider sm">
+		<div>
+			<label>Active Filters</label>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.group != null" @click="filters.groups = null" >
+				Travel Group
+				<i class="fa fa-close"></i>
+			</span>
+			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign != null" @click="filters.campaign = null" >
+				Campaign
+				<i class="fa fa-close"></i>
+			</span>
+		</div>
+		<hr class="divider sm">
+		<div style="position:relative;">
+			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<table class="table table-condensed table-hover">
+				<thead>
+				<tr>
+					<th>Name</th>
+					<th>Rooms</th>
+					<th># of Occupants</th>
+					<th><i class="fa fa-cog"></i></th>
+				</tr>
+				</thead>
+				<tbody v-if="plans.length">
+				<tr v-for="plan in plans|orderBy 'name'">
+					<td style="cursor: pointer;" v-text="plan.name" @click="loadManager(plan)"></td>
+					<td style="cursor: pointer;" @click="loadManager(plan)">
+						<span v-for="(key, val) in plan.rooms_count">
+							<span v-if="$index != 0"> | </span><em>{{key | capitalize}}:</em> <b>{{val}}</b>
+						</span>
+						<!--<div class="row">
+							<div class="col-xs-6">
+								<span v-if="$index == 1 || ($index % 2)">| </span>{{key | capitalize}}: {{val}}
+							</div>
+						</div>-->
+					</td>
+					<td style="cursor: pointer;" @click="loadManager(plan)" v-text="plan.occupants_count"></td>
+					<td>
+						<button type="button" class="btn btn-default-hollow btn-xs" @click="openDeletePlanModal(plan)">
+							<i class="fa fa-trash"></i>
+						</button>
+					</td>
+				</tr>
+				</tbody>
+				<tbody v-else>
+				<tr>
+					<td colspan="4" class="text-center text-italic text-muted">
+						No Rooming Plans yet. Create a new Rooming Plan
+					</td>
+				</tr>
+				</tbody>
+				<tfoot>
+				<tr>
+					<td colspan="4" class="text-center">
+						<pagination :pagination.sync="pagination"
+						            :callback="getRoomingPlans"
+						            size="small">
+						</pagination>
+					</td>
+				</tr>
+				</tfoot>
+			</table>
+		</div>
+
+		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+			<div slot="modal-body" class="modal-body">
+				<p v-if="selectedDeletePlan">
+					Are you sure you want to delete plan: "{{selectedDeletePlan.name}}" ?
+				</p>
+			</div>
+		</modal>
+
 	</div>
 </template>
 <style></style>
 <script type="text/javascript">
+    import _ from 'underscore';
+    import vSelect from 'vue-select';
     export default{
         name: 'rooming-plans-list',
+	    components: {vSelect},
         data(){
             return {
+                plans: [],
                 showFilters: false,
+	            search: '',
+                per_page: 10,
+                perPageOptions: [5, 10, 25, 50, 100],
+                groupsOptions: [],
+                campaignsOptions: [],
 	            filters: {
-                    campaign: '',
-		            group: '',
+                    campaign: null,
+		            group: null,
 	            },
+                pagination: {current_page: 1},
+                showPlanDeleteModal: false,
+                selectedDeletePlan: null,
 	            PlansResource: this.$resource('rooming/plans{/plan}')
             }
         },
@@ -209,20 +149,64 @@
             resetFilters(){
                 this.filters = {};
             },
+            loadManager(plan) {
+                this.$dispatch('rooming-wizard:plan-selected', plan);
+            },
 	        getRoomingPlans(){
                 let params = {
-                    include: ''
+                    include: '',
                 };
-                params = _.extend(params, this.filters);
+                params = _.extend(params, {
+                    campaign: this.filters.campaign ? this.filters.campaign.id : null,
+                    group: this.filters.group ? this.filters.group.id : null,
+	                search: this.search,
+	                per_page: this.per_page,
+                });
 
                 return this.PlansResource.get(params).then(function (response) {
-	                this.plansPagination = response.body.meta.pagination;
+	                this.pagination = response.body.meta.pagination;
 	                this.plans = response.body.data;
                 })
 	        },
+            getGroups(search, loading){
+                loading ? loading(true) : void 0;
+                let promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return promise;
+                    }
+                });
+            },
+            getCampaigns(search, loading){
+                loading ? loading(true) : void 0;
+                let promise = this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
+                    this.campaignsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return promise;
+                    }
+                });
+            },
+            openDeletePlanModal(plan) {
+                this.showPlanDeleteModal = true;
+                this.selectedDeletePlan = plan;
+            },
+            deletePlan() {
+                let plan = _.extend({}, this.selectedDeletePlan);
+                this.PlansResource.delete({ plan: plan.id}).then(function (response) {
+                    this.showPlanDeleteModal = false;
+                    this.$root.$emit('showInfo', plan.name + ' Deleted!');
+                    this.plans = _.reject(this.plans, function (obj) {
+                        return plan.id === obj.id;
+                    });
+                });
+            }
         },
         ready(){
-
+			this.getRoomingPlans();
         }
     }
 </script>

@@ -79,7 +79,7 @@ import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
 import teamManager from './components/teams/team-manager.vue';
-import roomingManager from './components/rooms/rooming-manager.vue';
+import roomingWizard from './components/rooms/rooming-wizard.vue';
 import teamTypeManager from './components/teams/team-type-manager.vue';
 import regionsManager from './components/regions/regions-manager.vue';
 
@@ -896,7 +896,7 @@ new Vue({
         teamTypeManager,
         regionsManager,
         reportsList,
-        roomingManager,
+        roomingWizard,
 
         // admin components
         campaignCreate,

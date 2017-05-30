@@ -580,17 +580,13 @@
         },
 	    watch: {
             currentPlan(val) {
-                val.rooms = val.rooms || [];
-                //this.$nextTick(function () {
                 this.updateConfig();
                 this.currentRoom = null;
                 this.getRooms(val);
 	            this.getTeams();
-                //});
             },
             currentRoom: {
                 handler(val, oldVal) {
-                    //val.rooms = val.rooms || [];
                     if (val && (!oldVal || val.occupants_count !== oldVal.occupants_count))
                         this.getOccupants();
                     this.getTeams();
@@ -603,7 +599,7 @@
 	    computed: {
             planOccupants() {
                 let excludedIDs = [];
-                if (_.isObject(this.currentPlan) && this.currentRooms) {
+                if (_.isObject(this.currentPlan) && this.currentRooms.length) {
                     _.each(this.currentRooms, function (room) {
                         let arr = room.occupants.hasOwnProperty('data') ? room.occupants.data : room.occupants;
                         excludedIDs = _.union(excludedIDs, _.pluck(arr, 'id'));
@@ -739,9 +735,6 @@
                     page: this.plansPagination.current_page,
                 };
 	                return this.$http.get('rooming/plans', { params: params }).then(function (response) {
-	                    _.each(response.body.data, function (plan) {
-		                    plan.rooms = [];
-	                    });
                         this.plansPagination = response.body.meta.pagination;
                         return this.plans = response.body.data;
                     },
@@ -775,7 +768,6 @@
                 };
                 return this.$http.get('rooming/rooms', { params: params })
 	                .then(function (response) {
-                        plan.rooms = response.body.data;
 		                if (plan.id === this.currentPlan.id)
 		                    return this.currentRooms = response.body.data;
                     },
@@ -833,7 +825,6 @@
                 if (this.$PlanCreate.valid) {
                     return this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
                         let plan = response.body.data;
-                        plan.rooms = [];
                         this.plans.push(plan);
                         this.showPlanModal = false;
                         this.$root.$emit('select-options:update', plan.id, 'id');
@@ -932,7 +923,6 @@
             }.bind(this));
 
             this.$root.$on('plan-scope', function (val) {
-                val.rooms = val.rooms || [];
                 this.currentPlan = val || null;
 //                this.$root.$emit('update-title', val || null);
             }.bind(this));

@@ -46,7 +46,7 @@
     <hr class="divider inv lg">
 @include('dashboard.groups.tabs', ['active' => 'rooming'])
     <div class="container">
-        <rooming-manager user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></rooming-manager>
+        <rooming-wizard user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></rooming-wizard>
         <hr class="divider inv xlg">
     </div><!-- end container -->
 @endsection

@@ -145,6 +145,17 @@
 	            PlansResource: this.$resource('rooming/plans{/plan}')
             }
         },
+	    watch: {
+            filters: {
+                handler(val) {
+                    this.getRoomingPlans();
+                },
+	            deep: true
+            },
+		    search() {
+                this.getRoomingPlans();
+		    },
+	    },
         methods: {
             resetFilters(){
                 this.filters = {};

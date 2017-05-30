@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Api\Rooming\Roomable;
 
 use App\Http\Requests;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\RoomRequest;
+use App\Services\Rooming\ManageRooms;
 use App\Http\Transformers\v1\RoomTransformer;
 use App\Repositories\Rooming\Interfaces\Room;
-use App\Services\Rooming\ManageRooms;
 
 class RoomsController extends Controller
 {
@@ -37,11 +38,19 @@ class RoomsController extends Controller
         return $this->response->item($room, new RoomTransformer);
     }
 
-    public function store($roomableType, $roomableId, Request $request)
+    public function store($roomableType, $roomableId, RoomRequest $request)
     {
-        (new ManageRooms($roomableType, $roomableId))->add($request->get('room_ids'));
+        DB::transaction(function () use ($request, $roomableType, $roomableId) 
+        {
+            $room = $this->room->create([
+                'room_type_id' => $request->get('room_type_id'),
+                'label'        => $request->get('label')
+            ]);
 
-        return $this->response->item($room, new RoomTransformer);
+            (new ManageRooms($roomableType, $roomableId))->add([$room->id]);
+
+            return $this->response->item($room, new RoomTransformer);
+        });
     }
 
     public function update($roomableType, $roomableId, $id, RoomRequest $request)
@@ -58,7 +67,14 @@ class RoomsController extends Controller
 
     public function destroy($roomableType, $roomableId, $id)
     {
-        (new ManageRooms($roomableType, $roomableId))->remove($id);
+        DB::transaction(function () use ($request, $roomableType, $roomableId, $id) 
+        {
+            $this->room
+                 ->filter([$roomableType => $roomableId])
+                 ->delete($id);
+
+            (new ManageRooms($roomableType, $roomableId))->remove($id);
+        });
 
         return $this->response->noContent();
     }

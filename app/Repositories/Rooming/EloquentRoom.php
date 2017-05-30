@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Rooming;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\v1\Room as RoomModel;
 use App\Repositories\EloquentRepository;
 use App\Repositories\Rooming\Interfaces\Room;
@@ -30,5 +31,14 @@ class EloquentRoom extends EloquentRepository implements Room {
     public function paginate($perPage = 15, $columns = array('*'))
     {
         return $this->model->withCount('occupants')->paginate($perPage, $columns);
+    }
+
+    public function delete($id)
+    {
+        DB::transaction(function () use ($id) 
+        {
+            $this->model->occupants()->detach();
+            $this->model->destroy($id);
+        });
     }
 }

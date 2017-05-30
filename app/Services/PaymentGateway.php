@@ -65,6 +65,7 @@ class PaymentGateway {
                     'exp_month' => $params['exp_month'],
                     'exp_year'  => $params['exp_year'],
                     'cvc'       => $params['cvc'],
+                    'address_zip' => $params['zip']
                 ],
             ];
         }

@@ -268,7 +268,7 @@
                     expMonth: this.cardMonth,
                     expYear: this.cardYear,
                     cvc: this.cardCVC,
-                    address_zip: this.cardZip,
+                    zip: this.cardZip,
                 };
             }
         },

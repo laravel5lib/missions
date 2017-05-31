@@ -36,6 +36,91 @@
 	</div><!-- end row -->
 
 	<div class="row" style="position:relative;">
+		<aside :show.sync="showMembersFilters" placement="left" header="Squad Members Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+				<!-- <div class="form-group">
+					<label>Tags</label>
+					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
+						   :debounce="250" placeholder="Tag, tag2, tag3...">
+				</div> -->
+
+				<!--<div class="form-group" v-if="isAdminRoute">
+					<label>Trip Type</label>
+					<select  class="form-control input-sm" v-model="membersFilters.type">
+						<option value="">Any Type</option>
+						<option value="ministry">Ministry</option>
+						<option value="family">Family</option>
+						<option value="international">International</option>
+						<option value="media">Media</option>
+						<option value="medical">Medical</option>
+						<option value="leader">Leader</option>
+					</select>
+				</div>-->
+
+				<div class="form-group">
+					<label>Role</label>
+					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
+					          :value.sync="membersFilters.role" :options="rolesOptions" label="name"
+					          placeholder="Filter Roles"></v-select>
+				</div>
+
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Travel Group</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="groupsArr" :options="groupsOptions" label="name"
+					          placeholder="Filter Groups"></v-select>
+				</div>
+
+				<div class="form-group">
+					<label>Gender</label>
+					<select class="form-control input-sm" v-model="membersFilters.gender" style="width:100%;">
+						<option value="">Any Genders</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Marital Status</label>
+					<select class="form-control input-sm" v-model="membersFilters.status" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="single">Single</option>
+						<option value="married">Married</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Arrival Designation</label>
+					<select  class="form-control input-sm" v-model="membersFilters.designation">
+						<option value="">Any</option>
+						<option value="eastern">Eastern</option>
+						<option value="western">Western</option>
+						<option value="international">International</option>
+						<option value="none">None</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Travel Companions</label>
+					<div>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions1" v-model="membersFilters.hasCompanions" :value=""> Any
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions2" v-model="membersFilters.hasCompanions" value="yes"> Yes
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions3" v-model="membersFilters.hasCompanions" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetMembersFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+			</form>
+		</aside>
+
 		<template v-if="currentPlan">
 			<div class="col-xs-12" v-if="currentPlan">
 				<h3>{{ currentPlan.name }} <button type="button" class="btn btn-xs btn-primary" @click="changePlan">Change Plan</button></h3>
@@ -120,8 +205,6 @@
 																<div class="col-sm-2">
 																	<label>Age</label>
 																	<p class="small">{{member.age}}</p>
-																	<!--<label>Travel Group</label>
-																	<p class="small">{{member.trip.data.group.data.name}}</p>-->
 																</div><!-- end col -->
 																<div class="col-sm-3">
 																	<label>Gender</label>
@@ -130,8 +213,17 @@
 																<div class="col-sm-6">
 																	<label>Marital Status</label>
 																	<p class="small">{{member.status | capitalize}}</p>
-																</div><!-- end col -->
 															</div><!-- end row -->
+															<div class="row">
+																<div class="col-sm-6">
+																	<label>Travel Group</label>
+																	<p class="small">{{member.travel_group}}</p>
+																</div>
+																<div class="col-sm-5">
+																	<label>Designation</label>
+																	<p class="small">{{member.arrival_designation}}</p>
+																</div>
+															</div>
 														</div><!-- end panel-body -->
 													</div>
 													<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
@@ -139,7 +231,7 @@
 														<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
 													</div>-->
 													<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
-														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
+														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. <span v-if="companionsPresentTeam(member) > 0">And {{member.present_companions_team}} not on this team.</span>
 														<!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
 													</div>
 												</div>
@@ -184,11 +276,11 @@
 									<span class="input-group-addon"><i class="fa fa-search"></i></span>
 								</div>
 							</div><!-- end col -->
-							<div class="form-group col-xs-4">
+							<!--<div class="form-group col-xs-4">
 								<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
 									<i class="fa fa-filter"></i>
 								</button>
-							</div>
+							</div>-->
 							<div class="col-xs-12">
 								<hr class="divider inv">
 							</div>
@@ -201,6 +293,7 @@
 									<div class="list-group">
 										<a @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentRooms | orderBy 'label'" style="cursor: pointer;">
 											{{(room.label ? (room.label + ' &middot; ' + room.type.data.name) : room.type.data.name) | capitalize}}
+											<span v-if="getRoomLeader(room)"> ({{ getRoomLeader(room).surname }}, {{ getRoomLeader(room).given_names | capitalize }}) </span>
 											<span v-if="room.type.data.rules.occupancy_limit === room.occupants_count" class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">Full</span>
 											<span v-if="room.type.data.rules.occupancy_limit > room.occupants_count" class="badge text-uppercase" style="font-size:10px;line-height:1.4;letter-spacing: 0;">{{room.occupants_count}}</span>
 										</a>
@@ -436,14 +529,23 @@
 												<label>Travel Group</label>
 											</div><!-- end col -->
 											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.trip.data.group.data.name}}</p>
+												<p class="small" style="margin:3px 0;">{{member.travel_group}}</p>
+											</div><!-- end col -->
+										</div><!-- end row -->
+										<hr class="divider sm">
+										<div class="row">
+											<div class="col-sm-6">
+												<label>Arrival Designation</label>
+											</div><!-- end col -->
+											<div class="col-sm-6">
+												<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
 											</div><!-- end col -->
 										</div><!-- end row -->
 									</div><!-- end panel-body -->
+
 								</div>
-								<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length">
-									<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-									<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
+								<div class="panel-footer" v-if="member.companions && member.companions.data.length">
+									I have {{member.companions.data.length}} companions.
 								</div>
 							</div>
 						</div>
@@ -560,8 +662,15 @@
                 // Filters vars
                 teamMembersSearch: '',
                 roomsSearch: '',
-                showReservationsFilters: false,
-
+                showMembersFilters: false,
+				membersFilters: {
+                    gender: '',
+                    hasCompanions: null,
+                    status: '',
+					role: null,
+                    designation: '',
+				},
+                rolesOptions: [],
 
 	            // modal vars
 	            showPlanModal: false,
@@ -596,8 +705,20 @@
                     this.updateConfig();
                 },
 	            deep: true
-
-            }
+            },
+            roomsSearch(val) {
+                this.getRooms();
+                this.roomsPagination.current_page = 1;
+            },
+            teamMembersSearch(val) {
+                this.getTeams();
+            },
+            membersFilters: {
+                handler() {
+                    this.getTeams();
+                },
+	            deep: true
+            },
 	    },
 	    computed: {
             planOccupants() {
@@ -626,12 +747,25 @@
             },
 		    currentRoomHasLeader() {
                 if (this.currentRoom && this.roomHasLeader(this.currentRoom)) {
-                    let leader = _.findWhere(this.currentRoom.occupants, { room_leader: true });
-                    return leader || false;
+                    return this.getRoomLeader(this.currentRoom);
                 } else return false;
 		    }
 	    },
         methods: {
+            resetMembersFilter() {
+                this.membersFilters = {
+                    gender: '',
+                    hasCompanions: null,
+                    status: '',
+                    role: null,
+                    designation: '',
+                };
+            },
+            getRoomLeader(room) {
+                let occupants = room.occupants.data || room.occupants;
+                let leader = _.findWhere(occupants, { room_leader: true });
+                return leader || false;
+            },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({
                     currentPlan: this.currentPlan.id,
@@ -767,6 +901,7 @@
                 let params = {
                     plans: new Array(plan.id),
 	                include: 'type,occupants',
+	                search: this.roomsSearch,
                     // page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/rooms', { params: params })
@@ -794,22 +929,63 @@
                     });
             },
             getTeams(){
+                let currentSelection = _.extend({}, this.currentTeam);
+
                 let params = {
-                    include: 'squads.members.companions,squads.members.trip.group,type',
+                    include: 'squads.members.companions,type',
                     page: this.teamsPagination.current_page,
                 };
 
                 if (_.isObject(this.currentPlan) && this.currentPlan.id) {
-                    params.include = 'squads.members:noRoom(plans|' + this.currentPlan.id + '),squads.members.companions,squads.members.trip.group,type';
+                    params.include += ',squads.members:noRoom(plans|' + this.currentPlan.id + ')';
                 }
+
+                if (this.teamMembersSearch) {
+                    params.include += ':search(' + this.teamMembersSearch + ')';
+                }
+
+                // membersFilters
+	            if (this.membersFilters.gender)
+                    params.include += ':gender(' + this.membersFilters.gender + ')';
+
+	            if (this.membersFilters.hasCompanions)
+                    params.include += ':hasCompanions(' + this.membersFilters.hasCompanions + ')';
+
+	            if (this.membersFilters.status)
+                    params.include += ':status(' + this.membersFilters.status + ')';
+
+	            if (this.membersFilters.role)
+                    params.include += ':role(' + this.membersFilters.role.value + ')';
+
+	            if (this.membersFilters.designation)
+                    params.include += ':designation(' + this.membersFilters.designation + ')';
 
                 return this.$http.get('teams', { params: params }).then(function (response) {
                         this.teamsPagination = response.body.meta.pagination;
-                        return this.teams = response.body.data;
+                        this.teams = response.body.data;
+                        if (currentSelection) {
+                            this.currentTeam = _.findWhere(this.teams, { id: currentSelection.id});
+                        }
+                        return this.teams;
                     }, function (response) {
                         console.log(response);
                         return response.body.data;
                     });
+            },
+            getRoles(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('utilities/team-roles').then(function (response) {
+                    let roles = [];
+                    _.each(response.body.roles, function (name, key) {
+                        roles.push({ value: key, name: name});
+                    });
+                    this.rolesOptions = roles;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return this.rolesOptions;
+                    }
+                });
             },
 
 	        // Modal Functions
@@ -910,7 +1086,7 @@
             }));*/
             promises.push(this.getRoomTypes());
             promises.push(this.getTeams());
-//            promises.push(this.getRoles());
+            promises.push(this.getRoles());
             Promise.all(promises).then(function (values) {
                 this.startUp = false;
 

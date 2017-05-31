@@ -43,14 +43,14 @@
                         </li>
                     </ul>
                 </li>
-                {{-- <li role="presentation" class="dropdown">
+                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Rooming <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">Overview</a></li>
-                        <li><a href="#">Room Assignments</a></li>
+                        <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/rooming-manager') }}">Room Assignments</a></li>
                         <li><a href="#">Accommodations</a></li>
                     </ul>
-                </li> --}}
+                </li>
                 <li role="presentation" class="{{ $tab == 'regions' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                       Regions <span class="caret"></span>

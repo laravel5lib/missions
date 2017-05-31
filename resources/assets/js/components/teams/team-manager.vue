@@ -124,6 +124,18 @@
 					</div>
 
 					<div class="form-group">
+						<label>Arrival Designation</label>
+						<select  class="form-control input-sm" v-model="reservationFilters.designation">
+							<option value="">Any</option>
+							<option value="eastern">Eastern</option>
+							<option value="western">Western</option>
+							<option value="international">International</option>
+							<option value="none">None</option>
+						</select>
+					</div>
+
+
+					<div class="form-group">
 						<label>Travel Companions</label>
 						<div>
 							<label class="radio-inline">
@@ -958,7 +970,8 @@
 		            gender: '',
 		            status: '',
                     hasCompanions: null,
-                    role: ''
+                    role: '',
+                    designation: ''
                 },
 	            membersFilters: {
                     groups: [],
@@ -1104,7 +1117,8 @@
                     gender: '',
                     status: '',
                     hasCompanions: null,
-	                role: ''
+	                role: '',
+                    designation: ''
                 }
 
 
@@ -1325,6 +1339,7 @@
 	                current: true,
 	                ignore: this.excludeReservationIds,
                     noSquad: true,
+                    designation: this.reservationFilters.designation,
                 };
 
                 if (this.isAdminRoute) {
@@ -1360,7 +1375,6 @@
                     page: this.teamsPagination.current_page,
 	                search: this.teamsSearch,
 	                group: this.teamFilters.group,
-                    designation: this.teamFilters.designation,
                 };
 
                 return this.TeamResource.get(params).then(function (response) {

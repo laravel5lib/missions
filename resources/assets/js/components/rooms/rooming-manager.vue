@@ -90,25 +90,16 @@
 					</select>
 				</div>
 
-				<!--<div class="form-group">
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Age Range</label>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Age Min</span>
-								<input type="number" class="form-control" number v-model="reservationsAgeMin" min="0">
-							</div>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Max</span>
-								<input type="number" class="form-control" number v-model="reservationsAgeMax" max="120">
-							</div>
-						</div>
-					</div>
-				</div>-->
+				<div class="form-group">
+					<label>Arrival Designation</label>
+					<select  class="form-control input-sm" v-model="membersFilters.designation">
+						<option value="">Any</option>
+						<option value="eastern">Eastern</option>
+						<option value="western">Western</option>
+						<option value="international">International</option>
+						<option value="none">None</option>
+					</select>
+				</div>
 
 				<div class="form-group">
 					<label>Travel Companions</label>
@@ -659,7 +650,8 @@
                     gender: '',
                     hasCompanions: null,
                     status: '',
-					role: null
+					role: null,
+                    designation: '',
 				},
                 rolesOptions: [],
 
@@ -748,7 +740,8 @@
                     gender: '',
                     hasCompanions: null,
                     status: '',
-                    role: null
+                    role: null,
+                    designation: '',
                 };
             },
             getRoomLeader(room) {
@@ -946,6 +939,9 @@
 
 	            if (this.membersFilters.role)
                     params.include += ':role(' + this.membersFilters.role.value + ')';
+
+	            if (this.membersFilters.designation)
+                    params.include += ':designation(' + this.membersFilters.designation + ')';
 
                 return this.$http.get('teams', { params: params }).then(function (response) {
                         this.teamsPagination = response.body.meta.pagination;

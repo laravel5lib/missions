@@ -480,8 +480,8 @@
 								<template v-else>
 									<hr class="divider inv">
 									<p class="text-center text-muted"><em>Select a Squad to get started or create a new one!</em></p>
-									<hr class="divider inv">
-									<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
+									<hr class="divider inv" v-if="isAdminRoute">
+									<p class="text-center" v-if="isAdminRoute"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
 								</template>
 							</div>
 						</div>
@@ -510,7 +510,7 @@
 									</select>
 									<p v-else v-text="currentTeam.locked ? 'Yes' : 'No'"></p>
 								</div>
-								<div class="col-sm-2" v-if="!editTeamMode">
+								<div class="col-sm-2" v-if="isAdminRoute && !editTeamMode">
 									<label class="control-label"><i class="fa fa-cog"></i>
 									<a @click="editTeamMode = true;">
 										Edit
@@ -623,7 +623,7 @@
 								</div>
 							</template>
 
-							<div class="col-xs-12 text-right">
+							<div class="col-xs-12 text-right" v-if="isAdminRoute">
 								<hr class="divider sm inv">
 								<button class="btn btn-primary btn-sm" @click="openNewTeamModel">Create A Squad</button>
 							</div>
@@ -655,8 +655,8 @@
 								<template v-else>
 									<hr class="divider inv">
 									<p class="text-center text-italic text-muted"><em>No Squads created yet. Create one to get started!</em></p>
-									<hr class="divider inv">
-									<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
+									<hr class="divider inv" v-if="isAdminRoute">
+									<p class="text-center" v-if="isAdminRoute"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
 								</template>
 							</div>
 						</div>

@@ -39,13 +39,6 @@ class CreateRoomsTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('rooming_plan_room_type', function (Blueprint $table) {
-            $table->uuid('rooming_plan_id')->index();
-            $table->uuid('room_type_id')->index();
-            $table->integer('available_rooms')->default(0);
-            $table->timestamps();
-        });
-
         Schema::create('occupants', function (Blueprint $table) {
             $table->uuid('reservation_id')->index();
             $table->uuid('room_id')->index();
@@ -85,16 +78,6 @@ class CreateRoomsTable extends Migration
                 ->references('id')->on('campaigns')
                 ->onDelete('cascade');
         });
-
-        Schema::table('rooming_plan_room_type', function (Blueprint $table) {
-            $table->foreign('rooming_plan_id')
-                ->references('id')->on('rooming_plans')
-                ->onDelete('cascade');
-
-            $table->foreign('room_type_id')
-                ->references('id')->on('room_types')
-                ->onDelete('cascade');
-        });
     }
 
     /**
@@ -109,7 +92,6 @@ class CreateRoomsTable extends Migration
         Schema::dropIfExists('rooming_plans');
         Schema::dropIfExists('rooms');
         Schema::dropIfExists('room_types');
-        Schema::dropIfExists('rooming_plan_room_type');
         Schema::dropIfExists('roomables');
         Schema::dropIfExists('occupants');
     }

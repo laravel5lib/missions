@@ -222,9 +222,9 @@
 				</form>
 			</aside>
 
-			<div class="col-xs-12 text-center" v-if="currentTeam">
-				<h1>{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h1>
-				<hr class="divider red-small">
+			<div class="col-xs-12" v-if="currentTeam">
+				<h3>{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span> <small>&middot; Squad Name</small></h3>
+				<hr class="divider lg">
 			</div>
 
 			<div class="col-md-7">
@@ -283,11 +283,17 @@
 																<h4 class="panel-title">
 																	<div class="row">
 																		<div class="col-xs-9">
-																			<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																				<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																				{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}<br>
-																				<label>{{ member.desired_role.name }}</label>
-																			</a>
+																			<div class="media">
+																				<div class="media-left" style="padding-right:0;">
+																					<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+																					</a>
+																				</div>
+																				<div class="media-body" style="vertical-align:middle;">
+																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+																				</div><!-- end media-body -->
+																			</div><!-- end media -->
 																		</div>
 																		<div class="col-xs-3 text-right action-buttons">
 																			<dropdown type="default">
@@ -390,11 +396,17 @@
 																<h4 class="panel-title">
 																	<div class="row">
 																		<div class="col-xs-9">
-																			<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																				<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																				{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
-																				<label>{{ member.desired_role.name }}</label>
-																			</a>
+																			<div class="media">
+																				<div class="media-left" style="padding-right:0;">
+																					<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+																					</a>
+																				</div>
+																				<div class="media-body" style="vertical-align:middle;">
+																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+																				</div><!-- end media-body -->
+																			</div><!-- end media -->
 																		</div>
 																		<div class="col-xs-3 text-right action-buttons">
 																			<dropdown type="default">
@@ -628,10 +640,10 @@
 											<div class="row">
 												<div class="col-xs-6">
 													{{ team.callsign | capitalize }}
-													<span class="label label-info" v-text="team.type.data.name | capitalize"></span>
-													<span v-if="team.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													<span v-if="team.locked" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
-												<div class="col-xs-6 text-right">Members: {{ team.members_count || 0 }}</div>
+												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
 											</div>
 										</a>
 									</ul>
@@ -708,11 +720,17 @@
 											<h4 class="panel-title">
 												<div class="row">
 													<div class="col-xs-9">
-														<a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-															<img :src="reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-															{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}<br>
-															<label>{{ reservation.desired_role.name }}</label>
-														</a>
+														<div class="media">
+															<div class="media-left" style="padding-right:0;">
+																<a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																	<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+																</a>
+															</div>
+															<div class="media-body" style="vertical-align:middle;">
+																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+																<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }}</p>
+															</div><!-- end media-body -->
+														</div><!-- end media -->
 													</div>
 													<div class="col-xs-3 text-right action-buttons">
 														<dropdown type="default">

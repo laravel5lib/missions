@@ -34,8 +34,6 @@ class SquadMemberTransformer extends TransformerAbstract
             'gender'              => $reservation->gender,
             'status'              => $reservation->status,
             'age'                 => $reservation->age,
-            'arrival_designation' => $reservation->designation ?
-                implode('', array_flatten($reservation->designation->content)) : 'none',
             'avatar'              => $reservation->avatar ? image($reservation->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'desired_role'        => [ 
                                         'code' => $reservation->desired_role, 

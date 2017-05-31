@@ -941,7 +941,7 @@
                 let currentSelection = _.extend({}, this.currentTeam);
 
                 let params = {
-                    include: 'squads.members.companions,squads.members.trip.group,type',
+                    include: 'squads.members.companions,type',
                     page: this.teamsPagination.current_page,
                 };
 

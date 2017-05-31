@@ -33,22 +33,11 @@ class RoomType extends Model
      */
     protected $casts = ['rules' => 'array'];
 
-    /**
-     * Set the rules attribute
-     * 
-     * @param array $value
-     */
     public function setRulesAttribute(array $value)
     {
         $this->attributes['rules'] = json_encode($value);
     }
 
-    /**
-     * Get the rules attribute.
-     * 
-     * @param  $value
-     * @return array
-     */
     public function getRulesAttribute($value)
     {
         return $value ? (array) json_decode($value) : [];

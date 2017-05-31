@@ -41,6 +41,9 @@
 						Filters
 						<i class="fa fa-filter"></i>
 					</button>
+					<button class="btn btn-primary btn-sm" type="button" @click="openNewPlanModal">
+						Create a plan
+					</button>
 				</form>
 			</div>
 		</div>
@@ -58,7 +61,6 @@
 		</div>
 		<hr class="divider sm">
 		<div style="position:relative;">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 			<table class="table table-condensed table-hover">
 				<thead>
 				<tr>
@@ -75,11 +77,6 @@
 						<span v-for="(key, val) in plan.rooms_count">
 							<span v-if="$index != 0"> | </span><em>{{key | capitalize}}:</em> <b>{{val}}</b>
 						</span>
-						<!--<div class="row">
-							<div class="col-xs-6">
-								<span v-if="$index == 1 || ($index % 2)">| </span>{{key | capitalize}}: {{val}}
-							</div>
-						</div>-->
 					</td>
 					<td style="cursor: pointer;" @click="loadManager(plan)" v-text="plan.occupants_count"></td>
 					<td>
@@ -109,7 +106,19 @@
 			</table>
 		</div>
 
-		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+		<!-- Modals -->
+		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :show.sync="showPlanModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="PlanCreate">
+					<form id="PlanCreateForm">
+						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
+							<label for="createPlanCallsign" class="control-label">Plan Name</label>
+							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal><modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedDeletePlan">
 					Are you sure you want to delete plan: "{{selectedDeletePlan.name}}" ?
@@ -141,7 +150,16 @@
 	            },
                 pagination: {current_page: 1},
                 showPlanDeleteModal: false,
+                showPlanModal: false,
                 selectedDeletePlan: null,
+                selectedNewPlan: {
+                    name: '',
+                    short_desc: '',
+                    rooms: [],
+                    locked: false,
+                    campaign_id: this.$parent.campaignId,
+                    group_id: this.$parent.groupId,
+                },
 	            PlansResource: this.$resource('rooming/plans{/plan}')
             }
         },
@@ -153,6 +171,9 @@
 	            deep: true
             },
 		    search() {
+                this.getRoomingPlans();
+		    },
+            per_page() {
                 this.getRoomingPlans();
 		    },
 	    },
@@ -214,7 +235,34 @@
                         return plan.id === obj.id;
                     });
                 });
-            }
+            },
+            openNewPlanModal(){
+                this.showPlanModal = true;
+                this.selectedNewPlan = {
+                    name: '',
+                    short_desc: '',
+                    rooms: [],
+                    locked: false,
+                    campaign_id: this.$parent.campaignId,
+                    group_id: this.$parent.groupId,
+                };
+            },
+            newPlan() {
+                if (this.$PlanCreate.valid) {
+                    return this.PlansResource.save(this.selectedNewPlan).then(function (response) {
+                        let plan = response.body.data;
+                        this.plans.push(plan);
+                        this.showPlanModal = false;
+                        this.loadManager(plan);
+                    }, function (response) {
+                        console.log(response);
+                        this.$root.$emit('showError', response.body.message);
+                        return response.body.data;
+                    });
+                } else {
+                    this.$root.$emit('showError', 'Please provide a name for the new plan');
+                }
+            },
         },
         ready(){
 			this.getRoomingPlans();

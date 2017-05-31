@@ -36,9 +36,12 @@
 	</div><!-- end row -->
 
 	<div class="row" style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-
 		<template v-if="currentPlan">
+			<div class="col-xs-12 text-center" v-if="currentPlan">
+				<h1>{{ currentPlan.name }} <button type="button" class="btn btn-sm btn-primary" @click="changePlan"> Change Plan</button></h1>
+				<hr class="divider red-small">
+			</div>
+
 			<div class="col-sm-8">
 
 				<!-- Occupants List -->
@@ -883,8 +886,15 @@
                     this.currentplan = this.plans.length ? this.plans[0] : null;
                 });
 
+            },
+            changePlan() {
+                this.$dispatch('rooming-wizard:plan-selection');
             }
         },
+	    activate(done){
+            this.currentPlan = this.$parent.currentPlan;
+            done();
+	    },
         ready(){
         	let self = this;
             let promises = [];
@@ -894,10 +904,10 @@
 
             }
 
-            promises.push(this.getPlans().then(function (plans) {
+            /*promises.push(this.getPlans().then(function (plans) {
                 //let pIds = _.pluck(plans, 'id');
 	            //this.getAllRooms(pIds);
-            }));
+            }));*/
             promises.push(this.getRoomTypes());
             promises.push(this.getTeams());
 //            promises.push(this.getRoles());
@@ -924,7 +934,6 @@
 
             this.$root.$on('plan-scope', function (val) {
                 this.currentPlan = val || null;
-//                this.$root.$emit('update-title', val || null);
             }.bind(this));
 
             this.$root.$on('create-plan', function (val) {

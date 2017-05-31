@@ -21,6 +21,8 @@ class OccupantTransformer extends TransformerAbstract {
             'surname'          => $occupant->surname,
             'age'              => $occupant->age,
             'gender'           => $occupant->gender,
+            'arrival_designation' => $occupant->designation ?
+                implode('', array_flatten($occupant->designation->content)) : 'none',
             'desired_role'     => [
                 'code' =>       $occupant->desired_role,
                 'name' =>       teamRole($occupant->desired_role)

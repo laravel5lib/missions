@@ -125,7 +125,7 @@
 
 					<div class="form-group">
 						<label>Arrival Designation</label>
-						<select  class="form-control input-sm" v-model="membersFilters.designation">
+						<select  class="form-control input-sm" v-model="reservationFilters.designation">
 							<option value="">Any</option>
 							<option value="eastern">Eastern</option>
 							<option value="western">Western</option>

@@ -22,44 +22,46 @@
 			</form>
 		</aside>
 
-		<div class="row">
-			<div class="col-sm-12">
-				<form class="form-inline" novalidate>
-					<div class="form-inline" style="display: inline-block;">
-						<div class="form-group">
-							<label>Show</label>
-							<select class="form-control  input-sm" v-model="per_page">
-								<option v-for="option in perPageOptions" :value="option">{{option}}</option>
-							</select>
+		<template v-if="isAdminRoute">
+			<div class="row">
+				<div class="col-sm-12">
+					<form class="form-inline" novalidate>
+						<div class="form-inline" style="display: inline-block;">
+							<div class="form-group">
+								<label>Show</label>
+								<select class="form-control  input-sm" v-model="per_page">
+									<option v-for="option in perPageOptions" :value="option">{{option}}</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
-						<span class="input-group-addon"><i class="fa fa-search"></i></span>
-					</div>
-					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-						Filters
-						<i class="fa fa-filter"></i>
-					</button>
-					<button class="btn btn-primary btn-sm" type="button" @click="openNewPlanModal">
-						Create a plan
-					</button>
-				</form>
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
+							<span class="input-group-addon"><i class="fa fa-search"></i></span>
+						</div>
+						<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+							Filters
+							<i class="fa fa-filter"></i>
+						</button>
+						<button class="btn btn-primary btn-sm" type="button" @click="openNewPlanModal">
+							Create a plan
+						</button>
+					</form>
+				</div>
 			</div>
-		</div>
-		<hr class="divider sm">
-		<div>
-			<label>Active Filters</label>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.group != null" @click="filters.groups = null" >
+			<hr class="divider sm">
+			<div>
+				<label>Active Filters</label>
+				<span style="margin-right:2px;" class="label label-default" v-show="filters.group != null" @click="filters.groups = null" >
 				Travel Group
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign != null" @click="filters.campaign = null" >
+				<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign != null" @click="filters.campaign = null" >
 				Campaign
 				<i class="fa fa-close"></i>
 			</span>
-		</div>
-		<hr class="divider sm">
+			</div>
+			<hr class="divider sm">
+		</template>
 		<div style="position:relative;" class="panel panel-default">
 			<table class="table table-hover">
 				<thead>
@@ -67,7 +69,7 @@
 					<th>Name</th>
 					<th>Rooms</th>
 					<th># of Occupants</th>
-					<th><i class="fa fa-cog"></i></th>
+					<th v-if="isAdminRoute"><i class="fa fa-cog"></i></th>
 				</tr>
 				</thead>
 				<tbody v-if="plans.length">
@@ -79,7 +81,7 @@
 						</span>
 					</td>
 					<td style="cursor: pointer;" @click="loadManager(plan)" v-text="plan.occupants_count"></td>
-					<td>
+					<td v-if="isAdminRoute">
 						<button type="button" class="btn btn-default-hollow btn-xs" @click="openDeletePlanModal(plan)">
 							<i class="fa fa-trash"></i>
 						</button>

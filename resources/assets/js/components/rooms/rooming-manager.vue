@@ -538,15 +538,6 @@
 												<label>Arrival Designation</label>
 											</div><!-- end col -->
 											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.arrival_designation}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Arrival Designation</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
 												<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
 											</div><!-- end col -->
 										</div><!-- end row -->

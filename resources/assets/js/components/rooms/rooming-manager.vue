@@ -216,12 +216,6 @@
 																	<p class="small">{{member.status | capitalize}}</p>
 															</div><!-- end row -->
 															<div class="row">
-																<div class="col-sm-12">
-																	<label>Arrival Designation</label>
-																	<p class="small">{{member.arrival_designation | capitalize}}</p>
-																</div><!-- end col -->
-															</div><!-- end row -->
-															<div class="row">
 																<div class="col-sm-6">
 																	<label>Travel Group</label>
 																	<p class="small">{{member.travel_group}}</p>

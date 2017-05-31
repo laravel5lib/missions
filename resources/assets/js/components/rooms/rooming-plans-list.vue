@@ -60,8 +60,8 @@
 			</span>
 		</div>
 		<hr class="divider sm">
-		<div style="position:relative;">
-			<table class="table table-condensed table-hover">
+		<div style="position:relative;" class="panel panel-default">
+			<table class="table table-hover">
 				<thead>
 				<tr>
 					<th>Name</th>

@@ -206,8 +206,6 @@
 																<div class="col-sm-2">
 																	<label>Age</label>
 																	<p class="small">{{member.age}}</p>
-																	<!--<label>Travel Group</label>
-																	<p class="small">{{member.trip.data.group.data.name}}</p>-->
 																</div><!-- end col -->
 																<div class="col-sm-3">
 																	<label>Gender</label>
@@ -218,6 +216,16 @@
 																	<p class="small">{{member.status | capitalize}}</p>
 																</div><!-- end col -->
 															</div><!-- end row -->
+															<div class="row">
+																<div class="col-sm-6">
+																	<label>Travel Group</label>
+																	<p class="small">{{member.travel_group}}</p>
+																</div>
+																<div class="col-sm-5">
+																	<label>Designation</label>
+																	<p class="small">{{member.arrival_designation}}</p>
+																</div>
+															</div>
 														</div><!-- end panel-body -->
 													</div>
 													<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
@@ -522,7 +530,16 @@
 												<label>Travel Group</label>
 											</div><!-- end col -->
 											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.trip.data.group.data.name}}</p>
+												<p class="small" style="margin:3px 0;">{{member.travel_group}}</p>
+											</div><!-- end col -->
+										</div><!-- end row -->
+										<hr class="divider sm">
+										<div class="row">
+											<div class="col-sm-6">
+												<label>Arrival Designation</label>
+											</div><!-- end col -->
+											<div class="col-sm-6">
+												<p class="small" style="margin:3px 0;">{{member.arrival_designation}}</p>
 											</div><!-- end col -->
 										</div><!-- end row -->
 									</div><!-- end panel-body -->

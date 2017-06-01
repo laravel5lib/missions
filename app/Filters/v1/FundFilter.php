@@ -35,4 +35,9 @@ class FundFilter extends Filter
     {
         return $this->where('name', 'LIKE', "%$terms%");
     }
+
+    public function archived()
+    {
+        return $this->onlyTrashed();
+    }
 }

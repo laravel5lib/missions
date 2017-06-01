@@ -65,4 +65,35 @@ class EloquentPlan extends EloquentRepository implements Plan
         return $plan;
     }
 
+    public function addRoomType(array $data, $id)
+    {
+        $plan = $this->getById($id);
+
+        $plan->availableRoomTypes()->sync([
+            $data['room_type_id'] => [ 'available_rooms' => $data['available_rooms'] ]
+            ], false);
+
+        return $plan->availableRoomTypes;
+    }
+
+    public function removeRoomType($typeId, $id)
+    {
+        $plan = $this->getById($id);
+
+        $plan->availableRoomTypes()->detach($typeId);
+
+        return $plan->availableRoomTypes;
+    }
+
+    public function updateRoomType(array $data, $id)
+    {
+        $plan = $this->getById($id);
+
+        $plan->types()->updateExistingPivot($data['room_type_id'], [ 
+            'available_rooms' => $data['available_rooms']
+        ]);
+
+        return $plan->types;
+    }
+
 }

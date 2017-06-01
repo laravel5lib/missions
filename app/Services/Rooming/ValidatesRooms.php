@@ -23,9 +23,7 @@ class ValidatesRooms
     {
         $this->getRooms()->each(function($room) 
         {
-            $type = $this->plan->wherehas('availableRoomTypes', function($query) {
-                return $query->where('id', $room->room_type_id);
-            });
+            $type = $this->plan->availableRoomTypes()->where('id', $room->room_type_id)->first();
 
             $this->assertAllowsRoomType($type);
             $this->assertWithinRoomTypeLimit($type);
@@ -34,14 +32,14 @@ class ValidatesRooms
 
     public function assertAllowsRoomType($type)
     {
-        if ( ! $type) {
+        if (! $type) {
             throw new \Exception("That type of room cannot be added to this plan.");
         }
     }
 
     public function assertWithinRoomTypeLimit($type)
     {
-        $count = $this->plan->roomsCount()->byType($type->name);
+        $count = $this->plan->roomsCount()->byType($type->id);
 
         if ( $count >= $type->pivot->available_rooms ) {
             throw new \Exception("This plan has the maximum number of $type->name rooms allowed.");

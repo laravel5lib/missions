@@ -12,6 +12,7 @@ class RoomingPlanTransformer extends TransformerAbstract
             'id'          => $plan->id,
             'name'        => $plan->name,
             'short_desc'  => $plan->short_desc,
+            'available_rooms' => $this->getAvailableRooms($plan),
             'rooms_count' => $plan->roomsCount()->all(),
             'occupants_count' => $plan->occupantsCount()->total(),
             'created_at'  => $plan->created_at->toDateTimeString(),
@@ -24,5 +25,12 @@ class RoomingPlanTransformer extends TransformerAbstract
                 ]
             ],
         ];
+    }
+
+    private function getAvailableRooms(RoomingPlan $plan)
+    {
+        return $plan->availableRoomTypes->keyBy('name')->map(function($type) {
+            return $type->pivot->available_rooms;
+        })->put('total', $plan->availableRoomTypes->count())->all();
     }
 }

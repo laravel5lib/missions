@@ -48,7 +48,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="#">Overview</a></li>
                         <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/rooming-manager') }}">Room Assignments</a></li>
-                        <li><a href="#">Accommodations</a></li>
+                        <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/accommodations') }}">Accommodations</a></li>
                     </ul>
                 </li>
                 <li role="presentation" class="{{ $tab == 'regions' ? 'active' : '' }} dropdown">
@@ -57,7 +57,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         {{-- <li><a href="#">Overview</a></li> --}}
-                        {{-- <li><a href="#">Accommodations</a></li> --}}
+                        <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/region-accommodations') }}">Accommodations</a></li>
                         <li class="{{ $tab == 'regions' ? 'active' : '' }}">
                             <a href="{{ url('admin/campaigns/'.$campaign->id.'/regions') }}">Squad Assignments</a>
                         </li>

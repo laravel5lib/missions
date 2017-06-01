@@ -122,13 +122,11 @@
 		</aside>
 
 		<template v-if="currentPlan">
-			<div class="col-xs-12 text-center" v-if="currentPlan">
-				<h1>{{ currentPlan.name }} <button type="button" class="btn btn-sm btn-primary" @click="changePlan"> Change Plan</button></h1>
-				<hr class="divider red-small">
+			<div class="col-xs-12" v-if="currentPlan">
+				<h3>{{ currentPlan.name }} <button type="button" class="btn btn-xs btn-primary" @click="changePlan">Change Plan</button></h3>
+				<hr class="divider lg">
 			</div>
-
 			<div class="col-sm-8">
-
 				<!-- Occupants List -->
 				<template v-if="currentRoom">
 					<div class="panel panel-default">
@@ -159,8 +157,9 @@
 									<hr class="divider sm">
 									<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 										<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
+										<div class="row">
 											<div class="col-sm-6" v-for="member in currentRoom.occupants | orderBy 'surname'">
-												<div class="panel panel-default" style="min-height: 75px">
+												<div class="panel panel-default" style="margin-bottom:8px;">
 													<div class="panel-heading" role="tab" id="headingOne">
 														<h5 class="panel-title">
 															<div class="row">
@@ -237,6 +236,7 @@
 													</div>
 												</div>
 											</div>
+										</div><!-- end row -->
 										</div>
 									</template>
 									<template v-else>
@@ -530,15 +530,6 @@
 											</div><!-- end col -->
 											<div class="col-sm-6">
 												<p class="small" style="margin:3px 0;">{{member.travel_group}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Arrival Designation</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.arrival_designation}}</p>
 											</div><!-- end col -->
 										</div><!-- end row -->
 										<hr class="divider sm">

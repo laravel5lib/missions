@@ -7,6 +7,7 @@ use App\UuidForKey;
 use App\OccupantCount;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\Rooming\ValidatesRooms;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RoomingPlan extends Model
@@ -15,6 +16,9 @@ class RoomingPlan extends Model
     
     protected $guarded = [];
 
+    /**
+     * Attributes that should be cast to date time objects
+     */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     
     public function rooms()
@@ -30,5 +34,17 @@ class RoomingPlan extends Model
     public function occupantsCount()
     {
         return new OccupantCount($this);
+    }
+
+    public function availableRoomTypes()
+    {
+        return $this->belongsToMany(RoomType::class, 'rooming_plan_room_type')
+                    ->withPivot('available_rooms')
+                    ->withTimestamps();
+    }
+
+    public function validateRooms($rooms)
+    {
+        return new ValidatesRooms($rooms, $this);
     }
 }

@@ -14,6 +14,8 @@ trait Roomable
     {
         $model = $this->getByid($id);
 
+        $model->validateRooms($rooms);
+
         $model->rooms()->sync($rooms, false);
 
         return true;

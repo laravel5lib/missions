@@ -44,6 +44,11 @@ class Accommodation extends Model
         return new OccupantCount($this);
     }
 
+    public function validateRooms($rooms)
+    {
+        return true;
+    }
+
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = strtolower(trim($value));

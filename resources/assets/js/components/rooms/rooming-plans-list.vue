@@ -68,7 +68,7 @@
 				<tr>
 					<th>Name</th>
 					<th>Rooms</th>
-					<th># of Occupants</th>
+					<th>Occupants</th>
 					<th v-if="isAdminRoute"><i class="fa fa-cog"></i></th>
 				</tr>
 				</thead>
@@ -77,7 +77,7 @@
 					<td style="cursor: pointer;" v-text="plan.name" @click="loadManager(plan)"></td>
 					<td style="cursor: pointer;" @click="loadManager(plan)">
 						<span v-for="(key, val) in plan.rooms_count">
-							<span v-if="$index != 0"> | </span><em>{{key | capitalize}}:</em> <b>{{val}}</b>
+							<p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
 						</span>
 					</td>
 					<td style="cursor: pointer;" @click="loadManager(plan)" v-text="plan.occupants_count"></td>
@@ -90,8 +90,10 @@
 				</tbody>
 				<tbody v-else>
 				<tr>
-					<td colspan="4" class="text-center text-italic text-muted">
-						No Rooming Plans yet. Create a new Rooming Plan
+					<td colspan="4">
+						<p class="text-center text-italic text-muted"><em>
+						No Rooming Plans yet. Create a new Rooming Plan.
+						</em></p>
 					</td>
 				</tr>
 				</tbody>

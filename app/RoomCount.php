@@ -23,6 +23,11 @@ class RoomCount
               ->all();
     }
 
+    public function byType($type)
+    {
+        //
+    }
+
     private function getRooms()
     {
         return $this->roomable->rooms()->with('type')->get();

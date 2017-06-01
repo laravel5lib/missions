@@ -616,16 +616,22 @@ class Reservation extends Model
         $this->addTodos($newTodos);
     }
 
-    /**
-     * Get current reservations
-     * 
-     * @param  Builder $query
-     * @return Builder
-     */
     public function scopeCurrent($query)
     {
         return $query->whereHas('trip', function($trip) {
-            return $trip->where('ended_at', '>', Carbon::now());
+            return $trip->current();
+        });
+    }
+
+    public function scopeActive($query)
+    {
+        return $this->scopeCurrent($query);
+    }
+
+    public function scopePast($query)
+    {
+        return $query->whereHas('trip', function($trip) {
+            return $trip->past();
         });
     }
 

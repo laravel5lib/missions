@@ -142,6 +142,8 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
+import accommodations from './components/admin/accommodations.vue';
+import regionsAccommodations from './components/regions/regions-accommodations.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -895,6 +897,7 @@ new Vue({
         teamManager,
         teamTypeManager,
         regionsManager,
+        regionsAccommodations,
         reportsList,
         roomingWizard,
 
@@ -956,7 +959,8 @@ new Vue({
         fundManager,
         companionManager,
         promotionals,
-        transports
+        transports,
+        accommodations,
     },
     http: {
         headers: {

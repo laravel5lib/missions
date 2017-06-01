@@ -190,9 +190,7 @@ class ReservationFilter extends Filter
      */
     public function current()
     {
-        return $this->whereHas('trip', function($trip) {
-            return $trip->current();
-        });
+        return $this->active();
     }
 
     /**
@@ -202,9 +200,7 @@ class ReservationFilter extends Filter
      */
     public function archived()
     {
-        return $this->whereHas('trip', function($trip) {
-            return $trip->past();
-        });
+        return $this->past();
     }
 
     /**

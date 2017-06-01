@@ -23,7 +23,8 @@ class Kernel extends ConsoleKernel
         Commands\AddRoleToTrips::class,
         Commands\AddTodoToTrips::class,
         Commands\AddRequirementToTrips::class,
-        Commands\ExtractAccounting::class
+        Commands\ExtractAccounting::class,
+        Commands\ArchiveOldFunds::class
     ];
 
     /**

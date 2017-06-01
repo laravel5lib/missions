@@ -55,9 +55,9 @@ class TravelItinerariesController extends Controller
 
                 $data['transport'] = [
                     'type'        => $transport->get('type'),
-                    'vessel_no'   => $transport->get('vessel_no'),
+                    'vessel_no'   => $transport->get('vessel_no') ?: 'unassigned',
                     'name'        => $transport->get('name'),
-                    'call_sign'   => $transport->get('call_sign'),
+                    'call_sign'   => $transport->get('call_sign') ?: null,
                     'domestic'    => $transport->get('domestic', true),
                     'capacity'    => $transport->get('capacity', 9999),
                     'campaign_id' => $reservation->trip->campaign->id

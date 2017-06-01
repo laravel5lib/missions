@@ -103,7 +103,7 @@
                         	<label for="started_at" class="control-label">Dates</label>
                             <div class="row">
                                 <div class="col-sm-6">
-	                                <date-picker :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD'" type="date" addon="Start" ></date-picker>
+	                                <date-picker :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD' false true" type="date" addon="Start" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
 	                                       v-validate:start="['required']" required>
 	                                <!--<div class="input-group" :class="{ 'has-error': checkForError('start') }">
@@ -113,7 +113,7 @@
 									</div>-->
                                 </div>
                                 <div class="col-sm-6">
-	                                <date-picker :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD'" type="date" addon="End" ></date-picker>
+	                                <date-picker :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD' false true" type="date" addon="End" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
 	                                       v-validate:end="['required']" required>
 	                                <!--<div class="input-group"

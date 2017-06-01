@@ -41,7 +41,20 @@
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </aside>
-
+        
+        <div class="row">
+            <div class="col-sm-12">
+                <ul class="nav nav-pills">
+                  <li role="presentation" :class="{'active': !archived}">
+                    <a @click="archived = false"><i class="fa fa-bolt"></i> Active</a>
+                  </li>
+                  <li role="presentation" :class="{'active': archived}">
+                    <a @click="archived = true"><i class="fa fa-archive"></i> Archived</a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+        <hr class="divider">
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
@@ -232,6 +245,7 @@
                     minBalance: null,
                     maxBalance: null,
                     type: null,
+                    archived: false
                 },
                 showFilters: false,
                 exportOptions: {
@@ -242,7 +256,8 @@
                     item: 'Account Item',
                     created: 'Created On'
                 },
-                exportFilters: {}
+                exportFilters: {},
+                archived: false
             }
         },
         watch: {
@@ -254,6 +269,15 @@
                     this.searchFunds();
                 },
                 deep: true
+            },
+            'archived': function (val) {
+                if (val) {
+                    this.filters.archived = true;
+                    this.searchFunds();
+                } else {
+                    delete this.filters.archived;
+                    this.searchFunds();
+                }
             },
             'direction': function (val) {
                 this.searchFunds();

@@ -17,6 +17,22 @@
             </div>
         </div>
     </div>
+    @if($fund->deleted_at)
+    <div class="darker-bg-primary">
+        <div class="container">
+            <div class="col-sm-8 text-center">
+                <hr class="divider inv sm">
+                <h5>This fund was archived {{ $fund->deleted_at->toDayDateTimeString() }} UTC and is no longer active.</h5>
+                <hr class="divider inv sm">
+            </div>
+            <div class="col-sm-4 text-center">
+                <hr class="divider inv sm hidden-xs">
+                <button data-toggle="modal" data-target="#restoreConfirmationModal" class="btn btn-sm btn-white-hollow"><i class="fa fa-undo"></i> Restore</button>
+                <hr class="divider inv sm">
+            </div>
+        </div><!-- end container -->
+    </div><!-- end dark-bg-primary -->
+    @endif
     <hr class="divider inv lg">
     <div class="container">
         <div class="row">
@@ -28,6 +44,7 @@
                        :can-modify="{{ auth()->user()->can('modify-notes') }}">
                 </notes>
             </fund-manager>
+            <restore-fund id="{{ $fund->id }}"></restore-fund>
         </div>
     </div>
 @stop

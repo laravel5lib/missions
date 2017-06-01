@@ -137,6 +137,13 @@ class FundsController extends Controller
         return $this->response->noContent();
     }
 
+    public function restore($id)
+    {
+        $fund = $this->fund->withTrashed()->findOrFail($id);
+
+        $fund->reactivate();
+    }
+
     /**
      * Export funds.
      *

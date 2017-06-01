@@ -135,6 +135,7 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
+import restoreFund from './components/financials/funds/restore-fund.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -842,6 +843,7 @@ new Vue({
         sendEmail,
         restoreReservation,
         transferReservation,
+        restoreFund,
 
         //dashboard components
         recordsList,

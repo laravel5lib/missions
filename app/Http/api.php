@@ -121,6 +121,7 @@ $api->version('v1', [
     $api->resource('funds', 'FundsController');
     $api->post('funds/export', 'FundsController@export');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
+    $api->put('funds/{id}/restore', 'FundsController@restore');
     $api->get('funds/{id}/donors', 'FundDonorsController@index');
     $api->resource('transactions', 'TransactionsController');
     $api->post('transactions/export', 'TransactionsController@export');

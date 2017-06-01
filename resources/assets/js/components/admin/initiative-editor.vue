@@ -118,7 +118,7 @@
             },
             create() {
                 this.initiative.country_code = this.initiative.country.code;
-                this.project_cause_id = this.causeId;
+                this.initiative.project_cause_id = this.causeId;
                 this.$http.post('initiatives', this.initiative).then(function (response) {
                     this.initiative = {};
                     window.location = '/admin/initiatives/' + response.body.data.id;

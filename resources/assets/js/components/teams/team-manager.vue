@@ -857,7 +857,8 @@
                 campaignsOptions: [],
                 groupsOptions: [],
                 teamFilters: {
-                    group: ''
+                    group: '',
+	                campaign: null
                 },
                 // reservations filters
 	            reservationFilters: {
@@ -1256,8 +1257,15 @@
                     include: 'type',
                     page: this.teamsPagination.current_page,
 	                search: this.teamsSearch,
-	                group: this.teamFilters.group,
                 };
+
+                if (this.isAdminRoute) {
+					params.campaign = this.campaignId;
+                    params.group = this.teamFilters.group || undefined;
+                } else {
+                    params.group = this.groupId;
+                    params.campaign = this.teamFilters.campaign || undefined;
+                }
 
                 return this.TeamResource.get(params).then(function (response) {
 	                this.teamsPagination = response.body.meta.pagination;

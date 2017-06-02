@@ -52,13 +52,8 @@
 			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
-					<!-- <div class="form-group">
-						<label>Tags</label>
-						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-							   :debounce="250" placeholder="Tag, tag2, tag3...">
-					</div> -->
 
-					<div class="form-group" v-if="isAdminRoute">
+					<div class="form-group">
 						<label>Trip Type</label>
 						<select  class="form-control input-sm" v-model="reservationFilters.type">
 							<option value="">Any Type</option>

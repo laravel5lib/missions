@@ -18,7 +18,7 @@
 	                                <h5>Follow these simple steps</h5>
 	                            </div>
 	                            <div class="col-xs-12 col-sm-6">
-	                                <p class="small"><strong>Step 1</strong> Create your rooming plan.</p>
+	                                <p class="small"><strong>Step 1</strong> Select rooming plan.</p>
 	                                <p class="small"><strong>Step 2</strong> Add rooms to your rooming plan.</p>
 	                                <p class="small"><strong>Step 3</strong> Select your squad.</p>
 	                            </div><!-- end col -->
@@ -39,13 +39,8 @@
 		<aside :show.sync="showMembersFilters" placement="left" header="Squad Members Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
-				<!-- <div class="form-group">
-					<label>Tags</label>
-					<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-						   :debounce="250" placeholder="Tag, tag2, tag3...">
-				</div> -->
 
-				<!--<div class="form-group" v-if="isAdminRoute">
+				<div class="form-group">
 					<label>Trip Type</label>
 					<select  class="form-control input-sm" v-model="membersFilters.type">
 						<option value="">Any Type</option>
@@ -56,7 +51,7 @@
 						<option value="medical">Medical</option>
 						<option value="leader">Leader</option>
 					</select>
-				</div>-->
+				</div>
 
 				<div class="form-group">
 					<label>Role</label>
@@ -959,6 +954,9 @@
 
 	            if (this.membersFilters.designation)
                     params.include += ':designation(' + this.membersFilters.designation + ')';
+
+                if (this.membersFilters.type)
+                    params.include += ':type(' + this.membersFilters.type + ')';
 
                 return this.$http.get('teams', { params: params }).then(function (response) {
                         this.teamsPagination = response.body.meta.pagination;

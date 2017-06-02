@@ -1264,7 +1264,7 @@
                     params.group = this.teamFilters.group || undefined;
                 } else {
                     params.group = this.groupId;
-                    params.campaign = this.teamFilters.campaign || undefined;
+                    params.campaign = this.campaignId;
                 }
 
                 return this.TeamResource.get(params).then(function (response) {
@@ -1599,6 +1599,7 @@
                 //campaign already scoped
                 this.newTeamCampaigns = [{id: this.campaignId}];
                 promises.push(this.getGroups());
+                promises.push(this.getTeams());
             } else {
                 promises.push(this.$http.get('users/' + this.userId, {
                     params: {include: 'facilitating,managing.trips'}
@@ -1620,7 +1621,7 @@
                 }));
             }
             promises.push(this.getTeamTypes());
-            promises.push(this.getTeams());
+            //promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.getRoles());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
@@ -1649,9 +1650,10 @@
 
             this.$root.$on('campaign-scope', function (val) {
                 if(val) {
-                    this.campaignId = val ? val.id : '';
+	                this.campaignId = val ? val.id : '';
                     this.newTeamCampaigns = [{id: val.id}];
                     this.$root.$emit('update-title', val ? val.name : '');
+                    this.getTeams()
                 }
                 this.searchReservations();
             }.bind(this));

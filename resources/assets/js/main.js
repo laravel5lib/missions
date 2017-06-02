@@ -142,7 +142,7 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
-import accommodations from './components/admin/accommodations.vue';
+import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
 import regionsAccommodations from './components/regions/regions-accommodations.vue';
 import restoreFund from './components/financials/funds/restore-fund.vue';
 
@@ -962,7 +962,7 @@ new Vue({
         companionManager,
         promotionals,
         transports,
-        accommodations,
+        roomingAccommodations,
     },
     http: {
         headers: {

@@ -12,6 +12,11 @@ export default {
                 airlines: [],
                 timezones: [],
                 roles: [],
+                roleTypes: {
+                    general: [],
+                    medical: [],
+                    leadership: [],
+                },
                 activityTypes: [],
                 trips: [],
             }
@@ -40,7 +45,8 @@ export default {
                 }
             })
         },
-        getRoles(conditionArray){
+        getRoles(conditionArray, loading){
+            loading ? loading(true) : void 0;
             return this.$http.get('utilities/team-roles').then(function (response) {
                 let arr = [];
                 _.each(response.body.roles, function (name, key) {
@@ -50,7 +56,32 @@ export default {
                     } else
                         arr.push({ value: key, name: name});
                 }.bind(this));
-                return this.UTILITIES.roles = arr;
+                this.UTILITIES.roles = arr;
+                if (loading) {
+                    loading(false);
+                } else {
+                    return this.UTILITIES.roles;
+                }
+            });
+        },
+        getRolesByType(type, loading){
+            if (!_.contains(['leadership', 'general', 'medical'], type)) {
+                console.error('`type` is not an existing type of collection of roles');
+                return;
+            }
+
+            loading ? loading(true) : void 0;
+            return this.$http.get('utilities/team-roles/' + type).then(function (response) {
+                let arr = [];
+                _.each(response.body.roles, function (name, key) {
+                    arr.push({ value: key, name: name});
+                }.bind(this));
+                this.UTILITIES.roleTypes[type] = arr;
+                if (loading) {
+                    loading(false);
+                } else {
+                    return this.UTILITIES.roleTypes[type];
+                }
             });
         },
         getAirports(search, loading){

@@ -214,11 +214,25 @@
 																	<label>Travel Group</label>
 																	<p class="small">{{member.travel_group}}</p>
 																</div>
-																<div class="col-sm-5">
+																<div class="col-sm-6">
 																	<label>Designation</label>
 																	<p class="small">{{member.arrival_designation}}</p>
 																</div>
 															</div>
+															<template v-if="member.companions.data.length">
+																<div class="row">
+																	<div class="col-sm-6">
+																		<label>Companions</label>
+																	</div><!-- end col -->
+																	<div class="col-sm-6">
+																		<ul class="list-unstyled">
+																			<li v-for="companion in member.companions.data">
+																				{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																			</li>
+																		</ul>
+																	</div><!-- end col -->
+																</div><!-- end row -->
+															</template>
 														</div><!-- end panel-body -->
 													</div>
 													<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
@@ -536,6 +550,22 @@
 												<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
 											</div><!-- end col -->
 										</div><!-- end row -->
+										<template v-if="member.companions.data.length">
+											<hr class="divider sm">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Companions</label>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<ul class="list-unstyled">
+														<li v-for="companion in member.companions.data">
+															{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+														</li>
+													</ul>
+												</div><!-- end col -->
+											</div><!-- end row -->
+										</template>
+
 									</div><!-- end panel-body -->
 
 								</div>
@@ -895,7 +925,7 @@
                 plan = plan || this.currentPlan;
                 let params = {
                     plans: new Array(plan.id),
-	                include: 'type,occupants',
+	                include: 'type,occupants.companions',
 	                search: this.roomsSearch,
                     // page: this.plansPagination.current_page,
                 };
@@ -911,8 +941,8 @@
             },
             getOccupants(){
                 let params = {
-//                    plans: new Array(this.currentPlan.id),
-//	                include: 'type',
+                    // plans: new Array(this.currentPlan.id),
+	                 include: 'companions',
                     // page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then(function (response) {

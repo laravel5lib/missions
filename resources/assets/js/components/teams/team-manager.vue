@@ -15,14 +15,14 @@
 							<div class="col-xs-12 col-sm-8">
 								<div class="row">
 									<div class="col-xs-12 col-sm-6">
-										<p class="small"><strong>Step 1</strong> Create and name your new squad.</p>
+										<p class="small"><strong>Step 1</strong> Select a squad.</p>
 										<p class="small"><strong>Step 2</strong> Assign Squad Members using the dropdown menu on reservations.</p>
 										<p class="small"><strong>Step 3</strong> Assign a Squad Leader.</p>
 									</div><!-- end col -->
 									<div class="col-xs-12 col-sm-6">
 										<p class="small"><strong>Step 4</strong> Assign a Group Leader.</p>
 										<p class="small"><strong>Step 5</strong> Add Squad Members to groups.</p>
-										<p class="small"><strong>Step 6</strong> Create more groups and squads then repeat!</p>
+										<p class="small"><strong>Step 6</strong> Create more groups as necessary then repeat!</p>
 									</div><!-- end col -->
 								</div><!-- end row -->
 							</div><!-- end col -->
@@ -157,77 +157,6 @@
 			<aside :show.sync="showMembersFilters" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
-					<!-- <div class="form-group">
-						<label>Tags</label>
-						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-							   :debounce="250" placeholder="Tag, tag2, tag3...">
-					</div> -->
-					<!--<div class="form-group">
-						<label>Role</label>
-						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-								  :value.sync="roleObj" :options="rolesOptions" label="name"
-								  placeholder="Filter Roles"></v-select>
-					</div>
-
-					<div class="form-group" v-if="isAdminRoute">
-						<label>Travel Group</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-								  :value.sync="groupsArr" :options="groupsOptions" label="name"
-								  placeholder="Filter Groups"></v-select>
-					</div>
-
-					<div class="form-group">
-						<label>Gender</label>
-						<select class="form-control input-sm" v-model="reservationFilters.gender" style="width:100%;">
-							<option value="">Any Genders</option>
-							<option value="male">Male</option>
-							<option value="female">Female</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label>Marital Status</label>
-						<select class="form-control input-sm" v-model="reservationFilters.status" style="width:100%;">
-							<option value="">Any Status</option>
-							<option value="single">Single</option>
-							<option value="married">Married</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<div class="row">
-							<div class="col-xs-12">
-								<label>Age Range</label>
-							</div>
-							<div class="col-xs-6">
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon">Age Min</span>
-									<input type="number" class="form-control" number v-model="reservationsAgeMin" min="0">
-								</div>
-							</div>
-							<div class="col-xs-6">
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon">Max</span>
-									<input type="number" class="form-control" number v-model="reservationsAgeMax" max="120">
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group" v-if="isAdminRoute">
-						<label>Travel Companions</label>
-						<div>
-							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" value=""> Any
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions3" v-model="reservationFilters.hasCompanions" value="no"> No
-							</label>
-						</div>
-					</div>-->
 
 					<hr class="divider inv sm">
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
@@ -247,6 +176,9 @@
 					<li role="presentation">
 						<a href="#teamdetails" data-toggle="pill">Squad Details</a>
 					</li>
+					<li role="presentation">
+						<a href="#notes" data-toggle="pill">Notes</a>
+					</li>
 				</ul>
 
 				<!-- Tab panes -->
@@ -259,13 +191,7 @@
 									<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
 									<span class="input-group-addon"><i class="fa fa-search"></i></span>
 								</div>
-							</div><!-- end col -->
-							<!-- <div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-								<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-									Filters
-									<i class="fa fa-filter"></i>
-								</button>
-							</div> -->
+							</div>
 							<div class="col-xs-12">
 								<hr class="divider inv">
 							</div>
@@ -570,41 +496,15 @@
 									</ul>
 								</div>
 							</div>
-
-							<!--<div class="form-group">
-								<label for="" class="col-sm-4 control-label">Squad Leader</label>
-								<div v-if="isAdminRoute" class="col-sm-4"></div>
-								<div class="col-sm-4">
-									<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.squad_leaders" min="2" max="5" value="2">
-									<p v-else v-text="currentTeam.squad_leaders"></p>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="" class="col-sm-4 control-label">Max Members per Group</label>
-								<div v-if="isAdminRoute" class="col-sm-4"></div>
-								<div class="col-sm-4">
-									<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.max_group_members" min="2" max="5" value="5">
-									<p v-else v-text="currentTeam.max_group_members"></p>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="" class="col-sm-4 control-label">Max Squad Members</label>
-								<div v-if="isAdminRoute" class="col-sm-4"></div>
-								<div class="col-sm-4">
-									<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.max_members" min="2" max="25" value="25">
-									<p v-else v-text="currentTeam.max_members"></p>
-								</div>
-							</div>-->
-
-							<!--<div class="form-group">
-								<div class="col-sm-12">
-									<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
-									<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Delete Squad</button>
-								</div>
-							</div>-->
 						</form>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="notes" v-if="currentTeam">
+						<notes type="teams"
+					           :id="currentTeam.id"
+					           :user_id="userId"
+					           :per_page="5"
+					           :can-modify="isAdminRoute ? 1 : 0">
+					    </notes>
 					</div>
 				</div>
 			</div>
@@ -893,13 +793,14 @@
 	import _ from 'underscore';
 	import $ from 'jquery';
 	import vSelect from 'vue-select';
+	import notes from '../notes.vue';
     export default{
         name: 'team-manager',
-	    components: {vSelect},
+	    components: {vSelect, notes},
 	    props: {
             userId: {
                 type: String,
-                required: false
+                required: true
             },
             groupId: {
                 type: String,
@@ -1073,20 +974,6 @@
 		    isLocked(){
                 return !this.isAdminRoute && this.currentTeam.locked;
 		    }
-            /*missionaries() {
-				let leaders = [];
-				leaders.push(_.filter(this.currentSquadGroups, function (squad) {
-					return _.findWhere(squad.members, { desired_role: { code: 'MISS'}}) || _.findWhere(squad.members, { desired_role: { code: 'MINR'}});
-				}));
-				return leaders;
-			},
-			influencers() {
-				let leaders = [];
-				leaders.push(_.filter(this.currentSquadGroups, function (squad) {
-					return _.findWhere(squad.members, { desired_role: { code: 'INFL'}});
-				}));
-				return leaders;
-			},*/
 	    },
         methods: {
             updateConfig(){
@@ -1702,6 +1589,7 @@
             },
         },
         ready(){
+        	console.log(this.userId);
             let self = this;
             let promises = [];
             if (this.isAdminRoute) {

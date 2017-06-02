@@ -44,6 +44,11 @@ class Team extends Model
         return $this->morphedByMany(Region::class, 'teamable');
     }
 
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
     public function validateSquads()
     {
         return new ValidatesSquads($this);

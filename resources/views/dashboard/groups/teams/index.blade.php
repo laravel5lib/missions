@@ -22,7 +22,7 @@
     @include('dashboard.groups.tabs', ['active' => 'teams'])
 
     <div class="container">
-        <team-manager user-id="{{ Auth::user()->id }}" group-id="{{ $groupId }}"></team-manager>
+        <team-manager user-id="{{ auth()->user()->id }}" group-id="{{ $groupId }}"></team-manager>
         <hr class="divider inv xlg">
     </div>
 @endsection

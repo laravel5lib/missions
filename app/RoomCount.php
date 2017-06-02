@@ -39,7 +39,9 @@ class RoomCount
 
     private function getRoomTypes()
     {
-       $types = $this->roomable->availableRoomTypes;
+       // $types = $this->roomable->availableRoomTypes;
+
+       $types = RoomType::all();
 
        return $this->getDefaultCounts($types);
     }

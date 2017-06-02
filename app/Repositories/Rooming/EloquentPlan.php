@@ -73,7 +73,7 @@ class EloquentPlan extends EloquentRepository implements Plan
             $data['room_type_id'] => [ 'available_rooms' => $data['available_rooms'] ]
             ], false);
 
-        return $plan->availableRoomTypes;
+        return $plan;
     }
 
     public function removeRoomType($typeId, $id)
@@ -82,18 +82,18 @@ class EloquentPlan extends EloquentRepository implements Plan
 
         $plan->availableRoomTypes()->detach($typeId);
 
-        return $plan->availableRoomTypes;
+        return $plan;
     }
 
-    public function updateRoomType(array $data, $id)
+    public function updateRoomType(array $data, $typeId, $id)
     {
         $plan = $this->getById($id);
 
-        $plan->types()->updateExistingPivot($data['room_type_id'], [ 
+        $plan->availableRoomTypes()->updateExistingPivot($typeId, [ 
             'available_rooms' => $data['available_rooms']
         ]);
 
-        return $plan->types;
+        return $plan;
     }
 
 }

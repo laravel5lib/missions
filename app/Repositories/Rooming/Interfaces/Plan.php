@@ -19,5 +19,5 @@ interface Plan {
     public function removeRooms($rooms, $id);
     public function addRoomType(array $data, $id);
     public function removeRoomType($typeId, $id);
-    public function updateRoomType(array $data, $id);
+    public function updateRoomType(array $data, $typeId, $id);
 }

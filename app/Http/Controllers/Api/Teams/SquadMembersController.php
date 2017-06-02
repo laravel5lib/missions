@@ -68,7 +68,6 @@ class SquadMembersController extends Controller
             $members = collect($request->json('members'))->keyBy('id')->map(function ($member) {
                 return ['leader' => collect($member)->get('leader', false)];
             })->all();
-
         }
 
         $squad->validateMembers($members)->validate();
@@ -76,6 +75,12 @@ class SquadMembersController extends Controller
         $squad->members()->attach($members);
 
         $members = $squad->members()->get();
+
+        // We need to associate any new groups from added members with the team
+        foreach($members as $member)
+        {
+            $squad->team->groups()->sync(['teamable_id' => $member->trip->group_id], false);
+        }
 
         return $this->response->collection($members, new SquadMemberTransformer);
     }
@@ -99,6 +104,14 @@ class SquadMembersController extends Controller
     public function destroy($squadId, $memberId)
     {
         $squad = $this->squad->findOrFail($squadId);
+
+        // We need to remove any groups from the team that don't have members
+        if ($squad->isLastMemberOfTravelGroup($memberId)) 
+        {
+            $member = $squad->members()->findOrFail($memberId);
+
+            $squad->team->groups()->detach($member->trip->group_id);
+        }
 
         $squad->members()->detach($memberId);
 

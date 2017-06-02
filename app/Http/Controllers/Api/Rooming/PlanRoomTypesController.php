@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\Rooming\Interfaces\Plan;
 use App\Repositories\Rooming\Interfaces\Type;
 use App\Http\Transformers\v1\RoomTypeTransformer;
+use App\Http\Transformers\v1\RoomingPlanTransformer;
 
 class PlanRoomTypesController extends Controller
 {
@@ -43,9 +44,9 @@ class PlanRoomTypesController extends Controller
 
         $data = $request->only('room_type_id', 'available_rooms');
 
-        $types = $this->plan->addRoomType($data, $planId);
+        $plan = $this->plan->addRoomType($data, $planId);
 
-        return $this->response->collection($types, new RoomTypeTransformer);
+        return $this->response->item($plan, new RoomingPlanTransformer);
     }
 
     public function update($planId, $typeId, Request $request)
@@ -56,9 +57,9 @@ class PlanRoomTypesController extends Controller
 
         $data = $request->only('available_rooms');
 
-        $types = $this->plan->updateRoomType($typeId, $planId);
+        $plan = $this->plan->updateRoomType($data, $typeId, $planId);
 
-        return $this->response->collection($types, new RoomTypeTransformer);
+        return $this->response->item($plan, new RoomingPlanTransformer);
     }
 
     public function destroy($planId, $typeId)

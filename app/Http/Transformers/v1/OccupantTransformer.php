@@ -2,9 +2,17 @@
 
 namespace App\Http\Transformers\v1;
 
+use App\Models\v1\Reservation;
 use League\Fractal\TransformerAbstract;
 
 class OccupantTransformer extends TransformerAbstract {
+
+    /**
+     * List of resources available to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = ['companions'];
 
     /**
      * Transform the object into a basic array
@@ -28,7 +36,7 @@ class OccupantTransformer extends TransformerAbstract {
             'status'           => $occupant->status,
             'travel_group'        => $occupant->trip->group->name,
             'arrival_designation' => $occupant->designation ? 
-                implode('', array_flatten($reservation->designation->content)) : 'none',
+                implode('', array_flatten($occupant->designation->content)) : 'none',
             'room_leader'      => (bool) $occupant->pivot->room_leader,
             'created_at'       => $occupant->pivot->created_at->toDateTimeString(),
             'updated_at'       => $occupant->pivot->updated_at->toDateTimeString(),
@@ -39,5 +47,18 @@ class OccupantTransformer extends TransformerAbstract {
                 ]
             ]
         ];
+    }
+
+    /**
+     * Include Companions
+     *
+     * @param Occupant $occupant
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeCompanions(Reservation $occupant)
+    {
+        $companions = $occupant->companionReservations;
+
+        return $this->collection($companions, new OccupantTransformer);
     }
 }

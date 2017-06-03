@@ -38,8 +38,8 @@ class OccupantTransformer extends TransformerAbstract {
             'arrival_designation' => $occupant->designation ? 
                 implode('', array_flatten($occupant->designation->content)) : 'none',
             'room_leader'      => (bool) $occupant->pivot->room_leader,
-            'created_at'       => $occupant->pivot->created_at->toDateTimeString(),
-            'updated_at'       => $occupant->pivot->updated_at->toDateTimeString(),
+            'created_at'       => $occupant->created_at->toDateTimeString(),
+            'updated_at'       => $occupant->updated_at->toDateTimeString(),
             'links'            => [
                 [
                     'rel' => 'self',

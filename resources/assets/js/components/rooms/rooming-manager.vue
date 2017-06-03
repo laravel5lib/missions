@@ -149,7 +149,7 @@
 																		<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																			<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
 																			<li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
-																			<li role="separator" class="divider"></li>
+																			<li v-if="member.room_leader || (!member.room_leader && !currentRoomHasLeader)" role="separator" class="divider"></li>
 																			<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
 																		</ul>
 																	</dropdown>
@@ -201,17 +201,13 @@
 															</template>
 														</div><!-- end panel-body -->
 													</div>
-													<!--<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
-														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. And {{companionsPresentTeam(member)}} not on this team.
-														<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>
-													</div>-->
+													</div>
 													<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
-														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this group. <span v-if="companionsPresentTeam(member) > 0">And {{member.present_companions_team}} not on this team.</span>
-														<!--<button type="button" class="btn btn-xs btn-default-hollow" @click="addCompanionsToSquad(member, squad)">Add Companions</button>-->
+														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this room.
+														<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToRoom(member, currentRoom)"><i class="fa fa-plus-circle"></i> Companions</button>
 													</div>
 												</div>
-											</div>
-										</div><!-- end row -->
+											</div><!-- end row -->
 										</div>
 									</template>
 									<template v-else>
@@ -565,7 +561,7 @@
 					<form id="PlanCreateForm">
 						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedPlan.name">
+							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="Miami Rooming, etc." v-validate:planname="['required']" v-model="selectedPlan.name">
 						</div>
 					</form>
 				</validator>
@@ -591,7 +587,8 @@
 						</div>
 						<div class="form-group">
 							<label for="roomname" class="control-label">Room Name (Optional)</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="roomname" v-model="selectedRoom.label">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="roomname"
+							       v-model="selectedRoom.label" placeholder="Men 1, Women 2, Name Family or Married 1">
 						</div>
 					</form>
 				</validator>
@@ -799,19 +796,42 @@
                 });
                 return member.present_companions = companionIds.length - presentIds.length;
             },
-            companionsPresentTeam(member) {
-                let memberIds = [];
-                //_.each(this.currentSquadGroups, function (squad) {
-                    memberIds = _.pluck(this.currentTeamMembers, 'id');
-                //});
-                memberIds = _.filter(memberIds, function (id) { return id !== member.id; });
+            addCompanionsToRoom(member, room) {
+                let memberIds = _.filter(_.pluck(room.occupants, 'id'), function (id) { return id !== member.id; });
                 let companionIds = _.pluck(member.companions.data, 'id');
                 let presentIds = [];
                 _.each(memberIds, function (id) {
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
-                return member.present_companions_team = companionIds.length - presentIds.length;
+                let notPresentIds = _.difference(companionIds, presentIds);
+
+                // Check for limitations
+                // Available Space
+                let availableSpace = room.type.data.rules.occupancy_limit - room.occupants.length;
+                if (availableSpace < companionIds.length) {
+                    this.$root.$emit('showError', 'There isn\'t enough space in this room for all ' + companionIds.length + ' companions.');
+                    return;
+                }
+
+                // Detect companions in other groups and remove them
+                if (member.present_companions_team) {
+                    _.each(this.currentRooms, function (roomA) {
+                        let companionObj;
+                        _.each(notPresentIds, function (companionId) {
+                            companionObj = _.findWhere(roomA.occupants, {id: companionId});
+                            if (companionObj) {
+                                this.removeFromRoom(companionObj, roomA);
+                            }
+                        }.bind(this));
+
+                    }.bind(this));
+                }
+
+                // package for mass assignment
+                _.each(companionIds, function (compId) {
+                    this.addToRoom({ id: compId }, false, room)
+                }.bind(this));
             },
             removeFromRoom(occupant, room) {
                 return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {
@@ -839,7 +859,7 @@
                     room_leader: leader,
                 };
 
-                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { } }).then(function (response) {
+                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions' } }).then(function (response) {
 	                let occupants = response.body.data;
 	                room.occupants = occupants;
                     room.occupants_count = occupants.length;

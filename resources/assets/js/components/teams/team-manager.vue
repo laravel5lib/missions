@@ -1554,6 +1554,7 @@
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
+                let notPresentIds = _.difference(companionIds, presentIds);
 
                 // Check for limitations
 	            // Available Space
@@ -1579,14 +1580,14 @@
 	            if (member.present_companions_team) {
                     _.each(this.currentSquadGroups, function (group) {
                         let companionObj;
-                        _.each(companionIds, function (companionId) {
+                        _.each(notPresentIds, function (companionId) {
 	                        companionObj = _.findWhere(group.members, {id: companionId});
 	                        if (companionObj) {
 	                            this.removeFromSquad(companionObj, group);
 	                        }
-                        });
+                        }.bind(this));
 
-                    });
+                    }.bind(this));
 	            }
 
 	            // package for mass assignment

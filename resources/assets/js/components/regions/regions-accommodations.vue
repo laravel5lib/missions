@@ -137,8 +137,13 @@
 					<template v-if="regions.length">
 						<div class="list-group">
 							<a @click="currentRegion = region" class="list-group-item" :class="{ 'active': currentRegion && currentRegion.id === region.id}" v-for="region in regions">
-								{{ region.name | capitalize }} <span v-if="region.callsign"> &middot; <span class="small">{{ region.callsign | capitalize }}</span></span>
-								<span class="badge label label-info" v-text="region.country.name|capitalize"></span>
+								<h4 class="list-group-item-heading">
+									{{ region.name | capitalize }} <span v-if="region.callsign"> &middot; <span class="small">{{ region.callsign | capitalize }}</span></span>
+									<span class="badge pull-right" v-text="region.accommodations.data.length"></span>
+								</h4>
+								<p class="list-group-item-text">
+									<span class="label label-info" v-text="region.country.name|capitalize"></span>
+								</p>
 							</a>
 						</div>
 						<div class="col-xs-12 text-center">
@@ -204,7 +209,7 @@
 				</validator>
 			</div>
 		</modal>
-		<modal title="Delete Accomodation" small ok-text="Delete" :callback="deleteAccommodation" :show.sync="showAccommodationDeleteModal">
+		<modal title="Delete Accommodation" small ok-text="Delete" :callback="deleteAccommodation" :show.sync="showAccommodationDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="currentAccommodation">
 					Are you sure you want to delete accommodation: "{{currentAccommodation.name}}" ?
@@ -370,7 +375,7 @@
             getRegions(){
                 let params = {
                     campaign: this.campaignId,
-                    include: '',
+                    include: 'accommodations',
                     page: this.regionsPagination.current_page,
                     search: this.regionsSearch,
                     country: _.isObject(this.regionsFilters.country) ? this.regionsFilters.country.code :    undefined

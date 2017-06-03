@@ -69,7 +69,7 @@
 					<div class="form-group">
 						<label>Role</label>
 						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-						          :value.sync="roleObj" :options="rolesOptions" label="name"
+						          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
 						          placeholder="Filter Roles"></v-select>
 					</div>
 
@@ -211,7 +211,7 @@
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in squad.members">
+														<div class="panel panel-default" v-for="member in squad.members | orderBy '-leader'">
 															<div class="panel-heading" role="tab" id="headingOne">
 																<h4 class="panel-title">
 																	<div class="row">
@@ -219,7 +219,7 @@
 																			<div class="media">
 																				<div class="media-left" style="padding-right:0;">
 																					<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
 																					</a>
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
@@ -242,8 +242,8 @@
 																						</template>
 																					</template>
 																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-																					<li :class="{'disabled': isLocked}" v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
-																					<li :class="{'disabled': isLocked}" v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>
@@ -324,7 +324,7 @@
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in squad.members">
+														<div class="panel panel-default" v-for="member in squad.members | orderBy '-leader'">
 															<div class="panel-heading" role="tab" id="headingOne">
 																<h4 class="panel-title">
 																	<div class="row">
@@ -332,7 +332,7 @@
 																			<div class="media">
 																				<div class="media-left" style="padding-right:0;">
 																					<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
 																					</a>
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
@@ -361,8 +361,8 @@
 																						</template>
 																					</template>
 																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-																					<li :class="{'disabled': isLocked}" v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
-																					<li :class="{'disabled': isLocked}" v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>
@@ -630,7 +630,7 @@
 														<div class="media">
 															<div class="media-left" style="padding-right:0;">
 																<a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																	<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+																	<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
 																</a>
 															</div>
 															<div class="media-body" style="vertical-align:middle;">
@@ -656,6 +656,12 @@
 																		<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
 																	</template>
 																</template>
+																<li role="separator" class="divider"></li>
+																<li class="dropdown-header">Change Role</li>
+																<li role="separator" class="divider"></li>
+																<li v-if="reservation.desired_role.name !== 'Squad Leader'"><a @click="updateRole(reservation, 'Squad Leader')">Squad Leader</a></li>
+																<li v-if="reservation.desired_role.name !== 'Group Leader'"><a @click="updateRole(reservation, 'Group Leader')">Group Leader</a></li>
+
 															</ul>
 														</dropdown>
 														<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -789,9 +795,11 @@
 	import $ from 'jquery';
 	import vSelect from 'vue-select';
 	import notes from '../notes.vue';
+	import utilities from '../utilities.mixin';
     export default{
         name: 'team-manager',
 	    components: {vSelect, notes},
+	    mixins: [utilities],
 	    props: {
             userId: {
                 type: String,
@@ -852,7 +860,6 @@
                 groupsArr: [],
                 groupObj: null,
                 roleObj: null,
-                rolesOptions: [],
 	            leadershipRoles: [],
                 campaignsOptions: [],
                 groupsOptions: [],
@@ -977,6 +984,21 @@
 					currentTeam: this.currentTeam.id,
                 });
             },
+            updateRole(member, roleName) {
+                this.getRoles().then(function (roles) {
+                    let role = _.findWhere(roles, { name: roleName});
+                    this.$http.put('reservations/' + member.id, { desired_role: role.value },
+                        { params: { include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions' }
+                        }).then(function (response) {
+                        this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' role updated!');
+                        member.desired_role = response.body.data.desired_role;
+                        return member = response.body.data;
+                    }, function (response) {
+                        console.log(response);
+                        this.$root.$emit('showError', response.body.message);
+                    });
+                });
+            },
 	        openNewTeamModel(){
                 let campaign = _.findWhere(this.campaignsOptions, { id: this.campaignId });
                 if (campaign)
@@ -1003,8 +1025,6 @@
 	                role: '',
                     designation: ''
                 }
-
-
             },
             resetTeamFilter(){
                 this.teamsSearch = null;
@@ -1012,21 +1032,6 @@
                 this.teamFilters = {
                     group: '',
                 }
-            },
-            getRoles(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/team-roles').then(function (response) {
-                    let roles = [];
-                    _.each(response.body.roles, function (name, key) {
-                        roles.push({ value: key, name: name});
-                    });
-                    this.rolesOptions = roles;
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.rolesOptions;
-                    }
-                });
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
@@ -1188,9 +1193,11 @@
                 };
 
                 this.TeamSquadResource.update(params , data).then(function (response) {
-                    this.currentSquadGroups = _.reject(this.currentSquadGroups, function (sq) {
+                    let groups =_.reject(this.currentSquadGroups, function (sq) {
                         return sq.id === squad.id;
                     });
+
+                    this.currentSquadGroups = groups;
                     this.currentTeam.squads_count--;
                     newTeam.squads_count++;
                     newTeam.members_count += squad.members_count;
@@ -1547,6 +1554,7 @@
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
+                let notPresentIds = _.difference(companionIds, presentIds);
 
                 // Check for limitations
 	            // Available Space
@@ -1572,14 +1580,14 @@
 	            if (member.present_companions_team) {
                     _.each(this.currentSquadGroups, function (group) {
                         let companionObj;
-                        _.each(companionIds, function (companionId) {
+                        _.each(notPresentIds, function (companionId) {
 	                        companionObj = _.findWhere(group.members, {id: companionId});
 	                        if (companionObj) {
 	                            this.removeFromSquad(companionObj, group);
 	                        }
-                        });
+                        }.bind(this));
 
-                    });
+                    }.bind(this));
 	            }
 
 	            // package for mass assignment

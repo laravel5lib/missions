@@ -2,6 +2,6 @@
 
 @section('tab')
 <div>
-    <accommodations campaign-id="{{ $campaign->id }}" ></accommodations>
+    <rooming-accommodations campaign-id="{{ $campaign->id }}" ></rooming-accommodations>
 </div>
 @endsection

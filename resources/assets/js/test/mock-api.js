@@ -1808,6 +1808,23 @@ export default {
                     "links": []
                 }
             }
+        };
+
+        if (pathMatch.team) {
+            body.data = _.findWhere(body.data, {id: pathMatch.team});
+            delete body.meta;
+        }
+
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
     ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
         // before respond, you can check the path and query parameters with `pathMatch` & `query`
         // powered by 'url-pattern' & 'qs'
@@ -1889,6 +1906,15 @@ export default {
             body.data = _.findWhere(body.data, {id: pathMatch.type});
             delete body.meta;
         }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
     ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
         // before respond, you can check the path and query parameters with `pathMatch` & `query`
         // powered by 'url-pattern' & 'qs'
@@ -3048,6 +3074,12 @@ export default {
                                 "updated_at": "2017-05-05 15:02:05",
                                 "links": [{"rel": "self", "uri": "\/groups\/120d15bb-e82a-3e40-9a55-a1c22b6b3ade"}]
                             }
+                        }
+                    }]
+                }
+            }]
+        }
+    },
     ['GET *teams'](pathMatch, query, request) {
         let body = {
             "data": [

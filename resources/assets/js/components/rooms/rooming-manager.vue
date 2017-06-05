@@ -946,6 +946,8 @@
                     page: this.teamsPagination.current_page,
                 };
 
+                if (this.isAdminRoute)
+
                 if (_.isObject(this.currentPlan) && this.currentPlan.id) {
                     params.include += ',squads.members:noRoom(plans|' + this.currentPlan.id + ')';
                 }

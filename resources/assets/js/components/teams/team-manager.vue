@@ -223,8 +223,10 @@
 																					</a>
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
-																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-																					<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																					<i :class="{ 'fa fa-mars text-info': member.gender === 'male', 'fa fa-venus text-danger': member.gender ==='female'}"></i> 
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
 																		</div>
@@ -266,7 +268,9 @@
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
 																					<li v-for="companion in member.companions.data">
-																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																						<i :class="{ 'fa fa-mars text-info': companion.gender === 'male', 'fa fa-venus text-danger': companion.gender ==='female'}"></i> 
+																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
+																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																					</li>
 																				</ul>
 																			</template>
@@ -336,8 +340,10 @@
 																					</a>
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
-																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-																					<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																					<i :class="{ 'fa fa-mars text-info': member.gender === 'male', 'fa fa-venus text-danger': member.gender ==='female'}"></i> 
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
 																		</div>
@@ -385,7 +391,9 @@
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
 																					<li v-for="companion in member.companions.data">
+																						<i :class="{ 'fa fa-mars text-info': companion.gender === 'male', 'fa fa-venus text-danger': companion.gender ==='female'}"></i> 
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																					</li>
 																				</ul>
 																			</template>
@@ -453,6 +461,7 @@
 								<div class="col-sm-12" v-if="isAdminRoute">
 									<hr class="divider sm">
 									<div class="form-group">
+										<label class="control-label">Associated Groups</label>
 										<div class="list-group">
 											<div class="list-group-item" v-for="group in currentTeam.groups.data">
 												{{ group.name }}
@@ -663,8 +672,11 @@
 																</a>
 															</div>
 															<div class="media-body" style="vertical-align:middle;">
-																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(reservation)" target="_blank">{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
-																<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }}</p>
+																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																<i :class="{ 'fa fa-mars text-info': reservation.gender === 'male', 'fa fa-venus text-danger': reservation.gender ==='female'}"></i> 
+																<a :href="getReservationLink(reservation)" target="_blank">
+																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 															</div><!-- end media-body -->
 														</div><!-- end media -->
 													</div>
@@ -713,7 +725,8 @@
 															<label>Companions</label>
 															<ul class="list-unstyled">
 																<li v-for="companion in reservation.companions.data">
-																	{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																	<i :class="{ 'fa fa-mars text-info': companion.gender === 'male', 'fa fa-venus text-danger': companion.gender ==='female'}"></i> 
+																	{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																</li>
 															</ul>
 														</template>
@@ -756,12 +769,6 @@
 									<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
 								</select>
 							</div>
-							<!--<div class="form-group" v-if="isAdminRoute">
-								<label>Campaigns</label>
-								<v-select @keydown.enter.prevent="" multiple class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-										  :value.sync="newTeamCampaigns" :options="campaignsOptions" label="name"
-										  placeholder="Filter by Campaign"></v-select>
-							</div>-->
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"

@@ -82,6 +82,9 @@
 					</td>
 					<td style="cursor: pointer;" @click="loadManager(plan)" v-text="plan.occupants_count"></td>
 					<td v-if="isAdminRoute">
+						<button type="button" class="btn btn-default-hollow btn-xs" @click="openPlanSettingsModal(plan)">
+							<i class="fa fa-pencil"></i>
+						</button>
 						<button type="button" class="btn btn-default-hollow btn-xs" @click="openDeletePlanModal(plan)">
 							<i class="fa fa-trash"></i>
 						</button>
@@ -122,7 +125,20 @@
 					</form>
 				</validator>
 			</div>
-		</modal><modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+		</modal>
+		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :show.sync="showPlanSettingsModal">
+			<div slot="modal-body" class="modal-body" v-if="selectedPlan && selectedPlanSettings">
+				<form id="PlanCreateForm" class="form-horizontal">
+					<div class="form-group" v-for="type in roomTypes">
+						<label :for="'settingsType-' + type.id" class="col-sm-6 control-label" v-text="type.name"></label>
+						<div class="col-sm-6">
+							<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
+						</div>
+					</div>
+				</form>
+			</div>
+		</modal>
+		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedDeletePlan">
 					Are you sure you want to delete plan: "{{selectedDeletePlan.name}}" ?
@@ -148,11 +164,13 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 groupsOptions: [],
                 campaignsOptions: [],
+                roomTypes: [],
 	            filters: {
                     campaign: null,
 		            group: null,
 	            },
                 pagination: {current_page: 1},
+                showPlanSettingsModal: false,
                 showPlanDeleteModal: false,
                 showPlanModal: false,
                 selectedDeletePlan: null,
@@ -164,7 +182,9 @@
                     campaign_id: this.$parent.campaignId,
                     group_id: this.$parent.groupId,
                 },
-	            PlansResource: this.$resource('rooming/plans{/plan}')
+	            selectedPlan: null,
+                selectedPlanSettings: null,
+	            PlansResource: this.$resource('rooming/plans{/plan}{/path}{/pathId}')
             }
         },
 	    watch: {
@@ -187,6 +207,16 @@
             },
             loadManager(plan) {
                 this.$dispatch('rooming-wizard:plan-selected', plan);
+            },
+            getRoomTypes(){
+                return this.$http.get('rooming/types')
+	                .then(function (response) {
+                        return this.roomTypes = response.body.data;
+                    },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
             },
 	        getRoomingPlans(){
                 let params = {
@@ -226,9 +256,71 @@
                     }
                 });
             },
+            openPlanSettingsModal(plan) {
+                this.showPlanSettingsModal = true;
+                this.selectedPlan = plan;
+                let settings = {};
+
+                // We need to loop through each room type to create an object to reference the plan types present
+                _.each(this.roomTypes, function (type) {
+                    // the settings will be traced by the type ids
+	                // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
+	                let assignment = plan.room_types.hasOwnProperty(type.name) ? plan.room_types[type.name] : 0;
+                    settings[type.id] = assignment;
+                    // we are using method to track which room types need to be updated or posted
+                    settings[type.id + '_method'] = assignment > 0 ? 'PUT' :'POST';
+                });
+                this.selectedPlanSettings = settings;
+            },
             openDeletePlanModal(plan) {
                 this.showPlanDeleteModal = true;
                 this.selectedDeletePlan = plan;
+            },
+            updatePlanSettings() {
+                let promises = [];
+                _.each(this.selectedPlanSettings, function (val, property) {
+                    let promise;
+					if (property.indexOf('_method') === -1) {
+					    if (this.selectedPlanSettings[property + '_method'] === 'PUT') {
+					        if (val > 0) {
+                                promise = this.PlansResource.update({
+	                                plan: this.selectedPlan.id, path: 'types', pathId: property
+                                }, { available_rooms: val });
+                            } else {
+					            // if val is 0 we should simply delete the room type setting
+                                promise = this.PlansResource.delete({
+                                    plan: this.selectedPlan.id, path: 'types', pathId: property
+                                });
+					        }
+
+					    } else {
+					        // only create setting if val > 0
+                            if (val > 0)
+	                            promise = this.PlansResource.save({ plan: this.selectedPlan.id, path: 'types'}, {
+	                                room_type_id: property,
+	                                available_rooms: val
+	                            });
+                        }
+                        if (promise) {
+                            // we only need to catch errors here
+                            promise.catch(function (response) {
+                                console.log(response.body.message);
+                            });
+                            promises.push(promise);
+                        }
+					}
+
+                }.bind(this));
+
+                Promise.all(promises).then(function () {
+                    this.showPlanSettingsModal = false;
+                    this.$root.$emit('showSuccess', this.selectedPlan.callsign + ' settings updated successfully.');
+                    this.getRoomingPlans().then(function () {
+                        this.selectedPlan = null;
+                        this.selectedPlanSettings = null;
+                    });
+                }.bind(this));
+
             },
             deletePlan() {
                 let plan = _.extend({}, this.selectedDeletePlan);
@@ -270,6 +362,7 @@
         },
         ready(){
 			this.getRoomingPlans();
+			this.getRoomTypes();
         }
     }
 </script>

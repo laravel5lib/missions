@@ -218,14 +218,14 @@
 																		<div class="col-xs-9">
 																			<div class="media">
 																				<div class="media-left" style="padding-right:0;">
-																					<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																					<a :href="getReservationLink(member)" target="_blank">
 																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
 																					</a>
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="{ 'fa fa-mars text-info': member.gender === 'male', 'fa fa-venus text-danger': member.gender ==='female'}"></i> 
-																					<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
@@ -335,14 +335,14 @@
 																		<div class="col-xs-9">
 																			<div class="media">
 																				<div class="media-left" style="padding-right:0;">
-																					<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																					<a :href="getReservationLink(member)" target="_blank">
 																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
 																					</a>
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="{ 'fa fa-mars text-info': member.gender === 'male', 'fa fa-venus text-danger': member.gender ==='female'}"></i> 
-																					<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
@@ -667,14 +667,14 @@
 													<div class="col-xs-9">
 														<div class="media">
 															<div class="media-left" style="padding-right:0;">
-																<a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																<a :href="getReservationLink(reservation)" target="_blank">
 																	<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
 																</a>
 															</div>
 															<div class="media-body" style="vertical-align:middle;">
 																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																<i :class="{ 'fa fa-mars text-info': reservation.gender === 'male', 'fa fa-venus text-danger': reservation.gender ==='female'}"></i> 
-																<a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																<a :href="getReservationLink(reservation)" target="_blank">
 																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
 																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 															</div><!-- end media-body -->
@@ -1038,6 +1038,9 @@
 		    }
 	    },
         methods: {
+            getReservationLink(reservation){
+                return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+            },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({
 					currentTeam: this.currentTeam.id,
@@ -1732,7 +1735,6 @@
                 }));
             }
             promises.push(this.getTeamTypes());
-            //promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.getRoles());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {

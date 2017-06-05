@@ -63,7 +63,7 @@
             </div><!-- end col -->
         </div><!-- end row -->
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-		<component :is="currentView" :user-id="userId" :group-id="groupId" transition="fade" transition-mode="out-in" keep-alive></component>
+		<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" keep-alive></component>
 	</div>
 </template>
 <style></style>

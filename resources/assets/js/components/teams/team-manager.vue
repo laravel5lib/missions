@@ -224,7 +224,7 @@
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																					<i :class="{ 'fa fa-mars text-info': member.gender === 'male', 'fa fa-venus text-danger': member.gender ==='female'}"></i> 
+																					<i :class="getGenderStatusIcon(member)"></i>
 																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
 																				</div><!-- end media-body -->
@@ -268,7 +268,7 @@
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
 																					<li v-for="companion in member.companions.data">
-																						<i :class="{ 'fa fa-mars text-info': companion.gender === 'male', 'fa fa-venus text-danger': companion.gender ==='female'}"></i> 
+																						<i :class="getGenderStatusIcon(companion)"></i> 
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
 																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																					</li>
@@ -341,7 +341,7 @@
 																				</div>
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																					<i :class="{ 'fa fa-mars text-info': member.gender === 'male', 'fa fa-venus text-danger': member.gender ==='female'}"></i> 
+																					<i :class="getGenderStatusIcon(member)"></i> 
 																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																				</div><!-- end media-body -->
@@ -391,7 +391,7 @@
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
 																					<li v-for="companion in member.companions.data">
-																						<i :class="{ 'fa fa-mars text-info': companion.gender === 'male', 'fa fa-venus text-danger': companion.gender ==='female'}"></i> 
+																						<i :class="getGenderStatusIcon(companion)"></i> 
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
 																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																					</li>
@@ -673,7 +673,7 @@
 															</div>
 															<div class="media-body" style="vertical-align:middle;">
 																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																<i :class="{ 'fa fa-mars text-info': reservation.gender === 'male', 'fa fa-venus text-danger': reservation.gender ==='female'}"></i> 
+																<i :class="getGenderStatusIcon(reservation)"></i> 
 																<a :href="getReservationLink(reservation)" target="_blank">
 																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
 																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
@@ -725,7 +725,7 @@
 															<label>Companions</label>
 															<ul class="list-unstyled">
 																<li v-for="companion in reservation.companions.data">
-																	<i :class="{ 'fa fa-mars text-info': companion.gender === 'male', 'fa fa-venus text-danger': companion.gender ==='female'}"></i> 
+																	<i :class="getGenderStatusIcon(companion)"></i> 
 																	{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																</li>
 															</ul>
@@ -1040,6 +1040,19 @@
         methods: {
             getReservationLink(reservation){
                 return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+            },
+            getGenderStatusIcon(reservation){
+            	if (reservation.gender == 'male') {
+            		if (reservation.status == 'married') {
+            			return 'fa fa-venus-mars text-info';
+            		}
+            		return 'fa fa-mars text-info';
+            	}
+
+            	if (reservation.status == 'married') {
+            		return 'fa fa-venus-mars text-danger';
+            	}
+            	return 'fa fa-venus text-danger';
             },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({

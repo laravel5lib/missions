@@ -14,4 +14,5 @@ interface Type {
     public function paginate($perPage);
     public function filter(array $data);
     public function belongsToPlan($planId);
+    public function belongsToAccommodation($accommodationId);
 }

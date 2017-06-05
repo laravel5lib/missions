@@ -12,4 +12,7 @@ interface Accommodation {
     public function delete($ids);
     public function addRooms($rooms, $id);
     public function removeRooms($rooms, $id);
+    public function addRoomType(array $data, $id);
+    public function removeRoomType($typeId, $id);
+    public function updateRoomType(array $data, $typeId, $id);
 }

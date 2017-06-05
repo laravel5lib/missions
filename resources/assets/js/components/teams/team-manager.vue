@@ -789,7 +789,7 @@
 					</p>
 				</div>
 			</modal>
-			<modal title="Remove Association" small ok-text="Delete" :callback="removeAssociation" :show.sync="removeAssociationData.show">
+			<modal title="Remove Association" small ok-text="Remove" :callback="removeAssociation" :show.sync="removeAssociationData.show">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="removeAssociationData.object">
 						Are you sure you want to disassociate {{removeAssociationData.object.name}} with this Team ?

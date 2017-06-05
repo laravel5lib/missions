@@ -12,7 +12,7 @@ class RoomingPlanTransformer extends TransformerAbstract
             'id'          => $plan->id,
             'name'        => $plan->name,
             'short_desc'  => $plan->short_desc,
-            'available_rooms' => $this->getAvailableRooms($plan),
+            'room_types'  => $this->getAvailableRooms($plan),
             'rooms_count' => $plan->roomsCount()->all(),
             'occupants_count' => $plan->occupantsCount()->total(),
             'created_at'  => $plan->created_at->toDateTimeString(),

@@ -946,7 +946,13 @@
                     page: this.teamsPagination.current_page,
                 };
 
-                if (this.isAdminRoute)
+                if (this.isAdminRoute) {
+                    params.campaign = this.campaignId;
+                    params.group = this.teamFilters.group || undefined;
+                } else {
+                    params.group = this.groupId;
+                    params.campaign = this.campaignId;
+                }
 
                 if (_.isObject(this.currentPlan) && this.currentPlan.id) {
                     params.include += ',squads.members:noRoom(plans|' + this.currentPlan.id + ')';

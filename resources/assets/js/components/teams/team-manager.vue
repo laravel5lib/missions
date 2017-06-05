@@ -1725,7 +1725,6 @@
                 }));
             }
             promises.push(this.getTeamTypes());
-            //promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.getRoles());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {

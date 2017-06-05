@@ -46,7 +46,7 @@
 							<hr class="divider inv">
 							<div class="row">
 								<div class="col-xs-8">
-									<a class="btn btn-primary btn-sm" href="#">Donate Now</a>
+									<a class="btn btn-primary btn-sm" href="{{ url('donate/medical-clinics') }}">Donate Now</a>
 								</div><!-- end col -->
 								<div class="col-xs-4">
 									<p style="margin-top:5px;"><a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Details <i class="fa fa-angle-down"></i></a></p>
@@ -69,7 +69,7 @@
 							<hr class="divider inv">
 							<div class="row">
 								<div class="col-xs-8">
-									<a class="btn btn-primary btn-sm" href="#">Donate Now</a>
+									<a class="btn btn-primary btn-sm" href="{{ url('donate/clean-water-projects') }}">Donate Now</a>
 								</div><!-- end col -->
 								<div class="col-xs-4">
 									<p style="margin-top:5px;"><a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Details <i class="fa fa-angle-down"></i></a></p>
@@ -94,7 +94,7 @@
 							<hr class="divider inv">
 							<div class="row">
 								<div class="col-xs-8">
-									<a class="btn btn-primary btn-sm" href="#">Donate Now</a>
+									<a class="btn btn-primary btn-sm" href="{{ url('donate/meals') }}">Donate Now</a>
 								</div><!-- end col -->
 								<div class="col-xs-4">
 									<p style="margin-top:5px;"><a class="pull-right" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Details <i class="fa fa-angle-down"></i></a></p>

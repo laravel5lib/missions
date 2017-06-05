@@ -53,7 +53,7 @@
 								</div><!-- end col -->
 							</div><!-- end row -->
 							<hr class="divider inv">
-							<p id="collapseFour" class="panel-collapse collapse small">They are open to the public and completely free.  We will diagnose and prescribe free medicine to anyone who visits the clinics.  We need to raise $25,000 to secure and ship the medicine needed for these clinics.  But the sticker on sponsoring a single clinic is $7,500.</p>
+							<p id="collapseFour" class="panel-collapse collapse small">Medical Clinics are open to the public and completely free. The Missions.Me medical teams will diagnose and prescribe free medicine to anyone who visits these clinics. We need to raise $25,000 to secure and ship the medicine needed for these clinics. To sponsor a single clinic is $7,500.</p>
 					<hr class="divider lg inv visible-xs">
 					</div><!-- end col -->
 					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
@@ -76,7 +76,7 @@
 								</div><!-- end col -->
 							</div><!-- end row -->
 							<hr class="divider inv">
-							<p id="collapseThree" class="panel-collapse collapse small">Our team will be constructing 5 water filtration systems across the nation in communities that we've identified as places that do not have access to free clean water.  The people there spend much of their income on buying clean water to drink, cook, etc.  These projects provide clean water to 1,000 people each week.</p>
+							<p id="collapseThree" class="panel-collapse collapse small">Our team will be constructing 5 water filtration systems across the nation in communities that we've identified as places that do not have access to free clean water. The people there spend much of their income on buying clean water to drink, cook, etc.  These projects provide clean water to 1,000 people each week.</p>
 					</div><!-- end col -->
 				</div><!-- end row -->
 				<hr class="divider lg inv">
@@ -101,12 +101,12 @@
 								</div><!-- end col -->
 							</div><!-- end row -->
 							<hr class="divider inv">
-							<p id="collapseOne" class="panel-collapse collapse small">We are shipping several large containers loaded with meals for poverty stricken communities.  Each container contains 270,000 meals and has a value of $159,000.  The aid has been donated, all we need to do is ship it.  Shipping costs are $7,500 per container.</p>
+							<p id="collapseOne" class="panel-collapse collapse small">The 1Nation1Day inititive is shipping several large containers loaded with meals for poverty stricken communities. Each container contains 270,000 meals and has a value of $159,000. The aid has been donated, all we need to do is ship it.  Shipping costs are $7,500 per container.</p>
 					<hr class="divider lg inv visible-xs">
 					</div><!-- end col -->
 					<div class="col-xs-10 col-xs-offset-1 col-sm-5 col-sm-offset-0">
 							<div class="panel-featured" style="position:absolute;left:16px;top:-5px;z-index:999;">
-								<h6 class="btn btn-success btn-xs" style="border-radius:50px;"><i class="fa fa-usd icon-left"></i> 20k-25k</h6>
+								<h6 class="btn btn-success btn-xs" style="border-radius:50px;"><i class="fa fa-usd icon-left"></i> 20k or 25k</h6>
 							</div>
 							<div class="hover-container">
 								<img class="hover-image img-responsive img-rounded" src="images/projects/leadership-thumb.jpg" alt="Leadership Conference">
@@ -124,7 +124,7 @@
 								</div><!-- end col -->
 							</div><!-- end row -->
 							<hr class="divider inv">
-							<div id="collapseTwo" class="panel-collapse collapse"><p class="small">Our core piece of our plan for sustainable change in the nation of Nicaragua is education. During the week of .</p>
+							<div id="collapseTwo" class="panel-collapse collapse"><p class="small">The core piece of our plan for sustainable change in the nation of Nicaragua is education. During the week of 1Nation1Day we will be holding Leadership and Business conferences for the leaders around the nation of Nicaragua.</p>
 							<p class="small">Spiritual Leaders Conference<br><strong>$25,000</strong></p>
 							<p class="small">Business Conference<br><strong>$20,000</strong></p>
 							</div>

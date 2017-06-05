@@ -154,6 +154,7 @@
 								</div>
 							</panel>
 						</accordion>
+
 						<div class="panel-group" id="plansAccordion" role="tablist" aria-multiselectable="true">
 							<div class="panel panel-default" v-for="plan in plans | orderBy 'name'">
 								<div class="panel-heading" role="tab" id="headingOne">

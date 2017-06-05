@@ -425,7 +425,7 @@
 							<div class="row">
 								<div class="col-sm-4">
 									<label for="" class="control-label">Name</label>
-									<input v-if="isAdminRoute || editTeamMode" type="text" class="form-control input-sm"  placeholder="Name" v-model="currentTeam.callsign">
+									<input v-if="isAdminRoute && editTeamMode" type="text" class="form-control input-sm"  placeholder="Name" v-model="currentTeam.callsign">
 									<p v-else v-text="currentTeam.callsign"></p>
 								</div>
 								<div class="col-sm-4">
@@ -449,6 +449,35 @@
 										Edit
 									</a>
 									</label>
+								</div>
+								<div class="col-sm-12" v-if="isAdminRoute">
+									<hr class="divider sm">
+									<div class="form-group">
+										<div class="list-group">
+											<div class="list-group-item" v-for="group in currentTeam.groups.data">
+												{{ group.name }}
+												<button v-if="editTeamMode" class="btn btn-xs btn-default-hollow pull-right" type="button" @click="confirmRemoveAssociation('groups', group)">
+													<i class="fa fa-close"></i>
+												</button>
+											</div>
+										</div>
+										<template v-if="editTeamMode">
+											<div class="form-group">
+												<div class="col-sm-8">
+													<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+													          :value.sync="addAssociationData.object" :options="unassociatedGroups" label="name"
+													          placeholder="Add a Travel Group"></v-select>
+												</div>
+												<div class="col-sm-4">
+													<button class="btn btn-primary btn-block" type="button" @click="addAssociation('groups', addAssociationData.object)">
+														<i class="fa fa-plus-circle"></i> Group
+													</button>
+												</div>
+
+
+											</div>
+										</template>
+									</div>
 								</div>
 								<div class="col-sm-12 text-right" v-if="editTeamMode">
 									<hr class="divider inv">
@@ -760,6 +789,13 @@
 					</p>
 				</div>
 			</modal>
+			<modal title="Remove Association" small ok-text="Remove" :callback="removeAssociation" :show.sync="removeAssociationData.show">
+				<div slot="modal-body" class="modal-body">
+					<p v-if="removeAssociationData.object">
+						Are you sure you want to disassociate {{removeAssociationData.object.name}} with this Team ?
+					</p>
+				</div>
+			</modal>
 			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :show.sync="showSquadCreateModal">
 				<div slot="modal-body" class="modal-body">
 					<validator name="SquadCreate">
@@ -852,6 +888,16 @@
 
                 lastReservationRequest: null,
 
+	            // squad dis/association vars
+                addAssociationData: {
+                    type: null,
+	                object: null
+                },
+                removeAssociationData: {
+                    type: null,
+                    object: null,
+	                show: false
+                },
 	            // Filters vars
                 showTeamsFilters: false,
                 showReservationsFilters: false,
@@ -867,6 +913,7 @@
                     group: '',
 	                campaign: null
                 },
+
                 // reservations filters
 	            reservationFilters: {
                     type: '',
@@ -877,6 +924,8 @@
                     role: '',
                     designation: ''
                 },
+
+	            // members filters
 	            membersFilters: {
                     groups: [],
 		            gender: '',
@@ -976,6 +1025,9 @@
             },
 		    isLocked(){
                 return !this.isAdminRoute && this.currentTeam.locked;
+		    },
+            unassociatedGroups() {
+		        return _.difference(this.groupsOptions, this.currentTeam.groups.data);
 		    }
 	    },
         methods: {
@@ -1261,7 +1313,7 @@
             },
             getTeams(){
                 let params = {
-                    include: 'type',
+                    include: 'type,groups',
                     page: this.teamsPagination.current_page,
 	                search: this.teamsSearch,
                 };
@@ -1349,7 +1401,7 @@
                         associations: associations
                     };
                     let params = {
-                        include: 'type',
+                        include: 'type,groups',
                     };
                     this.TeamResource.save(data, params).then(function (response) {
                         let team = response.body.data;
@@ -1395,15 +1447,17 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.TeamResource.update({team: team.id}, team).then(function (response) {
+	            this.TeamResource.update({team: team.id, include: 'type,groups'}, team).then(function (response) {
 					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
-	        updateTeamSettings(){
-	            this.TeamResource.update({ team: this.currentTeam.id, include: 'type' }, { callsign: this.currentTeam.callsign }).then(function (response) {
+	        updateTeamSettings(ignoreMessage){
+	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign }).then(function (response) {
                     this.currentTeam = response.body.data;
-					this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
+                    if (!ignoreMessage)
+						this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
 					this.editTeamMode = false;
+					return response.body.data;
                 });
 	        },
 	        updateSquad(){
@@ -1486,6 +1540,48 @@
                 });
 	            return total;
             },
+	        addAssociation(type, object) {
+                return this.$http.post(type + '/' + object.id + '/teams', { ids: [this.currentTeam.id] }).then(function (response) {
+                    this.additionalAssociatedGroup = null;
+                    this.updateTeamSettings(true).then(function () {
+                        this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now associated with ' + object.name);
+                    });
+                }, function (response) {
+                    console.log(response.body);
+                    this.$root.$emit('showError', response.body.message);
+                });
+	        },
+	        removeAssociation() {
+		        switch(this.removeAssociationData.type) {
+		            case 'groups':
+
+		                break;
+                    case 'regions':
+
+                        break;
+		            case 'campaigns':
+
+		                break;
+		        }
+
+	            return this.$http.delete(this.removeAssociationData.type + '/' + this.removeAssociationData.object.id + '/teams/' + this.currentTeam.id).then(function (response) {
+                    this.updateTeamSettings(true).then(function () {
+                        this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now unassociated with ' + this.removeAssociationData.object.name);
+                        this.removeAssociationData.type = null;
+                        this.removeAssociationData.object = null;
+                        this.removeAssociationData.show = false;
+                    });
+                }, function (response) {
+                    console.log(response.body);
+                    this.$root.$emit('showError', response.body.message);
+                });
+	        },
+	        confirmRemoveAssociation(type, object) {
+                this.removeAssociationData.type = type;
+                this.removeAssociationData.object = object;
+                this.removeAssociationData.show = true;
+
+	        },
             squadHasLeader(squad) {
 	            return _.findWhere(squad.members, { leader: true });
             },

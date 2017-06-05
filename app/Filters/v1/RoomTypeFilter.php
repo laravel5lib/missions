@@ -32,4 +32,11 @@ class RoomTypeFilter extends Filter
             return $query->where('id', $id);
         });
     }
+
+    public function accommodation($id)
+    {
+        return $this->whereHas('accommodations', function($query) use($id) {
+            return $query->where('id', $id);
+        });
+    }
 }

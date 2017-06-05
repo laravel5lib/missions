@@ -28,7 +28,8 @@ class AccommodationTransformer extends TransformerAbstract {
             'id'           => $accommodation->id,
             'region_id'    => $accommodation->region_id,
             'name'         => $accommodation->name,
-            'rooms_count'     => $accommodation->roomsCount()->all(),
+            'rooms_count'  => $accommodation->roomsCount()->all(),
+            'room_types'   => $this->getAvailableRooms($accommodation),
             'occupants_count' => $accommodation->occupantsCount()->total(),
             'address_one'  => $accommodation->address_one,
             'address_two'  => $accommodation->address_two,
@@ -67,5 +68,12 @@ class AccommodationTransformer extends TransformerAbstract {
         $region = $accommodation->region;
 
         return $this->item($region, new RegionTransformer);
+    }
+
+    private function getAvailableRooms(Accommodation $accommodation)
+    {
+        return $accommodation->availableRoomTypes->keyBy('name')->map(function($type) {
+            return $type->pivot->available_rooms;
+        })->put('total', $accommodation->availableRoomTypes->count())->all();
     }
 }

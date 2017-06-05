@@ -50,6 +50,13 @@ class RoomType extends Model
                     ->withTimestamps();
     }
 
+    public function accommodations()
+    {
+        return $this->belongsToMany(Accommodation::class, 'accommodation_room_type')
+                    ->withPivot('available_rooms')
+                    ->withTimestamps();
+    }
+
     public function setRulesAttribute(array $value)
     {
         $this->attributes['rules'] = json_encode($value);

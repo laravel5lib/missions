@@ -314,7 +314,7 @@
 
                 Promise.all(promises).then(function () {
                     this.showPlanSettingsModal = false;
-                    this.$root.$emit('showSuccess', this.selectedPlan.callsign + ' settings updated successfully.');
+                    this.$root.$emit('showSuccess', this.selectedPlan.name + ' settings updated successfully.');
                     this.getRoomingPlans().then(function () {
                         this.selectedPlan = null;
                         this.selectedPlanSettings = null;

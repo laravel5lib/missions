@@ -3,17 +3,16 @@
 namespace App\Services\Rooming;
 
 use App\Models\v1\Room;
-use App\Models\v1\RoomingPlan;
 
 class ValidatesRooms
 {
     protected $roomIds;
-    protected $plan;
+    protected $model;
 
-    function __construct($roomIds, RoomingPlan $plan)
+    function __construct($roomIds, $model)
     {
         $this->roomIds = $roomIds;
-        $this->plan = $plan;
+        $this->model = $model;
     }
 
     /**
@@ -23,7 +22,7 @@ class ValidatesRooms
     {
         $this->getRooms()->each(function($room) 
         {
-            $type = $this->plan->availableRoomTypes()->where('id', $room->room_type_id)->first();
+            $type = $this->model->availableRoomTypes()->where('id', $room->room_type_id)->first();
 
             $this->assertAllowsRoomType($type);
             $this->assertWithinRoomTypeLimit($type);
@@ -33,16 +32,16 @@ class ValidatesRooms
     public function assertAllowsRoomType($type)
     {
         if (! $type) {
-            throw new \Exception("That type of room cannot be added to this plan.");
+            throw new \Exception("That type of room cannot be added.");
         }
     }
 
     public function assertWithinRoomTypeLimit($type)
     {
-        $count = $this->plan->roomsCount()->byType($type->id);
+        $count = $this->model->roomsCount()->byType($type->id);
 
         if ( $count >= $type->pivot->available_rooms ) {
-            throw new \Exception("This plan has the maximum number of $type->name rooms allowed.");
+            throw new \Exception("The maximum number of $type->name rooms allowed has been reached.");
         }
     }
 

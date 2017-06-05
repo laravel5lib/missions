@@ -24,7 +24,7 @@ class RegionTransformer extends TransformerAbstract {
      */
     public function transform(Region $region)
     {
-        // $region->load(['teams', 'accommodations']);
+        $region->load(['teams', 'accommodations']);
 
         return [
             'id'             => $region->id,
@@ -35,8 +35,8 @@ class RegionTransformer extends TransformerAbstract {
                                     'name' => country($region->country_code)
                                 ],
             'campaign_id'    => $region->campaign_id,
-            // 'teams'          => (int) $region->teams()->count(),
-            // 'accommodations' => (int) $region->accommodations()->count(),
+            'teams_count'          => (int) $region->teams()->count(),
+            'accommodations_count' => (int) $region->accommodations()->count(),
             'created_at'     => $region->created_at->toDateTimeString(),
             'updated_at'     => $region->updated_at->toDateTimeString(),
             'deleted_at'     => $region->deleted_at ? $region->deleted_at->toDateTimeString() : null,

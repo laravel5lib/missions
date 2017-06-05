@@ -119,16 +119,12 @@
 									<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 										<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
 										<div class="row">
-											<div class="col-sm-6" v-for="member in currentRoom.occupants | orderBy 'surname'">
+											<div class="col-sm-12" v-for="member in currentRoom.occupants | orderBy 'surname'">
 												<div class="panel panel-default" style="margin-bottom:8px;">
 													<div class="panel-heading" role="tab" id="headingOne">
 														<h5 class="panel-title">
 															<div class="row">
 																<div class="col-xs-8">
-																	<!--<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																		<img :src="member.avatar" class="img-circle img-xs av-left">
-																		{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.room_leader">Room Leader</span>
-																	</a>-->
 																	<div class="media">
 																		<div class="media-left" style="padding-right:0;">
 																			<a :href="getReservationLink(member)" target="_blank">
@@ -136,8 +132,10 @@
 																			</a>
 																		</div>
 																		<div class="media-body" style="vertical-align:middle;">
-																			<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-																			<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+																			<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																			<i :class="getGenderStatusIcon(member)"></i>
+																			<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																			<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																		</div><!-- end media-body -->
 																	</div><!-- end media -->
 																</div>
@@ -163,7 +161,7 @@
 													<div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 														<div class="panel-body">
 															<div class="row">
-																<div class="col-sm-2">
+																<div class="col-sm-3">
 																	<label>Age</label>
 																	<p class="small">{{member.age}}</p>
 																</div><!-- end col -->
@@ -174,6 +172,7 @@
 																<div class="col-sm-6">
 																	<label>Marital Status</label>
 																	<p class="small">{{member.status | capitalize}}</p>
+																</div>
 															</div><!-- end row -->
 															<div class="row">
 																<div class="col-sm-6">
@@ -190,7 +189,9 @@
 																	<label>Companions</label>
 																	<ul class="list-unstyled small">
 																		<li v-for="companion in member.companions.data">
-																			{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																			<i :class="getGenderStatusIcon(companion)"></i> 
+																			{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
+																			<span class="text-muted">({{ companion.relationship }})</span>
 																		</li>
 																	</ul>
 																</div><!-- end col -->
@@ -436,15 +437,12 @@
 														</a>
 													</div>
 													<div class="media-body" style="vertical-align:middle;">
-														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+														<i :class="getGenderStatusIcon(member)"></i>
+														<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 														<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
 													</div><!-- end media-body -->
 												</div><!-- end media -->
-												<!-- <a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-													<img :src="member.avatar" class="img-circle img-xs av-left">
-													{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="small" v-if="member.leader">&middot; GL</span><br>
-													<label>{{ member.desired_role.name }}</label>
-												</a> -->
 											</div>
 											<div class="col-xs-3 text-right action-buttons">
 												<dropdown type="default">
@@ -517,7 +515,9 @@
 												<label>Companions</label>
 												<ul class="list-unstyled small">
 													<li v-for="companion in member.companions.data">
+														<i :class="getGenderStatusIcon(member)"></i>
 														{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+														<span class="text-muted">({{ companion.relationship }})</span>
 													</li>
 												</ul>
 											</div><!-- end col -->
@@ -739,6 +739,19 @@
         methods: {
             getReservationLink(reservation){
                 return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+            },
+            getGenderStatusIcon(reservation){
+            	if (reservation.gender == 'male') {
+            		if (reservation.status == 'married') {
+            			return 'fa fa-venus-mars text-info';
+            		}
+            		return 'fa fa-mars text-info';
+            	}
+
+            	if (reservation.status == 'married') {
+            		return 'fa fa-venus-mars text-danger';
+            	}
+            	return 'fa fa-venus text-danger';
             },
             resetMembersFilter() {
                 this.membersFilters = {

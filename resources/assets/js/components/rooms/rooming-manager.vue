@@ -131,12 +131,12 @@
 																	</a>-->
 																	<div class="media">
 																		<div class="media-left" style="padding-right:0;">
-																			<a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																			<a :href="getReservationLink(member)" target="_blank">
 																				<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.room_leader">RL</span>
 																			</a>
 																		</div>
 																		<div class="media-body" style="vertical-align:middle;">
-																			<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" :data-parent="'#occupantsAccordion' + tgIndex" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																			<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																			<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
 																		</div><!-- end media-body -->
 																	</div><!-- end media -->
@@ -185,20 +185,20 @@
 																	<p class="small">{{member.arrival_designation}}</p>
 																</div>
 															</div>
-															<template v-if="member.companions.data.length">
-																<div class="row">
-																	<div class="col-sm-6">
-																		<label>Companions</label>
-																	</div><!-- end col -->
-																	<div class="col-sm-6">
-																		<ul class="list-unstyled">
-																			<li v-for="companion in member.companions.data">
-																				{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-																			</li>
-																		</ul>
-																	</div><!-- end col -->
-																</div><!-- end row -->
-															</template>
+															<div class="row">
+																<div class="col-sm-6" v-if="member.companions.data.length">
+																	<label>Companions</label>
+																	<ul class="list-unstyled small">
+																		<li v-for="companion in member.companions.data">
+																			{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																		</li>
+																	</ul>
+																</div><!-- end col -->
+																<div class="col-sm-6">
+																	<label>Squad Groups</label>
+																	<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last">, </span></span></p>
+																</div><!-- end col -->
+															</div><!-- end row -->
 														</div><!-- end panel-body -->
 													</div>
 													</div>
@@ -431,12 +431,12 @@
 											<div class="col-xs-9">
 												<div class="media">
 													<div class="media-left" style="padding-right:0;">
-														<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+														<a :href="getReservationLink(member)" target="_blank">
 															<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
 														</a>
 													</div>
 													<div class="media-body" style="vertical-align:middle;">
-														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;"><a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 														<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
 													</div><!-- end media-body -->
 												</div><!-- end media -->
@@ -512,22 +512,20 @@
 												<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
 											</div><!-- end col -->
 										</div><!-- end row -->
-										<template v-if="member.companions.data.length">
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Companions</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<ul class="list-unstyled">
-														<li v-for="companion in member.companions.data">
-															{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-														</li>
-													</ul>
-												</div><!-- end col -->
-											</div><!-- end row -->
-										</template>
-
+										<div class="row">
+											<div class="col-sm-6" v-if="member.companions.data.length">
+												<label>Companions</label>
+												<ul class="list-unstyled small">
+													<li v-for="companion in member.companions.data">
+														{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+													</li>
+												</ul>
+											</div><!-- end col -->
+											<div class="col-sm-6">
+												<label>Squad Groups</label>
+												<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last">, </span></span></p>
+											</div><!-- end col -->
+										</div><!-- end row -->
 									</div><!-- end panel-body -->
 
 								</div>
@@ -739,6 +737,9 @@
 		    }
 	    },
         methods: {
+            getReservationLink(reservation){
+                return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+            },
             resetMembersFilter() {
                 this.membersFilters = {
                     gender: '',
@@ -810,7 +811,7 @@
                 // Available Space
                 let availableSpace = room.type.data.rules.occupancy_limit - room.occupants.length;
                 if (availableSpace < companionIds.length) {
-                    this.$root.$emit('showError', 'There isn\'t enough space in this room for all ' + companionIds.length + ' companions.');
+                    this.$root.$emit('showError', 'There isn\'t enough space in this room for all ' + (companionIds.length + 1) + ' companions.');
                     return;
                 }
 
@@ -910,7 +911,7 @@
                 plan = plan || this.currentPlan;
                 let params = {
                     plans: new Array(plan.id),
-	                include: 'type,occupants.companions',
+	                include: 'type,occupants.companions,occupants.squads',
 	                search: this.roomsSearch,
                     // page: this.plansPagination.current_page,
                 };
@@ -927,7 +928,7 @@
             getOccupants(){
                 let params = {
                     // plans: new Array(this.currentPlan.id),
-	                 include: 'companions',
+	                 include: 'companions,squads',
                     // page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then(function (response) {
@@ -948,10 +949,10 @@
 
                 if (this.isAdminRoute) {
                     params.campaign = this.campaignId;
-                    params.group = this.teamFilters.group || undefined;
+//                    params.group = this.groupId;
                 } else {
-                    params.group = this.groupId;
                     params.campaign = this.campaignId;
+                    params.group = this.groupId;
                 }
 
                 if (_.isObject(this.currentPlan) && this.currentPlan.id) {

@@ -12,7 +12,7 @@ class OccupantTransformer extends TransformerAbstract {
      *
      * @var array
      */
-    protected $availableIncludes = ['companions'];
+    protected $availableIncludes = ['companions', 'squads'];
 
     /**
      * Transform the object into a basic array
@@ -52,7 +52,7 @@ class OccupantTransformer extends TransformerAbstract {
     /**
      * Include Companions
      *
-     * @param Occupant $occupant
+     * @param Reservation $occupant
      * @return \League\Fractal\Resource\Collection
      */
     public function includeCompanions(Reservation $occupant)
@@ -60,5 +60,18 @@ class OccupantTransformer extends TransformerAbstract {
         $companions = $occupant->companionReservations;
 
         return $this->collection($companions, new OccupantTransformer);
+    }
+
+    /**
+     * Include Squads
+     *
+     * @param Reservation $occupant
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeSquads(Reservation $occupant)
+    {
+        $squads = $occupant->squads;
+
+        return $this->collection($squads, new TeamSquadTransformer);
     }
 }

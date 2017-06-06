@@ -196,8 +196,8 @@
 																	</ul>
 																</div><!-- end col -->
 																<div class="col-sm-6">
-																	<label>Squads</label>
-																	<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last">, </span></span></p>
+																	<label>Squad Groups</label>
+																	<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
 																</div><!-- end col -->
 															</div><!-- end row -->
 														</div><!-- end panel-body -->
@@ -523,7 +523,7 @@
 											</div><!-- end col -->
 											<div class="col-sm-6">
 												<label>Squad Groups</label>
-												<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last">, </span></span></p>
+												<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
 											</div><!-- end col -->
 										</div><!-- end row -->
 									</div><!-- end panel-body -->

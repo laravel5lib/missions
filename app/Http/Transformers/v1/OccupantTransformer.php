@@ -22,7 +22,7 @@ class OccupantTransformer extends TransformerAbstract {
      */
     public function transform($occupant)
     {
-        return [
+        $data = [
             'id'               => $occupant->id,
             'avatar'           => $occupant->avatar ? image($occupant->avatar->source) : url('/images/placeholders/user-placeholder.png'),
             'given_names'      => $occupant->given_names,
@@ -47,6 +47,12 @@ class OccupantTransformer extends TransformerAbstract {
                 ]
             ]
         ];
+
+        if($occupant->pivot) {
+            $data['relationship'] = $occupant->pivot->relationship;
+        }
+
+        return $data;
     }
 
     /**

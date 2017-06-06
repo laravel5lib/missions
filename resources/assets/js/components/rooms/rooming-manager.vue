@@ -202,10 +202,11 @@
 															</div><!-- end row -->
 														</div><!-- end panel-body -->
 													</div>
-													</div>
+													<!-- </div> -->
 													<div class="panel-footer" style="background-color: #ffe000;" v-if="member.companions && member.companions.data.length && companionsPresentRoom(member, currentRoom)">
 														<i class=" fa fa-info-circle"></i> I have {{member.present_companions}} companions not in this room.
-														<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToRoom(member, currentRoom)"><i class="fa fa-plus-circle"></i> Companions</button>
+														<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToRoom(member, currentRoom)"><i class="fa fa-plus-circle"></i>
+														<span class="hidden-xs">Companions</span></button>
 													</div>
 												</div>
 											</div><!-- end row -->

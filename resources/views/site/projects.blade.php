@@ -12,14 +12,14 @@
 						<hr class="divider lg inv hidden-xs hidden-sm hidden-md">
 						<hr class="divider lg inv hidden-xs hidden-sm">
 						<hr class="divider lg inv hidden-xs hidden-sm">
-						<h3 style="color:#ec6190;">Overwhelming Need</h3>
+						<h3 style="color:#ec6190;">Overwhelming Opportunity</h3>
 						<img style="width:60px;margin-bottom:25px;" src="images/projects/dash.png" alt="">
-						<p>As one of the neediest nations in the Western Hemisphere, Nicaragua is overwhelmed with opportunity for medical care, clean water and food. In cooperation with the local government, this global team will take on poverty and bring life-saving aid to those who need it.</p>
+						<p>In the Western Hemisphere, Nicaragua is one of the most destitute nations, overwhelmed with opportunity for medical care, clean water, and food. In cooperation with the local government, this global team will take on poverty and bring life-saving aid to those who need it.</p>
 					</div><!-- end col -->
 					<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-md-4 text-center visible-xs">
-						<h3 style="color:#ec6190;">Overwhelming Need</h3>
+						<h3 style="color:#ec6190;">Overwhelming Opportunity</h3>
 						<img style="width:60px;margin-bottom:25px;" src="images/projects/dash.png" alt="">
-						<p class="small">As one of the neediest nations in the Western Hemisphere, Nicaragua is overwhelmed with opportunity for medical care, clean water and food. In cooperation with the local government, this global team will take on poverty and bring life-saving aid to those who need it.</p>
+						<p class="small">In the Western Hemisphere, Nicaragua is one of the most destitute nations, overwhelmed with opportunity for medical care, clean water, and food. In cooperation with the local government, this global team will take on poverty and bring life-saving aid to those who need it.</p>
 					<hr class="divider lg inv visible-xs">
 					</div><!-- end col -->
 					<div class="col-sm-6 col-md-offset-2">

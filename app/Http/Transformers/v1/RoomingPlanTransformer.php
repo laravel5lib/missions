@@ -6,6 +6,13 @@ use League\Fractal\TransformerAbstract;
 
 class RoomingPlanTransformer extends TransformerAbstract
 {
+    /**
+     * List of resources available to include
+     *
+     * @var array
+     */
+    protected $availableIncludes = ['rooms'];
+
     public function transform(RoomingPlan $plan)
     {
         return [
@@ -33,4 +40,12 @@ class RoomingPlanTransformer extends TransformerAbstract
             return $type->pivot->available_rooms;
         })->put('total', $plan->availableRoomTypes->count())->all();
     }
+
+    public function includeRooms(RoomingPlan $plan)
+    {
+        $rooms = $plan->rooms;
+
+        return $this->collection($rooms, new RoomTransformer);
+    }
+
 }

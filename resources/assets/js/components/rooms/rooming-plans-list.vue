@@ -122,6 +122,15 @@
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
 							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
 						</div>
+						<div class="form-group" :class="{'has-error': $PlanCreate.teamgroup.invalid}" v-if="isAdminRoute">
+							<label>Travel Group</label>
+							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+							          :value.sync="selectedNewPlan.group" :options="groupsOptions" label="name"
+							          placeholder="Assign Travel Group"></v-select>
+							<select class="hidden" v-model="selectedNewPlan.group" v-validate:teamgroup="['required']">
+								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+							</select>
+						</div>
 					</form>
 				</validator>
 			</div>
@@ -344,8 +353,14 @@
                 };
             },
             newPlan() {
+                if (this.isAdminRoute && _.isObject(this.selectedNewPlan.group)) {
+                    this.selectedNewPlan.group_id = this.selectedNewPlan.group.id;
+                }
+                let data = _.extend({}, this.selectedNewPlan);
+                delete data.group;
+
                 if (this.$PlanCreate.valid) {
-                    return this.PlansResource.save(this.selectedNewPlan).then(function (response) {
+                    return this.PlansResource.save(data).then(function (response) {
                         let plan = response.body.data;
                         this.plans.push(plan);
                         this.showPlanModal = false;
@@ -361,6 +376,9 @@
             },
         },
         ready(){
+            if (this.isAdminRoute) {
+                this.getGroups();
+            }
 			this.getRoomingPlans();
 			this.getRoomTypes();
         }

@@ -25,4 +25,18 @@ class RoomTypeFilter extends Filter
      * @var array
      */
     public $searchable = ['name'];
+
+    public function plan($id)
+    {
+        return $this->whereHas('plans', function($query) use($id) {
+            return $query->where('id', $id);
+        });
+    }
+
+    public function accommodation($id)
+    {
+        return $this->whereHas('accommodations', function($query) use($id) {
+            return $query->where('id', $id);
+        });
+    }
 }

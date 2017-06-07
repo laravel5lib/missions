@@ -25,7 +25,7 @@ abstract class EloquentRepository
      */
     public function getAll()
     {
-        return $this->model->all();
+        return $this->model->get();
     }
 
     /**

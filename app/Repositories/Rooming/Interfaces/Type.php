@@ -13,4 +13,6 @@ interface Type {
     public function delete($ids);
     public function paginate($perPage);
     public function filter(array $data);
+    public function belongsToPlan($planId);
+    public function belongsToAccommodation($accommodationId);
 }

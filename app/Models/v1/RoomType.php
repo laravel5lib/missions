@@ -34,21 +34,34 @@ class RoomType extends Model
     protected $casts = ['rules' => 'array'];
 
     /**
-     * Set the rules attribute
+     * Get the rules for the room type.
      * 
-     * @param array $value
+     * @return App\RoomTypeRules
      */
+    public function rules()
+    {
+        return new RoomTypeRules($this->rules);
+    }
+
+    public function plans()
+    {
+        return $this->belongsToMany(RoomingPlan::class, 'rooming_plan_room_type')
+                    ->withPivot('available_rooms')
+                    ->withTimestamps();
+    }
+
+    public function accommodations()
+    {
+        return $this->belongsToMany(Accommodation::class, 'accommodation_room_type')
+                    ->withPivot('available_rooms')
+                    ->withTimestamps();
+    }
+
     public function setRulesAttribute(array $value)
     {
         $this->attributes['rules'] = json_encode($value);
     }
 
-    /**
-     * Get the rules attribute.
-     * 
-     * @param  $value
-     * @return array
-     */
     public function getRulesAttribute($value)
     {
         return $value ? (array) json_decode($value) : [];
@@ -64,13 +77,4 @@ class RoomType extends Model
         return ucwords(str_replace('_', ' ', $value));
     }
 
-    /**
-     * Get the rules for the room type.
-     * 
-     * @return App\RoomTypeRules
-     */
-    public function rules()
-    {
-        return new RoomTypeRules($this->rules);
-    }
 }

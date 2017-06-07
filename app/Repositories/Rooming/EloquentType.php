@@ -69,4 +69,24 @@ class EloquentType extends EloquentRepository implements Type
 
         return $model;
     }
+
+    /**
+     * Get room types that belong to a plan
+     */
+    public function belongsToPlan($planId)
+    {
+        $this->filter(['plan' => $planId]);
+
+        return $this;
+    }
+
+    /**
+     * Get room types that belong to an accommodation
+     */
+    public function belongsToAccommodation($accommodationId)
+    {
+        $this->filter(['accommodation' => $accommodationId]);
+
+        return $this;
+    }
 }

@@ -156,6 +156,9 @@
             'search': function (val, oldVal) {
                 this.page = 1;
                 this.fetch();
+            },
+            'id': function (val, oldVal) {
+                this.fetch();
             }
         },
         computed: {

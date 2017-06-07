@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="dark-bg-primary">
+    {{--<div class="dark-bg-primary">
         <div class="container">
             <div class="col-sm-8 col-md-7">
                 <hr class="divider inv sm hidden-xs">
@@ -42,7 +42,7 @@
                 <hr class="divider inv sm">
             </div>
         </div><!-- end container -->
-    </div>
+    </div>--}}
     <hr class="divider inv lg">
 @include('dashboard.groups.tabs', ['active' => 'rooming'])
     <div class="container">

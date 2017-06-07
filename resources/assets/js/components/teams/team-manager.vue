@@ -15,14 +15,14 @@
 							<div class="col-xs-12 col-sm-8">
 								<div class="row">
 									<div class="col-xs-12 col-sm-6">
-										<p class="small"><strong>Step 1</strong> Create and name your new squad.</p>
+										<p class="small"><strong>Step 1</strong> Select a squad.</p>
 										<p class="small"><strong>Step 2</strong> Assign Squad Members using the dropdown menu on reservations.</p>
 										<p class="small"><strong>Step 3</strong> Assign a Squad Leader.</p>
 									</div><!-- end col -->
 									<div class="col-xs-12 col-sm-6">
 										<p class="small"><strong>Step 4</strong> Assign a Group Leader.</p>
 										<p class="small"><strong>Step 5</strong> Add Squad Members to groups.</p>
-										<p class="small"><strong>Step 6</strong> Create more groups and squads then repeat!</p>
+										<p class="small"><strong>Step 6</strong> Create more groups as necessary then repeat!</p>
 									</div><!-- end col -->
 								</div><!-- end row -->
 							</div><!-- end col -->
@@ -52,13 +52,8 @@
 			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
-					<!-- <div class="form-group">
-						<label>Tags</label>
-						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-							   :debounce="250" placeholder="Tag, tag2, tag3...">
-					</div> -->
 
-					<div class="form-group" v-if="isAdminRoute">
+					<div class="form-group">
 						<label>Trip Type</label>
 						<select  class="form-control input-sm" v-model="reservationFilters.type">
 							<option value="">Any Type</option>
@@ -74,7 +69,7 @@
 					<div class="form-group">
 						<label>Role</label>
 						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-						          :value.sync="roleObj" :options="rolesOptions" label="name"
+						          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
 						          placeholder="Filter Roles"></v-select>
 					</div>
 
@@ -124,6 +119,18 @@
 					</div>
 
 					<div class="form-group">
+						<label>Arrival Designation</label>
+						<select  class="form-control input-sm" v-model="reservationFilters.designation">
+							<option value="">Any</option>
+							<option value="eastern">Eastern</option>
+							<option value="western">Western</option>
+							<option value="international">International</option>
+							<option value="none">None</option>
+						</select>
+					</div>
+
+
+					<div class="form-group">
 						<label>Travel Companions</label>
 						<div>
 							<label class="radio-inline">
@@ -145,86 +152,15 @@
 			<aside :show.sync="showMembersFilters" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
-					<!-- <div class="form-group">
-						<label>Tags</label>
-						<input type="text" class="form-control input-sm" style="width:100%" v-model="tagsString"
-							   :debounce="250" placeholder="Tag, tag2, tag3...">
-					</div> -->
-					<!--<div class="form-group">
-						<label>Role</label>
-						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-								  :value.sync="roleObj" :options="rolesOptions" label="name"
-								  placeholder="Filter Roles"></v-select>
-					</div>
-
-					<div class="form-group" v-if="isAdminRoute">
-						<label>Travel Group</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-								  :value.sync="groupsArr" :options="groupsOptions" label="name"
-								  placeholder="Filter Groups"></v-select>
-					</div>
-
-					<div class="form-group">
-						<label>Gender</label>
-						<select class="form-control input-sm" v-model="reservationFilters.gender" style="width:100%;">
-							<option value="">Any Genders</option>
-							<option value="male">Male</option>
-							<option value="female">Female</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<label>Marital Status</label>
-						<select class="form-control input-sm" v-model="reservationFilters.status" style="width:100%;">
-							<option value="">Any Status</option>
-							<option value="single">Single</option>
-							<option value="married">Married</option>
-						</select>
-					</div>
-
-					<div class="form-group">
-						<div class="row">
-							<div class="col-xs-12">
-								<label>Age Range</label>
-							</div>
-							<div class="col-xs-6">
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon">Age Min</span>
-									<input type="number" class="form-control" number v-model="reservationsAgeMin" min="0">
-								</div>
-							</div>
-							<div class="col-xs-6">
-								<div class="input-group input-group-sm">
-									<span class="input-group-addon">Max</span>
-									<input type="number" class="form-control" number v-model="reservationsAgeMax" max="120">
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="form-group" v-if="isAdminRoute">
-						<label>Travel Companions</label>
-						<div>
-							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" value=""> Any
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
-							</label>
-							<label class="radio-inline">
-								<input type="radio" name="companions" id="companions3" v-model="reservationFilters.hasCompanions" value="no"> No
-							</label>
-						</div>
-					</div>-->
 
 					<hr class="divider inv sm">
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 				</form>
 			</aside>
 
-			<div class="col-xs-12 text-center" v-if="currentTeam">
-				<h1>{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span></h1>
-				<hr class="divider red-small">
+			<div class="col-xs-12" v-if="currentTeam">
+				<h3>{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span> <small>&middot; Squad Name</small></h3>
+				<hr class="divider lg">
 			</div>
 
 			<div class="col-md-7">
@@ -234,6 +170,9 @@
 					</li>
 					<li role="presentation">
 						<a href="#teamdetails" data-toggle="pill">Squad Details</a>
+					</li>
+					<li role="presentation">
+						<a href="#notes" data-toggle="pill">Notes</a>
 					</li>
 				</ul>
 
@@ -247,13 +186,7 @@
 									<input type="text" class="form-control" v-model="membersSearch" debounce="300" placeholder="Search">
 									<span class="input-group-addon"><i class="fa fa-search"></i></span>
 								</div>
-							</div><!-- end col -->
-							<!-- <div class="form-group col-lg-4 col-md-4 col-sm-5 col-xs-12">
-								<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-									Filters
-									<i class="fa fa-filter"></i>
-								</button>
-							</div> -->
+							</div>
 							<div class="col-xs-12">
 								<hr class="divider inv">
 							</div>
@@ -278,16 +211,24 @@
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in squad.members">
+														<div class="panel panel-default" v-for="member in squad.members | orderBy '-leader'">
 															<div class="panel-heading" role="tab" id="headingOne">
 																<h4 class="panel-title">
 																	<div class="row">
 																		<div class="col-xs-9">
-																			<a role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-																				<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																				{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}<br>
-																				<label>{{ member.desired_role.name }}</label>
-																			</a>
+																			<div class="media">
+																				<div class="media-left" style="padding-right:0;">
+																					<a :href="getReservationLink(member)" target="_blank">
+																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+																					</a>
+																				</div>
+																				<div class="media-body" style="vertical-align:middle;">
+																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																					<i :class="getGenderStatusIcon(member)"></i>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
+																				</div><!-- end media-body -->
+																			</div><!-- end media -->
 																		</div>
 																		<div class="col-xs-3 text-right action-buttons">
 																			<dropdown type="default">
@@ -303,8 +244,8 @@
 																						</template>
 																					</template>
 																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-																					<li :class="{'disabled': isLocked}" v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
-																					<li :class="{'disabled': isLocked}" v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>
@@ -327,7 +268,9 @@
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
 																					<li v-for="companion in member.companions.data">
-																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																						<i :class="getGenderStatusIcon(companion)"></i> 
+																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
+																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																					</li>
 																				</ul>
 																			</template>
@@ -385,16 +328,24 @@
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in squad.members">
+														<div class="panel panel-default" v-for="member in squad.members | orderBy '-leader'">
 															<div class="panel-heading" role="tab" id="headingOne">
 																<h4 class="panel-title">
 																	<div class="row">
 																		<div class="col-xs-9">
-																			<a role="button" data-toggle="collapse" :data-parent="'#membersAccordion' + tgIndex" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-																				<img :src="member.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-																				{{ member.surname | capitalize }}, {{ member.given_names | capitalize }} <span class="label label-info" v-if="member.leader">Group Leader</span><br>
-																				<label>{{ member.desired_role.name }}</label>
-																			</a>
+																			<div class="media">
+																				<div class="media-left" style="padding-right:0;">
+																					<a :href="getReservationLink(member)" target="_blank">
+																						<img :src="member.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+																					</a>
+																				</div>
+																				<div class="media-body" style="vertical-align:middle;">
+																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																					<i :class="getGenderStatusIcon(member)"></i> 
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
+																				</div><!-- end media-body -->
+																			</div><!-- end media -->
 																		</div>
 																		<div class="col-xs-3 text-right action-buttons">
 																			<dropdown type="default">
@@ -416,8 +367,8 @@
 																						</template>
 																					</template>
 																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-																					<li :class="{'disabled': isLocked}" v-if="member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
-																					<li :class="{'disabled': isLocked}" v-if="!member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
+																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>
@@ -440,7 +391,9 @@
 																				<label>Companions</label>
 																				<ul class="list-unstyled">
 																					<li v-for="companion in member.companions.data">
+																						<i :class="getGenderStatusIcon(companion)"></i> 
 																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																					</li>
 																				</ul>
 																			</template>
@@ -468,8 +421,8 @@
 								<template v-else>
 									<hr class="divider inv">
 									<p class="text-center text-muted"><em>Select a Squad to get started or create a new one!</em></p>
-									<hr class="divider inv">
-									<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
+									<hr class="divider inv" v-if="isAdminRoute">
+									<p class="text-center" v-if="isAdminRoute"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
 								</template>
 							</div>
 						</div>
@@ -480,7 +433,7 @@
 							<div class="row">
 								<div class="col-sm-4">
 									<label for="" class="control-label">Name</label>
-									<input v-if="isAdminRoute || editTeamMode" type="text" class="form-control input-sm"  placeholder="Name" v-model="currentTeam.callsign">
+									<input v-if="isAdminRoute && editTeamMode" type="text" class="form-control input-sm"  placeholder="Name" v-model="currentTeam.callsign">
 									<p v-else v-text="currentTeam.callsign"></p>
 								</div>
 								<div class="col-sm-4">
@@ -498,12 +451,42 @@
 									</select>
 									<p v-else v-text="currentTeam.locked ? 'Yes' : 'No'"></p>
 								</div>
-								<div class="col-sm-2" v-if="!editTeamMode">
+								<div class="col-sm-2" v-if="isAdminRoute && !editTeamMode">
 									<label class="control-label"><i class="fa fa-cog"></i>
 									<a @click="editTeamMode = true;">
 										Edit
 									</a>
 									</label>
+								</div>
+								<div class="col-sm-12" v-if="isAdminRoute">
+									<hr class="divider sm">
+									<div class="form-group">
+										<label class="control-label">Associated Groups</label>
+										<div class="list-group">
+											<div class="list-group-item" v-for="group in currentTeam.groups.data">
+												{{ group.name }}
+												<button v-if="editTeamMode" class="btn btn-xs btn-default-hollow pull-right" type="button" @click="confirmRemoveAssociation('groups', group)">
+													<i class="fa fa-close"></i>
+												</button>
+											</div>
+										</div>
+										<template v-if="editTeamMode">
+											<div class="form-group">
+												<div class="col-sm-8">
+													<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
+													          :value.sync="addAssociationData.object" :options="unassociatedGroups" label="name"
+													          placeholder="Add a Travel Group"></v-select>
+												</div>
+												<div class="col-sm-4">
+													<button class="btn btn-primary btn-block" type="button" @click="addAssociation('groups', addAssociationData.object)">
+														<i class="fa fa-plus-circle"></i> Group
+													</button>
+												</div>
+
+
+											</div>
+										</template>
+									</div>
 								</div>
 								<div class="col-sm-12 text-right" v-if="editTeamMode">
 									<hr class="divider inv">
@@ -546,41 +529,15 @@
 									</ul>
 								</div>
 							</div>
-
-							<!--<div class="form-group">
-								<label for="" class="col-sm-4 control-label">Squad Leader</label>
-								<div v-if="isAdminRoute" class="col-sm-4"></div>
-								<div class="col-sm-4">
-									<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.squad_leaders" min="2" max="5" value="2">
-									<p v-else v-text="currentTeam.squad_leaders"></p>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="" class="col-sm-4 control-label">Max Members per Group</label>
-								<div v-if="isAdminRoute" class="col-sm-4"></div>
-								<div class="col-sm-4">
-									<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.max_group_members" min="2" max="5" value="5">
-									<p v-else v-text="currentTeam.max_group_members"></p>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="" class="col-sm-4 control-label">Max Squad Members</label>
-								<div v-if="isAdminRoute" class="col-sm-4"></div>
-								<div class="col-sm-4">
-									<input v-if="isAdminRoute" type="number" number class="form-control" v-model="currentTeam.max_members" min="2" max="25" value="25">
-									<p v-else v-text="currentTeam.max_members"></p>
-								</div>
-							</div>-->
-
-							<!--<div class="form-group">
-								<div class="col-sm-12">
-									<button type="button" v-if="isAdminRoute" class="btn btn-primary btn-sm" @click="updateTeamSettings">Update Settings</button>
-									<button type="button" v-if="isAdminRoute" class="btn btn-default btn-sm" @click="deleteTeam(currentTeam)">Delete Squad</button>
-								</div>
-							</div>-->
 						</form>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="notes" v-if="currentTeam">
+						<notes type="teams"
+					           :id="currentTeam.id"
+					           :user_id="userId"
+					           :per_page="5"
+					           :can-modify="isAdminRoute ? 1 : 0">
+					    </notes>
 					</div>
 				</div>
 			</div>
@@ -611,7 +568,7 @@
 								</div>
 							</template>
 
-							<div class="col-xs-12 text-right">
+							<div class="col-xs-12 text-right" v-if="isAdminRoute">
 								<hr class="divider sm inv">
 								<button class="btn btn-primary btn-sm" @click="openNewTeamModel">Create A Squad</button>
 							</div>
@@ -628,10 +585,10 @@
 											<div class="row">
 												<div class="col-xs-6">
 													{{ team.callsign | capitalize }}
-													<span class="label label-info" v-text="team.type.data.name | capitalize"></span>
-													<span v-if="team.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													<span v-if="team.locked" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
-												<div class="col-xs-6 text-right">Members: {{ team.members_count || 0 }}</div>
+												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
 											</div>
 										</a>
 									</ul>
@@ -643,8 +600,8 @@
 								<template v-else>
 									<hr class="divider inv">
 									<p class="text-center text-italic text-muted"><em>No Squads created yet. Create one to get started!</em></p>
-									<hr class="divider inv">
-									<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
+									<hr class="divider inv" v-if="isAdminRoute">
+									<p class="text-center" v-if="isAdminRoute"><a class="btn btn-link btn-sm" @click="openNewTeamModel">Create A Squad</a></p>
 								</template>
 							</div>
 						</div>
@@ -708,11 +665,20 @@
 											<h4 class="panel-title">
 												<div class="row">
 													<div class="col-xs-9">
-														<a role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-															<img :src="reservation.avatar" class="img-circle img-xs pull-left" style="margin-right: 10px">
-															{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}<br>
-															<label>{{ reservation.desired_role.name }}</label>
-														</a>
+														<div class="media">
+															<div class="media-left" style="padding-right:0;">
+																<a :href="getReservationLink(reservation)" target="_blank">
+																	<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+																</a>
+															</div>
+															<div class="media-body" style="vertical-align:middle;">
+																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																<i :class="getGenderStatusIcon(reservation)"></i> 
+																<a :href="getReservationLink(reservation)" target="_blank">
+																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
+															</div><!-- end media-body -->
+														</div><!-- end media -->
 													</div>
 													<div class="col-xs-3 text-right action-buttons">
 														<dropdown type="default">
@@ -731,6 +697,12 @@
 																		<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
 																	</template>
 																</template>
+																<li role="separator" class="divider"></li>
+																<li class="dropdown-header">Change Role</li>
+																<li role="separator" class="divider"></li>
+																<li v-if="reservation.desired_role.name !== 'Squad Leader'"><a @click="updateRole(reservation, 'Squad Leader')">Squad Leader</a></li>
+																<li v-if="reservation.desired_role.name !== 'Group Leader'"><a @click="updateRole(reservation, 'Group Leader')">Group Leader</a></li>
+
 															</ul>
 														</dropdown>
 														<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -753,7 +725,8 @@
 															<label>Companions</label>
 															<ul class="list-unstyled">
 																<li v-for="companion in reservation.companions.data">
-																	{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																	<i :class="getGenderStatusIcon(companion)"></i> 
+																	{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																</li>
 															</ul>
 														</template>
@@ -796,12 +769,6 @@
 									<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
 								</select>
 							</div>
-							<!--<div class="form-group" v-if="isAdminRoute">
-								<label>Campaigns</label>
-								<v-select @keydown.enter.prevent="" multiple class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-										  :value.sync="newTeamCampaigns" :options="campaignsOptions" label="name"
-										  placeholder="Filter by Campaign"></v-select>
-							</div>-->
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
@@ -826,6 +793,13 @@
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
 						Are you sure you want to delete {{selectedSquadObj.callsign}} ?
+					</p>
+				</div>
+			</modal>
+			<modal title="Remove Association" small ok-text="Remove" :callback="removeAssociation" :show.sync="removeAssociationData.show">
+				<div slot="modal-body" class="modal-body">
+					<p v-if="removeAssociationData.object">
+						Are you sure you want to disassociate {{removeAssociationData.object.name}} with this Team ?
 					</p>
 				</div>
 			</modal>
@@ -863,13 +837,16 @@
 	import _ from 'underscore';
 	import $ from 'jquery';
 	import vSelect from 'vue-select';
+	import notes from '../notes.vue';
+	import utilities from '../utilities.mixin';
     export default{
         name: 'team-manager',
-	    components: {vSelect},
+	    components: {vSelect, notes},
+	    mixins: [utilities],
 	    props: {
             userId: {
                 type: String,
-                required: false
+                required: true
             },
             groupId: {
                 type: String,
@@ -918,6 +895,16 @@
 
                 lastReservationRequest: null,
 
+	            // squad dis/association vars
+                addAssociationData: {
+                    type: null,
+	                object: null
+                },
+                removeAssociationData: {
+                    type: null,
+                    object: null,
+	                show: false
+                },
 	            // Filters vars
                 showTeamsFilters: false,
                 showReservationsFilters: false,
@@ -926,13 +913,14 @@
                 groupsArr: [],
                 groupObj: null,
                 roleObj: null,
-                rolesOptions: [],
 	            leadershipRoles: [],
                 campaignsOptions: [],
                 groupsOptions: [],
                 teamFilters: {
-                    group: ''
+                    group: '',
+	                campaign: null
                 },
+
                 // reservations filters
 	            reservationFilters: {
                     type: '',
@@ -940,8 +928,11 @@
 		            gender: '',
 		            status: '',
                     hasCompanions: null,
-                    role: ''
+                    role: '',
+                    designation: ''
                 },
+
+	            // members filters
 	            membersFilters: {
                     groups: [],
 		            gender: '',
@@ -1041,26 +1032,46 @@
             },
 		    isLocked(){
                 return !this.isAdminRoute && this.currentTeam.locked;
+		    },
+            unassociatedGroups() {
+		        return _.difference(this.groupsOptions, this.currentTeam.groups.data);
 		    }
-            /*missionaries() {
-				let leaders = [];
-				leaders.push(_.filter(this.currentSquadGroups, function (squad) {
-					return _.findWhere(squad.members, { desired_role: { code: 'MISS'}}) || _.findWhere(squad.members, { desired_role: { code: 'MINR'}});
-				}));
-				return leaders;
-			},
-			influencers() {
-				let leaders = [];
-				leaders.push(_.filter(this.currentSquadGroups, function (squad) {
-					return _.findWhere(squad.members, { desired_role: { code: 'INFL'}});
-				}));
-				return leaders;
-			},*/
 	    },
         methods: {
+            getReservationLink(reservation){
+                return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
+            },
+            getGenderStatusIcon(reservation){
+            	if (reservation.gender == 'male') {
+            		if (reservation.status == 'married') {
+            			return 'fa fa-venus-mars text-info';
+            		}
+            		return 'fa fa-mars text-info';
+            	}
+
+            	if (reservation.status == 'married') {
+            		return 'fa fa-venus-mars text-danger';
+            	}
+            	return 'fa fa-venus text-danger';
+            },
             updateConfig(){
                 localStorage[this.storageName] = JSON.stringify({
 					currentTeam: this.currentTeam.id,
+                });
+            },
+            updateRole(member, roleName) {
+                this.getRoles().then(function (roles) {
+                    let role = _.findWhere(roles, { name: roleName});
+                    this.$http.put('reservations/' + member.id, { desired_role: role.value },
+                        { params: { include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions' }
+                        }).then(function (response) {
+                        this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' role updated!');
+                        member.desired_role = response.body.data.desired_role;
+                        return member = response.body.data;
+                    }, function (response) {
+                        console.log(response);
+                        this.$root.$emit('showError', response.body.message);
+                    });
                 });
             },
 	        openNewTeamModel(){
@@ -1086,10 +1097,9 @@
                     gender: '',
                     status: '',
                     hasCompanions: null,
-	                role: ''
+	                role: '',
+                    designation: ''
                 }
-
-
             },
             resetTeamFilter(){
                 this.teamsSearch = null;
@@ -1097,21 +1107,6 @@
                 this.teamFilters = {
                     group: '',
                 }
-            },
-            getRoles(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/team-roles').then(function (response) {
-                    let roles = [];
-                    _.each(response.body.roles, function (name, key) {
-                        roles.push({ value: key, name: name});
-                    });
-                    this.rolesOptions = roles;
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.rolesOptions;
-                    }
-                });
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
@@ -1273,9 +1268,11 @@
                 };
 
                 this.TeamSquadResource.update(params , data).then(function (response) {
-                    this.currentSquadGroups = _.reject(this.currentSquadGroups, function (sq) {
+                    let groups =_.reject(this.currentSquadGroups, function (sq) {
                         return sq.id === squad.id;
                     });
+
+                    this.currentSquadGroups = groups;
                     this.currentTeam.squads_count--;
                     newTeam.squads_count++;
                     newTeam.members_count += squad.members_count;
@@ -1307,6 +1304,7 @@
 	                current: true,
 	                ignore: this.excludeReservationIds,
                     noSquad: true,
+                    designation: this.reservationFilters.designation,
                 };
 
                 if (this.isAdminRoute) {
@@ -1338,12 +1336,18 @@
             },
             getTeams(){
                 let params = {
-                    include: 'type',
+                    include: 'type,groups',
                     page: this.teamsPagination.current_page,
 	                search: this.teamsSearch,
-	                group: this.teamFilters.group,
-                    designation: this.teamFilters.designation,
                 };
+
+                if (this.isAdminRoute) {
+					params.campaign = this.campaignId;
+                    params.group = this.teamFilters.group || undefined;
+                } else {
+                    params.group = this.groupId;
+                    params.campaign = this.campaignId;
+                }
 
                 return this.TeamResource.get(params).then(function (response) {
 	                this.teamsPagination = response.body.meta.pagination;
@@ -1420,7 +1424,7 @@
                         associations: associations
                     };
                     let params = {
-                        include: 'type',
+                        include: 'type,groups',
                     };
                     this.TeamResource.save(data, params).then(function (response) {
                         let team = response.body.data;
@@ -1466,15 +1470,17 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.TeamResource.update({team: team.id}, team).then(function (response) {
+	            this.TeamResource.update({team: team.id, include: 'type,groups'}, team).then(function (response) {
 					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
-	        updateTeamSettings(){
-	            this.TeamResource.update({ team: this.currentTeam.id, include: 'type' }, { callsign: this.currentTeam.callsign }).then(function (response) {
+	        updateTeamSettings(ignoreMessage){
+	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign }).then(function (response) {
                     this.currentTeam = response.body.data;
-					this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
+                    if (!ignoreMessage)
+						this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
 					this.editTeamMode = false;
+					return response.body.data;
                 });
 	        },
 	        updateSquad(){
@@ -1557,6 +1563,48 @@
                 });
 	            return total;
             },
+	        addAssociation(type, object) {
+                return this.$http.post(type + '/' + object.id + '/teams', { ids: [this.currentTeam.id] }).then(function (response) {
+                    this.additionalAssociatedGroup = null;
+                    this.updateTeamSettings(true).then(function () {
+                        this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now associated with ' + object.name);
+                    });
+                }, function (response) {
+                    console.log(response.body);
+                    this.$root.$emit('showError', response.body.message);
+                });
+	        },
+	        removeAssociation() {
+		        switch(this.removeAssociationData.type) {
+		            case 'groups':
+
+		                break;
+                    case 'regions':
+
+                        break;
+		            case 'campaigns':
+
+		                break;
+		        }
+
+	            return this.$http.delete(this.removeAssociationData.type + '/' + this.removeAssociationData.object.id + '/teams/' + this.currentTeam.id).then(function (response) {
+                    this.updateTeamSettings(true).then(function () {
+                        this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now unassociated with ' + this.removeAssociationData.object.name);
+                        this.removeAssociationData.type = null;
+                        this.removeAssociationData.object = null;
+                        this.removeAssociationData.show = false;
+                    });
+                }, function (response) {
+                    console.log(response.body);
+                    this.$root.$emit('showError', response.body.message);
+                });
+	        },
+	        confirmRemoveAssociation(type, object) {
+                this.removeAssociationData.type = type;
+                this.removeAssociationData.object = object;
+                this.removeAssociationData.show = true;
+
+	        },
             squadHasLeader(squad) {
 	            return _.findWhere(squad.members, { leader: true });
             },
@@ -1625,6 +1673,7 @@
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
+                let notPresentIds = _.difference(companionIds, presentIds);
 
                 // Check for limitations
 	            // Available Space
@@ -1650,14 +1699,14 @@
 	            if (member.present_companions_team) {
                     _.each(this.currentSquadGroups, function (group) {
                         let companionObj;
-                        _.each(companionIds, function (companionId) {
+                        _.each(notPresentIds, function (companionId) {
 	                        companionObj = _.findWhere(group.members, {id: companionId});
 	                        if (companionObj) {
 	                            this.removeFromSquad(companionObj, group);
 	                        }
-                        });
+                        }.bind(this));
 
-                    });
+                    }.bind(this));
 	            }
 
 	            // package for mass assignment
@@ -1670,12 +1719,14 @@
             },
         },
         ready(){
+        	console.log(this.userId);
             let self = this;
             let promises = [];
             if (this.isAdminRoute) {
                 //campaign already scoped
                 this.newTeamCampaigns = [{id: this.campaignId}];
                 promises.push(this.getGroups());
+                promises.push(this.getTeams());
             } else {
                 promises.push(this.$http.get('users/' + this.userId, {
                     params: {include: 'facilitating,managing.trips'}
@@ -1697,7 +1748,6 @@
                 }));
             }
             promises.push(this.getTeamTypes());
-            promises.push(this.getTeams());
             promises.push(this.getCampaigns());
             promises.push(this.getRoles());
             promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
@@ -1726,9 +1776,10 @@
 
             this.$root.$on('campaign-scope', function (val) {
                 if(val) {
-                    this.campaignId = val ? val.id : '';
+	                this.campaignId = val ? val.id : '';
                     this.newTeamCampaigns = [{id: val.id}];
                     this.$root.$emit('update-title', val ? val.name : '');
+                    this.getTeams()
                 }
                 this.searchReservations();
             }.bind(this));

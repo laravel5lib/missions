@@ -23,6 +23,15 @@ class RoomCount
               ->all();
     }
 
+    public function byType($typeId)
+    {
+        return $this->getRooms()->filter(function($room) use($typeId) {
+            return $room->room_type_id === $typeId;
+        })->groupBy('type.name')->map(function ($room) {
+            return count($room);
+        })->first();
+    }
+
     private function getRooms()
     {
         return $this->roomable->rooms()->with('type')->get();
@@ -30,6 +39,8 @@ class RoomCount
 
     private function getRoomTypes()
     {
+       // $types = $this->roomable->availableRoomTypes;
+
        $types = RoomType::all();
 
        return $this->getDefaultCounts($types);

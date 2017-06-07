@@ -22,50 +22,54 @@
 			</form>
 		</aside>
 
-		<div class="row">
-			<div class="col-sm-12">
-				<form class="form-inline" novalidate>
-					<div class="form-inline" style="display: inline-block;">
-						<div class="form-group">
-							<label>Show</label>
-							<select class="form-control  input-sm" v-model="per_page">
-								<option v-for="option in perPageOptions" :value="option">{{option}}</option>
-							</select>
+		<template v-if="isAdminRoute">
+			<div class="row">
+				<div class="col-sm-12">
+					<form class="form-inline" novalidate>
+						<div class="form-inline" style="display: inline-block;">
+							<div class="form-group">
+								<label>Show</label>
+								<select class="form-control  input-sm" v-model="per_page">
+									<option v-for="option in perPageOptions" :value="option">{{option}}</option>
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
-						<span class="input-group-addon"><i class="fa fa-search"></i></span>
-					</div>
-					<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
-						Filters
-						<i class="fa fa-filter"></i>
-					</button>
-				</form>
+						<div class="input-group input-group-sm">
+							<input type="text" class="form-control" v-model="search" debounce="500" placeholder="Search for anything">
+							<span class="input-group-addon"><i class="fa fa-search"></i></span>
+						</div>
+						<button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
+							Filters
+							<i class="fa fa-filter"></i>
+						</button>
+						<button class="btn btn-primary btn-sm" type="button" @click="openNewPlanModal">
+							Create a plan
+						</button>
+					</form>
+				</div>
 			</div>
-		</div>
-		<hr class="divider sm">
-		<div>
-			<label>Active Filters</label>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.group != null" @click="filters.groups = null" >
+			<hr class="divider sm">
+			<div>
+				<label>Active Filters</label>
+				<span style="margin-right:2px;" class="label label-default" v-show="filters.group != null" @click="filters.groups = null" >
 				Travel Group
 				<i class="fa fa-close"></i>
 			</span>
-			<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign != null" @click="filters.campaign = null" >
+				<span style="margin-right:2px;" class="label label-default" v-show="filters.campaign != null" @click="filters.campaign = null" >
 				Campaign
 				<i class="fa fa-close"></i>
 			</span>
-		</div>
-		<hr class="divider sm">
-		<div style="position:relative;">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
-			<table class="table table-condensed table-hover">
+			</div>
+			<hr class="divider sm">
+		</template>
+		<div style="position:relative;" class="panel panel-default">
+			<table class="table table-hover">
 				<thead>
 				<tr>
 					<th>Name</th>
 					<th>Rooms</th>
-					<th># of Occupants</th>
-					<th><i class="fa fa-cog"></i></th>
+					<th>Occupants</th>
+					<th v-if="isAdminRoute"><i class="fa fa-cog"></i></th>
 				</tr>
 				</thead>
 				<tbody v-if="plans.length">
@@ -73,16 +77,14 @@
 					<td style="cursor: pointer;" v-text="plan.name" @click="loadManager(plan)"></td>
 					<td style="cursor: pointer;" @click="loadManager(plan)">
 						<span v-for="(key, val) in plan.rooms_count">
-							<span v-if="$index != 0"> | </span><em>{{key | capitalize}}:</em> <b>{{val}}</b>
+							<p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
 						</span>
-						<!--<div class="row">
-							<div class="col-xs-6">
-								<span v-if="$index == 1 || ($index % 2)">| </span>{{key | capitalize}}: {{val}}
-							</div>
-						</div>-->
 					</td>
 					<td style="cursor: pointer;" @click="loadManager(plan)" v-text="plan.occupants_count"></td>
-					<td>
+					<td v-if="isAdminRoute">
+						<button type="button" class="btn btn-default-hollow btn-xs" @click="openPlanSettingsModal(plan)">
+							<i class="fa fa-pencil"></i>
+						</button>
 						<button type="button" class="btn btn-default-hollow btn-xs" @click="openDeletePlanModal(plan)">
 							<i class="fa fa-trash"></i>
 						</button>
@@ -91,8 +93,10 @@
 				</tbody>
 				<tbody v-else>
 				<tr>
-					<td colspan="4" class="text-center text-italic text-muted">
-						No Rooming Plans yet. Create a new Rooming Plan
+					<td colspan="4">
+						<p class="text-center text-italic text-muted"><em>
+						No Rooming Plans yet. Create a new Rooming Plan.
+						</em></p>
 					</td>
 				</tr>
 				</tbody>
@@ -109,6 +113,31 @@
 			</table>
 		</div>
 
+		<!-- Modals -->
+		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :show.sync="showPlanModal">
+			<div slot="modal-body" class="modal-body">
+				<validator name="PlanCreate">
+					<form id="PlanCreateForm">
+						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
+							<label for="createPlanCallsign" class="control-label">Plan Name</label>
+							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
+						</div>
+					</form>
+				</validator>
+			</div>
+		</modal>
+		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :show.sync="showPlanSettingsModal">
+			<div slot="modal-body" class="modal-body" v-if="selectedPlan && selectedPlanSettings">
+				<form id="PlanCreateForm" class="form-horizontal">
+					<div class="form-group" v-for="type in roomTypes">
+						<label :for="'settingsType-' + type.id" class="col-sm-6 control-label" v-text="type.name"></label>
+						<div class="col-sm-6">
+							<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
+						</div>
+					</div>
+				</form>
+			</div>
+		</modal>
 		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedDeletePlan">
@@ -135,14 +164,27 @@
                 perPageOptions: [5, 10, 25, 50, 100],
                 groupsOptions: [],
                 campaignsOptions: [],
+                roomTypes: [],
 	            filters: {
                     campaign: null,
 		            group: null,
 	            },
                 pagination: {current_page: 1},
+                showPlanSettingsModal: false,
                 showPlanDeleteModal: false,
+                showPlanModal: false,
                 selectedDeletePlan: null,
-	            PlansResource: this.$resource('rooming/plans{/plan}')
+                selectedNewPlan: {
+                    name: '',
+                    short_desc: '',
+                    rooms: [],
+                    locked: false,
+                    campaign_id: this.$parent.campaignId,
+                    group_id: this.$parent.groupId,
+                },
+	            selectedPlan: null,
+                selectedPlanSettings: null,
+	            PlansResource: this.$resource('rooming/plans{/plan}{/path}{/pathId}')
             }
         },
 	    watch: {
@@ -155,6 +197,9 @@
 		    search() {
                 this.getRoomingPlans();
 		    },
+            per_page() {
+                this.getRoomingPlans();
+		    },
 	    },
         methods: {
             resetFilters(){
@@ -162,6 +207,16 @@
             },
             loadManager(plan) {
                 this.$dispatch('rooming-wizard:plan-selected', plan);
+            },
+            getRoomTypes(){
+                return this.$http.get('rooming/types')
+	                .then(function (response) {
+                        return this.roomTypes = response.body.data;
+                    },
+                    function (response) {
+                        console.log(response);
+                        return response.body.data;
+                    });
             },
 	        getRoomingPlans(){
                 let params = {
@@ -201,9 +256,71 @@
                     }
                 });
             },
+            openPlanSettingsModal(plan) {
+                this.showPlanSettingsModal = true;
+                this.selectedPlan = plan;
+                let settings = {};
+
+                // We need to loop through each room type to create an object to reference the plan types present
+                _.each(this.roomTypes, function (type) {
+                    // the settings will be traced by the type ids
+	                // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
+	                let assignment = plan.room_types.hasOwnProperty(type.name) ? plan.room_types[type.name] : 0;
+                    settings[type.id] = assignment;
+                    // we are using method to track which room types need to be updated or posted
+                    settings[type.id + '_method'] = assignment > 0 ? 'PUT' :'POST';
+                });
+                this.selectedPlanSettings = settings;
+            },
             openDeletePlanModal(plan) {
                 this.showPlanDeleteModal = true;
                 this.selectedDeletePlan = plan;
+            },
+            updatePlanSettings() {
+                let promises = [];
+                _.each(this.selectedPlanSettings, function (val, property) {
+                    let promise;
+					if (property.indexOf('_method') === -1) {
+					    if (this.selectedPlanSettings[property + '_method'] === 'PUT') {
+					        if (val > 0) {
+                                promise = this.PlansResource.update({
+	                                plan: this.selectedPlan.id, path: 'types', pathId: property
+                                }, { available_rooms: val });
+                            } else {
+					            // if val is 0 we should simply delete the room type setting
+                                promise = this.PlansResource.delete({
+                                    plan: this.selectedPlan.id, path: 'types', pathId: property
+                                });
+					        }
+
+					    } else {
+					        // only create setting if val > 0
+                            if (val > 0)
+	                            promise = this.PlansResource.save({ plan: this.selectedPlan.id, path: 'types'}, {
+	                                room_type_id: property,
+	                                available_rooms: val
+	                            });
+                        }
+                        if (promise) {
+                            // we only need to catch errors here
+                            promise.catch(function (response) {
+                                console.log(response.body.message);
+                            });
+                            promises.push(promise);
+                        }
+					}
+
+                }.bind(this));
+
+                Promise.all(promises).then(function () {
+                    this.showPlanSettingsModal = false;
+                    this.$root.$emit('showSuccess', this.selectedPlan.name + ' settings updated successfully.');
+                    this.getRoomingPlans().then(function () {
+                        this.selectedPlan = null;
+                        this.selectedPlanSettings = null;
+                    });
+                }.bind(this));
+
             },
             deletePlan() {
                 let plan = _.extend({}, this.selectedDeletePlan);
@@ -214,10 +331,38 @@
                         return plan.id === obj.id;
                     });
                 });
-            }
+            },
+            openNewPlanModal(){
+                this.showPlanModal = true;
+                this.selectedNewPlan = {
+                    name: '',
+                    short_desc: '',
+                    rooms: [],
+                    locked: false,
+                    campaign_id: this.$parent.campaignId,
+                    group_id: this.$parent.groupId,
+                };
+            },
+            newPlan() {
+                if (this.$PlanCreate.valid) {
+                    return this.PlansResource.save(this.selectedNewPlan).then(function (response) {
+                        let plan = response.body.data;
+                        this.plans.push(plan);
+                        this.showPlanModal = false;
+                        this.loadManager(plan);
+                    }, function (response) {
+                        console.log(response);
+                        this.$root.$emit('showError', response.body.message);
+                        return response.body.data;
+                    });
+                } else {
+                    this.$root.$emit('showError', 'Please provide a name for the new plan');
+                }
+            },
         },
         ready(){
 			this.getRoomingPlans();
+			this.getRoomTypes();
         }
     }
 </script>

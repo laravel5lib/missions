@@ -51,9 +51,9 @@ class TransportsController extends Controller
     {
         $transport = $this->transport->firstOrCreate([
             'type' => $request->json('type'),
-            'vessel_no' => strtoupper(trim($request->json('vessel_no'))),
+            'vessel_no' => strtoupper(trim($request->json('vessel_no', 'unassigned'))),
             'name' => $request->json('name'),
-            'call_sign' => $request->json('call_sign'),
+            'call_sign' => $request->json('call_sign', null),
             'domestic' => $request->json('domestic'),
             'capacity' => $request->json('capacity'),
             'campaign_id' => $request->json('campaign_id')

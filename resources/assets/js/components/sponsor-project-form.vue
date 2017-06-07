@@ -199,7 +199,7 @@
 			},
 			getInitiatives() {
 				this.intiativeResource
-						.get({causeId: this.causeId})
+						.get({causeId: this.causeId, current: true})
 						.then(function (response) {
 							this.initiatives = response.body.data;
 						}, function (error) {

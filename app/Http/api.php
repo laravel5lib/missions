@@ -127,6 +127,7 @@ $api->version('v1', [
     $api->resource('funds', 'FundsController');
     $api->post('funds/export', 'FundsController@export');
     $api->put('funds/{id}/reconcile', 'FundsController@reconcile');
+    $api->put('funds/{id}/restore', 'FundsController@restore');
     $api->get('funds/{id}/donors', 'FundDonorsController@index');
     $api->resource('transactions', 'TransactionsController');
     $api->post('transactions/export', 'TransactionsController@export');
@@ -165,6 +166,8 @@ $api->version('v1', [
     $api->group(['prefix' => 'rooming'], function($api) {
         $api->resource('plans', 'Rooming\PlansController');
         $api->resource('types', 'Rooming\TypesController');
+        $api->resource('plans.types', 'Rooming\PlanRoomTypesController');
+        $api->resource('accommodations.types', 'Rooming\AccommodationRoomTypesController');
         $api->resource('rooms', 'Rooming\RoomsController');
         $api->resource('{roomableType}/{roomableId}/rooms', 'Rooming\Roomable\RoomsController');
         $api->resource('rooms/{roomId}/occupants', 'Rooming\RoomOccupantsController');

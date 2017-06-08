@@ -1742,113 +1742,6 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
-
-    // Teams API
-
-    ['GET *teams'](pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
-                    "callsign": "Team #1",
-                    "created_at": "2017-04-25 16:26:15",
-                    "updated_at": "2017-04-25 16:26:15",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
-                        }
-                    ]
-                }
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 1,
-                    "count": 1,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-    ['GET *teams(/:team)(/:path)(/:pathId)'](pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
-                    "callsign": "Team #1",
-                    "created_at": "2017-04-25 16:26:15",
-                    "updated_at": "2017-04-25 16:26:15",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
-                        }
-                    ]
-                }
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 1,
-                    "count": 1,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-
-        if (pathMatch.team) {
-            body.data = _.findWhere(body.data, {id: pathMatch.team});
-            delete body.meta;
-        }
-
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-    ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {
-            "data": [{
-                "name": "trip_history",
-                "display_name": "Trip History",
-                "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:01:44"
-            }]
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-
     // Rooming API
     // Types
     ['GET *rooming/types(/:type)'](pathMatch, query, request) {
@@ -1906,40 +1799,6 @@ export default {
             body.data = _.findWhere(body.data, {id: pathMatch.type});
             delete body.meta;
         }
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-    ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {
-            "data": [{
-                "name": "countries_visited",
-                "display_name": "Countries Visited",
-                "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
-                    "code": "vg",
-                    "name": "Virgin Islands (British)"
-                }, {"code": "bj", "name": "Benin"}],
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:01:44"
-            }]
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
     },
     // Plans
     ['GET *rooming/plans(/:plan)'](pathMatch, query, request) {
@@ -2907,6 +2766,45 @@ export default {
         }
     },
     // Teams API
+    ['GET *teams'](pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
+                    "callsign": "Team #1",
+                    "type": {
+                        "data": {
+                            "id": "08c4d947-75fc-4a02-9e89-bb18c8e20d86",
+                            "name": "leadership",
+                            "rules": {
+                                "max_groups": 1,
+                                "min_groups": 1,
+                                "max_leaders": 2,
+                                "max_members": 10,
+                                "min_leaders": 2,
+                                "min_members": 2,
+                                "max_group_leaders": 1,
+                                "max_group_members": 10,
+                                "min_group_leaders": 1,
+                                "min_group_members": 2
+                            },
+                            "created_at": "2017-05-15 14:09:04",
+                            "updated_at": "2017-05-17 00:48:39",
+                            "links": [{"rel": "self", "uri": "api\/teams\/types\/08c4d947-75fc-4a02-9e89-bb18c8e20d86"}]
+                        }
+                    },
+                    "created_at": "2017-04-25 16:26:15",
+                    "updated_at": "2017-04-25 16:26:15",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
+                        }]
+                }
+            ]
+        }
+    },
     ['GET *teams/types(/:type)'](pathMatch, query, request) {
         let body = {
             "data": [{
@@ -2996,365 +2894,6 @@ export default {
         }
 
     },
-    // Campaigns API
-    ['GET *campaigns(/:campaign)'] (pathMatch, query, request) {
-        let body = {
-            "data": [{
-                "id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
-                "name": "1Nation1Day 2017",
-                "country": "Nicaragua",
-                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
-                "page_url": "1n1d17",
-                "page_src": "_1n1d2017",
-                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
-                "avatar_upload_id": "10238fcd-7d2e-4056-93ea-e7405196fbd0",
-                "banner": null,
-                "banner_upload_id": null,
-                "started_at": "2017-07-22 00:00:00",
-                "ended_at": "2017-07-30 22:59:59",
-                "status": "Published",
-                "groups_count": 10,
-                "published_at": "2016-01-01 00:00:00",
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:03:33",
-                "links": [{"rel": "self", "uri": "\/campaigns\/5830c58b-a183-49ec-a61e-a3c748b33c28"}],
-                "trips": {
-                    "data": [{
-                        "id": "19706ed3-1db9-45f1-b29e-b75e8a5ad76d",
-                        "group_id": "120d15bb-e82a-3e40-9a55-a1c22b6b3ade",
-                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
-                        "rep_id": "a79c0feb-b593-4bef-a2c4-53cc30b1be83",
-                        "rep": "Alex Waelchi",
-                        "spots": 84,
-                        "status": "active",
-                        "starting_cost": "1758.00",
-                        "companion_limit": 3,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "ministry",
-                        "difficulty": "level 3",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["medical professionals", "women", "men", "business professionals"],
-                        "team_roles": ["POLI", "MDFG", "OTEC", "MCDR"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. .. .\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
-                        "public": true,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-05 15:01:55",
-                        "updated_at": "2017-05-05 15:02:02",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/19706ed3-1db9-45f1-b29e-b75e8a5ad76d"}],
-                        "group": {
-                            "data": {
-                                "id": "120d15bb-e82a-3e40-9a55-a1c22b6b3ade",
-                                "status": "approved",
-                                "name": "Stoltenberg-Cormier",
-                                "type": "youth",
-                                "timezone": "America\/Kentucky\/Monticello",
-                                "description": "Cheshire Cat,' said Alice: '--where's the Duchess?' 'Hush! Hush!' said the Rabbit in a low, hurried tone. He looked at.",
-                                "url": "stoltenberg-cormier",
-                                "public": true,
-                                "address_one": "6925 Zachariah Estate",
-                                "address_two": "21801",
-                                "city": "East Jane",
-                                "state": "Oklahoma",
-                                "zip": null,
-                                "country_code": "br",
-                                "country_name": "Brazil",
-                                "phone_one": "14859053488",
-                                "phone_two": "8544454907",
-                                "email": "amira41@example.net",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-05 15:01:44",
-                                "updated_at": "2017-05-05 15:02:05",
-                                "links": [{"rel": "self", "uri": "\/groups\/120d15bb-e82a-3e40-9a55-a1c22b6b3ade"}]
-                            }
-                        }
-                    }]
-                }
-            }]
-        }
-    },
-    ['GET *teams'](pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "ad417b30-51b1-48f4-b26d-0b6ed956c4d3",
-                    "callsign": "Team #1",
-                    "type": {
-                        "data": {
-                            "id": "08c4d947-75fc-4a02-9e89-bb18c8e20d86",
-                            "name": "leadership",
-                            "rules": {
-                                "max_groups": 1,
-                                "min_groups": 1,
-                                "max_leaders": 2,
-                                "max_members": 10,
-                                "min_leaders": 2,
-                                "min_members": 2,
-                                "max_group_leaders": 1,
-                                "max_group_members": 10,
-                                "min_group_leaders": 1,
-                                "min_group_members": 2
-                            },
-                            "created_at": "2017-05-15 14:09:04",
-                            "updated_at": "2017-05-17 00:48:39",
-                            "links": [{"rel": "self", "uri": "api\/teams\/types\/08c4d947-75fc-4a02-9e89-bb18c8e20d86"}]
-                        }
-                    },
-                    "created_at": "2017-04-25 16:26:15",
-                    "updated_at": "2017-04-25 16:26:15",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "api/teams/ad417b30-51b1-48f4-b26d-0b6ed956c4d3"
-                        }
-                    }, {
-                        "id": "2012984c-67b7-489f-a51b-45912895f53e",
-                        "group_id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
-                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
-                        "rep_id": "33b6bbdf-986b-424d-9d1c-1dd5d80e31bc",
-                        "rep": "Sabrina Kreiger",
-                        "spots": 316,
-                        "status": "active",
-                        "starting_cost": "1843.00",
-                        "companion_limit": 1,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "leader",
-                        "difficulty": "level 2",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["teens", "pastors", "medical professionals", "women"],
-                        "team_roles": ["PRAS", "NAST", "DIET", "CRDO"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders...",
-                        "public": true,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-05 15:02:38",
-                        "updated_at": "2017-05-05 15:02:42",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/2012984c-67b7-489f-a51b-45912895f53e"}],
-                        "group": {
-                            "data": {
-                                "id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
-                                "status": "approved",
-                                "name": "Toy-Braun",
-                                "type": "business",
-                                "timezone": "America\/Porto_Velho",
-                                "description": "I was going a journey, I should think you'll feel it a little ledge of rock, and, as there was silence for some.",
-                                "url": "toy-braun",
-                                "public": true,
-                                "address_one": "488 Mattie Mountain Apt. 518",
-                                "address_two": "45254",
-                                "city": null,
-                                "state": null,
-                                "zip": null,
-                                "country_code": "ie",
-                                "country_name": "Ireland",
-                                "phone_one": "3285255388",
-                                "phone_two": "9218561719260",
-                                "email": "hjerde@example.org",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-05 15:01:44",
-                                "updated_at": "2017-05-05 15:02:49",
-                                "links": [{"rel": "self", "uri": "\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]
-                            }
-                        }
-                    }, {
-                        "id": "e2d3a383-58b9-434e-a6d5-22062395f3a7",
-                        "group_id": "e73e385a-435c-3ff1-a45c-2eb1db19a92b",
-                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
-                        "rep_id": "41e21866-80fb-4bb8-afcd-401087a70710",
-                        "rep": "Lily Conroy",
-                        "spots": 284,
-                        "status": "active",
-                        "starting_cost": "1754.00",
-                        "companion_limit": 2,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "family",
-                        "difficulty": "level 1",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["women", "business professionals", "men", "medical professionals"],
-                        "team_roles": ["MDSN", "ETEC", "DENT", "DENH"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+...",
-                        "public": true,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-05 15:03:00",
-                        "updated_at": "2017-05-05 15:03:04",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/f4fd2275-d972-4323-979f-2099ea17a15a"}],
-                        "group": {
-                            "data": {
-                                "id": "e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e",
-                                "status": "approved",
-                                "name": "Ruecker, Gerlach and Paucek",
-                                "type": "nonprofit",
-                                "timezone": "Asia\/Baku",
-                                "description": "And mentioned me to him: She gave me a pair of the shepherd boy--and the sneeze of the tea--' 'The twinkling of the.",
-                                "url": "ruecker-gerlach-and-paucek",
-                                "public": true,
-                                "address_one": "67251 Smith Overpass Apt. 318",
-                                "address_two": null,
-                                "city": null,
-                                "state": null,
-                                "zip": "05589-5101",
-                                "country_code": "tv",
-                                "country_name": "Tuvalu",
-                                "phone_one": "975420450588447",
-                                "phone_two": "",
-                                "email": "leo.mcclure@example.com",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-05 15:01:44",
-                                "updated_at": "2017-05-05 15:03:11",
-                                "links": [{"rel": "self", "uri": "\/groups\/e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e"}]
-                            }
-                        }
-                    }]
-                }
-            }],
-            "meta": {
-                "pagination": {
-                    "total": 1,
-                    "count": 1,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": {"next": "https:\/\/missions.dev\/api\/campaigns?page=2"}
-                }
-            }
-        };
-
-        if (pathMatch.campaign) {
-            body.data = _.findWhere (body.data, {id: pathMatch.campaign});
-            delete body.meta;
-        }
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-    // Uploads API
-    ['GET *uploads(/:id)'] (pathMatch, query, request) {
-        let body;
-        switch (request.params.type) {
-            case 'avatar':
-                body = {
-                    "data": [],
-                    "meta": {
-                        "pagination": {
-                            "total": 0,
-                            "count": 0,
-                            "per_page": 6,
-                            "current_page": 1,
-                            "total_pages": 0,
-                            "links": []
-                        }
-                    }
-                };
-                break;
-            case 'banner':
-                body = {
-                    "data": [
-                        {
-                            "id": "12132232-7ad5-4756-9b4f-c6c4fcfd9c8f",
-                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
-                            "name": "1n1d17_speak",
-                            "type": "banner",
-                            "meta": null,
-                            "created_at": "2017-05-05 15:01:43",
-                            "updated_at": "2017-05-05 15:01:43",
-                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
-                            "links": [{"rel": "self", "uri": "\/uploads\/12132232-7ad5-4756-9b4f-c6c4fcfd9c8f"}]
-                        },
-                        {
-                            "id": "2d0cadf4-52d9-4efc-af40-ff20e37adc5d",
-                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-vision3-2560x800.jpg",
-                            "name": "1n1d17_vision3",
-                            "type": "banner",
-                            "meta": null,
-                            "created_at": "2017-05-05 15:01:43",
-                            "updated_at": "2017-05-05 15:01:43",
-                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
-                            "links": [{"rel": "self", "uri": "\/uploads\/2d0cadf4-52d9-4efc-af40-ff20e37adc5d"}]
-                        },
-                        {
-                            "id": "31dcc58f-0f57-4b5c-ba56-d4321850afe6",
-                            "source": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-water-2560x800.jpg",
-                            "name": "1n1d17_water",
-                            "type": "banner",
-                            "meta": null,
-                            "created_at": "2017-05-05 15:01:43",
-                            "updated_at": "2017-05-05 15:01:43",
-                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
-                            "links": [{"rel": "self", "uri": "\/uploads\/31dcc58f-0f57-4b5c-ba56-d4321850afe6"}]
-                        },
-                        {
-                            "id": "59fb9992-1937-473d-b9f7-b5bde5b6ae52",
-                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-9-2560x800.jpg",
-                            "name": "gen_ban_9",
-                            "type": "banner",
-                            "meta": null,
-                            "created_at": "2017-05-05 15:01:43",
-                            "updated_at": "2017-05-05 15:01:43",
-                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
-                            "links": [{"rel": "self", "uri": "\/uploads\/59fb9992-1937-473d-b9f7-b5bde5b6ae52"}]
-                        },
-                        {
-                            "id": "643c932b-3bcc-42b5-b884-9a1ff1b8f8e7",
-                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-6-2560x800.jpg",
-                            "name": "gen_ban_6",
-                            "type": "banner",
-                            "meta": null,
-                            "created_at": "2017-05-05 15:01:43",
-                            "updated_at": "2017-05-05 15:01:43",
-                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
-                            "links": [{"rel": "self", "uri": "\/uploads\/643c932b-3bcc-42b5-b884-9a1ff1b8f8e7"}]
-                        },
-                        {
-                            "id": "648fa5d0-84ba-43c6-8042-b217954fae25",
-                            "source": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-4-2560x800.jpg",
-                            "name": "gen_ban_4",
-                            "type": "banner",
-                            "meta": null,
-                            "created_at": "2017-05-05 15:01:43",
-                            "updated_at": "2017-05-05 15:01:43",
-                            "tags": ["Fundraiser", "User", "Group", "Campaign"],
-                            "links": [{"rel": "self", "uri": "\/uploads\/648fa5d0-84ba-43c6-8042-b217954fae25"}]
-                        }],
-                    "meta": {
-                        "pagination": {
-                            "total": 18,
-                            "count": 6,
-                            "per_page": 6,
-                            "current_page": 1,
-                            "total_pages": 3,
-                            "links": {"next": "https:\/\/missions.dev\/api\/uploads?page=2"}
-                        }
-                    }
-                };
-                break;
     ['GET *teams(/:team)(/:path)(/:pathId)'](pathMatch, query, request) {
         let body = {
             "data": [
@@ -3413,285 +2952,6 @@ export default {
         }
 
     },
-
-    // Rooming API
-    // Types
-    ['GET *rooming/types(/:type)'](pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "04f7024d-b7be-43b3-86ad-5f457098f248",
-                    "name": "family standard",
-                    "rules": {
-                        "same_gender": false,
-                        "married_only": false,
-                        "occupancy_limit": 4
-                    },
-                    "created_at": "2017-05-05 19:13:16",
-                    "updated_at": "2017-05-05 19:13:16",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/api/rooming/types/04f7024d-b7be-43b3-86ad-5f457098f248"
-                        }
-                    ]
-                },
-                {
-                    "id": "45d67733-8b03-442f-b24b-0ebcc8681dc7",
-                    "name": "double",
-                    "rules": {
-                        "same_gender": false,
-                        "married_only": false,
-                        "occupancy_limit": 2
-                    },
-                    "created_at": "2017-05-05 18:52:44",
-                    "updated_at": "2017-05-05 18:52:44",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/api/rooming/types/45d67733-8b03-442f-b24b-0ebcc8681dc7"
-                        }
-                    ]
-                }
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 5,
-                    "count": 5,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-        if (pathMatch.type) {
-            body.data = _.findWhere(body.data, {id: pathMatch.type});
-            delete body.meta;
-        }
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-    // Plans
-    ['GET *rooming/plans(/:plan)'](pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "6d3ec4f6-7585-4d72-b48a-ec7cb82e3abe",
-                    "name": "Test Rooming Plan",
-                    "short_desc": "A custom description",
-                    "created_at": "2017-05-04 17:52:54",
-                    "updated_at": "2017-05-04 19:09:51"
-                },
-                {
-                    "id": "b198a66b-24d9-4f94-a5b3-6efa34c12c50",
-                    "name": "Another Rooming Plan",
-                    "short_desc": "no description",
-                    "created_at": "2017-05-04 19:12:32",
-                    "updated_at": "2017-05-04 19:12:32"
-                }
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 2,
-                    "count": 2,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-
-        if (pathMatch.plan) {
-            body.data = _.findWhere(body.data, {id: pathMatch.plan});
-            delete body.meta;
-        }
-
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-    ['POST *rooming/plans'] (pathMatch, query, request) {
-        let body = {
-            data: {
-                "id": "30434478-1fa2-4902-a96b-b4434110507e",
-                "name": "Test New Rooming Plan",
-                "short_desc": "A custom description",
-                "created_at": "2017-05-04 17:52:54",
-                "updated_at": "2017-05-04 19:09:51"
-            }
-        };
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-    ['GET *rooming/plans/:plan/rooms(/:room)'](pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "330e334d-91cc-488b-98a9-01e5fd6f7e80",
-                    "type": "Standard",
-                    "label": null,
-                    "occupants_count": 1,
-                    "created_at": "2017-05-08 19:02:06",
-                    "updated_at": "2017-05-08 19:02:06",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/api/rooming/rooms/330e334d-91cc-488b-98a9-01e5fd6f7e80"
-                        }
-                    ]
-                },
-                {
-                    "id": "6f38147e-f876-4b68-9970-7b90354cd519",
-                    "type": "Married (double)",
-                    "label": null,
-                    "occupants_count": 4,
-                    "created_at": "2017-05-08 19:01:46",
-                    "updated_at": "2017-05-08 19:01:46",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/api/rooming/rooms/6f38147e-f876-4b68-9970-7b90354cd519"
-                        }
-                    ]
-                },
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 4,
-                    "count": 4,
-                    "per_page": 15,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-        if (pathMatch.room) {
-            body.data = _.findWhere(body.data, {id: pathMatch.room});
-            delete body.meta;
-        }
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-    ['POST *rooming/plans/:plan/rooms(/:room)'](pathMatch, query, request) {
-        let body = {
-            "data": {
-                "id": "a4c704f0-f5f7-4c6c-8134-e0e67232305a",
-                "type": request.body.type.name,
-                "label": request.body.label,
-                "occupants_count": 0,
-                "created_at": "2017-05-08 19:02:06",
-                "updated_at": "2017-05-08 19:02:06",
-                "deleted_at": null,
-                "links": [
-                    {
-                        "rel": "self",
-                        "uri": "/api/rooming/rooms/a4c704f0-f5f7-4c6c-8134-e0e67232305a"
-                    }
-                ]
-            }
-        };
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-
-    },
-    // Rooms
-    ['GET *rooming/rooms'] (pathMatch, query, request) {
-        let body = {
-            "data": {
-                "id": "601395e6-3635-4001-b2df-f800a6349669",
-                "type": "Triple",
-                "label": null,
-                "occupants_count": null,
-                "created_at": "2017-05-09 16:44:22",
-                "updated_at": "2017-05-09 16:44:22",
-                "deleted_at": null,
-                "links": [
-                    {
-                        "rel": "self",
-                        "uri": "/api/rooming/rooms/601395e6-3635-4001-b2df-f800a6349669"
-                    }
-                ]
-            }
-        };
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-    ['POST *rooming/rooms(/:room)'] (pathMatch, query, request) {
-        let body = {
-            "data": {
-                "id": "b115f955-4fcc-45e9-bc87-fb79cfd8ef5c",
-                "name": "Matagalpa",
-                "callsign": null,
-                "country": {
-                    "code": "ni",
-                    "name": "Nicaragua"
-                },
-                "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
-                "created_at": "2017-05-24 01:53:42",
-                "updated_at": "2017-05-24 01:53:42",
-                "deleted_at": null,
-                "links": [
-                    {
-                        "rel": "self",
-                        "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/b115f955-4fcc-45e9-bc87-fb79cfd8ef5c"
-                    }
-                ]
-            }
-        };
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-
 
     // Travel Itineraries API
     ['GET *itineraries/:id'] (pathMatch, query, request) {
@@ -3914,7 +3174,8 @@ export default {
                                 "links": [{"rel": "self", "uri": "\/groups\/120d15bb-e82a-3e40-9a55-a1c22b6b3ade"}]
                             }
                         }
-                    }, {
+                    },
+                        {
                         "id": "2012984c-67b7-489f-a51b-45912895f53e",
                         "group_id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
                         "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
@@ -3970,7 +3231,8 @@ export default {
                                 "links": [{"rel": "self", "uri": "\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]
                             }
                         }
-                    }, {
+                    },
+                        {
                         "id": "e2d3a383-58b9-434e-a6d5-22062395f3a7",
                         "group_id": "e73e385a-435c-3ff1-a45c-2eb1db19a92b",
                         "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",

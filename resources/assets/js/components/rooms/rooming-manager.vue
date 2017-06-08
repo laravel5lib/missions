@@ -81,6 +81,106 @@
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetMembersFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
 		</aside>
+		<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
+			<hr class="divider inv sm">
+			<form class="col-sm-12">
+
+				<div class="form-group">
+					<label>Trip Type</label>
+					<select  class="form-control input-sm" v-model="reservationFilters.type">
+						<option value="">Any Type</option>
+						<option value="ministry">Ministry</option>
+						<option value="family">Family</option>
+						<option value="international">International</option>
+						<option value="media">Media</option>
+						<option value="medical">Medical</option>
+						<option value="leader">Leader</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Role</label>
+					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
+					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
+					          placeholder="Filter Roles"></v-select>
+				</div>
+
+				<div class="form-group" v-if="isAdminRoute">
+					<label>Travel Group</label>
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					          :value.sync="groupsArr" :options="groupsOptions" label="name"
+					          placeholder="Filter Groups"></v-select>
+				</div>
+
+				<div class="form-group">
+					<label>Gender</label>
+					<select class="form-control input-sm" v-model="reservationFilters.gender" style="width:100%;">
+						<option value="">Any Genders</option>
+						<option value="male">Male</option>
+						<option value="female">Female</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Marital Status</label>
+					<select class="form-control input-sm" v-model="reservationFilters.status" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="single">Single</option>
+						<option value="married">Married</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Age Range</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Age Min</span>
+								<input type="number" class="form-control" number v-model="reservationsAgeMin" min="0">
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max</span>
+								<input type="number" class="form-control" number v-model="reservationsAgeMax" max="120">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label>Arrival Designation</label>
+					<select  class="form-control input-sm" v-model="reservationFilters.designation">
+						<option value="">Any</option>
+						<option value="eastern">Eastern</option>
+						<option value="western">Western</option>
+						<option value="international">International</option>
+						<option value="none">None</option>
+					</select>
+				</div>
+
+
+				<div class="form-group">
+					<label>Travel Companions</label>
+					<div>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions1" v-model="reservationFilters.hasCompanions" :value=""> Any
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions2" v-model="reservationFilters.hasCompanions" value="yes"> Yes
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="companions" id="companions3" v-model="reservationFilters.hasCompanions" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<hr class="divider inv sm">
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+			</form>
+		</aside>
 
 		<template v-if="currentPlan">
 			<div class="col-xs-12" v-if="currentPlan">
@@ -151,14 +251,14 @@
 																			<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
 																		</ul>
 																	</dropdown>
-																	<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																	<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + $index" aria-expanded="true" aria-controls="collapseOne">
 																		<i class="fa fa-angle-down"></i>
 																	</a>
 																</div>
 															</div>
 														</h5>
 													</div>
-													<div :id="'occupantItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+													<div :id="'occupantItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 														<div class="panel-body">
 															<div class="row">
 																<div class="col-sm-3">
@@ -198,7 +298,7 @@
 																<div class="col-sm-6">
 																	<label>Squad Groups</label>
 																	<p class="small">
-																		<span v-for="squad in member.squads.data">{{squad.callsign}} <span>({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span>
+																		<span v-for="squad in member.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span>
 																	</p>
 																</div><!-- end col -->
 															</div><!-- end row -->
@@ -289,12 +389,52 @@
 				<template v-if="isAdminRoute">
 					<!-- Search and Filter -->
 					<form class="form-inline row">
-						<div class="form-group col-xs-12">
+						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
 								<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
+						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
+								Filters
+								<i class="fa fa-filter"></i>
+							</button>
+						</div>
+						<div class="col-xs-12">
+							<hr class="divider inv">
+							<div>
+								<label>Active Filters</label>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
+									Travel Group
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
+									Companions
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+									Role
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
+									Gender
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
+									Status
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMin != 0" @click="reservationsAgeMin = 0" >
+									Min. Age
+									<i class="fa fa-close"></i>
+								</span>
+								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMax != 120" @click="reservationsAgeMax = 120" >
+									Max. Age
+									<i class="fa fa-close"></i>
+								</span>
+							</div>
+						</div>
 					</form>
 					<hr class="divider sm inv">
 					<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
@@ -324,23 +464,11 @@
 													<span class="fa fa-ellipsis-h"></span>
 												</button>
 												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-													<li class="dropdown-header">Assign To Squad</li>
+													<li class="dropdown-header">Assign To Room</li>
 													<li role="separator" class="divider"></li>
-													<template v-for="squad in currentSquadGroups | orderBy 'callsign'">
-														<template v-if="squad.callsign === 'Squad Leaders'">
-															<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Squad Leader</a></li>
-														</template>
-														<template v-else>
-															<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
-															<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
-														</template>
-													</template>
-													<li role="separator" class="divider"></li>
-													<li class="dropdown-header">Change Role</li>
-													<li role="separator" class="divider"></li>
-													<li v-if="reservation.desired_role.name !== 'Squad Leader'"><a @click="updateRole(reservation, 'Squad Leader')">Squad Leader</a></li>
-													<li v-if="reservation.desired_role.name !== 'Group Leader'"><a @click="updateRole(reservation, 'Group Leader')">Group Leader</a></li>
-
+													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
+													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
+													<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
 												</ul>
 											</dropdown>
 											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -446,14 +574,14 @@
 															<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
 														</ul>
 													</dropdown>
-													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + $index" aria-expanded="true" aria-controls="collapseOne">
 														<i class="fa fa-angle-down"></i>
 													</a>
 												</div>
 											</div>
 										</h5>
 									</div>
-									<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+									<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 										<div class="panel-body">
 											<div class="row">
 												<div class="col-sm-6">
@@ -512,7 +640,7 @@
 												</div><!-- end col -->
 												<div class="col-sm-6">
 													<label>Squad Groups</label>
-													<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}} <span>({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
+													<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
 												</div><!-- end col -->
 											</div><!-- end row -->
 										</div><!-- end panel-body -->
@@ -639,6 +767,7 @@
                 teamMembersSearch: '',
                 roomsSearch: '',
                 showMembersFilters: false,
+                showReservationsFilters: false,
 				membersFilters: {
                     gender: '',
                     hasCompanions: null,
@@ -646,6 +775,17 @@
 					role: null,
                     designation: '',
 				},
+                reservationFilters: {
+                    type: '',
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+                    role: '',
+                    designation: ''
+                },
+                reservationsAgeMin: 0,
+                reservationsAgeMax: 120,
                 rolesOptions: [],
 
 	            // modal vars
@@ -695,7 +835,20 @@
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
             },
-            teamMembersSearch(val) {
+            reservationFilters: {
+                handler: function (val) {
+                    this.reservationsPagination.current_page = 1;
+                    this.searchReservations();
+                },
+                deep: true
+            },
+            reservationsAgeMin (val) {
+                this.searchReservations();
+            },
+            reservationsAgeMax (val) {
+                this.searchReservations();
+            },
+		    teamMembersSearch(val) {
                 this.getTeams();
             },
             membersFilters: {
@@ -873,7 +1026,7 @@
                     room_leader: leader,
                 };
 
-                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions' } }).then(function (response) {
+                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions,squads.team' } }).then(function (response) {
 	                let occupants = response.body.data;
 	                room.occupants = occupants;
                     room.occupants_count = occupants.length;
@@ -891,6 +1044,7 @@
                     current: true,
                     // ignore: this.excludeReservationIds,
                     inSquad: true,
+	                noRoom: 'plans|' + this.currentPlan.id,
                     // designation: this.reservationFilters.designation,
                 };
 

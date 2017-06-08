@@ -201,6 +201,10 @@ $api->version('v1', [
         });
     });
 
+    $api->group(['prefix' => 'metrics'], function ($api) {
+        $api->get('teams', 'Metrics\TeamsController@index');
+    });
+
     $api->group(['prefix' => 'utilities'], function ($api) {
         $api->get('team-roles/{type?}', 'UtilitiesController@getTeamRoles');
         $api->get('airlines/', 'AirlineController@index');

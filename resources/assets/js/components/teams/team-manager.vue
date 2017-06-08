@@ -1297,7 +1297,7 @@
             },
             searchReservations(){
                 let params = {
-                    include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions',
+                    include: 'trip.campaign,trip.group,user,companions',
                     search: this.reservationsSearch,
                     per_page: this.reservationsPerPage,
                     page: this.reservationsPagination.current_page,

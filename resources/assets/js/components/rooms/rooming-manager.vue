@@ -197,7 +197,9 @@
 																</div><!-- end col -->
 																<div class="col-sm-6">
 																	<label>Squad Groups</label>
-																	<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
+																	<p class="small">
+																		<span v-for="squad in member.squads.data">{{squad.callsign}} <span>({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span>
+																	</p>
 																</div><!-- end col -->
 															</div><!-- end row -->
 														</div><!-- end panel-body -->
@@ -280,272 +282,259 @@
 						</div>
 					</div>
 				</div>
-
-
-
-				<!-- Plans List-->
-				<!--<div class="col-sm-6">
-					<div class="col-xs-12 text-right">
-						<button class="btn btn-primary btn-xs" type="button" @click="openNewPlanModal">Create A Plan</button>
-						<hr class="divider lg">
-					</div>
-
-					<div class="col-xs-12">
-						<template v-if="plans.length">
-							<accordion :one-at-atime="true" type="info">
-								<panel :is-open="currentPlan && currentPlan.id === plan.id" :header="plan.name" v-for="plan in plans" @click="currentPlan = plan">
-									<tabs>
-										<tab header="Rooms">
-											&lt;!&ndash; Search and Filter &ndash;&gt;
-											<form class="form-inline row">
-												<div class="form-group col-xs-12 text-right">
-													<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
-													<hr class="divider lg">
-												</div>
-
-												<div class="form-group col-xs-8">
-													<div class="input-group input-group-sm col-xs-12">
-														<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search">
-														<span class="input-group-addon"><i class="fa fa-search"></i></span>
-													</div>
-												</div>&lt;!&ndash; end col &ndash;&gt;
-												<div class="form-group col-xs-4">
-													<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-														<i class="fa fa-filter"></i>
-													</button>
-												</div>
-												<div class="col-xs-12">
-													<hr class="divider inv">
-												</div>
-											</form>
-
-											<div class="row">
-												<div class="col-xs-12" v-if="currentPlan">
-													<template v-if="currentPlan.rooms.length">
-														&lt;!&ndash; List group List&ndash;&gt;
-														<div class="list-group">
-															<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentPlan.rooms" style="cursor: pointer;">
-																<h4 class="list-group-item-heading" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h4>
-																<div class="list-group-item-text">
-																	<div class="row">
-																		<div class="col-sm-6">
-																			<label>Occupancy Limit</label>
-																			<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
-																			<label>Limited to Gender</label>
-																			<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
-																			<label>Limited to Status</label>
-																			<p class="small">{{room.type.data.rules.status | capitalize}}</p>
-																		</div>&lt;!&ndash; end col &ndash;&gt;
-																		<div class="col-sm-6">
-																			<label>Current Number of Occupants</label>
-																			<p class="small">{{room.occupants_count}}</p>
-																			<label>Room Leader</label>
-																			<p class="small">{{room.leader}}</p>
-																		</div>&lt;!&ndash; end col &ndash;&gt;
-																	</div>&lt;!&ndash; end row &ndash;&gt;
-																</div>
-															</div>
-														</div>
-
-														&lt;!&ndash; Panel List &ndash;&gt;
-														&lt;!&ndash;<div class="panel panel-default" v-for="room in currentPlan.rooms">
-															<div class="panel-heading">
-																<h3 class="panel-title" v-text="(room.label ? (room.label + ' - ' + room.type.data.name) : room.type.data.name) | capitalize"></h3>
-															</div>
-															<div class="panel-body">
-																<div class="row">
-																	<div class="col-sm-6">
-																		<label>Occupancy Limit</label>
-																		<p class="small">{{room.type.data.rules.occupancy_limit}}</p>
-																		<label>Limit ed to Gender</label>
-																		<p class="small">{{room.type.data.rules.gender | capitalize}}</p>
-																		<label>Limited to Status</label>
-																		<p class="small">{{room.type.data.rules.status | capitalize}}</p>
-																	</div>&lt;!&ndash; end col &ndash;&gt;
-																	<div class="col-sm-6">
-																		<label>Current Number of Occupants</label>
-																		<p class="small">{{room.occupants_count}}</p>
-																		<label>Room Leader</label>
-																		<p class="small">{{room.leader}}</p>
-																	</div>&lt;!&ndash; end col &ndash;&gt;
-																</div>&lt;!&ndash; end row &ndash;&gt;
-															</div>
-														</div>&ndash;&gt;
-													</template>
-													<template v-else>
-														<hr class="divider inv">
-														<p class="text-center text-muted"><em>Create a room to get started!</em></p>
-													</template>
-												</div>
-											</div>
-										</tab>
-										<tab header="Plan Details">
-											<button class="btn btn-block btn-default btn-sm" type="button" @click="openDeletePlanModal">Delete Plan</button>
-										</tab>
-									</tabs>
-								</panel>
-							</accordion>
-						</template>
-						<template v-else>
-							<hr class="divider inv">
-							<p class="text-center text-muted"><em>Create a new plan to get started!</em></p>
-							<hr class="divider inv">
-							<p class="text-center"><a class="btn btn-link btn-sm" @click="openNewPlanModal">Create A Plan</a></p>
-						</template>
-
-					</div>
-
-				</div>-->
 			</div>
 
 			<!-- Teams Select & Members List -->
 			<div class="col-sm-4">
-				<select class="form-control input-sm" v-model="currentTeam">
-					<option :value="" v-if="!currentTeam">Select Squad</option>
-					<option :value="team" v-for="team in teams">{{team.callsign | capitalize}}</option>
-				</select>
-				<hr class="divider lg">
-				<!-- Search and Filter -->
-				<form class="form-inline row">
-					<div class="form-group col-xs-8">
-						<div class="input-group input-group-sm col-xs-12">
-							<input type="text" class="form-control" v-model="teamMembersSearch" debounce="300" placeholder="Search">
-							<span class="input-group-addon"><i class="fa fa-search"></i></span>
-						</div>
-					</div><!-- end col -->
-					<div class="form-group col-xs-4">
-						<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-							<i class="fa fa-filter"></i>
-						</button>
-					</div>
-					<div class="col-xs-12">
-						<hr class="divider inv">
-					</div>
-				</form>
-
-				<template v-if="currentTeam">
-					<template v-if="currentTeamMembers.length">
-						<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-							<div class="panel panel-default" v-for="member in currentTeamMembers | orderBy 'surname'" v-show="true">
-								<div class="panel-heading" role="tab" id="headingOne">
-									<h5 class="panel-title">
-										<div class="row">
-											<div class="col-xs-9">
-												<div class="media">
-													<div class="media-left" style="padding-right:0;">
-														<a :href="getReservationLink(member)" target="_blank">
-															<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
-														</a>
-													</div>
-													<div class="media-body" style="vertical-align:middle;">
-														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-														<i :class="getGenderStatusIcon(member)"></i>
-														<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-														<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
-													</div><!-- end media-body -->
-												</div><!-- end media -->
-											</div>
-											<div class="col-xs-3 text-right action-buttons">
-												<dropdown type="default">
-													<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-														<span class="fa fa-ellipsis-h"></span>
-													</button>
-													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-														<li class="dropdown-header">Assign To Room</li>
-														<li role="separator" class="divider"></li>
-														<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-														<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
-														<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
-													</ul>
-												</dropdown>
-												<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
-													<i class="fa fa-angle-down"></i>
-												</a>
-											</div>
+				<template v-if="isAdminRoute">
+					<!-- Search and Filter -->
+					<form class="form-inline row">
+						<div class="form-group col-xs-12">
+							<div class="input-group input-group-sm col-xs-12">
+								<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</div><!-- end col -->
+					</form>
+					<hr class="divider sm inv">
+					<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
+						<div class="panel panel-default" v-for="reservation in reservations">
+							<div class="panel-heading" role="tab" id="headingOne">
+								<h4 class="panel-title">
+									<div class="row">
+										<div class="col-xs-9">
+											<div class="media">
+												<div class="media-left" style="padding-right:0;">
+													<a :href="getReservationLink(reservation)" target="_blank">
+														<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+													</a>
+												</div>
+												<div class="media-body" style="vertical-align:middle;">
+													<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+														<i :class="getGenderStatusIcon(reservation)"></i>
+														<a :href="getReservationLink(reservation)" target="_blank">
+															{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+													<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
+												</div><!-- end media-body -->
+											</div><!-- end media -->
 										</div>
-									</h5>
-								</div>
-								<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-									<div class="panel-body">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Gender</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.gender | capitalize}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Marital Status</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.status | capitalize}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Age</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.age}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Travel Group</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.travel_group}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Arrival Designation</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<div class="row">
-											<div class="col-sm-6" v-if="member.companions.data.length">
+										<div class="col-xs-3 text-right action-buttons">
+											<dropdown type="default">
+												<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+													<span class="fa fa-ellipsis-h"></span>
+												</button>
+												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+													<li class="dropdown-header">Assign To Squad</li>
+													<li role="separator" class="divider"></li>
+													<template v-for="squad in currentSquadGroups | orderBy 'callsign'">
+														<template v-if="squad.callsign === 'Squad Leaders'">
+															<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Squad Leader</a></li>
+														</template>
+														<template v-else>
+															<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
+															<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(reservation, squad, false)" v-text="squad.callsign"></a></li>
+														</template>
+													</template>
+													<li role="separator" class="divider"></li>
+													<li class="dropdown-header">Change Role</li>
+													<li role="separator" class="divider"></li>
+													<li v-if="reservation.desired_role.name !== 'Squad Leader'"><a @click="updateRole(reservation, 'Squad Leader')">Squad Leader</a></li>
+													<li v-if="reservation.desired_role.name !== 'Group Leader'"><a @click="updateRole(reservation, 'Group Leader')">Group Leader</a></li>
+
+												</ul>
+											</dropdown>
+											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+												<i class="fa fa-angle-down"></i>
+											</a>
+										</div>
+									</div>
+
+								</h4>
+							</div>
+							<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-sm-6">
+											<label>Gender</label>
+											<p class="small">{{reservation.gender | capitalize}}</p>
+											<label>Marital Status</label>
+											<p class="small">{{reservation.status | capitalize}}</p>
+											<template v-if="reservation.companions.data.length">
 												<label>Companions</label>
-												<ul class="list-unstyled small">
-													<li v-for="companion in member.companions.data">
-														<i :class="getGenderStatusIcon(member)"></i>
-														{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-														<span class="text-muted">({{ companion.relationship }})</span>
+												<ul class="list-unstyled">
+													<li v-for="companion in reservation.companions.data">
+														<i :class="getGenderStatusIcon(companion)"></i>
+														{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
 													</li>
 												</ul>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<label>Squad Groups</label>
-												<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}}<span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-									</div><!-- end panel-body -->
-
-								</div>
-								<div class="panel-footer" v-if="member.companions && member.companions.data.length">
-									I have {{member.companions.data.length}} companions.
+											</template>
+										</div><!-- end col -->
+										<div class="col-sm-6">
+											<label>Age</label>
+											<p class="small">{{reservation.age}}</p>
+											<label>Travel Group</label>
+											<p class="small">{{reservation.trip.data.group.data.name}}</p>
+										</div><!-- end col -->
+									</div><!-- end row -->
 								</div>
 							</div>
+							<div class="panel-footer" v-if="reservation.companions.data.length">
+								I have {{reservation.companions.data.length}} companions.
+							</div>
 						</div>
+					</div>
+					<div class="col-sm-12 text-center">
+						<pagination :pagination.sync="reservationsPagination" :callback="searchReservations"></pagination>
+					</div>
+				</template>
+				<template v-else>
+					<select class="form-control input-sm" v-model="currentTeam">
+						<option :value="" v-if="!currentTeam">Select Squad</option>
+						<option :value="team" v-for="team in teams">{{team.callsign | capitalize}}</option>
+					</select>
+					<hr class="divider lg">
+					<!-- Search and Filter -->
+					<form class="form-inline row">
+						<div class="form-group col-xs-8">
+							<div class="input-group input-group-sm col-xs-12">
+								<input type="text" class="form-control" v-model="teamMembersSearch" debounce="300" placeholder="Search">
+								<span class="input-group-addon"><i class="fa fa-search"></i></span>
+							</div>
+						</div><!-- end col -->
+						<div class="form-group col-xs-4">
+							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
+								<i class="fa fa-filter"></i>
+							</button>
+						</div>
+						<div class="col-xs-12">
+							<hr class="divider inv">
+						</div>
+					</form>
+
+					<template v-if="currentTeam">
+						<template v-if="currentTeamMembers.length">
+							<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
+								<div class="panel panel-default" v-for="member in currentTeamMembers | orderBy 'surname'" v-show="true">
+									<div class="panel-heading" role="tab" id="headingOne">
+										<h5 class="panel-title">
+											<div class="row">
+												<div class="col-xs-9">
+													<div class="media">
+														<div class="media-left" style="padding-right:0;">
+															<a :href="getReservationLink(member)" target="_blank">
+																<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
+															</a>
+														</div>
+														<div class="media-body" style="vertical-align:middle;">
+															<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+																<i :class="getGenderStatusIcon(member)"></i>
+																<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+															<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
+														</div><!-- end media-body -->
+													</div><!-- end media -->
+												</div>
+												<div class="col-xs-3 text-right action-buttons">
+													<dropdown type="default">
+														<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+															<span class="fa fa-ellipsis-h"></span>
+														</button>
+														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+															<li class="dropdown-header">Assign To Room</li>
+															<li role="separator" class="divider"></li>
+															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
+															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
+															<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
+														</ul>
+													</dropdown>
+													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+														<i class="fa fa-angle-down"></i>
+													</a>
+												</div>
+											</div>
+										</h5>
+									</div>
+									<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Gender</label>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<p class="small" style="margin:3px 0;">{{member.gender | capitalize}}</p>
+												</div><!-- end col -->
+											</div><!-- end row -->
+											<hr class="divider sm">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Marital Status</label>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<p class="small" style="margin:3px 0;">{{member.status | capitalize}}</p>
+												</div><!-- end col -->
+											</div><!-- end row -->
+											<hr class="divider sm">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Age</label>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<p class="small" style="margin:3px 0;">{{member.age}}</p>
+												</div><!-- end col -->
+											</div><!-- end row -->
+											<hr class="divider sm">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Travel Group</label>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<p class="small" style="margin:3px 0;">{{member.travel_group}}</p>
+												</div><!-- end col -->
+											</div><!-- end row -->
+											<hr class="divider sm">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Arrival Designation</label>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
+												</div><!-- end col -->
+											</div><!-- end row -->
+											<div class="row">
+												<div class="col-sm-6" v-if="member.companions.data.length">
+													<label>Companions</label>
+													<ul class="list-unstyled small">
+														<li v-for="companion in member.companions.data">
+															<i :class="getGenderStatusIcon(member)"></i>
+															{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+															<span class="text-muted">({{ companion.relationship }})</span>
+														</li>
+													</ul>
+												</div><!-- end col -->
+												<div class="col-sm-6">
+													<label>Squad Groups</label>
+													<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}} <span>({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
+												</div><!-- end col -->
+											</div><!-- end row -->
+										</div><!-- end panel-body -->
+
+									</div>
+									<div class="panel-footer" v-if="member.companions && member.companions.data.length">
+										I have {{member.companions.data.length}} companions.
+									</div>
+								</div>
+							</div>
+						</template>
+						<template v-else>
+							<hr class="divider inv">
+							<p class="text-center text-italic text-muted"><em>No members in {{currentTeam.callsign}}. Select another team or add them using the team manager!</em></p>
+							<hr class="divider inv">
+							<p class="text-center"><a class="btn btn-link btn-sm" href="teams">Manage Teams</a></p>
+						</template>
 					</template>
 					<template v-else>
 						<hr class="divider inv">
-						<p class="text-center text-italic text-muted"><em>No members in {{currentTeam.callsign}}. Select another team or add them using the team manager!</em></p>
-						<hr class="divider inv">
-						<p class="text-center"><a class="btn btn-link btn-sm" href="teams">Manage Teams</a></p>
+						<p class="text-center text-italic text-muted"><em>Select a squad to begin.</em></p>
 					</template>
-				</template>
-				<template v-else>
-					<hr class="divider inv">
-					<p class="text-center text-italic text-muted"><em>Select a squad to begin.</em></p>
 				</template>
 			</div>
 		</template>
@@ -681,20 +670,30 @@
                 this.updateConfig();
                 this.currentRoom = null;
                 this.getRooms(val);
-	            this.getTeams();
+                if (this.isAdminRoute)
+                    this.searchReservations();
+                else
+                    this.getTeams();
             },
             currentRoom: {
                 handler(val, oldVal) {
                     if (val && (!oldVal || val.occupants_count !== oldVal.occupants_count))
                         this.getOccupants();
-                    this.getTeams();
+                    if (this.isAdminRoute)
+                        this.searchReservations();
+                    else
+                        this.getTeams();
                     this.updateConfig();
                 },
 	            deep: true
             },
             roomsSearch(val) {
-                this.getRooms();
                 this.roomsPagination.current_page = 1;
+                this.getRooms();
+            },
+            reservationsSearch(val) {
+                this.reservationsPagination.current_page = 1;
+                this.searchReservations();
             },
             teamMembersSearch(val) {
                 this.getTeams();
@@ -883,6 +882,42 @@
 	                this.$root.$emit('showError', response.body.message)
                 });
             },
+            searchReservations(){
+                let params = {
+                    include: 'trip.campaign,trip.group,user,companions,squads.team',
+                    search: this.reservationsSearch,
+                    per_page: this.reservationsPerPage,
+                    page: this.reservationsPagination.current_page,
+                    current: true,
+                    // ignore: this.excludeReservationIds,
+                    inSquad: true,
+                    // designation: this.reservationFilters.designation,
+                };
+
+                if (this.isAdminRoute) {
+                    params.campaign = this.campaignId;
+                }
+
+                params = _.extend(params, this.reservationFilters);
+                params = _.extend(params, {
+                    age: [this.ageMin, this.ageMax]
+                });
+
+                // this.$refs.spinner.show();
+                return this.$http.get('reservations', { params: params, before: function(xhr) {
+                    if (this.lastReservationRequest) {
+                        this.lastReservationRequest.abort();
+                    }
+                    this.lastReservationRequest = xhr;
+                } }).then(function (response) {
+                    this.reservations = response.body.data;
+                    this.reservationsPagination = response.body.meta.pagination;
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
+                });
+            },
             getRoomTypes(){
                 return this.$http.get('rooming/types').then(function (response) {
                         return this.roomTypes = response.body.data;
@@ -942,7 +977,7 @@
             getOccupants(){
                 let params = {
                     // plans: new Array(this.currentPlan.id),
-	                 include: 'companions,squads',
+	                 include: 'companions,squads.team',
                     // page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then(function (response) {
@@ -1110,7 +1145,7 @@
         ready(){
             let promises = [];
             if (this.isAdminRoute) {
-
+                this.searchReservations();
             } else {
 
             }

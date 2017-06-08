@@ -41,7 +41,7 @@ class TeamSquadTransformer extends TransformerAbstract
         ];
     }
 
-    public function team(TeamSquad $squad)
+    public function includeTeam(TeamSquad $squad)
     {
         $team = $squad->team;
 

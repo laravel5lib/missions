@@ -17,7 +17,7 @@ class TeamSquadTransformer extends TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = ['members'];
+    protected $availableIncludes = ['members', 'team'];
 
     /**
      * Transform the object into a basic array
@@ -39,6 +39,13 @@ class TeamSquadTransformer extends TransformerAbstract
                 ]
             ]
         ];
+    }
+
+    public function team(TeamSquad $squad)
+    {
+        $team = $squad->team;
+
+        return $this->item($team, new TeamTransformer);
     }
 
     /**

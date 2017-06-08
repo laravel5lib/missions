@@ -13,14 +13,15 @@
 	<div class="content-section">
 		<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-				<h3 class="text-primary">Greetings Legacy Partners,</h3>
+                <h3 class="text-primary">Greetings Legacy Partners,</h3>
 
-				<p>I wanted to take a moment and share a testimony with you. The vision of Missions.Me has always been centered on empowering people to change the world, but often times we forget to talk about the transformation that takes place within the lives of those who are on the ground changing the world. People just like you.</p>
+                <p>Trusting that all of you are having a great start to your summer. It’s official, we are now less than 60 days away from 1Nation1Day and we can hardly contain our excitement and expectation for this historic event. In this months update we wanted to give you a message and update from Managua.</p>
 
-                <p>Please know that your generosity is not only transforming nations, but also forever changing the lives of countless people around the world who have been the hands and feet for all that we do at Missions.Me.</p>
-				<hr class="divider inv">
-		        <p>Have a blessed March,</p>
-		        <h5 class="text-primary"><em>Gabe</em></h5>
+                <p>Please know that with all of our excitement and faith into what’s ahead for Missions.Me we are equally excited and full of faith for each and every one of you. You are on our minds and in our prayers every day.</p>
+                
+                <hr class="divider inv">
+                <p>Blessings!</p>
+                <h5 class="text-primary"><em>Gabe</em></h5>
 			</div>
 		</div><!-- end row -->
 	</div><!-- end content-section -->
@@ -35,7 +36,7 @@
 				<hr class="divider inv">
 				<div class="video-outer">
 					<div class="video-inner">
-						<iframe src="https://player.vimeo.com/video/208726172?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+						<iframe src="https://player.vimeo.com/video/220020772?title=0&byline=0&portrait=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 					</div>
 				</div>
 			</div><!-- end col -->

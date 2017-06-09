@@ -39,4 +39,9 @@ class RoomTypeFilter extends Filter
             return $query->where('id', $id);
         });
     }
+
+    public function campaign($id)
+    {
+        return $this->where('campaign_id', $id);
+    }
 }

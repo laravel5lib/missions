@@ -495,26 +495,44 @@
 						<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-sm-6">
+									<div class="col-sm-4">
 										<label>Gender</label>
 										<p class="small">{{reservation.gender | capitalize}}</p>
+									</div>
+									<div class="col-sm-4">
 										<label>Marital Status</label>
 										<p class="small">{{reservation.status | capitalize}}</p>
-										<template v-if="reservation.companions.data.length">
-											<label>Companions</label>
-											<ul class="list-unstyled">
-												<li v-for="companion in reservation.companions.data">
-													<i :class="getGenderStatusIcon(companion)"></i>
-													{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
-												</li>
-											</ul>
-										</template>
-									</div><!-- end col -->
-									<div class="col-sm-6">
+									</div>
+									<div class="col-sm-4">
 										<label>Age</label>
 										<p class="small">{{reservation.age}}</p>
+									</div>
+									<div class="col-sm-6">
 										<label>Travel Group</label>
 										<p class="small">{{reservation.trip.data.group.data.name}}</p>
+									</div><!-- end col -->
+									<div class="col-sm-6">
+										<label>Designation</label>
+										<p class="small">
+											{{ reservation.arrival_designation | capitalize }}
+										</p>
+									</div>
+									<div class="col-sm-12">
+										<label>Rooming Cost</label>
+										<p class="small">
+											<span v-for="cost in reservation.costs.data">{{cost.name}}
+											<span v-if="!$last && reservation.costs.data.length > 1">, </span></span>
+										</p>
+									</div>
+									<div class="col-sm-12">
+										<label>Companions</label>
+										<ul class="list-unstyled" v-if="reservation.companions.data.length">
+											<li v-for="companion in reservation.companions.data">
+												<i :class="getGenderStatusIcon(companion)"></i>
+												{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
+											</li>
+										</ul>
+										<p class="small" v-else>None</p>
 									</div><!-- end col -->
 									<div class="col-sm-6">
 										<label>Squad Groups</label>
@@ -923,7 +941,7 @@
             },
             searchReservations(){
                 let params = {
-                    include: 'trip.campaign,trip.group,user,companions,squads.team',
+                    include: 'trip.campaign,trip.group,user,companions,squads.team,costs:type(optional)',
                     per_page: this.reservationsPerPage,
                     page: this.reservationsPagination.current_page,
                     current: true,

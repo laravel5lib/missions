@@ -33,6 +33,11 @@ class RoomType extends Model
      */
     protected $casts = ['rules' => 'array'];
 
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class);
+    }
+
     /**
      * Get the rules for the room type.
      * 

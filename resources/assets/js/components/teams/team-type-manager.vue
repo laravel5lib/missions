@@ -106,6 +106,7 @@
     export default{
         name: 'team-type-manager',
         mixins: [errorHandler],
+        props: ['campaignId'],
         data(){
             return {
                 // mixin settings
@@ -123,6 +124,7 @@
             newTypeModel() {
                 return {
                     name: '',
+                    campaign_id: this.campaignId,
 	                rules: {
                         min_members: 25,
                         max_members: 25,
@@ -199,7 +201,7 @@
                     });
             },
             getTeamTypes() {
-                return this.teamTypeResource.get().then(function (response) {
+                return this.teamTypeResource.get({campaign: this.campaignId}).then(function (response) {
                     return this.teamTypes = response.body.data;
                 }, function (error) {
                     console.log(error);

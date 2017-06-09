@@ -17,6 +17,7 @@ class TeamTypeTransformer extends TransformerAbstract {
     {
         return [
             'id'           => $type->id,
+            'campaign_id'  => $type->campaign_id,
             'name'         => $type->name,
             'rules'        => $type->rules,
             'created_at'   => $type->created_at->toDateTimeString(),

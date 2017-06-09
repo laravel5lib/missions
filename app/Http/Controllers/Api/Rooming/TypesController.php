@@ -66,7 +66,8 @@ class TypesController extends Controller
     {
         $type = $this->type->create([
             'name' => $request->get('name'),
-            'rules' => $request->get('rules')
+            'rules' => $request->get('rules'),
+            'campaign_id' => $request->get('campaign_id')
         ]);
 
         return $this->response->item($type, new RoomTypeTransformer);
@@ -83,7 +84,8 @@ class TypesController extends Controller
     {
         $type = $this->type->update([
             'name' => $request->get('name'),
-            'rules' => $request->get('rules')
+            'rules' => $request->get('rules'),
+            'campaign_id' => $request->get('campaign_id')
         ], $id);
 
         return $this->response->item($type, new RoomTypeTransformer);

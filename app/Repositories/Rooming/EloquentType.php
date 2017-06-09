@@ -18,7 +18,7 @@ class EloquentType extends EloquentRepository implements Type
      */
     protected $model;
 
-    protected $attributes = ['name', 'rules'];
+    protected $attributes = ['name', 'rules', 'campaign_id'];
 
     /**
      * Rooming Type Constructor
@@ -46,7 +46,8 @@ class EloquentType extends EloquentRepository implements Type
 
         return $this->model = $this->model->create([
             'name' => trim($data['name']),
-            'rules' => $rules->all()
+            'rules' => $rules->all(),
+            'campaign_id' => trim($data['campaign_id'])
         ]);
     }
 
@@ -64,7 +65,8 @@ class EloquentType extends EloquentRepository implements Type
 
         $model->update([
             'name' => isset($data['name']) ? $data['name'] : $model->name,
-            'rules' => $model->rules()->merge($rules)->all()
+            'rules' => $model->rules()->merge($rules)->all(),
+            'campaign_id' => isset($data['campaign_id']) ? $data['campaign_id'] : $model->campaign_id
         ]);
 
         return $model;

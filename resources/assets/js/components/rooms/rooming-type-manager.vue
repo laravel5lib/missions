@@ -6,13 +6,13 @@
 			<form class="form-inline row">
 				<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 					<div class="input-group input-group-sm col-xs-12">
-						<input type="text" class="form-control" v-model="teamTypesSearch" debounce="300" placeholder="Search">
+						<input type="text" class="form-control" v-model="roomTypesSearch" debounce="300" placeholder="Search">
 						<span class="input-group-addon"><i class="fa fa-search"></i></span>
 					</div>
 				</div><!-- end col -->
 				<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
 					<button class="btn btn-primary btn-sm btn-block" type="button" @click="createTypeMode">
-						Create Team Type
+						Create Room Type
 						<i class="fa fa-plus"></i>
 					</button>
 				</div>
@@ -20,15 +20,15 @@
 					<hr class="divider inv">
 				</div>
 			</form>
-			<!-- Team Types Accordion -->
-			<div class="panel-group" id="teamTypesAccordion" role="tablist" aria-multiselectable="true">
-				<div class="panel panel-default" v-for="teamType in teamTypes | filterBy teamTypesSearch">
+			<!-- Room Types Accordion -->
+			<div class="panel-group" id="roomTypesAccordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default" v-for="roomType in roomTypes | filterBy roomTypesSearch">
 					<div class="panel-heading" role="tab" id="headingOne">
 						<h4 class="panel-title">
 							<div class="row">
 								<div class="col-xs-9">
-									<a role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-										<h4>{{ teamType.name | capitalize }}</h4>
+									<a role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+										<h4>{{ roomType.name | capitalize }}</h4>
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
@@ -37,11 +37,11 @@
 											<span class="fa fa-ellipsis-h"></span>
 										</button>
 										<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-											<li><a @click="editType(teamType)">Edit</a></li>
-											<li><a @click="confirmDelete(teamType)">Delete</a></li>
+											<li><a @click="editType(roomType)">Edit</a></li>
+											<li><a @click="confirmDelete(roomType)">Delete</a></li>
 										</ul>
 									</dropdown>
-									<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+									<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
 										<i class="fa fa-angle-down"></i>
 									</a>
 								</div>
@@ -49,10 +49,10 @@
 
 						</h4>
 					</div>
-					<div :id="'teamTypeItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+					<div :id="'roomTypeItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 						<div class="panel-body">
 							<div class="row">
-								<div class="col-sm-6" v-for="(key, value) in teamType.rules">
+								<div class="col-sm-6" v-for="(key, value) in roomType.rules">
 									<label v-text="key | underscoreToSpace | capitalize"></label>
 									<p class="small" v-text="value"></p>
 								</div>
@@ -74,10 +74,18 @@
 						<div class="row">
 							<template v-for="(key, value) in currentType.rules">
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
-									<div class="form-group">
+									<div class="form-group" v-if="key === 'occupancy_limit'">
 										<label v-text="key | underscoreToSpace | capitalize"></label>
 										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="['required']" :value="value" min="0">
 									</div>
+									<div class="form-group" v-else>
+										<label v-text="key | underscoreToSpace | capitalize"></label>
+										<select class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="['required']">
+											<option :value="true">Yes</option>
+											<option :value="false">No</option>
+										</select>
+									</div>
+
 								</div>
 							</template>
 						</div>
@@ -90,7 +98,7 @@
 
 		</div>
 
-		<modal title="Delete Team Type" small ok-text="Delete" :callback="deleteType" :show.sync="showTypeDeleteModal">
+		<modal title="Delete Room Type" small ok-text="Delete" :callback="deleteType" :show.sync="showTypeDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedType">
 					Are you sure you want to delete type: <b>{{selectedType.name}}</b> ?
@@ -104,7 +112,7 @@
 	import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
     export default{
-        name: 'team-type-manager',
+        name: 'room-type-manager',
         mixins: [errorHandler],
         data(){
             return {
@@ -115,8 +123,8 @@
                 selectedType: null,
                 editTypeMode: false,
                 showTypeDeleteModal: false,
-                teamTypes: [],
-                teamTypeResource: this.$resource('teams/types{/id}')
+                roomTypes: [],
+                roomTypeResource: this.$resource('rooming/types{/id}')
             }
         },
         methods: {
@@ -124,22 +132,16 @@
                 return {
                     name: '',
 	                rules: {
-                        min_members: 25,
-                        max_members: 25,
-                        min_leaders: 2,
-                        max_leaders: 2,
-                        min_squads: 2,
-                        max_squads: 10,
-                        min_squad_members: 2,
-                        max_squad_members: 5,
-                        min_squad_leaders: 1,
-                        max_squad_leaders: 1
+                        occupancy_limit: 4,
+                        married_only: false,
+                        same_gender: false,
                     }
                 }
             },
             editType(type) {
                 this.editTypeMode = true;
                 this.currentType = type;
+                this.currentType.rules = type.rules;
             },
             createTypeMode() {
                 this.editTypeMode = false;
@@ -150,15 +152,15 @@
                 this.resetErrors();
                 if (this.$TypeForm.valid) {
                     let updatingObject = _.extend({}, this.currentType);
-	                let originalType = _.findWhere(this.teamTypes, { id: this.currentType.id});
+	                let originalType = _.findWhere(this.roomTypes, { id: this.currentType.id});
 
                     // check if name changed
                     if (originalType.name === this.currentType.name)
 	                    delete updatingObject.name;
 
-                    return this.teamTypeResource.update({ id: updatingObject.id }, updatingObject).then(function (response) {
-                        _.extend(_.findWhere(this.teamTypes, { id: updatingObject.id}), response.body.data);
-                        this.$root.$emit('showSuccess', 'Team Type: ' + response.body.data.name + ', successfully updated');
+                    return this.roomTypeResource.update({ id: updatingObject.id }, updatingObject).then(function (response) {
+                        _.extend(_.findWhere(this.roomTypes, { id: updatingObject.id}), response.body.data);
+                        this.$root.$emit('showSuccess', 'Room Type: ' + response.body.data.name + ', successfully updated');
                     }, function (response) {
                         this.$root.$emit('showError', response.body.message);
                     });
@@ -169,9 +171,9 @@
 
                 this.resetErrors();
                 if (this.$TypeForm.valid) {
-                    return this.teamTypeResource.save(this.currentType).then(function (response) {
-                        this.teamTypes.push(response.body.data);
-                        this.$root.$emit('showSuccess', 'Team Type: ' + response.body.data.name + ', successfully created');
+                    return this.roomTypeResource.save(this.currentType).then(function (response) {
+                        this.roomTypes.push(response.body.data);
+                        this.$root.$emit('showSuccess', 'Room Type: ' + response.body.data.name + ', successfully created');
                     }, function (response) {
                         this.$root.$emit('showError', response.body.message);
 
@@ -183,14 +185,14 @@
                 this.showTypeDeleteModal = true;
             },
             deleteType() {
-                this.teamTypeResource
+                this.roomTypeResource
 	                .delete({ id: this.selectedType.id})
 	                .then(function (response) {
-	                    this.teamTypes = _.reject(this.teamTypes, function (type) {
+	                    this.roomTypes = _.reject(this.roomTypes, function (type) {
 		                    return type.id === this.selectedType.id
                         }.bind(this));
                         this.showTypeDeleteModal = true;
-                        this.$root.$emit('showInfo', 'Team Type: ' + this.selectedType.name + ', successfully deleted');
+                        this.$root.$emit('showInfo', 'Room Type: ' + this.selectedType.name + ', successfully deleted');
                         this.$nextTick(function () {
                             this.selectedType = null;
                         });
@@ -198,9 +200,9 @@
                         this.$root.$emit('showError', response.body.message);
                     });
             },
-            getTeamTypes() {
-                return this.teamTypeResource.get().then(function (response) {
-                    return this.teamTypes = response.body.data;
+            getRoomTypes() {
+                return this.roomTypeResource.get().then(function (response) {
+                    return this.roomTypes = response.body.data;
                 }, function (error) {
                     console.log(error);
                     return error;
@@ -208,7 +210,7 @@
             },
         },
         ready(){
-			this.getTeamTypes();
+			this.getRoomTypes();
         }
     }
 </script>

@@ -20,6 +20,16 @@ class RoomingPlan extends Model
      * Attributes that should be cast to date time objects
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class);
+    }
     
     public function rooms()
     {

@@ -11,7 +11,7 @@ use League\Fractal\TransformerAbstract;
 
 class ReservationTransformer extends TransformerAbstract
 {
-    private $validParams = ['status'];
+    private $validParams = ['status', 'type'];
 
     /**
      * List of resources available to include
@@ -21,7 +21,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'dues', 'fund', 'transports'
+        'fundraisers', 'dues', 'fund', 'transports', 'squads'
     ];
 
     /**
@@ -181,7 +181,7 @@ class ReservationTransformer extends TransformerAbstract
 
             $costs = [];
 
-            if (in_array('active', $params->get('status')))
+            if ($params->get('status') && in_array('active', $params->get('status')))
             {
                 $active = $reservation->activeCosts;
 
@@ -190,6 +190,11 @@ class ReservationTransformer extends TransformerAbstract
                 $costs = $active->reject(function ($value, $key) use($maxDate) {
                     return $value->type == 'incremental' && $value->active_at < $maxDate;
                 });
+            }
+
+            if ($params->get('type'))
+            {
+                $costs = $reservation->costs()->where('type', $params->get('type'))->get();
             }
 
         } else {
@@ -288,6 +293,13 @@ class ReservationTransformer extends TransformerAbstract
         $transports = $reservation->transports;
 
         return $this->collection($transports, new TransportTransformer);
+    }
+
+    public function includeSquads(Reservation $reservation)
+    {
+        $squads = $reservation->squads;
+
+        return $this->collection($squads, new TeamSquadTransformer);
     }
 
     private function validateParams($params)

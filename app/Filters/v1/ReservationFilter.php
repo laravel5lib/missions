@@ -416,7 +416,7 @@ class ReservationFilter extends Filter
         // check for existence of value after "|" pipe
         if (isset($param[1])) {
             // query reservations that have rooms
-            return $this->wherehas('rooms', function($room) use ($param) {
+            return $this->whereHas('rooms', function($room) use ($param) {
                 // query a room in plan or accomodation
                 return $room->whereHas($param[0], function($query) use($param) {
                     return $query->where('id', '<>', $param[1]);

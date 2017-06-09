@@ -1799,6 +1799,14 @@ export default {
             body.data = _.findWhere(body.data, {id: pathMatch.type});
             delete body.meta;
         }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
     },
     // Plans
     ['GET *rooming/plans(/:plan)'](pathMatch, query, request) {
@@ -2803,6 +2811,14 @@ export default {
                         }]
                 }
             ]
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
         }
     },
     ['GET *teams/types(/:type)'](pathMatch, query, request) {

@@ -22,7 +22,7 @@
 				<div class="form-group">
 					<label>Role</label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-					          :value.sync="membersFilters.role" :options="rolesOptions" label="name"
+					          :value.sync="membersFilters.role" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
@@ -101,14 +101,14 @@
 				<div class="form-group">
 					<label>Role</label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
+					          :value.sync="reservationFilters.role" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-					          :value.sync="groupsArr" :options="groupsOptions" label="name"
+					          :value.sync="reservationFilters.groups" :options="groupsOptions" label="name"
 					          placeholder="Filter Groups"></v-select>
 				</div>
 
@@ -178,7 +178,7 @@
 				</div>
 
 				<hr class="divider inv sm">
-				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetReservationFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
 		</aside>
 
@@ -220,7 +220,7 @@
 									<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 										<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
 										<div class="row">
-											<div class="col-sm-12" v-for="member in currentRoom.occupants | orderBy 'surname'">
+											<div class="col-sm-12" v-for="member in currentRoom.occupants | orderBy '-room_leader' 'surname'">
 												<div class="panel panel-default" style="margin-bottom:8px;">
 													<div class="panel-heading" role="tab" id="headingOne">
 														<h5 class="panel-title">
@@ -400,284 +400,142 @@
 
 			<!-- Teams Select & Members List -->
 			<div class="col-sm-4">
-				<template v-if="isAdminRoute">
-					<!-- Search and Filter -->
-					<form class="form-inline row">
-						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
-							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
-								<span class="input-group-addon"><i class="fa fa-search"></i></span>
-							</div>
-						</div><!-- end col -->
-						<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
-								Filters
-								<i class="fa fa-filter"></i>
-							</button>
+				<!-- Search and Filter -->
+				<form class="form-inline row">
+					<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
+						<div class="input-group input-group-sm col-xs-12">
+							<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
+							<span class="input-group-addon"><i class="fa fa-search"></i></span>
 						</div>
-						<div class="col-xs-12">
-							<hr class="divider inv">
-							<div>
-								<label>Active Filters</label>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
-									Travel Group
-									<i class="fa fa-close"></i>
-								</span>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
-									Companions
-									<i class="fa fa-close"></i>
-								</span>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
-									Role
-									<i class="fa fa-close"></i>
-								</span>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
-									Gender
-									<i class="fa fa-close"></i>
-								</span>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
-									Status
-									<i class="fa fa-close"></i>
-								</span>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMin != 0" @click="reservationsAgeMin = 0" >
-									Min. Age
-									<i class="fa fa-close"></i>
-								</span>
-								<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMax != 120" @click="reservationsAgeMax = 120" >
-									Max. Age
-									<i class="fa fa-close"></i>
-								</span>
-							</div>
-						</div>
-					</form>
-					<hr class="divider sm inv">
-					<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-						<div class="panel panel-default" v-for="reservation in reservations">
-							<div class="panel-heading" role="tab" id="headingOne">
-								<h4 class="panel-title">
-									<div class="row">
-										<div class="col-xs-9">
-											<div class="media">
-												<div class="media-left" style="padding-right:0;">
-													<a :href="getReservationLink(reservation)" target="_blank">
-														<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
-													</a>
-												</div>
-												<div class="media-body" style="vertical-align:middle;">
-													<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-														<i :class="getGenderStatusIcon(reservation)"></i>
-														<a :href="getReservationLink(reservation)" target="_blank">
-															{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
-													<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
-												</div><!-- end media-body -->
-											</div><!-- end media -->
-										</div>
-										<div class="col-xs-3 text-right action-buttons">
-											<dropdown type="default">
-												<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-													<span class="fa fa-ellipsis-h"></span>
-												</button>
-												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-													<li class="dropdown-header">Assign To Room</li>
-													<li role="separator" class="divider"></li>
-													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
-													<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
-												</ul>
-											</dropdown>
-											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-												<i class="fa fa-angle-down"></i>
-											</a>
-										</div>
-									</div>
-
-								</h4>
-							</div>
-							<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-								<div class="panel-body">
-									<div class="row">
-										<div class="col-sm-6">
-											<label>Gender</label>
-											<p class="small">{{reservation.gender | capitalize}}</p>
-											<label>Marital Status</label>
-											<p class="small">{{reservation.status | capitalize}}</p>
-											<template v-if="reservation.companions.data.length">
-												<label>Companions</label>
-												<ul class="list-unstyled">
-													<li v-for="companion in reservation.companions.data">
-														<i :class="getGenderStatusIcon(companion)"></i>
-														{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
-													</li>
-												</ul>
-											</template>
-										</div><!-- end col -->
-										<div class="col-sm-6">
-											<label>Age</label>
-											<p class="small">{{reservation.age}}</p>
-											<label>Travel Group</label>
-											<p class="small">{{reservation.trip.data.group.data.name}}</p>
-										</div><!-- end col -->
-									</div><!-- end row -->
-								</div>
-							</div>
-							<div class="panel-footer" v-if="reservation.companions.data.length">
-								I have {{reservation.companions.data.length}} companions.
-							</div>
-						</div>
+					</div><!-- end col -->
+					<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
+						<button class="btn btn-default btn-sm btn-block" type="button" @click="showReservationsFilters=!showReservationsFilters">
+							Filters
+							<i class="fa fa-filter"></i>
+						</button>
 					</div>
-					<div class="col-sm-12 text-center">
-						<pagination :pagination.sync="reservationsPagination" :callback="searchReservations"></pagination>
-					</div>
-				</template>
-				<template v-else>
-					<select class="form-control input-sm" v-model="currentTeam">
-						<option :value="" v-if="!currentTeam">Select Squad</option>
-						<option :value="team" v-for="team in teams">{{team.callsign | capitalize}}</option>
-					</select>
-					<hr class="divider lg">
-					<!-- Search and Filter -->
-					<form class="form-inline row">
-						<div class="form-group col-xs-8">
-							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="teamMembersSearch" debounce="300" placeholder="Search">
-								<span class="input-group-addon"><i class="fa fa-search"></i></span>
-							</div>
-						</div><!-- end col -->
-						<div class="form-group col-xs-4">
-							<button class="btn btn-default btn-sm btn-block" type="button" @click="showMembersFilters=!showMembersFilters">
-								<i class="fa fa-filter"></i>
-							</button>
-						</div>
-						<div class="col-xs-12">
-							<hr class="divider inv">
-						</div>
-					</form>
-
-					<template v-if="currentTeam">
-						<template v-if="currentTeamMembers.length">
-							<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-								<div class="panel panel-default" v-for="member in currentTeamMembers | orderBy 'surname'" v-show="true">
-									<div class="panel-heading" role="tab" id="headingOne">
-										<h5 class="panel-title">
-											<div class="row">
-												<div class="col-xs-9">
-													<div class="media">
-														<div class="media-left" style="padding-right:0;">
-															<a :href="getReservationLink(member)" target="_blank">
-																<img :src="member.avatar" class="media-object img-circle img-xs av-left"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member.leader">GL</span>
-															</a>
-														</div>
-														<div class="media-body" style="vertical-align:middle;">
-															<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-																<i :class="getGenderStatusIcon(member)"></i>
-																<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
-															<p class="text-muted" style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }}</p>
-														</div><!-- end media-body -->
-													</div><!-- end media -->
-												</div>
-												<div class="col-xs-3 text-right action-buttons">
-													<dropdown type="default">
-														<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-															<span class="fa fa-ellipsis-h"></span>
-														</button>
-														<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-															<li class="dropdown-header">Assign To Room</li>
-															<li role="separator" class="divider"></li>
-															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-															<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(member, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
-															<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
-														</ul>
-													</dropdown>
-													<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-														<i class="fa fa-angle-down"></i>
-													</a>
-												</div>
-											</div>
-										</h5>
-									</div>
-									<div :id="'memberItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-										<div class="panel-body">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Gender</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.gender | capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Marital Status</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.status | capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Age</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.age}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Travel Group</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.travel_group}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<hr class="divider sm">
-											<div class="row">
-												<div class="col-sm-6">
-													<label>Arrival Designation</label>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<p class="small" style="margin:3px 0;">{{member.arrival_designation|capitalize}}</p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-											<div class="row">
-												<div class="col-sm-6" v-if="member.companions.data.length">
-													<label>Companions</label>
-													<ul class="list-unstyled small">
-														<li v-for="companion in member.companions.data">
-															<i :class="getGenderStatusIcon(member)"></i>
-															{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-															<span class="text-muted">({{ companion.relationship }})</span>
-														</li>
-													</ul>
-												</div><!-- end col -->
-												<div class="col-sm-6">
-													<label>Squad Groups</label>
-													<p class="small"><span v-for="squad in member.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span></p>
-												</div><!-- end col -->
-											</div><!-- end row -->
-										</div><!-- end panel-body -->
-
-									</div>
-									<div class="panel-footer" v-if="member.companions && member.companions.data.length">
-										I have {{member.companions.data.length}} companions.
-									</div>
-								</div>
-							</div>
-						</template>
-						<template v-else>
-							<hr class="divider inv">
-							<p class="text-center text-italic text-muted"><em>No members in {{currentTeam.callsign}}. Select another team or add them using the team manager!</em></p>
-							<hr class="divider inv">
-							<p class="text-center"><a class="btn btn-link btn-sm" href="teams">Manage Teams</a></p>
-						</template>
-					</template>
-					<template v-else>
+					<div class="col-xs-12">
 						<hr class="divider inv">
-						<p class="text-center text-italic text-muted"><em>Select a squad to begin.</em></p>
-					</template>
-				</template>
+						<div>
+							<label>Active Filters</label>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
+								Travel Group
+								<i class="fa fa-close"></i>
+							</span>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
+								Companions
+								<i class="fa fa-close"></i>
+							</span>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+								Role
+								<i class="fa fa-close"></i>
+							</span>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
+								Gender
+								<i class="fa fa-close"></i>
+							</span>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
+								Status
+								<i class="fa fa-close"></i>
+							</span>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMin != 0" @click="reservationsAgeMin = 0" >
+								Min. Age
+								<i class="fa fa-close"></i>
+							</span>
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationsAgeMax != 120" @click="reservationsAgeMax = 120" >
+								Max. Age
+								<i class="fa fa-close"></i>
+							</span>
+						</div>
+					</div>
+				</form>
+				<hr class="divider sm inv">
+				<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
+					<div class="panel panel-default" v-for="reservation in reservations">
+						<div class="panel-heading" role="tab" id="headingOne">
+							<h4 class="panel-title">
+								<div class="row">
+									<div class="col-xs-9">
+										<div class="media">
+											<div class="media-left" style="padding-right:0;">
+												<a :href="getReservationLink(reservation)" target="_blank">
+													<img :src="reservation.avatar" class="img-circle img-xs av-left" style="margin-right: 10px"><span style="position:absolute;top:-2px;left:4px;font-size:8px; padding:3px 5px;" class="badge" v-if="member && member.leader">GL</span>
+												</a>
+											</div>
+											<div class="media-body" style="vertical-align:middle;">
+												<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+													<i :class="getGenderStatusIcon(reservation)"></i>
+													<a :href="getReservationLink(reservation)" target="_blank">
+														{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+												<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
+											</div><!-- end media-body -->
+										</div><!-- end media -->
+									</div>
+									<div class="col-xs-3 text-right action-buttons">
+										<dropdown type="default">
+											<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+												<span class="fa fa-ellipsis-h"></span>
+											</button>
+											<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+												<li class="dropdown-header">Assign To Room</li>
+												<li role="separator" class="divider"></li>
+												<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
+												<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
+												<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
+											</ul>
+										</dropdown>
+										<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+											<i class="fa fa-angle-down"></i>
+										</a>
+									</div>
+								</div>
+
+							</h4>
+						</div>
+						<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-6">
+										<label>Gender</label>
+										<p class="small">{{reservation.gender | capitalize}}</p>
+										<label>Marital Status</label>
+										<p class="small">{{reservation.status | capitalize}}</p>
+										<template v-if="reservation.companions.data.length">
+											<label>Companions</label>
+											<ul class="list-unstyled">
+												<li v-for="companion in reservation.companions.data">
+													<i :class="getGenderStatusIcon(companion)"></i>
+													{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
+												</li>
+											</ul>
+										</template>
+									</div><!-- end col -->
+									<div class="col-sm-6">
+										<label>Age</label>
+										<p class="small">{{reservation.age}}</p>
+										<label>Travel Group</label>
+										<p class="small">{{reservation.trip.data.group.data.name}}</p>
+									</div><!-- end col -->
+									<div class="col-sm-6">
+										<label>Squad Groups</label>
+										<p class="small" v-if="reservation.squads.data.length">
+											<span v-for="squad in reservation.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && reservation.squads.data.length > 1">, </span></span>
+										</p>
+										<p clas="small" v-else>
+											Unassigned
+										</p>
+									</div><!-- end col -->
+								</div><!-- end row -->
+							</div>
+						</div>
+						<div class="panel-footer" v-if="reservation.companions.data.length">
+							I have {{reservation.companions.data.length}} companions.
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-12 text-center">
+					<pagination :pagination.sync="reservationsPagination" :callback="searchReservations"></pagination>
+				</div>
 			</div>
 		</template>
 		<template v-else>
@@ -740,9 +598,11 @@
 <script type="text/javascript">
     import _ from 'underscore';
     import vSelect from 'vue-select';
+    import utilities from '../utilities.mixin';
     export default{
         name: 'rooming-manager',
         components: {vSelect},
+	    mixins: [utilities],
         props: {
             userId: {
                 type: String,
@@ -795,11 +655,12 @@
                     gender: '',
                     status: '',
                     hasCompanions: null,
-                    role: '',
+                    role: null,
                     designation: ''
                 },
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,
+                groupsOptions:[],
                 rolesOptions: [],
 
 	            // modal vars
@@ -929,6 +790,17 @@
                     designation: '',
                 };
             },
+            resetReservationFilter() {
+                this.reservationFilters = {
+                    type: '',
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+                    role: null,
+                    designation: ''
+                };
+            },
             getRoomLeader(room) {
                 let occupants = room.occupants.data || room.occupants;
                 let leader = _.findWhere(occupants, { room_leader: true });
@@ -1052,26 +924,30 @@
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,user,companions,squads.team',
-                    search: this.reservationsSearch,
                     per_page: this.reservationsPerPage,
                     page: this.reservationsPagination.current_page,
                     current: true,
                     // ignore: this.excludeReservationIds,
-                    inSquad: true,
+	                inSquad: true,
 	                noRoom: 'plans|' + this.currentPlan.id,
+                    search: this.reservationsSearch,
                     // designation: this.reservationFilters.designation,
+	                campaign: this.campaignId,
                 };
-
-                if (this.isAdminRoute) {
-                    params.campaign = this.campaignId;
-                }
 
                 params = _.extend(params, this.reservationFilters);
                 params = _.extend(params, {
                     age: [this.ageMin, this.ageMax]
                 });
 
-                // this.$refs.spinner.show();
+                if (_.isObject(this.reservationFilters.role)) {
+                    params.role = this.reservationFilters.role.value;
+                }
+                params.groups = new Array(this.currentPlan.group.data.id);
+	            if (this.reservationFilters.groups.length)
+                    params.groups = _.union(params.groups, _.pluck(this.reservationFilters.groups, 'id'));
+
+	                // this.$refs.spinner.show();
                 return this.$http.get('reservations', { params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();
@@ -1107,6 +983,17 @@
                         console.log(response);
                         return response.body.data;
                     });
+            },
+            getGroups(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return response.body.data;
+                    }
+                });
             },
             getAllRooms(plans){
                 let params = {
@@ -1211,7 +1098,7 @@
                         return response.body.data;
                     });
             },
-            getRoles(search, loading){
+            /*getRoles(search, loading){
                 loading ? loading(true) : void 0;
                 return this.$http.get('utilities/team-roles').then(function (response) {
                     let roles = [];
@@ -1225,7 +1112,7 @@
                         return this.rolesOptions;
                     }
                 });
-            },
+            },*/
 
 	        // Modal Functions
             openNewPlanModal(){

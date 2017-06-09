@@ -438,10 +438,10 @@
 								</div>
 								<div class="col-sm-4">
 									<label for="" class="control-label">Type</label>
-									<select v-if="isAdminRoute && editTeamMode" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
+									<!--<select v-if="isAdminRoute && editTeamMode" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
 										<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
-									</select>
-									<p v-else v-text="currentTeam.type.data.name | capitalize"></p>
+									</select>-->
+									<p v-text="currentTeam.type.data.name | capitalize"></p>
 								</div>
 								<div class="col-sm-2">
 									<label for="" class="control-label">Locked</label>
@@ -1018,9 +1018,11 @@
 		    },
 		    groupLeaders() {
                 let leaders = [];
-                leaders.push(_.filter(this.currentSquadGroups, function (squad) {
-	                return _.findWhere(squad.members, { leader: true});
-                }));
+                _.each(this.currentSquadGroups, function (group) {
+                    let leader = _.findWhere(group.members, { leader: true });
+                    if (leader)
+	                    leaders.push(leader);
+                });
                 return leaders;
 		    },
             totalMembers() {
@@ -1475,7 +1477,7 @@
                 });
 	        },
 	        updateTeamSettings(ignoreMessage){
-	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign }).then(function (response) {
+	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign, locked: this.currentTeam.locked }).then(function (response) {
                     this.currentTeam = response.body.data;
                     if (!ignoreMessage)
 						this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');

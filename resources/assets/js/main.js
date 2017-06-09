@@ -80,6 +80,7 @@ import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
 import teamManager from './components/teams/team-manager.vue';
 import roomingWizard from './components/rooms/rooming-wizard.vue';
+import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
 import teamTypeManager from './components/teams/team-type-manager.vue';
 import regionsManager from './components/regions/regions-manager.vue';
 
@@ -902,6 +903,7 @@ new Vue({
         regionsAccommodations,
         reportsList,
         roomingWizard,
+        roomingTypeManager,
 
         // admin components
         campaignCreate,

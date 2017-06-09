@@ -48,6 +48,9 @@
                     <ul class="dropdown-menu">
                         <li><a href="#">Overview</a></li>
                         <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/rooming-manager') }}">Room Assignments</a></li>
+                        <li class="{{ $tab == 'team-types' ? 'active' : '' }}">
+                            <a href="{{ url('admin/campaigns/'.$campaign->id.'/room-types') }}">Room Types</a>
+                        </li>
                         <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/accommodations') }}">Accommodations</a></li>
                     </ul>
                 </li>

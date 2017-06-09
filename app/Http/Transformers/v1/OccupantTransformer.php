@@ -4,15 +4,18 @@ namespace App\Http\Transformers\v1;
 
 use App\Models\v1\Reservation;
 use League\Fractal\TransformerAbstract;
+use League\Fractal\ParamBag;
 
 class OccupantTransformer extends TransformerAbstract {
+
+    private $validParams = ['status', 'type'];
 
     /**
      * List of resources available to include
      *
      * @var array
      */
-    protected $availableIncludes = ['companions', 'squads'];
+    protected $availableIncludes = ['companions', 'squads', 'costs'];
 
     /**
      * Transform the object into a basic array
@@ -79,5 +82,55 @@ class OccupantTransformer extends TransformerAbstract {
         $squads = $occupant->squads;
 
         return $this->collection($squads, new TeamSquadTransformer);
+    }
+
+    /**
+     * Include Costs
+     *
+     * @param Reservation $reservation
+     * @param ParamBag $params
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeCosts(Reservation $reservation, ParamBag $params = null)
+    {
+        // Optional params validation
+        if ( ! is_null($params)) {
+            $this->validateParams($params);
+
+            $costs = [];
+
+            if ($params->get('status') && in_array('active', $params->get('status')))
+            {
+                $active = $reservation->activeCosts;
+
+                $maxDate = $active->where('type', 'incremental')->max('active_at');
+
+                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                    return $value->type == 'incremental' && $value->active_at < $maxDate;
+                });
+            }
+
+            if ($params->get('type'))
+            {
+                $costs = $reservation->costs()->where('type', $params->get('type'))->get();
+            }
+
+        } else {
+            $costs = $reservation->costs;
+        }
+
+        return $this->collection($costs, new CostTransformer);
+    }
+
+    private function validateParams($params)
+    {
+        $usedParams = array_keys(iterator_to_array($params));
+        if ($invalidParams = array_diff($usedParams, $this->validParams)) {
+            throw new \Exception(sprintf(
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
+                implode(',', $this->validParams)
+            ));
+        }
     }
 }

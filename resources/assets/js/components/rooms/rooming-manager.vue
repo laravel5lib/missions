@@ -209,8 +209,8 @@
 									<div class="row">
 										<div class="col-xs-6">
 											<label>Room Occupants</label>
-											<div class="label label-info" v-if="currentRoom.type.data.rules.same_gender">Same Gender</div>
-											<div class="label label-info" v-if="currentRoom.type.data.rules.married_only">Must be Married</div>
+											<div class="label label-danger" v-if="currentRoom.type.data.rules.same_gender">Must be Same Gender</div>
+											<div class="label label-danger" v-if="currentRoom.type.data.rules.married_only">Must be Married</div>
 										</div>
 										<div class="col-xs-6 text-right">
 											<label>{{currentRoom.occupants_count}} of {{currentRoom.type.data.rules.occupancy_limit}} occupants</label>
@@ -282,27 +282,40 @@
 																</div>
 																<div class="col-sm-6">
 																	<label>Designation</label>
-																	<p class="small">{{member.arrival_designation}}</p>
+																	<p class="small">{{member.arrival_designation | capitalize}}</p>
 																</div>
 															</div>
 															<div class="row">
-																<div class="col-sm-6" v-if="member.companions.data.length">
+																<div class="col-sm-6">
 																	<label>Companions</label>
-																	<ul class="list-unstyled small">
+																	<ul class="list-unstyled small" v-if="member.companions.data.length">
 																		<li v-for="companion in member.companions.data">
 																			<i :class="getGenderStatusIcon(companion)"></i> 
 																			{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
 																			<span class="text-muted">({{ companion.relationship }})</span>
 																		</li>
 																	</ul>
+																	<p class="small" v-else>None</p>
 																</div><!-- end col -->
 																<div class="col-sm-6">
 																	<label>Squad Groups</label>
-																	<p class="small">
+																	<p class="small" v-if="member.squads.data.length">
 																		<span v-for="squad in member.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && member.squads.data.length > 1">, </span></span>
+																	</p>
+																	<p clas="small" v-else>
+																		Unassigned
 																	</p>
 																</div><!-- end col -->
 															</div><!-- end row -->
+															<div class="row">
+																<div class="col-sm-12">
+																	<label>Rooming Cost</label>
+																	<p class="small">
+																		<span v-for="cost in member.costs.data">{{cost.name}}
+																		<span v-if="!$last && member.costs.data.length > 1">, </span></span>
+																	</p>
+																</div>
+															</div>
 														</div><!-- end panel-body -->
 													</div>
 													<!-- </div> -->
@@ -1132,7 +1145,7 @@
             getOccupants(){
                 let params = {
                     // plans: new Array(this.currentPlan.id),
-	                 include: 'companions,squads.team',
+	                 include: 'companions,squads.team,costs:type(optional)',
                     // page: this.plansPagination.current_page,
                 };
                 return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then(function (response) {

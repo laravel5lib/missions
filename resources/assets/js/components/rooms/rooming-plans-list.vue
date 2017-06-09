@@ -10,15 +10,8 @@
 					          placeholder="Filter by Group"></v-select>
 				</div>
 
-				<div class="form-group" v-if="!tripId">
-					<label>Campaign</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-					          :value.sync="filters.campaign" :options="campaignsOptions" label="name"
-					          placeholder="Filter by Campaign"></v-select>
-				</div>
-
 				<hr class="divider inv sm">
-				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetPlansFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
 		</aside>
 
@@ -120,8 +113,14 @@
 					<form id="PlanCreateForm">
 						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
 						</div>
+
+						<div class="form-group" :class="{'has-error': $PlanCreate.plandesc.invalid}">
+							<label for="createPlanDesc" class="control-label">Short Description</label>
+							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" v-validate:plandesc="['required']"></textarea>
+						</div>
+
 						<div class="form-group" :class="{'has-error': $PlanCreate.teamgroup.invalid}" v-if="isAdminRoute">
 							<label>Travel Group</label>
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
@@ -137,14 +136,27 @@
 		</modal>
 		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :show.sync="showPlanSettingsModal">
 			<div slot="modal-body" class="modal-body" v-if="selectedPlan && selectedPlanSettings">
-				<form id="PlanCreateForm" class="form-horizontal">
-					<div class="form-group" v-for="type in roomTypes">
-						<label :for="'settingsType-' + type.id" class="col-sm-6 control-label" v-text="type.name"></label>
-						<div class="col-sm-6">
-							<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
+				<validator name="PlanSettings">
+					<form id="PlanCreateForm" class="form-horizontal">
+						<div class="form-group" :class="{'has-error': $PlanSettings.planname.invalid}">
+							<label for="updatePlanCallsign" class="control-label">Plan Name</label>
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedPlanSettings.name">
 						</div>
-					</div>
-				</form>
+
+						<div class="form-group" :class="{'has-error': $PlanSettings.plandesc.invalid}">
+							<label for="updatePlanDesc" class="control-label">Short Description</label>
+							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" v-validate:plandesc="['required']"></textarea>
+						</div>
+
+						<div class="form-group" v-for="type in roomTypes">
+							<label :for="'settingsType-' + type.id" class="col-sm-6 control-label" v-text="type.name"></label>
+							<div class="col-sm-6">
+								<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
+							</div>
+						</div>
+					</form>
+				</validator>
+
 			</div>
 		</modal>
 		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
@@ -175,7 +187,6 @@
                 campaignsOptions: [],
                 roomTypes: [],
 	            filters: {
-                    campaign: null,
 		            group: null,
 	            },
                 pagination: {current_page: 1},
@@ -211,8 +222,10 @@
 		    },
 	    },
         methods: {
-            resetFilters(){
-                this.filters = {};
+            resetPlansFilter(){
+                this.filters = {
+                    group: null,
+                };
             },
             loadManager(plan) {
                 this.$dispatch('rooming-wizard:plan-selected', plan);
@@ -232,7 +245,6 @@
                     include: '',
                 };
                 params = _.extend(params, {
-                    campaign: this.filters.campaign ? this.filters.campaign.id : null,
                     group: this.filters.group ? this.filters.group.id : null,
 	                search: this.search,
 	                per_page: this.per_page,
@@ -268,7 +280,10 @@
             openPlanSettingsModal(plan) {
                 this.showPlanSettingsModal = true;
                 this.selectedPlan = plan;
-                let settings = {};
+                let settings = {
+                    short_desc: plan.short_desc,
+                    name: plan.name,
+                };
 
                 // We need to loop through each room type to create an object to reference the plan types present
                 _.each(this.roomTypes, function (type) {
@@ -289,7 +304,7 @@
                 let promises = [];
                 _.each(this.selectedPlanSettings, function (val, property) {
                     let promise;
-					if (property.indexOf('_method') === -1) {
+					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name'], property)) {
 					    if (this.selectedPlanSettings[property + '_method'] === 'PUT') {
 					        if (val > 0) {
                                 promise = this.PlansResource.update({

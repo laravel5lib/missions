@@ -22,7 +22,7 @@
 				<div class="form-group">
 					<label>Role</label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-					          :value.sync="membersFilters.role" :options="rolesOptions" label="name"
+					          :value.sync="membersFilters.role" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
@@ -101,14 +101,14 @@
 				<div class="form-group">
 					<label>Role</label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
-					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
+					          :value.sync="reservationFilters.role" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-					          :value.sync="groupsArr" :options="groupsOptions" label="name"
+					          :value.sync="reservationFilters.groups" :options="groupsOptions" label="name"
 					          placeholder="Filter Groups"></v-select>
 				</div>
 
@@ -178,7 +178,7 @@
 				</div>
 
 				<hr class="divider inv sm">
-				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetReservationFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
 		</aside>
 
@@ -219,7 +219,7 @@
 									<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 										<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
 										<div class="row">
-											<div class="col-sm-12" v-for="member in currentRoom.occupants | orderBy 'surname'">
+											<div class="col-sm-12" v-for="member in currentRoom.occupants | orderBy '-room_leader' 'surname'">
 												<div class="panel panel-default" style="margin-bottom:8px;">
 													<div class="panel-heading" role="tab" id="headingOne">
 														<h5 class="panel-title">
@@ -726,9 +726,11 @@
 <script type="text/javascript">
     import _ from 'underscore';
     import vSelect from 'vue-select';
+    import utilities from '../utilities.mixin';
     export default{
         name: 'rooming-manager',
         components: {vSelect},
+	    mixins: [utilities],
         props: {
             userId: {
                 type: String,
@@ -781,11 +783,12 @@
                     gender: '',
                     status: '',
                     hasCompanions: null,
-                    role: '',
+                    role: null,
                     designation: ''
                 },
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,
+                groupsOptions:[],
                 rolesOptions: [],
 
 	            // modal vars
@@ -915,6 +918,17 @@
                     designation: '',
                 };
             },
+            resetReservationFilter() {
+                this.reservationFilters = {
+                    type: '',
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+                    role: null,
+                    designation: ''
+                };
+            },
             getRoomLeader(room) {
                 let occupants = room.occupants.data || room.occupants;
                 let leader = _.findWhere(occupants, { room_leader: true });
@@ -1038,13 +1052,13 @@
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,user,companions,squads.team',
-                    search: this.reservationsSearch,
                     per_page: this.reservationsPerPage,
                     page: this.reservationsPagination.current_page,
                     current: true,
                     // ignore: this.excludeReservationIds,
-                    inSquad: true,
+	                inSquad: true,
 	                noRoom: 'plans|' + this.currentPlan.id,
+                    search: this.reservationsSearch,
                     // designation: this.reservationFilters.designation,
                 };
 
@@ -1056,6 +1070,12 @@
                 params = _.extend(params, {
                     age: [this.ageMin, this.ageMax]
                 });
+
+                if (_.isObject(this.reservationFilters.role)) {
+                    params.role = this.reservationFilters.role.value;
+                }
+	            if (this.reservationFilters.groups.length)
+                    params.groups = _.pluck(this.reservationFilters.groups, 'id');
 
                 // this.$refs.spinner.show();
                 return this.$http.get('reservations', { params: params, before: function(xhr) {
@@ -1093,6 +1113,17 @@
                         console.log(response);
                         return response.body.data;
                     });
+            },
+            getGroups(search, loading){
+                loading ? loading(true) : void 0;
+                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
+                    this.groupsOptions = response.body.data;
+                    if (loading) {
+                        loading(false);
+                    } else {
+                        return response.body.data;
+                    }
+                });
             },
             getAllRooms(plans){
                 let params = {
@@ -1197,7 +1228,7 @@
                         return response.body.data;
                     });
             },
-            getRoles(search, loading){
+            /*getRoles(search, loading){
                 loading ? loading(true) : void 0;
                 return this.$http.get('utilities/team-roles').then(function (response) {
                     let roles = [];
@@ -1211,7 +1242,7 @@
                         return this.rolesOptions;
                     }
                 });
-            },
+            },*/
 
 	        // Modal Functions
             openNewPlanModal(){

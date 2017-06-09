@@ -68,6 +68,7 @@
 </template>
 <style></style>
 <script type="text/javascript">
+    import $ from 'jquery';
 	import plans from './rooming-plans-list.vue';
 	import manager from './rooming-manager.vue';
     import notes from '../notes.vue';

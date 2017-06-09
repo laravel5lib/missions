@@ -517,6 +517,15 @@
 											<label>Travel Group</label>
 											<p class="small">{{reservation.trip.data.group.data.name}}</p>
 										</div><!-- end col -->
+										<div class="col-sm-6">
+											<label>Squad Groups</label>
+											<p class="small" v-if="reservation.squads.data.length">
+												<span v-for="squad in reservation.squads.data">{{squad.callsign}} <span v-if="squad.team">({{ squad.team.data.callsign }})</span><span v-if="!$last && reservation.squads.data.length > 1">, </span></span>
+											</p>
+											<p clas="small" v-else>
+												Unassigned
+											</p>
+										</div><!-- end col -->
 									</div><!-- end row -->
 								</div>
 							</div>
@@ -1074,10 +1083,7 @@
 	                noRoom: 'plans|' + this.currentPlan.id,
                     search: this.reservationsSearch,
                     // designation: this.reservationFilters.designation,
-                };
-
-                if (this.isAdminRoute) {
-                    params.campaign = this.campaignId;
+	                campaign: this.campaignId;
                 }
 
                 params = _.extend(params, this.reservationFilters);
@@ -1088,10 +1094,11 @@
                 if (_.isObject(this.reservationFilters.role)) {
                     params.role = this.reservationFilters.role.value;
                 }
+                params.groups = new Array(this.currentPlan.group.data.id);
 	            if (this.reservationFilters.groups.length)
-                    params.groups = _.pluck(this.reservationFilters.groups, 'id');
+                    params.groups = _.union(params.groups, _.pluck(this.reservationFilters.groups, 'id'));
 
-                // this.$refs.spinner.show();
+	                // this.$refs.spinner.show();
                 return this.$http.get('reservations', { params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();

@@ -185,6 +185,7 @@
 		<template v-if="currentPlan">
 			<div class="col-xs-12" v-if="currentPlan">
 				<h3>{{ currentPlan.name }} <button type="button" class="btn btn-xs btn-primary" @click="changePlan">Change Plan</button></h3>
+				<h5>{{ currentPlan.group.data.name }}</h5>
 				<hr class="divider lg">
 			</div>
 			<div class="col-sm-8">

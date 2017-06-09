@@ -63,7 +63,54 @@
 			<hr class="divider sm">
 		</template>
 		<div style="position:relative;" class="panel panel-default">
-			<table class="table table-hover">
+
+            <div class="list-group" v-if="plans.length">
+              <div class="list-group-item" v-for="plan in plans|orderBy 'name'">
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4 class="list-group-item-heading">
+                            <a @click="loadManager(plan)">{{ plan.name }}</a>
+                            <span class="badge">{{ plan.occupants_count }} occupants</span>
+                            <br /><small>{{ plan.group.data.name }}</small>
+                        </h4>
+                        <p class="list-group-item-text">{{ plan.short_desc }}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Rooms</label><br />
+                        <span v-for="(key, val) in plan.rooms_count">
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+                        </span>
+                        <br />
+                        <label>Rooms Allowed</label><br />
+                        <span v-for="(key, val) in plan.room_types">
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+                        </span>
+                        <p>
+                            <hr class="divider sm">
+                            <button type="button" class="btn btn-primary btn-xs" @click="loadManager(plan)">Select Plan</button>
+                            <button type="button" class="btn btn-default-hollow btn-xs" @click="openPlanSettingsModal(plan)" v-if="isAdminRoute">
+                                <i class="fa fa-pencil"></i> Edit
+                            </button>
+                            <button type="button" class="btn btn-default-hollow btn-xs" @click="openDeletePlanModal(plan)" v-if="isAdminRoute">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                        </p>
+                    </div>
+                </div>
+              </div>
+              <div class="text-center">
+                  <pagination :pagination.sync="pagination"
+                              :callback="getRoomingPlans"
+                              size="small">
+                  </pagination>
+              </div>
+            </div>
+            <p class="text-center text-italic text-muted" v-else><em>
+            No Rooming Plans yet. Create a new Rooming Plan.
+            </em></p>
+
+			<!-- <table class="table table-hover">
 				<thead>
 				<tr>
 					<th>Name</th>
@@ -110,7 +157,7 @@
 					</td>
 				</tr>
 				</tfoot>
-			</table>
+			</table> -->
 		</div>
 
 		<!-- Modals -->
@@ -236,6 +283,7 @@
                     group: this.filters.group ? this.filters.group.id : null,
 	                search: this.search,
 	                per_page: this.per_page,
+                    include: 'group'
                 });
 
                 return this.PlansResource.get(params).then(function (response) {

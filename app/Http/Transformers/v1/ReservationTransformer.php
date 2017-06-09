@@ -21,7 +21,7 @@ class ReservationTransformer extends TransformerAbstract
     protected $availableIncludes = [
         'user', 'trip', 'rep', 'costs', 'deadlines',
         'requirements', 'notes', 'todos', 'companions',
-        'fundraisers', 'dues', 'fund', 'transports'
+        'fundraisers', 'dues', 'fund', 'transports', 'squads'
     ];
 
     /**
@@ -293,6 +293,13 @@ class ReservationTransformer extends TransformerAbstract
         $transports = $reservation->transports;
 
         return $this->collection($transports, new TransportTransformer);
+    }
+
+    public function includeSquads(Reservation $reservation)
+    {
+        $squads = $reservation->squads;
+
+        return $this->collection($squads, new TeamSquadTransformer);
     }
 
     private function validateParams($params)

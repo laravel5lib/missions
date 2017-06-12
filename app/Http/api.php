@@ -165,6 +165,7 @@ $api->version('v1', [
 
     $api->group(['prefix' => 'rooming'], function($api) {
         $api->resource('plans', 'Rooming\PlansController');
+        $api->post('plans/export', 'Rooming\PlansController@export');
         $api->resource('types', 'Rooming\TypesController');
         $api->resource('plans.types', 'Rooming\PlanRoomTypesController');
         $api->resource('accommodations.types', 'Rooming\AccommodationRoomTypesController');

@@ -23,9 +23,9 @@ class TeamTypesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $types = $this->type->all();
+        $types = $this->type->filter($request->all())->get();
 
         return $this->response->collection($types, new TeamTypeTransformer);
     }
@@ -46,7 +46,8 @@ class TeamTypesController extends Controller
 
         $type = $this->type->create([
             'name' => $request->get('name'),
-            'rules' => $rules->all()
+            'rules' => $rules->all(),
+            'campaign_id' => $request->get('campaign_id')
         ]);
 
         return $this->response->item($type, new TeamTypeTransformer);
@@ -80,7 +81,8 @@ class TeamTypesController extends Controller
 
         $type->update([
             'name' => $request->get('name', $type->name),
-            'rules' => $type->rules()->merge($rules)->all()
+            'rules' => $type->rules()->merge($rules)->all(),
+            'campaign_id' => $request->get('campaign_id', $type->campaign_id)
         ]);
 
         return $this->response->item($type, new TeamTypeTransformer);

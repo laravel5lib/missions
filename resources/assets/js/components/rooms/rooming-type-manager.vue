@@ -114,6 +114,7 @@
     export default{
         name: 'room-type-manager',
         mixins: [errorHandler],
+        props: ['campaignId'],
         data(){
             return {
                 // mixin settings
@@ -131,6 +132,7 @@
             newTypeModel() {
                 return {
                     name: '',
+                    campaign_id: this.campaignId,
 	                rules: {
                         occupancy_limit: 4,
                         married_only: false,
@@ -201,7 +203,7 @@
                     });
             },
             getRoomTypes() {
-                return this.roomTypeResource.get().then(function (response) {
+                return this.roomTypeResource.get({campaign: this.campaignId}).then(function (response) {
                     return this.roomTypes = response.body.data;
                 }, function (error) {
                     console.log(error);

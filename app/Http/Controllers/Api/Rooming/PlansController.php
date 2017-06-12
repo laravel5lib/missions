@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Rooming;
 
 use Illuminate\Http\Request;
+use App\Jobs\ExportRoomingPlans;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\v1\ExportRequest;
 use App\Http\Requests\v1\RoomingPlanRequest;
 use App\Repositories\Rooming\Interfaces\Plan;
 use App\Http\Transformers\v1\RoomingPlanTransformer;
@@ -26,7 +28,7 @@ class PlansController extends Controller
     public function index(Request $request)
     {
         $plans = $this->plan
-                      ->filter($request->all())
+                      ->filter(array_filter($request->all()))
                       ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($plans, new RoomingPlanTransformer);
@@ -94,5 +96,14 @@ class PlansController extends Controller
         $this->plan->delete($id);
 
         return $this->response->noContent();
+    }
+
+    public function export(ExportRequest $request)
+    {
+        $this->dispatch(new ExportRoomingPlans( array_filter($request->all()) ));
+
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 }

@@ -264,16 +264,6 @@
 																			<p class="small">{{member.gender | capitalize}}</p>
 																			<label>Marital Status</label>
 																			<p class="small">{{member.status | capitalize}}</p>
-																			<template v-if="member.companions.data.length">
-																				<label>Companions</label>
-																				<ul class="list-unstyled">
-																					<li v-for="companion in member.companions.data">
-																						<i :class="getGenderStatusIcon(companion)"></i> 
-																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
-																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
-																					</li>
-																				</ul>
-																			</template>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -282,6 +272,21 @@
 																			<p class="small">{{member.trip.data.group.data.name}}</p>
 																		</div><!-- end col -->
 																	</div><!-- end row -->
+																	<div class="col-sm-6">
+																		<label>Companions</label>
+																		<ul class="list-unstyled" v-if="member.companions.data.length">
+																			<li v-for="companion in member.companions.data">
+																				<i :class="getGenderStatusIcon(companion)"></i> 
+																				{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} 
+																				<span class="text-muted">({{ companion.relationship | capitalize }})</span>
+																			</li>
+																		</ul>
+																		<p class="small" v-else>None</p>
+																	</div>
+																	<div class="col-sm-6">
+																		<label>Designation</label>
+																		<p class="small">{{ member.arrival_designation }}</p>
+																	</div>
 																</div>
 															</div>
 															<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="member.companions.data.length && companionsPresentSquad(member, squad)">
@@ -387,16 +392,6 @@
 																			<p class="small">{{member.gender | capitalize}}</p>
 																			<label>Marital Status</label>
 																			<p class="small">{{member.status | capitalize}}</p>
-																			<template v-if="member.companions.data.length">
-																				<label>Companions</label>
-																				<ul class="list-unstyled">
-																					<li v-for="companion in member.companions.data">
-																						<i :class="getGenderStatusIcon(companion)"></i> 
-																						{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-																						<span class="text-muted">({{ companion.relationship | capitalize }})</span>
-																					</li>
-																				</ul>
-																			</template>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -404,6 +399,21 @@
 																			<label>Travel Group</label>
 																			<p class="small">{{member.trip.data.group.data.name}}</p>
 																		</div><!-- end col -->
+																		<div class="col-sm-6">
+																			<label>Companions</label>
+																			<ul class="list-unstyled" v-if="member.companions.data.length">
+																				<li v-for="companion in member.companions.data">
+																					<i :class="getGenderStatusIcon(companion)"></i> 
+																					{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																					<span class="text-muted">({{ companion.relationship | capitalize }})</span>
+																				</li>
+																			</ul>
+																			<p class="small" v-else>None</p>
+																		</div>
+																		<div class="col-sm-6">
+																			<label>Designation</label>
+																			<p class="small">{{ member.arrival_designation }}</p>
+																		</div>
 																	</div><!-- end row -->
 																</div><!-- end panel-body -->
 															</div>
@@ -721,15 +731,6 @@
 														<p class="small">{{reservation.gender | capitalize}}</p>
 														<label>Marital Status</label>
 														<p class="small">{{reservation.status | capitalize}}</p>
-														<template v-if="reservation.companions.data.length">
-															<label>Companions</label>
-															<ul class="list-unstyled">
-																<li v-for="companion in reservation.companions.data">
-																	<i :class="getGenderStatusIcon(companion)"></i> 
-																	{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
-																</li>
-															</ul>
-														</template>
 													</div><!-- end col -->
 													<div class="col-sm-6">
 														<label>Age</label>
@@ -737,6 +738,20 @@
 														<label>Travel Group</label>
 														<p class="small">{{reservation.trip.data.group.data.name}}</p>
 													</div><!-- end col -->
+													<div class="col-sm-6">
+														<label>Companions</label>
+														<ul class="list-unstyled" v-if="reservation.companions.data.length">
+															<li v-for="companion in reservation.companions.data">
+																<i :class="getGenderStatusIcon(companion)"></i> 
+																{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
+															</li>
+														</ul>
+														<p class="small" v-else>None</p>
+													</div>
+													<div class="col-sm-6">
+														<label>Designation</label>
+														<p class="small">{{reservation.arrival_designation | capitalize}}</p>
+													</div>
 												</div><!-- end row -->
 											</div>
 										</div>

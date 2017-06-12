@@ -27,12 +27,14 @@ class RoomTypeRequest extends FormRequest
             'name' => 'required|string|unique:room_types,name,NULL,id,deleted_at,NULL',
             'rules.occupancy_limit' => 'required|integer|min:1',
             'rules.married_only' => 'boolean',
-            'rules.same_gender' => 'boolean'
+            'rules.same_gender' => 'boolean',
+            'campaign_id' => 'required|exists:campaigns,id'
         ];
 
         if ($this->isMethod('put')) {
             $rules['name'] = 'sometimes|required|string|unique:room_types,name,'.$this->route('types').',id,deleted_at,NULL';
             $rules['rules.occupancy_limit'] = 'sometimes|required|integer|min:1';
+            $rules['campaign_id'] = 'sometimes|required|exists:campaigns,id';
         }
 
         return $rules;

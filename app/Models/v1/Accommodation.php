@@ -25,6 +25,11 @@ class Accommodation extends Model
         return $this->belongsTo(Region::class);
     }
 
+    public function campaign()
+    {
+        return $this->region()->campaign();
+    }
+
     public function notes()
     {
         return $this->morphMany(Note::class, 'noteable');

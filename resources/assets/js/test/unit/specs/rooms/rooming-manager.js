@@ -26,34 +26,9 @@ test('campaign data set', async (t) => {
     t.true(RoomingManager.campaignId === campaignId);
 });
 
-test.before('set plan data', (t) => {
-    RoomingManager.$root.$emit('plan-scope', RoomingManager.plans[0]);
-});
-
 test('plan data set', (t) => {
+    RoomingManager.$root.$emit('plan-scope', RoomingManager.plans[0]);
     t.true(RoomingManager.currentPlan.id === RoomingManager.plans[0].id);
-});
-
-test.before('open modal to create new plan', (t) => {
-    RoomingManager.$root.$emit('create-plan');
-});
-
-test('create plan modal is open', (t) => {
-    t.true(RoomingManager.showPlanModal);
-});
-
-test('selectedPlan data set', (t) => {
-    t.true(RoomingManager.selectedPlan.campaign_id === RoomingManager.campaignId && RoomingManager.selectedPlan.group_id === RoomingManager.groupId);
-});
-
-test.before('set name for new plan', (t) => {
-    RoomingManager.selectedPlan.name = 'Test New Rooming Plan';
-});
-
-test('create new plan', t => {
-    RoomingManager.newPlan().then(function (response) {
-        t.deepEqual(RoomingManager.currentPlan, response)
-    });
 });
 
 test('open create new room modal', t => {

@@ -807,7 +807,7 @@
                 return leader || false;
             },
             updateConfig(){
-                localStorage[this.storageName] = JSON.stringify({
+                window.localStorage[this.storageName] = JSON.stringify({
                     currentPlan: this.currentPlan.id,
                 });
             },
@@ -1216,8 +1216,8 @@
                 this.startUp = false;
 
                 // load view state
-                if (localStorage[this.storageName]) {
-                    let config = JSON.parse(localStorage[this.storageName]);
+                if (window.localStorage[this.storageName]) {
+                    let config = JSON.parse(window.localStorage[this.storageName]);
                     if (config.currentPlan) {
                         let plan = _.findWhere(this.plans, { id: config.currentPlan});
                         if (plan) {

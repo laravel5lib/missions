@@ -103,9 +103,14 @@ export default {
         getAirlines(search, loading){
             loading ? loading(true) : void 0;
             return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
-                    this.UTILITIES.airlines = response.body.data;
+                let airlines = response.body.data;
+                _.each(airlines, function (airline) {
+                    airline.extended_name = airline.iata ? airline.name + ' (' + airline.iata + ')' : airline.name;
+                });
+                    this.UTILITIES.airlines = airlines;
                     this.UTILITIES.airlines.push({
                         name: 'Other',
+                        extended_name: 'Other',
                         call_sign: ''
                     });
                     if (loading) {

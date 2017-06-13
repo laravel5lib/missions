@@ -275,7 +275,7 @@
 																			<p class="small">{{member.trip.data.group.data.name}}</p>
 																		</div><!-- end col -->
 																	</div><!-- end row -->
-																	<div class="col-sm-6">
+																	<div class="col-sm-12">
 																		<label>Companions</label>
 																		<ul class="list-unstyled" v-if="member.companions.data.length">
 																			<li v-for="companion in member.companions.data">
@@ -285,6 +285,10 @@
 																			</li>
 																		</ul>
 																		<p class="small" v-else>None</p>
+																	</div>
+																	<div class="col-sm-6">
+																		<label>Trip Type</label>
+																		<p class="small">{{member.trip.data.type | capitalize}}</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Designation</label>
@@ -411,7 +415,7 @@
 																			<label>Travel Group</label>
 																			<p class="small">{{member.trip.data.group.data.name}}</p>
 																		</div><!-- end col -->
-																		<div class="col-sm-6">
+																		<div class="col-sm-12">
 																			<label>Companions</label>
 																			<ul class="list-unstyled" v-if="member.companions.data.length">
 																				<li v-for="companion in member.companions.data">
@@ -421,6 +425,10 @@
 																				</li>
 																			</ul>
 																			<p class="small" v-else>None</p>
+																		</div>
+																		<div class="col-sm-6">
+																			<label>Trip Type</label>
+																			<p class="small">{{member.trip.data.type | capitalize}}</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Designation</label>
@@ -753,7 +761,7 @@
 														<label>Travel Group</label>
 														<p class="small">{{reservation.trip.data.group.data.name}}</p>
 													</div><!-- end col -->
-													<div class="col-sm-6">
+													<div class="col-sm-12">
 														<label>Companions</label>
 														<ul class="list-unstyled" v-if="reservation.companions.data.length">
 															<li v-for="companion in reservation.companions.data">
@@ -762,6 +770,10 @@
 															</li>
 														</ul>
 														<p class="small" v-else>None</p>
+													</div>
+													<div class="col-sm-6">
+														<label>Trip Type</label>
+														<p class="small">{{reservation.trip.data.type | capitalize}}</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Designation</label>

@@ -33,13 +33,13 @@
                 <li role="presentation" class="{{ $tab == 'trips' ? 'active' : '' }}">
                     <a href="{{ url('admin/campaigns/'.$campaign->id.'/trips') }}">Trips</a>
                 </li>
-                <li role="presentation" class="{{ ($tab == 'teams' || $tab == 'team-types') ? 'active' : '' }} dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Teams <span class="caret"></span></a>
+                <li role="presentation" class="{{ ($tab == 'squads' || $tab == 'squad-types') ? 'active' : '' }} dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Squads <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {{-- <li><a href="#">Overview</a></li> --}}
-                        <li class="{{ $tab == 'teams' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/teams') }}">Rosters</a></li>
-                        <li class="{{ $tab == 'team-types' ? 'active' : '' }}">
-                            <a href="{{ url('admin/campaigns/'.$campaign->id.'/team-types') }}">Team Types</a>
+                        <li class="{{ $tab == 'squads' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/squads') }}">Rosters</a></li>
+                        <li class="{{ $tab == 'squad-types' ? 'active' : '' }}">
+                            <a href="{{ url('admin/campaigns/'.$campaign->id.'/squad-types') }}">Squad Types</a>
                         </li>
                     </ul>
                 </li>
@@ -48,7 +48,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="#">Overview</a></li>
                         <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/rooming-manager') }}">Room Assignments</a></li>
-                        <li class="{{ $tab == 'team-types' ? 'active' : '' }}">
+                        <li class="{{ $tab == 'squad-types' ? 'active' : '' }}">
                             <a href="{{ url('admin/campaigns/'.$campaign->id.'/room-types') }}">Room Types</a>
                         </li>
                         <li><a href="{{ url('admin/campaigns/'.$campaign->id.'/accommodations') }}">Accommodations</a></li>

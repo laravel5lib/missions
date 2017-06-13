@@ -207,6 +207,9 @@
 													<h3 class="panel-title">Squad Leaders</h3>
 												</div>
 												<div class="panel-body">
+													<div class="alert alert-warning" v-if="!squadHasLeader(squad)">
+														Squad does not have a squad leader. Please assign one.
+													</div>
 													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_leaders">
 														Complete! You've filled all the positions.
 													</div>
@@ -329,6 +332,9 @@
 													</div>
 												</div><!-- end panel-heading -->
 												<div class="panel-body">
+													<div class="alert alert-warning" v-if="!squadHasLeader(squad)">
+														Group does not have a group leader. Please assign one.
+													</div>
 													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_group_members">
 														Complete! You've filled all the positions.
 													</div>
@@ -362,19 +368,25 @@
 																						<template v-if="subSquad.callsign === 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																							<li role="separator" class="divider"></li>
 																						</template>
 																						<template v-else>
 																							<template v-if="subSquad.id !== squad.id">
 																								<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Squad Leaders</a></li>
 																								<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
 																								<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
+																								<li role="separator" class="divider"></li>
 																							</template>
 																						</template>
 																					</template>
-																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
 																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
 																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
+																					<li role="separator" class="divider"></li>
+																					<li class="dropdown-header">Change Role</li>
+																					<li role="separator" class="divider"></li>
+																					<li v-if="member.desired_role.name !== 'Squad Leader'"><a @click="updateRole(member, 'Squad Leader')">Squad Leader</a></li>
+																					<li v-if="member.desired_role.name !== 'Group Leader'"><a @click="updateRole(member, 'Group Leader')">Group Leader</a></li>
 																				</ul>
 																			</dropdown>
 																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -516,7 +528,7 @@
 									<ul class="list-group" v-if="currentSquadGroups.length">
 										<li class="list-group-item" v-for="(key, value) in currentTeam.type.data.rules">
 											<span class="badge" v-text="value"></span>
-											{{ key | underscoreToSpace | capitalize }}
+											{{ getRuleLabel(key) }}
 										</li>
 									</ul>
 								</div>
@@ -592,14 +604,17 @@
 									<ul class="list-group">
 
 										<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
-											<div class="row">
+											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
 													{{ team.callsign | capitalize }}
 													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
-													<span v-if="team.locked" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
+													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
 											</div>
+											<p class="list-group-item-text small" v-if="team.groups.data.length">
+											<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+										</p>
 										</a>
 									</ul>
 									<div class="col-xs-12 text-center">
@@ -1055,6 +1070,36 @@
 		    }
 	    },
         methods: {
+            getRuleLabel(key){
+                switch(key) {
+	                case 'min_members':
+	                    return 'Minimum Squad Members Required';
+	                case 'max_members':
+	                    return 'Maximum Squad Members Allowed';
+	                case 'min_leaders':
+	                    return 'Minimum Squad Leaders Required';
+	                case 'max_leaders':
+	                    return 'Maximum Squad Leaders Allowed';
+	                case 'min_groups':
+	                case 'min_squads':
+	                    return 'Minimum Groups Required';
+	                case 'max_squads':
+	                case 'max_groups':
+	                    return 'Maximum Groups Allowed';
+	                case 'min_group_members':
+	                case 'min_squad_members':
+	                    return 'Minimum Members per Group';
+	                case 'max_group_members':
+	                case 'max_squad_members':
+	                    return 'Maximum Members per Group';
+	                case 'min_group_leaders':
+	                case 'min_squad_leaders':
+	                    return 'Minimum Leaders per Group';
+	                case 'max_group_leaders':
+	                case 'max_squad_leaders':
+	                    return 'Maximum Leaders per Group';
+                }
+            },
             getReservationLink(reservation){
                 return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
             },

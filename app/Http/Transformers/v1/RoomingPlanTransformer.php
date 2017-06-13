@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Transformers\v1;
 
+use App\RoomCount;
 use App\Models\v1\RoomingPlan;
 use League\Fractal\TransformerAbstract;
 
@@ -36,9 +37,11 @@ class RoomingPlanTransformer extends TransformerAbstract
 
     private function getAvailableRooms(RoomingPlan $plan)
     {
-        return $plan->availableRoomTypes->keyBy('name')->map(function($type) {
+        $available = $plan->availableRoomTypes->keyBy('name')->map(function($type) {
             return $type->pivot->available_rooms;
         })->put('total', $plan->availableRoomTypes->count())->all();
+
+        return array_merge((new RoomCount($plan))->getRoomTypes(), $available);
     }
 
     public function includeRooms(RoomingPlan $plan)

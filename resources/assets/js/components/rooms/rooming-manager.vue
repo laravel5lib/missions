@@ -426,7 +426,7 @@
 								Companions
 								<i class="fa fa-close"></i>
 							</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
+							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== null" @click="reservationFilters.role = null" >
 								Role
 								<i class="fa fa-close"></i>
 							</span>
@@ -679,7 +679,6 @@
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,
                 groupsOptions:[],
-                rolesOptions: [],
 
 	            // modal vars
 	            showPlanModal: false,
@@ -1116,21 +1115,6 @@
                         return response.body.data;
                     });
             },
-            /*getRoles(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/team-roles').then(function (response) {
-                    let roles = [];
-                    _.each(response.body.roles, function (name, key) {
-                        roles.push({ value: key, name: name});
-                    });
-                    this.rolesOptions = roles;
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.rolesOptions;
-                    }
-                });
-            },*/
 
 	        // Modal Functions
             openNewPlanModal(){

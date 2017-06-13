@@ -68,7 +68,7 @@
 
 					<div class="form-group">
 						<label>Role</label>
-						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
+						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
 						          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
 						          placeholder="Filter Roles"></v-select>
 					</div>
@@ -207,8 +207,8 @@
 													<h3 class="panel-title">Squad Leaders</h3>
 												</div>
 												<div class="panel-body">
-													<div class="alert alert-warning" v-if="!squadHasLeader(squad)">
-														Squad does not have a squad leader. Please assign one.
+													<div class="alert alert-warning" v-if="squad.members.length < currentTeam.type.data.rules.min_leaders">
+														Squad does not have the minimum {{currentTeam.type.data.rules.min_leaders}} squad {{currentTeam.type.data.rules.min_leaders > 1 ? 'leaders' : 'leader'}}.
 													</div>
 													<div class="alert alert-success" v-if="squad.members_count >= currentTeam.type.data.rules.max_leaders">
 														Complete! You've filled all the positions.
@@ -247,8 +247,8 @@
 																						</template>
 																					</template>
 																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
-																					<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>
-																					<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>
+																					<!--<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>-->
+																					<!--<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>-->
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>

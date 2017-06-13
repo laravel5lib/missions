@@ -53,7 +53,7 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-sm-6" v-for="(key, value) in teamType.rules">
-									<label v-text="key | underscoreToSpace | capitalize"></label>
+									<label v-text="getRuleLabel(key)"></label>
 									<p class="small" v-text="value"></p>
 								</div>
 							</div><!-- end row -->
@@ -75,7 +75,7 @@
 							<template v-for="(key, value) in currentType.rules">
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
 									<div class="form-group">
-										<label v-text="key | underscoreToSpace | capitalize"></label>
+										<label v-text="getRuleLabel(key)"></label>
 										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="['required']" :value="value" min="0">
 									</div>
 								</div>
@@ -121,6 +121,36 @@
             }
         },
         methods: {
+            getRuleLabel(key){
+                switch(key) {
+                    case 'min_members':
+                        return 'Minimum Squad Members Required';
+                    case 'max_members':
+                        return 'Maximum Squad Members Allowed';
+                    case 'min_leaders':
+                        return 'Minimum Squad Leaders Required';
+                    case 'max_leaders':
+                        return 'Maximum Squad Leaders Allowed';
+                    case 'min_groups':
+                    case 'min_squads':
+                        return 'Minimum Groups Required';
+                    case 'max_squads':
+                    case 'max_groups':
+                        return 'Maximum Groups Allowed';
+                    case 'min_group_members':
+                    case 'min_squad_members':
+                        return 'Minimum Members per Group';
+                    case 'max_group_members':
+                    case 'max_squad_members':
+                        return 'Maximum Members per Group';
+                    case 'min_group_leaders':
+                    case 'min_squad_leaders':
+                        return 'Minimum Leaders per Group';
+                    case 'max_group_leaders':
+                    case 'max_squad_leaders':
+                        return 'Maximum Leaders per Group';
+                }
+            },
             newTypeModel() {
                 return {
                     name: '',

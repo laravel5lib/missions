@@ -50,7 +50,7 @@ export default {
             return this.$http.get('utilities/team-roles').then(function (response) {
                 let arr = [];
                 _.each(response.body.roles, function (name, key) {
-                    if (conditionArray) {
+                    if (conditionArray && _.isArray(conditionArray)) {
                         if (_.contains(conditionArray, key))
                             this.UTILITIES.roles.push({ value: key, name: name});
                     } else
@@ -105,7 +105,7 @@ export default {
             return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
                 let airlines = response.body.data;
                 _.each(airlines, function (airline) {
-                    airline.extended_name = airline.iata ? airline.name + ' (' + airline.iata + ')' : airline.name;
+                    airline.extended_name = airline.iata ? airline.name + '(' + airline.iata + ')' : airline.name;
                 });
                     this.UTILITIES.airlines = airlines;
                     this.UTILITIES.airlines.push({

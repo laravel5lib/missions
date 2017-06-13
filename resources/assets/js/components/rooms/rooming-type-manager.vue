@@ -80,7 +80,7 @@
 									</div>
 									<div class="form-group" v-else>
 										<label v-text="key | underscoreToSpace | capitalize"></label>
-										<select class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="['required']">
+										<select class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="[]">
 											<option :value="true">Yes</option>
 											<option :value="false">No</option>
 										</select>

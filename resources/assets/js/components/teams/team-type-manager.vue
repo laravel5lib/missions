@@ -12,7 +12,7 @@
 				</div><!-- end col -->
 				<div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
 					<button class="btn btn-primary btn-sm btn-block" type="button" @click="createTypeMode">
-						Create Team Type
+						Create Squad Type
 						<i class="fa fa-plus"></i>
 					</button>
 				</div>
@@ -82,7 +82,7 @@
 							</template>
 						</div>
 						<div class="form-group">
-							<button class="btn btn-primary btn-sm" type="submit" v-text="editTypeMode ? 'Update Type' : 'Create Type'"></button>
+							<button class="btn btn-primary btn-sm" type="submit" v-text="editTypeMode ? 'Update Squad Type' : 'Create Squad Type'"></button>
 						</div>
 					</form>
 				</validator>

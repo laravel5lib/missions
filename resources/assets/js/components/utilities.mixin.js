@@ -64,6 +64,21 @@ export default {
                 }
             });
         },
+        getRolesSearch(search, loading){
+            loading ? loading(true) : void 0;
+            return this.$http.get('utilities/team-roles').then(function (response) {
+                let arr = [];
+                _.each(response.body.roles, function (name, key) {
+                    arr.push({ value: key, name: name});
+                }.bind(this));
+                this.UTILITIES.roles = arr;
+                if (loading) {
+                    loading(false);
+                } else {
+                    return this.UTILITIES.roles;
+                }
+            });
+        },
         getRolesByType(type, loading){
             if (!_.contains(['leadership', 'general', 'medical'], type)) {
                 console.error('`type` is not an existing type of collection of roles');

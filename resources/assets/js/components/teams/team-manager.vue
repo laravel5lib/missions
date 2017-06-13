@@ -68,7 +68,7 @@
 
 					<div class="form-group">
 						<label>Role</label>
-						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRoles"
+						<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
 						          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
 						          placeholder="Filter Roles"></v-select>
 					</div>

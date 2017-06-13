@@ -248,7 +248,7 @@
 																					</template>
 																					<li :class="{'disabled': isLocked}" role="separator" class="divider"></li>
 																					<!--<li :class="{'disabled': isLocked}" v-if="member && member.leader"><a @click="demoteToMember(member, squad)">Demote to Group Member</a></li>-->
-																					<!--<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"><a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>-->
+																					<!--<li :class="{'disabled': isLocked}" v-if="member && !member.leader && !squadHasLeader(squad)"<a @click="promoteToLeader(member, squad)">Promote to Group Leader</a></li>-->
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>
@@ -613,8 +613,8 @@
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
 											</div>
 											<p class="list-group-item-text small" v-if="team.groups.data.length">
-											<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
-										</p>
+												<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+											</p>
 										</a>
 									</ul>
 									<div class="col-xs-12 text-center">

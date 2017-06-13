@@ -52,50 +52,41 @@
 			<template v-if="currentRegion">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h5>{{currentRegion.name | capitalize}} <span class="small">&middot; Details</span></h5>
+						<div class="row">
+							<div class="col-sm-6">
+								<h5>{{currentRegion.name | capitalize}} <span v-if="currentRegion.callsign">({{currentRegion.callsign}})</span><span class="small">&middot; Details</span></h5>
+							</div>
+							<div class="col-sm-6 text-right">
+								<h5>{{currentRegion.country.name}}</h5>
+							</div>
+						</div>
+
 					</div><!-- end panel-heading -->
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-sm-5">
-								<div class="row">
-									<div class="col-sm-8">
-										<label>Country</label>
-									</div><!-- end col -->
-									<div class="col-sm-4 text-right">
-										<p class="small" style="margin:3px 0;">{{currentRegion.country.name}}</p>
-									</div><!-- end col -->
-								</div><!-- end row -->
-								<hr class="divider sm">
-								<div class="row">
-									<div class="col-sm-8">
-										<label>Callsign</label>
-									</div><!-- end col -->
-									<div class="col-sm-4 text-right">
-										<p class="small" style="margin:3px 0;">{{currentRegion.callsign || 'None Set'}}</p>
-									</div><!-- end col -->
-								</div><!-- end row -->
-
-							</div><!-- end col -->
-							<div class="col-sm-7">
+							<div class="col-sm-12">
 								<label>Region Squads <span v-if="currentRegion.teams" class="badge badge-primary" v-text="currentRegion.teams.data.length"></span></label>
 								<hr class="divider sm">
 								<template v-if="currentRegion.teams.data.length">
+
 									<div class="list-group">
-										<div class="list-group-item" v-for="squad in currentRegion.teams.data">
-											<div class="row">
-												<div class="col-xs-9">
-													{{ squad.callsign | capitalize }} &middot; <span class="small">Members: {{ squad.members_count || 0 }}</span><br>
-													<span v-if="squad.type" class="label label-info" v-text="squad.type.data.name | capitalize"></span>
-													<span v-if="squad.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
+										<div class="list-group-item" v-for="team in currentRegion.teams.data">
+											<div class="row list-group-item-heading">
+												<div class="col-xs-6">
+													{{ team.callsign | capitalize }}
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
-												<div class="col-xs-3 text-right">
-													<tooltip effect="scale" placement="left" content="Remove from Region">
-														<a class="btn btn-xs btn-primary-hollow" @click="removeFromRegion(squad)">
-															<i class="fa fa-minus"></i>
-														</a>
-													</tooltip>
+												<div class="col-xs-6 text-right">
+													<i class="fa fa-users"></i> {{ team.members_count || 0 }}
+													<a class="btn btn-xs btn-primary-hollow" @click="removeFromRegion(team)">
+														<i class="fa fa-minus"></i>
+													</a>
 												</div>
 											</div>
+											<p class="list-group-item-text small" v-if="team.groups.data.length">
+												<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+											</p>
 										</div>
 									</div>
 								</template>
@@ -127,7 +118,7 @@
 						</div><!-- end col -->
 						<div class="form-group col-xs-4">
 							<button class="btn btn-default btn-sm btn-block" type="button" @click="showRegionsFilters = true">
-								<i class="fa fa-filter"></i>
+								<i class="fa fa-filter"></i> Filter
 							</button>
 						</div>
 						<div class="col-xs-12 text-right">
@@ -203,7 +194,7 @@
 			</div>
 		</div>
 
-		<!-- Regions Select & Squads List -->
+		<!-- Squads List -->
 		<div class="col-sm-4">
 			<!-- Search and Filter -->
 			<form class="form-inline row" @submit.prevent>
@@ -215,7 +206,7 @@
 				</div>
 				<div class="form-group col-xs-4">
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="showSquadsFilters = true;">
-						<i class="fa fa-filter"></i>
+						<i class="fa fa-filter"></i> Filter
 					</button>
 				</div>
 				<div class="col-xs-12">
@@ -226,21 +217,23 @@
 				<div class="col-xs-12">
 					<template v-if="squads.length">
 						<div class="list-group">
-							<div class="list-group-item" v-for="squad in squads">
-								<div class="row">
-									<div class="col-xs-9">
-										{{ squad.callsign | capitalize }} &middot; <span class="small">Members: {{ squad.members_count || 0 }}</span><br>
-										<span class="label label-info" v-text="squad.type.data.name | capitalize"></span>
-										<span v-if="squad.locked" class="label label-danger"><i class="fa fa-lock"></i> Locked</span>
+							<div class="list-group-item" v-for="team in squads">
+								<div class="row list-group-item-heading">
+									<div class="col-xs-6">
+										{{ team.callsign | capitalize }}
+										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>
-									<div class="col-xs-3 text-right">
-										<tooltip effect="scale" placement="left" :content="!this.currentRegion ? 'Select a Region' : 'Add to Region'">
-											<a class="btn btn-xs btn-primary-hollow" @click="addToRegion(squad)" :class="{ 'disabled': !this.currentRegion}">
-												<i class="fa fa-plus"></i>
-											</a>
-										</tooltip>
+									<div class="col-xs-6 text-right">
+										<i class="fa fa-users"></i> {{ team.members_count || 0 }}
+										<a class="btn btn-xs btn-primary-hollow" @click="addToRegion(team)" :class="{ 'disabled': !this.currentRegion}">
+											<i class="fa fa-plus"></i>
+										</a>
 									</div>
 								</div>
+								<p class="list-group-item-text small" v-if="team.groups.data.length">
+									<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+								</p>
 							</div>
 						</div>
 						<div class="col-xs-12 text-center">
@@ -258,7 +251,7 @@
 		</div>
 
 		<!-- Modals -->
-		<modal title="Create a Region" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :show.sync="showRegionModal">
+		<modal :title="editRegionModal?'Edit Region' : 'Create a Region'" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :show.sync="showRegionModal">
 			<div slot="modal-body" class="modal-body" v-if="selectedRegion">
 				<validator name="RegionCreate">
 					<form id="RegionCreateForm">
@@ -447,7 +440,7 @@
             getRegions(){
                 let params = {
                     campaign: this.campaignId,
-                    include: 'teams.groups',
+                    include: 'teams.groups,teams.type',
                     page: this.regionsPagination.current_page,
 	                search: this.regionsSearch,
 	                country: this.regionsFilters.country,
@@ -490,7 +483,7 @@
             },
             getSquads(){
                 let params = {
-                    include: 'type',
+                    include: 'type,groups',
                     page: this.squadsPagination.current_page,
                     search: this.squadsSearch,
 	                campaign: this.campaignId,
@@ -575,7 +568,7 @@
                     call_sign: this.selectedRegion.call_sign,
                 };
 
-                this.RegionsResource.update({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups', }, data).then(function (response) {
+                this.RegionsResource.update({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups, teams.type', }, data).then(function (response) {
                     let region = response.body.data;
                     this.showRegionModal = false;
                     this.editRegionModal = false;

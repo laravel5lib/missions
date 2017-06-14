@@ -179,6 +179,20 @@
     export default{
         name: 'rooming-plans-list',
 	    components: {vSelect, exportUtility},
+        props: {
+            userId: {
+                type: String,
+                required: false
+            },
+            groupId: {
+                type: String,
+                required: false
+            },
+            campaignId: {
+                type: String,
+                required: false
+            }
+        },
         data(){
             return {
                 plans: [],
@@ -262,7 +276,14 @@
 	                per_page: this.per_page,
                     include: 'group'
                 });
+                
+                if (this.isAdminRoute) {
+					params.campaign = this.campaignId;
+                } else {
+                    params.campaign = this.campaignId;
+                    params.group = this.groupId;
 
+                }
                 this.exportFilters = params;
 
                 return this.PlansResource.get(params).then(function (response) {

@@ -319,7 +319,7 @@
 									:options="exportOptions"
 									:filters="exportFilters">
 					</export-utility>
-					<reservation-reports :filters="filters" :search="search"></reservation-reports>
+					<!-- <reservation-reports :filters="filters" :search="search"></reservation-reports> -->
                 </form>
             </div>
         </div>

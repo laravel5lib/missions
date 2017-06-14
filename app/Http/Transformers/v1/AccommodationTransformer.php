@@ -28,7 +28,7 @@ class AccommodationTransformer extends TransformerAbstract {
             'id'           => $accommodation->id,
             'region_id'    => $accommodation->region_id,
             'name'         => $accommodation->name,
-            'rooms_count'  => $accommodation->roomsCount()->all(),
+            //'rooms_count'  => $accommodation->roomsCount()->all(),
             'room_types'   => $this->getAvailableRooms($accommodation),
             'occupants_count' => $accommodation->occupantsCount()->total(),
             'address_one'  => $accommodation->address_one,

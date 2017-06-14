@@ -201,7 +201,8 @@
 									{{currentRoom.type.data.name | capitalize}}
 								</template>
 								<span v-if="currentRoomHasLeader"> ({{ currentRoomHasLeader.surname }}, {{ currentRoomHasLeader.given_names | capitalize }}) </span>
-								<span class="small">&middot; Details</span></h5>
+								<span class="small">&middot; Details</span>
+							</h5>
 						</div><!-- end panel-heading -->
 						<div class="panel-body">
 							<div class="row">

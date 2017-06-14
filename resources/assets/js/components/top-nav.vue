@@ -13,7 +13,6 @@
 			<ul class="nav navmenu-nav">
 				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>
-				<!-- <li class="donate-nav"><a class="navDonate" href="/donate/general">Donate to Missions.Me</a> -->
 				</li>
 				<li class="navlabel">Account</li>
 				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
@@ -70,13 +69,10 @@
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
-				<li><a href="/water">Clean Water</a></li>
+				<li><a href="/projects">1Nation1Day</a></li>
 				<li><a href="/orphans">Rescue Orphans</a></li>
+				<li><a href="/water">Clean Water</a></li>
 				<li><a href="/medical">Medical Missions</a></li>
-				<!--<li><a href="#">Homes</a></li>-->
-				<!--<li><a href="#">Trafficking Rescue</a></li>-->
-				<!--<li><a href="#">Leadership Centers</a></li>-->
-				<!--<li><a href="#">Sponsor A Project</a></li>-->
 
 				<!-- Training -->
 				<li class="navlabel">Train</li>

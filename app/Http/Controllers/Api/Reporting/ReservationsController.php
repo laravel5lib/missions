@@ -57,7 +57,7 @@ class ReservationsController extends Controller
                 'state_providence' => $reservation->state,
                 'zip_postal' => $reservation->zip,
                 'country' => country($reservation->country_code),
-                'trip_rep' => $reservation->rep ? $reservation->rep->name : $reservation->trip->rep->name,
+                'trip_rep' => $reservation->rep ? $reservation->rep->name : ($reservation->trip->rep ? $reservation->trip->rep->name : null),
                 'managing_user' => $reservation->user->name,
                 'user_email' => $reservation->user->email,
                 'user_primary_phone' => $reservation->user->phone_one,

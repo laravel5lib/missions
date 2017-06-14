@@ -149,7 +149,7 @@ abstract class EloquentRepository
                 && !is_null(trim($value)) 
                 && trim($value) <> '';
         })->map(function($value, $key) {
-            return $data[$key] = $value;
+            return $data[$key] = trim($value);
         })->all();
     }
 }

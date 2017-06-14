@@ -5,7 +5,9 @@ class SquadMembersEndpointTest extends TestCase
     /** @test */
     public function fetches_all_squad_members()
     {
-        $squad = factory(App\Models\v1\TeamSquad::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $squad = factory(App\Models\v1\TeamSquad::class)->create(['team_id' => $team->id]);
 
         $squad->members()->saveMany([
             factory(App\Models\v1\Reservation::class)->make(),
@@ -34,7 +36,9 @@ class SquadMembersEndpointTest extends TestCase
     /** @test */
     public function fetches_squad_member_by_id()
     {
-        $squad = factory(App\Models\v1\TeamSquad::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $squad = factory(App\Models\v1\TeamSquad::class)->create(['team_id' => $team->id]);
 
         $member = $squad->members()->save(factory(App\Models\v1\Reservation::class)->make());
 
@@ -46,7 +50,9 @@ class SquadMembersEndpointTest extends TestCase
     /** @test */
     public function adds_members_to_squad()
     {
-        $squad = factory(App\Models\v1\TeamSquad::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $squad = factory(App\Models\v1\TeamSquad::class)->create(['team_id' => $team->id]);
         $reservation = factory(App\Models\v1\Reservation::class)->create();
 
         $this->post('api/squads/' . $squad->id . '/members', ['id' => $reservation->id])
@@ -62,7 +68,9 @@ class SquadMembersEndpointTest extends TestCase
     /** @test */
     public function updates_member_in_squad()
     {
-        $squad = factory(App\Models\v1\TeamSquad::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $squad = factory(App\Models\v1\TeamSquad::class)->create(['team_id' => $team->id]);
         $reservation = factory(App\Models\v1\Reservation::class)->create();
         $squad->members()->attach($reservation->id);
 
@@ -79,7 +87,9 @@ class SquadMembersEndpointTest extends TestCase
     /** @test */
     public function removes_member_from_squad()
     {
-        $squad = factory(App\Models\v1\TeamSquad::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $squad = factory(App\Models\v1\TeamSquad::class)->create(['team_id' => $team->id]);
         $reservation = factory(App\Models\v1\Reservation::class)->create();
         $squad->members()->attach($reservation->id);
 

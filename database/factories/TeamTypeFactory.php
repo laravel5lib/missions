@@ -10,7 +10,7 @@ $factory->define(App\Models\v1\TeamType::class, function(Faker\Generator $faker)
             'max_members' => 25,
             'min_leaders' => 2,
             'max_leaders' => 2,
-            'min_groups'  => 2,
+            'min_groups'  => 1,
             'max_groups'  => 10,
             'min_group_members' => 2,
             'max_group_members' => 5,

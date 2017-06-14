@@ -27,7 +27,7 @@ class Accommodation extends Model
 
     public function campaign()
     {
-        return $this->region()->campaign();
+        return $this->region->campaign();
     }
 
     public function notes()

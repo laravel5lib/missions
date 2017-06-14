@@ -3,19 +3,27 @@
 namespace App\Http\Controllers\Api\Reporting;
 
 use App\Http\Requests;
+use App\Models\v1\User;
+use App\Jobs\GenerateReport;
 use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
 use App\Http\Controllers\Controller;
 
 class ReservationFundsController extends Controller
 {
-    function __construct(Reservation $reservation)
+    protected $reservation;
+    protected $user;
+
+    function __construct(Reservation $reservation, User $user)
     {
         $this->reservation = $reservation;
+        $this->user = $user;
     }
 
     public function store(Request $request)
     {
+        $user = $this->user->findOrFail($request->get('author_id'));
+
         $reservations = $this->reservation
                              ->filter($request->all())
                              ->with('costs', 'dues.payment.cost')
@@ -23,9 +31,11 @@ class ReservationFundsController extends Controller
 
         $data = $this->columnize($reservations);
 
-        return $data;
+        $this->dispatch(new GenerateReport($data, 'reservation_funds', $user));
 
-        // (new GenerateReport($filename)->create($data, $sheetname = 'Reservations');
+        return $this->response()->created(null, [
+            'message' => 'Report is being generated and will be available shortly.'
+        ]);
     }
 
     private function columnize($reservations)

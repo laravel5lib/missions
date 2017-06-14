@@ -319,6 +319,7 @@
 									:options="exportOptions"
 									:filters="exportFilters">
 					</export-utility>
+					<reservation-reports :filters="filters" :search="search"></reservation-reports>
                 </form>
             </div>
         </div>
@@ -536,9 +537,10 @@
 <script type="text/javascript">
 	import vSelect from "vue-select";
 	import exportUtility from '../export-utility.vue';
+	import reservationReports from '../admin/reporting/reservation-reports.vue';
 	export default{
 		name: 'admin-reservations-list',
-		components: {vSelect, exportUtility},
+		components: {vSelect, exportUtility, reservationReports},
 		props: {
 			tripId: {
 				type: String,

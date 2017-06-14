@@ -263,6 +263,14 @@
                     include: 'group'
                 });
 
+                if (this.isAdminRoute) {
+					params.campaign = this.campaignId;
+                } else {
+                    params.campaign = this.campaignId;
+                    params.group = this.groupId;
+
+                }
+
                 this.exportFilters = params;
 
                 return this.PlansResource.get(params).then(function (response) {
@@ -395,7 +403,7 @@
                 delete data.group;
 
                 if (this.$PlanCreate.valid) {
-                    return this.PlansResource.save(data).then(function (response) {
+                    return this.PlansResource.save(data, { include: 'group' }).then(function (response) {
                         let plan = response.body.data;
                         this.plans.push(plan);
                         this.showPlanModal = false;

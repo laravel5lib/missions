@@ -1,65 +1,69 @@
-<?php namespace App\Filters\v1;
-
-use Carbon\Carbon;
+<?php 
+namespace App\Filters\v1;
 
 class TeamFilter extends Filter
 {
-    /**
-    * Related Models that have ModelFilters as well as the method on the ModelFilter
-    * As [relatedModel => [method1, method2]]
-    *
-    * @var array
-    */
     public $relations = [];
+    public $sortable = ['callsign', 'created_at', 'updated_at'];
+    public $searchable = ['callsign'];
 
-    /**
-     * Fields that can be sorted.
-     *
-     * @var array
-     */
-    public $sortable = [
-        'call_sign', 'published_at', 'created_at', 'updated_at'
-    ];
-
-    /**
-     * Fields that are searchable.
-     *
-     * @var array
-     */
-    public $searchable = ['call_sign', 'region.name'];
-
-    /**
-     * By published.
-     * @return mixed
-     */
-    public function published()
+    public function type($type)
     {
-        return $this->whereNotNull('published_at')
-                    ->where('published_at', '<=', Carbon::now());
+        return $this->whereHas('type', function($query) use($type) {
+            return $query->where('name', strtolower( trim($type) ) );
+        });
+    }
+
+    public function group($id)
+    {
+        return $this->whereHas('groups', function($query) use($id) {
+            return $query->where('id', $id);
+        });
+    }
+
+    public function campaign($id)
+    {
+        return $this->whereHas('campaigns', function($query) use($id) {
+            return $query->where('id', $id);
+        });
+    }
+
+    public function region($id)
+    {
+        return $this->whereHas('regions', function($query) use($id) {
+            return $query->where('id', $id);
+        });
     }
 
     /**
-     * Filter by regions
-     *
-     * @param $ids
-     * @return mixed
+     * Filter by existing assignment
      */
-    public function regions($ids)
+    public function assigned($assignment)
     {
-        return $this->whereIn('region_id', $ids);
+        $param = preg_split('/\|+/', $assignment);
+
+        if(isset($param[1])) {
+            return $this->whereHas( str_plural($param[0]), function($query) use($param) {
+                return $query->where('id', '=', $param[1]);
+            });
+        }
+
+        return $this->has( str_plural($param[0]) );
     }
 
     /**
-     * By member range.
-     *
-     * @param $members
-     * @return mixed
+     * Filter by no assignment
      */
-    public function members($members)
+    public function unassigned($assignment)
     {
-        if(count($members) < 2) return $this;
+        $param = preg_split('/\|+/', $assignment);
 
-        return $this->has('members', '>=', $members[0])
-                    ->has('members', '<=', $members[1]);
+        if(isset($param[1])) {
+            return $this->whereHas( str_plural($param[0]), function($query) use($param) {
+                return $query->where('id', '<>', $param[1]);
+            });
+        }
+
+        return $this->has( str_plural($param[0]), '<', 1);
     }
 }

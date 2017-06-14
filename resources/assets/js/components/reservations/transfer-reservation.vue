@@ -9,7 +9,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-12">
-                            <div class="alert alert-warning"><strong>Important:</strong> Transferring a reservation will reset it's travel requirements and any additional costs applied. This action cannot be reversed.</div>
+                            <div class="alert alert-warning"><strong>Important:</strong> Transferring a reservation will reset it's travel requirements, applied costs, and remove it from any teams or rooms it may already be assigned to. This action cannot be reversed.</div>
                         </div>
                     </div>
                     <div class="row">

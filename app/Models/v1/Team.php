@@ -2,64 +2,65 @@
 
 namespace App\Models\v1;
 
-use App\UuidForKey;
 use Carbon\Carbon;
+use App\UuidForKey;
 use EloquentFilter\Filterable;
+use App\Services\Teams\ValidatesSquads;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Team extends Model
 {
-    use Filterable, UuidForKey;
+    use Filterable, UuidForKey, SoftDeletes;
 
-    protected $fillable = [
-      'region_id', 'call_sign'
-    ];
+    protected $guarded = [];
 
     protected $dates = [
-        'created_at', 'updated_at', 'published_at'
+        'created_at', 'updated_at', 'deleted_at'
     ];
 
-    public function region()
+    public function type()
     {
-        return $this->belongsTo(Region::class);
+        return $this->belongsTo(TeamType::class, 'type_id');
     }
 
-    public function members()
+    public function squads()
     {
-        return $this->hasMany(TeamMember::class);
+        return $this->hasMany(TeamSquad::class);
     }
 
-    public function isPublished()
+    public function groups()
     {
-        if ( ! is_null($this->published_at) and $this->published_at <= Carbon::now())
-        {
-            return true;
-        }
-
-        return false;
+        return $this->morphedByMany(Group::class, 'teamable');
     }
 
-    /**
-     * Syncronize all the team's members.
-     *
-     * @param $members
-     * @internal param $requirements
-     */
-    public function syncMembers($members)
+    public function campaigns()
     {
-        if ( ! $members) return;
+        return $this->morphedByMany(Campaign::class, 'teamable');
+    }
 
-        $ids = $this->members()->lists('id', 'id');
+    public function regions()
+    {
+        return $this->morphedByMany(Region::class, 'teamable');
+    }
 
-        foreach($members as $member)
-        {
-            if( ! isset($member['id'])) $member['id'] = null;
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
 
-            array_forget($ids, $member['id']);
+    public function validateSquads()
+    {
+        return new ValidatesSquads($this);
+    }
 
-            $this->members()->updateOrCreate(['id' => $member['id']], $member);
-        }
+    public function addTeamables(array $associations)
+    {
+        collect($associations)->each(function ($teamable) {
+            $type = $teamable['type'];
+            $id = $teamable['id'];
 
-        if( ! $ids->isEmpty()) TeamMember::destroy($ids);
+            $this->{$type}()->attach($id);
+        });
     }
 }

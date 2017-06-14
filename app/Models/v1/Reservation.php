@@ -7,6 +7,7 @@ use App\UuidForKey;
 use App\Traits\Rewardable;
 use Conner\Tagging\Taggable;
 use EloquentFilter\Filterable;
+use Illuminate\Support\Facades\DB;
 use App\Models\v1\RequirementCondition;
 use Illuminate\Database\Eloquent\Model;
 use App\Jobs\Reservations\SyncPaymentsDue;
@@ -127,6 +128,18 @@ class Reservation extends Model
     }
 
     /**
+     * Team squads the reservation is assigned to.
+     * 
+     * @return BelongsToMany
+     */
+    public function squads()
+    {
+        return $this->belongsToMany(TeamSquad::class, 'team_members')
+                    ->withPivot('leader')
+                    ->withTimestamps();
+    }
+
+    /**
      * Get the user that owns the reservation.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -162,7 +175,7 @@ class Reservation extends Model
     public function companionReservations()
     {
         return $this->belongsToMany(Reservation::class, 'companions', 'companion_id')
-                    ->withPivot('relationship');
+                    ->withPivot('relationship')->distinct();
     }
 
     /**
@@ -296,6 +309,18 @@ class Reservation extends Model
     public function avatar()
     {
         return $this->belongsTo(Upload::class, 'avatar_upload_id');
+    }
+
+    /**
+     * Get the reservation's room assignments.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'occupants')
+                    ->withPivot('room_leader')
+                    ->withTimestamps();
     }
 
     /**
@@ -662,9 +687,31 @@ class Reservation extends Model
      */
     public function drop()
     {
-        $this->fund ? $this->fund->archive() : null;
+        $this->archiveFund()
+             ->removeFromSquads();
 
         $this->delete();
+    }
+
+    /**
+     * Archive the Reservation's Fund.
+     */
+    public function archiveFund()
+    {
+        if ($this->fund)
+            $this->fund->archive();
+
+        return $this;
+    }
+
+    /**
+     * Remove the reservation from all squads.
+     */
+    public function removeFromSquads()
+    {
+        $this->squads()->detach();
+
+        return $this;
     }
 
     /**
@@ -686,16 +733,19 @@ class Reservation extends Model
      */
     public function transferToTrip($trip_id, $desired_role)
     {
-        // change trip and desired role
-        $this->update([
-            'desired_role' => $desired_role,
-            'trip_id' => $trip_id
-        ]);
+        DB::transaction(function () use($trip_id, $desired_role) {
+            // remove the current resources
+            $this->costs()->detach();
+            $this->requirements()->delete();
+            $this->todos()->delete();
+            $this->squads()->detach();
 
-        // remove the current resources
-        $this->costs()->detach();
-        $this->requirements()->delete();
-        $this->todos()->delete();
+            // change trip and desired role
+            $this->update([
+                'desired_role' => $desired_role,
+                'trip_id' => $trip_id
+            ]);
+        });
 
         // sync all other resources
         dispatch(new ProcessReservation($this));

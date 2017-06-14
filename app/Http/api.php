@@ -110,13 +110,19 @@ $api->version('v1', [
     $api->resource('referrals', 'ReferralsController');
     $api->post('referrals/export', 'ReferralsController@export');
     $api->post('referrals/import', 'ReferralsController@import');
-    $api->resource('regions', 'RegionsController');
-    $api->resource('teams', 'TeamsController');
-    $api->resource('teams.members', 'TeamMembersController');
+    $api->resource('campaigns.regions', 'RegionsController');
+
+    $api->group(['namespace' => 'Teams'], function($api)
+    {
+        $api->resource('teams/types', 'TeamTypesController');
+        $api->resource('teams', 'TeamsController');
+        $api->resource('{teamable_type}/{teamable_id}/teams', 'TeamablesController');
+        $api->resource('teams.squads', 'TeamSquadsController');
+        $api->resource('squads.members', 'SquadMembersController');
+    });
+
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
-    $api->resource('accommodations', 'AccommodationsController');
-    $api->resource('accommodations.occupants', 'OccupantsController');
     $api->resource('stories', 'StoriesController');
     $api->resource('funds', 'FundsController');
     $api->post('funds/export', 'FundsController@export');
@@ -155,6 +161,19 @@ $api->version('v1', [
     $api->put('promocodes/{id}/restore', 'PromocodesController@restore');
     $api->resource('accounting/classes', 'AccountingClassesController');
     $api->resource('accounting/items', 'AccountingItemsController');
+    $api->resource('regions.accommodations', 'AccommodationsController');
+
+    $api->group(['prefix' => 'rooming'], function($api) {
+        $api->resource('plans', 'Rooming\PlansController');
+        $api->post('plans/export', 'Rooming\PlansController@export');
+        $api->resource('types', 'Rooming\TypesController');
+        $api->resource('plans.types', 'Rooming\PlanRoomTypesController');
+        $api->resource('accommodations.types', 'Rooming\AccommodationRoomTypesController');
+        $api->resource('rooms', 'Rooming\RoomsController');
+        $api->resource('{roomableType}/{roomableId}/rooms', 'Rooming\Roomable\RoomsController');
+        $api->resource('rooms/{roomId}/occupants', 'Rooming\RoomOccupantsController');
+        $api->resource('{roomableType}/{roomableId}/plans', 'Rooming\Roomable\UtilizedPlansController');
+    });
 
     $api->resource('activities', 'ActivitiesController');
     $api->resource('itineraries/travel', 'TravelItinerariesController');
@@ -181,6 +200,10 @@ $api->version('v1', [
         $api->get('allergies', function() {
             return ['data' => \App\Models\v1\MedicalAllergy::available()];
         });
+    });
+
+    $api->group(['prefix' => 'metrics'], function ($api) {
+        $api->get('teams', 'Metrics\TeamsController@index');
     });
 
     $api->group(['prefix' => 'utilities'], function ($api) {

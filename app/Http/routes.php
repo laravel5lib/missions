@@ -27,6 +27,8 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     // Group Routes...
     $this->resource('groups', 'Dashboard\GroupsController', ['only' => ['index', 'show', 'edit']]);
     $this->get('groups/{groupId}/trips/{id}/{tab?}', 'Dashboard\GroupsController@trips');
+    $this->get('groups/{groupId}/teams', 'Dashboard\GroupsController@teams');
+    $this->get('groups/{groupId}/rooms', 'Dashboard\GroupsController@rooms');
 
     // Records Routes...
     $this->get('records/{tab?}', function($tab = 'passports') {
@@ -112,10 +114,14 @@ $this->get('/trips/{id}/register', 'TripsController@register');
 $this->get('/fundraisers', 'FundraisersController@index');
 $this->get('/groups', 'GroupsController@index');
 $this->get('/campaigns', 'CampaignsController@index');
-$this->get('/{slug}/signup', 'GroupsController@signup');
-$this->get('/{slug}/trips', 'CampaignsController@trips');
-$this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')->where('sponsor_slug', '.+');
-$this->get('/{slug}', 'PagesController@show');
+$this->get('/{slug}/signup', 'GroupsController@signup')
+     ->where('sponsor_slug', '^(?!api).*$');
+$this->get('/{slug}/trips', 'CampaignsController@trips')
+     ->where('sponsor_slug', '^(?!api).*$');
+$this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')
+     ->where('sponsor_slug', '^(?!api).*$');
+$this->get('/{slug}', 'PagesController@show')
+     ->where('sponsor_slug', '^(?!api).*$');
 
 // Home Route ...
 $this->get('/', function () {

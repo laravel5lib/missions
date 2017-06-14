@@ -399,7 +399,6 @@
                         let plan = response.body.data;
                         this.plans.push(plan);
                         this.showPlanModal = false;
-                        this.loadManager(plan);
                     }, function (response) {
                         console.log(response);
                         this.$root.$emit('showError', response.body.message);

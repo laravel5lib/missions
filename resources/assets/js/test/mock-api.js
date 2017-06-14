@@ -3166,8 +3166,213 @@ export default {
         }
 
     },
+    // Regions API
+    ['GET *regions/:region/accommodations(/:accommodation)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "faed1eec-e4d2-483e-a23e-b609b5d54164",
+                    "region_id": "45bd0918-bffa-447e-8af2-fb135b82a8c8",
+                    "name": "Marriott Hotel",
+                    "rooms_count": {
+                        "Standard": 1,
+                        "Double": 1,
+                        "Double (married)": 0,
+                        "Triple": 0,
+                        "total": 2
+                    },
+                    "occupants_count": 3,
+                    "address_one": null,
+                    "address_two": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "phone": null,
+                    "fax": null,
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "room_types": { "total": 0 },
+                    "email": null,
+                    "url": null,
+                    "short_desc": "",
+                    "created_at": "2017-05-26 17:30:02",
+                    "updated_at": "2017-05-26 17:30:02",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/regions/45bd0918-bffa-447e-8af2-fb135b82a8c8/accommodations/faed1eec-e4d2-483e-a23e-b609b5d54164"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        if (pathMatch.accommodation) {
+            body.data = _.findWhere(body.data, {id: pathMatch.accommodation});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
 
     // Campaigns API
+    ['GET *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "1f2aad09-7188-466e-9a02-cfd0261403b5",
+                    "name": "Leon",
+                    "call_sign": "Blue",
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "accommodations": {
+                        "data": [
+                            {
+                                "id": "faed1eec-e4d2-483e-a23e-b609b5d54164",
+                                "region_id": "45bd0918-bffa-447e-8af2-fb135b82a8c8",
+                                "name": "Marriott Hotel",
+                                "rooms_count": {
+                                    "Standard": 1,
+                                    "Double": 1,
+                                    "Double (married)": 0,
+                                    "Triple": 0,
+                                    "total": 2
+                                },
+                                "occupants_count": 3,
+                                "address_one": null,
+                                "address_two": null,
+                                "city": null,
+                                "state": null,
+                                "zip": null,
+                                "phone": null,
+                                "fax": null,
+                                "country": {
+                                    "code": "ni",
+                                    "name": "Nicaragua"
+                                },
+                                "room_types": { "total": 0 },
+                                "email": null,
+                                "url": null,
+                                "short_desc": "",
+                                "created_at": "2017-05-26 17:30:02",
+                                "updated_at": "2017-05-26 17:30:02",
+                                "deleted_at": null,
+                                "links": [
+                                    {
+                                        "rel": "self",
+                                        "uri": "/api/regions/45bd0918-bffa-447e-8af2-fb135b82a8c8/accommodations/faed1eec-e4d2-483e-a23e-b609b5d54164"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
+                    "created_at": "2017-05-24 01:42:55",
+                    "updated_at": "2017-05-24 01:42:55",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/1f2aad09-7188-466e-9a02-cfd0261403b5"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.region) {
+            body.data = _.findWhere(body.data, {id: pathMatch.region});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
+        debugger;
+        let body = {
+            "data": [
+                {
+                    "id": "1f2aad09-7188-466e-9a02-cfd0261403b5",
+                    "name": "Leon",
+                    "call_sign": "Blue",
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
+                    "created_at": "2017-05-24 01:42:55",
+                    "updated_at": "2017-05-24 01:42:55",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/1f2aad09-7188-466e-9a02-cfd0261403b5"
+                        }
+                    ]
+                },
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.region) {
+            body.data = _.findWhere(body.data, {id: pathMatch.region});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
     ['GET *campaigns(/:campaign)'] (pathMatch, query, request) {
         let body = {
             "data": [{
@@ -3248,119 +3453,119 @@ export default {
                         }
                     },
                         {
-                        "id": "2012984c-67b7-489f-a51b-45912895f53e",
-                        "group_id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
-                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
-                        "rep_id": "33b6bbdf-986b-424d-9d1c-1dd5d80e31bc",
-                        "rep": "Sabrina Kreiger",
-                        "spots": 316,
-                        "status": "active",
-                        "starting_cost": "1843.00",
-                        "companion_limit": 1,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "leader",
-                        "difficulty": "level 2",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["teens", "pastors", "medical professionals", "women"],
-                        "team_roles": ["PRAS", "NAST", "DIET", "CRDO"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders...",
-                        "public": true,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-05 15:02:38",
-                        "updated_at": "2017-05-05 15:02:42",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/2012984c-67b7-489f-a51b-45912895f53e"}],
-                        "group": {
-                            "data": {
-                                "id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
-                                "status": "approved",
-                                "name": "Toy-Braun",
-                                "type": "business",
-                                "timezone": "America\/Porto_Velho",
-                                "description": "I was going a journey, I should think you'll feel it a little ledge of rock, and, as there was silence for some.",
-                                "url": "toy-braun",
-                                "public": true,
-                                "address_one": "488 Mattie Mountain Apt. 518",
-                                "address_two": "45254",
-                                "city": null,
-                                "state": null,
-                                "zip": null,
-                                "country_code": "ie",
-                                "country_name": "Ireland",
-                                "phone_one": "3285255388",
-                                "phone_two": "9218561719260",
-                                "email": "hjerde@example.org",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-05 15:01:44",
-                                "updated_at": "2017-05-05 15:02:49",
-                                "links": [{"rel": "self", "uri": "\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]
+                            "id": "2012984c-67b7-489f-a51b-45912895f53e",
+                            "group_id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
+                            "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                            "rep_id": "33b6bbdf-986b-424d-9d1c-1dd5d80e31bc",
+                            "rep": "Sabrina Kreiger",
+                            "spots": 316,
+                            "status": "active",
+                            "starting_cost": "1843.00",
+                            "companion_limit": 1,
+                            "reservations": 0,
+                            "country_code": "ni",
+                            "country_name": "Nicaragua",
+                            "type": "leader",
+                            "difficulty": "level 2",
+                            "started_at": "2017-07-22",
+                            "ended_at": "2017-07-30",
+                            "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                            "prospects": ["teens", "pastors", "medical professionals", "women"],
+                            "team_roles": ["PRAS", "NAST", "DIET", "CRDO"],
+                            "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders...",
+                            "public": true,
+                            "published_at": "2016-02-01 00:00:00",
+                            "closed_at": "2017-07-15 00:00:00",
+                            "created_at": "2017-05-05 15:02:38",
+                            "updated_at": "2017-05-05 15:02:42",
+                            "tags": [],
+                            "links": [{"rel": "self", "uri": "\/trips\/2012984c-67b7-489f-a51b-45912895f53e"}],
+                            "group": {
+                                "data": {
+                                    "id": "4bbde7eb-dfe2-3b08-84be-f3bcad4c969a",
+                                    "status": "approved",
+                                    "name": "Toy-Braun",
+                                    "type": "business",
+                                    "timezone": "America\/Porto_Velho",
+                                    "description": "I was going a journey, I should think you'll feel it a little ledge of rock, and, as there was silence for some.",
+                                    "url": "toy-braun",
+                                    "public": true,
+                                    "address_one": "488 Mattie Mountain Apt. 518",
+                                    "address_two": "45254",
+                                    "city": null,
+                                    "state": null,
+                                    "zip": null,
+                                    "country_code": "ie",
+                                    "country_name": "Ireland",
+                                    "phone_one": "3285255388",
+                                    "phone_two": "9218561719260",
+                                    "email": "hjerde@example.org",
+                                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                    "banner": null,
+                                    "reservations_count": 75,
+                                    "created_at": "2017-05-05 15:01:44",
+                                    "updated_at": "2017-05-05 15:02:49",
+                                    "links": [{"rel": "self", "uri": "\/groups\/4bbde7eb-dfe2-3b08-84be-f3bcad4c969a"}]
+                                }
                             }
-                        }
-                    },
+                        },
                         {
-                        "id": "e2d3a383-58b9-434e-a6d5-22062395f3a7",
-                        "group_id": "e73e385a-435c-3ff1-a45c-2eb1db19a92b",
-                        "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
-                        "rep_id": "41e21866-80fb-4bb8-afcd-401087a70710",
-                        "rep": "Lily Conroy",
-                        "spots": 284,
-                        "status": "active",
-                        "starting_cost": "1754.00",
-                        "companion_limit": 2,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "family",
-                        "difficulty": "level 1",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["women", "business professionals", "men", "medical professionals"],
-                        "team_roles": ["MDSN", "ETEC", "DENT", "DENH"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+...",
-                        "public": true,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-05 15:03:00",
-                        "updated_at": "2017-05-05 15:03:04",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/f4fd2275-d972-4323-979f-2099ea17a15a"}],
-                        "group": {
-                            "data": {
-                                "id": "e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e",
-                                "status": "approved",
-                                "name": "Ruecker, Gerlach and Paucek",
-                                "type": "nonprofit",
-                                "timezone": "Asia\/Baku",
-                                "description": "And mentioned me to him: She gave me a pair of the shepherd boy--and the sneeze of the tea--' 'The twinkling of the.",
-                                "url": "ruecker-gerlach-and-paucek",
-                                "public": true,
-                                "address_one": "67251 Smith Overpass Apt. 318",
-                                "address_two": null,
-                                "city": null,
-                                "state": null,
-                                "zip": "05589-5101",
-                                "country_code": "tv",
-                                "country_name": "Tuvalu",
-                                "phone_one": "975420450588447",
-                                "phone_two": "",
-                                "email": "leo.mcclure@example.com",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-05 15:01:44",
-                                "updated_at": "2017-05-05 15:03:11",
-                                "links": [{"rel": "self", "uri": "\/groups\/e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e"}]
+                            "id": "e2d3a383-58b9-434e-a6d5-22062395f3a7",
+                            "group_id": "e73e385a-435c-3ff1-a45c-2eb1db19a92b",
+                            "campaign_id": "5830c58b-a183-49ec-a61e-a3c748b33c28",
+                            "rep_id": "41e21866-80fb-4bb8-afcd-401087a70710",
+                            "rep": "Lily Conroy",
+                            "spots": 284,
+                            "status": "active",
+                            "starting_cost": "1754.00",
+                            "companion_limit": 2,
+                            "reservations": 0,
+                            "country_code": "ni",
+                            "country_name": "Nicaragua",
+                            "type": "family",
+                            "difficulty": "level 1",
+                            "started_at": "2017-07-22",
+                            "ended_at": "2017-07-30",
+                            "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                            "prospects": ["women", "business professionals", "men", "medical professionals"],
+                            "team_roles": ["MDSN", "ETEC", "DENT", "DENH"],
+                            "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+...",
+                            "public": true,
+                            "published_at": "2016-02-01 00:00:00",
+                            "closed_at": "2017-07-15 00:00:00",
+                            "created_at": "2017-05-05 15:03:00",
+                            "updated_at": "2017-05-05 15:03:04",
+                            "tags": [],
+                            "links": [{"rel": "self", "uri": "\/trips\/f4fd2275-d972-4323-979f-2099ea17a15a"}],
+                            "group": {
+                                "data": {
+                                    "id": "e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e",
+                                    "status": "approved",
+                                    "name": "Ruecker, Gerlach and Paucek",
+                                    "type": "nonprofit",
+                                    "timezone": "Asia\/Baku",
+                                    "description": "And mentioned me to him: She gave me a pair of the shepherd boy--and the sneeze of the tea--' 'The twinkling of the.",
+                                    "url": "ruecker-gerlach-and-paucek",
+                                    "public": true,
+                                    "address_one": "67251 Smith Overpass Apt. 318",
+                                    "address_two": null,
+                                    "city": null,
+                                    "state": null,
+                                    "zip": "05589-5101",
+                                    "country_code": "tv",
+                                    "country_name": "Tuvalu",
+                                    "phone_one": "975420450588447",
+                                    "phone_two": "",
+                                    "email": "leo.mcclure@example.com",
+                                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                    "banner": null,
+                                    "reservations_count": 75,
+                                    "created_at": "2017-05-05 15:01:44",
+                                    "updated_at": "2017-05-05 15:03:11",
+                                    "links": [{"rel": "self", "uri": "\/groups\/e05fc7d1-ab3b-35bb-bd48-8365e54d7d7e"}]
+                                }
                             }
-                        }
-                    }]
+                        }]
                 }
             }],
             "meta": {
@@ -3388,102 +3593,6 @@ export default {
             delay: Settings.delay, // millisecond
         }
 
-    },
-    ['GET *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "1f2aad09-7188-466e-9a02-cfd0261403b5",
-                    "name": "Leon",
-                    "call_sign": "Blue",
-                    "country": {
-                        "code": "ni",
-                        "name": "Nicaragua"
-                    },
-                    "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
-                    "created_at": "2017-05-24 01:42:55",
-                    "updated_at": "2017-05-24 01:42:55",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/1f2aad09-7188-466e-9a02-cfd0261403b5"
-                        }
-                    ]
-                },
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 1,
-                    "count": 1,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-
-        if (pathMatch.region) {
-            body.data = _.findWhere(body.data, {id: pathMatch.region});
-            delete body.meta;
-        }
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-    ['POST *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
-        let body = {
-            "data": [
-                {
-                    "id": "1f2aad09-7188-466e-9a02-cfd0261403b5",
-                    "name": "Leon",
-                    "call_sign": "Blue",
-                    "country": {
-                        "code": "ni",
-                        "name": "Nicaragua"
-                    },
-                    "campaign_id": "618260ab-a58a-43aa-ad28-b85e6b3c1b74",
-                    "created_at": "2017-05-24 01:42:55",
-                    "updated_at": "2017-05-24 01:42:55",
-                    "deleted_at": null,
-                    "links": [
-                        {
-                            "rel": "self",
-                            "uri": "/campaigns/618260ab-a58a-43aa-ad28-b85e6b3c1b74/regions/1f2aad09-7188-466e-9a02-cfd0261403b5"
-                        }
-                    ]
-                },
-            ],
-            "meta": {
-                "pagination": {
-                    "total": 1,
-                    "count": 1,
-                    "per_page": 10,
-                    "current_page": 1,
-                    "total_pages": 1,
-                    "links": []
-                }
-            }
-        };
-
-        if (pathMatch.region) {
-            body.data = _.findWhere(body.data, {id: pathMatch.region});
-            delete body.meta;
-        }
-
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
     },
 
     // Uploads API

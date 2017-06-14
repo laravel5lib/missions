@@ -9,7 +9,8 @@ class ExportReservations extends Exporter
     public function data(array $request)
     {
         $reservations = Reservation::filter($request)
-            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 'costs', 'dues.payment', 'deadlines', 'promocodes')
+            ->with('user', 'trip.campaign', 'trip.group', 'requirements.requirement', 
+                'requirements.document', 'costs', 'dues.payment', 'deadlines', 'promocodes')
             ->get();
 
         return $reservations;
@@ -17,17 +18,23 @@ class ExportReservations extends Exporter
 
     public function columns($reservation)
     {
-        $columns = [
+        $user = [
             'managing_user' => $reservation->user->name,
             'user_email' => $reservation->user->email,
             'user_primary_phone' => $reservation->user->phone_one,
-            'user_secondary_phone' => $reservation->user->secondary_phone,
+            'user_secondary_phone' => $reservation->user->secondary_phone
+        ];
+
+        $trip = [
             'group' => $reservation->trip->group->name,
             'trip_type' => $reservation->trip->type,
             'campaign' => $reservation->trip->campaign->name,
             'country_located' => country($reservation->trip->campaign->country_code),
             'start_date' => $reservation->trip->started_at->format('M d, Y'),
-            'end_date' => $reservation->trip->ended_at->format('M d, Y'),
+            'end_date' => $reservation->trip->ended_at->format('M d, Y')
+        ];
+
+        $traveler = [
             'given_names' => $reservation->given_names,
             'surname' => $reservation->surname,
             'gender' => $reservation->gender,
@@ -43,10 +50,15 @@ class ExportReservations extends Exporter
             'state_providence' => $reservation->state,
             'zip_postal' => $reservation->zip,
             'country' => country($reservation->country_code),
+            'desired_role' => teamRole($reservation->desired_role),
+            'designation' => $reservation->designation ? 
+                implode('', array_flatten($reservation->designation->content)) : 'none',
+        ];
+
+        $funding = [
             'percent_raised' => $reservation->getPercentRaised().'%',
             'amount_raised' => $reservation->totalRaisedInDollars(),
             'outstanding' => $reservation->totalOwedInDollars(),
-            'desired_role' => teamRole($reservation->desired_role),
             'payments' => implode(", ", $reservation->dues->map(function($due) {
                 return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(),2).'] ('.$due->getStatus().')';
             })->all()),
@@ -58,22 +70,34 @@ class ExportReservations extends Exporter
             })->all()),
             'optional_costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
                 return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
-            })->all()),
+            })->all())
+        ];
+
+        $requirements = [
             'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
                 return $requirement->requirement->name . ' ('.$requirement->status.')';
-            })->all()),
+            })->all())
+        ];
+
+        $deadlines = [
             'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
                 return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
-            })->all()),
+            })->all())
+        ];
+
+        $promos = [
             'promocodes' => implode(", ", $reservation->promocodes->map(function ($promo) {
                 return $promo->code;
-            })->all()),
-            'designation' => $reservation->designation ? 
-                implode('', array_flatten($reservation->designation->content)) : 'none',
+            })->all())
+        ];
+
+        $dates = [
             'registered_at' => $reservation->created_at->toCookieString(),
             'updated_at' => $reservation->updated_at->toCookieString(),
             'dropped_at' => $reservation->dropped_at ? $reservation->dropped_at->toCookieString() : null
         ];
+
+        $columns = [];
 
         return $columns;
     }

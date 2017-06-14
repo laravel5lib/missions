@@ -209,6 +209,15 @@ $api->version('v1', [
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
 
+    $api->group(['prefix' => 'reports'], function($api)
+    {
+        $api->post('reservations/basic', 'Reporting\ReservationsController@store');
+        $api->post('reservations/funds', 'Reporting\ReservationFundsController@store');
+        $api->post('reservations/requirements', 'Reporting\ReservationRequirementsController@store');
+        $api->post('reservations/travel', 'Reporting\ReservationTravelController@store');
+        // $api->post('reservations/squads', 'Reporting\ReservationSquadsController@store');
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Mobile Specific Routes

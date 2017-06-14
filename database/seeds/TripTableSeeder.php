@@ -7,6 +7,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\User;
 use App\Models\v1\Donor;
 use App\Models\v1\Group;
+use App\Models\v1\Region;
 use App\Models\v1\Upload;
 use App\Models\v1\Payment;
 use App\Models\v1\Campaign;
@@ -81,6 +82,29 @@ class TripTableSeeder extends Seeder
             ]);
 
         $campaign->slug()->create(['url' => '1n1d17']);
+
+        $campaign->regions()->saveMany([
+            factory(Region::class)->make([
+                'name' => 'Granada',
+                'callsign' => 'purple',
+                'country_code' => $campaign->country_code
+            ]),
+            factory(Region::class)->make([
+                'name' => 'Leon',
+                'callsign' => 'blue',
+                'country_code' => $campaign->country_code
+            ]),
+            factory(Region::class)->make([
+                'name' => 'Managua',
+                'callsign' => 'red',
+                'country_code' => $campaign->country_code
+            ]),
+            factory(Region::class)->make([
+                'name' => 'Masaya',
+                'callsign' => 'green',
+                'country_code' => $campaign->country_code
+            ])
+        ]);
 
         return $campaign;
     }
@@ -215,11 +239,11 @@ class TripTableSeeder extends Seeder
             
             $r->user->slug()->create(['url' => generate_slug($r->user->name)]);
 
-            $companion = factory(Companion::class)->make([
-                'reservation_id' => $r->id,
-                'companion_id' => $reservations->random()->pluck('id')->first()
-            ])->toArray();
-            Companion::insert($companion);
+            // $companion = factory(Companion::class)->make([
+            //     'reservation_id' => $r->id,
+            //     'companion_id' => $reservations->random()->pluck('id')->first()
+            // ])->toArray();
+            // Companion::insert($companion);
 
             $note = factory(Note::class)->make([
                 'noteable_id' => $r->id, 

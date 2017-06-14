@@ -141,7 +141,10 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import vSelect from 'vue-select'
+    import Slim from '../../../../../public/js/slim.commonjs';
+    import jQuery from 'jquery';
+    import _ from 'underscore';
+    import vSelect from 'vue-select'
     import errorHandler from'../error-handler.mixin';
     export default{
         name: 'upload-create-update',
@@ -301,11 +304,14 @@
 				this.$validate('tags', true);
 			},
 			// Toggle ui states
-			'uiSelector': function (val) {
+			'uiSelector': function (val, oldVal) {
 				if (val === 1) {
 					this.searchUploads();
 				}
-			},
+                if (oldVal === 0 && val === 2) {
+                    this.loadCropper();
+                }
+            },
 			// Pagination Functionality
 			'orderByField': function (val, oldVal) {
 				this.searchUploads();
@@ -398,7 +404,8 @@
 					this.width = this.scaledWidth * this.imageAspectRatio;
 					this.height = this.scaledHeight * this.imageAspectRatio;
 					// update slim editor ratio
-					this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
+                    if (this.slimAPI[0])
+						this.slimAPI[0].ratio = this.typeObj.width + ':' + this.typeObj.height;
 				}
 			},
 			adjustSelect(){
@@ -539,7 +546,11 @@
 				this.$http.get('uploads', { params: params }).then(function (response) {
 					this.uploads = response.body.data;
 					this.pagination = response.body.meta.pagination;
-				})
+					return this.uploads;
+				}, function (response) {
+                    console.log(response);
+                    return response
+                });
 			},
 			selectExisting(upload){
 				// Assumes this is a child component
@@ -562,7 +573,7 @@
                     setTimeout(function () {
                         self.slimAPI = new Slim.parse(self.$el);
                         if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
-                            self.adjustSelectByType()
+                            self.adjustSelectByType();
                         } else {
                             self.slimAPI[0].ratio = 'free';
                         }
@@ -591,7 +602,10 @@
                     this.src = upload.source;
 
                     this.loadCropper();
-				});
+				}, function (response) {
+                    console.log(response);
+                    return response
+                });
 			} else {
                 this.loadCropper();
 			}

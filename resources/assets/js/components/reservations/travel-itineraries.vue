@@ -309,7 +309,10 @@
                     this.$http.delete('itineraries/travel/' + this.itinerary.id).then(function (response) {
                         this.unsetItinerary(this.itinerary);
                         console.log('Itinerary deleted');
-                    });
+                    },
+                        function (response) {
+                            console.log(response);
+                        });
                 }
 
                 this.editMode = true;
@@ -417,7 +420,10 @@
 	        getTypes() {
 	            return this.$http.get('utilities/activities/types').then(function (response) {
                     return this.activityTypes = response.body;
-                });
+                },
+                    function (response) {
+                        console.log(response);
+                    });
 	        },
 
         },

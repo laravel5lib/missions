@@ -76,6 +76,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
 	import vSelect from 'vue-select';
     export default{
         name: 'user-profile-countries',
@@ -96,8 +97,9 @@
             }
         },
         methods:{
+            // TODO Refactor: use as computed prop
             isUser(){
-                return this.$root.user && this.id === this.$root.user.id;
+                return (this.$root.user && this.id === this.$root.user.id);
             },
             removeAccolade(country){
 				this.deleteModal = true;

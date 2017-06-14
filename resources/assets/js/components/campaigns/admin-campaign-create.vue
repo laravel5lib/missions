@@ -126,13 +126,13 @@
 						<div class="collapse" id="avatarCollapse">
 							<div class="well">
 								<upload-create-update type="avatar" :lock-type="true" :is-child="true"
-								                      :tags="['campaign']"></upload-create-update>
+								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 						<div class="collapse" id="bannerCollapse">
 							<div class="well">
 								<upload-create-update type="banner" :lock-type="true" :is-child="true"
-								                      :tags="['campaign']"></upload-create-update>
+								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 					</div><!-- end col -->
@@ -156,6 +156,8 @@
 
 </template>
 <script type="text/javascript">
+	import jQuery from 'jquery';
+    import _ from 'underscore';
 	import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
@@ -168,8 +170,6 @@
 			return {
 				countries: [],
 				countryCodeObj: null,
-//				errors: {},
-
 				name: null,
 				country: null,
 				country_code: null,
@@ -179,7 +179,6 @@
 				published_at: null,
 				page_url: null,
 				page_src: null,
-//				attemptSubmit: false,
 				selectedAvatar: null,
 				avatar_upload_id: null,
 				selectedBanner: null,
@@ -199,17 +198,13 @@
 				if (typeof val === 'string') {
 					// pre-populate slug
 					this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } })
-							.then(function (response) {
-								this.page_url = response.body.slug;
-							});
+						.then(function (response) {
+							this.page_url = response.body.slug;
+						});
 				}
 			}
 		},
 		methods: {
-			/*checkForError(field){
-				// if user clicked submit button while the field is invalid trigger error styles 
-				return this.$CreateCampaign[field].invalid && this.attemptSubmit;
-			},*/
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 			},
@@ -235,6 +230,7 @@
 					}, function (error) {
 						this.errors = error.data.errors;
 						this.showError = true;
+						// TODO use global alert
 						// this.$refs.spinner.hide();
 					});
 				} else {
@@ -263,7 +259,9 @@
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;
 				// this.$refs.spinner.hide();
-			});
+			}, function (response) {
+                console.log(response);
+            });
 		}
 	}
 </script> 

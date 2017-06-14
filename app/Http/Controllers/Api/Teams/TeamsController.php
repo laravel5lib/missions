@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Teams;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\TeamRequest;
@@ -25,9 +25,6 @@ class TeamsController extends Controller
     public function __construct(Team $team)
     {
         $this->team = $team;
-
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -38,7 +35,10 @@ class TeamsController extends Controller
      */
     public function index(Request $request)
     {
-        $teams = $this->team->filter($request->all())
+        $teams = $this->team
+            ->filter($request->all())
+            ->withCount('groups')
+            ->withCount('squads')
             ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($teams, new TeamTransformer);
@@ -52,13 +52,16 @@ class TeamsController extends Controller
      */
     public function store(TeamRequest $request)
     {
-        $team = $this->team->create($request->except('members'));
+        $team = $this->team->create([
+            'callsign' => $request->get('callsign'),
+            'locked' => $request->get('locked', false),
+            'type_id' => $request->get('type_id')
+        ]);
 
-        if ($request->has('members'))
-            $team->syncMembers($request->get('members'));
-
-        if ($request->has('translators'))
-            $team->syncTranslators($request->get('translators'));
+        if ($request->has('associations')) {
+            
+            $team->addTeamables($request->get('associations'));
+        }
 
         return $this->response->item($team, new TeamTransformer);
     }
@@ -71,12 +74,10 @@ class TeamsController extends Controller
      */
     public function show($id)
     {
-        $team = $this->team->findOrFail($id);
-        
-        if ( ! $team->isPublished() and  ! $this->auth->user()->isAdmin())
-        {
-            abort(403);
-        }
+        $team = $this->team
+            ->withCount('groups')
+            ->withCount('squads')
+            ->findOrFail($id);
 
         return $this->response->item($team, new TeamTransformer);
     }
@@ -92,13 +93,11 @@ class TeamsController extends Controller
     {
         $team = $this->team->findOrFail($id);
 
-        $team->update($request->except('translators'));
-
-        if ($request->has('members'))
-            $team->syncMembers($request->get('members'));
-
-        if ($request->has('translators'))
-            $team->syncTranslators($request->get('translators'));
+        $team->update([
+            'callsign' => $request->get('callsign', $team->callsign),
+            'locked' => $request->get('locked', $team->locked),
+            'type_id' => $request->get('type_id', $team->type_id)
+        ]);
 
         return $this->response->item($team, new TeamTransformer);
     }

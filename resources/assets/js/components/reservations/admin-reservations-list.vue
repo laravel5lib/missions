@@ -319,6 +319,7 @@
 									:options="exportOptions"
 									:filters="exportFilters">
 					</export-utility>
+					<!-- <reservation-reports :filters="filters" :search="search"></reservation-reports> -->
                 </form>
             </div>
         </div>
@@ -536,9 +537,10 @@
 <script type="text/javascript">
 	import vSelect from "vue-select";
 	import exportUtility from '../export-utility.vue';
+	import reservationReports from '../admin/reporting/reservation-reports.vue';
 	export default{
 		name: 'admin-reservations-list',
-		components: {vSelect, exportUtility},
+		components: {vSelect, exportUtility, reservationReports},
 		props: {
 			tripId: {
 				type: String,
@@ -638,6 +640,7 @@
 					zip_postal: 'Zip/Postal Code',
 					country: 'Country',
 					designation: 'Arrival Designation',
+					companions: 'Companions',
 					payments: 'Payments Due',
 					incremental_costs: 'Incremental Costs',
 					static_costs: 'Static Costs',
@@ -645,7 +648,7 @@
 					requirements: 'Travel Requirements',
 					percent_raised: 'Percent Raised',
 					amount_raised: 'Amount Raised',
-					outstanding: 'Outstanding',
+					outstanding: 'Amount Outstanding',
 					deadlines: 'Other Deadlines',
 					desired_role: 'Role',
 					promocodes: 'Promo Codes',

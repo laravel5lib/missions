@@ -47,34 +47,120 @@ class ExportReservations extends Exporter
             'amount_raised' => $reservation->totalRaisedInDollars(),
             'outstanding' => $reservation->totalOwedInDollars(),
             'desired_role' => teamRole($reservation->desired_role),
-            'payments' => implode(", ", $reservation->dues->map(function($due) {
-                return $due->payment->cost->name. ' [balance: $'.number_format($due->outstandingBalanceInDollars(),2).'] ('.$due->getStatus().')';
-            })->all()),
-            'incremental_costs' => implode(", ", $reservation->costs()->type('incremental')->get()->map(function($cost) {
-                return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
-            })->all()),
-            'static_costs' => implode(", ", $reservation->costs()->type('static')->get()->map(function($cost) {
-                return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
-            })->all()),
-            'optional_costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
-                return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
-            })->all()),
-            'requirements' => implode(", ", $reservation->requirements->map(function($requirement) {
-                return $requirement->requirement->name . ' ('.$requirement->status.')';
-            })->all()),
-            'deadlines' => implode(", ", $reservation->deadlines->map(function($deadline) {
-                return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
-            })->all()),
-            'promocodes' => implode(", ", $reservation->promocodes->map(function ($promo) {
-                return $promo->code;
-            })->all()),
-            'designation' => $reservation->designation ? 
-                implode('', array_flatten($reservation->designation->content)) : 'none',
+            'companions' => $this->getCompanions($reservation->companionReservations),
+            'payments' => $this->getPayments($reservation->dues),
+            'incremental_costs' => $this->getCosts($reservation, 'incremental'),
+            'static_costs' => $this->getCosts($reservation, 'static'),
+            'optional_costs' => $this->getCosts($reservation, 'optional'),
+            'requirements' => $this->getRequirements($reservation->requirements),
+            'deadlines' => $this->getDeadlines($reservation->deadlines),
+            'promocodes' => $this->getPromocodes($reservation->promocodes),
+            'designation' => $this->getDesignation($reservation->designation),
             'registered_at' => $reservation->created_at->toCookieString(),
             'updated_at' => $reservation->updated_at->toCookieString(),
             'dropped_at' => $reservation->dropped_at ? $reservation->dropped_at->toCookieString() : null
         ];
 
         return $columns;
+    }
+
+    private function getCompanions($companions)
+    {
+        $array = $companions->map(function($companion) {
+            return $companion->given_names . ' ' 
+                    . $companion->surname 
+                    . '('. $companion->pivot->relationship .')';
+        })->all();
+
+        $companions = implode(", ", $array);
+
+        return $companions;
+    }
+
+    private function getPayments($dues)
+    {
+        $array = $dues->map(function($due) {
+            return $this->getPaymentDetails($due);
+        })->all();
+
+        $payments = implode(", ", $array);
+
+        return $payments;
+    }
+
+    private function getPaymentDetails($due)
+    {
+        return $due->payment->cost->name 
+            . ' [balance: $'
+            . number_format($due->outstandingBalanceInDollars(), 2)
+            . '] ('
+            .$due->getStatus()
+            .')';
+    }
+
+    private function getCosts($reservation, $type)
+    {
+        $array = $this->getCostsByType($reservation, $type)
+                      ->map(function($cost) {
+                          return $this->getCostDetails($cost);
+                      })->all();
+
+        $costs = implode(", ", $array);
+
+        return $costs;
+    }
+
+    private function getCostsByType($reservation, $type)
+    {
+        return $reservation->costs()->type($type)->get();
+    }
+
+    private function getCostDetails($cost)
+    {
+        return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+    }
+
+    private function getRequirements($requirements)
+    {
+        $array = $requirements->map(function($requirement) {
+            return $requirement->requirement->name . ' ('.$requirement->status.')';
+        })->all();
+
+        $requirements = implode(", ", $array);
+
+        return $requirements;
+    }
+
+    private function getDeadlines($deadlines)
+    {
+        $array = $deadlines->map(function($deadline) {
+            return $deadline->name . ' ('.$deadline->date->format('M d, Y').')';
+        })->all();
+
+        $deadlines = implode(", ", $array);
+
+        return $deadlines;
+    }
+
+    private function getPromocodes($promocodes)
+    {
+        $array = $promocodes->map(function ($promo) {
+            return $promo->code;
+        })->all();
+
+        $promocodes = implode(", ", $array);
+
+        return $promocodes;
+    }
+
+    private function getDesignation($designation = null)
+    {
+        if (is_null($designation)) {
+            return 'none';
+        }
+
+        $designation = array_flatten($designation->content);
+
+        return implode('', $designation);
     }
 }

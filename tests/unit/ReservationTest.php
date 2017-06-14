@@ -3,10 +3,12 @@
 use Carbon\Carbon;
 use App\Models\v1\Cost;
 use App\Models\v1\Fund;
+use App\Models\v1\Team;
 use App\Models\v1\Trip;
 use App\Models\v1\Payment;
 use App\Models\v1\Campaign;
 use App\Models\v1\Deadline;
+use App\Models\v1\TeamSquad;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
@@ -136,6 +138,19 @@ class ReservationTest extends TestCase
         $promo = $reservation->canBeRewarded()->first();
 
         $this->assertContains($promo, $campaign->promotionals()->pluck('id'));
+    }
+
+    /** @test */
+    function removes_reservation_from_squads_when_dropped()
+    {
+        $reservation = factory(Reservation::class)->create();
+        $team = factory(Team::class)->create();
+        $squad = $team->squads(TeamSquad::class)->create(['team_id' => $team->id]);
+        $squad->members()->attach($reservation->id);
+
+        $reservation->drop();
+
+        $this->assertFalse(in_array($reservation->id, $squad->members->toArray()));
     }
 
 }

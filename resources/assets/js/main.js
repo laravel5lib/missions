@@ -12,6 +12,9 @@ import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
+import actionDropdownSelect from './components/action-dropdown-select.vue';
+import actionSelect from './components/action-select.vue';
+import listenText from './components/listen-text.vue';
 import donate from './components/donate.vue';
 import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
@@ -75,6 +78,11 @@ import reservationRequirements from './components/reservations/reservation-requi
 import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
+import teamManager from './components/teams/team-manager.vue';
+import roomingWizard from './components/rooms/rooming-wizard.vue';
+import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
+import teamTypeManager from './components/teams/team-type-manager.vue';
+import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -135,6 +143,8 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
+import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
+import regionsAccommodations from './components/regions/regions-accommodations.vue';
 import restoreFund from './components/financials/funds/restore-fund.vue';
 
 // jQuery
@@ -158,7 +168,6 @@ require('bootstrap-sass');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
 
-
 window.AOS = require('aos');
 AOS.init();
 $(document).ready(function () {
@@ -179,9 +188,13 @@ Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
+Vue.component('button-group', VueStrap.buttonGroup);
 Vue.component('panel', VueStrap.panel);
+Vue.component('radio', VueStrap.radio);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
+Vue.component('dropdown', VueStrap.dropdown);
+Vue.component('strap-select', VueStrap.select);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
@@ -362,12 +375,14 @@ Vue.filter('percentage', {
 Vue.filter('moment', {
     read: function (val, format, diff = false, noLocal = false) {
 
+        if (!val) return val;
+
         if (noLocal) {
             return moment(val).format(format || 'LL'); // do not convert to local
         }
 
         // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val).local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -379,7 +394,8 @@ Vue.filter('moment', {
     write: function (val, oldVal) {
         let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return moment(val).local().utc().format(format);
+        if (!val) return val;
+            return moment(val).local().utc().format(format);
     }
 });
 
@@ -417,6 +433,10 @@ Vue.filter('mFormat', {
     write: function (value, oldVal) {
         return value;
     }
+});
+
+Vue.filter('underscoreToSpace', function (value) {
+    return value.replace(/_/g, ' ');
 });
 
 Vue.directive('crop', {
@@ -788,6 +808,7 @@ new Vue({
             color: {header: '#F74451'}
         },
         showSuccess: false,
+        showInfo: false,
         showError: false,
         message: '',
     },
@@ -829,6 +850,9 @@ new Vue({
         fundraiserCollection,
         topNav,
         actionTrigger,
+        actionDropdownSelect,
+        actionSelect,
+        listenText,
         donate,
         modalDonate,
         notes,
@@ -875,7 +899,13 @@ new Vue({
         dashboardGroupTrips,
         dashboardGroupReservations,
         dashboardInterestsList,
+        teamManager,
+        teamTypeManager,
+        regionsManager,
+        regionsAccommodations,
         reportsList,
+        roomingWizard,
+        roomingTypeManager,
 
         // admin components
         campaignCreate,
@@ -935,7 +965,8 @@ new Vue({
         fundManager,
         companionManager,
         promotionals,
-        transports
+        transports,
+        roomingAccommodations,
     },
     http: {
         headers: {
@@ -956,6 +987,11 @@ new Vue({
         this.$on('showSuccess', function (msg) {
             this.message = msg;
             this.showSuccess = true;
+        });
+
+        this.$on('showInfo', function (msg) {
+            this.message = msg;
+            this.showInfo = true;
         });
 
         this.$on('showError', function (msg) {
@@ -1029,10 +1065,18 @@ new Vue({
         'showSuccess': function (msg) {
             this.message = msg;
             this.showError = false;
+            this.showInfo = false;
             this.showSuccess = true;
+        },
+        'showInfo': function (msg) {
+            this.message = msg;
+            this.showError = false;
+            this.showInfo = true;
+            this.showSuccess = false;
         },
         'showError': function (msg) {
             this.message = msg;
+            this.showInfo = false;
             this.showSuccess = false;
             this.showError = true;
         },

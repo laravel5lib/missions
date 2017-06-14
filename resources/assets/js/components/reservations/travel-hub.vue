@@ -297,7 +297,6 @@
                 self.selectedAirportObj = _.findWhere(self.airportsOptions, { name: self.hub.name });
                 self.countryObj = _.findWhere(self.countriesOptions, { code: self.hub.country_code });
                 //console.log(self.selectedAirportObj);
-
             });
 //            this.attemptSubmit = true;
         }

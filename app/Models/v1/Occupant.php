@@ -10,26 +10,19 @@ class Occupant extends Model
 {
     use Filterable, UuidForKey;
 
-    protected $fillable = [
-        'room_no', 'accommodation_id', 'reservation_id', 'room_leader'
-    ];
+    protected $guarded = [];
 
     protected $dates = [
         'created_at', 'updated_at'
     ];
 
-    public function accommodation()
+    public function rooms()
     {
-        return $this->belongsTo(Accommodation::class);
+        return $this->belongsTo(Room::class);
     }
 
-    public function reservation()
+    public function reservations()
     {
         return $this->belongsTo(Reservation::class);
-    }
-
-    public function roommates()
-    {
-        // do something amazing
     }
 }

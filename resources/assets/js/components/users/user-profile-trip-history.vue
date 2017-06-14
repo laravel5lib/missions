@@ -77,7 +77,8 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import vSelect from 'vue-select';
+    import _ from 'underscore';
+    import vSelect from 'vue-select';
     export default{
         name: 'user-profile-trip-history',
         components: {vSelect},
@@ -96,6 +97,7 @@
             }
         },
         methods:{
+            // TODO Refactor: use as computed prop
             isUser(){
                 return this.$root.user && this.id === this.$root.user.id;
             },
@@ -124,7 +126,9 @@
                     this.accolades = response.body.data;
                     this.selectedTrips = [];
                     this.filterAccolades();
-				});
+				}, function (response) {
+                    console.log(response);
+                });
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
@@ -132,6 +136,9 @@
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
+					return this.accolades;
+                }, function (response) {
+                    return response;
                 });
             },
             filterAccolades(){
@@ -144,8 +151,10 @@
 			},
             searchTrips() {
 				return this.$http.get('utilities/past-trips').then(function(response) {
-					this.trips = response.body;
-				});
+					return this.trips = response.body;
+				}, function (response) {
+                    return response;
+                });
             }
         },
         ready(){

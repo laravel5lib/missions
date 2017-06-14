@@ -197,7 +197,7 @@
                             city: activity.hubs.data[0].city,
                             state: activity.hubs.data[0].state,
                             zip: activity.hubs.data[0].zip,
-                            country_code: activity.hubs.data[0].country,
+                            country_code: activity.hubs.data[0].country_code,
                         };
                     }
 

@@ -158,9 +158,10 @@ class TravelItinerariesController extends Controller
     {
         $itinerary = $this->itinerary->findOrFail($id);
 
-        $itinerary->activities->each(function ($activity) {
-            $activity->transports()->delete();
-            $activity->hubs()->delete();
+        $itinerary->activities->each(function($activity) use($itinerary) {
+            $activity->transports->each(function($transport) use($itinerary) {
+                $transport->passengers()->whereReservationId($itinerary->curator_id)->delete();
+            });
         });
 
         $itinerary->activities()->delete();

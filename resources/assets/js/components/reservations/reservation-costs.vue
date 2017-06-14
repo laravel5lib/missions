@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-xs-4 tour-step-addons">
                 <button class="btn btn-primary btn-sm" @click="add">
                     <span class="fa fa-plus"></span> Addons
@@ -17,7 +17,7 @@
             </div>
         </div>
 
-        <hr class="divider inv sm">
+        <hr class="divider inv sm"> -->
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h5>Reservation Cost Breakdown</h5>
@@ -27,7 +27,7 @@
             <div class="list-group-item" v-for="cost in listedCosts" :class="{'list-group-item-default': cost.unsaved}">
                 <div class="row" v-if="cost.type === 'optional'">
                     <div class="col-xs-12">
-                        <a class="btn btn-xs btn-default-hollow pull-right" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> <span class="hidden-xs">Remove</span></a>
+                        <!-- <a class="btn btn-xs btn-default-hollow pull-right" @click="confirmRemove(cost)"><i class="fa fa-trash"></i> <span class="hidden-xs">Remove</span></a> -->
                         <span v-if="cost.unsaved" class="label label-danger">Unsaved</span>
                     </div>
                 </div>

@@ -5,10 +5,11 @@
         <hr class="divider">
         <h6 class="text-uppercase">Helpful Links</h6>
         <ul class="list-unstyled">
+          <li><a href="http://shop.missions.me" target="_blank">Shop</a></li>
           <li><a href="http://1nation1day.com" target="_blank">1Nation1Day</a></li>
           <li><a href="/about-mm">Meet Our Team</a></li>
           <li><a href="/support">Become A Partner</a></li>
-          <li><a href="http://shop.missions.me" target="_blank">Shop</a></li>
+          <li><a href="/corporate-sponsors">Corporate Sponsors</a></li>
           <li><a href="/donate/general">Donate to Missions.Me</a></li>
         </ul>
       </div><!-- end col -->

@@ -317,6 +317,11 @@
             },
             updatePlanSettings() {
                 let promises = [];
+
+                // update name and short_desc properties
+	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
+		            { name: this.selectedPlanSettings.name, short_desc: this.selectedPlanSettings.short_desc}));
+
                 _.each(this.selectedPlanSettings, function (val, property) {
                     let promise;
 					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name'], property)) {

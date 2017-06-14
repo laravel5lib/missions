@@ -267,7 +267,7 @@
 						</div>
 						<div class="form-group">
 							<label for="createPlanCallsign" class="control-label">Region CallSign</label>
-							<input  type="text" class="form-control" id="createRegionName" placeholder="" v-model="selectedRegion.call_sign">
+							<input  type="text" class="form-control" id="createRegionName" placeholder="" v-model="selectedRegion.callsign">
 						</div>
 					</form>
 				</validator>
@@ -423,7 +423,7 @@
 					name: '',
                     country: this.campaignCountry,
                     country_code: this.campaignCountry.code,
-                    call_sign: '',
+                    callsign: '',
                 }
             },
             resetRegionFilter(){
@@ -539,8 +539,8 @@
                 this.selectedRegion.country_code = this.selectedRegion.country.code;
                 delete this.selectedRegion.country;
 
-                if (!this.selectedRegion.call_sign)
-                    delete this.selectedRegion.call_sign;
+                if (!this.selectedRegion.callsign)
+                    delete this.selectedRegion.callsign;
 
 
                 return this.RegionsResource.save({ campaign: this.campaignId, include: 'teams.groups', }, this.selectedRegion).then(function (response) {
@@ -559,13 +559,13 @@
                 this.selectedRegion.country_code = this.selectedRegion.country.code;
                 delete this.selectedRegion.country;
 
-                if (!this.selectedRegion.call_sign)
-                    delete this.selectedRegion.call_sign;
+                if (!this.selectedRegion.callsign)
+                    delete this.selectedRegion.callsign;
 
                 let data = {
                     name: this.selectedRegion.name,
                     country_code: this.selectedRegion.country_code,
-                    call_sign: this.selectedRegion.call_sign,
+                    callsign: this.selectedRegion.callsign,
                 };
 
                 this.RegionsResource.update({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups, teams.type', }, data).then(function (response) {

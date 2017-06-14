@@ -22,7 +22,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="panel-title">
-								{{ currentAccommodation.name | capitalize }} &midddot; <span>Details</span>
+								{{ currentAccommodation.name | capitalize }} &middot; <span>Details</span>
 							</h3>
 						</div>
 						<div class="panel-body">
@@ -138,7 +138,7 @@
 												  <h4>{{plan.name}}</h4>
 											  </div>
 											  <div class="col-xs-3 text-right">
-												  <button :disabled="!currentRegion && !currentAccommodation" class="btn btn-xs btn-primary-hollow" type="button" @click="addPlanToAccommodation(plan, currentAccommodation)">
+												  <button :disabled="!currentAccommodation" class="btn btn-xs btn-primary-hollow" type="button" @click="addPlanToAccommodation(plan, currentAccommodation)">
 													  <i class="fa fa-plus"></i>
 												  </button>
 												  <a :class="{ 'disabled': plan.rooms.data.length === 0 }" class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#plansAccordion" :href="'#planItem' + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -154,7 +154,7 @@
 											<h5 class="list-group-item-heading">
 												{{ (room.label ? (room.label + ' - ' + room.type) : room.type) | capitalize }}
 
-												<button :disabled="!currentRegion && !currentAccommodation" class="btn btn-xs btn-primary-hollow pull-right" type="button" @click="addRoomToAccommodation(room, currentAccommodation)">
+												<button :disabled="!currentAccommodation" class="btn btn-xs btn-primary-hollow pull-right" type="button" @click="addRoomToAccommodation(room, currentAccommodation)">
 													<i class="fa fa-plus"></i>
 												</button>
 											</h5>

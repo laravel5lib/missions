@@ -404,11 +404,7 @@
                     this.showAccommodationManageModal = false;
 //                    return this.getAccommodations();
                 }, function (response) {
-<<<<<<< HEAD
-                    console.log(response);
-=======
                     // console.log(response);
->>>>>>> develop
                     return response;
                 });
 	        },
@@ -429,11 +425,7 @@
                     this.editMode = false;
 //                    return this.getAccommodations();
                 }, function (response) {
-<<<<<<< HEAD
-                    console.log(response);
-=======
                     // console.log(response);
->>>>>>> develop
                     return response;
                 });
 	        },
@@ -443,11 +435,7 @@
                     this.showAccommodationDeleteModal = false;
                     return this.getAccommodations();
                 }, function (response) {
-<<<<<<< HEAD
-                    console.log(response);
-=======
                     // console.log(response);
->>>>>>> develop
                     return response;
                 });
 	        },
@@ -479,11 +467,7 @@
                         if (promise) {
                             // we only need to catch errors here
                             promise.catch(function (response) {
-<<<<<<< HEAD
-                                console.log(response.body.message);
-=======
                                 // console.log(response.body.message);
->>>>>>> develop
                             });
                             promises.push(promise);
                         }
@@ -508,11 +492,7 @@
                     }.bind(this));
 					return this.accommodations = accommodations;
                 }, function (response) {
-<<<<<<< HEAD
-                    console.log(response);
-=======
                     // console.log(response);
->>>>>>> develop
                     return response.body.message;
                 });
             },
@@ -522,22 +502,14 @@
                     include: 'accommodations',
                     page: this.regionsPagination.current_page,
                     search: this.regionsSearch,
-<<<<<<< HEAD
-                    country: _.isObject(this.regionsFilters.country) ? this.regionsFilters.country.code :    undefined
-=======
                     country: _.isObject(this.regionsFilters.country) ? this.regionsFilters.country.code : undefined
->>>>>>> develop
                 };
 
                 return this.RegionsResource.get(params).then(function (response) {
                     this.regionsPagination = response.body.meta.pagination;
                     return this.regions = response.body.data;
                 }, function (response) {
-<<<<<<< HEAD
-                    console.log(response);
-=======
                     // console.log(response);
->>>>>>> develop
                     return response.body.message;
                 });
             },
@@ -547,11 +519,7 @@
                             return this.roomTypes = response.body.data;
                         },
                         function (response) {
-<<<<<<< HEAD
-                            console.log(response);
-=======
                             // console.log(response);
->>>>>>> develop
                             return response.body.data;
                         });
             },

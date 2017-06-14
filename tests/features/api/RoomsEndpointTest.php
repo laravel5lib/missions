@@ -7,7 +7,7 @@ class RoomsEndpointTest extends TestCase
     {
         $rooms = factory(App\Models\v1\Room::class, 3)->create();
 
-        $this->get('api/rooms')
+        $this->get('api/rooming/rooms')
              ->assertResponseOk()
              ->seeJsonStructure([
                 'data' => [
@@ -27,7 +27,7 @@ class RoomsEndpointTest extends TestCase
     {
         $room = factory(App\Models\v1\Room::class)->create();
 
-        $this->get('api/rooms/' . $room->id)
+        $this->get('api/rooming/rooms/' . $room->id)
              ->assertResponseOk()
              ->seeJson(['id' => $room->id, 'label' => $room->label]);
     }
@@ -39,7 +39,7 @@ class RoomsEndpointTest extends TestCase
 
         $room = ['label' => 'Test Room', 'room_type_id' => $type->id];
 
-        $this->post('api/rooms', $room)
+        $this->post('api/rooming/rooms', $room)
              ->assertResponseOk()
              ->seeInDatabase('rooms', $room)
              ->seeJson(['label' => 'Test Room']);
@@ -52,7 +52,7 @@ class RoomsEndpointTest extends TestCase
 
         $update = ['label' => 'Updated Room'];
 
-        $this->put('api/rooms/' . $room->id, $update)
+        $this->put('api/rooming/rooms/' . $room->id, $update)
              ->assertResponseOk()
              ->seeInDatabase('rooms', $update)
              ->seeJson(['label' => 'Updated Room']);
@@ -63,7 +63,7 @@ class RoomsEndpointTest extends TestCase
     {
         $room = factory(App\Models\v1\Room::class)->create();
 
-        $this->delete('api/rooms/' . $room->id)
+        $this->delete('api/rooming/rooms/' . $room->id)
              ->dontSeeInDatabase('rooms', ['id' => $room->id, 'deleted_at' => null])
              ->assertResponseStatus(204);
     }

@@ -98,6 +98,8 @@ class SquadMembersController extends Controller
                     'team_squad_id' => $request->get('team_squad_id', $squadId)
                 ]);
 
+        $member = $squad->members()->findOrFail($memberId);
+
         return $this->response->item($member, new SquadMemberTransformer);
     }
 

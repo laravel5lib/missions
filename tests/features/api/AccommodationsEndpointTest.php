@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\v1\Region;
+use App\Models\v1\Campaign;
 use App\Models\v1\Accommodation;
 
 class AccommodationsEndpointTest extends TestCase
@@ -8,7 +9,8 @@ class AccommodationsEndpointTest extends TestCase
     /** @test */
     public function gets_accommodations()
     {
-        $region = factory(Region::class)->create();
+        $campaign = factory(Campaign::class)->create();
+        $region = factory(Region::class)->create(['campaign_id' => $campaign->id]);
         $accommodation = factory(Accommodation::class)->create(['region_id' => $region->id]);
         
         $this->get('/api/regions/'. $region->id .'/accommodations')
@@ -43,7 +45,8 @@ class AccommodationsEndpointTest extends TestCase
     /** @test */
     public function gets_accommodation_by_id()
     {
-        $region = factory(Region::class)->create();
+        $campaign = factory(Campaign::class)->create();
+        $region = factory(Region::class)->create(['campaign_id' => $campaign->id]);
         $accommodation = factory(Accommodation::class)->create(['region_id' => $region->id]);
 
         $this->get('/api/regions/'. $region->id .'/accommodations')
@@ -54,7 +57,8 @@ class AccommodationsEndpointTest extends TestCase
     /** @test */
     public function creates_accommodation()
     {
-        $region = factory(Region::class)->create();
+        $campaign = factory(Campaign::class)->create();
+        $region = factory(Region::class)->create(['campaign_id' => $campaign->id]);
 
         $data = [
             'name' => 'MARRIOTT hotel',
@@ -69,7 +73,8 @@ class AccommodationsEndpointTest extends TestCase
     /** @test */
     public function update_accommodation()
     {
-        $region = factory(Region::class)->create();
+        $campaign = factory(Campaign::class)->create();
+        $region = factory(Region::class)->create(['campaign_id' => $campaign->id]);
         $accommodation = factory(Accommodation::class)->create([
             'region_id' => $region->id,
             'short_desc' => 'Orginal description'

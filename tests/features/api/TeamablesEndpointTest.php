@@ -34,9 +34,11 @@ class TeamablesEndpointTest extends TestCase
 
     /** @test */
     public function add_teams_to_region()
-    {
-        $team = factory(App\Models\v1\Team::class)->create();
-        $region = factory(App\Models\v1\Region::class)->create();
+    {   
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $campaign = factory(App\Models\v1\Campaign::class)->create();
+        $region = factory(App\Models\v1\Region::class)->create(['campaign_id' => $campaign->id]);
 
         $this->post('api/regions/'.$region->id.'/teams', [ 'ids' => [$team->id]])
              ->assertResponseStatus(201)
@@ -82,8 +84,10 @@ class TeamablesEndpointTest extends TestCase
     /** @test */
     public function remove_team_from_region()
     {
-        $team = factory(App\Models\v1\Team::class)->create();
-        $region = factory(App\Models\v1\Region::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
+        $campaign = factory(App\Models\v1\Campaign::class)->create();
+        $region = factory(App\Models\v1\Region::class)->create(['campaign_id' => $campaign->id]);
         $region->teams()->attach($team->id);
 
         $this->delete('api/regions/'.$region->id.'/teams/'.$team->id)

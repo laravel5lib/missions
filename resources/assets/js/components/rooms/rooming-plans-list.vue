@@ -179,6 +179,20 @@
     export default{
         name: 'rooming-plans-list',
 	    components: {vSelect, exportUtility},
+        props: {
+            userId: {
+                type: String,
+                required: false
+            },
+            groupId: {
+                type: String,
+                required: false
+            },
+            campaignId: {
+                type: String,
+                required: false
+            }
+        },
         data(){
             return {
                 plans: [],

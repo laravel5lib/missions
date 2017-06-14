@@ -25,7 +25,7 @@ class TransportRequest extends FormRequest
     {
         $rules = [
             'type' => 'required|string|in:flight,bus,vehicle,train',
-            'vessel_no' => 'required|string',
+            'vessel_no' => 'string',
             'name' => 'required|string',
             'call_sign' => 'string',
             'domestic' => 'boolean',

@@ -72,11 +72,25 @@
             <p>{{ fund.updated_at | moment 'lll' }}</p>
         </validator>
         </div>
+        <div class="panel-footer text-right">
+            <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteConfirmationModal">
+                <i class="fa fa-archive"></i> Archive
+            </a>
+        </div>
+
+        <admin-delete-modal 
+            :id="id" 
+            resource="fund" 
+            label="Archive this Fund?" 
+            action="Archive">
+        </admin-delete-modal>
     </div>
 </template>
 <script type="text/javascript">
+    import adminDeleteModal from '../../admin-delete-modal.vue';
     export default{
         name: 'fund-editor',
+        components: {adminDeleteModal},
         props: {
             'id': {
                 type: String,
@@ -130,6 +144,12 @@
             reconcile() {
                 this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
                     this.$root.$emit('showSuccess', 'Fund reconciled');
+                    this.fetch();
+                });
+            },
+            archive() {
+                this.$http.delete('funds/' + this.id).then(function (response) {
+                    this.$root.$emit('showSuccess', 'Fund archived');
                     this.fetch();
                 });
             }

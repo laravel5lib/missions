@@ -3,8 +3,10 @@
  */
 let $, jQuery, moment, timezone;
 $ = jQuery = window.$;
-window.moment = require('moment');
-window.timezone = require('moment-timezone');
+moment = window.moment = require('moment');
+timezone = window.timezone = require('moment-timezone');
+require('eonasdan-bootstrap-datetimepicker');
+
 let localStorage = window.localStorage;
 
 import _ from 'underscore';
@@ -14,7 +16,9 @@ Vue.use(require('vue-cookie'));
 Vue.use(require('vue-resource'));
 import VueResourceMock from 'vue-resource-mock-api'
 import MockData from './mock-api'
-Vue.use(VueResourceMock, { routes: MockData, matchOptions: { segmentValueCharset: 'a-zA-Z0-9.,-_%', segmentNameStartChar: ':' }});
+Vue.use(VueResourceMock, { routes: MockData, matchOptions: {
+    segmentValueCharset: 'a-zA-Z0-9.,-_%',
+}});
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push(function(request, next) {
 
@@ -282,6 +286,33 @@ Vue.directive('error-handler', {
         this.handleClass(value);
         this.handleMessages(value, this.vm.errors);
     }
+});
+
+Vue.filter('moment', {
+    read: function (val, format, diff = false, noLocal = false) {
+
+        if (noLocal) {
+            return moment(val).format(format || 'LL'); // do not convert to local
+        }
+
+        // console.log('before: ', val);
+        var date = moment.utc(val).local().format(format || 'LL');
+
+        if (diff) {
+            date = moment.utc(val).local().fromNow();
+        }
+        // console.log('after: ', date);
+
+        return date;
+    },
+    write: function (val, oldVal) {
+        let format = 'YYYY-MM-DD HH:mm:ss';
+        // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
+        return moment(val).local().utc().format(format);
+    }
+});
+Vue.filter('underscoreToSpace', function (value) {
+    return value.replace(/_/g, ' ');
 });
 
 let RootInstance = {

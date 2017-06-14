@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\v1\Region;
 use Illuminate\Database\Seeder;
 
 class CampaignTableSeeder extends Seeder
@@ -23,6 +24,29 @@ class CampaignTableSeeder extends Seeder
         $oneNation->slug()->save(factory(App\Models\v1\Slug::class)->make([
                 'url' => '1n1d17'
             ]));
+
+        $oneNation->regions()->saveMany([
+            factory(Region::class)->make([
+                'name' => 'Granada',
+                'callsign' => 'purple',
+                'country_code' => $oneNation->country_code
+            ]),
+            factory(Region::class)->make([
+                'name' => 'Leon',
+                'callsign' => 'blue',
+                'country_code' => $oneNation->country_code
+            ]),
+            factory(Region::class)->make([
+                'name' => 'Managua',
+                'callsign' => 'red',
+                'country_code' => $oneNation->country_code
+            ]),
+            factory(Region::class)->make([
+                'name' => 'Masaya',
+                'callsign' => 'green',
+                'country_code' => $oneNation->country_code
+            ])
+        ]);
         
         $india = factory(App\Models\v1\Campaign::class, 'india')->create([
                 'avatar_upload_id' => function() {

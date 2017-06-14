@@ -10,26 +10,8 @@ class FundFilter extends Filter
     */
     public $relations = [];
 
-    /**
-     * Fields that can be sorted.
-     *
-     * @var array
-     */
     public $sortable = ['name', 'balance'];
 
-    /**
-     * Fields that can be searched.
-     *
-     * @var array
-     */
-    public $searchable = ['name', 'accountingClass.name', 'accountingItem.name'];
-
-    /**
-     * From minimum balance amount.
-     *
-     * @param $amount
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function minBalance($amount)
     {
         if (! $amount) return null;
@@ -37,12 +19,6 @@ class FundFilter extends Filter
         return $this->where('balance', '>=', $amount);
     }
 
-    /**
-     * To maximum balance amount.
-     *
-     * @param $amount
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function maxBalance($amount)
     {
         if (! $amount) return null;
@@ -50,14 +26,18 @@ class FundFilter extends Filter
         return $this->where('balance', '<=', $amount);
     }
 
-    /**
-     * By type.
-     *
-     * @param $type
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function type($type)
     {
         return $this->where('fundable_type', str_plural($type));
+    }
+
+    public function search($terms)
+    {
+        return $this->where('name', 'LIKE', "%$terms%");
+    }
+
+    public function archived()
+    {
+        return $this->onlyTrashed();
     }
 }

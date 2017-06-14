@@ -34,7 +34,7 @@
 </div>
 <hr class="divider inv lg">
 
-@include('dashboard.groups.tabs', ['active' => 'details']);
+@include('dashboard.groups.tabs', ['active' => 'details'])
 
     <div class="container">
         <div class="row">

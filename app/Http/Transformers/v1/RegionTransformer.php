@@ -13,7 +13,7 @@ class RegionTransformer extends TransformerAbstract {
      * @var array
      */
     protected $availableIncludes = [
-        'campaign', 'teams', 'accommodations'
+        'teams', 'accommodations', 'campaign'
     ];
 
     /**
@@ -29,18 +29,21 @@ class RegionTransformer extends TransformerAbstract {
         return [
             'id'             => $region->id,
             'name'           => $region->name,
-            'call_sign'      => $region->call_sign,
-            'country_code'   => $region->country_code,
-            'country_name'   => country($region->country_code),
+            'callsign'       => $region->callsign,
+            'country'        => [
+                                    'code' => $region->country_code,
+                                    'name' => country($region->country_code)
+                                ],
             'campaign_id'    => $region->campaign_id,
-            'teams'          => (int) $region->teams()->count(),
-            'accommodations' => (int) $region->accommodations()->count(),
+            'teams_count'          => (int) $region->teams()->count(),
+            'accommodations_count' => (int) $region->accommodations()->count(),
             'created_at'     => $region->created_at->toDateTimeString(),
             'updated_at'     => $region->updated_at->toDateTimeString(),
+            'deleted_at'     => $region->deleted_at ? $region->deleted_at->toDateTimeString() : null,
             'links'          => [
                 [
                     'rel' => 'self',
-                    'uri' => '/regions/' . $region->id,
+                    'uri' => '/campaigns/' . $region->campaign_id . '/regions/' . $region->id,
                 ]
             ]
         ];
@@ -63,7 +66,7 @@ class RegionTransformer extends TransformerAbstract {
      * Include Teams
      *
      * @param Region $region
-     * @return \League\Fractal\Resource\Item
+     * @return \League\Fractal\Resource\Collection
      */
     public function includeTeams(Region $region)
     {

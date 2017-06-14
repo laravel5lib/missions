@@ -4,11 +4,12 @@ namespace App\Models\v1;
 
 use App\UuidForKey;
 use App\TeamTypeRules;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamType extends Model
 {
-    use UuidForKey;
+    use UuidForKey, Filterable;
     
     /**
      * Attributes that should not be mass assigned.
@@ -53,6 +54,11 @@ class TeamType extends Model
     public function getRulesAttribute($value)
     {
         return $value ? (array) json_decode($value) : [];
+    }
+
+    public function campaign()
+    {
+        return $this->belongsTo(Campaign::class);
     }
 
     /**

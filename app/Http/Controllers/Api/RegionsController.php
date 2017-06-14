@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests;
+use App\Models\v1\Region;
+use App\Models\v1\Campaign;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\v1\RegionRequest;
 use App\Http\Transformers\v1\RegionTransformer;
-use App\Models\v1\Region;
-use Illuminate\Http\Request;
-use App\Http\Requests;
 
 class RegionsController extends Controller
 {
@@ -24,9 +26,6 @@ class RegionsController extends Controller
     public function __construct(Region $region)
     {
         $this->region = $region;
-
-        $this->middleware('api.auth');
-//        $this->middleware('jwt.refresh');
     }
 
     /**
@@ -35,13 +34,11 @@ class RegionsController extends Controller
      * @param Request $request
      * @return \Dingo\Api\Http\Response
      */
-    public function index(Request $request)
+    public function index($campaignId, Request $request)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
-        $regions = $this->region->filter($request->all())
+        $regions = $this->region
+            ->whereCampaignId($campaignId)
+            ->filter($request->all())
             ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($regions, new RegionTransformer);
@@ -53,9 +50,15 @@ class RegionsController extends Controller
      * @param RegionRequest $request
      * @return \Dingo\Api\Http\Response
      */
-    public function store(RegionRequest $request)
+    public function store($campaignId, RegionRequest $request, Campaign $campaign)
     {
-        $region = $this->region->create($request->all());
+        $campaign = $campaign->findOrFail($campaignId);
+
+        $region = $campaign->regions()->create([
+            'name' => $request->get('name'),
+            'callsign' => $request->get('callsign'),
+            'country_code' => $request->get('country_code', $campaign->country_code)
+        ]);
 
         return $this->response->item($region, new RegionTransformer);
     }
@@ -66,13 +69,12 @@ class RegionsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function show($id)
+    public function show($campaignId, $id)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-
-        $region = $this->region->findOrFail($id);
+        $region = $this->region
+             ->whereCampaignId($campaignId)
+             ->withTrashed()
+             ->findOrFail($id);
 
         return $this->response->item($region, new RegionTransformer);
     }
@@ -84,11 +86,17 @@ class RegionsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function update(RegionRequest $request, $id)
+    public function update($campaignId, $id, RegionRequest $request)
     {
-        $region = $this->region->findOrFail($id);
+        $region = $this->region
+            ->whereCampaignId($campaignId)
+            ->findOrFail($id);
 
-        $region->update($request->all());
+        $region->update([
+            'name' => $request->get('name', $region->name),
+            'callsign' => $request->get('callsign', $region->callsign),
+            'country_code' => $request->get('country_code', $region->country_code)
+        ]);
 
         return $this->response->item($region, new RegionTransformer);
     }
@@ -99,15 +107,16 @@ class RegionsController extends Controller
      * @param $id
      * @return \Dingo\Api\Http\Response
      */
-    public function destroy($id)
+    public function destroy($campaignId, $id)
     {
-        if ( ! $this->auth->user()->isAdmin()) {
-            abort(403);
-        }
-        
-        $region = $this->region->findOrFail($id);
+        $region = $this->region
+             ->whereCampaignId($campaignId)
+             ->findOrFail($id);
 
-        $region->delete();
+        DB::transaction(function() use($region) {
+            $region->teams()->detach();
+            $region->delete();
+        });
 
         return $this->response->noContent();
     }

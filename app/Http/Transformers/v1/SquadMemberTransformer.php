@@ -39,6 +39,9 @@ class SquadMemberTransformer extends TransformerAbstract
                                         'code' => $reservation->desired_role, 
                                         'name' => teamRole($reservation->desired_role) 
                                      ],
+            'travel_group'        => $reservation->trip->group->name,
+            'arrival_designation' => $reservation->designation ? 
+                implode('', array_flatten($reservation->designation->content)) : 'none',
             'leader'              => $reservation->pivot ? (boolean) $reservation->pivot->leader : null,
             'created_at'          => $reservation->pivot->created_at->toDateTimeString(),
             'updated_at'          => $reservation->pivot->updated_at->toDateTimeString(),

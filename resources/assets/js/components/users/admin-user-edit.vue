@@ -223,10 +223,10 @@
                     <div v-error-handler="{ value: gender, handle: 'gender' }">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
+                            <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
                         </label>
                     </div>
                 </div>
@@ -234,10 +234,10 @@
                     <div v-error-handler="{ value: gender, handle: 'status' }">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
+                            <input type="radio" name="status" id="status" value="single" v-model="status" v-validate:status="{required: {rule: true}}"> Single
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
+                            <input type="radio" name="status2" id="status2" value="married" v-model="status" v-validate:status> Married
                         </label>
                     </div>
                 </div>
@@ -251,13 +251,9 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
-                    <label class="control-label" for="infoAddress">Address 1</label>
-                    <input type="text" class="form-control" v-model="address_one" id="infoAddress" placeholder="Street Address 1">
-                </div>
-                <div class="col-sm-6">
-                    <label class="control-label" for="infoAddress2">Address 2</label>
-                    <input type="text" class="form-control" v-model="address_two" id="infoAddress2" placeholder="Street Address 2">
+                <div class="col-sm-12">
+                    <label class="control-label" for="infoAddress">Address</label>
+                    <input type="text" class="form-control" v-model="address" id="infoAddress" placeholder="Street Address">
                 </div>
             </div>
 
@@ -362,14 +358,13 @@
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
-                address_one: '',
-                address_two: '',
+                address: '',
                 city: '',
                 state: '',
                 zip: '',
                 public: false,
                 url: null,
-                gender: false,
+                gender: null,
                 admin: false,
 
                 countries: [],
@@ -395,7 +390,7 @@
             },
             birthday() {
                 return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('LL')
+                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
                         : null;
             }
         },
@@ -428,12 +423,12 @@
                         password_confirmation: this.changePassword ? this.password_confirmation : undefined,
                         bio: this.bio,
                         type: this.type,
+                        birthday: this.birthday,
                         country_code: this.country_code,
                         timezone: this.timezone,
                         phone_one: this.phone_one,
                         phone_two: this.phone_two,
-                        address_one: this.address_one,
-                        address_two: this.address_two,
+                        address: this.address,
                         city: this.city,
                         state: this.state,
                         zip: this.zip,
@@ -442,9 +437,12 @@
                         public: this.public,
                         url: this.public ? this.url : undefined,
                     }).then(function (resp) {
-                        // window.location.href = '/admin' + resp.data.data.links[0].uri;
                         this.$root.$emit('showSuccess', 'User updated.');
                         this.hasChanged = false;
+                        let that = this;
+                        setTimeout(function () {
+                            window.location.href = '/' + that.firstUrlSegment + '/users/' + that.userId;
+                        }, 1000);
                     }, function (error) {
                         this.$root.$emit('showError', 'There are errors on the form.');
                         console.log(error);
@@ -475,8 +473,7 @@
                     this.timezone = user.timezone;
                     this.phone_one = user.phone_one;
                     this.phone_two = user.phone_two;
-                    this.address_one = user.address_one;
-                    this.address_two = user.address_two;
+                    this.address = user.address
                     this.city = user.city;
                     this.state = user.state;
                     this.zip = user.zip;

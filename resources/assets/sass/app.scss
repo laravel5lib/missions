@@ -214,9 +214,9 @@ body:not(.modal-open) {
         padding-bottom: 0px;
       }
     h1 {
-      font-size: 3.5em;
+      font-size: 2.5em;
       @media screen and (max-width: 991px) {
-        font-size: 2.5em;
+        font-size: 2em;
       }
       @media screen and (max-width: 767px) {
         font-size: 1.3em;
@@ -278,6 +278,41 @@ body:not(.modal-open) {
     }
   }
 }
+
+// Image Hover Overlay //
+.hover-container {
+  position: relative;
+  .hover-image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .hover-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.8;
+    transition: .5s ease;
+    background: $brand-primary;
+    .hover-text {
+      color: #000;
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+    }
+  }
+  &:hover .hover-overlay {
+    opacity: 0;
+  }
+}
+
+// Cover Photos //
 .prof-cover-photo {
   height: 400px;
   overflow: hidden;

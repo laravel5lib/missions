@@ -104,6 +104,7 @@
     </div>
 </template>
 <script>
+    import $ from 'jquery';
     export default{
         name: 'notes',
         props: {
@@ -155,6 +156,9 @@
             },
             'search': function (val, oldVal) {
                 this.page = 1;
+                this.fetch();
+            },
+            'id': function (val, oldVal) {
                 this.fetch();
             }
         },

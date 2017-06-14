@@ -23,4 +23,14 @@ class OccupantFilter extends Filter
      * @var array
      */
     public $searchable = [];
+
+    public function onlyLeaders()
+    {
+        //
+    }
+
+    public function noLeaders()
+    {
+        //
+    }
 }

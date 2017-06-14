@@ -42,7 +42,8 @@ class TeamSquadsEndpointTest extends TestCase
     /** @test */
     public function adds_squad_to_team()
     {
-        $team = factory(App\Models\v1\Team::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
 
         $this->post('api/teams/' . $team->id . '/squads', ['callsign' => 'Group #1'])
              ->assertResponseOk()
@@ -72,8 +73,11 @@ class TeamSquadsEndpointTest extends TestCase
     /** @test */
     public function removes_squad_from_team()
     {
-        $team = factory(App\Models\v1\Team::class)->create();
+        $type = factory(App\Models\v1\TeamType::class)->create();
+        $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
         $squad = factory(App\Models\v1\TeamSquad::class)
+            ->create(['team_id' => $team->id]);
+        $squadTwo = factory(App\Models\v1\TeamSquad::class)
             ->create(['team_id' => $team->id]);
 
         $this->delete('api/teams/' . $team->id . '/squads/' . $squad->id)

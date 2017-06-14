@@ -39,6 +39,16 @@ class Team extends Model
         return $this->morphedByMany(Campaign::class, 'teamable');
     }
 
+    public function regions()
+    {
+        return $this->morphedByMany(Region::class, 'teamable');
+    }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
+
     public function validateSquads()
     {
         return new ValidatesSquads($this);
@@ -50,11 +60,7 @@ class Team extends Model
             $type = $teamable['type'];
             $id = $teamable['id'];
 
-            if ($this->{$type}()->attach($id)) {
-                return true;
-            }
-
-            return false;
+            $this->{$type}()->attach($id);
         });
     }
 }

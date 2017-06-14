@@ -410,6 +410,7 @@
 					exp_month: this.cardMonth,
 					exp_year: this.cardYear,
 					cvc: this.cardCVC,
+					zip: this.cardZip
 				};
 			},
 		},

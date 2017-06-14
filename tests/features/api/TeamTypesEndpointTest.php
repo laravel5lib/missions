@@ -37,7 +37,9 @@ class TeamTypesEndpointTest extends TestCase
     /** @test */
     public function creates_team_type()
     {
-        $type = [ 'name' => 'Medical', 'max_members' => 25 ];
+        $campaign = factory(App\Models\v1\Campaign::class)->create();
+
+        $type = [ 'name' => 'Medical', 'rules' => ['max_members' => 25], 'campaign_id' => $campaign->id ];
 
         $this->post('api/teams/types', $type)
              ->assertResponseOk()
@@ -56,7 +58,7 @@ class TeamTypesEndpointTest extends TestCase
             'rules' => ['max_members' => 25, 'min_members' => 10]
         ]);
 
-        $changes = [ 'max_members' => 15 ];
+        $changes = [ 'rules' => ['max_members' => 15 ]];
 
         $this->put('api/teams/types/' . $type->id, $changes)
              ->assertResponseOk()

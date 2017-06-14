@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\v1;
 
-use App\Http\Requests\Request;
+use Dingo\Api\Http\FormRequest;
 
-class OccupantRequest extends Request
+class OccupantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,22 @@ class OccupantRequest extends Request
      */
     public function rules()
     {
-        return [
-            'room_no'           => 'required|string',
-            'accommodation_id' => 'required|exists:accommodations,id',
-            'reservation_id'   => 'required|exists:reservations,id',
-            'room_leader'           => 'boolean'
+        $rules =  [
+            'reservation_id'   => 'required_without:reservations|exists:reservations,id',
+            'reservations'     => 'array',
+            'reservations.*'   => 'required|string',
+            'room_leader'      => 'boolean'
         ];
+
+        if ($this->isMethod('put')) {
+            $rules = [
+                'reservation_id'   => 'sometimes|required_without:reservations|exists:reservations,id',
+                'reservations'     => 'array',
+                'reservations.*'   => 'sometimes|required|string',
+                'room_leader'      => 'required|boolean'
+            ];
+        }
+
+        return $rules;
     }
 }

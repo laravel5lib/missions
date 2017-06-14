@@ -42,4 +42,11 @@ class GroupsController extends Controller
         $group = $this->api->get('groups/' . $groupId);
         return view('dashboard.groups.teams.index', compact('group', 'groupId'));
     }
+
+    public function rooms($groupId)
+    {
+        if( ! auth()->user()->managing()->count()) abort(403);
+        $group = $this->api->get('groups/' . $groupId);
+        return view('dashboard.groups.rooms.index', compact('group', 'groupId'));
+    }
 }

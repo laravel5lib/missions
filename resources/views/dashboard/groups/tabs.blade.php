@@ -8,8 +8,8 @@
                 <li role="presentation tour-step-teams" @if($active == 'teams') class="active" @endif>
                     <a href="{{ url('/dashboard/groups/' . $group->id) }}/teams">Squads</a>
                 </li>
-                <li role="presentation">
-                    <a href="{{ url('/dashboard/groups/' . $group->id) }}/rooms" @if($active == 'rooming') class="active" @endif>Rooming</a>
+                <li role="presentation" @if($active == 'rooming') class="active" @endif>
+                    <a href="{{ url('/dashboard/groups/' . $group->id) }}/rooms">Rooming</a>
                 </li>
             </ul>
         </div>

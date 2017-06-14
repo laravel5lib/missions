@@ -346,6 +346,7 @@
                     exp_month: this.cardMonth,
                     exp_year: this.cardYear,
                     cvc: this.cardCVC,
+                    zip: this.cardZip
                 };
             }
         },
@@ -395,7 +396,8 @@
                         cardNumber: '',
                         cardCVC: '',
                         cardYear: '',
-                        cardMonth: ''
+                        cardMonth: '',
+                        cardZip: ''
                     };
 
                     // authorize card data

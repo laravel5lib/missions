@@ -12,6 +12,7 @@ import login from './components/login.vue';
 import pagination from './components/pagination.vue';
 import topNav from './components/top-nav.vue';
 import actionTrigger from './components/action-trigger.vue';
+import actionDropdownSelect from './components/action-dropdown-select.vue';
 import actionSelect from './components/action-select.vue';
 import listenText from './components/listen-text.vue';
 import donate from './components/donate.vue';
@@ -78,6 +79,10 @@ import referralResponse from './components/referrals/referral-response.vue';
 import sendEmail from './components/send-email.vue';
 import reportsList from './components/reports/reports-list.vue';
 import teamManager from './components/teams/team-manager.vue';
+import roomingWizard from './components/rooms/rooming-wizard.vue';
+import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
+import teamTypeManager from './components/teams/team-type-manager.vue';
+import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
 import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -138,6 +143,9 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
+import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
+import regionsAccommodations from './components/regions/regions-accommodations.vue';
+import restoreFund from './components/financials/funds/restore-fund.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -160,7 +168,6 @@ require('bootstrap-sass');
 window.Shepherd = require('tether-shepherd');
 require('eonasdan-bootstrap-datetimepicker');
 
-
 window.AOS = require('aos');
 AOS.init();
 $(document).ready(function () {
@@ -181,10 +188,13 @@ Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
 Vue.component('aside', VueStrap.aside);
+Vue.component('button-group', VueStrap.buttonGroup);
 Vue.component('panel', VueStrap.panel);
+Vue.component('radio', VueStrap.radio);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
 Vue.component('dropdown', VueStrap.dropdown);
+Vue.component('strap-select', VueStrap.select);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
@@ -218,7 +228,7 @@ Vue.http.interceptors.push(function(request, next) {
     // modify request
     var token, headers;
 
-    token = 'Bearer ' + $.cookie('api_token');
+    token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
     headers = request.headers || (request.headers = {});
 
@@ -365,12 +375,14 @@ Vue.filter('percentage', {
 Vue.filter('moment', {
     read: function (val, format, diff = false, noLocal = false) {
 
+        if (!val) return val;
+
         if (noLocal) {
             return moment(val).format(format || 'LL'); // do not convert to local
         }
 
         // console.log('before: ', val);
-        var date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val).local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -382,7 +394,8 @@ Vue.filter('moment', {
     write: function (val, oldVal) {
         let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        return moment(val).local().utc().format(format);
+        if (!val) return val;
+            return moment(val).local().utc().format(format);
     }
 });
 
@@ -766,6 +779,9 @@ Vue.mixin({
         isAdminRoute() {
             return this.firstUrlSegment == 'admin';
         },
+        isDashboardRoute() {
+            return this.firstUrlSegment == 'dashboard';
+        },
     },
     ready() {
         function isTouchDevice() {
@@ -804,7 +820,7 @@ new Vue({
             return this.$cookie.get('impersonate');
         },
         user() {
-            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(localStorage.getItem('user'));
+            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
         },
     },
     components: {
@@ -834,6 +850,7 @@ new Vue({
         fundraiserCollection,
         topNav,
         actionTrigger,
+        actionDropdownSelect,
         actionSelect,
         listenText,
         donate,
@@ -847,6 +864,7 @@ new Vue({
         sendEmail,
         restoreReservation,
         transferReservation,
+        restoreFund,
 
         //dashboard components
         recordsList,
@@ -882,7 +900,12 @@ new Vue({
         dashboardGroupReservations,
         dashboardInterestsList,
         teamManager,
+        teamTypeManager,
+        regionsManager,
+        regionsAccommodations,
         reportsList,
+        roomingWizard,
+        roomingTypeManager,
 
         // admin components
         campaignCreate,
@@ -942,7 +965,8 @@ new Vue({
         fundManager,
         companionManager,
         promotionals,
-        transports
+        transports,
+        roomingAccommodations,
     },
     http: {
         headers: {
@@ -997,6 +1021,22 @@ new Vue({
             // Save user info
             this.user = user;
             this.authenticated = true;
+        },
+        fetchUser() {
+            if (localStorage.hasOwnProperty('user')) {
+                return JSON.parse(localStorage.getItem('user'))
+            } else {
+                let that = this;
+                this.$http.get('users/me?include=roles,abilities')
+                    .then(function (response) {
+                            that.$root.$emit('userHasLoggedIn', response.body.data);
+                            return response.body.data;
+                        },
+                        function (response) {
+                            if (this.isAdminRoute || this.isDashboardRoute)
+                                window.location = '/logout';
+                        });
+            }
         },
         getImpersonatedUser: function () {
             if (this.impersonatedUser !== null) {

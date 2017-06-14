@@ -129,7 +129,7 @@ class TripTest extends TestCase
     {
         $campaign = factory(Campaign::class, '1n1d2017')->create();
 
-        $campaign->promote('Campaign Promotional', 1, 10000);
+        $campaign->promote('Campaign Promotional', 1, 100);
 
         $trip = factory(App\Models\v1\Trip::class)->create([
             'campaign_id' => $campaign->id
@@ -147,7 +147,7 @@ class TripTest extends TestCase
     {
         $group = factory(Group::class)->create();
 
-        $group->promote('Group Promotional', 1, 10000);
+        $group->promote('Group Promotional', 1, 100);
 
         $trip = factory(App\Models\v1\Trip::class)->create([
             'group_id' => $group->id
@@ -165,7 +165,7 @@ class TripTest extends TestCase
     {
         $trip = factory(App\Models\v1\Trip::class)->create();
 
-        $trip->promote('Trip Promotional', 1, 10000);
+        $trip->promote('Trip Promotional', 1, 100);
 
         $code = $trip->promotionals()->first()->promocodes()->first()->code;
 

@@ -395,7 +395,7 @@
                 delete data.group;
 
                 if (this.$PlanCreate.valid) {
-                    return this.PlansResource.save(data).then(function (response) {
+                    return this.PlansResource.save(data, { include: 'group' }).then(function (response) {
                         let plan = response.body.data;
                         this.plans.push(plan);
                         this.showPlanModal = false;

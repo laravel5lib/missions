@@ -3166,7 +3166,6 @@ export default {
         }
 
     },
-
     // Regions API
     ['GET *regions/:region/accommodations(/:accommodation)'] (pathMatch, query, request) {
         let body = {
@@ -3220,7 +3219,6 @@ export default {
                 }
             }
         };
-
         if (pathMatch.accommodation) {
             body.data = _.findWhere(body.data, {id: pathMatch.accommodation});
             delete body.meta;

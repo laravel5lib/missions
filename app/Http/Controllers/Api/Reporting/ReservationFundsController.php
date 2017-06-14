@@ -44,7 +44,7 @@ class ReservationFundsController extends Controller
             return [
                 'given_names' => $reservation->given_names,
                 'surname' => $reservation->surname,
-                'trip_rep' => $reservation->rep ? $reservation->rep->name : $reservation->trip->rep->name,
+                'trip_rep' => $reservation->rep ? $reservation->rep->name : ($reservation->trip->rep ? $reservation->trip->rep->name : null),
                 'managing_user' => $reservation->user->name,
                 'group' => $reservation->trip->group->name,
                 'trip_type' => $reservation->trip->type,

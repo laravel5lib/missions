@@ -51,7 +51,7 @@ class ReservationRequirementsController extends Controller
             $data = [
                 'Given Names' => $reservation->given_names,
                 'Surname' => $reservation->surname,
-                'Trip Rep' => $reservation->rep ? $reservation->rep->name : $reservation->trip->rep->name,
+                'Trip Rep' => $reservation->rep ? $reservation->rep->name : ($reservation->trip->rep ? $reservation->trip->rep->name : null),
                 'Managing User' => $reservation->user->name,
                 'Group' => $reservation->trip->group->name,
                 'Trip Type' => $reservation->trip->type,

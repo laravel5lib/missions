@@ -132,22 +132,16 @@
                     case 'max_leaders':
                         return 'Maximum Squad Leaders Allowed';
                     case 'min_groups':
-                    case 'min_squads':
                         return 'Minimum Groups Required';
-                    case 'max_squads':
                     case 'max_groups':
                         return 'Maximum Groups Allowed';
                     case 'min_group_members':
-                    case 'min_squad_members':
                         return 'Minimum Members per Group';
                     case 'max_group_members':
-                    case 'max_squad_members':
                         return 'Maximum Members per Group';
                     case 'min_group_leaders':
-                    case 'min_squad_leaders':
                         return 'Minimum Leaders per Group';
                     case 'max_group_leaders':
-                    case 'max_squad_leaders':
                         return 'Maximum Leaders per Group';
                 }
             },
@@ -160,12 +154,12 @@
                         max_members: 25,
                         min_leaders: 2,
                         max_leaders: 2,
-                        min_squads: 2,
-                        max_squads: 10,
-                        min_squad_members: 2,
-                        max_squad_members: 5,
-                        min_squad_leaders: 1,
-                        max_squad_leaders: 1
+                        min_groups: 2,
+                        max_groups: 10,
+                        min_group_members: 2,
+                        max_group_members: 5,
+                        min_group_leaders: 1,
+                        max_group_leaders: 1
                     }
                 }
             },

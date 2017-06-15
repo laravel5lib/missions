@@ -24,7 +24,7 @@ class TeamTypeRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'name' => 'required|string|unique:team_types,name',
+            'name' => 'required|string',
             'rules' => 'required|array',
             'rules.*' => 'integer',
             'campaign_id' => 'required|exists:campaigns,id'
@@ -32,7 +32,7 @@ class TeamTypeRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $rules = [
-                'name' => 'sometimes|required|string|unique:team_types,name',
+                'name' => 'sometimes|required',
                 'rules' => 'array',
                 'rules.*' => 'integer',
                 'campaign_id' => 'sometimes|required|exists:campaigns,id'

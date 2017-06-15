@@ -90,7 +90,7 @@ class Reservation extends Model
 
     /**
      * Get the reservation's companion limi.
-     * 
+     *
      * @param  integer $value
      * @return integer
      */
@@ -129,12 +129,13 @@ class Reservation extends Model
 
     /**
      * Team squads the reservation is assigned to.
-     * 
+     *
      * @return BelongsToMany
      */
     public function squads()
     {
         return $this->belongsToMany(TeamSquad::class, 'team_members')
+                    ->has('team')
                     ->withPivot('leader')
                     ->withTimestamps();
     }
@@ -180,7 +181,7 @@ class Reservation extends Model
 
     /**
      * Get the reservation's companions.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function companions()
@@ -202,7 +203,7 @@ class Reservation extends Model
 
     /**
      * Get all of the reservation's active costs.
-     * 
+     *
      * @return Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function activeCosts()
@@ -215,7 +216,7 @@ class Reservation extends Model
 
     /**
      * Get all the reservation's payments due.
-     * 
+     *
      * @return Illuminate\Database\Eloquent\Reservations\MorphMany
      */
     public function dues()
@@ -313,7 +314,7 @@ class Reservation extends Model
 
     /**
      * Get the reservation's room assignments.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function rooms()
@@ -358,7 +359,7 @@ class Reservation extends Model
 
     /**
      * Get reservation's total cost in dollars.
-     * 
+     *
      * @return string
      */
     public function totalCostInDollars()
@@ -421,7 +422,7 @@ class Reservation extends Model
                        ->activeCosts()
                        ->get()
                        ->transform(function($cost) {
-                            // set a "locked" attribute for 
+                            // set a "locked" attribute for
                             // merge with reseration costs
                             return $cost->setAttribute('locked', 0);
                        });
@@ -429,12 +430,12 @@ class Reservation extends Model
         // we find the 'incremental' cost with the latest activation date
         $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-        // we remove optional costs so they don't 
+        // we remove optional costs so they don't
         // get added to the reservation
         $tripCosts = $active->reject(function ($value) {
             return $value->type == 'optional';
-            // we remove any incremental costs that are not the most 
-            // recently activated cost to make sure they don't 
+            // we remove any incremental costs that are not the most
+            // recently activated cost to make sure they don't
             // get added to the reservation
         })->reject(function ($value) use ($maxDate) {
             return $value->type == 'incremental' && $value->active_at < $maxDate;
@@ -451,7 +452,7 @@ class Reservation extends Model
                     })
                     ->reject(function($cost) {
                         return in_array(
-                            $cost->id, 
+                            $cost->id,
                             $this->payments()
                                  ->late()
                                  ->pluck('payment.cost_id')
@@ -465,7 +466,7 @@ class Reservation extends Model
         $minDate = $costs->where('type', 'incremental')->min('active_at');
 
         // to make sure only one incremental cost is being applied,
-        // we choose the 'incremental' cost that 
+        // we choose the 'incremental' cost that
         // has the earliest activation date
         $costs = $costs->reject(function ($value) use($minDate) {
             return $value->type == 'incremental' && $value->active_at > $minDate;
@@ -483,7 +484,7 @@ class Reservation extends Model
     public function syncCosts($costs)
     {
         if ( ! $costs) return;
-        
+
         if ( ! $costs instanceof Collection)
             $costs = collect($costs);
 
@@ -493,7 +494,7 @@ class Reservation extends Model
                 'locked' => isset($item['locked']) and $item['locked'] ? true : false,
             ];
         })->toArray();
-        
+
         $this->costs()->sync($data);
 
         // update the related fudraiser goal amount
@@ -588,7 +589,7 @@ class Reservation extends Model
 
     /**
      * Add an array of todos to the reservation.
-     * 
+     *
      * @param array $todos [description]
      */
     public function addTodos(array $todos)
@@ -604,7 +605,7 @@ class Reservation extends Model
 
     /**
      * Delete an array of todos from the reservation.
-     * 
+     *
      * @param  array  $todos
      */
     public function removeTodos(array $todos)
@@ -625,7 +626,7 @@ class Reservation extends Model
     public function syncTodos(array $tripTodos)
     {
         $tasks = $this->todos()->pluck('task')->toArray();
-        
+
         $todos = collect($tripTodos)->transform(function($todo) {
             return ucfirst(trim(strtolower($todo)));
         })->toArray();
@@ -662,7 +663,7 @@ class Reservation extends Model
 
     /**
      * Helper method to retrieve the user's avatar
-     * 
+     *
      * @return mixed
      */
     public function getAvatar()
@@ -726,7 +727,7 @@ class Reservation extends Model
 
     /**
      * Transfer Reservation to another trip
-     * 
+     *
      * @param  String $trip_id
      * @param  String $desired_role
      * @return void
@@ -752,9 +753,9 @@ class Reservation extends Model
     }
 
     /**
-     * Find rewardable promotionals the 
+     * Find rewardable promotionals the
      * reservation can be enrolled in
-     * 
+     *
      * @return mixed
      */
     public function canBeRewarded()

@@ -1041,8 +1041,12 @@
                 this.searchReservations();
             },
 		    'currentTeam': function (val) {
-			    this.getSquads();
-			    this.updateConfig();
+                if (val && val.id) {
+                    this.getSquads();
+                    this.updateConfig();
+                } else {
+                    window.localStorage.removeItem(this.storageName);
+                }
             },
 
         },
@@ -1205,15 +1209,21 @@
                 });
             },
             canAssignToTeamLeaders(squad){
-	            return squad.callsign === 'Squad Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.rules.max_leaders;
+	            if (this.currentTeam)
+	                return squad.callsign === 'Squad Leaders' && squad.members && squad.members.length < this.currentTeam.type.data.rules.max_leaders;
+	            return false;
             },
             canAssignToSquadLeader(squad){
-                return !_.some(squad.members, function (member) {
-	                return member.leader;
-                });
+                if (this.currentTeam)
+                    return !_.some(squad.members, function (member) {
+		                return member.leader;
+	                });
+                return false;
             },
             canAssignToSquad(squad){
-	            return  squad.members && squad.members.length < this.currentTeam.type.data.rules.max_group_members;
+                if (this.currentTeam)
+                    return  squad.members && squad.members.length < this.currentTeam.type.data.rules.max_group_members;
+                return false
             },
             assignToSquad(reservation, squad, leader) {
                 if (leader) {
@@ -1384,6 +1394,7 @@
                 if (this.isAdminRoute) {
                     params.campaign = this.campaignId;
                 } else {
+                    params.campaign = this.campaignId;
                     params.groups = new Array(this.groupId);
                     params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
                 }
@@ -1853,7 +1864,9 @@
 	                this.campaignId = val ? val.id : '';
                     this.newTeamCampaigns = [{id: val.id}];
                     this.$root.$emit('update-title', val ? val.name : '');
-                    this.getTeams()
+                    this.currentTeam = null;
+                    this.getTeams();
+                    $('.nav-tabs a[href="#teams"]').tab('show');
                 }
                 this.searchReservations();
             }.bind(this));

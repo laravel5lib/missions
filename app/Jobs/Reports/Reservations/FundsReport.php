@@ -1,41 +1,48 @@
 <?php
 
-namespace App\Http\Controllers\Api\Reporting;
+namespace App\Jobs\Reports\Reservations;
 
-use App\Http\Requests;
-use App\Models\v1\User;
-use App\Jobs\GenerateReport;
-use Illuminate\Http\Request;
+use App\Jobs\Job;
 use App\Models\v1\Reservation;
-use App\Http\Controllers\Controller;
+use App\Services\Reports\CSVReport;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ReservationFundsController extends Controller
+class FundsReport extends Job implements ShouldQueue
 {
-    protected $reservation;
+    use InteractsWithQueue, SerializesModels;
+
+    protected $request;
     protected $user;
 
-    function __construct(Reservation $reservation, User $user)
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($request, $user)
     {
-        $this->reservation = $reservation;
+        $this->request = $request;
         $this->user = $user;
     }
 
-    public function store(Request $request)
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle(Reservation $reservation)
     {
-        $user = $this->user->findOrFail($request->get('author_id'));
-
-        $reservations = $this->reservation
-                             ->filter($request->all())
+        $reservations = $reservation->filter($this->request)
                              ->with('costs', 'dues.payment.cost')
                              ->get();
 
         $data = $this->columnize($reservations);
 
-        $this->dispatch(new GenerateReport($data, 'reservation_funds', $user));
+        $filename = 'reservations_funds_' . time();
 
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
+        (new CSVReport($data, $this->user))->make($filename)->notify();
     }
 
     private function columnize($reservations)

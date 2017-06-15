@@ -74,7 +74,9 @@ class TravelReport extends Job implements ShouldQueue
 
     private function passport($reservation)
     {
-        $passport = $reservation->requirements->where('document_type', 'passports')->first()->document;
+        $requirement = $reservation->requirements->where('document_type', 'passports')->first();
+
+        $passport = $requirement ? $requirement->document : null;
 
         return collect([
             'Passport Surname' => $passport ? $passport->surname : null,
@@ -88,7 +90,9 @@ class TravelReport extends Job implements ShouldQueue
 
     private function itinerary($reservation)
     {
-        $itinerary_id = $reservation->requirements->where('document_type', 'travel_itineraries')->first()['document_id'];
+        $requirement = $reservation->requirements->where('document_type', 'travel_itineraries')->first();
+
+        $itinerary_id = $requirement ? $requirement['document_id'] : null;
 
         $itinerary = Itinerary::with('activities.type', 'activities.hubs', 'activities.transports')
                           ->find($itinerary_id);

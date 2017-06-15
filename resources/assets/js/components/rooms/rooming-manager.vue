@@ -703,19 +703,15 @@
                 this.updateConfig();
                 this.currentRoom = null;
                 this.getRooms(val);
-                if (this.isAdminRoute)
-                    this.searchReservations();
-                else
-                    this.getTeams();
+                this.searchReservations();
+                this.getTeams();
             },
             currentRoom: {
                 handler(val, oldVal) {
                     if (val && (!oldVal || val.occupants_count !== oldVal.occupants_count))
                         this.getOccupants();
-                    if (this.isAdminRoute)
-                        this.searchReservations();
-                    else
-                        this.getTeams();
+                    this.searchReservations();
+                    this.getTeams();
                     this.updateConfig();
                 },
 	            deep: true
@@ -930,7 +926,7 @@
                     room_leader: leader,
                 };
 
-                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions,squads.team' } }).then(function (response) {
+                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions,squads.team,costs:type(optional)' } }).then(function (response) {
 	                let occupants = response.body.data;
 	                room.occupants = occupants;
                     room.occupants_count = occupants.length;
@@ -1166,7 +1162,7 @@
                         let room = response.body.data;
                         this.showRoomModal = false;
                         return this.getRooms().then(function (rooms) {
-                            return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id})
+                            return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
                         });
                     }, function (response) {
                         console.log(response);
@@ -1233,7 +1229,7 @@
 
             this.$root.$on('campaign-scope', function (val) {
                 this.campaignId = val ? val.id : '';
-                this.$root.$emit('update-title', val ? val.name : '');
+                this.$dispatch('rooming-wizard:plan-selection');
             }.bind(this));
 
             this.$root.$on('plan-scope', function (val) {

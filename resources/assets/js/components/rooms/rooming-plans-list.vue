@@ -437,6 +437,14 @@
             }
 			this.getRoomingPlans();
 			this.getRoomTypes();
+
+            this.$root.$on('campaign-scope', function (val) {
+                this.campaignId = val ? val.id : '';
+                if (val && val.id) {
+                    this.getRoomingPlans();
+                    this.getRoomTypes();
+                }
+            }.bind(this));
         }
     }
 </script>

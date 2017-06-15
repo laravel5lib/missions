@@ -1,44 +1,49 @@
 <?php
 
-namespace App\Http\Controllers\Api\Reporting;
+namespace App\Jobs\Reports\Reservations;
 
-use App\Http\Requests;
-use App\Models\v1\User;
-use App\Jobs\GenerateReport;
+use App\Jobs\Job;
 use App\Models\v1\Itinerary;
-use Illuminate\Http\Request;
 use App\Models\v1\Reservation;
-use App\Http\Controllers\Controller;
+use App\Services\Reports\CSVReport;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ReservationTravelController extends Controller
-{   
-    protected $reservation;
-    protected $itinerary;
+class TravelReport extends Job implements ShouldQueue
+{
+    use InteractsWithQueue, SerializesModels;
+
+    protected $request;
     protected $user;
 
-    function __construct(Reservation $reservation, Itinerary $itinerary, User $user)
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($request, $user)
     {
-        $this->reservation = $reservation;
-        $this->itinerary = $itinerary;
+        $this->request = $request;
         $this->user = $user;
     }
 
-    public function store(Request $request)
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle(Reservation $reservation)
     {
-        $user = $this->user->findOrFail($request->get('author_id'));
-        
-        $reservations = $this->reservation
-                             ->filter($request->all())
+        $reservations = $reservation->filter($this->request)
                              ->with('requirements.document')
                              ->get();
 
         $data = $this->columnize($reservations);
 
-        $this->dispatch(new GenerateReport($data, 'reservation_travel', $user));
+        $filename = 'reservations_travel_' . time();
 
-        return $this->response()->created(null, [
-            'message' => 'Report is being generated and will be available shortly.'
-        ]);
+        (new CSVReport($data, $this->user))->make($filename)->notify();
     }
 
     private function columnize($reservations)
@@ -69,7 +74,9 @@ class ReservationTravelController extends Controller
 
     private function passport($reservation)
     {
-        $passport = $reservation->requirements->where('document_type', 'passports')->first()->document;
+        $requirement = $reservation->requirements->where('document_type', 'passports')->first();
+
+        $passport = $requirement ? $requirement->document : null;
 
         return collect([
             'Passport Surname' => $passport ? $passport->surname : null,
@@ -83,10 +90,11 @@ class ReservationTravelController extends Controller
 
     private function itinerary($reservation)
     {
-        $itinerary_id = $reservation->requirements->where('document_type', 'travel_itineraries')->first()['document_id'];
+        $requirement = $reservation->requirements->where('document_type', 'travel_itineraries')->first();
 
-        $itinerary = $this->itinerary
-                          ->with('activities.type', 'activities.hubs', 'activities.transports')
+        $itinerary_id = $requirement ? $requirement['document_id'] : null;
+
+        $itinerary = Itinerary::with('activities.type', 'activities.hubs', 'activities.transports')
                           ->find($itinerary_id);
 
         $travel = collect([

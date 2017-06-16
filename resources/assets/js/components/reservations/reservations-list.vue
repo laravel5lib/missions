@@ -62,14 +62,14 @@
                     <!-- Cost/Payments -->
                     <div class="form-group">
                         <label>Applied Cost</label>
-                        <select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
+                        <select class="form-control input-sm" v-model="filters.due" style="width:100%;">
                             <option value="">Any Cost</option>
                             <option v-for="option in dueOptions" v-bind:value="option">
                                 {{ option }}
                             </option>
                         </select>
                     </div>
-                    <div class="form-group" v-if="filters.dueName">
+                    <div class="form-group" v-if="filters.due">
                         <label>Payment Status</label>
                         <select class="form-control input-sm" v-model="filters.dueStatus" style="width:100%;">
                             <option value="">Any Status</option>
@@ -358,7 +358,7 @@
                     todoStatus: null,
                     requirementName: '',
                     requirementStatus: '',
-                    dueName: '',
+                    due: '',
                     dueStatus: '',
                     rep: '',
                     sort: 'created_at',

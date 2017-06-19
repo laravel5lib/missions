@@ -116,7 +116,7 @@ class TravelReport extends Job implements ShouldQueue
             if ($act->type->name == 'arrival') {
                 $travel['Arrival Method'] = $act->transports->first() ? $act->transports->first()->type : null;
                 $travel['Arrival Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
-                $travel['Arrival At'] = $act->occurred_at ? $act->occurred_at->toDateTimeString() : null;
+                $travel['Arrival At'] = $act->occurred_at ? $act->occurred_at->timezone('America/Detroit')->format('F d, Y h:i a') : null;
                 $travel['Arrival Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
                 $travel['Arrival Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
             }
@@ -124,7 +124,7 @@ class TravelReport extends Job implements ShouldQueue
             if ($act->type->name === 'departure') {
                  $travel['Departure Method'] = $act->transports->first() ? $act->transports->first()->type : null;
                  $travel['Departure Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
-                 $travel['Departure At'] = $act->occurred_at ? $act->occurred_at->toDateTimeString() : null;
+                 $travel['Departure At'] = $act->occurred_at ? $act->occurred_at->timezone('America/Detroit')->format('F d, Y h:i a') : null;
                  $travel['Departure Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
                  $travel['Departure Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
             }

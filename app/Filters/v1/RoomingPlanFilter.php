@@ -15,7 +15,7 @@ class RoomingPlanFilter extends Filter
      *
      * @var array
      */
-    public $sortable = ['created_at', 'updated_at'];
+    public $sortable = ['name', 'created_at', 'updated_at'];
 
     /**
      * Default searchable fields.

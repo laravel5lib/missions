@@ -1,6 +1,7 @@
 <?php namespace App\Filters\v1;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReservationFilter extends Filter
 {
@@ -368,12 +369,32 @@ class ReservationFilter extends Filter
 
     public function minPercentRaised($percent)
     {
-        //
+        $decimal = $percent / 100;
+
+        $ids = DB::table('reservations')->join('reservation_costs', 'reservations.id', '=', 'reservation_costs.reservation_id')
+                     ->join('costs', 'costs.id', '=', 'reservation_costs.cost_id')
+                     ->join('funds', 'reservations.id', '=', 'funds.fundable_id')
+                     ->groupBy('reservations.id')
+                     ->havingRaw("funds.balance/SUM(costs.amount) >= $decimal")
+                     ->selectRaw('reservations.id, funds.balance, costs.amount')
+                     ->pluck('reservations.id');
+
+        return $this->whereIn('id', $ids);
     }
 
     public function maxPercentRaised($percent)
     {
-        //
+        $decimal = $percent / 100;
+
+        $ids = DB::table('reservations')->join('reservation_costs', 'reservations.id', '=', 'reservation_costs.reservation_id')
+            ->join('costs', 'costs.id', '=', 'reservation_costs.cost_id')
+            ->join('funds', 'reservations.id', '=', 'funds.fundable_id')
+            ->groupBy('reservations.id')
+            ->havingRaw("funds.balance/SUM(costs.amount) <= $decimal")
+            ->selectRaw('reservations.id, funds.balance, costs.amount')
+            ->pluck('reservations.id');
+
+        return $this->whereIn('id', $ids);
     }
 
     /**

@@ -72,8 +72,10 @@ class AccommodationTransformer extends TransformerAbstract {
 
     private function getAvailableRooms(Accommodation $accommodation)
     {
-        return $accommodation->availableRoomTypes->keyBy('name')->map(function($type) {
+        $available = $accommodation->availableRoomTypes->keyBy('name')->map(function($type) {
             return $type->pivot->available_rooms;
-        })->put('total', $accommodation->availableRoomTypes->count())->all();
+        });
+
+        return $available->put('total', $available->sum())->all();
     }
 }

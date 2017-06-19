@@ -77,7 +77,9 @@ class BasicReport extends Job implements ShouldQueue
                 'end_date' => $reservation->trip->ended_at->format('M d, Y'),
                 'desired_role' => teamRole($reservation->desired_role),
                 'designation' => $reservation->designation ? 
-                    implode('', array_flatten($reservation->designation->content)) : 'none'
+                    implode('', array_flatten($reservation->designation->content)) : 'none',
+                'Registered' => $reservation->created_at->timezone('America/Detroit')->format('F d, Y h:i a'),
+                'Updated' => $reservation->updated_at->timezone('America/Detroit')->format('F d, Y h:i a')
             ];
         })->all();
     }

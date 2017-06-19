@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Cache;
 
 class UtilitiesController extends Controller
-{   
+{
     public function getTeamRoles($type = null)
     {
         switch ($type) {
@@ -74,7 +74,7 @@ class UtilitiesController extends Controller
     public function getTimezones($country_code = null)
     {
         $timezones = \DateTimeZone::listIdentifiers();
-        
+
         if ($country_code)
             $timezones = \DateTimeZone::listIdentifiers(\
                 DateTimeZone::PER_COUNTRY, strtoupper($country_code)
@@ -139,7 +139,10 @@ class UtilitiesController extends Controller
         ];
 
         Mail::queue('emails.sponsor-request', ['data' => $data], function ($m) use ($data) {
-            $m->to('katie@missions.me', 'Katie @ Missions.me')->subject('New Project Request!');
+            $m->to('mail@missions.me', 'Missions.Me')
+              ->cc('katie@missions.me', 'Katie Mazur')
+              ->cc('gabe@missions.me', 'Gabe Bahlhorn')
+              ->subject('New Project Request!');
         });
 
     }

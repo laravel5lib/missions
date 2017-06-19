@@ -39,7 +39,9 @@ class RoomingPlanTransformer extends TransformerAbstract
     {
         $available = $plan->availableRoomTypes->keyBy('name')->map(function($type) {
             return $type->pivot->available_rooms;
-        })->put('total', $plan->availableRoomTypes->count())->all();
+        });
+
+        $available = $available->put('total', $available->sum())->all();
 
         return array_merge((new RoomCount($plan))->getRoomTypes(), $available);
     }

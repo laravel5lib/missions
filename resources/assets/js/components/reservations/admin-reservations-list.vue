@@ -83,6 +83,8 @@
 						<option value="eastern">Eastern</option>
 						<option value="western">Western</option>
 						<option value="international">International</option>
+                        <option value="weekend">Weekend</option>
+                        <option value="other">Other</option>
 						<option value="none">None</option>
 					</select>
 				</div>
@@ -164,6 +166,50 @@
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Max</span>
 								<input type="number" class="form-control" number v-model="ageMax" max="120">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Percent Raised</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Min</span>
+								<input type="text" class="form-control"  v-model="filters.minPercentRaised" min="0">
+                                <span class="input-group-addon">%</span>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max</span>
+								<input type="text" class="form-control"  v-model="filters.maxPercentRaised" max="100">
+                                <span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Amount Raised</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Min $</span>
+								<input type="text" class="form-control"  v-model="filters.minAmountRaised" min="0">
+                                <span class="input-group-addon">.00</span>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max $</span>
+								<input type="text" class="form-control"  v-model="filters.maxAmountRaised" max="100">
+                                <span class="input-group-addon">.00</span>
 							</div>
 						</div>
 					</div>
@@ -610,7 +656,11 @@
 					requirementStatus: '',
 					dueName: '',
 					dueStatus: '',
-					rep: ''
+					rep: '',
+                    minPercentRaised: '',
+                    maxPercentRaised: '',
+                    minAmountRaised: '',
+                    maxAmountRaised: ''
 				},
 				showFilters: false,
 				exportOptions: {

@@ -36,7 +36,9 @@ class TravelReport extends Job implements ShouldQueue
     public function handle(Reservation $reservation)
     {
         $reservations = $reservation->filter($this->request)
-                             ->with('requirements.document')
+                             ->with('requirements.document', 'trip.group',
+                                'trip.campaign', 'trip.rep', 'rep',
+                                'designation', 'squads.team.regions')
                              ->get();
 
         $data = $this->columnize($reservations);
@@ -51,15 +53,25 @@ class TravelReport extends Job implements ShouldQueue
 
         return $reservations->map(function($reservation) {
             $data = [
-                'Given Names' => $reservation->given_names,
-                'Surname' => $reservation->surname,
-                'Trip Rep' => $reservation->rep ? $reservation->rep->name : ($reservation->trip->rep ? $reservation->trip->rep->name : null),
-                'Managing User' => $reservation->user->name,
+                'First Name' => $reservation->given_names,
+                'Last Name' => $reservation->surname,
+                'Arrival Designation' => $reservation->designation ?
+                    implode('', array_flatten($reservation->designation->content)) : 'none',
+                'Role' => teamRole($reservation->desired_role),
                 'Group' => $reservation->trip->group->name,
                 'Trip Type' => $reservation->trip->type,
                 'Campaign' => $reservation->trip->campaign->name,
-                'designation' => $reservation->designation ? 
-                    implode('', array_flatten($reservation->designation->content)) : 'none'
+                'Marital Status' => $reservation->status,
+                'Gender' => $reservation->gender,
+                'Age' => $reservation->age,
+                'Birthday' => $reservation->birthday->toFormattedDateString(),
+                'Weight' => convert_to_pounds($reservation->weight).' lbs',
+                'Email' => $reservation->email,
+                'Primary Phone' => $reservation->phone_one,
+                'Shirt Size' => shirtSize($reservation->shirt_size),
+                'Region' => implode(',', $reservation->squads->pluck('team')->flatten()->pluck('regions')->flatten()->pluck('name')->all()),
+                'Squad' => implode(',', $reservation->squads->pluck('team')->flatten()->pluck('callsign')->all()),
+                'Squad Group' => implode(',', $reservation->squads->pluck('callsign')->all())
             ];
 
             $data = collect($data)
@@ -74,16 +86,18 @@ class TravelReport extends Job implements ShouldQueue
 
     private function passport($reservation)
     {
-        $requirement = $reservation->requirements->where('document_type', 'passports')->first();
+        $requirement = $reservation->requirements
+            ->where('document_type', 'passports')
+            ->first();
 
         $passport = $requirement ? $requirement->document : null;
 
         return collect([
-            'Passport Surname' => $passport ? $passport->surname : null,
-            'Passport Given Names' => $passport ? $passport->given_names : null,
+            // 'Passport Surname' => $passport ? $passport->surname : null,
+            // 'Passport Given Names' => $passport ? $passport->given_names : null,
             'Passport Number' => $passport ? $passport->number : null,
             'Citizenship' => $passport ? country($passport->citizenship) : null,
-            'Nationality' => $passport ? country($passport->birth_country) : null,
+            // 'Nationality' => $passport ? country($passport->birth_country) : null,
             'Expires' => $passport ? $passport->expires_at->toFormattedDateString() : null
         ]);
     }
@@ -108,6 +122,14 @@ class TravelReport extends Job implements ShouldQueue
             'Departure At' => null,
             'Departure Transportation' => null,
             'Departure Transport No.' => null,
+            'Intl Departure Location' => null,
+            'Intl Departure At' => null,
+            'Intl Departure Transportation' => null,
+            'Intl Departure Transport No.' => null,
+            'Intl Return Location' => null,
+            'Intl Return At' => null,
+            'Intl Return Transportation' => null,
+            'Intl Return Transport No.' => null,
         ]);
 
         if (!$itinerary) return $travel;
@@ -116,7 +138,7 @@ class TravelReport extends Job implements ShouldQueue
             if ($act->type->name == 'arrival') {
                 $travel['Arrival Method'] = $act->transports->first() ? $act->transports->first()->type : null;
                 $travel['Arrival Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
-                $travel['Arrival At'] = $act->occurred_at ? $act->occurred_at->toDateTimeString() : null;
+                $travel['Arrival At'] = $act->occurred_at ? $act->occurred_at->timezone('America/Detroit')->format('F d, Y h:i a') : null;
                 $travel['Arrival Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
                 $travel['Arrival Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
             }
@@ -124,7 +146,7 @@ class TravelReport extends Job implements ShouldQueue
             if ($act->type->name === 'departure') {
                  $travel['Departure Method'] = $act->transports->first() ? $act->transports->first()->type : null;
                  $travel['Departure Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
-                 $travel['Departure At'] = $act->occurred_at ? $act->occurred_at->toDateTimeString() : null;
+                 $travel['Departure At'] = $act->occurred_at ? $act->occurred_at->timezone('America/Detroit')->format('F d, Y h:i a') : null;
                  $travel['Departure Transportation'] = $act->transports->first() ? $act->transports->first()->name : null;
                  $travel['Departure Transport No.'] = $act->transports->first() ? $act->transports->first()->vessel_no : null;
             }

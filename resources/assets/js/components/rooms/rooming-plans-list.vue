@@ -62,7 +62,7 @@
 		<div style="position:relative;" class="panel panel-default">
 
             <div class="list-group" v-if="plans.length">
-              <div class="list-group-item" v-for="plan in plans|orderBy 'name'">
+              <div class="list-group-item" v-for="plan in plans">
 
                 <div class="row">
                     <div class="col-sm-6">
@@ -274,9 +274,11 @@
                     group: this.filters.group ? this.filters.group.id : null,
 	                search: this.search,
 	                per_page: this.per_page,
+					page: this.pagination.current_page,
+					sort: 'created_at|desc',
                     include: 'group'
                 });
-
+                
                 if (this.isAdminRoute) {
 					params.campaign = this.campaignId;
                 } else {
@@ -284,7 +286,6 @@
                     params.group = this.groupId;
 
                 }
-
                 this.exportFilters = params;
 
                 return this.PlansResource.get(params).then(function (response) {

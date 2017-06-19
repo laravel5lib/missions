@@ -6,28 +6,29 @@ use App\UuidForKey;
 use App\TeamTypeRules;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TeamType extends Model
 {
-    use UuidForKey, Filterable;
-    
+    use UuidForKey, Filterable, SoftDeletes;
+
     /**
      * Attributes that should not be mass assigned.
-     * 
+     *
      * @var array
      */
     protected $guarded = [];
 
     /**
      * Attributes that should be cast to native types.
-     * 
+     *
      * @var array
      */
     protected $casts = ['rules' => 'array'];
 
     /**
      * Set the name attribute
-     * 
+     *
      * @param string $value
      */
     public function setNameAttribute($value)
@@ -37,7 +38,7 @@ class TeamType extends Model
 
     /**
      * Set the rules attribute
-     * 
+     *
      * @param array $value
      */
     public function setRulesAttribute($value)
@@ -47,7 +48,7 @@ class TeamType extends Model
 
     /**
      * Get the rules attribute.
-     * 
+     *
      * @param  $value
      * @return array
      */
@@ -63,7 +64,7 @@ class TeamType extends Model
 
     /**
      * Get teams
-     * 
+     *
      * @return HasMany
      */
     public function teams()
@@ -73,7 +74,7 @@ class TeamType extends Model
 
     /**
      * Get rules
-     * 
+     *
      * @return TeamTypeRules
      */
     public function rules()

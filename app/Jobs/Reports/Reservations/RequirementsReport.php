@@ -35,7 +35,9 @@ class RequirementsReport extends Job implements ShouldQueue
     public function handle(Reservation $reservation)
     {
         $reservations = $reservation->filter($this->request)
-                             ->with('requirements.requirement')
+                             ->with('requirements.requirement', 'costs',
+                                'trip.group', 'trip.campaign', 'trip.rep',
+                                'rep', 'user')
                              ->get();
 
         $data = $this->columnize($reservations);
@@ -58,11 +60,17 @@ class RequirementsReport extends Job implements ShouldQueue
             $data = [
                 'Given Names' => $reservation->given_names,
                 'Surname' => $reservation->surname,
+                'Email' => $reservation->email,
                 'Trip Rep' => $reservation->rep ? $reservation->rep->name : ($reservation->trip->rep ? $reservation->trip->rep->name : null),
                 'Managing User' => $reservation->user->name,
                 'Group' => $reservation->trip->group->name,
                 'Trip Type' => $reservation->trip->type,
                 'Campaign' => $reservation->trip->campaign->name,
+                'Role' => teamRole($reservation->desired_role),
+                'Rooming Costs' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
+                    return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+                })->all()),
+                'Percent Funded' => $reservation->getPercentRaised()
             ];
 
             $data = collect($data)->merge($requirementColumns)->all();

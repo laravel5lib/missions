@@ -23,7 +23,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 @endsection
 @section('content')
 <div class="vid-bg">
-  <video muted autoplay loop poster="video/video-placeholder.png" class="vid-bg-video">
+  <video muted autoplay loop poster="video/video-placeholder.jpg" class="vid-bg-video">
     <source src="video/mm-homepage-bg.webm" type="video/webm">
     <source src="video/mm-homepage-bg.mp4" type="video/mp4">
     <source src="video/mm-homepage-bg.ogv" type="video/ogg">

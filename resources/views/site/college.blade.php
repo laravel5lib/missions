@@ -53,7 +53,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
     <source src="images/college/mmc-vid-bg.mp4" type="video/mp4">
     <source src="images/college/mmc-vid-bg.ogv" type="video/ogg">
   </video>
-  <div class="container">
+  	<div class="container">
 	  <div class="row">
 	    <hr class="divider inv xlg">
 	    <hr class="divider inv xlg">

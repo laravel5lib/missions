@@ -11,18 +11,18 @@ class TeamRole {
         'PRAS' => 'Project Assistant',
         'CODR' => 'Country Director',
         'SSPK' => 'Stadium Speaker',
-        'MCDR' => 'Medical Clinic Director'
+        'MCDR' => 'Medical Clinic Director',
+        'INFL' => 'Influencer',
+        'PAST' => 'Pastor'
     ];
 
     protected static $general = [
         'MISS' => 'Missionary (13+)',
         'MINR' => 'Missionary (Child 8-12)',
-        'PAST' => 'Pastor',
         'POLI' => 'Politican',
         'BUSP' => 'Business Professional',
         'MEDI' => 'Media Professional',
         'MDPF' => 'Medical Professional',
-        'INFL' => 'Influencer',
         'WATR' => 'Clean Water Team Member'
     ];
 

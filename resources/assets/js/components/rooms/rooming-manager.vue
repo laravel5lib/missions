@@ -938,15 +938,12 @@
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,user,companions,squads.team,costs:type(optional)',
-                    per_page: this.reservationsPerPage,
-                    page: this.reservationsPagination.current_page,
+					campaign: this.campaignId,
                     current: true,
-                    // ignore: this.excludeReservationIds,
-	                inSquad: true,
-	                noRoom: 'plans|' + this.currentPlan.id,
                     search: this.reservationsSearch,
-                    // designation: this.reservationFilters.designation,
-	                campaign: this.campaignId,
+					noRoom: 'plans|' + this.currentPlan.id,
+					per_page: this.reservationsPerPage,
+					page: this.reservationsPagination.current_page,
                 };
 
                 params = _.extend(params, this.reservationFilters);

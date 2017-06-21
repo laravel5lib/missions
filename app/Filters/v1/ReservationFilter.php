@@ -101,7 +101,7 @@ class ReservationFilter extends Filter
     /**
      * By reps.
      *
-     * @param $ids
+     * @param $id
      * @return mixed
      */
     public function rep($id)
@@ -437,13 +437,12 @@ class ReservationFilter extends Filter
         // check for existence of value after "|" pipe
         if (isset($param[1])) {
             // query reservations that have rooms
-            return $this->whereHas('rooms', function($room) use ($param) {
+            return $this->whereDoesntHave('rooms', function($room) use ($param) {
                 // query a room in plan or accomodation
                 return $room->whereHas($param[0], function($query) use($param) {
-                    return $query->where('id', '<>', $param[1]);
+                    return $query->where('id', '=', $param[1]);
                 });
-                // or query reservations that do not have rooms
-            })->orHas('rooms', '<', 1);
+            });
         }
 
         // if no value exists after the "|" pipe, only use first value

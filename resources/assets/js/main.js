@@ -389,7 +389,7 @@ Vue.filter('moment', {
         }
         // console.log('after: ', date);
 
-        return d,ate;
+        return date;
     },
     write: function (val, oldVal, format = 'YYYY-MM-DD HH:mm:ss', diff = false, noLocal = false) {
         // let format = 'YYYY-MM-DD HH:mm:ss';
@@ -399,7 +399,7 @@ Vue.filter('moment', {
         if (noLocal) {
             // interpret as still UTC
             // format does not need to change (obviously...)
-            console.log(val);
+            // console.log(val);
             return val;
             // console.log(moment.utc(val).format(format));
             // return moment.utc(val).format(format); // do not convert to local

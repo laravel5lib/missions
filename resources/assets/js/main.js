@@ -378,7 +378,7 @@ Vue.filter('moment', {
         if (!val) return val;
 
         if (noLocal) {
-            return moment(val).format(format || 'LL'); // do not convert to local
+            return moment.utc(val).format(format || 'LL'); // do not convert to local
         }
 
         // console.log('before: ', val);
@@ -398,7 +398,7 @@ Vue.filter('moment', {
 
         if (noLocal) {
             // interpret as still UTC
-            return moment.utc(val).format(format); // do not convert to local
+            return val; // do not convert to local
         }
 
         return moment(val).local().utc().format(format);

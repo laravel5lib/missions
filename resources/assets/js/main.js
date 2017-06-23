@@ -399,10 +399,10 @@ Vue.filter('moment', {
         if (noLocal) {
             // interpret as still UTC
             // format does not need to change (obviously...)
-            console.log('Date: ', val);
-            return val;
+            // console.log('Date: ', val);
+            //return val;
             // console.log(moment.utc(val).format(format));
-            // return moment.utc(val).format(format); // do not convert to local
+            return moment(val).format(format || 'LL'); // do not convert to local
         }
 
         return moment(val).local().utc().format(format);

@@ -27,7 +27,7 @@
 					<label for="" v-text="LABELS.dateTime"></label>
 					<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true" v-if="editMode"></date-picker>
 					<p v-else>{{ activity.occurred_at | moment 'LLLL' false true }}</p>
-					<input type="text" class="form-control hidden" v-model="activity.occurred_at"
+					<input type="text" class="form-control hidden" v-model="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
 					       id="occurred_at" v-validate:occurred="['required', 'datetime']">
 				</div>
 				<!--<template v-if="isUpdate && editMode">

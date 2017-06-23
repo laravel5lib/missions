@@ -37,8 +37,8 @@ class EloquentRoom extends EloquentRepository implements Room {
     {
         DB::transaction(function () use ($id) 
         {
-            $this->model->occupants()->detach();
-            $this->model->destroy($id);
+            $this->getById($id)->occupants()->detach();
+            $this->model->delete($id);
         });
     }
 }

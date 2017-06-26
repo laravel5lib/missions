@@ -391,11 +391,21 @@ Vue.filter('moment', {
 
         return date;
     },
-    write: function (val, oldVal) {
-        let format = 'YYYY-MM-DD HH:mm:ss';
+    write: function (val, oldVal, format = 'YYYY-MM-DD HH:mm:ss', diff = false, noLocal = false) {
+        // let format = 'YYYY-MM-DD HH:mm:ss';
         // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
         if (!val) return val;
-            return moment(val).local().utc().format(format);
+
+        if (noLocal) {
+            // interpret as still UTC
+            // format does not need to change (obviously...)
+            // console.log('Date: ', val);
+            //return val;
+            // console.log(moment.utc(val).format(format));
+            return moment(val).format(format || 'LL'); // do not convert to local
+        }
+
+        return moment(val).local().utc().format(format);
     }
 });
 

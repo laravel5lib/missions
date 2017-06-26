@@ -38,10 +38,7 @@
 						<button class="btn btn-primary btn-sm" type="button" @click="openNewPlanModal">
 							Create a plan
 						</button>
-                        <export-utility url="rooming/plans/export"
-                                        :options="exportOptions"
-                                        :filters="exportFilters">
-                        </export-utility>
+						<rooming-reports :filters="filters" :search="search" :campaign="campaignId"></rooming-reports>
 					</form>
 				</div>
 			</div>
@@ -176,9 +173,10 @@
     import _ from 'underscore';
     import vSelect from 'vue-select';
     import exportUtility from '../export-utility.vue';
+    import roomingReports from '../admin/reporting/rooming-reports.vue';
     export default{
         name: 'rooming-plans-list',
-	    components: {vSelect, exportUtility},
+	    components: {vSelect, exportUtility, roomingReports},
         props: {
             userId: {
                 type: String,

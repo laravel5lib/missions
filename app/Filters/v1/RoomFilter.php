@@ -8,7 +8,10 @@ class RoomFilter extends Filter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'plans' => ['campaign', 'group'],
+        'accommodations' => ['region']
+    ];
 
     /**
      * Default sortable fields.

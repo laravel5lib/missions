@@ -23,6 +23,11 @@ class EloquentRoom extends EloquentRepository implements Room {
         return $this->model->withCount('occupants')->get();
     }
 
+    public function withOccupants()
+    {
+        return $this->model->withCount('occupants')->has('occupants')->with('occupants')->get();
+    }
+
     public function getById($id)
     {
         return $this->model->withTrashed()->withCount('occupants')->findOrFail($id);

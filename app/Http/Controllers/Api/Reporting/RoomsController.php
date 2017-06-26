@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers\Api\Reporting;
 
+use App\Jobs\Reports\Rooms\RoomsByAccommodationReport;
+use App\Jobs\Reports\Rooms\RoomsByPlanReport;
 use App\Models\v1\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Jobs\Reports\Reservations\BasicReport;
-use App\Jobs\Reports\Reservations\FundsReport;
-use App\Jobs\Reports\Reservations\TravelReport;
-use App\Jobs\Reports\Reservations\RequirementsReport;
 
-class ReservationsController extends Controller
+class RoomsController extends Controller
 {
     protected $user;
-    
-    function __construct(User $user)
+
+    public function __construct(User $user)
     {
         $this->user = $user;
     }
 
-    public function store(Request $request, $type)
+    public function store($type, Request $request)
     {
         $user = $this->user->findOrFail($request->get('author_id'));
 
@@ -35,10 +33,8 @@ class ReservationsController extends Controller
     private function getReport($type)
     {
         $reports = [
-            'basic' => BasicReport::class,
-            'funds' => FundsReport::class,
-            'requirements' => RequirementsReport::class,
-            'travel' => TravelReport::class
+            'plans' => RoomsByPlanReport::class,
+            'accommodations' => RoomsByAccommodationReport::class
         ];
 
         return $reports[$type];

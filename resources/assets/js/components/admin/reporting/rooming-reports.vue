@@ -15,6 +15,7 @@ export default {
     methods: {
         create(report) {
             let params = { 'author_id': this.$root.user.id, 'campaign': this.campaign };
+            this.filters.group ? this.filters.group = this.filters.group.id : null;
             $.extend(params, this.filters);
             $.extend(params, {search: this.search});
             console.log(report);

@@ -226,7 +226,7 @@ Vue.http.options.root = '/api';
 Vue.http.interceptors.push(function(request, next) {
 
     // modify request
-    var token, headers;
+    let token, headers;
 
     token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
@@ -299,7 +299,7 @@ Vue.http.interceptors.push(function(request, next) {
 // Register email validator function.
 Vue.validator('email', function (val) {
     if (! val) return true;
-    
+
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 });
 // Validate datetime inputs
@@ -420,72 +420,6 @@ Vue.filter('mFormat', {
 
 Vue.filter('underscoreToSpace', function (value) {
     return value.replace(/_/g, ' ');
-});
-
-Vue.directive('crop', {
-
-    acceptStatement: true,
-
-    bind: function () {
-        let event = this.arg;
-
-        let slimEvents = [
-            'didInit',                  // Initialized
-            'didLoad',                  // Image Loaded
-            'didTransform',             // Image Transformed
-            'didCancel',                // Image Editor Cancelled
-            'didConfirm',               // Image Editor Confirmed
-            'didSave',                  // Image Saved
-            'didRemove',                // Image Removed
-            'didUpload',                // Image Uploaded
-            'didReceiveServerError',    // Error Received from Server During Upload
-        ];
-
-        if (event && !_.contains(slimEvents, event)) {
-            console.warn('Invalid slim event: ' + event);
-            return;
-        }
-
-        if (this.vm.slim) return;
-
-        let self = this;
-        let vm = this.vm;
-        /*self.waitForLibrary = function() {
-            if (_.isFunction(Slim)) {
-                let $wrapper = self.el;
-                //debugger;
-                vm.slimAPI = new Slim($wrapper);
-                // send api to active componant
-                vm.$dispatch('slim-api', vm.slimAPI);
-            } else {
-                setTimeout(self.waitForLibrary, 1000);
-            }
-        };*/
-        
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            // debugger;
-            // this.waitForLibrary();
-        }
-    },
-
-    update: function (callback) {
-        let $wrapper = self.el;
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            //$wrapper.on('crop' + this.arg, callback)
-        }
-    },
-
-    unbind: function () {
-        let $wrapper = self.el;
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            $wrapper.off('crop' + this.arg);
-
-            if (this._watcher.id != 1) return;
-
-            $wrapper.slim('destroy');
-            this.vm.slimAPI = null
-        }
-    }
 });
 
 Vue.directive('tour-guide', {

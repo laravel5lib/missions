@@ -405,6 +405,9 @@
 											<span v-if="room.type.data.rules.occupancy_limit > room.occupants_count" class="badge text-uppercase" style="font-size:10px;line-height:1.4;letter-spacing: 0;">{{room.occupants_count}}</span>
 										</div>
 									</div>
+									<div class="col-sm-12 text-center">
+										<pagination :pagination.sync="roomsPagination" :callback="getRooms"></pagination>
+									</div>
 								</template>
 								<template v-else>
 									<hr class="divider inv">
@@ -1062,12 +1065,15 @@
                     plans: new Array(plan.id),
 	                include: 'type,occupants.companions,occupants.squads.team',
 	                search: this.roomsSearch,
-                    // page: this.plansPagination.current_page,
+	                page: this.roomsPagination.current_page,
+	                per_page: 25,
                 };
                 return this.$http.get('rooming/rooms', { params: params })
 	                .then(function (response) {
-		                if (plan.id === this.currentPlan.id)
-		                    return this.currentRooms = response.body.data;
+		                if (plan.id === this.currentPlan.id) {
+		                    this.roomsPagination = response.body.meta.pagination
+                            return this.currentRooms = response.body.data;
+                        }
                     },
                     function (response) {
                         console.log(response);

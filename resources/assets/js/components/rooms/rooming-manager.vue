@@ -593,7 +593,7 @@
 		</modal>
 
 		<modal :title="roomModalEditMode? 'Edit Room' : 'Create a new Room'" small :ok-text="roomModalEditMode?'Update':'Create'" :callback="newRoom" :show.sync="showRoomModal">
-			<div slot="modal-body" class="modal-body">
+			<div slot="modal-body" class="modal-body" v-if="selectedRoom">
 				<validator name="RoomCreate">
 					<form id="RoomCreateForm">
 						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}" v-if="!roomModalEditMode">
@@ -619,7 +619,7 @@
 			</div>
 		</modal>
 
-		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deleteRoom" :show.sync="showRoomDeleteModal">
+		<modal title="Delete Room" small ok-text="Delete" :callback="deleteRoom" :show.sync="showRoomDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedRoom">
 					Are you sure you want to delete room: "{{selectedRoom.label}}" ?
@@ -736,7 +736,7 @@
             },
             currentRoom: {
                 handler(val, oldVal) {
-                    if (val && !oldVal || val.id !== oldVal.id)
+                    if (val && (!oldVal || val.id !== oldVal.id))
                         this.getOccupants();
                     this.searchReservations();
                     this.getTeams();
@@ -1212,7 +1212,8 @@
                             let room = response.body.data;
                             this.showRoomModal = false;
                             return this.getRooms().then(function (rooms) {
-                                return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
+                                if (room)
+                                    return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
                             });
                         }, function (response) {
                             console.log(response);
@@ -1247,10 +1248,10 @@
                 let room = _.extend({}, this.selectedRoom);
                 this.$http.delete('rooming/plans/' + this.currentPlan.id + '/rooms/' + room.id).then(function (response) {
                     this.$root.$emit('showInfo', room.label + ' Deleted!');
-                    this.selectedRoom = null;
+                    this.showRoomDeleteModal = false;
                     if (this.currentRoom && room.id === this.currentRoom.id)
                         this.currentRoom = null;
-                    this.showRoomDeleteModal = false;
+                    this.selectedRoom = null;
 					this.getRooms();
 					this.searchReservations();
                 })

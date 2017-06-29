@@ -405,6 +405,9 @@
 											<span v-if="room.type.data.rules.occupancy_limit > room.occupants_count" class="badge text-uppercase" style="font-size:10px;line-height:1.4;letter-spacing: 0;">{{room.occupants_count}}</span>
 										</div>
 									</div>
+									<div class="col-sm-12 text-center">
+										<pagination :pagination.sync="roomsPagination" :callback="getRooms"></pagination>
+									</div>
 								</template>
 								<template v-else>
 									<hr class="divider inv">
@@ -593,7 +596,7 @@
 		</modal>
 
 		<modal :title="roomModalEditMode? 'Edit Room' : 'Create a new Room'" small :ok-text="roomModalEditMode?'Update':'Create'" :callback="newRoom" :show.sync="showRoomModal">
-			<div slot="modal-body" class="modal-body">
+			<div slot="modal-body" class="modal-body" v-if="selectedRoom">
 				<validator name="RoomCreate">
 					<form id="RoomCreateForm">
 						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}" v-if="!roomModalEditMode">
@@ -618,8 +621,7 @@
 				</validator>
 			</div>
 		</modal>
-
-		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deleteRoom" :show.sync="showRoomDeleteModal">
+		<modal title="Delete Room" small ok-text="Delete" :callback="deleteRoom" :show.sync="showRoomDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedRoom">
 					Are you sure you want to delete room: "{{selectedRoom.label}}" ?
@@ -736,7 +738,7 @@
             },
             currentRoom: {
                 handler(val, oldVal) {
-                    if (val && !oldVal || val.id !== oldVal.id)
+                    if (val && (!oldVal || val.id !== oldVal.id))
                         this.getOccupants();
                     this.searchReservations();
                     this.getTeams();
@@ -1062,12 +1064,15 @@
                     plans: new Array(plan.id),
 	                include: 'type,occupants.companions,occupants.squads.team',
 	                search: this.roomsSearch,
-                    // page: this.plansPagination.current_page,
+	                page: this.roomsPagination.current_page,
+	                per_page: 25,
                 };
                 return this.$http.get('rooming/rooms', { params: params })
 	                .then(function (response) {
-		                if (plan.id === this.currentPlan.id)
-		                    return this.currentRooms = response.body.data;
+		                if (plan.id === this.currentPlan.id) {
+		                    this.roomsPagination = response.body.meta.pagination
+                            return this.currentRooms = response.body.data;
+                        }
                     },
                     function (response) {
                         console.log(response);
@@ -1212,7 +1217,8 @@
                             let room = response.body.data;
                             this.showRoomModal = false;
                             return this.getRooms().then(function (rooms) {
-                                return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
+                                if (room)
+                                    return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
                             });
                         }, function (response) {
                             console.log(response);
@@ -1247,10 +1253,10 @@
                 let room = _.extend({}, this.selectedRoom);
                 this.$http.delete('rooming/plans/' + this.currentPlan.id + '/rooms/' + room.id).then(function (response) {
                     this.$root.$emit('showInfo', room.label + ' Deleted!');
-                    this.selectedRoom = null;
+                    this.showRoomDeleteModal = false;
                     if (this.currentRoom && room.id === this.currentRoom.id)
                         this.currentRoom = null;
-                    this.showRoomDeleteModal = false;
+                    this.selectedRoom = null;
 					this.getRooms();
 					this.searchReservations();
                 })

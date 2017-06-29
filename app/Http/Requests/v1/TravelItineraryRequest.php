@@ -54,7 +54,7 @@ class TravelItineraryRequest extends FormRequest
                 'items.*.transport' => 'sometimes|required|array',
                 'items.*.transport.id' => 'required|string|exists:transports,id',
                 'items.*.transport.type' => 'sometimes|required|string|in:flight,bus,vehicle,train',
-                'items.*.transport.vessel_no' => 'sometimes|required|string',
+                'items.*.transport.vessel_no' => 'string',
                 'items.*.transport.name' => 'sometimes|required|string',
                 'items.*.transport.call_sign' => 'string',
                 'items.*.transport.domestic' => 'boolean',

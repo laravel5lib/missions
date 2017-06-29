@@ -62,9 +62,9 @@
 					</template>
 				</div>
 
-				<modal title="Start Over" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
+				<modal title="Make Changes" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
 					<div slot="modal-body" class="modal-body">
-						This action can't be undone.
+						In order to make changes to a travel itinerary, you will need to start over and submit a new one. This action can't be undone. Do you want to continue making changes?
 					</div>
 				</modal>
 

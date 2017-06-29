@@ -621,7 +621,6 @@
 				</validator>
 			</div>
 		</modal>
-
 		<modal title="Delete Room" small ok-text="Delete" :callback="deleteRoom" :show.sync="showRoomDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedRoom">

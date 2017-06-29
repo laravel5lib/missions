@@ -20,13 +20,13 @@
 							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
 								<label for="travel_methodA">Airline</label>
 								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-								          :value.sync="selectedAirlineObj" :options="airlinesOptions" label="name"
+								          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
 								          placeholder="Select Airline" v-if="editMode"></v-select>
 								<p v-else>{{ transport.name | uppercase }}</p>
 								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
 								        v-model="transport.name">
-									<option :value="airline.name" v-for="airline in airlinesOptions">
-										{{airline.name | capitalize}}
+									<option :value="airline.name" v-for="airline in UTILITIES.airlines">
+										{{airline.extended_name | capitalize}}
 									</option>
 									<option value="other">Other</option>
 								</select>
@@ -99,10 +99,11 @@
 <script type="text/javascript">
 	import _ from 'underscore';
     import errorHandler from'../error-handler.mixin';
+    import utilities from'../utilities.mixin';
     import vSelect from 'vue-select';
     export default{
         name: 'travel-transport',
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         components: {vSelect},
         props: {
             reservationId: {
@@ -135,7 +136,6 @@
 
                 //logic variables
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],
-                airlinesOptions: [],
                 trainOptions: [
                     'Amtrak', 'BNSF Railway', 'Canadian National Railway', 'Canadian Pacific Railway',
                     'CSX Transportation', 'Kansas City Southern Railway', 'Norfolk Southern Railway',
@@ -187,24 +187,6 @@
             }
         },
         methods: {
-            getAirlines(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
-                    this.airlinesOptions = response.body.data;
-                    this.airlinesOptions.push({
-	                    name: 'Other',
-	                    call_sign: ''
-                    });
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.airlinesOptions;
-                    }
-                },
-                    function (response) {
-                        console.log(response);
-                    });
-            },
             getAirline(reference){
                 return this.$http.get('utilities/airlines/' + reference).then(function (response) {
                     return response.body.data;
@@ -225,13 +207,14 @@
         ready(){
             let self = this;
             let promises = [];
-            promises.push(this.getAirlines(this.transport.name, false));
+            if (this.transport.type === 'flight')
+	            promises.push(this.getAirlines(this.transport.name, false));
 
             Promise.all(promises).then(function (values) {
                 // Update state data
                 if (self.isUpdate) {
                     // select airline
-                    self.selectedAirlineObj = _.findWhere(self.airlinesOptions, { name: self.transport.name });
+                    self.selectedAirlineObj = _.findWhere(self.UTILITIES.airlines, { name: self.transport.name });
                     //console.log(self.selectedAirlineObj);
                 }
                 self.$nextTick(function () {

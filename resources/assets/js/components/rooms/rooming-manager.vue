@@ -151,6 +151,50 @@
 				</div>
 
 				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Percent Raised</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Min</span>
+								<input type="text" class="form-control"  v-model="reservationFilters.minPercentRaised" min="0">
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max</span>
+								<input type="text" class="form-control"  v-model="reservationFilters.maxPercentRaised" max="100">
+								<span class="input-group-addon">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-xs-12">
+							<label>Amount Raised</label>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Min $</span>
+								<input type="text" class="form-control"  v-model="reservationFilters.minAmountRaised" min="0">
+								<span class="input-group-addon">.00</span>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">Max $</span>
+								<input type="text" class="form-control"  v-model="reservationFilters.maxAmountRaised" max="100">
+								<span class="input-group-addon">.00</span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
 					<label>Arrival Designation</label>
 					<select  class="form-control input-sm" v-model="reservationFilters.designation">
 						<option value="">Any</option>
@@ -701,7 +745,11 @@
                     status: '',
                     hasCompanions: null,
                     role: null,
-                    designation: ''
+                    designation: '',
+                    minPercentRaised: '',
+                    maxPercentRaised: '',
+                    minAmountRaised: '',
+                    maxAmountRaised: ''
                 },
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,

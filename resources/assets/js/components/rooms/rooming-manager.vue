@@ -231,13 +231,13 @@
 									</h5>
 								</div>
 								<div class="col-xs-2 text-right">
-									<dropdown type="default">
+									<dropdown type="default" v-if="!isLocked">
 										<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
 											<span class="fa fa-ellipsis-h"></span>
 										</button>
 										<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-											<li :class="{'disabled': isLocked}"><a @click="editRoom(currentRoom)">Edit Room</a></li>
-											<li :class="{'disabled': isLocked}"><a @click="openDeleteRoomModal(currentRoom)">Delete Room</a></li>
+											<li><a @click="editRoom(currentRoom)">Edit Room</a></li>
+											<li><a @click="openDeleteRoomModal(currentRoom)">Delete Room</a></li>
 										</ul>
 									</dropdown>
 								</div>
@@ -282,15 +282,15 @@
 																	</div><!-- end media -->
 																</div>
 																<div class="col-xs-4 text-right action-buttons">
-																	<dropdown type="default">
+																	<dropdown type="default" v-if="!isLocked">
 																		<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
 																			<span class="fa fa-ellipsis-h"></span>
 																		</button>
 																		<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																			<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
-																			<li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
+																			<li v-if="member.room_leader"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
+																			<li v-if="!member.room_leader && !currentRoomHasLeader"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
 																			<li v-if="member.room_leader || (!member.room_leader && !currentRoomHasLeader)" role="separator" class="divider"></li>
-																			<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
+																			<li><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
 																		</ul>
 																	</dropdown>
 																	<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -393,7 +393,7 @@
 								<h5>Rooms</h5>
 							</div>
 							<div class="form-group col-xs-6 text-right">
-								<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
+								<button :disabled="isLocked" class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
 							</div>
 
 							<div class="form-group col-xs-12">
@@ -516,15 +516,15 @@
 										</div><!-- end media -->
 									</div>
 									<div class="col-xs-3 text-right action-buttons">
-										<dropdown type="default">
+										<dropdown type="default" v-if="!isLocked">
 											<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
 												<span class="fa fa-ellipsis-h"></span>
 											</button>
 											<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 												<li class="dropdown-header">Assign To Room</li>
 												<li role="separator" class="divider"></li>
-												<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-												<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
+												<li v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
+												<li v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
 												<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
 											</ul>
 										</dropdown>
@@ -815,6 +815,9 @@
 
         },
 	    computed: {
+            isLocked(){
+                return !this.isAdminRoute && this.currentPlan && this.currentPlan.locked;
+            },
             planOccupants() {
                 let excludedIDs = [];
                 if (_.isObject(this.currentPlan) && this.currentRooms.length) {

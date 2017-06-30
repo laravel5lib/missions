@@ -17,6 +17,16 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 <div class="content-page-header" style="max-height:500px;">
     <img class="img-responsive" src="images/projects/projects-header.jpg" alt="Projects">
 </div><!-- end c-page-header -->
+<div class="gray-lighter-bg">
+    <div class="content-section" style="padding:0;">
+      <div class="row" style="margin-left:0;margin-right:0;">
+        <div class="col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-1 text-center home-vision">
+          <h4>Bold opportunity, it's yours to lose. <a style="margin-left:10px;" class="btn btn-primary-hollow btn-sm launch-modal" data-toggle="modal" data-target="#video-modal"><i class="fa fa-play"></i></a></h4>
+        </div><!-- end col -->
+      </div><!-- end row -->
+    </div><!-- end content-section -->
+  <hr style="margin-top:0;margin-bottom:0;" class="divider xs">
+</div><!-- end white-bg -->
 <div class="white-bg">
 	<div class="container">
 		<div class="content-section">

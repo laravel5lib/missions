@@ -34,7 +34,7 @@ class RequirementsReport extends Job implements ShouldQueue
      */
     public function handle(Reservation $reservation)
     {
-        $reservations = $reservation->filter($this->request)
+        $reservations = $reservation->filter(array_filter($this->request))
                              ->with('requirements.requirement', 'costs',
                                 'trip.group', 'trip.campaign', 'trip.rep',
                                 'rep', 'user')

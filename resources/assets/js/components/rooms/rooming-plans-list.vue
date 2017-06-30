@@ -64,7 +64,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h4 class="list-group-item-heading">
-                            <a @click="loadManager(plan)">{{ plan.name }}</a>
+                            <i class="fa fa-lock text-muted" v-if="plan.locked"></i> <a @click="loadManager(plan)">{{ plan.name }}</a>
                             <span class="badge">{{ plan.occupants_count }} occupants</span>
                             <br /><small>{{ plan.group.data.name }}</small>
                         </h4>
@@ -152,6 +152,15 @@
 							<div class="col-sm-6">
 								<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
 							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="settingsLock" class="control-label">Locked</label>
+							<select id="settingsLock" v-if="isAdminRoute" class="form-control" v-model="selectedPlanSettings.locked">
+								<option :value="true">Yes</option>
+								<option :value="false">No</option>
+							</select>
+							<!--<p v-else v-text="selectedPlanSettings.locked ? 'Yes' : 'No'"></p>-->
 						</div>
 					</form>
 				</validator>
@@ -319,6 +328,7 @@
                 let settings = {
                     short_desc: plan.short_desc,
                     name: plan.name,
+	                locked: plan.locked,
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present
@@ -341,11 +351,11 @@
 
                 // update name and short_desc properties
 	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
-		            { name: this.selectedPlanSettings.name, short_desc: this.selectedPlanSettings.short_desc}));
+		            { name: this.selectedPlanSettings.name, short_desc: this.selectedPlanSettings.short_desc, locked: this.selectedPlanSettings.locked }));
 
                 _.each(this.selectedPlanSettings, function (val, property) {
                     let promise;
-					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name'], property)) {
+					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'locked'], property)) {
 					    if (this.selectedPlanSettings[property + '_method'] === 'PUT') {
 					        if (val > 0) {
                                 promise = this.PlansResource.update({

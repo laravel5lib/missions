@@ -14,7 +14,7 @@ class EloquentPlan extends EloquentRepository implements Plan
     protected $model;
 
     protected $attributes = [
-        'name', 'short_desc', 'group_id', 'campaign_id'
+        'name', 'short_desc', 'group_id', 'campaign_id', 'locked'
     ];
 
     function __construct(RoomingPlan $model)
@@ -60,7 +60,7 @@ class EloquentPlan extends EloquentRepository implements Plan
     {
         $plan = $this->getById($id);
 
-        $plan->update(['locked' => true]);
+        $plan->update(['locked' => false]);
 
         return $plan;
     }

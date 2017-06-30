@@ -153,6 +153,15 @@
 								<input type="number" number class="form-control" :id="'settingsType-' + type.id" v-model="selectedPlanSettings[type.id]" min="0">
 							</div>
 						</div>
+
+						<div class="form-group">
+							<label for="settingsLock" class="control-label">Locked</label>
+							<select id="settingsLock" v-if="isAdminRoute" class="form-control" v-model="selectedPlanSettings.locked">
+								<option :value="true">Yes</option>
+								<option :value="false">No</option>
+							</select>
+							<!--<p v-else v-text="selectedPlanSettings.locked ? 'Yes' : 'No'"></p>-->
+						</div>
 					</form>
 				</validator>
 
@@ -341,11 +350,11 @@
 
                 // update name and short_desc properties
 	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
-		            { name: this.selectedPlanSettings.name, short_desc: this.selectedPlanSettings.short_desc}));
+		            { name: this.selectedPlanSettings.name, short_desc: this.selectedPlanSettings.short_desc, locked: this.selectedPlanSettings.locked }));
 
                 _.each(this.selectedPlanSettings, function (val, property) {
                     let promise;
-					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name'], property)) {
+					if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'locked'], property)) {
 					    if (this.selectedPlanSettings[property + '_method'] === 'PUT') {
 					        if (val > 0) {
                                 promise = this.PlansResource.update({

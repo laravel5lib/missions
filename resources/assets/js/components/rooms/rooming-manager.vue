@@ -785,6 +785,9 @@
             },
 	    },
 	    computed: {
+            isLocked(){
+                return !this.isAdminRoute && this.currentRoom.locked;
+            },
             planOccupants() {
                 let excludedIDs = [];
                 if (_.isObject(this.currentPlan) && this.currentRooms.length) {

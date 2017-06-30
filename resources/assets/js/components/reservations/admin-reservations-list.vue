@@ -122,13 +122,13 @@
 				</div>
 				<div class="form-group" v-if="filters.todoName">
 					<label class="radio-inline">
-						<input type="radio" name="companions" id="companions1" v-model="filters.todoStatus" :value="null"> Any
+						<input type="radio" name="todos" id="todos1" v-model="filters.todoStatus" :value="null"> Any
 					</label>
 					<label class="radio-inline">
-						<input type="radio" name="companions" id="companions2" v-model="filters.todoStatus" value="complete"> Complete
+						<input type="radio" name="todos" id="todos2" v-model="filters.todoStatus" value="complete"> Complete
 					</label>
 					<label class="radio-inline">
-						<input type="radio" name="companions" id="companions3" v-model="filters.todoStatus" value="incomplete"> Incomplete
+						<input type="radio" name="todos" id="todos3" v-model="filters.todoStatus" value="incomplete"> Incomplete
 					</label>
 				</div>
 				<!-- end todos -->
@@ -226,6 +226,18 @@
 						</label>
 						<label class="radio-inline">
 							<input type="radio" name="companions" id="companions3" v-model="filters.hasCompanions" value="no"> No
+						</label>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label>Rooms</label>
+					<div>
+						<label class="checkbox-inline">
+							<input type="checkbox" v-model="hasRoomInPlan"> Has Room in Plan
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" v-model="noRoomInPlan"> No Room in Plan
 						</label>
 					</div>
 				</div>
@@ -406,6 +418,14 @@
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.hasCompanions !== null" @click="filters.hasCompanions = null" >
 				Companions
+				<i class="fa fa-close"></i>
+			</span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.hasRoom !== null" @click="filters.hasRoom = null" >
+				Has Room
+				<i class="fa fa-close"></i>
+			</span>
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.noRoom !== null" @click="filters.noRoom = null" >
+				No Room
 				<i class="fa fa-close"></i>
 			</span>
 			<span style="margin-right:2px;" class="label label-default" v-show="filters.todoName != ''" @click="filters.todoName = '', filters.todoStatus = null" >
@@ -636,7 +656,8 @@
 				],
 				ageMin: 0,
 				ageMax: 120,
-
+                hasRoomInPlan: false,
+                noRoomInPlan: false,
 				// filter vars
 				filters: {
                     type: '',
@@ -648,6 +669,8 @@
 					status: '',
 					shirtSize: [],
 					hasCompanions: null,
+                    hasRoom: null,
+                    noRoom: null,
 					due: '',
 					todoName: '',
 					todoStatus: null,
@@ -790,7 +813,21 @@
 			'per_page': function (val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
-			}
+			},
+            'hasRoomInPlan': function (val, oldVal) {
+			    if (val) {
+                    this.filters.hasRoom = 'plans';
+                } else {
+			        this.filters.hasRoom = null;
+                }
+            },
+            'noRoomInPlan': function (val, oldVal) {
+                if (val) {
+                    this.filters.noRoom = 'plans';
+                } else {
+                    this.filters.noRoom = null;
+                }
+            }
         },
         methods: {
         	getIncomplete(reservation) {
@@ -837,6 +874,8 @@
 						status: this.filters.status,
 						shirtSize: this.filters.shirtSize,
 						hasCompanions: this.filters.hasCompanions,
+                        hasRoom: this.filters.hasRoom,
+                        noRoom: this.filters.noRoom,
 						todoName: this.filters.todoName,
 						todoStatus: this.filters.todoStatus,
 						designation: this.filters.designation,
@@ -879,6 +918,8 @@
 					status: '',
 					shirtSize: [],
 					hasCompanions: null,
+                    hasRoom: null,
+                    noRoom: null,
 					todoName: '',
 					todoStatus: null,
 					designation: '',

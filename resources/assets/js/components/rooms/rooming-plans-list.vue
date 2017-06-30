@@ -328,6 +328,7 @@
                 let settings = {
                     short_desc: plan.short_desc,
                     name: plan.name,
+	                locked: plan.locked,
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present

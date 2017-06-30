@@ -19,6 +19,7 @@ class RoomingPlanTransformer extends TransformerAbstract
         return [
             'id'          => $plan->id,
             'name'        => $plan->name,
+            'locked'      => (boolean) $plan->locked,
             'short_desc'  => $plan->short_desc,
             'room_types'  => $this->getAvailableRooms($plan),
             'rooms_count' => $plan->roomsCount()->all(),

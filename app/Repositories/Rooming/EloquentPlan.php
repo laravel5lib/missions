@@ -14,7 +14,7 @@ class EloquentPlan extends EloquentRepository implements Plan
     protected $model;
 
     protected $attributes = [
-        'name', 'short_desc', 'group_id', 'campaign_id'
+        'name', 'short_desc', 'group_id', 'campaign_id', 'locked'
     ];
 
     function __construct(RoomingPlan $model)

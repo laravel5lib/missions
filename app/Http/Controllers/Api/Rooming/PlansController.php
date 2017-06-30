@@ -79,7 +79,8 @@ class PlansController extends Controller
             'name'        => $request->get('name'),
             'short_desc'  => $request->get('short_desc'),
             'group_id'    => $request->get('group_id'),
-            'campaign_id' => $request->get('campaign_id')
+            'campaign_id' => $request->get('campaign_id'),
+            'locked'      => $request->get('locked')
         ], $id);
 
         return $this->response->item($plan, new RoomingPlanTransformer);

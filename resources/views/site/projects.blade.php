@@ -46,7 +46,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					<hr class="divider lg inv visible-xs">
 					</div><!-- end col -->
 					<div class="col-sm-6 col-md-offset-2">
-						<img class="img-responsive" src="images/projects/need-thumb.png" alt="Need">
+						<a style="margin-left:10px;" class="launch-modal" data-toggle="modal" data-target="#video-modal"><img class="img-responsive" src="images/projects/need-thumb.png" alt="Need"></a>
 					</div><!-- end col -->
 				</div><!-- end row -->
 		</div><!-- end content-section -->

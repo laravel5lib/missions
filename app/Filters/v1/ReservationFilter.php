@@ -420,9 +420,7 @@ class ReservationFilter extends Filter
         }
 
         // if no value exists after the "|" pipe, only use first value
-        return $this->whereHas('rooms', function ($room) use($param) {
-            return $room->has($param[0]);
-        });
+        return $this->has('rooms');
     }
 
     /**
@@ -448,9 +446,7 @@ class ReservationFilter extends Filter
         }
 
         // if no value exists after the "|" pipe, only use first value
-        return $this->whereDoesntHave('rooms', function ($room) use($param) {
-            return $room->has($param[0]);
-        });
+        return $this->doesntHave('rooms');
     }
 
     public function inSquad()

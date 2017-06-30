@@ -150,49 +150,28 @@
 					</div>
 				</div>
 
+				<!-- Cost/Payments -->
 				<div class="form-group">
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Percent Raised</label>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Min</span>
-								<input type="text" class="form-control"  v-model="reservationFilters.minPercentRaised" min="0">
-								<span class="input-group-addon">%</span>
-							</div>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Max</span>
-								<input type="text" class="form-control"  v-model="reservationFilters.maxPercentRaised" max="100">
-								<span class="input-group-addon">%</span>
-							</div>
-						</div>
-					</div>
+					<label>Applied Cost</label>
+					<select class="form-control input-sm" v-model="reservationFilters.dueName" style="width:100%;">
+						<option value="">Any Cost</option>
+						<option v-for="option in dueOptions" v-bind:value="option">
+							{{ option }}
+						</option>
+					</select>
 				</div>
-
-				<div class="form-group">
-					<div class="row">
-						<div class="col-xs-12">
-							<label>Amount Raised</label>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Min $</span>
-								<input type="text" class="form-control"  v-model="reservationFilters.minAmountRaised" min="0">
-								<span class="input-group-addon">.00</span>
-							</div>
-						</div>
-						<div class="col-xs-6">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">Max $</span>
-								<input type="text" class="form-control"  v-model="reservationFilters.maxAmountRaised" max="100">
-								<span class="input-group-addon">.00</span>
-							</div>
-						</div>
-					</div>
+				<div class="form-group" v-if="reservationFilters.dueName">
+					<label>Payment Status</label>
+					<select class="form-control input-sm" v-model="reservationFilters.dueStatus" style="width:100%;">
+						<option value="">Any Status</option>
+						<option value="overdue">Overdue</option>
+						<option value="late">Late</option>
+						<option value="extended">Extended</option>
+						<option value="paid">Paid</option>
+						<option value="pending">Pending</option>
+					</select>
 				</div>
+				<!-- end cost/payments -->
 
 				<div class="form-group">
 					<label>Arrival Designation</label>
@@ -727,6 +706,7 @@
                 roomTypes: [],
 
                 // Filters vars
+                dueOptions: [],
                 teamMembersSearch: '',
                 roomsSearch: '',
                 showMembersFilters: false,
@@ -746,10 +726,9 @@
                     hasCompanions: null,
                     role: null,
                     designation: '',
-                    minPercentRaised: '',
-                    maxPercentRaised: '',
-                    minAmountRaised: '',
-                    maxAmountRaised: ''
+                    due: '',
+                    dueName: '',
+                    dueStatus: '',
                 },
                 reservationsAgeMin: 0,
                 reservationsAgeMax: 120,
@@ -804,6 +783,9 @@
             },
             reservationFilters: {
                 handler: function (val) {
+                    // using the handler instead of a separate watcher
+                    val.due = this.reservationFilters.dueStatus ? (this.reservationFilters.dueName + '|' + this.reservationFilters.dueStatus) : this.reservationFilters.dueName;
+
                     this.reservationsPagination.current_page = 1;
                     this.searchReservations();
                 },
@@ -829,8 +811,9 @@
                     this.roomModalEditMode = false;
                     this.selectedRoom = null;
                 }
-            },
-	    },
+            }
+
+        },
 	    computed: {
             planOccupants() {
                 let excludedIDs = [];
@@ -860,8 +843,8 @@
                 if (this.currentRoom && this.roomHasLeader(this.currentRoom)) {
                     return this.getRoomLeader(this.currentRoom);
                 } else return false;
-		    }
-	    },
+		    },
+        },
         methods: {
             getReservationLink(reservation){
                 return (this.isAdminRoute ? '/admin/reservations/' : '/dashboard/reservations/') + reservation.id;
@@ -1141,6 +1124,15 @@
                         return response.body.data;
                     });
             },
+            getCosts(){
+                return this.$http.get('costs', { params: {
+                    'assignment': 'trips',
+                    'per_page': 100,
+                    'unique': true
+                }}).then(function (response) {
+                    this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
+                });
+            },
             getTeams(){
                 let currentSelection = _.extend({}, this.currentTeam);
 
@@ -1332,6 +1324,7 @@
             promises.push(this.getRoomTypes());
             promises.push(this.getTeams());
             promises.push(this.getRoles());
+            promises.push(this.getCosts());
             Promise.all(promises).then(function (values) {
                 this.startUp = false;
 

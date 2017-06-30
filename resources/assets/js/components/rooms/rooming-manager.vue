@@ -370,7 +370,7 @@
 								<h5>Rooms</h5>
 							</div>
 							<div class="form-group col-xs-6 text-right">
-								<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
+								<button :disabled="isLocked" class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
 							</div>
 
 							<div class="form-group col-xs-12">

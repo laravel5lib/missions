@@ -60,7 +60,7 @@ class EloquentPlan extends EloquentRepository implements Plan
     {
         $plan = $this->getById($id);
 
-        $plan->update(['locked' => true]);
+        $plan->update(['locked' => false]);
 
         return $plan;
     }

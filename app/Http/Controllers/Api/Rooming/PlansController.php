@@ -80,8 +80,13 @@ class PlansController extends Controller
             'short_desc'  => $request->get('short_desc'),
             'group_id'    => $request->get('group_id'),
             'campaign_id' => $request->get('campaign_id'),
-            'locked'      => $request->get('locked')
         ], $id);
+
+        if ($request->get('locked') == true)
+            $this->plan->lock($id);
+
+        if ($request->get('locked') == false)
+            $this->plan->unlock($id);
 
         return $this->response->item($plan, new RoomingPlanTransformer);
     }

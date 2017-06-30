@@ -64,7 +64,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <h4 class="list-group-item-heading">
-                            <a @click="loadManager(plan)">{{ plan.name }}</a>
+                            <i class="fa fa-lock text-muted" v-if="plan.locked"></i> <a @click="loadManager(plan)">{{ plan.name }}</a>
                             <span class="badge">{{ plan.occupants_count }} occupants</span>
                             <br /><small>{{ plan.group.data.name }}</small>
                         </h4>

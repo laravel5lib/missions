@@ -7,12 +7,12 @@
 						<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
 						<template v-if="editMode">
 							<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-							          :value.sync="selectedAirportObj" :options="airportsOptions" label="name"
+							          :value.sync="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
 							          placeholder="Select Airport"></v-select>
 							<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
 							        v-model="hub.name">
-								<option :value="airport.name" v-for="airport in airportsOptions">
-									{{airport.name | capitalize}}
+								<option :value="airport.name" v-for="airport in UTILITIES.airports">
+									{{airport.extended_name | capitalize}}
 								</option>
 								<option value="other">Other</option>
 							</select>
@@ -72,11 +72,11 @@
 						<label for="">Country</label>
 						<template v-if="editMode">
 							<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
-							          :value.sync="countryObj" :options="countriesOptions" label="name"
+							          :value.sync="countryObj" :options="UTILITIES.countries" label="name"
 							          placeholder="Select Country"></v-select>
 							<select class="form-control hidden" name="country" id="country" v-validate:country="['required']"
 							        v-model="hub.country_code">
-								<option :value="country.code" v-for="country in countriesOptions">
+								<option :value="country.code" v-for="country in UTILITIES.countries">
 									{{country.name | capitalize}}
 								</option>
 							</select>
@@ -98,11 +98,12 @@
 </template>
 <style></style>
 <script type="text/javascript">
+    import utilities from'../utilities.mixin';
     import errorHandler from'../error-handler.mixin';
     import vSelect from 'vue-select';
     export default{
         name: 'travel-hub',
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         components: {vSelect},
 	    props: {
             hub: {
@@ -139,9 +140,6 @@
             return {
                 // mixin settings
                 validatorHandle: 'TravelHub',
-
-                airportsOptions: [],
-                countriesOptions: [],
                 selectedAirportObj: null,
                 countryObj: null,
                 LABELS: {
@@ -167,7 +165,7 @@
                 if (val && val !== oldVal) {
                     this.hub.name = val.name;
                     this.hub.city = val.city;
-                    let country = _.findWhere(this.countriesOptions, { name: val.country });
+                    let country = _.findWhere(this.UTILITIES.countries, { name: val.country });
                     this.hub.country_code = country.code;
                     this.hub.call_sign = val.iata;
                 }
@@ -223,33 +221,6 @@
 	        }
         },
         methods: {
-            getAirports(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/airports', { params: {search: search, sort: 'name'} }).then(function (response) {
-                    this.airportsOptions = response.body.data;
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.airportsOptions;
-                    }
-                });
-            },
-            getAirport(reference){
-                return this.$http.get('utilities/airports/' + reference).then(function (response) {
-                    return response.body.data;
-                });
-            },
-            getCountries(search, loading){
-                loading ? loading(true) : void 0;
-                return this.$http.get('utilities/countries', { params: { search: search} }).then(function (response) {
-                    this.countriesOptions = response.body.countries;
-                    if (loading) {
-                        loading(false);
-                    } else {
-                        return this.countriesOptions;
-                    }
-                })
-            },
             update(){
                 this.$http.put('hubs/' + this.hub.id, this.hub).then(function (response) {
                     this.$emit('showSuccess', 'Itinerary Station Updated');
@@ -288,14 +259,15 @@
             }
 
             let promises = [];
-            promises.push(this.getAirports(this.hub.name, false));
+            if (this.transportType === 'flight')
+                promises.push(this.getAirports(this.hub.name, false));
             promises.push(this.getCountries(this.hub.country_code, false));
 
             Promise.all(promises).then(function (values) {
 				// Update state data
                 // select airline
-                self.selectedAirportObj = _.findWhere(self.airportsOptions, { name: self.hub.name });
-                self.countryObj = _.findWhere(self.countriesOptions, { code: self.hub.country_code });
+                self.selectedAirportObj = _.findWhere(self.UTILITIES.airports, { name: self.hub.name });
+                self.countryObj = _.findWhere(self.UTILITIES.countries, { code: self.hub.country_code });
                 //console.log(self.selectedAirportObj);
             });
 //            this.attemptSubmit = true;

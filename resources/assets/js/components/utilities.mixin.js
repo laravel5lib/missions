@@ -87,7 +87,17 @@ export default {
         getAirports(search, loading){
             loading ? loading(true) : void 0;
             return this.$http.get('utilities/airports', { params: {search: search, sort: 'name'} }).then(function (response) {
-                this.UTILITIES.airports = response.body.data;
+                let airports = response.body.data;
+                _.each(airports, function (airport) {
+                    if (airport.iata) {
+                        airport.extended_name = airport.name + ' (' + airport.iata + ')';
+                    } else if (airport.icao) {
+                        airport.extended_name = airport.name + ' (' + airport.icao + ')'
+                    } else
+                        airport.extended_name = airport.name;
+                });
+
+                this.UTILITIES.airports = airports;
                 if (loading) {
                     loading(false);
                 } else {
@@ -105,7 +115,7 @@ export default {
             return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then(function (response) {
                 let airlines = response.body.data;
                 _.each(airlines, function (airline) {
-                    airline.extended_name = airline.iata ? airline.name + '(' + airline.iata + ')' : airline.name;
+                    airline.extended_name = airline.iata ? airline.name + ' (' + airline.iata + ')' : airline.name;
                 });
                     this.UTILITIES.airlines = airlines;
                     this.UTILITIES.airlines.push({

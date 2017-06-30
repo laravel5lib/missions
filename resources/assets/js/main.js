@@ -226,7 +226,7 @@ Vue.http.options.root = '/api';
 Vue.http.interceptors.push(function(request, next) {
 
     // modify request
-    var token, headers;
+    let token, headers;
 
     token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
@@ -255,46 +255,19 @@ Vue.http.interceptors.push(function(request, next) {
     }
 
     // Only POST and PUT Requests to our API
-    if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
-        console.log(this);
-        console.log(request);
+    //if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
+        // console.log(this);
+        // console.log(request);
 
         /*
          * Date Conversion: Local to UTC
          */
         // search nested objects/arrays for dates to convert
         // YYYY-MM-DD
-        let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
+        //let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
         // YYYY-MM-DD HH:MM:SS
-        let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
-        searchObjAndConvertDates(request.data);
-
-        function searchObjAndConvertDates(obj) {
-            _.each(obj, function (value, key) {
-                // nested search
-                if (_.isObject(value) || _.isArray(value))
-                    searchObjAndConvertDates(value);
-
-                let testDate = _.isString(value) && value.length === 10 && dateRegex.test(value);
-                let testDateTime = _.isString(value) && value.length === 19 && dateTimeRegex.test(value);
-
-
-                if (testDate) {
-                    // console.log('then: ', value);
-                    obj[key] = moment(value).startOf('day').utc().format('YYYY-MM-DD');
-                    // console.log('now: ', value);
-                }
-
-                if (testDateTime) {
-                    // console.log('then: ', value);
-                    obj[key] = moment(value).utc().format('YYYY-MM-DD HH:mm:ss');
-                    // console.log('now: ', value);
-                }
-
-
-            });
-        }
-    }
+        //let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
+    //}
 
     // continue to next interceptor
     next(function(response) {
@@ -326,7 +299,7 @@ Vue.http.interceptors.push(function(request, next) {
 // Register email validator function.
 Vue.validator('email', function (val) {
     if (! val) return true;
-    
+
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
 });
 // Validate datetime inputs
@@ -447,72 +420,6 @@ Vue.filter('mFormat', {
 
 Vue.filter('underscoreToSpace', function (value) {
     return value.replace(/_/g, ' ');
-});
-
-Vue.directive('crop', {
-
-    acceptStatement: true,
-
-    bind: function () {
-        let event = this.arg;
-
-        let slimEvents = [
-            'didInit',                  // Initialized
-            'didLoad',                  // Image Loaded
-            'didTransform',             // Image Transformed
-            'didCancel',                // Image Editor Cancelled
-            'didConfirm',               // Image Editor Confirmed
-            'didSave',                  // Image Saved
-            'didRemove',                // Image Removed
-            'didUpload',                // Image Uploaded
-            'didReceiveServerError',    // Error Received from Server During Upload
-        ];
-
-        if (event && !_.contains(slimEvents, event)) {
-            console.warn('Invalid slim event: ' + event);
-            return;
-        }
-
-        if (this.vm.slim) return;
-
-        let self = this;
-        let vm = this.vm;
-        /*self.waitForLibrary = function() {
-            if (_.isFunction(Slim)) {
-                let $wrapper = self.el;
-                //debugger;
-                vm.slimAPI = new Slim($wrapper);
-                // send api to active componant
-                vm.$dispatch('slim-api', vm.slimAPI);
-            } else {
-                setTimeout(self.waitForLibrary, 1000);
-            }
-        };*/
-        
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            // debugger;
-            // this.waitForLibrary();
-        }
-    },
-
-    update: function (callback) {
-        let $wrapper = self.el;
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            //$wrapper.on('crop' + this.arg, callback)
-        }
-    },
-
-    unbind: function () {
-        let $wrapper = self.el;
-        if (!_.contains(['file', 'video'], this.vm.type)) {
-            $wrapper.off('crop' + this.arg);
-
-            if (this._watcher.id != 1) return;
-
-            $wrapper.slim('destroy');
-            this.vm.slimAPI = null
-        }
-    }
 });
 
 Vue.directive('tour-guide', {

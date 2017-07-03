@@ -4,6 +4,7 @@ namespace App\Jobs\Reports\Reservations;
 
 use App\Jobs\Job;
 use App\Models\v1\Reservation;
+use App\Services\Reports\CSVReport;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,8 +37,9 @@ class RoomingReport extends Job implements ShouldQueue
     public function handle(Reservation $reservation)
     {
         $reservations = $reservation->filter($this->request)
-            ->with('rooms.type', 'rooms.plans', 'rooms.accommodations', 'costs',
-                'trip.group', 'trip.campaign', 'user')
+            ->withCount('companionReservations')
+            ->with('rooms.type', 'rooms.plans', 'rooms.occupants', 'costs',
+                'trip.group', 'trip.campaign', 'user', 'companionReservations')
             ->get();
 
         $data = $this->columnize($reservations);
@@ -51,20 +53,71 @@ class RoomingReport extends Job implements ShouldQueue
 
     public function columnize($reservations)
     {
-        return $reservations->map(function($reservation) {
+        $companionCols = [];
+
+        foreach(range(1, $reservations->max('companion_reservations_count')) as $number)
+        {
+            $companionCols['Companion '.$number . ' Given Names'] = null;
+            $companionCols['Companion '.$number . ' Surname'] = null;
+        }
+
+        $roommateCols = [];
+
+        foreach(range(1, $reservations->pluck('rooms')->flatten()->max('occupants_count')) as $number)
+        {
+            $roommateCols['Roommate '.$number . ' Given Names'] = null;
+            $roommateCols['Roommate '.$number . ' Surname'] = null;
+        }
+
+        return $reservations->map(function($reservation) use ($companionCols) {
+
+            foreach($reservation->companionReservations as $key => $companion)
+            {
+                $number = ($key+1);
+                $companionCols['Companion '. $number .' Surname'] = $companion->surname;
+                $companionCols['Companion '. $number .' Given Names'] = $companion->given_names;
+            }
+
+            foreach($reservation->rooms->pluck('occupants')->flatten() as $key => $roommate)
+            {
+                $number = ($key+1);
+                $roommateCols['Roommate '. $number .' Surname'] = $roommate->surname;
+                $roommateCols['Roommate '. $number .' Given Names'] = $roommate->given_names;
+            }
+
             $data = [
                 'Campaign' => $reservation->trip->campaign->name,
+                'Group' => $reservation->trip->group->name,
+                'Trip Type' => $reservation->trip->type,
                 'Surname' => $reservation->surname,
                 'Given Names' => $reservation->given_names,
-                'Group' => $reservation->trip->group->name,
+                'Age' => $reservation->age,
+                'Gender' => $reservation->gender,
+                'Marital Status' => $reservation->status,
                 'Rooming Cost(s)' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
-                    return $cost->name . ' ($'.number_format($cost->amountInDollars(),2).')';
+                    return $cost->name;
                 })->all()),
-                'Rooms' => implode(',', $reservation->rooms->pluck('type.name')->all()),
-                'Plans' => implode(',', $reservation->rooms->pluck('plans')->flatten()->pluck('name')->all())
+                'Rooms' => implode(', ', $reservation->rooms->pluck('type.name')->all()),
+                'Plans' => implode(', ', $reservation->rooms->pluck('plans')->flatten()->pluck('name')->all()),
+//                'Roommates' => implode(', ', $reservation->rooms->pluck('occupants')->flatten()->map(function ($occupant) {
+//                    return $occupant->given_names . ' ' . $occupant->surname;
+//                })->all()),
             ];
 
-            return $data;
+            return $data + $companionCols + $roommateCols;
         })->all();
+    }
+
+    private function getCompanions($companions)
+    {
+        $array = $companions->map(function($companion) {
+            return $companion->given_names . ' '
+                . $companion->surname
+                . '('. $companion->pivot->relationship .')';
+        })->all();
+
+        $companions = implode(", ", $array);
+
+        return $companions;
     }
 }

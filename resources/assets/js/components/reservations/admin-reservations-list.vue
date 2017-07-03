@@ -179,14 +179,14 @@
 						<div class="col-xs-6">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Min</span>
-								<input type="text" class="form-control"  v-model="filters.minPercentRaised" min="0">
+								<input type="number" class="form-control"  v-model="filters.minPercentRaised" min="0">
                                 <span class="input-group-addon">%</span>
 							</div>
 						</div>
 						<div class="col-xs-6">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Max</span>
-								<input type="text" class="form-control"  v-model="filters.maxPercentRaised" max="100">
+								<input type="number" class="form-control"  v-model="filters.maxPercentRaised" min="0">
                                 <span class="input-group-addon">%</span>
 							</div>
 						</div>
@@ -201,14 +201,14 @@
 						<div class="col-xs-6">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Min $</span>
-								<input type="text" class="form-control"  v-model="filters.minAmountRaised" min="0">
+								<input type="number" class="form-control"  v-model="filters.minAmountRaised" min="0">
                                 <span class="input-group-addon">.00</span>
 							</div>
 						</div>
 						<div class="col-xs-6">
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">Max $</span>
-								<input type="text" class="form-control"  v-model="filters.maxAmountRaised" max="100">
+								<input type="number" class="form-control"  v-model="filters.maxAmountRaised" min="0">
                                 <span class="input-group-addon">.00</span>
 							</div>
 						</div>

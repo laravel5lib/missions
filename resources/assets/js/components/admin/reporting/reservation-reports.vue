@@ -8,6 +8,7 @@
         <li><a @click="create('funds')"><i class="fa fa-file-excel-o"></i> Funds &amp; Costs</a></li>
         <li><a @click="create('requirements')"><i class="fa fa-file-excel-o"></i> Travel Requirements</a></li>
         <li><a @click="create('travel')"><i class="fa fa-file-excel-o"></i> Travel Documents &amp; Itinerary</a></li>
+        <li><a @click="create('rooming')"><i class="fa fa-file-excel-o"></i> Rooming</a></li>
       </ul>
     </div>
 </template>

@@ -92,6 +92,8 @@ class RoomingReport extends Job implements ShouldQueue
                 'Age' => $reservation->age,
                 'Gender' => $reservation->gender,
                 'Marital Status' => $reservation->status,
+                'Designation' => $reservation->designation ?
+                    implode('', array_flatten($reservation->designation->content)) : 'none',
                 'Rooming Cost(s)' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
                     return $cost->name;
                 })->all()),

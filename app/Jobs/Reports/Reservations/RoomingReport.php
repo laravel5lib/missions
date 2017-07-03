@@ -98,13 +98,16 @@ class RoomingReport extends Job implements ShouldQueue
                     return $cost->name;
                 })->all()),
                 'Rooms' => implode(', ', $reservation->rooms->pluck('type.name')->all()),
-                'Plans' => implode(', ', $reservation->rooms->pluck('plans')->flatten()->pluck('name')->all())
+                'Plans' => implode(', ', $reservation->rooms->pluck('plans')->flatten()->pluck('name')->all()),
+//                'Roommates' => implode(', ', $reservation->rooms->pluck('occupants')->flatten()->map(function ($occupant) {
+//                    return $occupant->given_names . ' ' . $occupant->surname;
+//                })->all()),
             ];
 
             return $data;
         })->all();
     }
-
+    
 //    private function getCompanions($companions)
 //    {
 //        $array = $companions->map(function($companion) {
@@ -117,4 +120,5 @@ class RoomingReport extends Job implements ShouldQueue
 //
 //        return $companions;
 //    }
+
 }

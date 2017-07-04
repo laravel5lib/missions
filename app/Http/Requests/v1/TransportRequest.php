@@ -28,7 +28,7 @@ class TransportRequest extends FormRequest
             'vessel_no' => 'string',
             'name' => 'required|string',
             'call_sign' => 'string',
-            'domestic' => 'boolean',
+            'domestic' => 'required|boolean',
             'capacity' => 'numeric',
             'campaign_id' => 'required|exists:campaigns,id'
         ];
@@ -38,6 +38,7 @@ class TransportRequest extends FormRequest
             $rules['vessel_no'] = 'sometimes|required|string';
             $rules['name'] = 'sometimes|required|string';
             $rules['campaign_id'] = 'sometimes|required|exists:campaigns,id';
+            $rules['domestic'] = 'sometimes|required|boolean';
         }
 
         return $rules;

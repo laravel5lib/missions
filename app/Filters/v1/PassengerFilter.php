@@ -8,14 +8,16 @@ class PassengerFilter extends Filter
     *
     * @var array
     */
-    public $relations = [];
+    public $relations = [
+        'reservation' => ['gender', 'status', 'age', 'role', 'hasCompanions', 'search']
+    ];
 
     /**
      * Fields that can be sorted.
      *
      * @var array
      */
-    public $sortable = [];
+    public $sortable = ['created_at', 'updated_at', 'seat_no'];
 
     /**
      * Fields that can be searched.

@@ -3,7 +3,7 @@
 		<span class='input-group-addon' v-if="addon !== ''">
 			{{addon}}
 		</span>
-		<input class='form-control' :name='name' type='text' />
+		<input class='form-control' :name='name' type='text' :placeholder="placeholder"/>
 		<span class='input-group-addon' v-if="!inline">
 			<i class='fa fa-fw fa-calendar'></i>
 		</span>
@@ -112,6 +112,10 @@
                 type: String,
                 required: false,
                 default: "datetime"
+            },
+            placeholder: {
+                type: String,
+                required: false,
             },
             addon: {
                 type: String,

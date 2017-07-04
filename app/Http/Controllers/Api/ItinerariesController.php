@@ -39,8 +39,8 @@ class ItinerariesController extends Controller
     {
         $itinerary = $this->itinerary->create([
             'name' => $request->get('name'),
-            'itinerant_id' => $request->get('itinerant_id'),
-            'itinerant_type' => $request->get('itinerant_type')
+            'curator_id' => $request->get('curator_id'),
+            'curator_type' => $request->get('curator_type')
         ]);
 
         return $this->response->item($itinerary, new ItineraryTransformer);
@@ -52,8 +52,8 @@ class ItinerariesController extends Controller
 
         $itinerary->update([
             'name' => $request->get('name', $itinerary->name),
-            'itinerant_id' => $request->get('itinerant_id', $itinerary->itinerant_id),
-            'itinerant_type' => $request->get('itinerant_type', $itinerary->itinerant_type)
+            'curator_id' => $request->get('curator_id', $itinerary->curator_id),
+            'curator_type' => $request->get('curator_type', $itinerary->curator_type)
         ]);
 
         return $this->response->item($itinerary, new ItineraryTransformer);

@@ -1,99 +1,101 @@
 <template>
 	<div>
-		<validator name="TravelHub" v-if="hub">
-			<form id="TravelHubForm" novalidate>
-				<template v-if="transportType === 'flight' || transportType === ''">
-					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-						<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
-						<template v-if="editMode">
-							<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-							          :value.sync="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
-							          placeholder="Select Airport"></v-select>
-							<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
-							        v-model="hub.name">
-								<option :value="airport.name" v-for="airport in UTILITIES.airports">
-									{{airport.extended_name | capitalize}}
-								</option>
-								<option value="other">Other</option>
-							</select>
-							<div class="errors-block"></div>
-						</template>
+		<div v-if="hub">
+			<validator name="TravelHub">
+				<form id="TravelHubForm" novalidate>
+					<template v-if="transportType === 'flight' || transportType === ''">
+						<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
+							<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
+							<template v-if="editMode">
+								<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
+								          :value.sync="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
+								          placeholder="Select Airport"></v-select>
+								<select class="form-control hidden" name="airport" id="airport" v-validate:hubname="['required']"
+								        v-model="hub.name">
+									<option :value="airport.name" v-for="airport in UTILITIES.airports">
+										{{airport.extended_name | capitalize}}
+									</option>
+									<option value="other">Other</option>
+								</select>
+								<div class="errors-block"></div>
+							</template>
 
-						<template v-if="selectedAirportObj && selectedAirportObj.name === 'Other'">
-							<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-								<label for="">{{ LABELS[(transportType||'flight')] }}</label>
-								<template v-if="editMode">
-									<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
-								</template>
-							</div>
-							<div  class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
-								<label for="">IATA Code</label>
-								<template v-if="editMode">
-									<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']">
-								</template>
-							</div>
-						</template>
-						<template v-if="!editMode">
-							<p>{{ hub.name | uppercase }}</p>
-						</template>
-					</div>
-					<div class="form-group" v-if="selectedAirportObj && isAdminRoute">
-						<br>
-						<div class="well well-sm">
-							<dl class="dl-horizontal">
-								<dt>Name</dt>
-								<dd>{{ selectedAirportObj.name }}</dd>
-								<dt>City</dt>
-								<dd>{{ selectedAirportObj.city }}</dd>
-								<dt>Country</dt>
-								<dd>{{ selectedAirportObj.country }}</dd>
-								<dt>IATA</dt>
-								<dd>{{ selectedAirportObj.iata }}</dd>
-							</dl>
+							<template v-if="selectedAirportObj && selectedAirportObj.name === 'Other'">
+								<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
+									<label for="">{{ LABELS[(transportType||'flight')] }}</label>
+									<template v-if="editMode">
+										<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
+									</template>
+								</div>
+								<div  class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
+									<label for="">IATA Code</label>
+									<template v-if="editMode">
+										<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']">
+									</template>
+								</div>
+							</template>
+							<template v-if="!editMode">
+								<p>{{ hub.name | uppercase }}</p>
+							</template>
 						</div>
-					</div>
-				</template>
-				<template v-else>
-					<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
-						<label for="">{{ LABELS[(transportType||'flight')] }}</label>
-						<template v-if="editMode">
-							<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
-						</template>
-						<p v-else>{{ hub.name | uppercase }}</p>
-					</div>
-					<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
-						<label for="">City</label>
-						<template v-if="editMode">
-							<input type="text" class="form-control" v-model="hub.city" v-validate:city="['required']">
-						</template>
-						<p v-else>{{ hub.city | uppercase }}</p>
-					</div>
-					<div class="form-group" v-error-handler="{ value: hub.country_code, client: 'country' }">
-						<label for="">Country</label>
-						<template v-if="editMode">
-							<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
-							          :value.sync="countryObj" :options="UTILITIES.countries" label="name"
-							          placeholder="Select Country"></v-select>
-							<select class="form-control hidden" name="country" id="country" v-validate:country="['required']"
-							        v-model="hub.country_code">
-								<option :value="country.code" v-for="country in UTILITIES.countries">
-									{{country.name | capitalize}}
-								</option>
-							</select>
-							<div class="errors-block"></div>
-						</template>
-						<p v-else>{{ hub.country_code | uppercase }}</p>
-					</div>
-					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
-						<label for="">CallSign</label>
-						<template v-if="editMode">
-							<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']" v-if="editMode">
-						</template>
-						<p v-else>{{ hub.call_sign | uppercase }}</p>
-					</div>
-				</template>
-			</form>
-		</validator>
+						<div class="form-group" v-if="selectedAirportObj && isAdminRoute">
+							<br>
+							<div class="well well-sm">
+								<dl class="dl-horizontal">
+									<dt>Name</dt>
+									<dd>{{ selectedAirportObj.name }}</dd>
+									<dt>City</dt>
+									<dd>{{ selectedAirportObj.city }}</dd>
+									<dt>Country</dt>
+									<dd>{{ selectedAirportObj.country }}</dd>
+									<dt>IATA</dt>
+									<dd>{{ selectedAirportObj.iata }}</dd>
+								</dl>
+							</div>
+						</div>
+					</template>
+					<template v-else>
+						<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
+							<label for="">{{ LABELS[(transportType||'flight')] }}</label>
+							<template v-if="editMode">
+								<input type="text" class="form-control" v-model="hub.name" v-validate:hubname="['required']">
+							</template>
+							<p v-else>{{ hub.name | uppercase }}</p>
+						</div>
+						<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
+							<label for="">City</label>
+							<template v-if="editMode">
+								<input type="text" class="form-control" v-model="hub.city" v-validate:city="['required']">
+							</template>
+							<p v-else>{{ hub.city | uppercase }}</p>
+						</div>
+						<div class="form-group" v-error-handler="{ value: hub.country_code, client: 'country' }">
+							<label for="">Country</label>
+							<template v-if="editMode">
+								<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
+								          :value.sync="countryObj" :options="UTILITIES.countries" label="name"
+								          placeholder="Select Country"></v-select>
+								<select class="form-control hidden" name="country" id="country" v-validate:country="['required']"
+								        v-model="hub.country_code">
+									<option :value="country.code" v-for="country in UTILITIES.countries">
+										{{country.name | capitalize}}
+									</option>
+								</select>
+								<div class="errors-block"></div>
+							</template>
+							<p v-else>{{ hub.country_code | uppercase }}</p>
+						</div>
+						<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
+							<label for="">CallSign</label>
+							<template v-if="editMode">
+								<input type="text" class="form-control" v-model="hub.call_sign" v-validate:callsign="['required']" v-if="editMode">
+							</template>
+							<p v-else>{{ hub.call_sign | uppercase }}</p>
+						</div>
+					</template>
+				</form>
+			</validator>
+		</div>
 	</div>
 </template>
 <style></style>

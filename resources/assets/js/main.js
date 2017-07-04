@@ -143,9 +143,13 @@ import fundManager from './components/financials/funds/fund-manager.vue';
 import companionManager from './components/reservations/companion-manager.vue';
 import promotionals from './components/admin/promotionals.vue';
 import transports from './components/admin/transports.vue';
+import transportsDetails from './components/admin/transports-details.vue';
 import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
 import regionsAccommodations from './components/regions/regions-accommodations.vue';
 import restoreFund from './components/financials/funds/restore-fund.vue';
+
+// filter components
+import reservationsFilters from './components/filters/reservations-filters.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -883,7 +887,10 @@ new Vue({
         companionManager,
         promotionals,
         transports,
+        transportsDetails,
         roomingAccommodations,
+
+        reservationsFilters,
     },
     http: {
         headers: {
@@ -975,7 +982,16 @@ new Vue({
 
         startTour(){
             window.tour.start();
-        }
+        },
+
+        // Simple error handlers for API calls
+        handleApiSoftError(response) {
+            console.error(response.body.message ? response.body.message : response.body);
+        },
+        handleApiError(response) {
+            console.error(response.body.message ? response.body.message : response.body);
+            this.$root.$emit('showError', response.body.message)
+        },
 
     },
     events: {

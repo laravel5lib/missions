@@ -15,6 +15,7 @@ interface Plan {
     public function delete($ids);
     public function lock($id);
     public function unlock($id);
+    public function syncGroups($id, array $groupIds = []);
     public function addRooms($rooms, $id);
     public function removeRooms($rooms, $id);
     public function addRoomType(array $data, $id);

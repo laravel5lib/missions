@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<validator name="TravelTransport" v-if="transport">
+		<div v-if="transport">
+			<validator name="TravelTransport">
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
@@ -92,7 +93,9 @@
 						</template>
 					</section>
 				</form>
-		</validator>
+			</validator>
+		</div>
+
 	</div>
 </template>
 <style></style>

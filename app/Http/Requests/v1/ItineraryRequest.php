@@ -25,15 +25,15 @@ class ItineraryRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string',
-            'itinerant_id' => 'required|string',
-            'itinerant_type' => 'required|in:reservations,trips,campaigns,groups'
+            'curator_id' => 'required|string',
+            'curator_type' => 'required|in:reservations,trips,campaigns,groups,transports,accommodations'
         ];
 
         if ($this->isMethod('Put')) {
             $rules = [
                 'name' => 'sometimes|required|string',
-                'itinerant_id' => 'sometimes|required|string',
-                'itinerant_type' => 'sometimes|required|in:reservations,trips,campaigns,groups'
+                'curator_id' => 'sometimes|required|string',
+                'curator_type' => 'sometimes|required|in:reservations,trips,campaigns,groups,transports,accommodations'
             ];
         }
 

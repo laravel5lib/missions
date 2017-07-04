@@ -458,4 +458,18 @@ class ReservationFilter extends Filter
     {
         return $this->has('squads', '<', 1);
     }
+
+    public function notInTransport($transportId)
+    {
+        return $this->whereHas('transports', function ($transport) use ($transportId) {
+            return $transport->where('transports.id', '<>', $transportId);
+        })->orhas('transports', '<', 1);
+    }
+
+    public function inTransport($transportId)
+    {
+        return $this->whereHas('transports', function ($transport) use ($transportId) {
+            return $transport->where('transports.id', $transportId);
+        });
+    }
 }

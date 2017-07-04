@@ -37,9 +37,9 @@ class PlansController extends Controller
     /**
      * Get specific plan.
      *
-     * @param  String  $id
-     * @param  Request $request
+     * @param  String $id
      * @return Dingo\Api\Http\Response
+     * @internal param Request $request
      */
     public function show($id)
     {
@@ -59,9 +59,10 @@ class PlansController extends Controller
         $plan = $this->plan->create([
             'name'        => $request->get('name'),
             'short_desc'  => $request->get('short_desc', 'no description'),
-            'group_id'    => $request->get('group_id'),
             'campaign_id' => $request->get('campaign_id')
         ]);
+
+        $this->plan->syncGroups($plan->id, $request->get('group_ids', []));
 
         return $this->response->item($plan, new RoomingPlanTransformer); 
     }
@@ -78,7 +79,6 @@ class PlansController extends Controller
         $plan = $this->plan->update([
             'name'        => $request->get('name'),
             'short_desc'  => $request->get('short_desc'),
-            'group_id'    => $request->get('group_id'),
             'campaign_id' => $request->get('campaign_id'),
         ], $id);
 
@@ -87,6 +87,8 @@ class PlansController extends Controller
 
         if ($request->get('locked') == false)
             $this->plan->unlock($id);
+
+        $this->plan->syncGroups($id, $request->get('group_ids', []));
 
         return $this->response->item($plan, new RoomingPlanTransformer);
     }
@@ -104,6 +106,12 @@ class PlansController extends Controller
         return $this->response->noContent();
     }
 
+    /**
+     * Export plans
+     *
+     * @param ExportRequest $request
+     * @return \Dingo\Api\Http\Response
+     */
     public function export(ExportRequest $request)
     {
         $this->dispatch(new ExportRoomingPlans( array_filter($request->all()) ));

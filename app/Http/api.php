@@ -170,6 +170,7 @@ $api->version('v1', [
         $api->resource('plans.types', 'Rooming\PlanRoomTypesController');
         $api->resource('accommodations.types', 'Rooming\AccommodationRoomTypesController');
         $api->resource('rooms', 'Rooming\RoomsController');
+        $api->resource('accommodations/{accommodationId}/rooms', 'Rooming\Accommodations\RoomsController');
         $api->resource('{roomableType}/{roomableId}/rooms', 'Rooming\Roomable\RoomsController');
         $api->resource('rooms/{roomId}/occupants', 'Rooming\RoomOccupantsController');
         $api->resource('{roomableType}/{roomableId}/plans', 'Rooming\Roomable\UtilizedPlansController');

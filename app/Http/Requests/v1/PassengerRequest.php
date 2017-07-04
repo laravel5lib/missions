@@ -24,14 +24,14 @@ class PassengerRequest extends FormRequest
     public function rules()
     {
         $required = [
-            'reservation_id' => 'required|exists:reservations,id',
+            'reservation_id' => 'required|string|exists:reservations,id',
             'transport_id'   => 'sometimes|required|exists:transports,id',
         ];
 
         if ($this->isMethod('put'))
         {
             $required = [
-                'reservation_id' => 'sometimes|required|exists:reservations,id',
+                'reservation_id' => 'sometimes|required|string|exists:reservations,id',
                 'transport_id'   => 'sometimes|required|exists:transports,id',
             ];
         }

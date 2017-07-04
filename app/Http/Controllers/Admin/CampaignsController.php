@@ -42,11 +42,14 @@ class CampaignsController extends Controller
      * @param $id
      * @return $this
      */
-    public function show($id, $tab = 'trips')
+    public function show($id, $tab = 'trips', $tabId = null)
     {
         $this->authorize('view', $this->campaign);
 
         $campaign = $this->api->get('campaigns/'.$id);
+
+        if (!is_null($tabId))
+            return view('admin.campaigns.tabs.'.$tab.'.details', compact('campaign', 'tab', 'tabId'));
 
         return view('admin.campaigns.tabs.'.$tab, compact('campaign', 'tab'));
     }

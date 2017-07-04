@@ -21,31 +21,62 @@ class RoomingPlan extends Model
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
-    public function group()
+    /**
+     * Get groups
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function groups()
     {
-        return $this->belongsTo(Group::class);
+        return $this->belongsToMany(Group::class, 'rooming_plan_group')
+            ->withTimestamps();
     }
 
+    /**
+     * Get campaign
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);
     }
-    
+
+    /**
+     * Get rooms
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
     public function rooms()
     {
         return $this->morphToMany(Room::class, 'roomable');
     }
 
+    /**
+     * Get rooms count
+     *
+     * @return RoomCount
+     */
     public function roomsCount()
     {
         return new RoomCount($this);
     }
 
+    /**
+     * Get occupant count
+     *
+     * @return OccupantCount
+     */
     public function occupantsCount()
     {
         return new OccupantCount($this);
     }
 
+    /**
+     * Get available room types
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function availableRoomTypes()
     {
         return $this->belongsToMany(RoomType::class, 'rooming_plan_room_type')
@@ -53,6 +84,12 @@ class RoomingPlan extends Model
                     ->withTimestamps();
     }
 
+    /**
+     * Validate rooms being added to the plan
+     *
+     * @param $rooms
+     * @return ValidatesRooms
+     */
     public function validateRooms($rooms)
     {
         return new ValidatesRooms($rooms, $this);

@@ -59,6 +59,10 @@ class TransportsController extends Controller
             'campaign_id' => $request->json('campaign_id')
         ]);
 
+        if ($request->json('activity_id')) {
+            $transport->activities()->sync([$request->json('activity_id')], false);
+        }
+
         return $this->response->item($transport, new TransportTransformer);
     }
 
@@ -95,6 +99,10 @@ class TransportsController extends Controller
             'capacity' => $request->json('capacity', $transport->capacity),
             'campaign_id' => $request->json('campaign_id', $transport->campaign_id)
         ]);
+
+        if ($request->json('activity_id')) {
+            $transport->activities()->sync([$request->json('activity_id')], false);
+        }
 
         return $this->response->item($transport, new TransportTransformer);
     }

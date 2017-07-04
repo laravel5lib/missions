@@ -20,19 +20,47 @@ test('room types populated', t => {
     t.truthy(RegionsAccommodations.roomTypes.length);
 });
 
-test.before('select region', () => {
-    RegionsAccommodations.currentRegion = RegionsAccommodations.regions[0];
-});
-
 test('accommodations populated', async t => {
+    RegionsAccommodations.currentRegion = RegionsAccommodations.regions[0];
     await nextTick();
     t.truthy(RegionsAccommodations.accommodations.length);
+    await nextTick();
 });
 
-test.before('select accommodation', () => {
+test.after('create accommodation', async t => {
+    RegionsAccommodations.startNewAccommodation();
+    await nextTick();
+    t.true(RegionsAccommodations.showAccommodationManageModal);
+    RegionsAccommodations.currentAccommodation = _.extend(RegionsAccommodations.currentAccommodation, {
+        name: "4 Seasons Hotel"
+    });
+    await nextTick();
+    t.truthy(RegionsAccommodations.manageAccommodation());
+    // await nextTick();
+    // t.falsy(RegionsAccommodations.currentAccommodation);
+    // t.false(RegionsAccommodations.showAccommodationManageModal);
+});
+
+test.after('update accommodation', async t => {
     RegionsAccommodations.currentAccommodation = RegionsAccommodations.accommodations[0];
+    await nextTick();
+    RegionsAccommodations.editAccommodation(RegionsAccommodations.accommodations[1]);
+    await nextTick();
+    RegionsAccommodations.currentAccommodation = _.extend(RegionsAccommodations.currentAccommodation, {
+        description: "Lorem Ipsum..."
+    });
+    await nextTick();
+    t.truthy(RegionsAccommodations.manageAccommodation());
 });
 
-test.todo('create accommodation');
-test.todo('update accommodation');
-test.todo('delete accommodation');
+/*test.after('delete accommodation', async t => {
+    RegionsAccommodations.currentAccommodation = RegionsAccommodations.accommodations[0];
+    await nextTick();
+    t.false(RegionsAccommodations.showAccommodationDeleteModal);
+    RegionsAccommodations.openDeleteAccommodationModal(RegionsAccommodations.accommodations[0]);
+    await nextTick();
+    t.true(RegionsAccommodations.showAccommodationDeleteModal);
+    RegionsAccommodations.deleteAccommodation();
+    await nextTick();
+    t.false(RegionsAccommodations.showAccommodationDeleteModal);
+});*/

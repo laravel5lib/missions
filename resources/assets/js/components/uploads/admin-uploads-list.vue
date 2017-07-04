@@ -125,6 +125,7 @@
 	}
 </style>
 <script type="text/javascript">
+    import $ from 'jquery';
 	import vSelect from "vue-select";
 	export default{
         name: 'admin-uploads-list',
@@ -210,10 +211,10 @@
 				};
 
 				$.extend(params, this.filters);
-                this.$http.get('uploads', { params: params }).then(function (response) {
-                    this.uploads = response.body.data;
+                return this.$http.get('uploads', { params: params }).then(function (response) {
                     this.pagination = response.body.meta.pagination;
-                })
+                    this.uploads = response.body.data;
+                }, this.$root.handleApiErrors);
             },
         },
         ready(){

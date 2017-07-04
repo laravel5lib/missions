@@ -20,6 +20,11 @@ class Activity extends Model
         return $this->morphTo();
     }
 
+    public function itineraries()
+    {
+        return $this->morphedByMany(Itinerary::class, 'activitable');
+    }
+
     public function transports()
     {
         return $this->morphedByMany(Transport::class, 'activitable');
@@ -33,5 +38,10 @@ class Activity extends Model
     public function type()
     {
         return $this->belongsTo(ActivityType::class, 'activity_type_id');
+    }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
     }
 }

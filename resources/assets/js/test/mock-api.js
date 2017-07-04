@@ -1742,6 +1742,140 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
+
+    // Groups API
+    ['GET *groups(/:group)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "043cddec-f698-39eb-874f-3de45e0ac0eb",
+                    "status": "approved",
+                    "name": "Kuvalis, Mraz and Hammes",
+                    "type": "youth",
+                    "timezone": "America\/Los_Angeles",
+                    "description": "Alice. 'That's the first to speak. 'What size do you mean by that?' said the Mock Turtle angrily: 'really you are very.",
+                    "url": "kuvalis-mraz-and-hammes",
+                    "public": true,
+                    "address_one": "462 Alfreda Islands",
+                    "address_two": "556",
+                    "city": null,
+                    "state": "California",
+                    "zip": "64577",
+                    "country_code": "ir",
+                    "country_name": "Iran (Islamic Republic of)",
+                    "phone_one": "4102237069",
+                    "phone_two": "",
+                    "email": "stehr.zoila@example.org",
+                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                    "banner": null,
+                    "reservations_count": 75,
+                    "created_at": "2017-06-14 23:50:59",
+                    "updated_at": "2017-06-15 00:00:14",
+                    "links": [{"rel": "self", "uri": "\/groups\/043cddec-f698-39eb-874f-3de45e0ac0eb"}]
+                }, {
+                    "id": "10d394ba-3d88-3392-a19d-113f3aa7b565",
+                    "status": "approved",
+                    "name": "Herman-O'Hara",
+                    "type": "youth",
+                    "timezone": "Indian\/Mauritius",
+                    "description": "Tortoise--' 'Why did you manage to do next, when suddenly a White Rabbit cried out, 'Silence in the direction in which.",
+                    "url": "herman-ohara",
+                    "public": true,
+                    "address_one": null,
+                    "address_two": "85737",
+                    "city": "Montanachester",
+                    "state": "Oklahoma",
+                    "zip": null,
+                    "country_code": "uz",
+                    "country_name": "Uzbekistan",
+                    "phone_one": "738987448398854",
+                    "phone_two": "",
+                    "email": "suzanne.davis@example.net",
+                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                    "banner": null,
+                    "reservations_count": 75,
+                    "created_at": "2017-06-14 23:50:59",
+                    "updated_at": "2017-06-15 00:00:36",
+                    "links": [{"rel": "self", "uri": "\/groups\/10d394ba-3d88-3392-a19d-113f3aa7b565"}]
+                }, {
+                    "id": "15e18ddd-9046-306e-b12b-352b4c6f81c7",
+                    "status": "approved",
+                    "name": "Will, Anderson and Lubowitz",
+                    "type": "youth",
+                    "timezone": "America\/New_York",
+                    "description": "Alice looked up, and there stood the Queen merely remarking as it is.' 'I quite agree with you,' said the Gryphon,.",
+                    "url": "will-anderson-and-lubowitz",
+                    "public": true,
+                    "address_one": null,
+                    "address_two": null,
+                    "city": "Port Alexa",
+                    "state": null,
+                    "zip": null,
+                    "country_code": "ky",
+                    "country_name": "Cayman Islands",
+                    "phone_one": "635955899126287",
+                    "phone_two": "",
+                    "email": "constance.lockman@example.com",
+                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                    "banner": null,
+                    "reservations_count": 75,
+                    "created_at": "2017-06-14 23:50:59",
+                    "updated_at": "2017-06-15 00:01:28",
+                    "links": [{"rel": "self", "uri": "\/groups\/15e18ddd-9046-306e-b12b-352b4c6f81c7"}]
+                },
+                {
+                    "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                    "status": "approved",
+                    "name": "Lemke, Ruecker and Schamberger",
+                    "type": "youth",
+                    "timezone": "America\/Paramaribo",
+                    "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
+                    "url": "lemke-ruecker-and-schamberger",
+                    "public": true,
+                    "address_one": "61200 Ward Common",
+                    "address_two": null,
+                    "city": null,
+                    "state": "Hawaii",
+                    "zip": "18276-8333",
+                    "country_code": "kg",
+                    "country_name": "Kyrgyzstan",
+                    "phone_one": "18248126371",
+                    "phone_two": "",
+                    "email": "doyle.madie@example.com",
+                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                    "banner": null,
+                    "reservations_count": 75,
+                    "created_at": "2017-05-15 14:09:06",
+                    "updated_at": "2017-05-15 14:10:58",
+                    "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 3,
+                    "count": 3,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.group) {
+            body.data = _.findWhere(body.data, {id: pathMatch.group});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
     // Rooming API
     // Types
     ['GET *rooming/types(/:type)'](pathMatch, query, request) {
@@ -2310,505 +2444,511 @@ export default {
         let body = {
             "data": [
                 {
-                "id": "013cdd56-d377-34c2-b46c-a7cf8f76d9c8",
-                "given_names": "Ashtyn Jordane",
-                "surname": "Adams",
-                "gender": "male",
-                "status": "married",
-                "shirt_size": "L",
-                "shirt_size_name": "Large",
-                "age": 50,
-                "birthday": "1966-12-28",
-                "email": "desmond20@example.net",
-                "phone_one": "931819923573370",
-                "phone_two": "16413440144",
-                "address": "140 Arnulfo Neck Suite 883\nJuneland, WI 02009-0461",
-                "city": "Nikolausborough",
-                "state": null,
-                "zip": "40393",
-                "country_code": "kh",
-                "country_name": "Cambodia",
-                "companion_limit": 2,
-                "arrival_designation": "none",
-                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
-                "desired_role": {"code": "NUTR", "name": "Nutrionist"},
-                "total_cost": "2024.00",
-                "total_raised": "100.00",
-                "percent_raised": 5,
-                "total_owed": "1924.00",
-                "created_at": "2017-05-15 14:10:50",
-                "updated_at": "2017-05-15 14:10:52",
-                "deleted_at": null,
-                "tags": ["vip", "media"],
-                "links": [{"rel": "self", "uri": "\/api\/reservations\/013cdd56-d377-34c2-b46c-a7cf8f76d9c8"}],
-                "user": {
-                    "data": {
-                        "id": "edb57920-8c0d-49a3-a535-409758bbfc6f",
-                        "name": "Sophie Cummings",
-                        "email": "hokuneva@example.net",
-                        "password": "$2y$10$I.IKYIbiR.uvUp51OhGlE.5Ib2BVaiyoQSsQQAdG40wwNhgiR3RjS",
-                        "alt_email": "linda.crooks@example.com",
-                        "gender": "male",
-                        "status": "single",
-                        "birthday": "1958-01-23",
-                        "phone_one": null,
-                        "phone_two": null,
-                        "address": "2818 Dorothy Light Suite 462",
-                        "city": "Port Rubytown",
-                        "state": null,
-                        "zip": null,
-                        "country_code": "am",
-                        "country_name": "Armenia",
-                        "shirt_size": "",
-                        "timezone": "America\/Detroit",
-                        "bio": null,
-                        "url": "sophie-cummings",
-                        "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
-                        "avatar_upload_id": "5b67ee33-6178-44f1-8391-89086a9825b1",
-                        "banner": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
-                        "public": false,
-                        "created_at": "2017-05-15 14:10:50",
-                        "updated_at": "2017-05-15 14:10:50",
-                        "links": [{"rel": "self", "uri": "\/users\/edb57920-8c0d-49a3-a535-409758bbfc6f"}]
-                    }
-                },
-                "trip": {
-                    "data": {
-                        "id": "0eac4053-7d79-47f9-bd91-f59d916269f4",
-                        "group_id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
-                        "campaign_id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
-                        "rep_id": "2f445c6e-dc71-4c73-ae0b-31cef080eb88",
-                        "rep": "Deonte Emard",
-                        "spots": 348,
-                        "status": "active",
-                        "starting_cost": "1874.00",
-                        "companion_limit": 2,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "medical",
-                        "difficulty": "level 3",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["families", "medical professionals", "pastors", "women"],
-                        "team_roles": ["LACT", "MDSP", "CHRA", "POLI"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
-                        "public": false,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-15 14:10:46",
-                        "updated_at": "2017-05-15 14:10:54",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/0eac4053-7d79-47f9-bd91-f59d916269f4"}],
-                        "campaign": {
-                            "data": {
-                                "id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
-                                "name": "1Nation1Day 2017",
-                                "country": "Nicaragua",
-                                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
-                                "page_url": "1n1d17",
-                                "page_src": "_1n1d2017",
-                                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
-                                "avatar_upload_id": "b4a5ad85-4fa9-4d74-9765-42c445f91c38",
-                                "banner": null,
-                                "banner_upload_id": null,
-                                "started_at": "2017-07-22 00:00:00",
-                                "ended_at": "2017-07-30 22:59:59",
-                                "status": "Published",
-                                "groups_count": 10,
-                                "published_at": "2016-01-01 00:00:00",
-                                "created_at": "2017-05-15 14:09:06",
-                                "updated_at": "2017-05-15 14:10:58",
-                                "links": [{"rel": "self", "uri": "\/campaigns\/54ba518e-a8c3-4e3f-b3a9-4797df585020"}]
+                    "id": "013cdd56-d377-34c2-b46c-a7cf8f76d9c8",
+                    "given_names": "Ashtyn Jordane",
+                    "surname": "Adams",
+                    "gender": "male",
+                    "status": "married",
+                    "shirt_size": "L",
+                    "shirt_size_name": "Large",
+                    "age": 50,
+                    "birthday": "1966-12-28",
+                    "email": "desmond20@example.net",
+                    "phone_one": "931819923573370",
+                    "phone_two": "16413440144",
+                    "address": "140 Arnulfo Neck Suite 883\nJuneland, WI 02009-0461",
+                    "city": "Nikolausborough",
+                    "state": null,
+                    "zip": "40393",
+                    "country_code": "kh",
+                    "country_name": "Cambodia",
+                    "companion_limit": 2,
+                    "arrival_designation": "none",
+                    "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                    "desired_role": {"code": "NUTR", "name": "Nutrionist"},
+                    "total_cost": "2024.00",
+                    "total_raised": "100.00",
+                    "percent_raised": 5,
+                    "total_owed": "1924.00",
+                    "created_at": "2017-05-15 14:10:50",
+                    "updated_at": "2017-05-15 14:10:52",
+                    "deleted_at": null,
+                    "tags": ["vip", "media"],
+                    "links": [{"rel": "self", "uri": "\/api\/reservations\/013cdd56-d377-34c2-b46c-a7cf8f76d9c8"}],
+                    "user": {
+                        "data": {
+                            "id": "edb57920-8c0d-49a3-a535-409758bbfc6f",
+                            "name": "Sophie Cummings",
+                            "email": "hokuneva@example.net",
+                            "password": "$2y$10$I.IKYIbiR.uvUp51OhGlE.5Ib2BVaiyoQSsQQAdG40wwNhgiR3RjS",
+                            "alt_email": "linda.crooks@example.com",
+                            "gender": "male",
+                            "status": "single",
+                            "birthday": "1958-01-23",
+                            "phone_one": null,
+                            "phone_two": null,
+                            "address": "2818 Dorothy Light Suite 462",
+                            "city": "Port Rubytown",
+                            "state": null,
+                            "zip": null,
+                            "country_code": "am",
+                            "country_name": "Armenia",
+                            "shirt_size": "",
+                            "timezone": "America\/Detroit",
+                            "bio": null,
+                            "url": "sophie-cummings",
+                            "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
+                            "avatar_upload_id": "5b67ee33-6178-44f1-8391-89086a9825b1",
+                            "banner": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
+                            "public": false,
+                            "created_at": "2017-05-15 14:10:50",
+                            "updated_at": "2017-05-15 14:10:50",
+                            "links": [{"rel": "self", "uri": "\/users\/edb57920-8c0d-49a3-a535-409758bbfc6f"}]
+                        }
+                    },
+                    "trip": {
+                        "data": {
+                            "id": "0eac4053-7d79-47f9-bd91-f59d916269f4",
+                            "group_id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                            "campaign_id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                            "rep_id": "2f445c6e-dc71-4c73-ae0b-31cef080eb88",
+                            "rep": "Deonte Emard",
+                            "spots": 348,
+                            "status": "active",
+                            "starting_cost": "1874.00",
+                            "companion_limit": 2,
+                            "reservations": 0,
+                            "country_code": "ni",
+                            "country_name": "Nicaragua",
+                            "type": "medical",
+                            "difficulty": "level 3",
+                            "started_at": "2017-07-22",
+                            "ended_at": "2017-07-30",
+                            "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                            "prospects": ["families", "medical professionals", "pastors", "women"],
+                            "team_roles": ["LACT", "MDSP", "CHRA", "POLI"],
+                            "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
+                            "public": false,
+                            "published_at": "2016-02-01 00:00:00",
+                            "closed_at": "2017-07-15 00:00:00",
+                            "created_at": "2017-05-15 14:10:46",
+                            "updated_at": "2017-05-15 14:10:54",
+                            "tags": [],
+                            "links": [{"rel": "self", "uri": "\/trips\/0eac4053-7d79-47f9-bd91-f59d916269f4"}],
+                            "campaign": {
+                                "data": {
+                                    "id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                                    "name": "1Nation1Day 2017",
+                                    "country": "Nicaragua",
+                                    "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
+                                    "page_url": "1n1d17",
+                                    "page_src": "_1n1d2017",
+                                    "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                                    "avatar_upload_id": "b4a5ad85-4fa9-4d74-9765-42c445f91c38",
+                                    "banner": null,
+                                    "banner_upload_id": null,
+                                    "started_at": "2017-07-22 00:00:00",
+                                    "ended_at": "2017-07-30 22:59:59",
+                                    "status": "Published",
+                                    "groups_count": 10,
+                                    "published_at": "2016-01-01 00:00:00",
+                                    "created_at": "2017-05-15 14:09:06",
+                                    "updated_at": "2017-05-15 14:10:58",
+                                    "links": [{
+                                        "rel": "self",
+                                        "uri": "\/campaigns\/54ba518e-a8c3-4e3f-b3a9-4797df585020"
+                                    }]
+                                }
+                            },
+                            "group": {
+                                "data": {
+                                    "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                                    "status": "approved",
+                                    "name": "Lemke, Ruecker and Schamberger",
+                                    "type": "youth",
+                                    "timezone": "America\/Paramaribo",
+                                    "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
+                                    "url": "lemke-ruecker-and-schamberger",
+                                    "public": true,
+                                    "address_one": "61200 Ward Common",
+                                    "address_two": null,
+                                    "city": null,
+                                    "state": "Hawaii",
+                                    "zip": "18276-8333",
+                                    "country_code": "kg",
+                                    "country_name": "Kyrgyzstan",
+                                    "phone_one": "18248126371",
+                                    "phone_two": "",
+                                    "email": "doyle.madie@example.com",
+                                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                    "banner": null,
+                                    "reservations_count": 75,
+                                    "created_at": "2017-05-15 14:09:06",
+                                    "updated_at": "2017-05-15 14:10:58",
+                                    "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                                }
                             }
-                        },
-                        "group": {
-                            "data": {
-                                "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
-                                "status": "approved",
-                                "name": "Lemke, Ruecker and Schamberger",
-                                "type": "youth",
-                                "timezone": "America\/Paramaribo",
-                                "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
-                                "url": "lemke-ruecker-and-schamberger",
-                                "public": true,
-                                "address_one": "61200 Ward Common",
-                                "address_two": null,
-                                "city": null,
-                                "state": "Hawaii",
-                                "zip": "18276-8333",
-                                "country_code": "kg",
-                                "country_name": "Kyrgyzstan",
-                                "phone_one": "18248126371",
-                                "phone_two": "",
-                                "email": "doyle.madie@example.com",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-15 14:09:06",
-                                "updated_at": "2017-05-15 14:10:58",
-                                "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                        }
+                    },
+                    "costs": {
+                        "data": [{
+                            "cost_id": "f139f68d-f09e-4249-84f0-1232c63fda71",
+                            "name": "General Registration",
+                            "description": "Standard cost to register.",
+                            "amount": "1774.00",
+                            "active_at": "2017-03-01 00:00:00",
+                            "type": "incremental",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "locked": false,
+                            "links": [{"rel": "self", "uri": "\/api\/costs\/f139f68d-f09e-4249-84f0-1232c63fda71"}],
+                            "payments": {
+                                "data": [{
+                                    "id": "829d7873-5397-43dc-ade9-be9ac391bb6c",
+                                    "amount_owed": "887.00",
+                                    "percent_owed": 50,
+                                    "due_at": "2018-03-01 00:00:00",
+                                    "grace_period": 2,
+                                    "upfront": false
+                                }, {
+                                    "id": "a1999f4f-b277-47e9-846c-969a53ba9a2d",
+                                    "amount_owed": "887.00",
+                                    "percent_owed": 50,
+                                    "due_at": "2017-09-01 00:00:00",
+                                    "grace_period": 2,
+                                    "upfront": false
+                                }]
                             }
-                        }
-                    }
-                },
-                "costs": {
-                    "data": [{
-                        "cost_id": "f139f68d-f09e-4249-84f0-1232c63fda71",
-                        "name": "General Registration",
-                        "description": "Standard cost to register.",
-                        "amount": "1774.00",
-                        "active_at": "2017-03-01 00:00:00",
-                        "type": "incremental",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "locked": false,
-                        "links": [{"rel": "self", "uri": "\/api\/costs\/f139f68d-f09e-4249-84f0-1232c63fda71"}],
-                        "payments": {
-                            "data": [{
-                                "id": "829d7873-5397-43dc-ade9-be9ac391bb6c",
-                                "amount_owed": "887.00",
-                                "percent_owed": 50,
-                                "due_at": "2018-03-01 00:00:00",
-                                "grace_period": 2,
-                                "upfront": false
-                            }, {
-                                "id": "a1999f4f-b277-47e9-846c-969a53ba9a2d",
-                                "amount_owed": "887.00",
-                                "percent_owed": 50,
-                                "due_at": "2017-09-01 00:00:00",
-                                "grace_period": 2,
-                                "upfront": false
-                            }]
-                        }
-                    }, {
-                        "cost_id": "369cdd25-457d-4d35-b1cc-206a526916e9",
-                        "name": "Deposit",
-                        "description": "Non-refundable, non-transferable amount required to secure your initial spot on the trip.",
-                        "amount": "100.00",
-                        "active_at": "2016-01-01 00:00:00",
-                        "type": "static",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "locked": false,
-                        "links": [{"rel": "self", "uri": "\/api\/costs\/369cdd25-457d-4d35-b1cc-206a526916e9"}],
-                        "payments": {
-                            "data": [{
-                                "id": "f5b17512-2db5-420d-a7cd-9640f5b1d9ab",
-                                "amount_owed": "100.00",
-                                "percent_owed": 100,
-                                "due_at": null,
-                                "grace_period": 2,
-                                "upfront": true
-                            }]
-                        }
-                    }, {
-                        "cost_id": "b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec",
-                        "name": "Triple Room Request",
-                        "description": "Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.",
-                        "amount": "150.00",
-                        "active_at": "2016-01-01 00:00:00",
-                        "type": "optional",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "locked": false,
-                        "links": [{"rel": "self", "uri": "\/api\/costs\/b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec"}],
-                        "payments": {
-                            "data": [{
-                                "id": "7e292f6c-ba37-4a83-b7cb-80da97a5a6bc",
-                                "amount_owed": "150.00",
-                                "percent_owed": 100,
-                                "due_at": "2017-07-01 00:00:00",
-                                "grace_period": 2,
-                                "upfront": false
-                            }]
-                        }
-                    }]
-                },
-                "companions": {"data": []},
-                "fundraisers": {
-                    "data": [{
-                        "id": "c8ade54c-30ff-47a4-a252-9e47eff54eeb",
-                        "name": "Send Ashtyn Jordane Adams to Nicaragua",
-                        "type": "general",
-                        "fund_id": "d944730e-2b24-4737-93a5-2e4621e318bc",
-                        "goal_amount": "2024.00",
-                        "raised_amount": "100.00",
-                        "raised_percent": 5,
-                        "donors_count": 1,
-                        "sponsor_id": "edb57920-8c0d-49a3-a535-409758bbfc6f",
-                        "sponsor_type": "users",
-                        "url": "nicaragua-2017-700",
-                        "public": true,
-                        "show_donors": true,
-                        "status": "open",
-                        "description": "I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.\n\nIn preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?\n\nI sincerely appreciate your prayerful consideration in helping make this trip possible.",
-                        "started_at": "2017-05-15 14:10:50",
-                        "ended_at": "2017-07-22 00:00:00",
-                        "created_at": "2017-05-15 14:10:52",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "tags": [],
-                        "links": [{
-                            "rel": "self",
-                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb"
                         }, {
-                            "rel": "donors",
-                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb\/donors"
+                            "cost_id": "369cdd25-457d-4d35-b1cc-206a526916e9",
+                            "name": "Deposit",
+                            "description": "Non-refundable, non-transferable amount required to secure your initial spot on the trip.",
+                            "amount": "100.00",
+                            "active_at": "2016-01-01 00:00:00",
+                            "type": "static",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "locked": false,
+                            "links": [{"rel": "self", "uri": "\/api\/costs\/369cdd25-457d-4d35-b1cc-206a526916e9"}],
+                            "payments": {
+                                "data": [{
+                                    "id": "f5b17512-2db5-420d-a7cd-9640f5b1d9ab",
+                                    "amount_owed": "100.00",
+                                    "percent_owed": 100,
+                                    "due_at": null,
+                                    "grace_period": 2,
+                                    "upfront": true
+                                }]
+                            }
                         }, {
-                            "rel": "donations",
-                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb\/donations"
+                            "cost_id": "b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec",
+                            "name": "Triple Room Request",
+                            "description": "Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.",
+                            "amount": "150.00",
+                            "active_at": "2016-01-01 00:00:00",
+                            "type": "optional",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "locked": false,
+                            "links": [{"rel": "self", "uri": "\/api\/costs\/b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec"}],
+                            "payments": {
+                                "data": [{
+                                    "id": "7e292f6c-ba37-4a83-b7cb-80da97a5a6bc",
+                                    "amount_owed": "150.00",
+                                    "percent_owed": 100,
+                                    "due_at": "2017-07-01 00:00:00",
+                                    "grace_period": 2,
+                                    "upfront": false
+                                }]
+                            }
                         }]
-                    }]
-                }
-            },
+                    },
+                    "companions": {"data": []},
+                    "fundraisers": {
+                        "data": [{
+                            "id": "c8ade54c-30ff-47a4-a252-9e47eff54eeb",
+                            "name": "Send Ashtyn Jordane Adams to Nicaragua",
+                            "type": "general",
+                            "fund_id": "d944730e-2b24-4737-93a5-2e4621e318bc",
+                            "goal_amount": "2024.00",
+                            "raised_amount": "100.00",
+                            "raised_percent": 5,
+                            "donors_count": 1,
+                            "sponsor_id": "edb57920-8c0d-49a3-a535-409758bbfc6f",
+                            "sponsor_type": "users",
+                            "url": "nicaragua-2017-700",
+                            "public": true,
+                            "show_donors": true,
+                            "status": "open",
+                            "description": "I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.\n\nIn preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?\n\nI sincerely appreciate your prayerful consideration in helping make this trip possible.",
+                            "started_at": "2017-05-15 14:10:50",
+                            "ended_at": "2017-07-22 00:00:00",
+                            "created_at": "2017-05-15 14:10:52",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "tags": [],
+                            "links": [{
+                                "rel": "self",
+                                "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb"
+                            }, {
+                                "rel": "donors",
+                                "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb\/donors"
+                            }, {
+                                "rel": "donations",
+                                "uri": "https:\/\/missions.dev\/api\/fundraisers\/c8ade54c-30ff-47a4-a252-9e47eff54eeb\/donations"
+                            }]
+                        }]
+                    }
+                },
                 {
-                "id": "013e8643-fdf2-308b-bdbb-0621249fa4d1",
-                "given_names": "Cydney Tavares",
-                "surname": "Hodkiewicz",
-                "gender": "male",
-                "status": "single",
-                "shirt_size": "XXXL",
-                "shirt_size_name": "Extra Large x3",
-                "age": 36,
-                "birthday": "1980-09-26",
-                "email": "oconnell.jewel@example.net",
-                "phone_one": "9064648988644",
-                "phone_two": "19947471916761",
-                "address": "7018 Zena Viaduct\nEast Aracely, FL 79536",
-                "city": "Lake Hudson",
-                "state": null,
-                "zip": "26002",
-                "country_code": "it",
-                "country_name": "Italy",
-                "companion_limit": 2,
-                "arrival_designation": "none",
-                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
-                "desired_role": {"code": "NAST", "name": "Nurse Assistant"},
-                "total_cost": "2024.00",
-                "total_raised": "100.00",
-                "percent_raised": 5,
-                "total_owed": "1924.00",
-                "created_at": "2017-05-15 14:10:51",
-                "updated_at": "2017-05-15 14:10:53",
-                "deleted_at": null,
-                "tags": ["medical", "media"],
-                "links": [{"rel": "self", "uri": "\/api\/reservations\/013e8643-fdf2-308b-bdbb-0621249fa4d1"}],
-                "user": {
-                    "data": {
-                        "id": "65611de2-35f9-4263-87e3-83d01d2730ec",
-                        "name": "Burdette Crooks",
-                        "email": "mose22@example.net",
-                        "password": "$2y$10$0QzDT0GTOdFcEMKJj.0oQOdQ9wJ9oKFhfJQYXXkRHQ9DM2HlD0cvW",
-                        "alt_email": "zvon@example.net",
-                        "gender": "female",
-                        "status": "married",
-                        "birthday": "1967-01-06",
-                        "phone_one": "17874836866",
-                        "phone_two": "2406750342145",
-                        "address": null,
-                        "city": "Pollichhaven",
-                        "state": "Hawaii",
-                        "zip": "80201-9077",
-                        "country_code": "cx",
-                        "country_name": "Christmas Island",
-                        "shirt_size": "",
-                        "timezone": "America\/Detroit",
-                        "bio": null,
-                        "url": "burdette-crooks",
-                        "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
-                        "avatar_upload_id": "821687c6-b7f0-4193-981b-8b971ebde288",
-                        "banner": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
-                        "public": false,
-                        "created_at": "2017-05-15 14:10:52",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "links": [{"rel": "self", "uri": "\/users\/65611de2-35f9-4263-87e3-83d01d2730ec"}]
-                    }
-                },
-                "trip": {
-                    "data": {
-                        "id": "0eac4053-7d79-47f9-bd91-f59d916269f4",
-                        "group_id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
-                        "campaign_id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
-                        "rep_id": "2f445c6e-dc71-4c73-ae0b-31cef080eb88",
-                        "rep": "Deonte Emard",
-                        "spots": 348,
-                        "status": "active",
-                        "starting_cost": "1874.00",
-                        "companion_limit": 2,
-                        "reservations": 0,
-                        "country_code": "ni",
-                        "country_name": "Nicaragua",
-                        "type": "medical",
-                        "difficulty": "level 3",
-                        "started_at": "2017-07-22",
-                        "ended_at": "2017-07-30",
-                        "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
-                        "prospects": ["families", "medical professionals", "pastors", "women"],
-                        "team_roles": ["LACT", "MDSP", "CHRA", "POLI"],
-                        "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
-                        "public": false,
-                        "published_at": "2016-02-01 00:00:00",
-                        "closed_at": "2017-07-15 00:00:00",
-                        "created_at": "2017-05-15 14:10:46",
-                        "updated_at": "2017-05-15 14:10:54",
-                        "tags": [],
-                        "links": [{"rel": "self", "uri": "\/trips\/0eac4053-7d79-47f9-bd91-f59d916269f4"}],
-                        "campaign": {
-                            "data": {
-                                "id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
-                                "name": "1Nation1Day 2017",
-                                "country": "Nicaragua",
-                                "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
-                                "page_url": "1n1d17",
-                                "page_src": "_1n1d2017",
-                                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
-                                "avatar_upload_id": "b4a5ad85-4fa9-4d74-9765-42c445f91c38",
-                                "banner": null,
-                                "banner_upload_id": null,
-                                "started_at": "2017-07-22 00:00:00",
-                                "ended_at": "2017-07-30 22:59:59",
-                                "status": "Published",
-                                "groups_count": 10,
-                                "published_at": "2016-01-01 00:00:00",
-                                "created_at": "2017-05-15 14:09:06",
-                                "updated_at": "2017-05-15 14:10:58",
-                                "links": [{"rel": "self", "uri": "\/campaigns\/54ba518e-a8c3-4e3f-b3a9-4797df585020"}]
+                    "id": "013e8643-fdf2-308b-bdbb-0621249fa4d1",
+                    "given_names": "Cydney Tavares",
+                    "surname": "Hodkiewicz",
+                    "gender": "male",
+                    "status": "single",
+                    "shirt_size": "XXXL",
+                    "shirt_size_name": "Extra Large x3",
+                    "age": 36,
+                    "birthday": "1980-09-26",
+                    "email": "oconnell.jewel@example.net",
+                    "phone_one": "9064648988644",
+                    "phone_two": "19947471916761",
+                    "address": "7018 Zena Viaduct\nEast Aracely, FL 79536",
+                    "city": "Lake Hudson",
+                    "state": null,
+                    "zip": "26002",
+                    "country_code": "it",
+                    "country_name": "Italy",
+                    "companion_limit": 2,
+                    "arrival_designation": "none",
+                    "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                    "desired_role": {"code": "NAST", "name": "Nurse Assistant"},
+                    "total_cost": "2024.00",
+                    "total_raised": "100.00",
+                    "percent_raised": 5,
+                    "total_owed": "1924.00",
+                    "created_at": "2017-05-15 14:10:51",
+                    "updated_at": "2017-05-15 14:10:53",
+                    "deleted_at": null,
+                    "tags": ["medical", "media"],
+                    "links": [{"rel": "self", "uri": "\/api\/reservations\/013e8643-fdf2-308b-bdbb-0621249fa4d1"}],
+                    "user": {
+                        "data": {
+                            "id": "65611de2-35f9-4263-87e3-83d01d2730ec",
+                            "name": "Burdette Crooks",
+                            "email": "mose22@example.net",
+                            "password": "$2y$10$0QzDT0GTOdFcEMKJj.0oQOdQ9wJ9oKFhfJQYXXkRHQ9DM2HlD0cvW",
+                            "alt_email": "zvon@example.net",
+                            "gender": "female",
+                            "status": "married",
+                            "birthday": "1967-01-06",
+                            "phone_one": "17874836866",
+                            "phone_two": "2406750342145",
+                            "address": null,
+                            "city": "Pollichhaven",
+                            "state": "Hawaii",
+                            "zip": "80201-9077",
+                            "country_code": "cx",
+                            "country_name": "Christmas Island",
+                            "shirt_size": "",
+                            "timezone": "America\/Detroit",
+                            "bio": null,
+                            "url": "burdette-crooks",
+                            "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                            "avatar_upload_id": "821687c6-b7f0-4193-981b-8b971ebde288",
+                            "banner": "https:\/\/missions.dev\/api\/images\/banners\/1n1d17-speak-2560x800.jpg",
+                            "public": false,
+                            "created_at": "2017-05-15 14:10:52",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "links": [{"rel": "self", "uri": "\/users\/65611de2-35f9-4263-87e3-83d01d2730ec"}]
+                        }
+                    },
+                    "trip": {
+                        "data": {
+                            "id": "0eac4053-7d79-47f9-bd91-f59d916269f4",
+                            "group_id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                            "campaign_id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                            "rep_id": "2f445c6e-dc71-4c73-ae0b-31cef080eb88",
+                            "rep": "Deonte Emard",
+                            "spots": 348,
+                            "status": "active",
+                            "starting_cost": "1874.00",
+                            "companion_limit": 2,
+                            "reservations": 0,
+                            "country_code": "ni",
+                            "country_name": "Nicaragua",
+                            "type": "medical",
+                            "difficulty": "level 3",
+                            "started_at": "2017-07-22",
+                            "ended_at": "2017-07-30",
+                            "todos": ["send shirt", "send wrist band", "enter into lgl", "send launch guide", "send luggage tag"],
+                            "prospects": ["families", "medical professionals", "pastors", "women"],
+                            "team_roles": ["LACT", "MDSP", "CHRA", "POLI"],
+                            "description": "### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306",
+                            "public": false,
+                            "published_at": "2016-02-01 00:00:00",
+                            "closed_at": "2017-07-15 00:00:00",
+                            "created_at": "2017-05-15 14:10:46",
+                            "updated_at": "2017-05-15 14:10:54",
+                            "tags": [],
+                            "links": [{"rel": "self", "uri": "\/trips\/0eac4053-7d79-47f9-bd91-f59d916269f4"}],
+                            "campaign": {
+                                "data": {
+                                    "id": "54ba518e-a8c3-4e3f-b3a9-4797df585020",
+                                    "name": "1Nation1Day 2017",
+                                    "country": "Nicaragua",
+                                    "description": "1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.",
+                                    "page_url": "1n1d17",
+                                    "page_src": "_1n1d2017",
+                                    "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                                    "avatar_upload_id": "b4a5ad85-4fa9-4d74-9765-42c445f91c38",
+                                    "banner": null,
+                                    "banner_upload_id": null,
+                                    "started_at": "2017-07-22 00:00:00",
+                                    "ended_at": "2017-07-30 22:59:59",
+                                    "status": "Published",
+                                    "groups_count": 10,
+                                    "published_at": "2016-01-01 00:00:00",
+                                    "created_at": "2017-05-15 14:09:06",
+                                    "updated_at": "2017-05-15 14:10:58",
+                                    "links": [{
+                                        "rel": "self",
+                                        "uri": "\/campaigns\/54ba518e-a8c3-4e3f-b3a9-4797df585020"
+                                    }]
+                                }
+                            },
+                            "group": {
+                                "data": {
+                                    "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
+                                    "status": "approved",
+                                    "name": "Lemke, Ruecker and Schamberger",
+                                    "type": "youth",
+                                    "timezone": "America\/Paramaribo",
+                                    "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
+                                    "url": "lemke-ruecker-and-schamberger",
+                                    "public": true,
+                                    "address_one": "61200 Ward Common",
+                                    "address_two": null,
+                                    "city": null,
+                                    "state": "Hawaii",
+                                    "zip": "18276-8333",
+                                    "country_code": "kg",
+                                    "country_name": "Kyrgyzstan",
+                                    "phone_one": "18248126371",
+                                    "phone_two": "",
+                                    "email": "doyle.madie@example.com",
+                                    "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
+                                    "banner": null,
+                                    "reservations_count": 75,
+                                    "created_at": "2017-05-15 14:09:06",
+                                    "updated_at": "2017-05-15 14:10:58",
+                                    "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                                }
                             }
-                        },
-                        "group": {
-                            "data": {
-                                "id": "b0f45565-867b-32cd-92c9-3c5b254b082b",
-                                "status": "approved",
-                                "name": "Lemke, Ruecker and Schamberger",
-                                "type": "youth",
-                                "timezone": "America\/Paramaribo",
-                                "description": "I don't know,' he went on in a shrill, passionate voice. 'Would YOU like cats if you wouldn't have come here.' Alice.",
-                                "url": "lemke-ruecker-and-schamberger",
-                                "public": true,
-                                "address_one": "61200 Ward Common",
-                                "address_two": null,
-                                "city": null,
-                                "state": "Hawaii",
-                                "zip": "18276-8333",
-                                "country_code": "kg",
-                                "country_name": "Kyrgyzstan",
-                                "phone_one": "18248126371",
-                                "phone_two": "",
-                                "email": "doyle.madie@example.com",
-                                "avatar": "https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png",
-                                "banner": null,
-                                "reservations_count": 75,
-                                "created_at": "2017-05-15 14:09:06",
-                                "updated_at": "2017-05-15 14:10:58",
-                                "links": [{"rel": "self", "uri": "\/groups\/b0f45565-867b-32cd-92c9-3c5b254b082b"}]
+                        }
+                    },
+                    "costs": {
+                        "data": [{
+                            "cost_id": "f139f68d-f09e-4249-84f0-1232c63fda71",
+                            "name": "General Registration",
+                            "description": "Standard cost to register.",
+                            "amount": "1774.00",
+                            "active_at": "2017-03-01 00:00:00",
+                            "type": "incremental",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "locked": false,
+                            "links": [{"rel": "self", "uri": "\/api\/costs\/f139f68d-f09e-4249-84f0-1232c63fda71"}],
+                            "payments": {
+                                "data": [{
+                                    "id": "829d7873-5397-43dc-ade9-be9ac391bb6c",
+                                    "amount_owed": "887.00",
+                                    "percent_owed": 50,
+                                    "due_at": "2018-03-01 00:00:00",
+                                    "grace_period": 2,
+                                    "upfront": false
+                                }, {
+                                    "id": "a1999f4f-b277-47e9-846c-969a53ba9a2d",
+                                    "amount_owed": "887.00",
+                                    "percent_owed": 50,
+                                    "due_at": "2017-09-01 00:00:00",
+                                    "grace_period": 2,
+                                    "upfront": false
+                                }]
                             }
-                        }
-                    }
-                },
-                "costs": {
-                    "data": [{
-                        "cost_id": "f139f68d-f09e-4249-84f0-1232c63fda71",
-                        "name": "General Registration",
-                        "description": "Standard cost to register.",
-                        "amount": "1774.00",
-                        "active_at": "2017-03-01 00:00:00",
-                        "type": "incremental",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "locked": false,
-                        "links": [{"rel": "self", "uri": "\/api\/costs\/f139f68d-f09e-4249-84f0-1232c63fda71"}],
-                        "payments": {
-                            "data": [{
-                                "id": "829d7873-5397-43dc-ade9-be9ac391bb6c",
-                                "amount_owed": "887.00",
-                                "percent_owed": 50,
-                                "due_at": "2018-03-01 00:00:00",
-                                "grace_period": 2,
-                                "upfront": false
-                            }, {
-                                "id": "a1999f4f-b277-47e9-846c-969a53ba9a2d",
-                                "amount_owed": "887.00",
-                                "percent_owed": 50,
-                                "due_at": "2017-09-01 00:00:00",
-                                "grace_period": 2,
-                                "upfront": false
-                            }]
-                        }
-                    }, {
-                        "cost_id": "369cdd25-457d-4d35-b1cc-206a526916e9",
-                        "name": "Deposit",
-                        "description": "Non-refundable, non-transferable amount required to secure your initial spot on the trip.",
-                        "amount": "100.00",
-                        "active_at": "2016-01-01 00:00:00",
-                        "type": "static",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "locked": false,
-                        "links": [{"rel": "self", "uri": "\/api\/costs\/369cdd25-457d-4d35-b1cc-206a526916e9"}],
-                        "payments": {
-                            "data": [{
-                                "id": "f5b17512-2db5-420d-a7cd-9640f5b1d9ab",
-                                "amount_owed": "100.00",
-                                "percent_owed": 100,
-                                "due_at": null,
-                                "grace_period": 2,
-                                "upfront": true
-                            }]
-                        }
-                    }, {
-                        "cost_id": "b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec",
-                        "name": "Triple Room Request",
-                        "description": "Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.",
-                        "amount": "150.00",
-                        "active_at": "2016-01-01 00:00:00",
-                        "type": "optional",
-                        "updated_at": "2017-05-15 14:10:52",
-                        "locked": false,
-                        "links": [{"rel": "self", "uri": "\/api\/costs\/b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec"}],
-                        "payments": {
-                            "data": [{
-                                "id": "7e292f6c-ba37-4a83-b7cb-80da97a5a6bc",
-                                "amount_owed": "150.00",
-                                "percent_owed": 100,
-                                "due_at": "2017-07-01 00:00:00",
-                                "grace_period": 2,
-                                "upfront": false
-                            }]
-                        }
-                    }]
-                },
-                "companions": {"data": []},
-                "fundraisers": {
-                    "data": [{
-                        "id": "2062b1ff-ea5d-4a64-a167-1a28847239fe",
-                        "name": "Send Cydney Tavares Hodkiewicz to Nicaragua",
-                        "type": "general",
-                        "fund_id": "74ec2cec-80cb-4540-8222-3adead95c770",
-                        "goal_amount": "2024.00",
-                        "raised_amount": "100.00",
-                        "raised_percent": 5,
-                        "donors_count": 1,
-                        "sponsor_id": "65611de2-35f9-4263-87e3-83d01d2730ec",
-                        "sponsor_type": "users",
-                        "url": "nicaragua-2017-701",
-                        "public": true,
-                        "show_donors": true,
-                        "status": "open",
-                        "description": "I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.\n\nIn preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?\n\nI sincerely appreciate your prayerful consideration in helping make this trip possible.",
-                        "started_at": "2017-05-15 14:10:51",
-                        "ended_at": "2017-07-22 00:00:00",
-                        "created_at": "2017-05-15 14:10:53",
-                        "updated_at": "2017-05-15 14:10:53",
-                        "tags": [],
-                        "links": [{
-                            "rel": "self",
-                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe"
                         }, {
-                            "rel": "donors",
-                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe\/donors"
+                            "cost_id": "369cdd25-457d-4d35-b1cc-206a526916e9",
+                            "name": "Deposit",
+                            "description": "Non-refundable, non-transferable amount required to secure your initial spot on the trip.",
+                            "amount": "100.00",
+                            "active_at": "2016-01-01 00:00:00",
+                            "type": "static",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "locked": false,
+                            "links": [{"rel": "self", "uri": "\/api\/costs\/369cdd25-457d-4d35-b1cc-206a526916e9"}],
+                            "payments": {
+                                "data": [{
+                                    "id": "f5b17512-2db5-420d-a7cd-9640f5b1d9ab",
+                                    "amount_owed": "100.00",
+                                    "percent_owed": 100,
+                                    "due_at": null,
+                                    "grace_period": 2,
+                                    "upfront": true
+                                }]
+                            }
                         }, {
-                            "rel": "donations",
-                            "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe\/donations"
+                            "cost_id": "b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec",
+                            "name": "Triple Room Request",
+                            "description": "Requesting a Triple Bed Room (hotel room with two or three beds for a maximum of three people) for comfort purposes.",
+                            "amount": "150.00",
+                            "active_at": "2016-01-01 00:00:00",
+                            "type": "optional",
+                            "updated_at": "2017-05-15 14:10:52",
+                            "locked": false,
+                            "links": [{"rel": "self", "uri": "\/api\/costs\/b56ff7fd-c9c0-45c0-88e4-65153ba6d5ec"}],
+                            "payments": {
+                                "data": [{
+                                    "id": "7e292f6c-ba37-4a83-b7cb-80da97a5a6bc",
+                                    "amount_owed": "150.00",
+                                    "percent_owed": 100,
+                                    "due_at": "2017-07-01 00:00:00",
+                                    "grace_period": 2,
+                                    "upfront": false
+                                }]
+                            }
                         }]
-                    }]
-                }
-            },
+                    },
+                    "companions": {"data": []},
+                    "fundraisers": {
+                        "data": [{
+                            "id": "2062b1ff-ea5d-4a64-a167-1a28847239fe",
+                            "name": "Send Cydney Tavares Hodkiewicz to Nicaragua",
+                            "type": "general",
+                            "fund_id": "74ec2cec-80cb-4540-8222-3adead95c770",
+                            "goal_amount": "2024.00",
+                            "raised_amount": "100.00",
+                            "raised_percent": 5,
+                            "donors_count": 1,
+                            "sponsor_id": "65611de2-35f9-4263-87e3-83d01d2730ec",
+                            "sponsor_type": "users",
+                            "url": "nicaragua-2017-701",
+                            "public": true,
+                            "show_donors": true,
+                            "status": "open",
+                            "description": "I want to share some exciting news with you regarding an incredible opportunity! I am joining a passionate team of fellow missionaries for a life-altering short-term trip. We will be in country focusing on evangelism, humanitarian aid, and more! The government and local leaders are open and ready for our team. I have felt a compassion for the lost and broken for some time now and believe this is the first step in my calling to the nations of the world. This is sure to be an unforgettable experience.\n\nIn preparation for departure, I am seeking support, both financially and in prayer. I need to raise funds to make my trip possible. Will you consider a gift of $25, $50 or $100 or more to make my dream a reality?\n\nI sincerely appreciate your prayerful consideration in helping make this trip possible.",
+                            "started_at": "2017-05-15 14:10:51",
+                            "ended_at": "2017-07-22 00:00:00",
+                            "created_at": "2017-05-15 14:10:53",
+                            "updated_at": "2017-05-15 14:10:53",
+                            "tags": [],
+                            "links": [{
+                                "rel": "self",
+                                "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe"
+                            }, {
+                                "rel": "donors",
+                                "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe\/donors"
+                            }, {
+                                "rel": "donations",
+                                "uri": "https:\/\/missions.dev\/api\/fundraisers\/2062b1ff-ea5d-4a64-a167-1a28847239fe\/donations"
+                            }]
+                        }]
+                    }
+                },
             ],
             "meta": {
                 "pagination": {
@@ -3193,7 +3333,7 @@ export default {
                         "code": "ni",
                         "name": "Nicaragua"
                     },
-                    "room_types": { "total": 0 },
+                    "room_types": {"total": 0},
                     "email": null,
                     "url": null,
                     "short_desc": "",
@@ -3204,6 +3344,109 @@ export default {
                         {
                             "rel": "self",
                             "uri": "/api/regions/45bd0918-bffa-447e-8af2-fb135b82a8c8/accommodations/faed1eec-e4d2-483e-a23e-b609b5d54164"
+                        }
+                    ]
+                },
+                {
+                    "id": "c9006243-4942-4709-932c-ace2cc6d5fc1",
+                    "region_id": "45bd0918-bffa-447e-8af2-fb135b82a8c8",
+                    "name": "4 Seasons Hotel",
+                    "rooms_count": {
+                        "Standard": 0,
+                        "Double": 0,
+                        "Double (married)": 0,
+                        "Triple": 0,
+                        "total": 0
+                    },
+                    "room_types": {"total": 0},
+                    "occupants_count": 0,
+                    "address_one": null,
+                    "address_two": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "phone": null,
+                    "fax": null,
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "email": null,
+                    "url": null,
+                    "short_desc": "",
+                    "created_at": "2017-05-26 17:30:02",
+                    "updated_at": "2017-05-26 17:30:02",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/regions/45bd0918-bffa-447e-8af2-fb135b82a8c8/accommodations/c9006243-4942-4709-932c-ace2cc6d5fc1"
+                        }
+                    ]
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 2,
+                    "count": 2,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.accommodation) {
+            body.data = _.findWhere(body.data, {id: pathMatch.accommodation});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *regions/:region/accommodations'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "c9006243-4942-4709-932c-ace2cc6d5fc1",
+                    "region_id": "45bd0918-bffa-447e-8af2-fb135b82a8c8",
+                    "name": "4 Seasons Hotel",
+                    "rooms_count": {
+                        "Standard": 0,
+                        "Double": 0,
+                        "Double (married)": 0,
+                        "Triple": 0,
+                        "total": 0
+                    },
+                    "room_types": {"total": 0},
+                    "occupants_count": 0,
+                    "address_one": null,
+                    "address_two": null,
+                    "city": null,
+                    "state": null,
+                    "zip": null,
+                    "phone": null,
+                    "fax": null,
+                    "country": {
+                        "code": "ni",
+                        "name": "Nicaragua"
+                    },
+                    "email": null,
+                    "url": null,
+                    "short_desc": "",
+                    "created_at": "2017-05-26 17:30:02",
+                    "updated_at": "2017-05-26 17:30:02",
+                    "deleted_at": null,
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/regions/45bd0918-bffa-447e-8af2-fb135b82a8c8/accommodations/c9006243-4942-4709-932c-ace2cc6d5fc1"
                         }
                     ]
                 }
@@ -3271,7 +3514,7 @@ export default {
                                     "code": "ni",
                                     "name": "Nicaragua"
                                 },
-                                "room_types": { "total": 0 },
+                                "room_types": {"total": 0},
                                 "email": null,
                                 "url": null,
                                 "short_desc": "",
@@ -3325,7 +3568,6 @@ export default {
         }
     },
     ['POST *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
-        debugger;
         let body = {
             "data": [
                 {
@@ -3596,20 +3838,122 @@ export default {
     },
 
     // Uploads API
-    ['GET *uploads(/:id)'] (pathMatch, query, request) {
+    ['GET *uploads(/:upload)'] (pathMatch, query, request) {
         let body;
         switch (request.params.type) {
             case 'avatar':
+            default:
                 body = {
-                    "data": [],
+                    "data": [
+                        {
+                        "id": "90fd1c9a-78f1-4d2a-907d-31dbda79211e",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                        "name": "1n1d17_white",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:50:59",
+                        "updated_at": "2017-06-14 23:50:59",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+                    }, {
+                        "id": "23615728-e37b-4559-bfff-62789f5c62e1",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                        "name": "a",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:51:21",
+                        "updated_at": "2017-06-14 23:51:21",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/23615728-e37b-4559-bfff-62789f5c62e1"}]
+                    }, {
+                        "id": "5ec67a1f-bcf8-4578-8f9b-0402a308e624",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
+                        "name": "a",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:52:40",
+                        "updated_at": "2017-06-14 23:52:40",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/5ec67a1f-bcf8-4578-8f9b-0402a308e624"}]
+                    }, {
+                        "id": "84633065-1975-4779-8309-b6b1e755782a",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
+                        "name": "a",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:51:15",
+                        "updated_at": "2017-06-14 23:51:15",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/84633065-1975-4779-8309-b6b1e755782a"}]
+                    }, {
+                        "id": "94c1b1c1-ae1c-4c83-ad0d-152eac4bf4cc",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                        "name": "a",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:52:48",
+                        "updated_at": "2017-06-14 23:52:48",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/94c1b1c1-ae1c-4c83-ad0d-152eac4bf4cc"}]
+                    }, {
+                        "id": "ea875a73-9a2c-4cfb-a010-27186c65d11e",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                        "name": "a",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:51:01",
+                        "updated_at": "2017-06-14 23:51:01",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/ea875a73-9a2c-4cfb-a010-27186c65d11e"}]
+                    }, {
+                        "id": "0a32f560-dcb1-4129-9a20-1714eec8448a",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                        "name": "ab",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:52:29",
+                        "updated_at": "2017-06-14 23:52:29",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/0a32f560-dcb1-4129-9a20-1714eec8448a"}]
+                    }, {
+                        "id": "235ed5ce-46ad-4d6e-bcc4-6d6d9be867c8",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
+                        "name": "ab",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:51:12",
+                        "updated_at": "2017-06-14 23:51:12",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/235ed5ce-46ad-4d6e-bcc4-6d6d9be867c8"}]
+                    }, {
+                        "id": "6cbb03dc-abf1-4d65-a9a2-a662f719d17b",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg",
+                        "name": "ab",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:52:44",
+                        "updated_at": "2017-06-14 23:52:44",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/6cbb03dc-abf1-4d65-a9a2-a662f719d17b"}]
+                    }, {
+                        "id": "6e593928-716f-4fff-bb37-dcb12716c6de",
+                        "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-red-400x400.jpg",
+                        "name": "ab",
+                        "type": "avatar",
+                        "meta": null,
+                        "created_at": "2017-06-14 23:51:07",
+                        "updated_at": "2017-06-14 23:51:07",
+                        "tags": [],
+                        "links": [{"rel": "self", "uri": "\/uploads\/6e593928-716f-4fff-bb37-dcb12716c6de"}]
+                    }],
                     "meta": {
                         "pagination": {
-                            "total": 0,
-                            "count": 0,
-                            "per_page": 6,
+                            "total": 1659,
+                            "count": 10,
+                            "per_page": 10,
                             "current_page": 1,
-                            "total_pages": 0,
-                            "links": []
+                            "total_pages": 166,
+                            "links": {"next": "https:\/\/missions.dev\/api\/uploads?page=2"}
                         }
                     }
                 };
@@ -3697,6 +4041,12 @@ export default {
                 break;
         }
 
+        if (pathMatch.upload) {
+            body.data = _.findWhere(body.data, {id: pathMatch.upload});
+            delete body.meta;
+        }
+
+
         return {
             body: body,
             status: 200,
@@ -3705,6 +4055,27 @@ export default {
             delay: Settings.delay, // millisecond
         }
 
+    },
+    ['POST *uploads(/:upload)'] (pathMatch, query, request) {
+        let body = {
+            "id": "b4da362f-2524-4eb7-abaa-8aceb6fdd618",
+            "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+            "name": request.body.name || "1n1d17_white",
+            "type": request.body.type || "avatar",
+            "meta": null,
+            "created_at": "2017-06-14 23:50:59",
+            "updated_at": "2017-06-14 23:50:59",
+            "tags": request.body.tags || [],
+            "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+        };
+
+        return {
+            body: body,
+                status: 200,
+                statusText: 'OK',
+                headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
     },
 
     // Utilities API
@@ -5123,7 +5494,7 @@ export default {
         };
 
         let body = {};
-        if(pathMatch.type) {
+        if (pathMatch.type) {
             body.roles = roles[pathMatch.type]
         } else {
             body.roles = _.extend({}, roles.leadership, roles.general, roles.medical);

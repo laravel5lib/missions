@@ -16317,6 +16317,33 @@ body:not(.modal-open) {
         bottom: 5%;
         padding-bottom: 0px; } }
 
+.hover-container {
+  position: relative; }
+  .hover-container .hover-image {
+    display: block;
+    width: 100%;
+    height: auto; }
+  .hover-container .hover-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0.8;
+    transition: .5s ease;
+    background: #f6323e; }
+    .hover-container .hover-overlay .hover-text {
+      color: #000;
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%); }
+  .hover-container:hover .hover-overlay {
+    opacity: 0; }
+
 .prof-cover-photo {
   height: 400px;
   overflow: hidden; }

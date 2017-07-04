@@ -59,6 +59,10 @@ class RoomOccupantsController extends Controller
 
         $this->occupant->create($reservations, $roomId);
 
+        if ($request->has('reservation_id') && $request->get('room_leader') === true) {
+            $this->occupant->promote($roomId, $request->get('reservation_id'));
+        }
+
         $occupants = $this->occupant->getAll($roomId);
 
         return $this->response->collection($occupants, new OccupantTransformer);

@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
 //        Commands\ExtractAccounting::class, // TODO delete
         Commands\ArchiveOldFunds::class, //Commands/Funds/Archive
         Commands\Requirements\Add::class,
-        Commands\Requirements\Remove::class
+        Commands\Requirements\Remove::class,
+        Commands\Utilities\UpdateRoomingPlansToMultiGroups::class
     ];
 
     /**

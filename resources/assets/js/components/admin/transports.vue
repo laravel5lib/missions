@@ -37,6 +37,7 @@
                                 <td>{{ transport.name }}</td>
                                 <td>{{ transport.vessel_no }}</td>
                                 <td>
+                                    <a class="btn btn-xs btn-primary-hollow" :href="'transports/' + transport.id">Select</a>
                                     <a @click="openTransportModal(transport)"><i class="fa fa-cog"></i></a>
                                     <a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i></a>
                                 </td>

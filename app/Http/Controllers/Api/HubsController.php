@@ -50,6 +50,10 @@ class HubsController extends Controller
             'country_code' => $request->json('country_code')
         ]);
 
+        if ($request->json('activity_id')) {
+            $hub->activities()->sync([$request->json('activity_id')], false);
+        }
+
         return $this->response->item($hub, new HubTransformer);
     }
 
@@ -69,7 +73,7 @@ class HubsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -87,6 +91,10 @@ class HubsController extends Controller
             'zip' => $request->json('zip', $hub->zip),
             'country_code' => $request->json('country_code', $hub->country_code)
         ]);
+
+        if ($request->json('activity_id')) {
+            $hub->activities()->sync([$request->json('activity_id')], false);
+        }
 
         return $this->response->item($hub, new HubTransformer);
     }

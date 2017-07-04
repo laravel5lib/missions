@@ -318,7 +318,7 @@
 					params.campaign = this.campaignId;
                 } else {
                     params.campaign = this.campaignId;
-                    params.groupd = [this.groupId];
+                    params.groups = [this.groupId];
 
                 }
                 this.exportFilters = params;
@@ -378,7 +378,7 @@
 	        handleRoomTypeSettings(plan, settings, promises) {
                 _.each(settings, function (val, property) {
                     let promise;
-                    if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'groups', 'group_ids'], property)) {
+                    if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'groups', 'group_ids', 'locked'], property)) {
                         if (settings[property + '_method'] === 'PUT') {
                             if (val > 0) {
                                 promise = this.PlansResource.update({
@@ -418,7 +418,7 @@
 
                 // update name and short_desc properties
 	            promises.push(this.PlansResource.update({ plan: this.selectedPlan.id},
-		            { name: settingsData.name, short_desc: settingsData.short_desc, group_ids: settingsData.group_ids}));
+		            { name: settingsData.name, short_desc: settingsData.short_desc, group_ids: settingsData.group_ids, locked: settingsData.locked}));
 
 	            this.handleRoomTypeSettings(this.selectedPlan, settingsData, promises);
 

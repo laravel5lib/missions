@@ -24,13 +24,13 @@
 					<label for="" class="control-label">Type</label>
 					<select class="form-control" v-model="squadsFilters.type">
 						<option :value="">-- Select --</option>
-						<option :value="type.id" v-for="type in squadTypes">{{type.name | capitalize}}</option>
+						<option :value="type.name" v-for="type in squadTypes">{{type.name | capitalize}}</option>
 					</select>
 				</div>
 
 				<div class="form-group">
 					<label>Travel Group</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 					          :value.sync="squadsFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>

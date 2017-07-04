@@ -72,6 +72,30 @@
 				Max. Age
 				<i class="fa fa-close"></i>
 			</span>
+			<span v-if="propertyExists('minAmountRaised')" style="margin-right:2px;" class="label label-default" v-show="filters.minAmountRaised != null" @click="filters.minAmountRaised = null" >
+				Min. $ Raised
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('maxAmountRaised')" style="margin-right:2px;" class="label label-default" v-show="filters.maxAmountRaised != null" @click="filters.maxAmountRaised = null" >
+				Max. $ Raised
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('minPercentRaised')" style="margin-right:2px;" class="label label-default" v-show="filters.minPercentRaised != null" @click="filters.minPercentRaised = null" >
+				Min. % Raised
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('maxPercentRaised')" style="margin-right:2px;" class="label label-default" v-show="filters.maxPercentRaised != null" @click="filters.maxPercentRaised = null" >
+				Max. % Raised
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('hasRoom')" style="margin-right:2px;" class="label label-default" v-show="filters.hasRoom !== null" @click="filters.hasRoom = null,syncFilters()" >
+				Has Room
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('noRoom')" style="margin-right:2px;" class="label label-default" v-show="filters.noRoom !== null" @click="filters.noRoom = null,syncFilters()" >
+				No Room
+				<i class="fa fa-close"></i>
+			</span>
 		</div>
 	</div>
 </template>

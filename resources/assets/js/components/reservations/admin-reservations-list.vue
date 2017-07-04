@@ -298,11 +298,11 @@
 	import vSelect from "vue-select";
 	import exportUtility from '../export-utility.vue';
 	import reservationsFilters from '../filters/reservations-filters.vue';
-	import reservationsFiltersIndicator from '../filters/filters-indicator.vue';
+	import filtersIndicator from '../filters/filters-indicator.vue';
 	import reservationReports from '../admin/reporting/reservation-reports.vue';
 	export default{
 		name: 'admin-reservations-list',
-		components: {vSelect, exportUtility, reservationReports, reservationsFilters, reservationsFiltersIndicator},
+		components: {vSelect, exportUtility, reservationReports, reservationsFilters, filtersIndicator},
 		props: {
 			tripId: {
 				type: String,
@@ -459,21 +459,7 @@
 			'per_page': function (val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
-			},
-            'hasRoomInPlan': function (val, oldVal) {
-			    if (val) {
-                    this.filters.hasRoom = 'plans';
-                } else {
-			        this.filters.hasRoom = null;
-                }
-            },
-            'noRoomInPlan': function (val, oldVal) {
-                if (val) {
-                    this.filters.noRoom = 'plans';
-                } else {
-                    this.filters.noRoom = null;
-                }
-            }
+			}
         },
         methods: {
         	getIncomplete(reservation) {

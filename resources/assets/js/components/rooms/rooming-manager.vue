@@ -198,7 +198,7 @@
 									<h5>Rooms</h5>
 								</div>
 								<div class="form-group col-xs-6 text-right">
-									<button class="btn btn-primary btn-xs" type="button" @click="openNewRoomModel">Add Room</button>
+									<button class="btn btn-primary btn-xs" :disabled="isLocked" type="button" @click="openNewRoomModel">Add Room</button>
 								</div>
 
 								<div class="form-group col-xs-12">
@@ -574,9 +574,6 @@
                 this.roomsPagination.current_page = 1;
                 this.getRooms();
             },
-            isLocked(){
-                return !this.isAdminRoute && this.currentRoom.locked;
-            },
             reservationsSearch(val) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
@@ -729,6 +726,11 @@
                 return member.present_companions = companionIds.length - presentIds.length;
             },
             addCompanionsToRoom(member, room) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This rooming plan is currently locked');
+                    return;
+                }
+
                 let memberIds = _.filter(_.pluck(room.occupants, 'id'), function (id) { return id !== member.id; });
                 let companionIds = _.pluck(member.companions.data, 'id');
                 let presentIds = [];
@@ -766,6 +768,11 @@
                 }.bind(this));
             },
             removeFromRoom(occupant, room) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This rooming plan is currently locked');
+                    return;
+                }
+
                 return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {
                     room.occupants = _.reject(room.occupants, function (member) {
                         return member.id === occupant.id;
@@ -776,6 +783,11 @@
                 });
             },
             addToRoom(occupant, leader, room) {
+                if (this.isLocked) {
+                    this.$root.$emit('showInfo', 'This rooming plan is currently locked');
+                    return;
+                }
+
                 if (room.occupants_count >= room.type.data.rules.occupancy_limit) {
                     this.$root.$emit('showInfo', room.label +' currently has the max number of occupants');
                     return;

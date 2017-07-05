@@ -24,17 +24,17 @@ class TransportTransformer extends TransformerAbstract {
      */
     public function transform(Transport $transport)
     {
-        return [
+        $array = [
             'id'          => $transport->id,
             'campaign_id' => $transport->campaign_id,
             'type'        => $transport->type,
             'vessel_no'   => $transport->vessel_no,
             'name'        => $transport->name,
+            'call_sign'   => $transport->call_sign,
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
             'passengers'  => $transport->passengers_count,
             'seats_left'  => $transport->seatsLeft(),
-            'call_sign'   => $transport->call_sign,
             'created_at'  => $transport->created_at->toDateTimeString(),
             'updated_at'  => $transport->updated_at->toDateTimeString(),
             'links'       => [
@@ -44,6 +44,16 @@ class TransportTransformer extends TransformerAbstract {
                 ]
             ]
         ];
+
+        if (in_array('groups', request('with'))) {
+            $array['groups'] = $transport->groups();
+        }
+
+        if (in_array('designations', request('with'))) {
+            $array['designations'] = $transport->designations();
+        }
+
+        return $array;
     }
 
     /**

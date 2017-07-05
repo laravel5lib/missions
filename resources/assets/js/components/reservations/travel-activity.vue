@@ -88,7 +88,7 @@
 			}
         },
 	    watch: {
-            activityType(val, oldVal) {
+            activityType() {
                 this.handleLabels();
             },
 	    },

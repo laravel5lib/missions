@@ -45,12 +45,14 @@ class TransportTransformer extends TransformerAbstract {
             ]
         ];
 
-        if (in_array('groups', request('with'))) {
-            $array['groups'] = $transport->groups();
-        }
+        if (request('with')) {
+            if (in_array('groups', request('with'))) {
+                $array['groups'] = $transport->groups();
+            }
 
-        if (in_array('designations', request('with'))) {
-            $array['designations'] = $transport->designations();
+            if (in_array('designations', request('with'))) {
+                $array['designations'] = $transport->designations();
+            }
         }
 
         return $array;

@@ -17,6 +17,13 @@ class Transport extends Model
         'created_at', 'updated_at'
     ];
 
+    public function seatsLeft()
+    {
+        $this->load('passengers');
+
+        return $this->capacity - $this->passengers()->count();
+    }
+
     public function campaign()
     {
         return $this->belongsTo(Campaign::class);

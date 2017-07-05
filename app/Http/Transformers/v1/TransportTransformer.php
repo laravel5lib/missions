@@ -32,6 +32,8 @@ class TransportTransformer extends TransformerAbstract {
             'name'        => $transport->name,
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
+            'passengers'  => $transport->passengers_count,
+            'seats_left'  => $transport->seatsLeft(),
             'call_sign'   => $transport->call_sign,
             'created_at'  => $transport->created_at->toDateTimeString(),
             'updated_at'  => $transport->updated_at->toDateTimeString(),

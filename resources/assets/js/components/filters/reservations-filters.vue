@@ -288,7 +288,6 @@
         components: {vSelect},
 	    props: {
             // Main object that contains all filters used by the parent component for API calls
-		    // age[] default is used to avoid errors caused by (possibly) empty filter objects
 			filters: {
 			    type: Object,
 				required: true,
@@ -419,7 +418,7 @@
                 // Instead of concerning the filters component about where it is
 	            // It is may be best to behave based on the filter object passed in
 	            // We can ho this be checking whether a property exists in it
-	            return this.filters.hasOwnProperty(property);
+	            return this.filters && this.filters.hasOwnProperty(property);
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;

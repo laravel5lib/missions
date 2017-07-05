@@ -2,6 +2,10 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
+                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
+                    <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
+                </aside>
                 <div class="panel panel-default">
                     
                     <div class="panel-heading">
@@ -22,29 +26,119 @@
 
 
                     </div>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Name</th>
-                                <th>Number</th>
-                                <th><i class="fa fa-cog"></i></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="transport in transports">
-                                <td>{{ transport.type | capitalize }}</td>
-                                <td>{{ transport.name }}</td>
-                                <td>{{ transport.vessel_no }}</td>
-                                <td>
-                                    <a class="btn btn-xs btn-primary-hollow" :href="'transports/' + transport.id">Select</a>
-                                    <a @click="openTransportModal(transport)"><i class="fa fa-cog"></i></a>
-                                    <a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                </div>
 
+                <!-- Search and Filter -->
+                <div class="row">
+                    <form class="form-inline">
+                        <div class="form-group col-xs-8">
+                            <div class="input-group input-group-sm col-xs-12">
+                                <input type="text" class="form-control" v-model="options.params.search" debounce="300" placeholder="Search">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-4 text-right">
+                            <button type="button" class="btn btn-sm btn-default" @click="showFilters = !showFilters">Filters</button>
+                            <button type="button" class="btn btn-sm btn-default" @click="expandAll">Expand All</button>
+                        </div>
+                        <div class="col-xs-12">
+                            <hr class="divider inv">
+                        </div>
+                    </form>
+                </div>
+
+
+                <div class="panel-group" id="transportsAccordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" v-for="transport in transports">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <div class="row">
+                                    <div class="col-xs-9">
+                                        <div class="media">
+                                            <div class="media-body" style="vertical-align:middle;">
+                                                <h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
+                                                    <a :href="'transports/' + transport.id">{{ transport.name }}</a>
+                                                    <br />
+                                                    <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
+                                                        {{ transport.type | capitalize }}
+                                                        <span class="label label-default" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+                                                    </small>
+                                                </h6>
+                                            </div><!-- end media-body -->
+                                        </div><!-- end media -->
+                                    </div>
+                                    <div class="col-xs-3 text-right action-buttons">
+                                        <a :href="'transports/' + transport.id" class="btn btn-xs btn-primary">View</a>
+                                        <dropdown type="default">
+                                            <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+                                                <span class="fa fa-ellipsis-h"></span>
+                                            </button>
+                                            <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
+                                                <li><a @click="openTransportModal(transport)"><i class="fa fa-cog"></i> Edit</a></li>
+                                                <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>
+                                                <!--<li class="dropdown-header">Assign To Squad</li>
+                                                <li role="separator" class="divider"></li>
+                                                <template v-for="squad in currentSquadGroups | orderBy 'callsign'">
+                                                    <template v-if="squad.callsign === 'Squad Leaders'">
+                                                        <li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(transport)"><a @click="assignToSquad(transport, squad, false)">Squad Leader</a></li>
+                                                    </template>
+                                                    <template v-else>
+                                                        <li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(transport)"><a @click="assignToSquad(transport, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
+                                                        <li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(transport, squad, false)" v-text="squad.callsign"></a></li>
+                                                    </template>
+                                                </template>
+                                                <li role="separator" class="divider"></li>
+                                                <li class="dropdown-header">Change Role</li>
+                                                <li role="separator" class="divider"></li>
+                                                <li v-if="transport.desired_role.name !== 'Squad Leader'"><a @click="updateRole(transport, 'Squad Leader')">Squad Leader</a></li>
+                                                <li v-if="transport.desired_role.name !== 'Group Leader'"><a @click="updateRole(transport, 'Group Leader')">Group Leader</a></li>
+-->
+                                            </ul>
+                                        </dropdown>
+                                        <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+                                            <i class="fa fa-angle-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <hr class="divider sm">
+                                <div class="row">
+                                    <div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
+                                    <div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
+                                    <div class="col-sm-3"><label>Capacity</label> {{transport.capacity}}</div>
+                                    <div class="col-sm-3"><label>Seats Left</label> {{transport.seats_left}}</div>
+                                </div>
+
+                            </h4>
+                        </div>
+                        <div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>Passenger Groups</label>
+                                        <p class="small">
+                                            <template v-for="group in transport.groups">
+                                                {{ group.name }}
+                                                <template v-if="($index + 1) < transport.groups.length">&middot;</template>
+                                            </template>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Designations</label>
+                                        <p class="small">
+                                            <template v-for="designation in transport.designations">
+                                                {{ designation }}
+                                                <template v-if="($index + 1) < transport.designations.length">&middot;</template>
+                                            </template>
+                                        </p>
+
+                                    </div>
+                                </div><!-- end row -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 text-center">
+                    <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
                 </div>
             </div>
         </div>
@@ -152,14 +246,16 @@
     </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     import _ from 'underscore';
     import vSelect from 'vue-select';
     import errorHandler from '../error-handler.mixin';
     import utilities from '../utilities.mixin';
+    import transportsFilters from '../filters/transports-filters.vue';
     export default {
         name: 'transports',
         mixins: [errorHandler, utilities],
-        components: {vSelect},
+        components: {vSelect, transportsFilters},
         props: {
           campaignId: {
             type: String,
@@ -171,13 +267,22 @@
                 validatorHandle: 'TransportsModal',
 
                 transports: [],
+                showFilters: false,
+                filters: {
+                    groups: null,
+                    designation: '',
+                    trip_type: '',
+                    type: '',
+                    max_passengers: 9999,
+                    min_passengers: 0,
+                },
                 options: {
                     params: {
                         isDomestic: 'yes',
                         campaign: this.campaignId,
                         per_page: 10,
                         search: '',
-                        filters: []
+                        with: ['groups','designations']
                     }
                 },
                 pagination: { current_page: 1},
@@ -209,6 +314,9 @@
         },
         watch: {
             'options.params.isDomestic'(val){
+                this.fetch();
+            },
+            'options.params.search'(val){
                 this.fetch();
             },
             selectedAirlineObj(val, oldVal){
@@ -266,8 +374,21 @@
                     this.fetch();
                 }
             },
+            resetFilters(){
+                this.filters = {
+                    groups: null,
+                    designation: '',
+                    trip_type: '',
+                    type: '',
+                    max_passengers: 9999,
+                    min_passengers: 0,
+                };
+            },
             fetch() {
-                this.TransportsResource.get(this.options.params).then(function (response) {
+                let params = _.extend({}, this.options.params);
+                params = _.extend(params, this.filters);
+                params.page = _.isObject(this.pagination) ? this.pagination.page : 1;
+                this.TransportsResource.get(params).then(function (response) {
                     this.transports = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 }, function (error) {
@@ -330,6 +451,10 @@
                     this.showTransportDeleteModal = false;
                     this.selectedTransport = null;
                 });
+            },
+            expandAll(){
+                if ($.fn.collapse)
+                    $('.transport-item').collapse('show');
             },
         },
         ready() {

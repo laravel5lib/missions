@@ -29,7 +29,10 @@ class ActivityRequest extends FormRequest
             'occurred_at' => 'required|date',
             'participant_id' => 'required|string',
             'participant_type' => 'required|string',
-            'activity_type_id' => 'required|string|exists:activity_types,id'
+            'activity_type_id' => 'required|string|exists:activity_types,id',
+            'transport_id' => 'string|exists:transports,id',
+            'itinerary_id' => 'string|exists:itineraries,id',
+            'hub_id' => 'string|exists:hubs,id'
         ];
 
         if ($this->isMethod('put')) {
@@ -39,7 +42,10 @@ class ActivityRequest extends FormRequest
                 'occurred_at' => 'sometimes|required|date',
                 'participant_id' => 'sometimes|required|string',
                 'participant_type' => 'sometimes|required|string',
-                'activity_type_id' => 'sometimes|required|string|exists:activity_types,id'
+                'activity_type_id' => 'sometimes|required|string|exists:activity_types,id',
+                'transport_id' => 'string|exists:transports,id',
+                'itinerary_id' => 'string|exists:itineraries,id',
+                'hub_id' => 'string|exists:hubs,id'
             ];
         }
 

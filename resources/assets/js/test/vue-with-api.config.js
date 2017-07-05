@@ -315,6 +315,15 @@ Vue.filter('underscoreToSpace', function (value) {
     return value.replace(/_/g, ' ');
 });
 
+Vue.mixin({
+    data() {
+        return {
+            // use as data property instead of computed for easy switching
+            isAdminRoute: true,
+        }
+    }
+});
+
 let RootInstance = {
     http: {
         headers: {
@@ -323,6 +332,40 @@ let RootInstance = {
     },
     data: {
         userId: '',
+        someObject: {},
+        someArray: [],
+        someString: '',
+        // filters test Object
+        filtersVars: {
+            filters: {
+                type: '',
+                //tags: [],
+                user: [],
+                groups: [],
+                campaign: null,
+                gender: '',
+                status: '',
+                shirtSize: [],
+                hasCompanions: null,
+                due: '',
+                todoName: '',
+                todoStatus: null,
+                designation: '',
+                requirementName: '',
+                requirementStatus: '',
+                dueName: '',
+                dueStatus: '',
+                rep: '',
+                age: [0, 120],
+                minPercentRaised: '',
+                maxPercentRaised: '',
+                minAmountRaised: '',
+                maxAmountRaised: ''
+            },
+            pagination: {
+                current_page: 1,
+            }
+        }
     },
     computed: {
         impersonatedUser() {
@@ -396,6 +439,49 @@ let RootInstance = {
         startTour(){
             window.tour.start();
         },
+
+        // filters test methods
+        filtersMethodsCallback(){
+            console.log('callback function called');
+        },
+        filtersMethodsReset(){
+            this.filtersVars.filters = {
+                type: '',
+                //tags: [],
+                user: [],
+                groups: [],
+                campaign: null,
+                gender: '',
+                status: '',
+                shirtSize: [],
+                hasCompanions: null,
+                due: '',
+                todoName: '',
+                todoStatus: null,
+                designation: '',
+                requirementName: '',
+                requirementStatus: '',
+                dueName: '',
+                dueStatus: '',
+                rep: '',
+                age: [0, 120],
+                minPercentRaised: '',
+                maxPercentRaised: '',
+                minAmountRaised: '',
+                maxAmountRaised: ''
+            };
+            console.log('reset callback function called');
+        },
+
+        // Simple error handlers for API calls
+        handleApiSoftError(response) {
+            console.error(response.body.message ? response.body.message : response.body);
+        },
+        handleApiError(response) {
+            console.error(response.body.message ? response.body.message : response.body);
+            this.$root.$emit('showError', response.body.message)
+        },
+
 
     },
     events: {

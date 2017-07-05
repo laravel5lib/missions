@@ -1,5 +1,6 @@
 // The purpose of this mixin is to work along with custom directives to provide a standard system of
 // error handling and error message rendering that is consistent and predictable.
+import _ from 'underscore';
 export default {
     data(){
         return {
@@ -43,7 +44,7 @@ export default {
         checkForError(field){
             // if user clicked submit button while the field is invalid trigger error styles 
             if (this.attemptSubmit) {
-                if (_.isString(field) && this['$' + this.validatorHandle][field]) {
+                if (_.isString(field) && this['$' + this.validatorHandle] && this['$' + this.validatorHandle][field]) {
                     return this['$' + this.validatorHandle][field].invalid;
                 }
                 //console.warn(field + ' does not exist in ' + this.validatorHandle);

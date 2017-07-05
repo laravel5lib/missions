@@ -25,7 +25,8 @@ class RoomingPlanRequest extends FormRequest
     {
         $rules = [
             'campaign_id' => 'required|exists:campaigns,id',
-            'group_id' => 'required|exists:groups,id',
+            'group_ids' => 'array',
+            'group_ids.*' => 'required|exists:groups,id',
             'name' => 'required|string',
             'short_desc' => 'string'
         ];
@@ -33,7 +34,8 @@ class RoomingPlanRequest extends FormRequest
         if ($this->isMethod('put')) {
             $rules = [
                 'campaign_id' => 'sometimes|required|exists:campaigns,id',
-                'group_id' => 'sometimes|required|exists:groups,id',
+                'group_ids' => 'array',
+                'group_ids.*' => 'exists:groups,id',
                 'name' => 'sometimes|required|string',
                 'short_desc' => 'string'
             ];

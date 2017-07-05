@@ -65,4 +65,20 @@ class EloquentPlan extends EloquentRepository implements Plan
         return $plan;
     }
 
+    /**
+     * Add/Remove Groups
+     *
+     * @param $id
+     * @param array $groupIds
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function syncGroups($id, array $groupIds = [])
+    {
+        $plan = $this->getById($id);
+
+        $plan->groups()->sync($groupIds);
+
+        return $plan;
+    }
+
 }

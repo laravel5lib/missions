@@ -149,6 +149,14 @@ export default {
                     console.log(response);
                 });
         },
+        getActivityTypes() {
+            return this.$http.get('utilities/activities/types').then(function (response) {
+                    return this.UTILITIES.activityTypes = response.body;
+                },
+                function (response) {
+                    console.log(response);
+                });
+        },
         getTrips() {
             return this.$http.get('utilities/past-trips').then(function(response) {
                 return this.UTILITIES.trips = response.body;

@@ -24,4 +24,9 @@ class Itinerary extends Model
     {
         return $this->morphTo();
     }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
 }

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
-			<!--<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" storage="" teams></reservations-filters>-->
+			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" storage="" transports></reservations-filters>
 		</aside>
 		<aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
 			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" storage="" teams></reservations-filters>
@@ -22,42 +22,7 @@
 						<a class="btn btn-default btn-sm btn-block" @click="showPassengersFilters = true;">Filters</a>
 					</div>
 					<div class="col-xs-12">
-						<hr class="divider inv">
-						<div>
-							<label>Active Filters</label>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.type != ''" @click="reservationFilters.type = ''" >
-									Trip Type
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.groups.length" @click="reservationFilters.groups = []" >
-									Travel Group
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.hasCompanions !== null" @click="reservationFilters.hasCompanions = null" >
-									Companions
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.role !== ''" @click="reservationFilters.role = ''" >
-									Role
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.gender != ''" @click="reservationFilters.gender = ''" >
-									Gender
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.status != ''" @click="reservationFilters.status = ''" >
-									Status
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.age[0] != 0" @click="reservationFilters.age[0] = 0" >
-									Min. Age
-									<i class="fa fa-close"></i>
-								</span>
-							<span style="margin-right:2px;" class="label label-default" v-show="reservationFilters.age[1] != 120" @click="reservationFilters.age[1] = 120" >
-									Max. Age
-									<i class="fa fa-close"></i>
-								</span>
-						</div>
+						<filters-indicator :filters.sync="passengersFilters"></filters-indicator>
 					</div>
 				</form>
 				<div class="panel-group" id="PassengerAccordion" role="tablist" aria-multiselectable="true">
@@ -128,9 +93,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="passenger.reservation.data.companions.data.length && companionsPresentSquad(passenger, squad)">
-							<i class=" fa fa-info-circle"></i> {{passenger.reservation.data.present_companions}} companions not in group &middot; {{companionsPresentTeam(passenger)}} not on this squad.
-							<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToSquad(passenger, squad)"><i class="fa fa-plus-circle"></i> Companions</button>
+						<div class="panel-footer small clearfix" style="background-color: #ffe000;" v-if="passenger.reservation.data.companions.data.length && companionsPresentTransport(passenger)">
+							<i class=" fa fa-info-circle"></i> {{companionsPresentTransport(passenger)}} companion(s) not in transport.
+							<button type="button" class="btn btn-xs btn-default-hollow pull-right" @click="addCompanionsToTransport(passenger)"><i class="fa fa-plus-circle"></i> Companions</button>
 						</div>
 					</div>
 				</div>
@@ -250,11 +215,11 @@
     import errorHandler from '../error-handler.mixin';
     import utilities from '../utilities.mixin';
     import reservationsFilters from '../filters/reservations-filters.vue'
-    import reservationsFiltersIndicator from '../filters/filters-indicator.vue';
+    import filtersIndicator from '../filters/filters-indicator.vue';
     export default{
         name: 'transports-details-passengers',
 //        mixins: [errorHandler, utilities],
-	    components: {vSelect, reservationsFilters, reservationsFiltersIndicator},
+	    components: {vSelect, reservationsFilters, filtersIndicator},
 	    props: ['transport', 'campaignId'],
         data(){
             return {
@@ -265,8 +230,9 @@
                 reservations: [],
                 reservationsPagination: { current_page: 1 },
 	            passengersFilters: {
+                    groups: [],
                     gender: '',
-                    status: '',
+                    designation: '',
                     role: '',
                     age: [0, 120],
                     hasCompanions: null,
@@ -295,6 +261,12 @@
                 },
 	            deep: true
             },
+		    'passengersFilters.search'(){
+                this.getPassengers();
+		    },
+		    'reservationFilters.search'(){
+		        this.searchReservations();
+		    },
 	    },
         methods: {
             resetPassengerFilters(){},
@@ -325,13 +297,13 @@
                 });
             },
 	        addPassenger(reservation) {
-                this.PassengersResource.save({
+                return this.PassengersResource.save({
                     transport_id: this.transport.id,
                     reservation_id: reservation.id,
                 }).then(function (response) {
                     this.getPassengers();
                     this.searchReservations();
-                });
+                }, this.$root.handleApiError);
 	        },
 	        removePassenger(passenger) {
                 this.PassengersResource.delete({ passenger: passenger.id }).then(function (response) {
@@ -375,6 +347,29 @@
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
+            },
+            companionsPresentTransport(passenger) {
+				let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
+				let passengerIds = _.pluck(this.passengers, 'reservation_id');
+                let presentIds =  _.intersection(companionIds, passengerIds);
+                return companionIds.length - presentIds.length;
+            },
+            addCompanionsToTransport(passenger) {
+                let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
+                let passengerIds = _.pluck(this.passengers, 'reservation_id');
+				let notPresentIds = _.difference(companionIds, passengerIds);
+                // Check Limitations
+	            // Available Space
+
+	            let promises = [];
+	            _.each(notPresentIds, function (id) {
+		            promises.push(this.addPassenger({ id: id }));
+                }.bind(this));
+
+	            Promise.all(promises).then(function (values) {
+		            this.$root.$emit('showSuccess', 'Companions Added');
+                }bind(this))
+
             },
         },
         ready(){

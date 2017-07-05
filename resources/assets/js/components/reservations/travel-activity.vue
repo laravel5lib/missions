@@ -87,6 +87,11 @@
 			    return this && _.isObject(this.activity);
 			}
         },
+	    watch: {
+            activityType(val, oldVal) {
+                this.handleLabels();
+            },
+	    },
 	    events: {
             'validate-itinerary'() {
                 this.resetErrors();
@@ -100,21 +105,26 @@
                     function (response) {
                         console.log(response);
                     });
-            }
+            },
+	        handleLabels(){
+                let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
+                if (activityType) {
+                    switch (activityType.name) {
+                        case 'arrival':
+                            this.LABELS.dateTime = 'Arriving at Date & Time';
+                            break;
+                        case 'departure':
+                            this.LABELS.dateTime = 'Departing at Date & Time';
+                            break;
+                        case 'connection':
+                            this.LABELS.dateTime = 'Connection Departs at Date & Time';
+                            break;
+                    }
+                }
+	        },
         },
         ready(){
-	        let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
-	        switch (activityType.name) {
-		        case 'arrival':
-		            this.LABELS.dateTime = 'Arriving at Date & Time';
-		            break;
-		        case 'departure':
-                    this.LABELS.dateTime = 'Departing at Date & Time';
-                    break;
-		        case 'connection':
-                    this.LABELS.dateTime = 'Connection Departs at Date & Time';
-                    break;
-	        }
+	        this.handleLabels();
         }
     }
 </script>

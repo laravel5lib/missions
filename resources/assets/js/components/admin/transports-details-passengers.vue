@@ -368,7 +368,7 @@
 
 	            Promise.all(promises).then(function (values) {
 		            this.$root.$emit('showSuccess', 'Companions Added');
-                }bind(this))
+                }.bind(this))
 
             },
         },

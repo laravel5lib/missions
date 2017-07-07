@@ -22,10 +22,10 @@
 		</div>
 		<tabs v-if="transport">
 			<tab header="Itinerary">
-				<transports-details-itinerary :transport="transport" :campaign-id="campaignId"></transports-details-itinerary>
+				<transports-details-itinerary v-ref:itinerary :transport="transport" :campaign-id="campaignId"></transports-details-itinerary>
 			</tab>
 			<tab header="Passengers">
-				<transports-details-passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
+				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Notes">
 				<!--<notes type="transports"-->
@@ -58,9 +58,7 @@
         },
         data(){
             return {
-                validatorHandle: 'TransportsDetailsModal',
                 transport: null,
-
                 TransportsResource: this.$resource('transports{/transport}'),
 	            passengersCount: 0,
             }
@@ -69,7 +67,7 @@
             getTransport() {
                 this.TransportsResource.get({ transport: this.transportId }).then(function (response) {
 	                this.transport = response.body.data;
-                });
+                }, this.$root.handleApiError);
             }
         },
         ready(){

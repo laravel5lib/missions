@@ -438,7 +438,7 @@
                         this.showTransportsModal = false;
                         this.transportsModalEdit = false;
                         this.selectedTransport = null;
-                    })
+                    }, this.$root.handleApiError)
                 } else {
                     console.log(this.$TransportsModal);
                     this.$root.$emit('showError', 'Please check the form.');

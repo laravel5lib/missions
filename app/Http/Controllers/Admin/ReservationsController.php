@@ -45,7 +45,7 @@ class ReservationsController extends Controller
     {
         $this->authorize('view', $this->reservation);
 
-        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments']);
+        $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
 
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 

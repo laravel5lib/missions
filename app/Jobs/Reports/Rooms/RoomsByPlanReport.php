@@ -37,7 +37,7 @@ class RoomsByPlanReport extends Job implements ShouldQueue
     public function handle(Room $room)
     {
         $rooms = $room->filter(array_filter($this->request))
-            ->with('type', 'plans.group')
+            ->with('type', 'plans.groups')
             ->withOccupants();
 
         $data = $this->columnize($rooms);
@@ -66,11 +66,18 @@ class RoomsByPlanReport extends Job implements ShouldQueue
                 $occupantCols['Occupant '. $number .' Given Names'] = $occupant->given_names;
             }
 
+            $groups = $room->plans
+                ->pluck('groups')
+                ->flatten()
+                ->pluck('name')
+                ->flatten()
+                ->all();
+
             $columns = [
                 'Room Type' => $room->type->name,
                 'Room Label' => $room->label,
-                'Plan(s)' => $room->plans ? implode(',', $room->plans->pluck('name')->all()) : null,
-                'Group(s)' => $room->plans ? implode(',', $room->plans->pluck('group.name')->flatten()->all()) : null
+                'Plan(s)' => $room->plans ? implode(', ', $room->plans->pluck('name')->all()) : null,
+                'Group(s)' => $room->plans ? implode(', ', $groups) : null
             ];
 
             return $occupantCols + $columns;

@@ -294,7 +294,7 @@
                 this.PassengersResource.get(params).then(function (response) {
                     this.passengers = response.body.data;
                     this.passengersPagination = response.body.meta.pagination;
-                }, this.$root.handleApiError);
+                });
             },
 	        addPassenger(reservation) {
                 return this.PassengersResource.save({
@@ -309,7 +309,7 @@
                 this.PassengersResource.delete({ passenger: passenger.id }).then(function (response) {
                     this.getPassengers();
                     this.searchReservations();
-                }, this.$root.handleApiError);
+                });
 	        },
             searchReservations(){
                 let params = {
@@ -317,15 +317,24 @@
                     search: this.reservationFilters.search,
                     page: this.reservationsPagination.current_page,
                     current: true,
-                    campaign: this.campaignId,
                     //ignore: this.excludeReservationIds,
                     //noSquad: true,
                     designation: this.reservationFilters.designation,
                 };
 
-                params = _.extend(params, this.reservationFilters);
+                if (this.isAdminRoute) {
+                    params.campaign = this.campaignId;
+                } else {
+                    params.campaign = this.campaignId;
+                    //params.groups = new Array(this.groupId);
+                    //params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
+                }
 
-	            return this.$http.get('reservations', { params: params, before: function(xhr) {
+                $.extend(params, this.reservationFilters);
+
+
+                // this.$refs.spinner.show();
+                return this.$http.get('reservations', { params: params, before: function(xhr) {
                     if (this.lastReservationRequest) {
                         this.lastReservationRequest.abort();
                     }
@@ -333,7 +342,11 @@
                 } }).then(function (response) {
                     this.reservations = response.body.data;
                     this.reservationsPagination = response.body.meta.pagination;
-                }, this.$root.handleApiError);
+                    // this.$refs.spinner.hide();
+                }, function (error) {
+                    // this.$refs.spinner.hide();
+                    //TODO add error alert
+                });
             },
             companionsPresentTransport(passenger) {
 				let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
@@ -355,7 +368,7 @@
 
 	            Promise.all(promises).then(function (values) {
 		            this.$root.$emit('showSuccess', 'Companions Added');
-                }.bind(this))
+                }.bind(this));
 
             },
         },

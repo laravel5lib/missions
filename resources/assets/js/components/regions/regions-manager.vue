@@ -191,6 +191,9 @@
 									</div><!-- end panel-body -->
 								</div>
 							</div>
+							<div class="col-xs-12 text-center">
+								<pagination :pagination.sync="regionsPagination" :callback="getRegions"></pagination>
+							</div>
 						</div>
 					</template>
 					<template v-else>

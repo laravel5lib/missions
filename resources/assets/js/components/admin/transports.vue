@@ -76,23 +76,6 @@
                                             <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
                                                 <li><a @click="openTransportModal(transport)"><i class="fa fa-cog"></i> Edit</a></li>
                                                 <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>
-                                                <!--<li class="dropdown-header">Assign To Squad</li>
-                                                <li role="separator" class="divider"></li>
-                                                <template v-for="squad in currentSquadGroups | orderBy 'callsign'">
-                                                    <template v-if="squad.callsign === 'Squad Leaders'">
-                                                        <li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(transport)"><a @click="assignToSquad(transport, squad, false)">Squad Leader</a></li>
-                                                    </template>
-                                                    <template v-else>
-                                                        <li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(squad) && isLeadership(transport)"><a @click="assignToSquad(transport, squad, true)" v-text="squad.callsign + ' Leader'"></a></li>
-                                                        <li :class="{'disabled': isLocked}" v-if="canAssignToSquad(squad)"><a @click="assignToSquad(transport, squad, false)" v-text="squad.callsign"></a></li>
-                                                    </template>
-                                                </template>
-                                                <li role="separator" class="divider"></li>
-                                                <li class="dropdown-header">Change Role</li>
-                                                <li role="separator" class="divider"></li>
-                                                <li v-if="transport.desired_role.name !== 'Squad Leader'"><a @click="updateRole(transport, 'Squad Leader')">Squad Leader</a></li>
-                                                <li v-if="transport.desired_role.name !== 'Group Leader'"><a @click="updateRole(transport, 'Group Leader')">Group Leader</a></li>
--->
                                             </ul>
                                         </dropdown>
                                         <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">
@@ -104,7 +87,7 @@
                                 <div class="row">
                                     <div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
                                     <div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
-                                    <div class="col-sm-3"><label>Capacity</label> {{transport.capacity}}</div>
+                                    <div class="col-sm-3"><label>Passengers</label> {{transport.passengers}}</div>
                                     <div class="col-sm-3"><label>Seats Left</label> {{transport.seats_left}}</div>
                                 </div>
 
@@ -114,7 +97,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <label>Passenger Groups</label>
+                                        <label>Travel Groups</label>
                                         <p class="small">
                                             <template v-for="group in transport.groups">
                                                 {{ group.name }}
@@ -126,7 +109,7 @@
                                         <label>Designations</label>
                                         <p class="small">
                                             <template v-for="designation in transport.designations">
-                                                {{ designation }}
+                                                {{ designation.content }}
                                                 <template v-if="($index + 1) < transport.designations.length">&middot;</template>
                                             </template>
                                         </p>

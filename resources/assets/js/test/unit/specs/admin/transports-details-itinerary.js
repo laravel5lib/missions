@@ -38,3 +38,11 @@ test('transport populated', t => {
 test('activities populated', t => {
     t.not(AdminTransportsDetailsItineary.activities, []);
 });
+
+test('activity types populated', t => {
+    t.not(AdminTransportsDetailsItineary.UTILITIES.activityTypes, []);
+});
+
+test('', t => {
+
+});

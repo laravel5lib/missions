@@ -479,21 +479,7 @@
 			'per_page': function (val, oldVal) {
                 this.updateConfig();
                 this.searchReservations();
-			},
-            'hasRoomInPlan': function (val, oldVal) {
-			    if (val) {
-                    this.filters.hasRoom = 'plans';
-                } else {
-			        this.filters.hasRoom = null;
-                }
-            },
-            'noRoomInPlan': function (val, oldVal) {
-                if (val) {
-                    this.filters.noRoom = 'plans';
-                } else {
-                    this.filters.noRoom = null;
-                }
-            }
+			}
         },
         methods: {
         	getIncomplete(reservation) {

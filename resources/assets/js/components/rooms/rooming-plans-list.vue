@@ -292,7 +292,7 @@
                 this.$dispatch('rooming-wizard:plan-selected', plan);
             },
             getRoomTypes(){
-                return this.$http.get('rooming/types', { params: { campaign: this.campaignId }})
+                return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 }})
 	                .then(function (response) {
                         return this.roomTypes = response.body.data;
                     },

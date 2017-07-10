@@ -121,6 +121,7 @@ $api->version('v1', [
         $api->resource('squads.members', 'SquadMembersController');
     });
 
+    $api->resource('campaigns.transports', 'CampaignTransportsController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
     $api->resource('stories', 'StoriesController');

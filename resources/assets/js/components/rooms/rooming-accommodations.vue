@@ -136,6 +136,12 @@
                           </li>
                         </ul>
 					</div>
+					<div class="text-center">
+						<pagination :pagination.sync="regionsPagination"
+									:callback="getRegions"
+									size="small">
+						</pagination>
+					</div>
 				</template>
 				<template v-else>
 					<div class="form-group">

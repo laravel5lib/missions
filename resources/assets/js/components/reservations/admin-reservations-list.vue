@@ -52,6 +52,11 @@
 							</li>
 							<li>
 								<label class="small" style="margin-bottom: 0px;">
+									<input type="checkbox" v-model="activeFields" value="teams" :disabled="maxCheck('teams')"> Teams
+								</label>
+							</li>
+							<li>
+								<label class="small" style="margin-bottom: 0px;">
 									<input type="checkbox" v-model="activeFields" value="fund" :disabled="maxCheck('fund')"> Fund
 								</label>
 							</li>
@@ -170,6 +175,9 @@
 						<i @click="setOrderByField('trip.data.campaign.data.name')" v-if="orderByField !== 'trip.data.campaign.data.name'" class="fa fa-sort pull-right"></i>
 						<i @click="direction=direction*-1" v-if="orderByField === 'trip.data.campaign.data.name'" class="fa pull-right" :class="{'fa-sort-desc': direction==1, 'fa-sort-asc': direction==-1}"></i>
 					</th>
+					<th v-if="isActive('teams')">
+						Teams
+					</th>
 					<th v-if="isActive('fund')">
 						Fund
 					</th>
@@ -231,6 +239,18 @@
 					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
 					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
+					<td v-if="isActive('teams')">
+						<template v-if="reservation.squads.data.length">
+							<span v-for="squad in reservation.squads.data">
+								<span v-if="squad.team_id">
+									<span v-if="$index!=0">, </span>{{squad.team.data.callsign}}
+								</span>
+							</span>
+						</template>
+						<template v-else>
+							No Team
+						</template>
+					</td>
 					<td v-if="isActive('fund')"><a :href="'/admin/funds/'+reservation.fund.data.id" target="_blank">{{ reservation.fund.data.name|capitalize }}</a></td>
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
 					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
@@ -566,7 +586,7 @@
 			getListSettings(){
 				let params = {
 					trip_id: this.tripId ? new Array(this.tripId) : undefined,
-					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund',
+					include: 'trip.campaign,trip.group,costs.payments,user,requirements,rep,fund,squads.team',
 					search: this.search ? this.search.trim() : this.search,
 					per_page: this.per_page,
 					page: this.pagination.current_page,

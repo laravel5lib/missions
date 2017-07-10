@@ -6,7 +6,7 @@ import nextTick from "p-immediate";
 import test from "ava";
 
 //load the component with a vue instance
-RootInstance.template = '<div><upload-create-update v-ref:test-component :ui-selector="2" is-child></upload-create-update></div>';
+RootInstance.template = '<div><upload-create-update v-ref:test-component :ui-selector="1" is-child type="banner" ></upload-create-update></div>';
 RootInstance.components = {'upload-create-update': require('../../../../components/uploads/admin-upload-create-update.vue')};
 document.body.insertAdjacentHTML("afterbegin", "<app></app>");
 const vm = new Vue(RootInstance).$mount('app');
@@ -16,21 +16,12 @@ test('uploads populated', t => {
     t.notDeepEqual(AdminUploader.uploads, []);
 });
 
-test.before('set form data', t => {
-    AdminUploader.name = 'Upload Test';
-    AdminUploader.type = 'avatar';
-    AdminUploader.tags = ['User'];
-    AdminUploader.url = 'some/url';
-});
-
-test('submit upload', async t => {
+test.todo('select banner - currently an issue with slimAPI code causing - Error: Maximum call stack size exceeded');
+/*
+test('select banner', async t => {
+    let selectedItem = AdminUploader.uploads[0];
+    AdminUploader.selectExisting(selectedItem);
     await nextTick();
-    let promise = AdminUploader.submit();
-    if (!promise)  // if promise is a false boolean
-        t.fail();
-    promise.then(data => {
-        t.is(data.name, 'Upload Test');
-        t.is(data.type, 'avatar');
-        t.is(data.tags[0], 'User');
-    })
-});
+    t.deepEqual(AdminUploader.selectedBanner, selectedItem);
+    t.is(AdminUploader.banner_upload_id, selectedItem.id);
+});*/

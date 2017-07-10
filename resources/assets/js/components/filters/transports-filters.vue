@@ -23,15 +23,13 @@
 			</div>
 
 			<div class="form-group" v-if="propertyExists('type')">
-				<label>Trip Type</label>
+				<label>Transport Type</label>
 				<select  class="form-control input-sm" v-model="filters.type">
 					<option value="">Any Type</option>
-					<option value="ministry">Ministry</option>
-					<option value="family">Family</option>
-					<option value="international">International</option>
-					<option value="media">Media</option>
-					<option value="medical">Medical</option>
-					<option value="leader">Leader</option>
+					<option value="flight">Flight</option>
+					<option value="vehicle">Vehicle</option>
+					<option value="bus">Bus</option>
+					<option value="train">Train</option>
 				</select>
 			</div>
 

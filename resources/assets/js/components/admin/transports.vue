@@ -243,7 +243,7 @@
                         </div>
                         <hr class="divider">
                         <h4>Arrival</h4>
-                        <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
+                        <travel-hub v-ref:arrivalhub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="arrivalType.id" edit-mode
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
@@ -253,7 +253,7 @@
                                    id="arrive_at" v-validate:occurred="['required', 'datetime']">
                         </div>
                         <h4>Departure</h4>
-                        <travel-hub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
+                        <travel-hub v-ref:departurehub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="departureType.id" edit-mode
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
@@ -405,8 +405,6 @@
                     domestic: false,
                     capacity: 0,
                     campaign_id: this.campaignId,
-                    arrive_at: null,
-                    depart_at: null,
                     departure: {
                         name: '',
                         address: '',
@@ -460,18 +458,52 @@
                 });
             },
             openTransportModal(transport) {
+                let thisTransport = _.extend(transport, {
+                        departure: {
+                            name: '',
+                            address: '',
+                            call_sign: '', // required
+                            city: '',
+                            state: '',
+                            zip: '',
+                            country_code: '',
+                        },
+                        arrival: {
+                            name: '',
+                            address: '',
+                            call_sign: '', // required
+                            city: '',
+                            state: '',
+                            zip: '',
+                            country_code: '',
+                        }
+                    }) || _.extend({ }, this.TransportFactory());
                 this.transportsModalEdit = !!transport;
-                this.selectedTransport = transport || _.extend({}, this.TransportFactory());
+
                 if (transport) {
+                    // if has arrivalHub
+                    if (transport.type === 'flight') {
+                        if (transport.arrivalHub && _.isObject(transport.arrivalHub.data)) {
+                            _.extend(thisTransport.arrival, transport.arrivalHub.data)
+                        }
+                        if (transport.departureHub && _.isObject(transport.departureHub.data)) {
+                            _.extend(thisTransport.departure, transport.departureHub.data)
+                        }
+                    }
+
+                    this.selectedTransport = thisTransport;
+
                     this.getAirlines(transport.name).then(function (obj) {
                         this.selectedAirlineObj = _.findWhere(this.UTILITIES.airlines, { name: transport.name });
-                        this.showTransportsModal = true;
-                        this.$nextTick(function () {
-                            if (_.isFunction(this.$validate))
-                                this.$validate(true);
-                        });
+                    });
+
+                    this.showTransportsModal = true;
+                    this.$nextTick(function () {
+                        if (_.isFunction(this.$validate))
+                            this.$validate(true);
                     });
                 } else {
+                    this.selectedTransport = thisTransport;
                     this.showTransportsModal = true;
                 }
             },

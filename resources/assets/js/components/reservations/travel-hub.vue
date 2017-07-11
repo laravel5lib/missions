@@ -110,14 +110,16 @@
 	    props: {
             hub: {
                 type: Object,
-	            default: {
-                    name: '',
-                    address: '',
-                    call_sign: '', // required
-                    city: '',
-                    state: '',
-                    zip: '',
-                    country_code: '',
+	            default: function () {
+                    return {
+                        name: '',
+                        address: '',
+                        call_sign: '', // required
+                        city: '',
+                        state: '',
+                        zip: '',
+                        country_code: '',
+                    }
 	            }
             },
 		    transportType: {

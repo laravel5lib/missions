@@ -18,202 +18,35 @@
 					<div class="col-sm-4"><label>Call Sign</label> {{transport.call_sign}}</div>
 					<div class="col-sm-4"><label>Capacity</label> {{transport.capacity}}</div>
 				</div>
-				<div class="row">
-					<div class="timeline-centered">
-						<article class="timeline-entry"><!-- Arrival Item -->
-
-							<div class="timeline-entry-inner">
-								<time class="timeline-time" datetime="{{ transport.arrive_at }}">
-									<span>{{ transport.arrive_at | moment 'h:mm A zz' }}</span>
-									<span>{{ transport.arrive_at | moment 'ddd, ll' }}</span>
-								</time>
-
-								<!--<div class="timeline-icon bg-success" v-if="activity.type.name == 'departure'">
-									<i class="fa fa-arrow-right"></i>
-								</div>
-
-								<div class="timeline-icon bg-warning" v-if="activity.type.name == 'connection'">
-									<i class="fa fa-arrow-arrows"></i>
-								</div>-->
-
-								<div class="timeline-icon bg-danger">
-									<i class="fa fa-arrow-left"></i>
-								</div>
-
-								<div class="timeline-label">
-									<h2>
-										<a href="#">Arriving at Location</a>
-										<span class="label label-default">Arrival</span>
-										<br />
-										<small><i class="fa fa-clock-o"></i> {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
-									</h2>
-
-									<!--<p>{{ activity.description }}</p>-->
-
-									<hr class="divider">
-
-									<!--<p class="text-right">
-										<a @click="confirmDeleteActivity(activity)" class="btn btn-xs btn-default-hollow pull-right">
-											<i class="fa fa-trash"></i> Delete
-										</a>
-										<a @click="editActivity(activity)" class="btn btn-xs btn-default-hollow pull-right">
-											<i class="fa fa-pencil"></i> Edit
-										</a>
-									<p>-->
-
-									<ul class="nav nav-tabs" role="tablist">
-										<li role="presentation" class="active">
-											<a href="#arrivalHubs" aria-controls="hubs" role="tab" data-toggle="tab">
-												<i class="fa fa-map-marker"></i> Hub
-											</a>
-										</li>
-										<li role="presentation">
-											<a href="#arrivalNotes" aria-controls="notes" role="tab" data-toggle="tab">
-												<i class="fa fa-sticky-note-o"></i> Notes
-											</a>
-										</li>
-									</ul>
-
-									<!-- Tab panes -->
-									<div class="tab-content">
-										<div role="tabpanel" class="tab-pane active" id="arrivalHubs">
-											<!--<div class="text-right">
-												<button class="btn btn-sm btn-primary" type="button" @click="newHub(activity)">Add Hub</button>
-											</div>-->
-											<hr class="divider inv">
-											<div class="list-group">
-												<div class="list-group-item">
-													<h5 class="list-group-item-heading">
-														{{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
-
-														<!--<a @click="confirmDeleteHub(transport.arrivalHub.data)" class="btn btn-xs btn-default-hollow pull-right">
-															<i class="fa fa-trash"></i> Delete
-														</a>-->
-
-														<a @click="editHub(transport.arrivalHub.data)" class="btn btn-xs btn-default-hollow pull-right">
-															<i class="fa fa-pencil"></i> Edit
-														</a>
-													</h5>
-													<p class="list-group-item-text">
-														<span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}<br></span>
-														<span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
-														<span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
-													</p>
-												</div>
-											</div>
-										</div>
-
-										<div role="tabpanel" class="tab-pane" id="arrivalNotes">
-										</div>
-									</div>
-
-								</div>
-							</div>
-
-						</article>
-						<article class="timeline-entry"><!-- Departure Item -->
-
-							<div class="timeline-entry-inner">
-								<time class="timeline-time" datetime="{{ transport.depart_at }}">
-									<span>{{ transport.depart_at | moment 'h:mm A zz' }}</span>
-									<span>{{ transport.depart_at | moment 'ddd, ll' }}</span>
-								</time>
-
-								<div class="timeline-icon bg-success">
-									<i class="fa fa-arrow-right"></i>
-								</div>
-
-								<div class="timeline-label">
-									<h2>
-										<a href="#">Returning Home</a>
-										<span class="label label-default">Departure</span>
-										<br />
-										<small><i class="fa fa-clock-o"></i> {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
-									</h2>
-
-									<!--<p>{{ activity.description }}</p>-->
-
-									<hr class="divider">
-
-									<!--<p class="text-right">
-										<a @click="confirmDeleteActivity(activity)" class="btn btn-xs btn-default-hollow pull-right">
-											<i class="fa fa-trash"></i> Delete
-										</a>
-										<a @click="editActivity(activity)" class="btn btn-xs btn-default-hollow pull-right">
-											<i class="fa fa-pencil"></i> Edit
-										</a>
-									<p>-->
-
-									<ul class="nav nav-tabs" role="tablist">
-										<li role="presentation" class="active">
-											<a href="#departureHubs" aria-controls="hubs" role="tab" data-toggle="tab">
-												<i class="fa fa-map-marker"></i> Hub
-											</a>
-										</li>
-										<li role="presentation">
-											<a href="#departureNotes" aria-controls="notes" role="tab" data-toggle="tab">
-												<i class="fa fa-sticky-note-o"></i> Notes
-											</a>
-										</li>
-									</ul>
-
-									<!-- Tab panes -->
-									<div class="tab-content">
-										<div role="tabpanel" class="tab-pane active" id="departureHubs">
-											<!--<div class="text-right">
-												<button class="btn btn-sm btn-primary" type="button" @click="newHub(activity)">Add Hub</button>
-											</div>-->
-											<hr class="divider inv">
-											<div class="list-group">
-												<div class="list-group-item">
-													<h5 class="list-group-item-heading">
-														{{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
-
-														<a @click="confirmDeleteHub(transport.departureHub.data)" class="btn btn-xs btn-default-hollow pull-right">
-															<i class="fa fa-trash"></i> Delete
-														</a>
-
-														<a @click="editHub(transport.departureHub.data)" class="btn btn-xs btn-default-hollow pull-right">
-															<i class="fa fa-pencil"></i> Edit
-														</a>
-													</h5>
-													<p class="list-group-item-text">
-														<span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
-														<span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
-														<span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
-													</p>
-												</div>
-											</div>
-										</div>
-
-										<div role="tabpanel" class="tab-pane" id="departureNotes">
-										</div>
-									</div>
-
-								</div>
-							</div>
-
-						</article>
-						<article class="timeline-entry begin">
-
-							<div class="timeline-entry-inner">
-
-								<div class="timeline-icon">
-									<i class="fa fa-ban"></i>
-								</div>
-
-							</div>
-
-						</article>
-					</div>
-
-				</div>
 			</div>
 		</div>
 		<tabs v-if="transport">
-			<!--<tab header="Itinerary">
-				<transports-details-itinerary v-ref:itinerary :transport="transport" :campaign-id="campaignId"></transports-details-itinerary>
-			</tab>-->
+			<tab header="Details">
+				<div class="row">
+					<div class="col-sm-6">
+						<h4>Arrival</h4>
+						<small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+
+						<p class="">
+							{{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
+							<span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}</span><br>
+							<span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
+							<span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
+						</p>
+					</div>
+					<div class="col-sm-6">
+						<h4>Departure</h4>
+						<small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+
+						<p class="">
+							{{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
+							<span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
+							<span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
+							<span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
+						</p>
+					</div>
+				</div>
+			</tab>
 			<tab header="Passengers">
 				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>

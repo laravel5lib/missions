@@ -63,11 +63,10 @@
 	</div>
 </template>
 <script type="text/javascript">
-    import transportsDetailsItinerary from './transports-details-itinerary.vue';
     import transportsDetailsPassengers from './transports-details-passengers.vue';
     export default{
         name: 'transports-details',
-        components: {transportsDetailsItinerary, transportsDetailsPassengers},
+        components: {transportsDetailsPassengers},
         props: {
             campaignId: {
                 type: String,

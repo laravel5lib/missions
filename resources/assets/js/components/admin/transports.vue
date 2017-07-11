@@ -178,6 +178,12 @@
                                 <label for="">Company</label>
                                 <input type="text" class="form-control" v-model="selectedTransport.name">
                             </div>
+
+                            <div class="form-group">
+                                <label for="">Callsign</label>
+                                <input type="text" class="form-control" v-model="selectedTransport.call_sign">
+                            </div>
+
                             <div class="form-group">
                                 <label for="">Schedule/Route No.</label>
                                 <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
@@ -192,6 +198,12 @@
                                         <option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
                                     </select>
                             </div>
+
+                            <div class="form-group">
+                                <label for="">Callsign</label>
+                                <input type="text" class="form-control" v-model="selectedTransport.call_sign">
+                            </div>
+
                             <div class="form-group">
                                 <label for="">Train No.</label>
                                 <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
@@ -206,6 +218,11 @@
                                         <option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
                                         </option>
                                     </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="">Callsign</label>
+                                <input type="text" class="form-control" v-model="selectedTransport.call_sign">
                             </div>
                         </template>
 
@@ -327,7 +344,7 @@
             selectedAirlineObj(val, oldVal){
                 if (val && val !== oldVal) {
                     this.selectedTransport.name = val.name;
-                    this.selectedTransport.call_sign = val.call_sign;
+                    this.selectedTransport.call_sign = val.iata;
                 }
             },
             selectedTransport: {

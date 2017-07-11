@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div><!-- end col -->
-            <div class="col-sm-4 panel panel-default text-center">
+            <div class="col-md-4 col-sm-12 panel panel-default text-center">
                 <div class="panel-body">
                     <label>Start Date</label>
                     <p>{{ campaign.started_at | moment 'll' false true }}</p>

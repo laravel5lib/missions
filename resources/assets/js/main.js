@@ -89,6 +89,7 @@ import campaignCreate from './components/campaigns/admin-campaign-create.vue';
 import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
 import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
 import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
+import visibilityControls from './components/campaigns/visibility-controls.vue';
 import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
 import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
@@ -833,6 +834,7 @@ new Vue({
         campaignEdit,
         adminCampaignsList,
         adminCampaignDetails,
+        visibilityControls,
         campaignTripCreateWizard,
         campaignTripEditWizard,
         adminCampaignTrips,

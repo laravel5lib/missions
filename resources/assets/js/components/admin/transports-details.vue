@@ -51,22 +51,23 @@
 				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Notes">
-				<!--<notes type="transports"-->
-				       <!--:id="transport.id"-->
-				       <!--:user_id="userId"-->
-				       <!--:per_page="5"-->
-				       <!--:can-modify="isAdminRoute ? 1 : 0">-->
-				<!--</notes>-->
+				<notes type="campaign_transports"
+				       :id="transport.id"
+				       :user_id="$root.userId"
+				       :per_page="10"
+				       :can-modify="1">
+				</notes>
 			</tab>
 		</tabs>
 
 	</div>
 </template>
 <script type="text/javascript">
+    import notes from '../notes.vue';
     import transportsDetailsPassengers from './transports-details-passengers.vue';
     export default{
         name: 'transports-details',
-        components: {transportsDetailsPassengers},
+        components: {transportsDetailsPassengers, notes},
         props: {
             campaignId: {
                 type: String,

@@ -6,25 +6,10 @@
                 <aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
                     <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
                 </aside>
-                <div class="panel panel-default">
-                    
-                    <div class="panel-heading">
-                        <h5>Transports</h5>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                                    <button type="button" class="btn" :class="isInternationalSet" @click="options.params.isDomestic = 'no'">International</button>
-                                    <button type="button" class="btn" :class="isDomesticSet" @click="options.params.isDomestic = 'yes'">Domestic</button>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 text-right">
-                                <button type="button" class="btn btn-primary btn-sm" @click="openTransportModal()">Create a Transport</button>
-                            </div>
-                        </div>
 
-
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>Transports</h4>
                     </div>
                 </div>
 
@@ -40,6 +25,7 @@
                         <div class="form-group col-xs-4 text-right">
                             <button type="button" class="btn btn-sm btn-default" @click="showFilters = !showFilters">Filters</button>
                             <button type="button" class="btn btn-sm btn-default" @click="expandAll">Expand All</button>
+                            <button type="button" class="btn btn-primary btn-sm" @click="openTransportModal()">Create a Transport</button>
                         </div>
                         <div class="col-xs-12">
                             <hr class="divider inv">
@@ -47,23 +33,31 @@
                     </form>
                 </div>
 
+                <ul class="nav nav-tabs">
+                    <li :class="isInternationalSet" @click="options.params.isDomestic = 'no'"><a>International</a></li>
+                    <li :class="isDomesticSet" @click="options.params.isDomestic = 'yes'"><a>Domestic</a></li>
+                </ul>
+
 
                 <div class="panel-group" id="transportsAccordion" role="tablist" aria-multiselectable="true">
                     <div class="panel panel-default" v-for="transport in transports">
                         <div class="panel-heading" role="tab" id="headingOne">
-                            <h4 class="panel-title">
+                            <div class="panel-title">
                                 <div class="row">
                                     <div class="col-xs-9">
                                         <div class="media">
                                             <div class="media-body" style="vertical-align:middle;">
-                                                <h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-                                                    <a :href="'transports/' + transport.id">{{ transport.name }}</a>
+                                                <h4 class="media-heading text-capitalize" style="margin-bottom:3px;">
+                                                    <a :href="'transports/' + transport.id">
+                                                        {{ transport.name }}
+                                                        <small> &middot; {{transport.vessel_no}}</small>
+                                                    </a>
                                                     <br />
                                                     <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
                                                         {{ transport.type | capitalize }}
                                                         <span class="label label-default" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
                                                     </small>
-                                                </h6>
+                                                </h4>
                                             </div><!-- end media-body -->
                                         </div><!-- end media -->
                                     </div>
@@ -85,33 +79,50 @@
                                 </div>
                                 <hr class="divider sm">
                                 <div class="row">
+                                    <div class="col-sm-3"><label>Depart At</label>
+                                        {{transport.depart_at | moment 'lll' false true}}
+                                    </div>
+                                    <div class="col-sm-3"><label>Depart From</label> {{ transport.departureHub.data.call_sign }}</div>
+                                    <div class="col-sm-3"><label>Arrive At</label>
+                                        {{transport.arrive_at | moment 'lll' false true}}
+                                    </div>
+                                    <div class="col-sm-3"><label>Arrive In</label> {{ transport.arrivalHub.data.call_sign }}</div>
+                                </div>
+                                <hr class="divider sm">
+                                <div class="row">
                                     <div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
                                     <div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
                                     <div class="col-sm-3"><label>Passengers</label> {{transport.passengers}}</div>
                                     <div class="col-sm-3"><label>Seats Left</label> {{transport.seats_left}}</div>
                                 </div>
 
-                            </h4>
+                            </div>
                         </div>
                         <div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label>Travel Groups</label>
-                                        <p class="small">
+                                        <p class="small" v-if="transport.groups.length > 0">
                                             <template v-for="group in transport.groups">
                                                 {{ group.name }}
                                                 <template v-if="($index + 1) < transport.groups.length">&middot;</template>
                                             </template>
                                         </p>
+                                        <p class="small" v-else>
+                                            Add passengers to see groups
+                                        </p>
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Designations</label>
-                                        <p class="small">
+                                        <p class="small" v-if="transport.designations.length > 0">
                                             <template v-for="designation in transport.designations">
                                                 {{ designation.content }}
                                                 <template v-if="($index + 1) < transport.designations.length">&middot;</template>
                                             </template>
+                                        </p>
+                                        <p class="small" v-else>
+                                            Add passengers to see designations
                                         </p>
 
                                     </div>
@@ -297,10 +308,11 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
+                    include: 'departureHub,arrivalHub'
                 },
                 options: {
                     params: {
-                        isDomestic: 'yes',
+                        isDomestic: 'no',
                         campaign: this.campaignId,
                         per_page: 10,
                         search: '',
@@ -368,10 +380,10 @@
         },
         computed: {
             isDomesticSet() {
-                return this.options.params.isDomestic === 'yes' ? 'btn-default' : 'btn-default-hollow'
+                return this.options.params.isDomestic === 'yes' ? 'active' : ''
             },
             isInternationalSet() {
-                return this.options.params.isDomestic === 'no' ? 'btn-default' : 'btn-default-hollow'
+                return this.options.params.isDomestic === 'no' ? 'active' : ''
             },
             arrivalType(){
                 return _.findWhere(this.UTILITIES.activityTypes, { name: 'arrival'});
@@ -393,6 +405,8 @@
                     domestic: false,
                     capacity: 0,
                     campaign_id: this.campaignId,
+                    arrive_at: null,
+                    depart_at: null,
                     departure: {
                         name: '',
                         address: '',
@@ -431,6 +445,7 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
+                    include: 'departureHub,arrivalHub'
                 };
             },
             fetch() {

@@ -25,7 +25,7 @@ class CampaignTransportTransformer extends TransformerAbstract
      */
     public function transform(CampaignTransport $transport)
     {
-        return [
+        $array = [
             'id'          => $transport->id,
             'type'        => $transport->type,
             'vessel_no'   => $transport->vessel_no,
@@ -33,6 +33,7 @@ class CampaignTransportTransformer extends TransformerAbstract
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
             'passengers'  => (int) $transport->passengers_count,
+            'seats_left'  => $transport->seatsLeft(),
             'call_sign'   => strtoupper($transport->call_sign),
             'depart_at'   => $transport->depart_at ? $transport->depart_at->toDateTimeString() : null,
             'arrive_at'   => $transport->arrive_at ? $transport->arrive_at->toDateTimeString() : null,
@@ -46,6 +47,18 @@ class CampaignTransportTransformer extends TransformerAbstract
                 ]
             ]
         ];
+
+        if (request('with')) {
+            if (in_array('groups', request('with'))) {
+                $array['groups'] = $transport->groups();
+            }
+
+            if (in_array('designations', request('with'))) {
+                $array['designations'] = $transport->designations();
+            }
+        }
+
+        return $array;
     }
 
     /**

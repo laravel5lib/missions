@@ -32,6 +32,7 @@ class CampaignTransportsController extends Controller
         $transports = $this->transport
             ->whereCampaignId($campaignId)
             ->filter(request()->all())
+            ->withCount('passengers')
             ->paginate(request()->get('per_page', 25));
 
         return $this->response->paginator($transports, new CampaignTransportTransformer);
@@ -41,6 +42,7 @@ class CampaignTransportsController extends Controller
     {
         $transport = $this->transport
             ->whereCampaignId($campaignId)
+            ->withCount('passengers')
             ->findOrFail($id);
 
         return $this->response->item($transport, new CampaignTransportTransformer);
@@ -99,7 +101,7 @@ class CampaignTransportsController extends Controller
             'arrival_hub_id' => $request->get('arrival_hub_id')
         ]);
 
-        $transport = $transport->fresh();
+        $transport = $transport->fresh()->withCount('passengers');
 
         return $this->response->item($transport, new CampaignTransportTransformer);
     }

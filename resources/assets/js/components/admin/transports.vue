@@ -368,6 +368,8 @@
             TransportFactory(){
                 return {
                     name: '',
+                    arrive_at: null,
+                    depart_at: null,
                     call_sign: '',
                     type: '',
                     vessel_no: '',

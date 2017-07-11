@@ -171,16 +171,16 @@
                                     </option>
                                     <option value="other">Other</option>
                                 </select>
-                                <template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
-                                    <div class="form-group">
-                                        <label for="">Airline</label>
-                                        <input type="text" class="form-control" v-model="selectedTransport.name">
-                                    </div>
-                                </template>
+                            </div>
+                            <template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
                                 <div class="form-group">
-                                    <label for="">Flight No.</label>
-                                    <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
+                                    <label for="">Airline</label>
+                                    <input type="text" class="form-control" v-model="selectedTransport.name">
                                 </div>
+                            </template>
+                            <div class="form-group">
+                                <label for="">Flight No.</label>
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -243,8 +243,8 @@
                         </div>
                         <hr class="divider">
                         <h4>Arrival</h4>
-                        <travel-hub v-ref:arrivalhub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
-                                    :activity-type="arrivalType.id" edit-mode
+                        <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
+                                    :activity-type="arrivalType.id" edit-mode transports
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
@@ -253,8 +253,8 @@
                                    id="arrive_at" v-validate:occurred="['required', 'datetime']">
                         </div>
                         <h4>Departure</h4>
-                        <travel-hub v-ref:departurehub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
-                                    :activity-type="departureType.id" edit-mode
+                        <travel-hub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
+                                    :activity-type="departureType.id" edit-mode transports
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>

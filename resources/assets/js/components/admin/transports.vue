@@ -213,6 +213,27 @@
                             <label for="transportCapacity">Capacity</label>
                             <input id="transportCapacity" v-model="selectedTransport.capacity" type="number" number class="form-control" min="0">
                         </div>
+                        <hr class="divider">
+                        <h4>Arrival</h4>
+                        <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
+                                    :activity-type="arrivalType.id" edit-mode
+                                    :transport-type="selectedTransport.type"></travel-hub>
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                            <label for="">Arriving at Date & Time</label>
+                            <date-picker :model.sync="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
+                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
+                                   id="arrive_at" v-validate:occurred="['required', 'datetime']">
+                        </div>
+                        <h4>Departure</h4>
+                        <travel-hub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
+                                    :activity-type="departureType.id" edit-mode
+                                    :transport-type="selectedTransport.type"></travel-hub>
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                            <label for="">Departing at Date & Time</label>
+                            <date-picker :model.sync="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
+                            <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
+                                   id="depart_at" v-validate:occurred="['required', 'datetime']">
+                        </div>
                     </form>
                 </validator>
             </div>
@@ -234,11 +255,12 @@
     import vSelect from 'vue-select';
     import errorHandler from '../error-handler.mixin';
     import utilities from '../utilities.mixin';
+    import travelHub from '../reservations/travel-hub.vue';
     import transportsFilters from '../filters/transports-filters.vue';
     export default {
         name: 'transports',
         mixins: [errorHandler, utilities],
-        components: {vSelect, transportsFilters},
+        components: {vSelect, transportsFilters, travelHub},
         props: {
           campaignId: {
             type: String,
@@ -292,7 +314,7 @@
                 transportsModalEdit: false,
                 selectedTransport: null,
 
-                TransportsResource: this.$resource('transports{/transport}')
+                TransportsResource: this.$resource('campaigns{/campaign}/transports{/transport}', { campaign: this.campaignId})
             }
         },
         watch: {
@@ -334,6 +356,13 @@
             isInternationalSet() {
                 return this.options.params.isDomestic === 'no' ? 'btn-default' : 'btn-default-hollow'
             },
+            arrivalType(){
+                return _.findWhere(this.UTILITIES.activityTypes, { name: 'arrival'});
+            },
+            departureType(){
+                return _.findWhere(this.UTILITIES.activityTypes, { name: 'departure'});
+            },
+
         },
         methods: {
             TransportFactory(){
@@ -344,7 +373,25 @@
                     vessel_no: '',
                     domestic: false,
                     capacity: 0,
-                    campaign_id: this.campaignId
+                    campaign_id: this.campaignId,
+                    departure: {
+                        name: '',
+                        address: '',
+                        call_sign: '', // required
+                        city: '',
+                        state: '',
+                        zip: '',
+                        country_code: '',
+                    },
+                    arrival: {
+                        name: '',
+                        address: '',
+                        call_sign: '', // required
+                        city: '',
+                        state: '',
+                        zip: '',
+                        country_code: '',
+                    },
 
                 };
             },
@@ -421,7 +468,7 @@
                         this.showTransportsModal = false;
                         this.transportsModalEdit = false;
                         this.selectedTransport = null;
-                    })
+                    }, this.$root.handleApiError)
                 } else {
                     console.log(this.$TransportsModal);
                     this.$root.$emit('showError', 'Please check the form.');
@@ -441,8 +488,10 @@
             },
         },
         ready() {
+            this.getActivityTypes();
             this.fetch();
             this.getAirlines();
+
         }
     }
 </script>

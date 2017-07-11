@@ -37,7 +37,7 @@ class CampaignTransport extends Model
 
     public function passengers()
     {
-        return $this->hasMany(Passenger::class);
+        return $this->hasMany(Passenger::class, 'transport_id');
     }
 
     public function setNameAttribute($value)

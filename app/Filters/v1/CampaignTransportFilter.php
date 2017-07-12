@@ -2,7 +2,7 @@
 
 use EloquentFilter\ModelFilter;
 
-class CampaignTransportFilter extends ModelFilter
+class CampaignTransportFilter extends Filter
 {
     /**
      * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -19,7 +19,7 @@ class CampaignTransportFilter extends ModelFilter
     ];
 
     public $searchable = [
-        'name', 'call_sign', 'vessel_no', 'capacity'
+        'name', 'vessel_no'
     ];
 
     public function campaign($campaign)

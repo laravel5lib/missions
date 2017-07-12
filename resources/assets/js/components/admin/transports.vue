@@ -175,7 +175,7 @@
                             </div>
                             <template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
                                 <div class="form-group">
-                                    <label for="">Airline</label>
+                                    <label for="">Airline Name</label>
                                     <input type="text" class="form-control" v-model="selectedTransport.name">
                                 </div>
                             </template>
@@ -479,7 +479,7 @@
                             zip: '',
                             country_code: '',
                         }
-                    }) || _.extend({ }, this.TransportFactory());
+                    }) || _.extend({}, this.TransportFactory());
                 this.transportsModalEdit = !!transport;
 
                 if (transport) {

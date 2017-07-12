@@ -32,7 +32,7 @@ class Campaign extends Model
         'name', 'country_code', 'short_desc',
         'started_at', 'ended_at', 'published_at', 
         'page_src', 'created_at', 'updated_at', 'deleted_at',
-        'avatar_upload_id'
+        'avatar_upload_id', 'reservations_locked'
     ];
 
     /**
@@ -43,6 +43,10 @@ class Campaign extends Model
     protected $dates = [
         'started_at', 'ended_at', 'created_at',
         'updated_at', 'deleted_at', 'published_at'
+    ];
+
+    protected $casts = [
+        'reservations_locked' => 'boolean'
     ];
 
     /**

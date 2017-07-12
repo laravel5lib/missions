@@ -28,7 +28,9 @@ class ReservationsController extends Controller
             return $response;
         }
 
-        return view('dashboard.reservations.' . $tab, compact('reservation', 'rep', 'tab'));
+        $locked = $reservation->trip->campaign->reservations_locked;
+
+        return view('dashboard.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));
     }
 
     private function getDataToInclude($tab)

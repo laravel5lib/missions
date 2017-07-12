@@ -324,6 +324,11 @@ class Reservation extends Model
                     ->withTimestamps();
     }
 
+    public function questionnaires()
+    {
+        return $this->hasMany(Questionnaire::class);
+    }
+
     /**
      * Get the name on the reservation.
      *
@@ -738,6 +743,7 @@ class Reservation extends Model
             // remove the current resources
             $this->costs()->detach();
             $this->requirements()->delete();
+            $this->questionnaires()->delete();
             $this->todos()->delete();
             $this->squads()->detach();
 

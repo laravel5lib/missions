@@ -317,6 +317,9 @@
 									</div>
 								</panel>
 							</accordion>
+							<div class="col-xs-12 text-center">
+								<pagination :pagination.sync="accommodationsPagination" :callback="getAccommodations"></pagination>
+							</div>
 						</template>
 						<template v-else>
 							<hr class="divider inv">
@@ -662,7 +665,7 @@
                 });
             },
             getRoomTypes(){
-                return this.$http.get('rooming/types', { params: { campaign: this.campaignId } })
+                return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 } })
                     .then(function (response) {
                             return this.roomTypes = response.body.data;
                         },

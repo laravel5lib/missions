@@ -46,7 +46,7 @@ class ExportReservationProfilePics extends Command
      */
     public function handle()
     {
-        $reservations = $this->reservation->current()->take(3)->get();
+        $reservations = $this->reservation->current()->get();
 
         $bar = $this->output->createProgressBar(count($reservations));
 

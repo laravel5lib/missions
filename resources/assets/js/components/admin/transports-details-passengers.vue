@@ -39,9 +39,9 @@
 											</div>
 											<div class="media-body" style="vertical-align:middle;">
 												<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
-													<i :class="getGenderStatusIcon(passenger)"></i>
+													<i :class="getGenderStatusIcon(passenger.reservation.data)"></i>
 													<a :href="'/admin/reservations/' + passenger.reservation.data.id" target="_blank">{{ passenger.reservation.data.surname | capitalize }}, {{ passenger.reservation.data.given_names | capitalize }}</a></h6>
-												<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ passenger.reservation.data.desired_role.name }} <span class="text-muted">&middot; {{ passenger.reservation.data.travel_group}}</span></p>
+												<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ passenger.reservation.data.desired_role.name }} <span class="text-muted">&middot; {{ passenger.reservation.data.trip.data.group.data.name}}</span></p>
 											</div><!-- end media-body -->
 										</div><!-- end media -->
 									</div>
@@ -72,24 +72,26 @@
 										<p class="small">{{passenger.reservation.data.trip.data.group.data.name}}</p>
 									</div><!-- end col -->
 								</div><!-- end row -->
-								<div class="col-sm-12">
-									<label>Companions</label>
-									<ul class="list-unstyled" v-if="passenger.reservation.data.companions.data.length">
-										<li v-for="companion in passenger.reservation.data.companions.data">
-											<i :class="getGenderStatusIcon(companion)"></i>
-											{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-											<span class="text-muted">({{ companion.relationship | capitalize }})</span>
-										</li>
-									</ul>
-									<p class="small" v-else>None</p>
-								</div>
-								<div class="col-sm-6">
-									<label>Trip Type</label>
-									<p class="small">{{passenger.reservation.data.trip.data.type | capitalize}}</p>
-								</div>
-								<div class="col-sm-6">
-									<label>Designation</label>
-									<p class="small">{{ passenger.reservation.data.arrival_designation }}</p>
+								<div class="row">
+									<div class="col-sm-12">
+										<label>Companions</label>
+										<ul class="list-unstyled" v-if="passenger.reservation.data.companions.data.length">
+											<li v-for="companion in passenger.reservation.data.companions.data">
+												<i :class="getGenderStatusIcon(companion)"></i>
+												{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+												<span class="text-muted">({{ companion.relationship | capitalize }})</span>
+											</li>
+										</ul>
+										<p class="small" v-else>None</p>
+									</div>
+									<div class="col-sm-6">
+										<label>Trip Type</label>
+										<p class="small">{{passenger.reservation.data.trip.data.type | capitalize}}</p>
+									</div>
+									<div class="col-sm-6">
+										<label>Designation</label>
+										<p class="small">{{ passenger.reservation.data.arrival_designation }}</p>
+									</div>
 								</div>
 							</div>
 						</div>

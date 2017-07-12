@@ -49,7 +49,9 @@ class ReservationsController extends Controller
 
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab'));
+        $locked = $reservation->trip->campaign->reservations_locked;
+
+        return view('admin.reservations.' . $tab, compact('reservation', 'rep', 'tab', 'locked'));
     }
 
     /**

@@ -4,7 +4,7 @@
             <div class="col-xs-12">
                 <h6 class="text-uppercase">
                     <i class="fa fa-plane"></i> Preferred Airports
-                    <button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true" v-if="! editMode"><i class="fa fa-pencil"></i> Change</button>
+                    <button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true" v-if="! editMode && ! isLocked"><i class="fa fa-pencil"></i> Change</button>
                 </h6>
                 <hr class="divider lg">
 
@@ -65,6 +65,10 @@
             'reservationId': {
                 type: String,
                 required: true
+            },
+            'locked': {
+                type: Boolean,
+                default: false
             }
         },
         data() {
@@ -99,6 +103,12 @@
         computed: {
             formComplete: function() {
                 return !(!!this.choice_one && !!this.choice_two && !!this.choice_three);
+            },
+            'isLocked': function() {
+                if (this.isAdminRoute)
+                    return false;
+
+                return this.locked;
             }
         },
         methods: {

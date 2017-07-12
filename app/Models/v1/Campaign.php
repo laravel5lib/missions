@@ -33,7 +33,7 @@ class Campaign extends Model
         'started_at', 'ended_at', 'published_at', 
         'page_src', 'created_at', 'updated_at', 'deleted_at',
         'avatar_upload_id', 'publish_squads', 'publish_regions',
-        'publish_rooms', 'publish_transports'
+        'publish_rooms', 'publish_transports', 'reservations_locked'
     ];
 
     /**

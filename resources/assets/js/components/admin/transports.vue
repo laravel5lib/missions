@@ -16,15 +16,16 @@
                 <!-- Search and Filter -->
                 <div class="row">
                     <form class="form-inline">
-                        <div class="form-group col-xs-8">
+                        <div class="form-group col-lg-6 col-sm-12 col-md-4">
                             <div class="input-group input-group-sm col-xs-12">
                                 <input type="text" class="form-control" v-model="options.params.search" debounce="300" placeholder="Search">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
-                        <div class="form-group col-xs-4 text-right">
+                        <div class="form-group col-lg-6 col-sm-12 col-md-8 text-right">
                             <button type="button" class="btn btn-sm btn-default" @click="showFilters = !showFilters">Filters</button>
                             <button type="button" class="btn btn-sm btn-default" @click="expandAll">Expand All</button>
+                            <transport-reports :filters="filters" :search="search"></transport-reports>
                             <button type="button" class="btn btn-primary btn-sm" @click="openTransportModal()">Create a Transport</button>
                         </div>
                         <div class="col-xs-12">
@@ -285,10 +286,11 @@
     import utilities from '../utilities.mixin';
     import travelHub from '../reservations/travel-hub.vue';
     import transportsFilters from '../filters/transports-filters.vue';
+    import transportReports from '../admin/reporting/transportation-reports.vue';
     export default {
         name: 'transports',
         mixins: [errorHandler, utilities],
-        components: {vSelect, transportsFilters, travelHub},
+        components: {vSelect, transportsFilters, travelHub, transportReports},
         props: {
           campaignId: {
             type: String,

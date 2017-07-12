@@ -238,6 +238,7 @@ $api->version('v1', [
     {
         $api->post('reservations/{type}', 'Reporting\ReservationsController@store');
         $api->post('{type}/rooms', 'Reporting\RoomsController@store');
+        $api->post('transports/{type}', 'Reporting\TransportsController@store');
     });
 
     /*

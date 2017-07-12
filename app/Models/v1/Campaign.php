@@ -46,10 +46,6 @@ class Campaign extends Model
         'updated_at', 'deleted_at', 'published_at'
     ];
 
-    protected $casts = [
-        'reservations_locked' => 'boolean'
-    ];
-
     /**
      * All of the relationships to be touched.
      * Update the parent's timestamp.

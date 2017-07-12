@@ -3,7 +3,7 @@
     <div class="row" v-if="loaded" style="position:relative">
         <spinner v-ref:spinner size="sm" text="Loading"></spinner>
         <div class="col-sm-12 tour-step-attach">
-            <div class="text-center" v-if="list">
+            <div class="text-center" v-if="list && ! isLocked">
                 <form novalidate>
                     <a class="btn btn-default-hollow btn-sm" @click="toggleChangeState()">
                         <span v-if="!changeState">
@@ -24,6 +24,7 @@
                 <div class="panel-body">
                     <component :is="docPreview"
                                :document="document"
+                               :locked="isLocked"
                                keep-alive>
                     </component>
                 </div><!-- end panel-body -->
@@ -33,6 +34,7 @@
                     <component :is="questionnaire"
                                :document="document"
                                :reservation-id="requirement.reservation_id"
+                               :locked="isLocked"
                                keep-alive>
                     </component>
                 </div>
@@ -112,6 +114,10 @@
             'userId': {
                 type: String,
                 required: false
+            },
+            'locked': {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -141,6 +147,12 @@
                 if (this.userId) return this.userId;
 
                 return this.$root.user.id;
+            },
+            'isLocked': function() {
+                if (this.isAdminRoute)
+                    return false;
+
+                return this.locked;
             }
         },
         watch:{

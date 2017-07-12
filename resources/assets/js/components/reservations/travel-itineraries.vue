@@ -3,7 +3,7 @@
 		<template v-if="itinerary && itinerary.id">
 			<h6 class="text-uppercase">
 				<i class="fa fa-plane"></i> {{itinerary.name}}
-				<button class="btn btn-xs btn-default-hollow pull-right" @click="toggleResetModal" v-if="! editMode"><i class="fa fa-pencil"></i> Change</button>
+				<button class="btn btn-xs btn-default-hollow pull-right" @click="toggleResetModal" v-if="! editMode && ! isLocked"><i class="fa fa-pencil"></i> Change</button>
 			</h6>
 			<hr class="divider lg">
 		</template>
@@ -93,6 +93,10 @@
             document: {
                 type: Object,
             },
+            locked: {
+                type: Boolean,
+                default: false
+            }
         },
         data(){
             return {
@@ -150,7 +154,13 @@
                     }
                     return false;
                 }.bind(this));
-            }
+            },
+			'isLocked': function() {
+				if (this.isAdminRoute)
+					return false;
+
+				return this.locked;
+			}
 		},
         methods: {
             isArrival(item) {

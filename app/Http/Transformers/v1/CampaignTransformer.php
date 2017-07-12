@@ -42,6 +42,7 @@ class CampaignTransformer extends TransformerAbstract
             'ended_at'     => $campaign->ended_at->toDateTimeString(),
             'status'       => $campaign->status,
             'groups_count' => $campaign->groups->count(),
+            'reservations_locked' => (boolean) $campaign->reservations_locked,
             'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,
             'created_at'   => $campaign->created_at->toDateTimeString(),
             'updated_at'   => $campaign->updated_at->toDateTimeString(),

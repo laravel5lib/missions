@@ -462,7 +462,7 @@ class ReservationFilter extends Filter
     public function notInTransport($transportId)
     {
         return $this->whereDoesntHave('transports', function ($transport) use ($transportId) {
-            return $transport->where('transports.id', '<>', $transportId);
+            return $transport->where('transports.id', $transportId);
         });
     }
 

@@ -6,57 +6,24 @@ import nextTick from 'p-immediate';
 import test from 'ava';
 
 //load the component with a vue instance
+RootInstance.template = '<div><listen-text v-ref:test-component text="One" event="listen"></listen-text></div>';
+RootInstance.components = {'listen-text': require('../../../components/listen-text.vue')};
 document.body.insertAdjacentHTML("afterbegin", "<app></app>");
-const vm = new Vue(_.extend(RootInstance, {
-    template: '<div><listen-text v-ref:test-component :text="text" :event="event" :icon="icon" :size="size"></listen-text></div>',
-    components: {
-        'listen-text': require('../../../components/listen-text.vue')
-    },
-    data: {
-        text: '',
-        event: null,
-        icon: null,
-        size: '',
-        count: 0
-    },
-    methods: {
-        action(){
-            return this.count = 1;
-        }
-    },
-    ready() {
-        this.$on('action', function () {
-            this.action();
-        })
-    }
-})).$mount('app');
-let trigger = vm.$refs.testComponent;
+const vm = new Vue(RootInstance).$mount('app');
 
-test.beforeEach('set variables', (t) => {
-    vm.text = 'Open';
-    vm.event = 'action';
-    vm.icon = 'fa fa-star';
-    vm.size = 'btn-sm';
+let ListenText = vm.$refs.testComponent;
+
+test('should have correct text', (t) => {
+    t.is(ListenText.text, 'One');
 });
 
-test('should have correct button text', async (t) => {
-    await nextTick();
-    t.is(trigger.text, vm.text);
+test('should have correct event', (t) => {
+    t.true(_.isString(ListenText.event));
+    t.is(ListenText.event, 'listen');
 });
 
-test('should have correct event', async (t) => {
+test('firing event changes text', async (t) => {
+    vm.$emit('listen', 'Two');
     await nextTick();
-    t.true(_.isString(vm.event));
-    t.true(_.isString(trigger.event));
-    t.is(vm.event, trigger.event);
-});
-
-test('should have correct button icon class', async (t) => {
-    await nextTick();
-    t.is(trigger.icon, vm.icon);
-});
-
-test('should have correct button class', async (t) => {
-    await nextTick();
-    t.is(trigger.size, vm.size);
+    t.is(ListenText.text, 'Two');
 });

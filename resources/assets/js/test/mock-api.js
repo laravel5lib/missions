@@ -4481,15 +4481,40 @@ export default {
     },
     ['POST *uploads(/:upload)'] (pathMatch, query, request) {
         let body = {
-            "id": "b4da362f-2524-4eb7-abaa-8aceb6fdd618",
-            "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
-            "name": request.body.name || "1n1d17_white",
-            "type": request.body.type || "avatar",
-            "meta": null,
-            "created_at": "2017-06-14 23:50:59",
-            "updated_at": "2017-06-14 23:50:59",
-            "tags": request.body.tags || [],
-            "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+            "data": {
+                "id": "b4da362f-2524-4eb7-abaa-8aceb6fdd618",
+                "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "name": request.body.name || "1n1d17_white",
+                "type": request.body.type || "avatar",
+                "meta": null,
+                "created_at": "2017-06-14 23:50:59",
+                "updated_at": "2017-06-14 23:50:59",
+                "tags": request.body.tags || [],
+                "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+            }
+        };
+
+        return {
+            body: body,
+                status: 200,
+                statusText: 'OK',
+                headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['PUT *uploads(/:upload)'] (pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "90fd1c9a-78f1-4d2a-907d-31dbda79211e",
+                "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "name": request.body.name || "1n1d17_white",
+                "type": request.body.type || "avatar",
+                "meta": null,
+                "created_at": "2017-06-14 23:50:59",
+                "updated_at": "2017-06-14 23:50:59",
+                "tags": request.body.tags || [],
+                "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+            }
         };
 
         return {
@@ -5350,7 +5375,8 @@ export default {
     },
     ['GET *utilities/airlines'] (pathMatch, query, request) {
         let body = {
-            "data": [{
+            "data": [
+                {
                 "id": "004f1cd7-dfb8-4871-9f5b-61a67a1836ef",
                 "name": "Virgin Nigeria Airways",
                 "alias": "",

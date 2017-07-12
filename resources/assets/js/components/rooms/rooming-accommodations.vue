@@ -510,13 +510,14 @@
                     notInUse: this.currentRegion ? this.currentRegion.id : null,
                     search: this.plansSearch,
                     per_page: this.per_page,
+	                page: this.plansPagination.current_page
                 });
 
                 return this.PlansResource.get(params).then(function (response) {
                     _.each(response.body.data, function (plan) {
                         plan.rooms_count_remaining = _.countBy(plan.rooms.data, 'type');
                     });
-                    this.pagination = response.body.meta.pagination;
+                    this.plansPagination = response.body.meta.pagination;
                     return this.plans = response.body.data;
                 }, this.$root.handleApiError)
             },

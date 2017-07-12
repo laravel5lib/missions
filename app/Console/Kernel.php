@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         Commands\Requirements\Add::class,
         Commands\Requirements\Remove::class,
         Commands\Utilities\UpdateRoomingPlansToMultiGroups::class,
-        Commands\Utilities\ExportReservationPics::class
+        Commands\Utilities\ExportReservationProfilePics::class
     ];
 
     /**

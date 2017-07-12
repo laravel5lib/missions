@@ -15,8 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \Barryvdh\Cors\HandleCors::class,
-        \App\Http\Middleware\RedirectToLowercase::class
+        \Barryvdh\Cors\HandleCors::class
     ];
 
     /**
@@ -53,5 +52,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'internal' => \App\Http\Middleware\InjectJwtToken::class,
         'impersonate' => \App\Http\Middleware\Impersonate::class,
+        'lowercase' => \App\Http\Middleware\RedirectToLowercase::class
     ];
 }

@@ -482,13 +482,11 @@
 
                 if (transport) {
                     // if has arrivalHub
-                    if (transport.type === 'flight') {
-                        if (transport.arrivalHub && _.isObject(transport.arrivalHub.data)) {
-                            _.extend(thisTransport.arrival, transport.arrivalHub.data)
-                        }
-                        if (transport.departureHub && _.isObject(transport.departureHub.data)) {
-                            _.extend(thisTransport.departure, transport.departureHub.data)
-                        }
+                    if (transport.arrivalHub && _.isObject(transport.arrivalHub.data)) {
+                        _.extend(thisTransport.arrival, transport.arrivalHub.data)
+                    }
+                    if (transport.departureHub && _.isObject(transport.departureHub.data)) {
+                        _.extend(thisTransport.departure, transport.departureHub.data)
                     }
 
                     this.selectedTransport = thisTransport;

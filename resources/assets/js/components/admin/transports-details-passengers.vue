@@ -332,7 +332,7 @@
                     //params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
                 }
 
-                $.extend(params, this.reservationFilters);
+                params = _.extend(params, this.reservationFilters);
 
 
                 // this.$refs.spinner.show();

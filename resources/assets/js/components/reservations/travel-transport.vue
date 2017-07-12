@@ -19,22 +19,27 @@
 
 						<template v-if="transport && transport.type === 'flight'">
 							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
-								<label for="travel_methodA">Airline</label>
-								<v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
+								<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
 								          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
 								          placeholder="Select Airline" v-if="editMode"></v-select>
 								<p v-else>{{ transport.name | uppercase }}</p>
-								<select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+								<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
 								        v-model="transport.name">
 									<option :value="airline.name" v-for="airline in UTILITIES.airlines">
 										{{airline.extended_name | capitalize}}
 									</option>
-									<option value="other">Other</option>
 								</select>
-								<template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
+								<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
+
+								<template v-if="manualAirlineData">
 									<div class="form-group">
 										<label for="">Airline</label>
 										<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
+										<p v-else>{{ transport.name | uppercase }}</p>
+									<div class="form-group">
+										<label for="">Callsign</label>
+										<input type="text" class="form-control" v-model="transport.call_sign" v-if="editMode">
 										<p v-else>{{ transport.name | uppercase }}</p>
 									</div>
 								</template>
@@ -146,6 +151,7 @@
                 ],
                 vehicleOptions: ['Taxi', 'Uber', 'Metro Car', 'Personal', 'Other'],
                 selectedAirlineObj: null,
+                manualAirlineData: false,
 	            LABELS: {
                     method: '',
 		            vehicle: '',
@@ -217,8 +223,14 @@
                 // Update state data
                 if (self.isUpdate) {
                     // select airline
-                    self.selectedAirlineObj = _.findWhere(self.UTILITIES.airlines, { name: self.transport.name });
-                    //console.log(self.selectedAirlineObj);
+                    let airline = _.findWhere(self.UTILITIES.airports, { name: self.transport.name });
+                    if (airline) {
+                        self.selectedAirportObj = airline
+                    } else {
+                        if (self.editMode && self.transport.name !== '')
+                            self.manualAirlineData = true;
+                    }
+	                //console.log(self.selectedAirlineObj);
                 }
                 self.$nextTick(function () {
                     if (_.isFunction(self.$validate))

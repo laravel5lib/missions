@@ -46,6 +46,7 @@ class CampaignTransformer extends TransformerAbstract
             'publish_rooms' => (boolean) $campaign->publish_rooms,
             'publish_regions' => (boolean) $campaign->publish_regions,
             'publish_transports' => (boolean) $campaign->publish_transports,
+            'reservations_locked' => (boolean) $campaign->reservations_locked,
             'published_at' => $campaign->published_at ? $campaign->published_at->toDateTimeString() : null,
             'created_at'   => $campaign->created_at->toDateTimeString(),
             'updated_at'   => $campaign->updated_at->toDateTimeString(),

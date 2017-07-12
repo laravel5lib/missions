@@ -110,20 +110,26 @@
 	    props: {
             hub: {
                 type: Object,
-	            default: {
-                    name: '',
-                    address: '',
-                    call_sign: '', // required
-                    city: '',
-                    state: '',
-                    zip: '',
-                    country_code: '',
+	            default: function () {
+                    return {
+                        name: '',
+                        address: '',
+                        call_sign: '', // required
+                        city: '',
+                        state: '',
+                        zip: '',
+                        country_code: '',
+                    }
 	            }
             },
 		    transportType: {
                 type: String,
 		    },
             isUpdate: {
+                type: Boolean,
+                default: false
+            },
+            transports: {
                 type: Boolean,
                 default: false
             },
@@ -179,7 +185,7 @@
                 });
             },
 	        transportType(val){
-                if (val !== 'flight')
+                if (val !== 'flight' && !this.transports)
                 switch (val) {
 	                case 'train':
 	                    _.extend(this.hub, {

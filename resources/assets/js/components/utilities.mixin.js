@@ -107,6 +107,13 @@ export default {
         },
         getAirport(reference){
             return this.$http.get('utilities/airports/' + reference).then(function (response) {
+                if (response.body.iata) {
+                    response.body.extended_name = response.body.name + ' (' + response.body.iata + ')';
+                } else if (response.body.icao) {
+                    response.body.extended_name = response.body.name + ' (' + response.body.icao + ')'
+                } else
+                    response.body.extended_name = response.body.name;
+
                 return response.body.data;
             });
         },

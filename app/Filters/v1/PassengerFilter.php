@@ -9,7 +9,7 @@ class PassengerFilter extends Filter
     * @var array
     */
     public $relations = [
-        'reservation' => ['gender', 'status', 'age', 'role', 'hasCompanions', 'search']
+        'reservation' => ['gender', 'status', 'age', 'role', 'hasCompanions', 'search', 'designation', 'groups']
     ];
 
     /**

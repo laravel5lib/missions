@@ -157,7 +157,7 @@
 						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
 					</select>
 				</div>
-				<travel-activity v-ref:activity :activity="selectedActivity" :activity-types="activityTypes" transport-domestic></travel-activity>
+				<travel-activity v-ref:activity :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
 			</div>
 		</modal>
 		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :show.sync="hubModal">

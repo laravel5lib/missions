@@ -3,6 +3,7 @@
 		<div class="panel panel-default" v-if="transport">
 			<div class="panel-heading">
 				<h3>
+					<a :href="'/admin/campaigns/' + campaignId + '/transports'" class="btn btn-xs btn-primary pull-right"><i class="fa fa-chevron-left"></i> Back to Transports</a>
 					{{ transport.name }}
 					<br />
 					<small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
@@ -20,31 +21,53 @@
 			</div>
 		</div>
 		<tabs v-if="transport">
-			<tab header="Itinerary">
-				<transports-details-itinerary :transport="transport" :campaign-id="campaignId"></transports-details-itinerary>
+			<tab header="Details">
+				<div class="row">
+					<div class="col-sm-6">
+						<h4>Arrival</h4>
+						<small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+
+						<p class="">
+							{{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
+							<span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}</span><br>
+							<span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
+							<span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
+						</p>
+					</div>
+					<div class="col-sm-6">
+						<h4>Departure</h4>
+						<small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+
+						<p class="">
+							{{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
+							<span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
+							<span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
+							<span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
+						</p>
+					</div>
+				</div>
 			</tab>
 			<tab header="Passengers">
-				<transports-details-passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
+				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Notes">
-				<!--<notes type="transports"-->
-				       <!--:id="transport.id"-->
-				       <!--:user_id="userId"-->
-				       <!--:per_page="5"-->
-				       <!--:can-modify="isAdminRoute ? 1 : 0">-->
-				<!--</notes>-->
+				<notes type="campaign_transports"
+				       :id="transport.id"
+				       :user_id="$root.userId"
+				       :per_page="10"
+				       :can-modify="1">
+				</notes>
 			</tab>
 		</tabs>
 
 	</div>
 </template>
-<style></style>
 <script type="text/javascript">
-    import transportsDetailsItinerary from './transports-details-itinerary.vue';
+    import notes from '../notes.vue';
     import transportsDetailsPassengers from './transports-details-passengers.vue';
     export default{
         name: 'transports-details',
-        components: {transportsDetailsItinerary, transportsDetailsPassengers},
+        components: {transportsDetailsPassengers, notes},
         props: {
             campaignId: {
                 type: String,
@@ -57,18 +80,20 @@
         },
         data(){
             return {
-                validatorHandle: 'TransportsDetailsModal',
                 transport: null,
-
-                TransportsResource: this.$resource('transports{/transport}'),
+                TransportsResource: this.$resource('campaigns{/campaign}/transports{/transport}', { campaign: this.campaignId}),
 	            passengersCount: 0,
             }
         },
         methods: {
             getTransport() {
-                this.TransportsResource.get({ transport: this.transportId }).then(function (response) {
+                let params = {
+                    transport: this.transportId,
+                    include: 'departureHub,arrivalHub'
+                };
+                this.TransportsResource.get(params).then(function (response) {
 	                this.transport = response.body.data;
-                });
+                }, this.$root.handleApiError);
             }
         },
         ready(){
@@ -76,3 +101,4 @@
         }
     }
 </script>
+<style></style>

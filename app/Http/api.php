@@ -121,6 +121,7 @@ $api->version('v1', [
         $api->resource('squads.members', 'SquadMembersController');
     });
 
+    $api->resource('campaigns.transports', 'CampaignTransportsController');
     $api->resource('transports', 'TransportsController');
     $api->resource('transports.passengers', 'PassengersController');
     $api->resource('stories', 'StoriesController');
@@ -237,6 +238,7 @@ $api->version('v1', [
     {
         $api->post('reservations/{type}', 'Reporting\ReservationsController@store');
         $api->post('{type}/rooms', 'Reporting\RoomsController@store');
+        $api->post('transports/{type}', 'Reporting\TransportsController@store');
     });
 
     /*

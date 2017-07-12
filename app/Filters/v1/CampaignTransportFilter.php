@@ -1,23 +1,25 @@
 <?php namespace App\Filters\v1;
 
-class TransportFilter extends Filter
+use EloquentFilter\ModelFilter;
+
+class CampaignTransportFilter extends Filter
 {
     /**
-    * Related Models that have ModelFilters as well as the method on the ModelFilter
-    * As [relatedModel => [method1, method2]]
-    *
-    * @var array
-    */
+     * Related Models that have ModelFilters as well as the method on the ModelFilter
+     * As [relatedModel => [method1, method2]]
+     *
+     * @var array
+     */
     public $relations = [
         'passengers' => ['designation', 'groups']
     ];
 
     public $sortable = [
-        'name', 'call_sign', 'vessel_no', 'capacity', 'type', 'created_at', 'updated_at'
+        'name', 'call_sign', 'vessel_no', 'capacity', 'type', 'created_at', 'updated_at', 'depart_at', 'arrive_at'
     ];
 
     public $searchable = [
-        'name', 'call_sign', 'vessel_no', 'capacity'
+        'name', 'vessel_no'
     ];
 
     public function campaign($campaign)
@@ -48,5 +50,25 @@ class TransportFilter extends Filter
     public function minPassengers($value)
     {
         return $this->has('passengers', '>=', $value);
+    }
+
+    public function departAfter()
+    {
+        //
+    }
+
+    public function departBefore()
+    {
+        //
+    }
+
+    public function arriveAfter()
+    {
+        //
+    }
+
+    public function arriveBefore()
+    {
+        //
     }
 }

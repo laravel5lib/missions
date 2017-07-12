@@ -243,16 +243,6 @@
                             <input id="transportCapacity" v-model="selectedTransport.capacity" type="number" number class="form-control" min="0">
                         </div>
                         <hr class="divider">
-                        <h4>Arrival</h4>
-                        <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
-                                    :activity-type="arrivalType.id" edit-mode transports
-                                    :transport-type="selectedTransport.type"></travel-hub>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
-                            <label for="">Arriving at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-                                   id="arrive_at" v-validate:occurred="['required', 'datetime']">
-                        </div>
                         <h4>Departure</h4>
                         <travel-hub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="departureType.id" edit-mode transports
@@ -262,6 +252,16 @@
                             <date-picker :model.sync="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
                             <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
                                    id="depart_at" v-validate:occurred="['required', 'datetime']">
+                        </div>
+                        <h4>Arrival</h4>
+                        <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
+                                    :activity-type="arrivalType.id" edit-mode transports
+                                    :transport-type="selectedTransport.type"></travel-hub>
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                            <label for="">Arriving at Date & Time</label>
+                            <date-picker :model.sync="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
+                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
+                                   id="arrive_at" v-validate:occurred="['required', 'datetime']">
                         </div>
                     </form>
                 </validator>

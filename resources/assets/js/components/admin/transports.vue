@@ -321,7 +321,7 @@
                     params: {
                         isDomestic: 'no',
                         campaign: this.campaignId,
-                        per_page: 1,
+                        per_page: 10,
                         search: '',
                         with: ['groups','designations']
                     }

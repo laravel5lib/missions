@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\v1\Campaign;
 use App\Models\v1\Hub;
+use App\Models\v1\Note;
 use App\Models\v1\Passenger;
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
@@ -116,5 +117,10 @@ class CampaignTransport extends Model
         return $designations;
 
         return [];
+    }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
     }
 }

@@ -63,7 +63,7 @@
                         </li>
                     </ul>
                 </li>
-                <li role="presentation" class="{{ $tab == 'transports' ||  $tab == 'details' || $tab == 'promotionals' ? 'active' : '' }} dropdown">
+                <li role="presentation" class="{{ $tab == 'transports' ? 'active' : '' }} dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Transportation <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="{{ $tab == 'transports' ? 'active' : '' }}"><a href="{{ url('admin/campaigns/'.$campaign->id.'/transports') }}">Transports</a></li>

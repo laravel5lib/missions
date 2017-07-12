@@ -321,7 +321,7 @@
                     params: {
                         isDomestic: 'no',
                         campaign: this.campaignId,
-                        per_page: 10,
+                        per_page: 1,
                         search: '',
                         with: ['groups','designations']
                     }
@@ -461,7 +461,7 @@
             fetch() {
                 let params = _.extend({}, this.options.params);
                 params = _.extend(params, this.filters);
-                params.page = _.isObject(this.pagination) ? this.pagination.page : 1;
+                params.page = _.isObject(this.pagination) ? this.pagination.current_page : 1;
                 this.TransportsResource.get(params).then(function (response) {
                     this.transports = response.body.data;
                     this.pagination = response.body.meta.pagination;

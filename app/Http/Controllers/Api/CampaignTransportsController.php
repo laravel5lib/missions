@@ -101,7 +101,7 @@ class CampaignTransportsController extends Controller
             'arrival_hub_id' => $request->get('arrival_hub_id')
         ]);
 
-        $transport = $transport->fresh()->withCount('passengers');
+        $transport = $transport->fresh();
 
         return $this->response->item($transport, new CampaignTransportTransformer);
     }

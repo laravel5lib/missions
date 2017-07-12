@@ -161,24 +161,29 @@
 
                         <template v-if="selectedTransport.type === 'flight'">
                             <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline' }">
-                                <label for="travel_methodA">Airline</label>
-                                <v-select @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+                                <label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
+                                <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
                                           :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
                                           placeholder="Select Airline"></v-select>
-                                <select class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+                                <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
                                         v-model="selectedTransport.name">
                                     <option :value="airline.name" v-for="airline in UTILITIES.airlines">
                                         {{airline.extended_name | capitalize}}
                                     </option>
-                                    <option value="other">Other</option>
                                 </select>
+	                            <label><input type="checkbox" v-model="manualAirlineData"> This is a chartered flight</label>
+                                <template v-if="manualAirlineData">
+                                    <div class="form-group">
+                                        <label for="">Airline Name</label>
+                                        <input type="text" class="form-control" v-model="selectedTransport.name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Callsign</label>
+                                        <input type="text" class="form-control" v-model="selectedTransport.call_sign">
+                                    </div>
+                                </template>
                             </div>
-                            <template v-if="selectedAirlineObj && selectedAirlineObj.name === 'Other'">
-                                <div class="form-group">
-                                    <label for="">Airline Name</label>
-                                    <input type="text" class="form-control" v-model="selectedTransport.name">
-                                </div>
-                            </template>
+
                             <div class="form-group">
                                 <label for="">Flight No.</label>
                                 <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
@@ -341,6 +346,7 @@
 
                 // modal vars
                 showTransportsModal: false,
+                manualAirlineData: false,
                 showTransportDeleteModal: false,
                 transportsModalEdit: false,
                 selectedTransport: null,
@@ -349,6 +355,10 @@
             }
         },
         watch: {
+            showTransportsModal(val) {
+                if (!val)
+                    this.manualAirlineData = false;
+            },
             'options.params.isDomestic'(val){
                 this.fetch();
             },
@@ -494,7 +504,10 @@
                     this.selectedTransport = thisTransport;
 
                     this.getAirlines(transport.name).then(function (obj) {
-                        this.selectedAirlineObj = _.findWhere(this.UTILITIES.airlines, { name: transport.name });
+                        let airline = _.findWhere(this.UTILITIES.airlines, { name: transport.name });
+                        if (airline) {
+                            this.selectedAirlineObj = airline;
+                        } else this.manualAirlineData = true;
                     });
 
                     this.showTransportsModal = true;

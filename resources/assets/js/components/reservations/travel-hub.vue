@@ -129,6 +129,10 @@
                 type: Boolean,
                 default: false
             },
+            transports: {
+                type: Boolean,
+                default: false
+            },
 		    editMode: {
                 type: Boolean,
 			    default: true
@@ -181,7 +185,7 @@
                 });
             },
 	        transportType(val){
-                if (val !== 'flight')
+                if (val !== 'flight' && !this.transports)
                 switch (val) {
 	                case 'train':
 	                    _.extend(this.hub, {

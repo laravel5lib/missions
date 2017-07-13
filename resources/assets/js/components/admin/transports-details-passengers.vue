@@ -239,6 +239,7 @@
                     age: [0, 120],
                     hasCompanions: null,
                     search: '',
+		            per_page: 10
 	            },
                 reservationFilters: {
                     type: '',
@@ -296,7 +297,7 @@
                 this.PassengersResource.get(params).then(function (response) {
                     this.passengers = response.body.data;
                     this.passengersPagination = response.body.meta.pagination;
-                });
+                }, this.$root.handleApiError);
             },
 	        addPassenger(reservation) {
                 return this.PassengersResource.save({
@@ -332,7 +333,7 @@
                     //params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
                 }
 
-                $.extend(params, this.reservationFilters);
+                params = _.extend(params, this.reservationFilters);
 
 
                 // this.$refs.spinner.show();
@@ -345,20 +346,17 @@
                     this.reservations = response.body.data;
                     this.reservationsPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
+                }, this.$root.handleApiError);
             },
             companionsPresentTransport(passenger) {
 				let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
-				let passengerIds = _.pluck(this.passengers, 'reservation_id');
+				let passengerIds = _.pluck(passenger.transportCompanions, 'id');
                 let presentIds =  _.intersection(companionIds, passengerIds);
                 return companionIds.length - presentIds.length;
             },
             addCompanionsToTransport(passenger) {
                 let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
-                let passengerIds = _.pluck(this.passengers, 'reservation_id');
+                let passengerIds = _.pluck(passenger.transportCompanions, 'id');
 				let notPresentIds = _.difference(companionIds, passengerIds);
                 // Check Limitations
 	            // Available Space

@@ -7,6 +7,7 @@ use League\Fractal\TransformerAbstract;
 
 class PassengerTransformer extends TransformerAbstract {
 
+    protected $defaultIncludes = [];
     /**
      * List of resources available to include
      *
@@ -24,7 +25,9 @@ class PassengerTransformer extends TransformerAbstract {
      */
     public function transform(Passenger $passenger)
     {
+
         return [
+            'transportCompanions' => $this->includeTransportCompanions($passenger),
             'id'             => $passenger->id,
             'reservation_id' => $passenger->reservation_id,
             'transport_id'   => $passenger->transport_id,
@@ -64,6 +67,22 @@ class PassengerTransformer extends TransformerAbstract {
         $reservation = $passenger->reservation;
 
         return $this->item($reservation, new ReservationTransformer);
+    }
+
+    /**
+     * Include Transport Companions
+     *
+     * @param Passenger $passenger
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeTransportCompanions(Passenger $passenger)
+    {
+        $companions = $passenger->reservation->companionReservations()->whereHas('transports', function ($transport) use ($passenger) {
+            return $transport->where('transports.id', $passenger->transport_id);
+        })->get(['reservations.id', 'reservations.given_names', 'reservations.surname']);
+        return $companions;
+//        $companions = $passenger->transportCompanions;
+//        return $this->collection($companions, new ReservationTransformer);
     }
 
 }

@@ -370,30 +370,7 @@
 		            this.$root.$emit('showSuccess', 'Companions Added');
                 }.bind(this));
 
-            },
-            companionsPresentTransport(passenger) {
-				let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
-				let passengerIds = _.pluck(this.passengers, 'reservation_id');
-                let presentIds =  _.intersection(companionIds, passengerIds);
-                return companionIds.length - presentIds.length;
-            },
-            addCompanionsToTransport(passenger) {
-                let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
-                let passengerIds = _.pluck(this.passengers, 'reservation_id');
-				let notPresentIds = _.difference(companionIds, passengerIds);
-                // Check Limitations
-	            // Available Space
-
-	            let promises = [];
-	            _.each(notPresentIds, function (id) {
-		            promises.push(this.addPassenger({ id: id }));
-                }.bind(this));
-
-	            Promise.all(promises).then(function (values) {
-		            this.$root.$emit('showSuccess', 'Companions Added');
-                }.bind(this));
-
-            },
+            }
         },
         ready(){
 			this.getPassengers();

@@ -48,8 +48,6 @@ class TravelReport extends Job implements ShouldQueue
 
         $data = $this->columnize($reservations);
 
-        dd($data);
-
         $filename = 'reservations_travel_' . time();
 
         (new CSVReport($data, $this->user))->make($filename)->notify();

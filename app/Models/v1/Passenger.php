@@ -35,10 +35,19 @@ class Passenger extends Model
         return $this->belongsTo(CampaignTransport::class, 'transport_id');
     }
 
-    /*public function transportCompanions()
+    public function transportCompanions()
     {
-        return $this->reservation->companionReservations()->whereHas('transports', function ($transport) {
-            return $transport->where('transports.id', $this->getAttribute('transport_id'));
-        });
-    }*/
+        return $this->reservation
+            ->companionReservations()
+            ->whereHas('transports', function ($transport) {
+                return $transport->where('transports.id', $this->transport_id);
+            })
+            ->get([
+                'reservations.id',
+                'reservations.given_names',
+                'reservations.surname'
+            ]);
+    }
+
+
 }

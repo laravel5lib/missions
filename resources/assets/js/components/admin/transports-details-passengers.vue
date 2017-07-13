@@ -346,7 +346,7 @@
                     this.reservations = response.body.data;
                     this.reservationsPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, this.$root.handleApiError);
+                }, this.$root.handleApiSoftError);
             },
             companionsPresentTransport(passenger) {
 				let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');

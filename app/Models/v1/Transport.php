@@ -14,7 +14,7 @@ class Transport extends Model
     protected $guarded = [];
 
     protected $dates = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'depart_at', 'arrive_at'
     ];
 
     public function seatsLeft()
@@ -74,13 +74,13 @@ class Transport extends Model
         return $this->morphToMany(Activity::class, 'activitable');
     }
 
-    public function addPassenger()
+    public function departureHub()
     {
-        //
+        return $this->belongsTo(Hub::class, 'departure_hub_id');
     }
 
-    public function removePassenger()
+    public function arrivalHub()
     {
-        //
+        return $this->belongsTo(Hub::class, 'arrival_hub_id');
     }
 }

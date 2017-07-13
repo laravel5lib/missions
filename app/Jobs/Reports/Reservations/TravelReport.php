@@ -202,7 +202,7 @@ class TravelReport extends Job implements ShouldQueue
 
         collect($flights)->sortBy('depart_at')
             ->each(function ($transport, $key) use($len, $transports) {
-                if ($key == 0 && $transport->departureHub->country_code == 'us') {
+                if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
                     // we get the first iteration for the departure
                     // and make sure departure is from the US
                     $transports['Intl Departure Location'] = $transport->departureHub->name;
@@ -211,7 +211,7 @@ class TravelReport extends Job implements ShouldQueue
                     $transports['Intl Departure Transport No.'] = $transport->vessel_no;
                 }
 
-                if ($key == $len - 1 && $transport->arrivalHub->country_code == 'us') {
+                if ($key == $len - 1 && $transport->arrivalHub && $transport->arrivalHub->country_code == 'us') {
                     // we get the last iteration for the return
                     // and make sure arrival is in the US
                     $transports['Intl Return Location'] = $transport->departureHub->name;

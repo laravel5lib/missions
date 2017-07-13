@@ -239,7 +239,7 @@
                     age: [0, 120],
                     hasCompanions: null,
                     search: '',
-		            per_page: 2
+		            per_page: 10
 	            },
                 reservationFilters: {
                     type: '',

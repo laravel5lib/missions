@@ -236,9 +236,9 @@
                                 <div class="col-sm-8">
                                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
-                                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
+                                            <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -246,9 +246,9 @@
                             <div class="row form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
-                                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="UTILITIES.timezones"></v-select>
                                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
-                                        <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                                        <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -340,10 +340,11 @@
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
+    import utilities from'../utilities.mixin';
     export default{
         name: 'user-settings',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [errorHandler, utilities],
         data(){
             return {
                 id: this.$root.user.id,
@@ -381,9 +382,7 @@
                 startUp: true,
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
 //                attemptSubmit: false,
-                countries: [],
                 countryCodeObj: null,
-                timezones: [],
                 changePassword: false,
                 showPassword: false,
                 timezoneObj: null,
@@ -549,7 +548,7 @@
                 this.name = user.name;
                 this.bio = user.bio;
                 this.type = user.type;
-                this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});
                 console.log(this.countryCodeObj);
                 this.country_code = user.country_code;
                 this.timezone = user.timezone;
@@ -579,22 +578,15 @@
             }
         },
         ready(){
-            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
-            });
+            let promises = [];
+            promises.push(this.getCountries());
+            promises.push(this.getTimezones());
 
-            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
-            });
-
-            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
+            Promise.all(promises).then(function (values) {
                 this.resource.get().then(function (response) {
                     this.setUserData(response.body.data);
                     this.startUp = false;
-                }, function (response) {
-                    console.log('Update Failed! :(');
-                    console.log(response);
-                });
+                }, this.$root.handleApiError);
             }.bind(this));
 
             this.$root.$on('save-settings', function () {

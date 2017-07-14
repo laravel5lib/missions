@@ -870,821 +870,917 @@ export default {
     },
 
     // Users API
-    ['GET *users/:id(?include=:include)'] (pathMatch, query, request) {
+    ['GET *users/:id/accolades(/:name)'] (pathMatch, query, request) {
+        let body;
+
+        switch (pathMatch.name) {
+            case 'trip_history':
+                body = {
+                    data: [{
+                        "name": "trip_history",
+                        "display_name": "Trip History",
+                        "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+            case 'countries_visited':
+                body = {
+                    data: [{
+                        "name": "countries_visited",
+                        "display_name": "Countries Visited",
+                        "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
+                            "code": "vg",
+                            "name": "Virgin Islands (British)"
+                        }, {"code": "bj", "name": "Benin"}],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['PUT *users/:id/accolades(/:name)'] (pathMatch, query, request) {
+        let body;
+
+        switch (pathMatch.name) {
+            case 'trip_history':
+                body = {
+                    data: [{
+                        "name": "trip_history",
+                        "display_name": "Trip History",
+                        "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+            case 'countries_visited':
+                body = {
+                    data: [{
+                        "name": "countries_visited",
+                        "display_name": "Countries Visited",
+                        "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
+                            "code": "vg",
+                            "name": "Virgin Islands (British)"
+                        }, {"code": "bj", "name": "Benin"}],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['GET *users(/:user)(?include=:include)'] (pathMatch, query, request) {
         // before respond, you can check the path and query parameters with `pathMatch` & `query`
         // powered by 'url-pattern' & 'qs'
         // https://www.npmjs.com/package/url-pattern
         // https://www.npmjs.com/package/qs
         let body = {
-            "data": {
-                "id": "112d15e5-c447-4c9e-bf25-b4cdb450c6a2",
-                "name": "Administrator",
-                "email": "admin@admin.com",
-                "password": "$2y$10$qBd9LjcDtM4MZlAvgIR9H.43NiD0OPPVpvSiE\/YaOLqqBvk2kCSpO",
-                "alt_email": null,
-                "gender": "Male",
-                "status": "Married",
-                "birthday": "1978-12-30",
-                "phone_one": null,
-                "phone_two": null,
-                "street": "7872 Lang Wall",
-                "city": "Port Loraine",
-                "state": "Idaho",
-                "zip": "90344",
-                "country_code": "la",
-                "country_name": "Lao, People's Democratic Republic",
-                "timezone": "Asia\/Kolkata",
-                "bio": "test",
-                "url": "administrator",
-                "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/112d15e5-c447-4c9e-bf25-b4cdb450c6a2_1487658721.jpg",
-                "banner": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-2-2560x800.jpg",
-                "public": false,
-                "created_at": "2017-02-20 22:00:08",
-                "updated_at": "2017-02-24 12:53:22",
-                "links": [{"rel": "self", "uri": "\/users\/112d15e5-c447-4c9e-bf25-b4cdb450c6a2"}],
-                "roles": {
-                    "data": [{
-                        "id": 1,
-                        "name": "member",
-                        "abilities": {
-                            "data": [{
-                                "id": 1,
-                                "display_name": "Access Dashboard",
-                                "name": "access-dashboard",
-                                "slug": "access-dashboard",
-                                "entity_id": null,
-                                "entity_type": null
-                            }]
-                        }
-                    }, {
-                        "id": 3,
-                        "name": "admin",
-                        "abilities": {
-                            "data": [{
-                                "id": 1,
-                                "display_name": "Access Dashboard",
-                                "name": "access-dashboard",
-                                "slug": "access-dashboard",
-                                "entity_id": null,
-                                "entity_type": null
-                            }, {
-                                "id": 2,
-                                "display_name": "Access Admin",
-                                "name": "access-admin",
-                                "slug": "access-admin",
-                                "entity_id": null,
-                                "entity_type": null
-                            }, {
-                                "id": 3,
-                                "display_name": "View Users",
-                                "name": "view",
-                                "slug": "view-users",
-                                "entity_id": null,
-                                "entity_type": "users"
-                            }, {
-                                "id": 4,
-                                "display_name": "Create Users",
-                                "name": "create",
-                                "slug": "create-users",
-                                "entity_id": null,
-                                "entity_type": "users"
-                            }, {
-                                "id": 5,
-                                "display_name": "Edit Users",
-                                "name": "edit",
-                                "slug": "edit-users",
-                                "entity_id": null,
-                                "entity_type": "users"
-                            }, {
-                                "id": 6,
-                                "display_name": "Delete Users",
-                                "name": "delete",
-                                "slug": "delete-users",
-                                "entity_id": null,
-                                "entity_type": "users"
-                            }, {
-                                "id": 7,
-                                "display_name": "View Groups",
-                                "name": "view",
-                                "slug": "view-groups",
-                                "entity_id": null,
-                                "entity_type": "groups"
-                            }, {
-                                "id": 8,
-                                "display_name": "Create Groups",
-                                "name": "create",
-                                "slug": "create-groups",
-                                "entity_id": null,
-                                "entity_type": "groups"
-                            }, {
-                                "id": 9,
-                                "display_name": "Edit Groups",
-                                "name": "edit",
-                                "slug": "edit-groups",
-                                "entity_id": null,
-                                "entity_type": "groups"
-                            }, {
-                                "id": 10,
-                                "display_name": "Delete Groups",
-                                "name": "delete",
-                                "slug": "delete-groups",
-                                "entity_id": null,
-                                "entity_type": "groups"
-                            }, {
-                                "id": 11,
-                                "display_name": "View Campaigns",
-                                "name": "view",
-                                "slug": "view-campaigns",
-                                "entity_id": null,
-                                "entity_type": "campaigns"
-                            }, {
-                                "id": 12,
-                                "display_name": "Create Campaigns",
-                                "name": "create",
-                                "slug": "create-campaigns",
-                                "entity_id": null,
-                                "entity_type": "campaigns"
-                            }, {
-                                "id": 13,
-                                "display_name": "Edit Campaigns",
-                                "name": "edit",
-                                "slug": "edit-campaigns",
-                                "entity_id": null,
-                                "entity_type": "campaigns"
-                            }, {
-                                "id": 14,
-                                "display_name": "Delete Campaigns",
-                                "name": "delete",
-                                "slug": "delete-campaigns",
-                                "entity_id": null,
-                                "entity_type": "campaigns"
-                            }, {
-                                "id": 15,
-                                "display_name": "View Trips",
-                                "name": "view",
-                                "slug": "view-trips",
-                                "entity_id": null,
-                                "entity_type": "trips"
-                            }, {
-                                "id": 16,
-                                "display_name": "Create Trips",
-                                "name": "create",
-                                "slug": "create-trips",
-                                "entity_id": null,
-                                "entity_type": "trips"
-                            }, {
-                                "id": 17,
-                                "display_name": "Edit Trips",
-                                "name": "edit",
-                                "slug": "edit-trips",
-                                "entity_id": null,
-                                "entity_type": "trips"
-                            }, {
-                                "id": 18,
-                                "display_name": "Delete Trips",
-                                "name": "delete",
-                                "slug": "delete-trips",
-                                "entity_id": null,
-                                "entity_type": "trips"
-                            }, {
-                                "id": 19,
-                                "display_name": "View Reservations",
-                                "name": "view",
-                                "slug": "view-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 20,
-                                "display_name": "Create Reservations",
-                                "name": "create",
-                                "slug": "create-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 21,
-                                "display_name": "Edit Reservations",
-                                "name": "edit",
-                                "slug": "edit-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 22,
-                                "display_name": "Delete Reservations",
-                                "name": "delete",
-                                "slug": "delete-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 23,
-                                "display_name": "Manage Costs Reservations",
-                                "name": "manage costs",
-                                "slug": "manage costs-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 24,
-                                "display_name": "Manage Payments Reservations",
-                                "name": "manage payments",
-                                "slug": "manage payments-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 25,
-                                "display_name": "Manage Requirements Reservations",
-                                "name": "manage requirements",
-                                "slug": "manage requirements-reservations",
-                                "entity_id": null,
-                                "entity_type": "reservations"
-                            }, {
-                                "id": 26,
-                                "display_name": "View Projects",
-                                "name": "view",
-                                "slug": "view-projects",
-                                "entity_id": null,
-                                "entity_type": "projects"
-                            }, {
-                                "id": 27,
-                                "display_name": "Create Projects",
-                                "name": "create",
-                                "slug": "create-projects",
-                                "entity_id": null,
-                                "entity_type": "projects"
-                            }, {
-                                "id": 28,
-                                "display_name": "Edit Projects",
-                                "name": "edit",
-                                "slug": "edit-projects",
-                                "entity_id": null,
-                                "entity_type": "projects"
-                            }, {
-                                "id": 29,
-                                "display_name": "Delete Projects",
-                                "name": "delete",
-                                "slug": "delete-projects",
-                                "entity_id": null,
-                                "entity_type": "projects"
-                            }, {
-                                "id": 30,
-                                "display_name": "View App\\models\\v1\\cost",
-                                "name": "view",
-                                "slug": "view-app\\models\\v1\\cost",
-                                "entity_id": null,
-                                "entity_type": "App\\Models\\v1\\Cost"
-                            }, {
-                                "id": 31,
-                                "display_name": "Create App\\models\\v1\\cost",
-                                "name": "create",
-                                "slug": "create-app\\models\\v1\\cost",
-                                "entity_id": null,
-                                "entity_type": "App\\Models\\v1\\Cost"
-                            }, {
-                                "id": 32,
-                                "display_name": "Edit App\\models\\v1\\cost",
-                                "name": "edit",
-                                "slug": "edit-app\\models\\v1\\cost",
-                                "entity_id": null,
-                                "entity_type": "App\\Models\\v1\\Cost"
-                            }, {
-                                "id": 33,
-                                "display_name": "Delete App\\models\\v1\\cost",
-                                "name": "delete",
-                                "slug": "delete-app\\models\\v1\\cost",
-                                "entity_id": null,
-                                "entity_type": "App\\Models\\v1\\Cost"
-                            }, {
-                                "id": 34,
-                                "display_name": "View Project_causes",
-                                "name": "view",
-                                "slug": "view-project_causes",
-                                "entity_id": null,
-                                "entity_type": "project_causes"
-                            }, {
-                                "id": 35,
-                                "display_name": "Create Project_causes",
-                                "name": "create",
-                                "slug": "create-project_causes",
-                                "entity_id": null,
-                                "entity_type": "project_causes"
-                            }, {
-                                "id": 36,
-                                "display_name": "Edit Project_causes",
-                                "name": "edit",
-                                "slug": "edit-project_causes",
-                                "entity_id": null,
-                                "entity_type": "project_causes"
-                            }, {
-                                "id": 37,
-                                "display_name": "Delete Project_causes",
-                                "name": "delete",
-                                "slug": "delete-project_causes",
-                                "entity_id": null,
-                                "entity_type": "project_causes"
-                            }, {
-                                "id": 38,
-                                "display_name": "View Transactions",
-                                "name": "view",
-                                "slug": "view-transactions",
-                                "entity_id": null,
-                                "entity_type": "transactions"
-                            }, {
-                                "id": 39,
-                                "display_name": "Create Transactions",
-                                "name": "create",
-                                "slug": "create-transactions",
-                                "entity_id": null,
-                                "entity_type": "transactions"
-                            }, {
-                                "id": 40,
-                                "display_name": "Edit Transactions",
-                                "name": "edit",
-                                "slug": "edit-transactions",
-                                "entity_id": null,
-                                "entity_type": "transactions"
-                            }, {
-                                "id": 41,
-                                "display_name": "Delete Transactions",
-                                "name": "delete",
-                                "slug": "delete-transactions",
-                                "entity_id": null,
-                                "entity_type": "transactions"
-                            }, {
-                                "id": 42,
-                                "display_name": "View Funds",
-                                "name": "view",
-                                "slug": "view-funds",
-                                "entity_id": null,
-                                "entity_type": "funds"
-                            }, {
-                                "id": 43,
-                                "display_name": "Create Funds",
-                                "name": "create",
-                                "slug": "create-funds",
-                                "entity_id": null,
-                                "entity_type": "funds"
-                            }, {
-                                "id": 44,
-                                "display_name": "Edit Funds",
-                                "name": "edit",
-                                "slug": "edit-funds",
-                                "entity_id": null,
-                                "entity_type": "funds"
-                            }, {
-                                "id": 45,
-                                "display_name": "View Donors",
-                                "name": "view",
-                                "slug": "view-donors",
-                                "entity_id": null,
-                                "entity_type": "donors"
-                            }, {
-                                "id": 46,
-                                "display_name": "Create Donors",
-                                "name": "create",
-                                "slug": "create-donors",
-                                "entity_id": null,
-                                "entity_type": "donors"
-                            }, {
-                                "id": 47,
-                                "display_name": "Edit Donors",
-                                "name": "edit",
-                                "slug": "edit-donors",
-                                "entity_id": null,
-                                "entity_type": "donors"
-                            }, {
-                                "id": 48,
-                                "display_name": "Delete Donors",
-                                "name": "delete",
-                                "slug": "delete-donors",
-                                "entity_id": null,
-                                "entity_type": "donors"
-                            }, {
-                                "id": 49,
-                                "display_name": "Modify Todos",
-                                "name": "modify",
-                                "slug": "modify-todos",
-                                "entity_id": null,
-                                "entity_type": "todos"
-                            }, {
-                                "id": 50,
-                                "display_name": "Modify Notes",
-                                "name": "modify",
-                                "slug": "modify-notes",
-                                "entity_id": null,
-                                "entity_type": "notes"
-                            }, {
-                                "id": 51,
-                                "display_name": "View Uploads",
-                                "name": "view",
-                                "slug": "view-uploads",
-                                "entity_id": null,
-                                "entity_type": "uploads"
-                            }, {
-                                "id": 52,
-                                "display_name": "Create Uploads",
-                                "name": "create",
-                                "slug": "create-uploads",
-                                "entity_id": null,
-                                "entity_type": "uploads"
-                            }, {
-                                "id": 53,
-                                "display_name": "Edit Uploads",
-                                "name": "edit",
-                                "slug": "edit-uploads",
-                                "entity_id": null,
-                                "entity_type": "uploads"
-                            }, {
-                                "id": 54,
-                                "display_name": "Delete Uploads",
-                                "name": "delete",
-                                "slug": "delete-uploads",
-                                "entity_id": null,
-                                "entity_type": "uploads"
-                            }]
-                        }
-                    }]
-                },
-                "abilities": {
-                    "data": [{
-                        "id": 1,
-                        "display_name": "Access Dashboard",
-                        "name": "access-dashboard",
-                        "slug": "access-dashboard",
-                        "entity_id": null,
-                        "entity_type": null
-                    }, {
-                        "id": 2,
-                        "display_name": "Access Admin",
-                        "name": "access-admin",
-                        "slug": "access-admin",
-                        "entity_id": null,
-                        "entity_type": null
-                    }, {
-                        "id": 3,
-                        "display_name": "View Users",
-                        "name": "view",
-                        "slug": "view-users",
-                        "entity_id": null,
-                        "entity_type": "users"
-                    }, {
-                        "id": 4,
-                        "display_name": "Create Users",
-                        "name": "create",
-                        "slug": "create-users",
-                        "entity_id": null,
-                        "entity_type": "users"
-                    }, {
-                        "id": 5,
-                        "display_name": "Edit Users",
-                        "name": "edit",
-                        "slug": "edit-users",
-                        "entity_id": null,
-                        "entity_type": "users"
-                    }, {
-                        "id": 6,
-                        "display_name": "Delete Users",
-                        "name": "delete",
-                        "slug": "delete-users",
-                        "entity_id": null,
-                        "entity_type": "users"
-                    }, {
-                        "id": 7,
-                        "display_name": "View Groups",
-                        "name": "view",
-                        "slug": "view-groups",
-                        "entity_id": null,
-                        "entity_type": "groups"
-                    }, {
-                        "id": 8,
-                        "display_name": "Create Groups",
-                        "name": "create",
-                        "slug": "create-groups",
-                        "entity_id": null,
-                        "entity_type": "groups"
-                    }, {
-                        "id": 9,
-                        "display_name": "Edit Groups",
-                        "name": "edit",
-                        "slug": "edit-groups",
-                        "entity_id": null,
-                        "entity_type": "groups"
-                    }, {
-                        "id": 10,
-                        "display_name": "Delete Groups",
-                        "name": "delete",
-                        "slug": "delete-groups",
-                        "entity_id": null,
-                        "entity_type": "groups"
-                    }, {
-                        "id": 11,
-                        "display_name": "View Campaigns",
-                        "name": "view",
-                        "slug": "view-campaigns",
-                        "entity_id": null,
-                        "entity_type": "campaigns"
-                    }, {
-                        "id": 12,
-                        "display_name": "Create Campaigns",
-                        "name": "create",
-                        "slug": "create-campaigns",
-                        "entity_id": null,
-                        "entity_type": "campaigns"
-                    }, {
-                        "id": 13,
-                        "display_name": "Edit Campaigns",
-                        "name": "edit",
-                        "slug": "edit-campaigns",
-                        "entity_id": null,
-                        "entity_type": "campaigns"
-                    }, {
-                        "id": 14,
-                        "display_name": "Delete Campaigns",
-                        "name": "delete",
-                        "slug": "delete-campaigns",
-                        "entity_id": null,
-                        "entity_type": "campaigns"
-                    }, {
-                        "id": 15,
-                        "display_name": "View Trips",
-                        "name": "view",
-                        "slug": "view-trips",
-                        "entity_id": null,
-                        "entity_type": "trips"
-                    }, {
-                        "id": 16,
-                        "display_name": "Create Trips",
-                        "name": "create",
-                        "slug": "create-trips",
-                        "entity_id": null,
-                        "entity_type": "trips"
-                    }, {
-                        "id": 17,
-                        "display_name": "Edit Trips",
-                        "name": "edit",
-                        "slug": "edit-trips",
-                        "entity_id": null,
-                        "entity_type": "trips"
-                    }, {
-                        "id": 18,
-                        "display_name": "Delete Trips",
-                        "name": "delete",
-                        "slug": "delete-trips",
-                        "entity_id": null,
-                        "entity_type": "trips"
-                    }, {
-                        "id": 19,
-                        "display_name": "View Reservations",
-                        "name": "view",
-                        "slug": "view-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 20,
-                        "display_name": "Create Reservations",
-                        "name": "create",
-                        "slug": "create-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 21,
-                        "display_name": "Edit Reservations",
-                        "name": "edit",
-                        "slug": "edit-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 22,
-                        "display_name": "Delete Reservations",
-                        "name": "delete",
-                        "slug": "delete-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 23,
-                        "display_name": "Manage Costs Reservations",
-                        "name": "manage costs",
-                        "slug": "manage costs-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 24,
-                        "display_name": "Manage Payments Reservations",
-                        "name": "manage payments",
-                        "slug": "manage payments-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 25,
-                        "display_name": "Manage Requirements Reservations",
-                        "name": "manage requirements",
-                        "slug": "manage requirements-reservations",
-                        "entity_id": null,
-                        "entity_type": "reservations"
-                    }, {
-                        "id": 26,
-                        "display_name": "View Projects",
-                        "name": "view",
-                        "slug": "view-projects",
-                        "entity_id": null,
-                        "entity_type": "projects"
-                    }, {
-                        "id": 27,
-                        "display_name": "Create Projects",
-                        "name": "create",
-                        "slug": "create-projects",
-                        "entity_id": null,
-                        "entity_type": "projects"
-                    }, {
-                        "id": 28,
-                        "display_name": "Edit Projects",
-                        "name": "edit",
-                        "slug": "edit-projects",
-                        "entity_id": null,
-                        "entity_type": "projects"
-                    }, {
-                        "id": 29,
-                        "display_name": "Delete Projects",
-                        "name": "delete",
-                        "slug": "delete-projects",
-                        "entity_id": null,
-                        "entity_type": "projects"
-                    }, {
-                        "id": 30,
-                        "display_name": "View App\\models\\v1\\cost",
-                        "name": "view",
-                        "slug": "view-app\\models\\v1\\cost",
-                        "entity_id": null,
-                        "entity_type": "App\\Models\\v1\\Cost"
-                    }, {
-                        "id": 31,
-                        "display_name": "Create App\\models\\v1\\cost",
-                        "name": "create",
-                        "slug": "create-app\\models\\v1\\cost",
-                        "entity_id": null,
-                        "entity_type": "App\\Models\\v1\\Cost"
-                    }, {
-                        "id": 32,
-                        "display_name": "Edit App\\models\\v1\\cost",
-                        "name": "edit",
-                        "slug": "edit-app\\models\\v1\\cost",
-                        "entity_id": null,
-                        "entity_type": "App\\Models\\v1\\Cost"
-                    }, {
-                        "id": 33,
-                        "display_name": "Delete App\\models\\v1\\cost",
-                        "name": "delete",
-                        "slug": "delete-app\\models\\v1\\cost",
-                        "entity_id": null,
-                        "entity_type": "App\\Models\\v1\\Cost"
-                    }, {
-                        "id": 34,
-                        "display_name": "View Project_causes",
-                        "name": "view",
-                        "slug": "view-project_causes",
-                        "entity_id": null,
-                        "entity_type": "project_causes"
-                    }, {
-                        "id": 35,
-                        "display_name": "Create Project_causes",
-                        "name": "create",
-                        "slug": "create-project_causes",
-                        "entity_id": null,
-                        "entity_type": "project_causes"
-                    }, {
-                        "id": 36,
-                        "display_name": "Edit Project_causes",
-                        "name": "edit",
-                        "slug": "edit-project_causes",
-                        "entity_id": null,
-                        "entity_type": "project_causes"
-                    }, {
-                        "id": 37,
-                        "display_name": "Delete Project_causes",
-                        "name": "delete",
-                        "slug": "delete-project_causes",
-                        "entity_id": null,
-                        "entity_type": "project_causes"
-                    }, {
-                        "id": 38,
-                        "display_name": "View Transactions",
-                        "name": "view",
-                        "slug": "view-transactions",
-                        "entity_id": null,
-                        "entity_type": "transactions"
-                    }, {
-                        "id": 39,
-                        "display_name": "Create Transactions",
-                        "name": "create",
-                        "slug": "create-transactions",
-                        "entity_id": null,
-                        "entity_type": "transactions"
-                    }, {
-                        "id": 40,
-                        "display_name": "Edit Transactions",
-                        "name": "edit",
-                        "slug": "edit-transactions",
-                        "entity_id": null,
-                        "entity_type": "transactions"
-                    }, {
-                        "id": 41,
-                        "display_name": "Delete Transactions",
-                        "name": "delete",
-                        "slug": "delete-transactions",
-                        "entity_id": null,
-                        "entity_type": "transactions"
-                    }, {
-                        "id": 42,
-                        "display_name": "View Funds",
-                        "name": "view",
-                        "slug": "view-funds",
-                        "entity_id": null,
-                        "entity_type": "funds"
-                    }, {
-                        "id": 43,
-                        "display_name": "Create Funds",
-                        "name": "create",
-                        "slug": "create-funds",
-                        "entity_id": null,
-                        "entity_type": "funds"
-                    }, {
-                        "id": 44,
-                        "display_name": "Edit Funds",
-                        "name": "edit",
-                        "slug": "edit-funds",
-                        "entity_id": null,
-                        "entity_type": "funds"
-                    }, {
-                        "id": 45,
-                        "display_name": "View Donors",
-                        "name": "view",
-                        "slug": "view-donors",
-                        "entity_id": null,
-                        "entity_type": "donors"
-                    }, {
-                        "id": 46,
-                        "display_name": "Create Donors",
-                        "name": "create",
-                        "slug": "create-donors",
-                        "entity_id": null,
-                        "entity_type": "donors"
-                    }, {
-                        "id": 47,
-                        "display_name": "Edit Donors",
-                        "name": "edit",
-                        "slug": "edit-donors",
-                        "entity_id": null,
-                        "entity_type": "donors"
-                    }, {
-                        "id": 48,
-                        "display_name": "Delete Donors",
-                        "name": "delete",
-                        "slug": "delete-donors",
-                        "entity_id": null,
-                        "entity_type": "donors"
-                    }, {
-                        "id": 49,
-                        "display_name": "Modify Todos",
-                        "name": "modify",
-                        "slug": "modify-todos",
-                        "entity_id": null,
-                        "entity_type": "todos"
-                    }, {
-                        "id": 50,
-                        "display_name": "Modify Notes",
-                        "name": "modify",
-                        "slug": "modify-notes",
-                        "entity_id": null,
-                        "entity_type": "notes"
-                    }, {
-                        "id": 51,
-                        "display_name": "View Uploads",
-                        "name": "view",
-                        "slug": "view-uploads",
-                        "entity_id": null,
-                        "entity_type": "uploads"
-                    }, {
-                        "id": 52,
-                        "display_name": "Create Uploads",
-                        "name": "create",
-                        "slug": "create-uploads",
-                        "entity_id": null,
-                        "entity_type": "uploads"
-                    }, {
-                        "id": 53,
-                        "display_name": "Edit Uploads",
-                        "name": "edit",
-                        "slug": "edit-uploads",
-                        "entity_id": null,
-                        "entity_type": "uploads"
-                    }, {
-                        "id": 54,
-                        "display_name": "Delete Uploads",
-                        "name": "delete",
-                        "slug": "delete-uploads",
-                        "entity_id": null,
-                        "entity_type": "uploads"
-                    }]
+            "data": [
+                {
+                    "id": "112d15e5-c447-4c9e-bf25-b4cdb450c6a2",
+                    "name": "Administrator",
+                    "email": "admin@admin.com",
+                    "password": "$2y$10$qBd9LjcDtM4MZlAvgIR9H.43NiD0OPPVpvSiE\/YaOLqqBvk2kCSpO",
+                    "alt_email": null,
+                    "gender": "Male",
+                    "status": "Married",
+                    "birthday": "1978-12-30",
+                    "phone_one": null,
+                    "phone_two": null,
+                    "street": "7872 Lang Wall",
+                    "city": "Port Loraine",
+                    "state": "Idaho",
+                    "zip": "90344",
+                    "country_code": "la",
+                    "country_name": "Lao, People's Democratic Republic",
+                    "timezone": "Asia\/Kolkata",
+                    "bio": "test",
+                    "url": "administrator",
+                    "avatar": "https:\/\/missions.dev\/api\/images\/avatars\/112d15e5-c447-4c9e-bf25-b4cdb450c6a2_1487658721.jpg",
+                    "banner": "https:\/\/missions.dev\/api\/images\/banners\/gen-ban-2-2560x800.jpg",
+                    "public": false,
+                    "created_at": "2017-02-20 22:00:08",
+                    "updated_at": "2017-02-24 12:53:22",
+                    "links": [{"rel": "self", "uri": "\/users\/112d15e5-c447-4c9e-bf25-b4cdb450c6a2"}],
+                    "roles": {
+                        "data": [{
+                            "id": 1,
+                            "name": "member",
+                            "abilities": {
+                                "data": [{
+                                    "id": 1,
+                                    "display_name": "Access Dashboard",
+                                    "name": "access-dashboard",
+                                    "slug": "access-dashboard",
+                                    "entity_id": null,
+                                    "entity_type": null
+                                }]
+                            }
+                        }, {
+                            "id": 3,
+                            "name": "admin",
+                            "abilities": {
+                                "data": [{
+                                    "id": 1,
+                                    "display_name": "Access Dashboard",
+                                    "name": "access-dashboard",
+                                    "slug": "access-dashboard",
+                                    "entity_id": null,
+                                    "entity_type": null
+                                }, {
+                                    "id": 2,
+                                    "display_name": "Access Admin",
+                                    "name": "access-admin",
+                                    "slug": "access-admin",
+                                    "entity_id": null,
+                                    "entity_type": null
+                                }, {
+                                    "id": 3,
+                                    "display_name": "View Users",
+                                    "name": "view",
+                                    "slug": "view-users",
+                                    "entity_id": null,
+                                    "entity_type": "users"
+                                }, {
+                                    "id": 4,
+                                    "display_name": "Create Users",
+                                    "name": "create",
+                                    "slug": "create-users",
+                                    "entity_id": null,
+                                    "entity_type": "users"
+                                }, {
+                                    "id": 5,
+                                    "display_name": "Edit Users",
+                                    "name": "edit",
+                                    "slug": "edit-users",
+                                    "entity_id": null,
+                                    "entity_type": "users"
+                                }, {
+                                    "id": 6,
+                                    "display_name": "Delete Users",
+                                    "name": "delete",
+                                    "slug": "delete-users",
+                                    "entity_id": null,
+                                    "entity_type": "users"
+                                }, {
+                                    "id": 7,
+                                    "display_name": "View Groups",
+                                    "name": "view",
+                                    "slug": "view-groups",
+                                    "entity_id": null,
+                                    "entity_type": "groups"
+                                }, {
+                                    "id": 8,
+                                    "display_name": "Create Groups",
+                                    "name": "create",
+                                    "slug": "create-groups",
+                                    "entity_id": null,
+                                    "entity_type": "groups"
+                                }, {
+                                    "id": 9,
+                                    "display_name": "Edit Groups",
+                                    "name": "edit",
+                                    "slug": "edit-groups",
+                                    "entity_id": null,
+                                    "entity_type": "groups"
+                                }, {
+                                    "id": 10,
+                                    "display_name": "Delete Groups",
+                                    "name": "delete",
+                                    "slug": "delete-groups",
+                                    "entity_id": null,
+                                    "entity_type": "groups"
+                                }, {
+                                    "id": 11,
+                                    "display_name": "View Campaigns",
+                                    "name": "view",
+                                    "slug": "view-campaigns",
+                                    "entity_id": null,
+                                    "entity_type": "campaigns"
+                                }, {
+                                    "id": 12,
+                                    "display_name": "Create Campaigns",
+                                    "name": "create",
+                                    "slug": "create-campaigns",
+                                    "entity_id": null,
+                                    "entity_type": "campaigns"
+                                }, {
+                                    "id": 13,
+                                    "display_name": "Edit Campaigns",
+                                    "name": "edit",
+                                    "slug": "edit-campaigns",
+                                    "entity_id": null,
+                                    "entity_type": "campaigns"
+                                }, {
+                                    "id": 14,
+                                    "display_name": "Delete Campaigns",
+                                    "name": "delete",
+                                    "slug": "delete-campaigns",
+                                    "entity_id": null,
+                                    "entity_type": "campaigns"
+                                }, {
+                                    "id": 15,
+                                    "display_name": "View Trips",
+                                    "name": "view",
+                                    "slug": "view-trips",
+                                    "entity_id": null,
+                                    "entity_type": "trips"
+                                }, {
+                                    "id": 16,
+                                    "display_name": "Create Trips",
+                                    "name": "create",
+                                    "slug": "create-trips",
+                                    "entity_id": null,
+                                    "entity_type": "trips"
+                                }, {
+                                    "id": 17,
+                                    "display_name": "Edit Trips",
+                                    "name": "edit",
+                                    "slug": "edit-trips",
+                                    "entity_id": null,
+                                    "entity_type": "trips"
+                                }, {
+                                    "id": 18,
+                                    "display_name": "Delete Trips",
+                                    "name": "delete",
+                                    "slug": "delete-trips",
+                                    "entity_id": null,
+                                    "entity_type": "trips"
+                                }, {
+                                    "id": 19,
+                                    "display_name": "View Reservations",
+                                    "name": "view",
+                                    "slug": "view-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 20,
+                                    "display_name": "Create Reservations",
+                                    "name": "create",
+                                    "slug": "create-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 21,
+                                    "display_name": "Edit Reservations",
+                                    "name": "edit",
+                                    "slug": "edit-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 22,
+                                    "display_name": "Delete Reservations",
+                                    "name": "delete",
+                                    "slug": "delete-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 23,
+                                    "display_name": "Manage Costs Reservations",
+                                    "name": "manage costs",
+                                    "slug": "manage costs-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 24,
+                                    "display_name": "Manage Payments Reservations",
+                                    "name": "manage payments",
+                                    "slug": "manage payments-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 25,
+                                    "display_name": "Manage Requirements Reservations",
+                                    "name": "manage requirements",
+                                    "slug": "manage requirements-reservations",
+                                    "entity_id": null,
+                                    "entity_type": "reservations"
+                                }, {
+                                    "id": 26,
+                                    "display_name": "View Projects",
+                                    "name": "view",
+                                    "slug": "view-projects",
+                                    "entity_id": null,
+                                    "entity_type": "projects"
+                                }, {
+                                    "id": 27,
+                                    "display_name": "Create Projects",
+                                    "name": "create",
+                                    "slug": "create-projects",
+                                    "entity_id": null,
+                                    "entity_type": "projects"
+                                }, {
+                                    "id": 28,
+                                    "display_name": "Edit Projects",
+                                    "name": "edit",
+                                    "slug": "edit-projects",
+                                    "entity_id": null,
+                                    "entity_type": "projects"
+                                }, {
+                                    "id": 29,
+                                    "display_name": "Delete Projects",
+                                    "name": "delete",
+                                    "slug": "delete-projects",
+                                    "entity_id": null,
+                                    "entity_type": "projects"
+                                }, {
+                                    "id": 30,
+                                    "display_name": "View App\\models\\v1\\cost",
+                                    "name": "view",
+                                    "slug": "view-app\\models\\v1\\cost",
+                                    "entity_id": null,
+                                    "entity_type": "App\\Models\\v1\\Cost"
+                                }, {
+                                    "id": 31,
+                                    "display_name": "Create App\\models\\v1\\cost",
+                                    "name": "create",
+                                    "slug": "create-app\\models\\v1\\cost",
+                                    "entity_id": null,
+                                    "entity_type": "App\\Models\\v1\\Cost"
+                                }, {
+                                    "id": 32,
+                                    "display_name": "Edit App\\models\\v1\\cost",
+                                    "name": "edit",
+                                    "slug": "edit-app\\models\\v1\\cost",
+                                    "entity_id": null,
+                                    "entity_type": "App\\Models\\v1\\Cost"
+                                }, {
+                                    "id": 33,
+                                    "display_name": "Delete App\\models\\v1\\cost",
+                                    "name": "delete",
+                                    "slug": "delete-app\\models\\v1\\cost",
+                                    "entity_id": null,
+                                    "entity_type": "App\\Models\\v1\\Cost"
+                                }, {
+                                    "id": 34,
+                                    "display_name": "View Project_causes",
+                                    "name": "view",
+                                    "slug": "view-project_causes",
+                                    "entity_id": null,
+                                    "entity_type": "project_causes"
+                                }, {
+                                    "id": 35,
+                                    "display_name": "Create Project_causes",
+                                    "name": "create",
+                                    "slug": "create-project_causes",
+                                    "entity_id": null,
+                                    "entity_type": "project_causes"
+                                }, {
+                                    "id": 36,
+                                    "display_name": "Edit Project_causes",
+                                    "name": "edit",
+                                    "slug": "edit-project_causes",
+                                    "entity_id": null,
+                                    "entity_type": "project_causes"
+                                }, {
+                                    "id": 37,
+                                    "display_name": "Delete Project_causes",
+                                    "name": "delete",
+                                    "slug": "delete-project_causes",
+                                    "entity_id": null,
+                                    "entity_type": "project_causes"
+                                }, {
+                                    "id": 38,
+                                    "display_name": "View Transactions",
+                                    "name": "view",
+                                    "slug": "view-transactions",
+                                    "entity_id": null,
+                                    "entity_type": "transactions"
+                                }, {
+                                    "id": 39,
+                                    "display_name": "Create Transactions",
+                                    "name": "create",
+                                    "slug": "create-transactions",
+                                    "entity_id": null,
+                                    "entity_type": "transactions"
+                                }, {
+                                    "id": 40,
+                                    "display_name": "Edit Transactions",
+                                    "name": "edit",
+                                    "slug": "edit-transactions",
+                                    "entity_id": null,
+                                    "entity_type": "transactions"
+                                }, {
+                                    "id": 41,
+                                    "display_name": "Delete Transactions",
+                                    "name": "delete",
+                                    "slug": "delete-transactions",
+                                    "entity_id": null,
+                                    "entity_type": "transactions"
+                                }, {
+                                    "id": 42,
+                                    "display_name": "View Funds",
+                                    "name": "view",
+                                    "slug": "view-funds",
+                                    "entity_id": null,
+                                    "entity_type": "funds"
+                                }, {
+                                    "id": 43,
+                                    "display_name": "Create Funds",
+                                    "name": "create",
+                                    "slug": "create-funds",
+                                    "entity_id": null,
+                                    "entity_type": "funds"
+                                }, {
+                                    "id": 44,
+                                    "display_name": "Edit Funds",
+                                    "name": "edit",
+                                    "slug": "edit-funds",
+                                    "entity_id": null,
+                                    "entity_type": "funds"
+                                }, {
+                                    "id": 45,
+                                    "display_name": "View Donors",
+                                    "name": "view",
+                                    "slug": "view-donors",
+                                    "entity_id": null,
+                                    "entity_type": "donors"
+                                }, {
+                                    "id": 46,
+                                    "display_name": "Create Donors",
+                                    "name": "create",
+                                    "slug": "create-donors",
+                                    "entity_id": null,
+                                    "entity_type": "donors"
+                                }, {
+                                    "id": 47,
+                                    "display_name": "Edit Donors",
+                                    "name": "edit",
+                                    "slug": "edit-donors",
+                                    "entity_id": null,
+                                    "entity_type": "donors"
+                                }, {
+                                    "id": 48,
+                                    "display_name": "Delete Donors",
+                                    "name": "delete",
+                                    "slug": "delete-donors",
+                                    "entity_id": null,
+                                    "entity_type": "donors"
+                                }, {
+                                    "id": 49,
+                                    "display_name": "Modify Todos",
+                                    "name": "modify",
+                                    "slug": "modify-todos",
+                                    "entity_id": null,
+                                    "entity_type": "todos"
+                                }, {
+                                    "id": 50,
+                                    "display_name": "Modify Notes",
+                                    "name": "modify",
+                                    "slug": "modify-notes",
+                                    "entity_id": null,
+                                    "entity_type": "notes"
+                                }, {
+                                    "id": 51,
+                                    "display_name": "View Uploads",
+                                    "name": "view",
+                                    "slug": "view-uploads",
+                                    "entity_id": null,
+                                    "entity_type": "uploads"
+                                }, {
+                                    "id": 52,
+                                    "display_name": "Create Uploads",
+                                    "name": "create",
+                                    "slug": "create-uploads",
+                                    "entity_id": null,
+                                    "entity_type": "uploads"
+                                }, {
+                                    "id": 53,
+                                    "display_name": "Edit Uploads",
+                                    "name": "edit",
+                                    "slug": "edit-uploads",
+                                    "entity_id": null,
+                                    "entity_type": "uploads"
+                                }, {
+                                    "id": 54,
+                                    "display_name": "Delete Uploads",
+                                    "name": "delete",
+                                    "slug": "delete-uploads",
+                                    "entity_id": null,
+                                    "entity_type": "uploads"
+                                }]
+                            }
+                        }]
+                    },
+                    "abilities": {
+                        "data": [{
+                            "id": 1,
+                            "display_name": "Access Dashboard",
+                            "name": "access-dashboard",
+                            "slug": "access-dashboard",
+                            "entity_id": null,
+                            "entity_type": null
+                        }, {
+                            "id": 2,
+                            "display_name": "Access Admin",
+                            "name": "access-admin",
+                            "slug": "access-admin",
+                            "entity_id": null,
+                            "entity_type": null
+                        }, {
+                            "id": 3,
+                            "display_name": "View Users",
+                            "name": "view",
+                            "slug": "view-users",
+                            "entity_id": null,
+                            "entity_type": "users"
+                        }, {
+                            "id": 4,
+                            "display_name": "Create Users",
+                            "name": "create",
+                            "slug": "create-users",
+                            "entity_id": null,
+                            "entity_type": "users"
+                        }, {
+                            "id": 5,
+                            "display_name": "Edit Users",
+                            "name": "edit",
+                            "slug": "edit-users",
+                            "entity_id": null,
+                            "entity_type": "users"
+                        }, {
+                            "id": 6,
+                            "display_name": "Delete Users",
+                            "name": "delete",
+                            "slug": "delete-users",
+                            "entity_id": null,
+                            "entity_type": "users"
+                        }, {
+                            "id": 7,
+                            "display_name": "View Groups",
+                            "name": "view",
+                            "slug": "view-groups",
+                            "entity_id": null,
+                            "entity_type": "groups"
+                        }, {
+                            "id": 8,
+                            "display_name": "Create Groups",
+                            "name": "create",
+                            "slug": "create-groups",
+                            "entity_id": null,
+                            "entity_type": "groups"
+                        }, {
+                            "id": 9,
+                            "display_name": "Edit Groups",
+                            "name": "edit",
+                            "slug": "edit-groups",
+                            "entity_id": null,
+                            "entity_type": "groups"
+                        }, {
+                            "id": 10,
+                            "display_name": "Delete Groups",
+                            "name": "delete",
+                            "slug": "delete-groups",
+                            "entity_id": null,
+                            "entity_type": "groups"
+                        }, {
+                            "id": 11,
+                            "display_name": "View Campaigns",
+                            "name": "view",
+                            "slug": "view-campaigns",
+                            "entity_id": null,
+                            "entity_type": "campaigns"
+                        }, {
+                            "id": 12,
+                            "display_name": "Create Campaigns",
+                            "name": "create",
+                            "slug": "create-campaigns",
+                            "entity_id": null,
+                            "entity_type": "campaigns"
+                        }, {
+                            "id": 13,
+                            "display_name": "Edit Campaigns",
+                            "name": "edit",
+                            "slug": "edit-campaigns",
+                            "entity_id": null,
+                            "entity_type": "campaigns"
+                        }, {
+                            "id": 14,
+                            "display_name": "Delete Campaigns",
+                            "name": "delete",
+                            "slug": "delete-campaigns",
+                            "entity_id": null,
+                            "entity_type": "campaigns"
+                        }, {
+                            "id": 15,
+                            "display_name": "View Trips",
+                            "name": "view",
+                            "slug": "view-trips",
+                            "entity_id": null,
+                            "entity_type": "trips"
+                        }, {
+                            "id": 16,
+                            "display_name": "Create Trips",
+                            "name": "create",
+                            "slug": "create-trips",
+                            "entity_id": null,
+                            "entity_type": "trips"
+                        }, {
+                            "id": 17,
+                            "display_name": "Edit Trips",
+                            "name": "edit",
+                            "slug": "edit-trips",
+                            "entity_id": null,
+                            "entity_type": "trips"
+                        }, {
+                            "id": 18,
+                            "display_name": "Delete Trips",
+                            "name": "delete",
+                            "slug": "delete-trips",
+                            "entity_id": null,
+                            "entity_type": "trips"
+                        }, {
+                            "id": 19,
+                            "display_name": "View Reservations",
+                            "name": "view",
+                            "slug": "view-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 20,
+                            "display_name": "Create Reservations",
+                            "name": "create",
+                            "slug": "create-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 21,
+                            "display_name": "Edit Reservations",
+                            "name": "edit",
+                            "slug": "edit-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 22,
+                            "display_name": "Delete Reservations",
+                            "name": "delete",
+                            "slug": "delete-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 23,
+                            "display_name": "Manage Costs Reservations",
+                            "name": "manage costs",
+                            "slug": "manage costs-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 24,
+                            "display_name": "Manage Payments Reservations",
+                            "name": "manage payments",
+                            "slug": "manage payments-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 25,
+                            "display_name": "Manage Requirements Reservations",
+                            "name": "manage requirements",
+                            "slug": "manage requirements-reservations",
+                            "entity_id": null,
+                            "entity_type": "reservations"
+                        }, {
+                            "id": 26,
+                            "display_name": "View Projects",
+                            "name": "view",
+                            "slug": "view-projects",
+                            "entity_id": null,
+                            "entity_type": "projects"
+                        }, {
+                            "id": 27,
+                            "display_name": "Create Projects",
+                            "name": "create",
+                            "slug": "create-projects",
+                            "entity_id": null,
+                            "entity_type": "projects"
+                        }, {
+                            "id": 28,
+                            "display_name": "Edit Projects",
+                            "name": "edit",
+                            "slug": "edit-projects",
+                            "entity_id": null,
+                            "entity_type": "projects"
+                        }, {
+                            "id": 29,
+                            "display_name": "Delete Projects",
+                            "name": "delete",
+                            "slug": "delete-projects",
+                            "entity_id": null,
+                            "entity_type": "projects"
+                        }, {
+                            "id": 30,
+                            "display_name": "View App\\models\\v1\\cost",
+                            "name": "view",
+                            "slug": "view-app\\models\\v1\\cost",
+                            "entity_id": null,
+                            "entity_type": "App\\Models\\v1\\Cost"
+                        }, {
+                            "id": 31,
+                            "display_name": "Create App\\models\\v1\\cost",
+                            "name": "create",
+                            "slug": "create-app\\models\\v1\\cost",
+                            "entity_id": null,
+                            "entity_type": "App\\Models\\v1\\Cost"
+                        }, {
+                            "id": 32,
+                            "display_name": "Edit App\\models\\v1\\cost",
+                            "name": "edit",
+                            "slug": "edit-app\\models\\v1\\cost",
+                            "entity_id": null,
+                            "entity_type": "App\\Models\\v1\\Cost"
+                        }, {
+                            "id": 33,
+                            "display_name": "Delete App\\models\\v1\\cost",
+                            "name": "delete",
+                            "slug": "delete-app\\models\\v1\\cost",
+                            "entity_id": null,
+                            "entity_type": "App\\Models\\v1\\Cost"
+                        }, {
+                            "id": 34,
+                            "display_name": "View Project_causes",
+                            "name": "view",
+                            "slug": "view-project_causes",
+                            "entity_id": null,
+                            "entity_type": "project_causes"
+                        }, {
+                            "id": 35,
+                            "display_name": "Create Project_causes",
+                            "name": "create",
+                            "slug": "create-project_causes",
+                            "entity_id": null,
+                            "entity_type": "project_causes"
+                        }, {
+                            "id": 36,
+                            "display_name": "Edit Project_causes",
+                            "name": "edit",
+                            "slug": "edit-project_causes",
+                            "entity_id": null,
+                            "entity_type": "project_causes"
+                        }, {
+                            "id": 37,
+                            "display_name": "Delete Project_causes",
+                            "name": "delete",
+                            "slug": "delete-project_causes",
+                            "entity_id": null,
+                            "entity_type": "project_causes"
+                        }, {
+                            "id": 38,
+                            "display_name": "View Transactions",
+                            "name": "view",
+                            "slug": "view-transactions",
+                            "entity_id": null,
+                            "entity_type": "transactions"
+                        }, {
+                            "id": 39,
+                            "display_name": "Create Transactions",
+                            "name": "create",
+                            "slug": "create-transactions",
+                            "entity_id": null,
+                            "entity_type": "transactions"
+                        }, {
+                            "id": 40,
+                            "display_name": "Edit Transactions",
+                            "name": "edit",
+                            "slug": "edit-transactions",
+                            "entity_id": null,
+                            "entity_type": "transactions"
+                        }, {
+                            "id": 41,
+                            "display_name": "Delete Transactions",
+                            "name": "delete",
+                            "slug": "delete-transactions",
+                            "entity_id": null,
+                            "entity_type": "transactions"
+                        }, {
+                            "id": 42,
+                            "display_name": "View Funds",
+                            "name": "view",
+                            "slug": "view-funds",
+                            "entity_id": null,
+                            "entity_type": "funds"
+                        }, {
+                            "id": 43,
+                            "display_name": "Create Funds",
+                            "name": "create",
+                            "slug": "create-funds",
+                            "entity_id": null,
+                            "entity_type": "funds"
+                        }, {
+                            "id": 44,
+                            "display_name": "Edit Funds",
+                            "name": "edit",
+                            "slug": "edit-funds",
+                            "entity_id": null,
+                            "entity_type": "funds"
+                        }, {
+                            "id": 45,
+                            "display_name": "View Donors",
+                            "name": "view",
+                            "slug": "view-donors",
+                            "entity_id": null,
+                            "entity_type": "donors"
+                        }, {
+                            "id": 46,
+                            "display_name": "Create Donors",
+                            "name": "create",
+                            "slug": "create-donors",
+                            "entity_id": null,
+                            "entity_type": "donors"
+                        }, {
+                            "id": 47,
+                            "display_name": "Edit Donors",
+                            "name": "edit",
+                            "slug": "edit-donors",
+                            "entity_id": null,
+                            "entity_type": "donors"
+                        }, {
+                            "id": 48,
+                            "display_name": "Delete Donors",
+                            "name": "delete",
+                            "slug": "delete-donors",
+                            "entity_id": null,
+                            "entity_type": "donors"
+                        }, {
+                            "id": 49,
+                            "display_name": "Modify Todos",
+                            "name": "modify",
+                            "slug": "modify-todos",
+                            "entity_id": null,
+                            "entity_type": "todos"
+                        }, {
+                            "id": 50,
+                            "display_name": "Modify Notes",
+                            "name": "modify",
+                            "slug": "modify-notes",
+                            "entity_id": null,
+                            "entity_type": "notes"
+                        }, {
+                            "id": 51,
+                            "display_name": "View Uploads",
+                            "name": "view",
+                            "slug": "view-uploads",
+                            "entity_id": null,
+                            "entity_type": "uploads"
+                        }, {
+                            "id": 52,
+                            "display_name": "Create Uploads",
+                            "name": "create",
+                            "slug": "create-uploads",
+                            "entity_id": null,
+                            "entity_type": "uploads"
+                        }, {
+                            "id": 53,
+                            "display_name": "Edit Uploads",
+                            "name": "edit",
+                            "slug": "edit-uploads",
+                            "entity_id": null,
+                            "entity_type": "uploads"
+                        }, {
+                            "id": 54,
+                            "display_name": "Delete Uploads",
+                            "name": "delete",
+                            "slug": "delete-uploads",
+                            "entity_id": null,
+                            "entity_type": "uploads"
+                        }]
+                    }
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
                 }
             }
         };
+
+        if (pathMatch.user) {
+            body.data = _.findWhere(body.user, {id: pathMatch.user});
+            delete body.meta;
+        }
+
         return {
             body: body,
             status: 200,
@@ -1693,56 +1789,6 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
-
-    ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {
-            "data": [{
-                "name": "trip_history",
-                "display_name": "Trip History",
-                "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:01:44"
-            }]
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-
-    ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {
-            "data": [{
-                "name": "countries_visited",
-                "display_name": "Countries Visited",
-                "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
-                    "code": "vg",
-                    "name": "Virgin Islands (British)"
-                }, {"code": "bj", "name": "Benin"}],
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:01:44"
-            }]
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-
     // Groups API
     ['GET *groups(/:group)'] (pathMatch, query, request) {
         let body = {
@@ -1877,6 +1923,7 @@ export default {
     },
 
     // Rooming API
+
     // Types
     ['GET *rooming/types(/:type)'](pathMatch, query, request) {
         let body = {
@@ -1942,6 +1989,7 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
+
     // Plans
     ['GET *rooming/plans(/:plan)'](pathMatch, query, request) {
         let body = {
@@ -2207,6 +2255,7 @@ export default {
         }
 
     },
+
     // Rooms
     ['GET *rooming/rooms(/:room)'] (pathMatch, query, request) {
         let body = {
@@ -2384,6 +2433,7 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
+
     // Occupants
     ['GET *rooming/rooms/:room/occupants(/:occupant)'] (pathMatch, query, request) {
         let body = {
@@ -2961,6 +3011,12 @@ export default {
                 }
             }
         };
+
+        if (pathMatch.reservation) {
+            body.data = _.findWhere(body.data, {id: pathMatch.reservation});
+            delete body.meta;
+        }
+
         return {
             body: body,
             status: 200,
@@ -2969,6 +3025,227 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
+
+    // Costs API
+    ['GET *costs(/:cost)']  (pathMatch, query, request) {
+        let body = {
+            data: [],
+            meta: {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.cost) {
+            body.data = _.findWhere(body.data, {id: pathMatch.cost});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    // Reqiurements API
+    ['GET *requirements(/:requirement)']  (pathMatch, query, request) {
+        let body = {
+            data: [
+                {
+                    "id": "0d629112-428d-4743-a4a0-6ca9fd9494c0",
+                    "name": "Arrival Designation",
+                    "document_type": "arrival_designation",
+                    "short_desc": "Gryphon, with a whiting. Now you know.' 'I don't like the look of things at all, as the soldiers did. After these came.",
+                    "due_at": "2016-07-16 02:27:17",
+                    "grace_period": 2,
+                    "created_at": "2016-11-17 00:09:01",
+                    "updated_at": "2016-11-17 00:09:01",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/requirements/0d629112-428d-4743-a4a0-6ca9fd9494c0"
+                        }
+                    ]
+                }
+            ],
+            meta: {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        }
+
+
+        if (pathMatch.requirement) {
+            body.data = _.findWhere(body.data, {id: pathMatch.requirement});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    // Todos API
+    ['GET *todos(/:todo)']  (pathMatch, query, request) {
+        let body = {
+            data: [],
+            meta: {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        
+        if (pathMatch.reservation) {
+            body.data = _.findWhere(body.data, {id: pathMatch.reservation});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
+    // Costs API
+    ['GET *costs(/:cost)']  (pathMatch, query, request) {
+        let body = {
+            data: [],
+            meta: {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+        if (pathMatch.cost) {
+            body.data = _.findWhere(body.data, {id: pathMatch.cost});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    // Reqiurements API
+    ['GET *requirements(/:requirement)']  (pathMatch, query, request) {
+        let body = {
+            data: [
+                {
+                    "id": "0d629112-428d-4743-a4a0-6ca9fd9494c0",
+                    "name": "Arrival Designation",
+                    "document_type": "arrival_designation",
+                    "short_desc": "Gryphon, with a whiting. Now you know.' 'I don't like the look of things at all, as the soldiers did. After these came.",
+                    "due_at": "2016-07-16 02:27:17",
+                    "grace_period": 2,
+                    "created_at": "2016-11-17 00:09:01",
+                    "updated_at": "2016-11-17 00:09:01",
+                    "links": [
+                        {
+                            "rel": "self",
+                            "uri": "/api/requirements/0d629112-428d-4743-a4a0-6ca9fd9494c0"
+                        }
+                    ]
+                }
+            ],
+            meta: {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        }
+
+
+        if (pathMatch.requirement) {
+            body.data = _.findWhere(body.data, {id: pathMatch.requirement});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+
+    },
+
+    // Todos API
+    ['GET *todos(/:todo)']  (pathMatch, query, request) {
+        let body = {
+            data: [],
+            meta: {
+                "pagination": {
+                    "total": 1,
+                    "count": 1,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+        
+        if (pathMatch.todo) {
+            body.data = _.findWhere(body.data, {id: pathMatch.todo});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
     // Teams API
     ['GET *teams'](pathMatch, query, request) {
         let body = {
@@ -3306,6 +3583,270 @@ export default {
         }
 
     },
+
+    // Transports API
+    ['GET *transports(/:transport)'] (pathMatch, query, request) {
+        let body = {
+            "data":[
+                {"id":"1b8a9ac7-e601-46a8-afb1-50cef8127531","type":"flight","vessel_no":"TSA1234","name":"Tesla Airlines","domestic":false,"capacity":100,"passengers":5,"seats_left":95,"call_sign":"TSA","depart_at":"2017-07-31 11:39:00","arrive_at":"2017-07-12 11:39:00","created_at":"2017-07-11 15:29:15","updated_at":"2017-07-12 19:00:31","deleted_at":null,"links":[{"rel":"self","uri":"\/api\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780atransports\/1b8a9ac7-e601-46a8-afb1-50cef8127531"}],"groups":{"0":{"id":"10d394ba-3d88-3392-a19d-113f3aa7b565","name":"Herman-O'Hara","type":"youth","description":"Tortoise--' 'Why did you manage to do next, when suddenly a White Rabbit cried out, 'Silence in the direction in which.","public":1,"timezone":"Indian\/Mauritius","address_one":null,"address_two":"85737","city":"Montanachester","state":"Oklahoma","zip":null,"country_code":"uz","phone_one":"738987448398854","phone_two":"","email":"suzanne.davis@example.net","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"3db110ca-77ac-3625-9945-f3add5cb9c5f","banner_upload_id":"8f4d7382-17f8-3be6-91fa-ecdb41349a38","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-15 00:00:36","deleted_at":null},"1":{"id":"15e18ddd-9046-306e-b12b-352b4c6f81c7","name":"Will, Anderson and Lubowitz","type":"youth","description":"Alice looked up, and there stood the Queen merely remarking as it is.' 'I quite agree with you,' said the Gryphon,.","public":1,"timezone":"America\/New_York","address_one":null,"address_two":null,"city":"Port Alexa","state":null,"zip":null,"country_code":"ky","phone_one":"635955899126287","phone_two":"","email":"constance.lockman@example.com","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"cab645dd-30c3-32fd-8897-eb888c86fa46","banner_upload_id":"7a9afff6-155d-3d60-8b68-8f1a65c80f05","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-15 00:01:28","deleted_at":null},"3":{"id":"2ad24d78-33bd-3e86-af87-a427a4759b8f","name":"Dooley-Greenholt","type":"nonprofit","description":"March Hare and his buttons, and turns out his toes.' [later editions continued as follows The Panther took pie-crust,.","public":1,"timezone":"Europe\/Oslo","address_one":null,"address_two":null,"city":null,"state":"Louisiana","zip":null,"country_code":"sd","phone_one":"15208352905","phone_two":"","email":"sean83@example.com","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"cefb89ef-e51f-3de8-8e12-9b54e90664ff","banner_upload_id":"ae831897-87bb-394a-8d0a-d952e6dc3197","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:51:42","deleted_at":null},"4":{"id":"e6d27580-fc5b-3b9c-957e-2d2a22073f28","name":"Langosh-Marks","type":"other","description":"I've finished.' So they sat down, and the two creatures, who had spoken first. 'That's none of my life.' 'You are.","public":1,"timezone":"Pacific\/Fakaofo","address_one":null,"address_two":null,"city":"Reneehaven","state":null,"zip":null,"country_code":"qa","phone_one":"18703102122","phone_two":"7347065284","email":"zwillms@example.com","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"548743df-ecfb-33d3-9a02-a17cc4dc822f","banner_upload_id":"42c9658b-e88b-3d67-89f0-68659ace32f9","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:52:38","deleted_at":null}},"designations":[null],"departureHub":{"data":{"id":"e1af4ee3-928a-4bf4-9214-c88b9580764c","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"Lynden Pindling International Airport","call_sign":"NAS","address":"","city":"Nassau","state":"","zip":"","country_code":"bs","created_at":"2017-07-11 15:29:14","updated_at":"2017-07-11 15:29:14"}},"arrivalHub":{"data":{"id":"c448549e-2b0c-46f0-b32c-b9033bcc56ea","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"Miami International Airport","call_sign":"MIA","address":null,"city":"Miami","state":null,"zip":null,"country_code":"us","created_at":"2017-06-19 20:01:55","updated_at":"2017-06-19 20:01:55"}}},
+                {"id":"665f0159-f319-4a92-a9b0-0d63f5355b72","type":"vehicle","vessel_no":"UNASSIGNED","name":"Uber","domestic":false,"capacity":9999,"passengers":1,"seats_left":9998,"call_sign":"","depart_at":null,"arrive_at":null,"created_at":"2017-06-28 19:56:31","updated_at":"2017-06-28 19:56:31","deleted_at":null,"links":[{"rel":"self","uri":"\/api\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780atransports\/665f0159-f319-4a92-a9b0-0d63f5355b72"}],"groups":[{"id":"15e18ddd-9046-306e-b12b-352b4c6f81c7","name":"Will, Anderson and Lubowitz","type":"youth","description":"Alice looked up, and there stood the Queen merely remarking as it is.' 'I quite agree with you,' said the Gryphon,.","public":1,"timezone":"America\/New_York","address_one":null,"address_two":null,"city":"Port Alexa","state":null,"zip":null,"country_code":"ky","phone_one":"635955899126287","phone_two":"","email":"constance.lockman@example.com","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"cab645dd-30c3-32fd-8897-eb888c86fa46","banner_upload_id":"7a9afff6-155d-3d60-8b68-8f1a65c80f05","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-15 00:01:28","deleted_at":null}],"designations":[null]},
+                {"id":"679f09ab-5cd7-49f2-bcde-692555dd9833","type":"flight","vessel_no":"AA1234","name":"American Airlines","domestic":false,"capacity":200,"passengers":2,"seats_left":198,"call_sign":"AMERICAN","depart_at":null,"arrive_at":null,"created_at":"2017-06-19 15:40:32","updated_at":"2017-06-19 15:40:32","deleted_at":null,"links":[{"rel":"self","uri":"\/api\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780atransports\/679f09ab-5cd7-49f2-bcde-692555dd9833"}],"groups":[{"id":"10d394ba-3d88-3392-a19d-113f3aa7b565","name":"Herman-O'Hara","type":"youth","description":"Tortoise--' 'Why did you manage to do next, when suddenly a White Rabbit cried out, 'Silence in the direction in which.","public":1,"timezone":"Indian\/Mauritius","address_one":null,"address_two":"85737","city":"Montanachester","state":"Oklahoma","zip":null,"country_code":"uz","phone_one":"738987448398854","phone_two":"","email":"suzanne.davis@example.net","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"3db110ca-77ac-3625-9945-f3add5cb9c5f","banner_upload_id":"8f4d7382-17f8-3be6-91fa-ecdb41349a38","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-15 00:00:36","deleted_at":null},{"id":"2ad24d78-33bd-3e86-af87-a427a4759b8f","name":"Dooley-Greenholt","type":"nonprofit","description":"March Hare and his buttons, and turns out his toes.' [later editions continued as follows The Panther took pie-crust,.","public":1,"timezone":"Europe\/Oslo","address_one":null,"address_two":null,"city":null,"state":"Louisiana","zip":null,"country_code":"sd","phone_one":"15208352905","phone_two":"","email":"sean83@example.com","status":"approved","stripe_id":null,"card_brand":null,"card_last_four":null,"avatar_upload_id":"cefb89ef-e51f-3de8-8e12-9b54e90664ff","banner_upload_id":"ae831897-87bb-394a-8d0a-d952e6dc3197","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:51:42","deleted_at":null}],"designations":[null]},
+                {"id":"9cd13857-2e92-46fc-b50c-6a19b0351eec","type":"flight","vessel_no":"0000","name":"Other","domestic":false,"capacity":0,"passengers":0,"seats_left":0,"call_sign":"","depart_at":"2017-07-27 13:45:00","arrive_at":"2017-07-11 13:45:00","created_at":"2017-07-11 18:09:13","updated_at":"2017-07-11 18:09:13","deleted_at":null,"links":[{"rel":"self","uri":"\/api\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780atransports\/9cd13857-2e92-46fc-b50c-6a19b0351eec"}],"groups":[],"designations":[],"departureHub":{"data":{"id":"e1af4ee3-928a-4bf4-9214-c88b9580764c","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"Lynden Pindling International Airport","call_sign":"NAS","address":"","city":"Nassau","state":"","zip":"","country_code":"bs","created_at":"2017-07-11 15:29:14","updated_at":"2017-07-11 15:29:14"}},"arrivalHub":{"data":{"id":"2360df9d-3b8c-4141-b2be-917c25e916b1","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"Miami International Airport","call_sign":"MIA","address":"","city":"Miami","state":"","zip":"","country_code":"us","created_at":"2017-07-11 15:29:15","updated_at":"2017-07-11 15:29:15"}}}
+                ],
+            "meta":{"pagination":{"total":4,"count":4,"per_page":10,"current_page":1,"total_pages":1,"links":[]}}
+        };
+
+        if (pathMatch.transport) {
+            body.data = _.findWhere(body.data, {id: pathMatch.transport});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['PUT *transports(/:transport)'] (pathMatch, query, request) {
+        let body = {
+            "id": "b8d20208-8f44-470f-a05c-ef26fd299a2f",
+            "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+            "type": request.body.type || "flight",
+            "vessel_no": request.body.vessel_no || "DL100",
+            "name": request.body.name || "Delta Airlines",
+            "domestic": request.body.domestic || true,
+            "capacity": request.body.capacity || 9999,
+            "call_sign": request.body.call_sign || null,
+            "created_at": "2017-04-21 18:14:34",
+            "updated_at": "2017-04-21 18:14:34",
+            "links": [
+                {
+                    "rel": "self",
+                    "uri": "/api/transports/b8d20208-8f44-470f-a05c-ef26fd299a2f"
+                }
+            ]
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *transports(/:transport)'] (pathMatch, query, request) {
+        let body = {
+            "id": "b8d20208-8f44-470f-a05c-ef26fd299a2f",
+            "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+            "type": request.body.type || "flight",
+            "vessel_no": request.body.vessel_no || "DL100",
+            "name": request.body.name || "Delta Airlines",
+            "domestic": request.body.domestic || true,
+            "capacity": request.body.capacity || 9999,
+            "call_sign": request.body.call_sign || null,
+            "created_at": "2017-04-21 18:14:34",
+            "updated_at": "2017-04-21 18:14:34",
+            "links": [
+                {
+                    "rel": "self",
+                    "uri": "/api/transports/b8d20208-8f44-470f-a05c-ef26fd299a2f"
+                }
+            ]
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['DELETE *transports(/:transport)'] (pathMatch, query, request) {
+        let body = '';
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['GET *transports/:transport/passengers(/:passenger)'] (pathMatch, query, request) {
+        let body = {"data":[{"id":"bda6dd30-f1c9-4db1-9c0a-23cfbbd20e1e","reservation_id":"00b2967c-3d4c-35b5-841d-a2eb8e0e1a45","transport_id":"2f410cf6-b4eb-48b4-92c1-1542963c606f","seat_no":null,"created_at":"2017-06-22 04:54:59","updated_at":"2017-06-22 04:54:59","links":[{"rel":"self","uri":"\/transports\/2f410cf6-b4eb-48b4-92c1-1542963c606f\/passengers\/bda6dd30-f1c9-4db1-9c0a-23cfbbd20e1e"}],"reservation":{"data":{"id":"00b2967c-3d4c-35b5-841d-a2eb8e0e1a45","given_names":"Albina Nick","surname":"Feeney","gender":"male","status":"single","shirt_size":"XXXL","shirt_size_name":"Extra Large x3","age":32,"birthday":"1984-07-20","email":"ortiz.murphy@example.org","phone_one":"15015763638","phone_two":"15035754351","address":"17218 Gene Pines Apt. 237\nSouth Marvin, IL 06288","city":"West Tamara","state":null,"zip":"31032-8131","country_code":"vn","country_name":"Vietnam","companion_limit":0,"arrival_designation":"none","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg","desired_role":{"code":"LACT","name":"Lactation Consultant"},"total_cost":"2084.00","total_raised":"100.00","percent_raised":5,"total_owed":"1984.00","created_at":"2017-06-14 23:51:14","updated_at":"2017-06-14 23:51:15","deleted_at":null,"tags":["vip","medical"],"links":[{"rel":"self","uri":"\/api\/reservations\/00b2967c-3d4c-35b5-841d-a2eb8e0e1a45"}],"trip":{"data":{"id":"68b90cad-0c94-4241-9144-7d16e3128b9c","group_id":"10d394ba-3d88-3392-a19d-113f3aa7b565","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","rep_id":"fed6e36d-c9ec-4d8f-8699-593504d353fd","rep":"Modesta Bode","spots":26,"status":"active","starting_cost":"2067.00","companion_limit":0,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"media","difficulty":"level 3","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["medical professionals","men","teens","adults"],"team_roles":["MCDR","DENA","OTEC","NAST"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-06-14 23:51:09","updated_at":"2017-06-14 23:51:17","tags":[],"links":[{"rel":"self","uri":"\/trips\/68b90cad-0c94-4241-9144-7d16e3128b9c"}],"campaign":{"data":{"id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"1Nation1Day 2017","country":"Nicaragua","description":"1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.","page_url":"1n1d17","page_src":"_1n1d2017","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","avatar_upload_id":"90fd1c9a-78f1-4d2a-907d-31dbda79211e","banner":null,"banner_upload_id":null,"started_at":"2017-07-22 00:00:00","ended_at":"2017-07-30 22:59:59","status":"Published","groups_count":10,"published_at":"2016-01-01 00:00:00","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:52:49","links":[{"rel":"self","uri":"\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780a"}]}},"group":{"data":{"id":"10d394ba-3d88-3392-a19d-113f3aa7b565","status":"approved","name":"Herman-O'Hara","type":"youth","timezone":"Indian\/Mauritius","description":"Tortoise--' 'Why did you manage to do next, when suddenly a White Rabbit cried out, 'Silence in the direction in which.","url":"herman-ohara","public":true,"address_one":null,"address_two":"85737","city":"Montanachester","state":"Oklahoma","zip":null,"country_code":"uz","country_name":"Uzbekistan","phone_one":"738987448398854","phone_two":"","email":"suzanne.davis@example.net","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-06-14 23:50:59","updated_at":"2017-06-15 00:00:36","links":[{"rel":"self","uri":"\/groups\/10d394ba-3d88-3392-a19d-113f3aa7b565"}]}}}},"companions":{"data":[]}}}},{"id":"dcb5a361-8869-42da-9884-84415dd9cbec","reservation_id":"4e69ff27-6e8c-38b3-aea5-d8326609f5c5","transport_id":"2f410cf6-b4eb-48b4-92c1-1542963c606f","seat_no":null,"created_at":"2017-06-28 19:56:31","updated_at":"2017-06-28 19:56:31","links":[{"rel":"self","uri":"\/transports\/2f410cf6-b4eb-48b4-92c1-1542963c606f\/passengers\/dcb5a361-8869-42da-9884-84415dd9cbec"}],"reservation":{"data":{"id":"4e69ff27-6e8c-38b3-aea5-d8326609f5c5","given_names":"Missouri Dorothea","surname":"Abshire","gender":"male","status":"single","shirt_size":"XXL","shirt_size_name":"Extra Large x2","age":42,"birthday":"1975-02-17","email":"gwen.braun@example.org","phone_one":"4528499619","phone_two":"8567055728057","address":"492 Grady Lane\nManteland, VT 31709","city":"Hattiehaven","state":null,"zip":"78623-9665","country_code":"gf","country_name":"French Guiana","companion_limit":2,"arrival_designation":"none","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg","desired_role":{"code":"PAST","name":"Pastor"},"total_cost":"1968.00","total_raised":"100.00","percent_raised":5,"total_owed":"1868.00","created_at":"2017-06-14 23:51:30","updated_at":"2017-06-14 23:51:30","deleted_at":null,"tags":["vip","missionary"],"links":[{"rel":"self","uri":"\/api\/reservations\/4e69ff27-6e8c-38b3-aea5-d8326609f5c5"}],"trip":{"data":{"id":"dc2e9c9c-8eca-4649-a7df-cb564291ba47","group_id":"15e18ddd-9046-306e-b12b-352b4c6f81c7","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","rep_id":"dc1a4685-2bd5-46f3-94bd-be347d338678","rep":"Wiley Larson","spots":232,"status":"active","starting_cost":"2011.00","companion_limit":2,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"international","difficulty":"level 1","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["adults","families","business professionals","women"],"team_roles":["DENT","ANES","NUTR","MEDI"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-06-14 23:51:20","updated_at":"2017-06-14 23:51:31","tags":[],"links":[{"rel":"self","uri":"\/trips\/dc2e9c9c-8eca-4649-a7df-cb564291ba47"}],"campaign":{"data":{"id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"1Nation1Day 2017","country":"Nicaragua","description":"1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.","page_url":"1n1d17","page_src":"_1n1d2017","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","avatar_upload_id":"90fd1c9a-78f1-4d2a-907d-31dbda79211e","banner":null,"banner_upload_id":null,"started_at":"2017-07-22 00:00:00","ended_at":"2017-07-30 22:59:59","status":"Published","groups_count":10,"published_at":"2016-01-01 00:00:00","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:52:49","links":[{"rel":"self","uri":"\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780a"}]}},"group":{"data":{"id":"15e18ddd-9046-306e-b12b-352b4c6f81c7","status":"approved","name":"Will, Anderson and Lubowitz","type":"youth","timezone":"America\/New_York","description":"Alice looked up, and there stood the Queen merely remarking as it is.' 'I quite agree with you,' said the Gryphon,.","url":"will-anderson-and-lubowitz","public":true,"address_one":null,"address_two":null,"city":"Port Alexa","state":null,"zip":null,"country_code":"ky","country_name":"Cayman Islands","phone_one":"635955899126287","phone_two":"","email":"constance.lockman@example.com","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-06-14 23:50:59","updated_at":"2017-06-15 00:01:28","links":[{"rel":"self","uri":"\/groups\/15e18ddd-9046-306e-b12b-352b4c6f81c7"}]}}}},"companions":{"data":[]}}}},{"id":"e0a3068b-f911-45ce-b160-22107b57fcc6","reservation_id":"bf984d99-6602-387c-ad5a-3cf1a664034d","transport_id":"2f410cf6-b4eb-48b4-92c1-1542963c606f","seat_no":null,"created_at":"2017-07-05 22:13:05","updated_at":"2017-07-05 22:13:05","links":[{"rel":"self","uri":"\/transports\/2f410cf6-b4eb-48b4-92c1-1542963c606f\/passengers\/e0a3068b-f911-45ce-b160-22107b57fcc6"}],"reservation":{"data":{"id":"bf984d99-6602-387c-ad5a-3cf1a664034d","given_names":"Gonzalo Bartholome","surname":"Corwin","gender":"female","status":"married","shirt_size":"M","shirt_size_name":"Medium","age":21,"birthday":"1996-05-23","email":"ramona72@example.com","phone_one":"9043460511","phone_two":"449814514221912","address":"9308 Will Burg Suite 732\nCartwrighthaven, OK 29883-6841","city":"Macejkovicstad","state":null,"zip":"80643-5858","country_code":"lk","country_name":"Sri Lanka","companion_limit":1,"arrival_designation":"none","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","desired_role":{"code":"DENH","name":"Dental Hygienist"},"total_cost":"2067.00","total_raised":"100.00","percent_raised":5,"total_owed":"1967.00","created_at":"2017-06-14 23:51:41","updated_at":"2017-06-14 23:51:42","deleted_at":null,"tags":["media","short"],"links":[{"rel":"self","uri":"\/api\/reservations\/bf984d99-6602-387c-ad5a-3cf1a664034d"}],"trip":{"data":{"id":"b99ff016-eae9-4209-ab9b-02bea1ae11e3","group_id":"2ad24d78-33bd-3e86-af87-a427a4759b8f","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","rep_id":"69787756-69d6-412b-bbac-526dcc57818e","rep":"Theo Flatley","spots":68,"status":"active","starting_cost":"2081.00","companion_limit":1,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"media","difficulty":"level 3","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["pastors","women","teens","media professionals"],"team_roles":["CHRO","NPRC","CODR","NTEC"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-06-14 23:51:31","updated_at":"2017-06-14 23:51:42","tags":[],"links":[{"rel":"self","uri":"\/trips\/b99ff016-eae9-4209-ab9b-02bea1ae11e3"}],"campaign":{"data":{"id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"1Nation1Day 2017","country":"Nicaragua","description":"1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.","page_url":"1n1d17","page_src":"_1n1d2017","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","avatar_upload_id":"90fd1c9a-78f1-4d2a-907d-31dbda79211e","banner":null,"banner_upload_id":null,"started_at":"2017-07-22 00:00:00","ended_at":"2017-07-30 22:59:59","status":"Published","groups_count":10,"published_at":"2016-01-01 00:00:00","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:52:49","links":[{"rel":"self","uri":"\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780a"}]}},"group":{"data":{"id":"2ad24d78-33bd-3e86-af87-a427a4759b8f","status":"approved","name":"Dooley-Greenholt","type":"nonprofit","timezone":"Europe\/Oslo","description":"March Hare and his buttons, and turns out his toes.' [later editions continued as follows The Panther took pie-crust,.","url":"dooley-greenholt","public":true,"address_one":null,"address_two":null,"city":null,"state":"Louisiana","zip":null,"country_code":"sd","country_name":"Sudan","phone_one":"15208352905","phone_two":"","email":"sean83@example.com","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:51:42","links":[{"rel":"self","uri":"\/groups\/2ad24d78-33bd-3e86-af87-a427a4759b8f"}]}}}},"companions":{"data":[{"id":"0081c37a-840e-3857-b007-d9b2df0c39f3","given_names":"Lilla Orval","surname":"Auer","gender":"male","status":"single","shirt_size":"XL","shirt_size_name":"Extra Large","age":37,"birthday":"1979-09-03","email":"dorothea71@example.net","phone_one":"4843559497","phone_two":"6716905262","address":"213 Jordon Loop Suite 087\nNorth Delta, AK 66113","city":"Pourosville","state":null,"zip":"90477-8457","country_code":"pg","country_name":"Papua New Guinea","companion_limit":3,"arrival_designation":"none","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg","desired_role":{"code":"GPLR","name":"Group Leader"},"total_cost":"2022.00","total_raised":"100.00","percent_raised":5,"total_owed":"1922.00","created_at":"2017-06-14 23:51:35","updated_at":"2017-06-14 23:51:37","deleted_at":null,"tags":["medical","short"],"links":[{"rel":"self","uri":"\/api\/reservations\/0081c37a-840e-3857-b007-d9b2df0c39f3"}],"relationship":"family"}]}}}},{"id":"e2bbe510-2902-46ac-81b4-ecf003756221","reservation_id":"0081c37a-840e-3857-b007-d9b2df0c39f3","transport_id":"2f410cf6-b4eb-48b4-92c1-1542963c606f","seat_no":null,"created_at":"2017-06-22 04:54:57","updated_at":"2017-06-22 04:54:57","links":[{"rel":"self","uri":"\/transports\/2f410cf6-b4eb-48b4-92c1-1542963c606f\/passengers\/e2bbe510-2902-46ac-81b4-ecf003756221"}],"reservation":{"data":{"id":"0081c37a-840e-3857-b007-d9b2df0c39f3","given_names":"Lilla Orval","surname":"Auer","gender":"male","status":"single","shirt_size":"XL","shirt_size_name":"Extra Large","age":37,"birthday":"1979-09-03","email":"dorothea71@example.net","phone_one":"4843559497","phone_two":"6716905262","address":"213 Jordon Loop Suite 087\nNorth Delta, AK 66113","city":"Pourosville","state":null,"zip":"90477-8457","country_code":"pg","country_name":"Papua New Guinea","companion_limit":3,"arrival_designation":"none","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-dark-400x400.jpg","desired_role":{"code":"GPLR","name":"Group Leader"},"total_cost":"2022.00","total_raised":"100.00","percent_raised":5,"total_owed":"1922.00","created_at":"2017-06-14 23:51:35","updated_at":"2017-06-14 23:51:37","deleted_at":null,"tags":["medical","short"],"links":[{"rel":"self","uri":"\/api\/reservations\/0081c37a-840e-3857-b007-d9b2df0c39f3"}],"trip":{"data":{"id":"5375b509-1188-40ee-adff-8a3aa03fc83c","group_id":"2ad24d78-33bd-3e86-af87-a427a4759b8f","campaign_id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","rep_id":"aaea6442-107e-4150-8e8a-ac4075b3e94d","rep":"Waldo Bode","spots":205,"status":"active","starting_cost":"2024.00","companion_limit":3,"reservations":0,"country_code":"ni","country_name":"Nicaragua","type":"family","difficulty":"level 3","started_at":"2017-07-22","ended_at":"2017-07-30","todos":["send shirt","send wrist band","enter into lgl","send launch guide","send luggage tag"],"prospects":["men","media professionals","adults","pastors"],"team_roles":["PHAT","MDFG","PHYT","NCRT"],"description":"### WHAT TO EXPECT\nWHO\n+ This trip is for anyone not traveling with a group or home church flying from the Eastern, Central or Mountain US timezones.\n\nWHEN\n+ The full week trip experience July 22-30, 2017.\n+ We take you from an epic day of training in Miami to the beautiful landscapes of Nicaragua. You'll spend Monday - Thursday sharing Jesus in schools then enjoy a Free Day with your team on Friday. On Saturday unite with your state and make history at the national 1Nation1Day event.\n\nHOW\n+ Each day you'll be teamed up with 25 of your new best friends under the supervision of highly trained Team Leaders.\n+ Travel across your state and experience new cities, villages, neighborhoods and culture.\n+ At each site, your team will perform impacting dramas, share testimonies, catch a baseball, shoot hoops, pray, share a message of hope, and inspire the dreams of the next generation.\n\nROLES\n+ All non-medical roles\n\n### WHAT'S INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n+ All training materials\n+ Team t-shirt\n\nMIAMI HQ\n+ Airport shuttle from MIA airport to the Miami Airport Marriott Campus\n+ Housing\/hotel accommodations for one evening at a Miami Hotel on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n+ Lunch (12pm), Dinner (5pm) and bottled water in Miami beginning on either July 21 (Western and International Missionaries) or July 22 (Eastern Missionaries)\n\nNICARAGUA\n+ Round-trip international flight from MIA (Miami, FL) to MGA (Managua, Nicaragua) July 23-30\n+ Hotel accommodations July 23-30\n+ All international bus transportation to\/from airports and to\/from ministry sites July 23-30\n+ Daily meals and bottled water while in Nicaragua July 23-30\n+ All immigration entry and exit fees\n\n### WHAT'S NOT INCLUDED IN MY TRIP REGISTRATION?\nPRE-TRIP\n- Passport: Apply for your passport no later then 6 months out from trip start date\n\nMIAMI HQ\n- Domestic flight or transportation to\/from your hometown to Miami HQ\n- Any hotel accommodations in Miami before or after July 22\n\nNICARAGUA\n- Hotel accommodations before July 23 or after July 30\n- Meals before 12pm July 22 or after landing back at MIA on July 30\n- Snacks\/Meals in all transit airports\n- Souvenirs\/Internet\/Wi-fi\/Computer Usage\/Internet Cafe\/Anything on the packing list that is forgotten\n\n### PRE-TRIP TRAINING\nYour Trip Representative will be contacting you regarding dates and times for team meetings, conference calls and training sessions.\n\nMissions.Me will begin holding ministry training sessions in April 2017 at:\nOakland Church\n5100 N. Adams Rd.\nOakland Township, MI 48306","public":true,"published_at":"2016-02-01 00:00:00","closed_at":"2017-07-15 00:00:00","created_at":"2017-06-14 23:51:31","updated_at":"2017-06-14 23:51:38","tags":[],"links":[{"rel":"self","uri":"\/trips\/5375b509-1188-40ee-adff-8a3aa03fc83c"}],"campaign":{"data":{"id":"d753e78d-0d9a-4294-868d-0a1e89f2780a","name":"1Nation1Day 2017","country":"Nicaragua","description":"1Nation1Day Nicaragua will be the largest global missions outreach in history. But this isn\u2019t just about numbers; it's about creating measurable change. It takes an unprecedented strategy to make this audacious vision a reality.","page_url":"1n1d17","page_src":"_1n1d2017","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","avatar_upload_id":"90fd1c9a-78f1-4d2a-907d-31dbda79211e","banner":null,"banner_upload_id":null,"started_at":"2017-07-22 00:00:00","ended_at":"2017-07-30 22:59:59","status":"Published","groups_count":10,"published_at":"2016-01-01 00:00:00","created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:52:49","links":[{"rel":"self","uri":"\/campaigns\/d753e78d-0d9a-4294-868d-0a1e89f2780a"}]}},"group":{"data":{"id":"2ad24d78-33bd-3e86-af87-a427a4759b8f","status":"approved","name":"Dooley-Greenholt","type":"nonprofit","timezone":"Europe\/Oslo","description":"March Hare and his buttons, and turns out his toes.' [later editions continued as follows The Panther took pie-crust,.","url":"dooley-greenholt","public":true,"address_one":null,"address_two":null,"city":null,"state":"Louisiana","zip":null,"country_code":"sd","country_name":"Sudan","phone_one":"15208352905","phone_two":"","email":"sean83@example.com","avatar":"https:\/\/missions.dev\/images\/placeholders\/logo-placeholder.png","banner":null,"reservations_count":75,"created_at":"2017-06-14 23:50:59","updated_at":"2017-06-14 23:51:42","links":[{"rel":"self","uri":"\/groups\/2ad24d78-33bd-3e86-af87-a427a4759b8f"}]}}}},"companions":{"data":[{"id":"bf984d99-6602-387c-ad5a-3cf1a664034d","given_names":"Gonzalo Bartholome","surname":"Corwin","gender":"female","status":"married","shirt_size":"M","shirt_size_name":"Medium","age":21,"birthday":"1996-05-23","email":"ramona72@example.com","phone_one":"9043460511","phone_two":"449814514221912","address":"9308 Will Burg Suite 732\nCartwrighthaven, OK 29883-6841","city":"Macejkovicstad","state":null,"zip":"80643-5858","country_code":"lk","country_name":"Sri Lanka","companion_limit":1,"arrival_designation":"none","avatar":"https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg","desired_role":{"code":"DENH","name":"Dental Hygienist"},"total_cost":"2067.00","total_raised":"100.00","percent_raised":5,"total_owed":"1967.00","created_at":"2017-06-14 23:51:41","updated_at":"2017-06-14 23:51:42","deleted_at":null,"tags":["media","short"],"links":[{"rel":"self","uri":"\/api\/reservations\/bf984d99-6602-387c-ad5a-3cf1a664034d"}],"relationship":"family"}]}}}}],"meta":{"pagination":{"total":4,"count":4,"per_page":10,"current_page":1,"total_pages":1,"links":[]}}};
+
+
+        if (pathMatch.passenger) {
+            body.data = _.findWhere(body.data, {id: pathMatch.passenger});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
+    // Activities API
+    ['GET *activities(/:activity)'] (pathMatch, query, request) {
+        let body = {
+            "data": [
+                {
+                    "id": "3426b528-bc85-4679-b519-6637d469784b",
+                    "type": {"id": "8f831321-bd41-498e-9ef8-a371ca67754b", "name": "arrival"},
+                    "name": "Arrive in Destination Country",
+                    "description": "testing arrival A",
+                    "participant_id": "4e69ff27-6e8c-38b3-aea5-d8326609f5c5",
+                    "participant_type": "reservations",
+                    "occurred_at": "2017-07-31 14:56:34",
+                    "created_at": "2017-06-28 19:56:31",
+                    "updated_at": "2017-06-28 19:56:31",
+                    "deleted_at": null,
+                    "hubs": {
+                        "data": [{
+                            "id": "304f1bc3-2043-4df4-8dc3-68c5491cff69",
+                            "campaign_id": "d753e78d-0d9a-4294-868d-0a1e89f2780a",
+                            "name": "NOWHERE",
+                            "call_sign": "CAR",
+                            "address": null,
+                            "city": "Cool Stuff",
+                            "state": null,
+                            "zip": null,
+                            "country_code": "us",
+                            "created_at": "2017-06-28 19:56:31",
+                            "updated_at": "2017-06-28 19:56:31"
+                        }]
+                    }
+                },
+                {
+                    "id": "b1e42856-b2c5-4936-a7e7-83bb8f7528e7",
+                    "type": {"id": "ede919f2-9865-49ff-9fef-8d4a3e6c6f2b", "name": "departure"},
+                    "name": "Return Home",
+                    "description": null,
+                    "participant_id": "4e69ff27-6e8c-38b3-aea5-d8326609f5c5",
+                    "participant_type": "reservations",
+                    "occurred_at": "2017-08-31 14:56:00",
+                    "created_at": "2017-06-28 19:56:31",
+                    "updated_at": "2017-06-28 19:56:31",
+                    "deleted_at": null,
+                    "hubs": {
+                        "data": [{
+                            "id": "c448549e-2b0c-46f0-b32c-b9033bcc56ea",
+                            "campaign_id": "d753e78d-0d9a-4294-868d-0a1e89f2780a",
+                            "name": "Miami International Airport",
+                            "call_sign": "MIA",
+                            "address": null,
+                            "city": "Miami",
+                            "state": null,
+                            "zip": null,
+                            "country_code": "us",
+                            "created_at": "2017-06-19 20:01:55",
+                            "updated_at": "2017-06-19 20:01:55"
+                        }]
+                    }
+                }
+            ],
+            "meta": {
+                "pagination": {
+                    "total": 2,
+                    "count": 2,
+                    "per_page": 10,
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "links": []
+                }
+            }
+        };
+
+
+        if (pathMatch.activity) {
+            body.data = _.findWhere(body.data, {id: pathMatch.activity});
+            delete body.meta;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['PUT *activities(/:activity)'] (pathMatch, query, request) {
+        let body = {
+            "id": "b8d20208-8f44-470f-a05c-ef26fd299a2f",
+            "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+            "type": request.body.type || "flight",
+            "vessel_no": request.body.vessel_no || "DL100",
+            "name": request.body.name || "Delta Airlines",
+            "domestic": request.body.domestic || true,
+            "capacity": request.body.capacity || 9999,
+            "call_sign": request.body.call_sign || null,
+            "created_at": "2017-04-21 18:14:34",
+            "updated_at": "2017-04-21 18:14:34",
+            "links": [
+                {
+                    "rel": "self",
+                    "uri": "/api/transports/b8d20208-8f44-470f-a05c-ef26fd299a2f"
+                }
+            ]
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['POST *activities(/:activity)'] (pathMatch, query, request) {
+        let body = {
+            "id": "b8d20208-8f44-470f-a05c-ef26fd299a2f",
+            "campaign_id": "b304fd5a-3c18-4a77-9722-e6138f3429d7",
+            "type": request.body.type || "flight",
+            "vessel_no": request.body.vessel_no || "DL100",
+            "name": request.body.name || "Delta Airlines",
+            "domestic": request.body.domestic || true,
+            "capacity": request.body.capacity || 9999,
+            "call_sign": request.body.call_sign || null,
+            "created_at": "2017-04-21 18:14:34",
+            "updated_at": "2017-04-21 18:14:34",
+            "links": [
+                {
+                    "rel": "self",
+                    "uri": "/api/transports/b8d20208-8f44-470f-a05c-ef26fd299a2f"
+                }
+            ]
+        };
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['DELETE *activities(/:activity)'] (pathMatch, query, request) {
+        let body = '';
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+
     // Regions API
     ['GET *regions/:region/accommodations(/:accommodation)'] (pathMatch, query, request) {
         let body = {
@@ -3475,7 +4016,6 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
-
 
     // Campaigns API
     ['GET *campaigns/:campaign/regions(/:region)'] (pathMatch, query, request) {
@@ -4058,15 +4598,40 @@ export default {
     },
     ['POST *uploads(/:upload)'] (pathMatch, query, request) {
         let body = {
-            "id": "b4da362f-2524-4eb7-abaa-8aceb6fdd618",
-            "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
-            "name": request.body.name || "1n1d17_white",
-            "type": request.body.type || "avatar",
-            "meta": null,
-            "created_at": "2017-06-14 23:50:59",
-            "updated_at": "2017-06-14 23:50:59",
-            "tags": request.body.tags || [],
-            "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+            "data": {
+                "id": "b4da362f-2524-4eb7-abaa-8aceb6fdd618",
+                "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "name": request.body.name || "1n1d17_white",
+                "type": request.body.type || "avatar",
+                "meta": null,
+                "created_at": "2017-06-14 23:50:59",
+                "updated_at": "2017-06-14 23:50:59",
+                "tags": request.body.tags || [],
+                "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+            }
+        };
+
+        return {
+            body: body,
+                status: 200,
+                statusText: 'OK',
+                headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['PUT *uploads(/:upload)'] (pathMatch, query, request) {
+        let body = {
+            "data": {
+                "id": "90fd1c9a-78f1-4d2a-907d-31dbda79211e",
+                "source": "https:\/\/missions.dev\/api\/images\/avatars\/1n1d17-white-400x400.jpg",
+                "name": request.body.name || "1n1d17_white",
+                "type": request.body.type || "avatar",
+                "meta": null,
+                "created_at": "2017-06-14 23:50:59",
+                "updated_at": "2017-06-14 23:50:59",
+                "tags": request.body.tags || [],
+                "links": [{"rel": "self", "uri": "\/uploads\/90fd1c9a-78f1-4d2a-907d-31dbda79211e"}]
+            }
         };
 
         return {
@@ -4097,7 +4662,6 @@ export default {
         }
 
     },
-
     ['GET *utilities/airports'] (pathMatch, query, request) {
         let body = {
             "data": [{
@@ -4622,7 +5186,6 @@ export default {
         }
 
     },
-
     ['GET *utilities/airports/:reference'] (pathMatch, query, request) {
         let body = {
             "data": {
@@ -4647,7 +5210,6 @@ export default {
         }
 
     },
-
     ['GET *utilities/countries'] (pathMatch, query, request) {
         let body = {
             "countries": [{"name": "United States", "code": "us"}, {
@@ -4928,10 +5490,10 @@ export default {
         }
 
     },
-
     ['GET *utilities/airlines'] (pathMatch, query, request) {
         let body = {
-            "data": [{
+            "data": [
+                {
                 "id": "004f1cd7-dfb8-4871-9f5b-61a67a1836ef",
                 "name": "Virgin Nigeria Airways",
                 "alias": "",
@@ -5402,7 +5964,6 @@ export default {
         }
 
     },
-
     ['GET *utilities/timezones'] (pathMatch, query, request) {
         let body = {"timezones": ["Africa\/Abidjan", "Africa\/Accra", "Africa\/Addis_Ababa", "Africa\/Algiers", "Africa\/Asmara", "Africa\/Bamako", "Africa\/Bangui", "Africa\/Banjul", "Africa\/Bissau", "Africa\/Blantyre", "Africa\/Brazzaville", "Africa\/Bujumbura", "Africa\/Cairo", "Africa\/Casablanca", "Africa\/Ceuta", "Africa\/Conakry", "Africa\/Dakar", "Africa\/Dar_es_Salaam", "Africa\/Djibouti", "Africa\/Douala", "Africa\/El_Aaiun", "Africa\/Freetown", "Africa\/Gaborone", "Africa\/Harare", "Africa\/Johannesburg", "Africa\/Juba", "Africa\/Kampala", "Africa\/Khartoum", "Africa\/Kigali", "Africa\/Kinshasa", "Africa\/Lagos", "Africa\/Libreville", "Africa\/Lome", "Africa\/Luanda", "Africa\/Lubumbashi", "Africa\/Lusaka", "Africa\/Malabo", "Africa\/Maputo", "Africa\/Maseru", "Africa\/Mbabane", "Africa\/Mogadishu", "Africa\/Monrovia", "Africa\/Nairobi", "Africa\/Ndjamena", "Africa\/Niamey", "Africa\/Nouakchott", "Africa\/Ouagadougou", "Africa\/Porto-Novo", "Africa\/Sao_Tome", "Africa\/Tripoli", "Africa\/Tunis", "Africa\/Windhoek", "America\/Adak", "America\/Anchorage", "America\/Anguilla", "America\/Antigua", "America\/Araguaina", "America\/Argentina\/Buenos_Aires", "America\/Argentina\/Catamarca", "America\/Argentina\/Cordoba", "America\/Argentina\/Jujuy", "America\/Argentina\/La_Rioja", "America\/Argentina\/Mendoza", "America\/Argentina\/Rio_Gallegos", "America\/Argentina\/Salta", "America\/Argentina\/San_Juan", "America\/Argentina\/San_Luis", "America\/Argentina\/Tucuman", "America\/Argentina\/Ushuaia", "America\/Aruba", "America\/Asuncion", "America\/Atikokan", "America\/Bahia", "America\/Bahia_Banderas", "America\/Barbados", "America\/Belem", "America\/Belize", "America\/Blanc-Sablon", "America\/Boa_Vista", "America\/Bogota", "America\/Boise", "America\/Cambridge_Bay", "America\/Campo_Grande", "America\/Cancun", "America\/Caracas", "America\/Cayenne", "America\/Cayman", "America\/Chicago", "America\/Chihuahua", "America\/Costa_Rica", "America\/Creston", "America\/Cuiaba", "America\/Curacao", "America\/Danmarkshavn", "America\/Dawson", "America\/Dawson_Creek", "America\/Denver", "America\/Detroit", "America\/Dominica", "America\/Edmonton", "America\/Eirunepe", "America\/El_Salvador", "America\/Fort_Nelson", "America\/Fortaleza", "America\/Glace_Bay", "America\/Godthab", "America\/Goose_Bay", "America\/Grand_Turk", "America\/Grenada", "America\/Guadeloupe", "America\/Guatemala", "America\/Guayaquil", "America\/Guyana", "America\/Halifax", "America\/Havana", "America\/Hermosillo", "America\/Indiana\/Indianapolis", "America\/Indiana\/Knox", "America\/Indiana\/Marengo", "America\/Indiana\/Petersburg", "America\/Indiana\/Tell_City", "America\/Indiana\/Vevay", "America\/Indiana\/Vincennes", "America\/Indiana\/Winamac", "America\/Inuvik", "America\/Iqaluit", "America\/Jamaica", "America\/Juneau", "America\/Kentucky\/Louisville", "America\/Kentucky\/Monticello", "America\/Kralendijk", "America\/La_Paz", "America\/Lima", "America\/Los_Angeles", "America\/Lower_Princes", "America\/Maceio", "America\/Managua", "America\/Manaus", "America\/Marigot", "America\/Martinique", "America\/Matamoros", "America\/Mazatlan", "America\/Menominee", "America\/Merida", "America\/Metlakatla", "America\/Mexico_City", "America\/Miquelon", "America\/Moncton", "America\/Monterrey", "America\/Montevideo", "America\/Montserrat", "America\/Nassau", "America\/New_York", "America\/Nipigon", "America\/Nome", "America\/Noronha", "America\/North_Dakota\/Beulah", "America\/North_Dakota\/Center", "America\/North_Dakota\/New_Salem", "America\/Ojinaga", "America\/Panama", "America\/Pangnirtung", "America\/Paramaribo", "America\/Phoenix", "America\/Port-au-Prince", "America\/Port_of_Spain", "America\/Porto_Velho", "America\/Puerto_Rico", "America\/Rainy_River", "America\/Rankin_Inlet", "America\/Recife", "America\/Regina", "America\/Resolute", "America\/Rio_Branco", "America\/Santarem", "America\/Santiago", "America\/Santo_Domingo", "America\/Sao_Paulo", "America\/Scoresbysund", "America\/Sitka", "America\/St_Barthelemy", "America\/St_Johns", "America\/St_Kitts", "America\/St_Lucia", "America\/St_Thomas", "America\/St_Vincent", "America\/Swift_Current", "America\/Tegucigalpa", "America\/Thule", "America\/Thunder_Bay", "America\/Tijuana", "America\/Toronto", "America\/Tortola", "America\/Vancouver", "America\/Whitehorse", "America\/Winnipeg", "America\/Yakutat", "America\/Yellowknife", "Antarctica\/Casey", "Antarctica\/Davis", "Antarctica\/DumontDUrville", "Antarctica\/Macquarie", "Antarctica\/Mawson", "Antarctica\/McMurdo", "Antarctica\/Palmer", "Antarctica\/Rothera", "Antarctica\/Syowa", "Antarctica\/Troll", "Antarctica\/Vostok", "Arctic\/Longyearbyen", "Asia\/Aden", "Asia\/Almaty", "Asia\/Amman", "Asia\/Anadyr", "Asia\/Aqtau", "Asia\/Aqtobe", "Asia\/Ashgabat", "Asia\/Baghdad", "Asia\/Bahrain", "Asia\/Baku", "Asia\/Bangkok", "Asia\/Barnaul", "Asia\/Beirut", "Asia\/Bishkek", "Asia\/Brunei", "Asia\/Chita", "Asia\/Choibalsan", "Asia\/Colombo", "Asia\/Damascus", "Asia\/Dhaka", "Asia\/Dili", "Asia\/Dubai", "Asia\/Dushanbe", "Asia\/Gaza", "Asia\/Hebron", "Asia\/Ho_Chi_Minh", "Asia\/Hong_Kong", "Asia\/Hovd", "Asia\/Irkutsk", "Asia\/Jakarta", "Asia\/Jayapura", "Asia\/Jerusalem", "Asia\/Kabul", "Asia\/Kamchatka", "Asia\/Karachi", "Asia\/Kathmandu", "Asia\/Khandyga", "Asia\/Kolkata", "Asia\/Krasnoyarsk", "Asia\/Kuala_Lumpur", "Asia\/Kuching", "Asia\/Kuwait", "Asia\/Macau", "Asia\/Magadan", "Asia\/Makassar", "Asia\/Manila", "Asia\/Muscat", "Asia\/Nicosia", "Asia\/Novokuznetsk", "Asia\/Novosibirsk", "Asia\/Omsk", "Asia\/Oral", "Asia\/Phnom_Penh", "Asia\/Pontianak", "Asia\/Pyongyang", "Asia\/Qatar", "Asia\/Qyzylorda", "Asia\/Rangoon", "Asia\/Riyadh", "Asia\/Sakhalin", "Asia\/Samarkand", "Asia\/Seoul", "Asia\/Shanghai", "Asia\/Singapore", "Asia\/Srednekolymsk", "Asia\/Taipei", "Asia\/Tashkent", "Asia\/Tbilisi", "Asia\/Tehran", "Asia\/Thimphu", "Asia\/Tokyo", "Asia\/Ulaanbaatar", "Asia\/Urumqi", "Asia\/Ust-Nera", "Asia\/Vientiane", "Asia\/Vladivostok", "Asia\/Yakutsk", "Asia\/Yekaterinburg", "Asia\/Yerevan", "Atlantic\/Azores", "Atlantic\/Bermuda", "Atlantic\/Canary", "Atlantic\/Cape_Verde", "Atlantic\/Faroe", "Atlantic\/Madeira", "Atlantic\/Reykjavik", "Atlantic\/South_Georgia", "Atlantic\/St_Helena", "Atlantic\/Stanley", "Australia\/Adelaide", "Australia\/Brisbane", "Australia\/Broken_Hill", "Australia\/Currie", "Australia\/Darwin", "Australia\/Eucla", "Australia\/Hobart", "Australia\/Lindeman", "Australia\/Lord_Howe", "Australia\/Melbourne", "Australia\/Perth", "Australia\/Sydney", "Europe\/Amsterdam", "Europe\/Andorra", "Europe\/Astrakhan", "Europe\/Athens", "Europe\/Belgrade", "Europe\/Berlin", "Europe\/Bratislava", "Europe\/Brussels", "Europe\/Bucharest", "Europe\/Budapest", "Europe\/Busingen", "Europe\/Chisinau", "Europe\/Copenhagen", "Europe\/Dublin", "Europe\/Gibraltar", "Europe\/Guernsey", "Europe\/Helsinki", "Europe\/Isle_of_Man", "Europe\/Istanbul", "Europe\/Jersey", "Europe\/Kaliningrad", "Europe\/Kiev", "Europe\/Lisbon", "Europe\/Ljubljana", "Europe\/London", "Europe\/Luxembourg", "Europe\/Madrid", "Europe\/Malta", "Europe\/Mariehamn", "Europe\/Minsk", "Europe\/Monaco", "Europe\/Moscow", "Europe\/Oslo", "Europe\/Paris", "Europe\/Podgorica", "Europe\/Prague", "Europe\/Riga", "Europe\/Rome", "Europe\/Samara", "Europe\/San_Marino", "Europe\/Sarajevo", "Europe\/Simferopol", "Europe\/Skopje", "Europe\/Sofia", "Europe\/Stockholm", "Europe\/Tallinn", "Europe\/Tirane", "Europe\/Ulyanovsk", "Europe\/Uzhgorod", "Europe\/Vaduz", "Europe\/Vatican", "Europe\/Vienna", "Europe\/Vilnius", "Europe\/Volgograd", "Europe\/Warsaw", "Europe\/Zagreb", "Europe\/Zaporozhye", "Europe\/Zurich", "Indian\/Antananarivo", "Indian\/Chagos", "Indian\/Christmas", "Indian\/Cocos", "Indian\/Comoro", "Indian\/Kerguelen", "Indian\/Mahe", "Indian\/Maldives", "Indian\/Mauritius", "Indian\/Mayotte", "Indian\/Reunion", "Pacific\/Apia", "Pacific\/Auckland", "Pacific\/Bougainville", "Pacific\/Chatham", "Pacific\/Chuuk", "Pacific\/Easter", "Pacific\/Efate", "Pacific\/Enderbury", "Pacific\/Fakaofo", "Pacific\/Fiji", "Pacific\/Funafuti", "Pacific\/Galapagos", "Pacific\/Gambier", "Pacific\/Guadalcanal", "Pacific\/Guam", "Pacific\/Honolulu", "Pacific\/Johnston", "Pacific\/Kiritimati", "Pacific\/Kosrae", "Pacific\/Kwajalein", "Pacific\/Majuro", "Pacific\/Marquesas", "Pacific\/Midway", "Pacific\/Nauru", "Pacific\/Niue", "Pacific\/Norfolk", "Pacific\/Noumea", "Pacific\/Pago_Pago", "Pacific\/Palau", "Pacific\/Pitcairn", "Pacific\/Pohnpei", "Pacific\/Port_Moresby", "Pacific\/Rarotonga", "Pacific\/Saipan", "Pacific\/Tahiti", "Pacific\/Tarawa", "Pacific\/Tongatapu", "Pacific\/Wake", "Pacific\/Wallis", "UTC"]};
         return {
@@ -5414,7 +5975,6 @@ export default {
         }
 
     },
-
     ['GET *utilities/past-trips'] (pathMatch, query, request) {
         let body = ["2004 Puerto Plata, Dominican Rep.", "2005 Iquitos, Peru", "2005 Leon, Nicaragua", "2005 Cusco, Peru", "2006 Belo Horizonte, Brazil", "2006 Azua, Dominican Rep.", "2006 Cap Haitien, Haiti", "2007 Escuintla, Guatemala", "2007 El Progreso, Honduras", "2007 Cap-Hatien, Haiti", "2008 Shillong, India", "2008 Barahona, Dominican Rep.", "2008 Puerto Cortes, Honduras", "2008 Santa Cruz, Bolivia", "2009 Managua, Nicaragua", "2009 Petionville, Haiti", "2010 Kurnool, India", "2010 San Cristobal, Dominican Rep.", "2010 Lima, Peru", "2010 Warangal, India", "2011 Meteti, Panama", "2011 Andra Pradesh, India", "2011 Lima, Peru", "2011 Amazon River, Peru", "2011 Croix-de-Bouquet, Haiti", "2011 Bhimavaram, India", "2012 Buriram, Thailand", "2012 La Ceiba, Honduras", "2012 Patna, India", "2012 Quito, Ecuador", "2012 Bangkok, Thailand", "2012 Lima, Peru", "2012 Hyderabad, India", "2013 Patna, India", "2013 1Nation1Day Honduras", "2013 Hyderabad, India", "2014 Yoro, Honduras", "2014 Roatan, Honduras", "2014 Kumasi, Ghana", "2014 Lima, Peru", "2014 Kathmandu, Nepal", "2015 India", "2015 1Nation1Day Dominican Republic", "2015 Christmas in India", "2016 India", "2016 Ecuador", "2016 Nicaragua", "2016 Honduras 1N1D Follow up", "2016 Nepal", "2016 Christmas in India"];
         return {
@@ -5426,7 +5986,6 @@ export default {
         }
 
     },
-
     ['GET *utilities/team-roles(/:type)'] (pathMatch, query, request) {
         let roles = {
             leadership: {
@@ -5509,7 +6068,5 @@ export default {
         }
 
     },
-
-    // mock influencer
 
 }

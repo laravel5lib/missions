@@ -143,8 +143,9 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import markdownExampleModal from '../markdown-example-modal.vue';
-    var marked = require('marked');
+    let marked = require('marked');
     export default{
         name: 'user-profile-stories',
         components:{'markdown-example-modal': markdownExampleModal},
@@ -175,7 +176,7 @@
             }
         },
         watch: {
-            'page': function (val, oldVal) {
+            page(val, oldVal) {
                 this.searchStories();
             },
         },
@@ -194,7 +195,7 @@
                         });
                         this.resetData();
                         this.searchStories();
-                    });
+                    }, this.$root.handleApiError);
                 }
             },
             updateStory(story){
@@ -210,7 +211,7 @@
                         // this.$refs.spinner.show();
                         return response.body.data;
                         //this.searchStories();
-                    });
+                    }, this.$root.handleApiError);
                 }
             },
             createStory(story){
@@ -222,9 +223,7 @@
                         this.newMode = false;
                         this.resetData();
                         this.searchStories();
-                    }, function (response) {
-                        debugger;
-                    });
+                    }, this.$root.handleApiError);
                 }
             },
             searchStories(){
@@ -235,7 +234,7 @@
                 }}).then(function(response) {
                     this.stories = response.body.data;
                     this.pagination = response.body.meta.pagination;
-                });
+                }, this.$root.handleApiError);
             },
             resetData(){
                 this.selectedStory =  {

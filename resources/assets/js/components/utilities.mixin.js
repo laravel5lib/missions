@@ -32,7 +32,7 @@ export default {
                 } else {
                     return this.UTILITIES.countries;
                 }
-            })
+            }, this.$root.handleApiError)
         },
         getTimezones(search, loading){
             loading ? loading(true) : void 0;
@@ -43,7 +43,7 @@ export default {
                 } else {
                     return this.UTILITIES.timezones;
                 }
-            })
+            }, this.$root.handleApiError)
         },
         getRoles(conditionArray, loading){
             loading ? loading(true) : void 0;
@@ -62,7 +62,7 @@ export default {
                 } else {
                     return this.UTILITIES.roles;
                 }
-            });
+            }, this.$root.handleApiError);
         },
         getRolesByType(type, loading){
             if (!_.contains(['leadership', 'general', 'medical'], type)) {
@@ -82,7 +82,7 @@ export default {
                 } else {
                     return this.UTILITIES.roleTypes[type];
                 }
-            });
+            }, this.$root.handleApiError);
         },
         getAirports(search, loading){
             loading ? loading(true) : void 0;
@@ -103,12 +103,12 @@ export default {
                 } else {
                     return this.UTILITIES.airports;
                 }
-            });
+            }, this.$root.handleApiError);
         },
         getAirport(reference){
             return this.$http.get('utilities/airports/' + reference).then(function (response) {
                 return response.body.data;
-            });
+            }, this.$root.handleApiError);
         },
         getAirlines(search, loading){
             loading ? loading(true) : void 0;
@@ -128,47 +128,33 @@ export default {
                     } else {
                         return this.UTILITIES.airlines;
                     }
-                },
-                function (response) {
-                    console.log(response);
-                });
+                }, this.$root.handleApiError);
         },
         getAirline(reference){
             return this.$http.get('utilities/airlines/' + reference).then(function (response) {
                     return response.body.data;
-                },
-                function (response) {
-                    console.log(response);
-                });
+                }, this.$root.handleApiError);
         },
         getTypes() {
             return this.$http.get('utilities/activities/types').then(function (response) {
                     return this.UTILITIES.activityTypes = response.body;
-                },
-                function (response) {
-                    console.log(response);
-                });
+                }, this.$root.handleApiError);
         },
         getActivityTypes() {
             return this.$http.get('utilities/activities/types').then(function (response) {
                     return this.UTILITIES.activityTypes = response.body;
-                },
-                function (response) {
-                    console.log(response);
-                });
+                }, this.$root.handleApiError);
         },
         getTrips() {
             return this.$http.get('utilities/past-trips').then(function(response) {
                 return this.UTILITIES.trips = response.body;
-            }, function (response) {
-                return response;
-            });
+            }, this.$root.handleApiError);
         },
         getSlug(slug) {
             return this.$http.get('utilities/make-slug/' + slug, { params: { hideLoader: true } })
                 .then(function (response) {
                     return response.body.slug;
-                });
+                }, this.$root.handleApiError);
         },
     },
 }

@@ -286,6 +286,11 @@
 														<button :disabled="!currentAccommodation" class="btn btn-xs btn-primary-hollow pull-right" type="button" @click="addRoomToAccommodation(room, currentAccommodation)">
 															<i class="fa fa-plus"></i>
 														</button>
+                                                        <p class="small" style="line-height:1;margin-bottom:2px;">
+                                                            <span v-for="occupant in room.occupants.data">
+                                                                <br /> &middot; {{ occupant.given_names }} {{ occupant.surname }}
+                                                            </span>
+                                                        </p>
 													</div>
 
 												</div>

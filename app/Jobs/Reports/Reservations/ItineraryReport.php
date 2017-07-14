@@ -90,7 +90,7 @@ class ItineraryReport extends Job implements ShouldQueue
             $data['Hotel Check-In Date'] = 'July 21';
             $data['Hotel Check-In Time'] = '4:00 pm';
         } else {
-            switch (array_flatten($reservation->designation->content)){
+            switch (implode('', array_flatten($reservation->designation->content))){
                 case 'eastern':
                     $data['Domestic Check-In Date'] = 'July 22';
                     $data['Domestic Check-In Time'] = '10:00 pm';
@@ -136,7 +136,7 @@ class ItineraryReport extends Job implements ShouldQueue
 
         if ($len == 0) return $transports;
 
-        collect($flights)->sortBy('depart_at')
+        collect($flights)->sortBy('depart_at', 'asc')
             ->each(function ($transport, $key) use($len, $transports) {
                 if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
                     // we get the first iteration for the departure

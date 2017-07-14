@@ -92,8 +92,8 @@ class ItineraryReport extends Job implements ShouldQueue
         } else {
             switch (implode('', array_flatten($reservation->designation->content))){
                 case 'eastern':
-                    $data['Domestic Check-In Date'] = 'July 22';
-                    $data['Domestic Check-In Time'] = '10:00 pm';
+                    $data['Hotel Check-In Date'] = 'July 22';
+                    $data['Hotel Check-In Time'] = '10:00 pm';
                     break;
                 case 'western':
                     $data['Hotel Check-In Date'] = 'July 21';

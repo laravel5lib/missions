@@ -136,8 +136,7 @@ class ItineraryReport extends Job implements ShouldQueue
 
         if ($len == 0) return $transports;
 
-        collect($flights)
-            ->each(function ($transport, $key) use($len, $transports) {
+        collect($flights)->each(function ($transport, $key) use($len, $transports) {
                 if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
                     // we get the first iteration for the departure
                     // and make sure departure is from the US

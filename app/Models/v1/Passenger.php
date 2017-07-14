@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use App\CampaignTransport;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
@@ -27,5 +28,24 @@ class Passenger extends Model
     public function transport()
     {
         return $this->belongsTo(Transport::class);
+    }
+
+    public function campaignTransport()
+    {
+        return $this->belongsTo(CampaignTransport::class, 'transport_id');
+    }
+
+    public function transportCompanions()
+    {
+        return $this->reservation
+            ->companionReservations()
+            ->whereHas('transports', function ($transport) {
+                return $transport->where('transports.id', $this->transport_id);
+            })
+            ->get([
+                'reservations.id',
+                'reservations.given_names',
+                'reservations.surname'
+            ]);
     }
 }

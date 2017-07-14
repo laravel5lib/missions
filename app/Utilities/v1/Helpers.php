@@ -296,3 +296,13 @@ function convert_to_cents($dollars)
 {
     //
 }
+
+function removeNonNumericCharacters($value)
+{
+    return preg_replace("/[^0-9,.]/", "", $value);
+}
+
+function addLeadingZeros($value, $digits = 4)
+{
+    return str_pad($value, 4, '0', STR_PAD_LEFT);
+}

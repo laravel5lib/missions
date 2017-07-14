@@ -2,12 +2,25 @@
 	<div>
 		<hr class="divider inv sm">
 		<form class="col-sm-12">
-			<div class="form-group" v-if="propertyExists('groups')">
-				<label>Groups</label>
-				<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-				          :value.sync="groupsArr" :options="groupsOptions" label="name"
-				          placeholder="Filter Groups"></v-select>
-			</div>
+			<template v-if="propertyExists('groups')">
+				<template v-if="isAdminRoute">
+					<div class="form-group">
+						<label>Travel Groups</label>
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+						          :value.sync="groupsArr" :options="groupsOptions" label="name"
+						          placeholder="Filter Groups"></v-select>
+					</div>
+				</template>
+				<template v-else>
+					<div class="form-group">
+						<label>Groups</label>
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+						          :value.sync="groupsArr" :options="groupsOptions" label="name"
+						          placeholder="Filter Groups"></v-select>
+					</div>
+				</template>
+			</template>
+
 			<div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
 				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
@@ -28,16 +41,9 @@
 				</select>
 			</div>
 
-			<template v-if="isAdminRoute || facilitator || teams || rooms">
+			<template v-if="isAdminRoute || facilitator || teams || rooms || transports">
 
-				<div class="form-group" v-if="isAdminRoute && propertyExists('groups') && teams">
-					<label>Travel Group</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-					          :value.sync="groupsArr" :options="groupsOptions" label="name"
-					          placeholder="Filter Groups"></v-select>
-				</div>
-
-				<div class="form-group" v-if="propertyExists('role') && (!isAdminRoute || teams || rooms)">
+				<div class="form-group" v-if="propertyExists('role') && (!isAdminRoute || transports)">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
 					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
@@ -200,7 +206,7 @@
 					</div>
 				</div>
 
-                <div class="form-group">
+                <div class="form-group" v-if="propertyExists('minPercentRaised')">
                     <div class="row">
                         <div class="col-xs-12">
                             <label>Percent Raised</label>
@@ -222,7 +228,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" v-if="propertyExists('minAmountRaised')">
                     <div class="row">
                         <div class="col-xs-12">
                             <label>Amount Raised</label>
@@ -259,7 +265,7 @@
 					</div>
 				</div>
 
-                <div class="form-group">
+                <div class="form-group" v-if="!transports">
                     <label>Rooms</label>
                     <div>
                         <label class="checkbox-inline">
@@ -288,7 +294,6 @@
         components: {vSelect},
 	    props: {
             // Main object that contains all filters used by the parent component for API calls
-		    // age[] default is used to avoid errors caused by (possibly) empty filter objects
 			filters: {
 			    type: Object,
 				required: true,
@@ -338,6 +343,11 @@
 		    },
 		    // We need to know if the user is managing rooming
 		    rooms: {
+			    type: Boolean,
+			    default: false
+		    },
+		    // We need to know if the user is managing transports
+            transports: {
 			    type: Boolean,
 			    default: false
 		    },
@@ -419,7 +429,7 @@
                 // Instead of concerning the filters component about where it is
 	            // It is may be best to behave based on the filter object passed in
 	            // We can ho this be checking whether a property exists in it
-	            return this.filters.hasOwnProperty(property);
+	            return this.filters && this.filters.hasOwnProperty(property);
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;

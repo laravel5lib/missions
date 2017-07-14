@@ -4,7 +4,7 @@
             <div class="col-xs-12" v-if="! editMode">
                 <h6 class="text-uppercase">
                     <i class="fa fa-map-marker"></i> {{ designation.content }} Arrival
-                    <button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true"><i class="fa fa-pencil"></i> Change</button>
+                    <button class="btn btn-xs btn-default-hollow pull-right" @click="editMode = true" v-if="! isLocked"><i class="fa fa-pencil"></i> Change</button>
                 </h6>
             </div>
             <div class="col-xs-12" v-else>
@@ -43,6 +43,10 @@
             'reservationId': {
                 type: String,
                 required: true
+            },
+            'locked': {
+                type: Boolean,
+                default: false
             }
         },
         computed: {
@@ -52,6 +56,12 @@
                 } else {
                     return { content: ["eastern"] };
                 }
+            },
+            'isLocked': function() {
+                if (this.isAdminRoute)
+                    return false;
+
+                return this.locked;
             }
         },
         data() {

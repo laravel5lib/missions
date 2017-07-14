@@ -20,7 +20,8 @@ class TravelReport extends Job implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $request
+     * @param $user
      */
     public function __construct($request, $user)
     {
@@ -31,14 +32,18 @@ class TravelReport extends Job implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param Reservation $reservation
      * @return void
      */
     public function handle(Reservation $reservation)
     {
         $reservations = $reservation->filter(array_filter($this->request))
-                             ->with('requirements.document', 'trip.group',
-                                'trip.campaign', 'trip.rep', 'rep',
-                                'designation', 'squads.team.regions')
+                             ->with(
+                                 'requirements.document', 'trip.group',
+                                 'trip.campaign', 'trip.rep', 'rep',
+                                 'designation', 'squads.team.regions',
+                                 'transports.departureHub', 'transports.arrivalHub'
+                             )
                              ->get();
 
         $data = $this->columnize($reservations);
@@ -48,6 +53,12 @@ class TravelReport extends Job implements ShouldQueue
         (new CSVReport($data, $this->user))->make($filename)->notify();
     }
 
+    /**
+     * Organize collection into columns
+     *
+     * @param $reservations
+     * @return mixed
+     */
     private function columnize($reservations)
     {
 
@@ -77,6 +88,7 @@ class TravelReport extends Job implements ShouldQueue
             $data = collect($data)
                         ->merge($this->passport($reservation))
                         ->merge($this->itinerary($reservation))
+                        ->merge($this->internationalTravel($reservation))
                         ->all();
 
             return $data;
@@ -84,6 +96,12 @@ class TravelReport extends Job implements ShouldQueue
         })->all();
     }
 
+    /**
+     * Get passport columns
+     *
+     * @param $reservation
+     * @return \Illuminate\Support\Collection
+     */
     private function passport($reservation)
     {
         $requirement = $reservation->requirements
@@ -102,6 +120,12 @@ class TravelReport extends Job implements ShouldQueue
         ]);
     }
 
+    /**
+     * Get itinerary columns
+     *
+     * @param $reservation
+     * @return \Illuminate\Support\Collection
+     */
     private function itinerary($reservation)
     {
         $requirement = $reservation->requirements->where('document_type', 'travel_itineraries')->first();
@@ -121,15 +145,7 @@ class TravelReport extends Job implements ShouldQueue
             'Departure Location' => null,
             'Departure At' => null,
             'Departure Transportation' => null,
-            'Departure Transport No.' => null,
-            'Intl Departure Location' => null,
-            'Intl Departure At' => null,
-            'Intl Departure Transportation' => null,
-            'Intl Departure Transport No.' => null,
-            'Intl Return Location' => null,
-            'Intl Return At' => null,
-            'Intl Return Transportation' => null,
-            'Intl Return Transport No.' => null,
+            'Departure Transport No.' => null
         ]);
 
         if (!$itinerary) return $travel;
@@ -153,5 +169,56 @@ class TravelReport extends Job implements ShouldQueue
         });
 
         return $travel;
+    }
+
+    /**
+     * Get international travel columns
+     *
+     * @param $reservation
+     * @return \Illuminate\Support\Collection
+     */
+    private function internationalTravel($reservation)
+    {
+        $transports = collect([
+            'Intl Departure Location' => null,
+            'Intl Departure At' => null,
+            'Intl Departure Transportation' => null,
+            'Intl Departure Transport No.' => null,
+            'Intl Return Location' => null,
+            'Intl Return At' => null,
+            'Intl Return Transportation' => null,
+            'Intl Return Transport No.' => null,
+        ]);
+
+        $flights = array_values($reservation->transports->filter(function ($transport) {
+            return $transport->domestic == false && $transport->type == 'flight';
+        })->all());
+
+        $len = count($flights);
+
+        if ($len == 0) return $transports;
+
+        collect($flights)->sortBy('depart_at')
+            ->each(function ($transport, $key) use($len, $transports) {
+                if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
+                    // we get the first iteration for the departure
+                    // and make sure departure is from the US
+                    $transports['Intl Departure Location'] = $transport->departureHub->name;
+                    $transports['Intl Departure At'] = $transport->depart_at->toDateTimeString();
+                    $transports['Intl Departure Transportation'] = $transport->name;
+                    $transports['Intl Departure Transport No.'] = $transport->vessel_no;
+                }
+
+                if ($key == $len - 1 && $transport->arrivalHub && $transport->arrivalHub->country_code == 'us') {
+                    // we get the last iteration for the return
+                    // and make sure arrival is in the US
+                    $transports['Intl Return Location'] = $transport->departureHub->name;
+                    $transports['Intl Return At'] = $transport->depart_at->toDateTimeString();
+                    $transports['Intl Return Transportation'] = $transport->name;
+                    $transports['Intl Return Transport No.'] = $transport->vessel_no;
+                }
+            });
+
+        return $transports;
     }
 }

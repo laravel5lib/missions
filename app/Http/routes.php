@@ -121,7 +121,8 @@ $this->get('/{slug}/trips', 'CampaignsController@trips')
 $this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')
      ->where('sponsor_slug', '^(?!api).*$');
 $this->get('/{slug}', 'PagesController@show')
-     ->where('sponsor_slug', '^(?!api).*$');
+     ->where('sponsor_slug', '^(?!api).*$')
+     ->middleware(['lowercase']);
 
 // Home Route ...
 $this->get('/', function () {

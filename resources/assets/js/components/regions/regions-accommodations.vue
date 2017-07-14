@@ -317,6 +317,9 @@
 									</div>
 								</panel>
 							</accordion>
+							<div class="col-xs-12 text-center">
+								<pagination :pagination.sync="accommodationsPagination" :callback="getAccommodations"></pagination>
+							</div>
 						</template>
 						<template v-else>
 							<hr class="divider inv">

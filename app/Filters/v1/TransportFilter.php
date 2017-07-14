@@ -8,32 +8,18 @@ class TransportFilter extends Filter
     *
     * @var array
     */
-    public $relations = [];
-
-    /**
-     * Fields that can be sorted.
-     *
-     * @var array
-     */
-    public $sortable = [
-        'name', 'call_sign', 'vessel_no', 'capacity', 'type',
-        'departs_at', 'arrives_at', 'created_at', 'updated_at'
+    public $relations = [
+        'passengers' => ['designation', 'groups']
     ];
 
-    /**
-     * Fields that can be searched.
-     *
-     * @var array
-     */
+    public $sortable = [
+        'name', 'call_sign', 'vessel_no', 'capacity', 'type', 'created_at', 'updated_at'
+    ];
+
     public $searchable = [
         'name', 'call_sign', 'vessel_no', 'capacity'
     ];
-    /**
-     * Filter by campaign
-     *
-     * @param $campaign
-     * @return mixed
-     */
+
     public function campaign($campaign)
     {
         return $this->where('campaign_id', $campaign);
@@ -41,9 +27,6 @@ class TransportFilter extends Filter
 
     /**
      * Filter by domestic or international
-     *
-     * @param $isDomestic
-     * @return mixed
      */
     public function isDomestic($isDomestic)
     {
@@ -52,14 +35,18 @@ class TransportFilter extends Filter
             $this->where('domestic', false);
     }
 
-    /**
-     * Filter by type
-     *
-     * @param $type
-     * @return mixed
-     */
     public function type($type)
     {
         return $this->where('type', $type);
+    }
+
+    public function maxPassengers($value)
+    {
+        return $this->has('passengers', '<=', $value);
+    }
+
+    public function minPassengers($value)
+    {
+        return $this->has('passengers', '>=', $value);
     }
 }

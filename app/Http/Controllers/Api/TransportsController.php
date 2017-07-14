@@ -36,6 +36,7 @@ class TransportsController extends Controller
     public function index(Request $request)
     {
         $transports = $this->transport->filter($request->all())
+                        ->withCount('passengers')
                         ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($transports, new TransportTransformer);
@@ -49,15 +50,21 @@ class TransportsController extends Controller
      */
     public function store(TransportRequest $request)
     {
-        $transport = $this->transport->firstOrCreate([
-            'type' => $request->json('type'),
-            'vessel_no' => strtoupper(trim($request->json('vessel_no', 'unassigned'))),
-            'name' => $request->json('name'),
-            'call_sign' => $request->json('call_sign', null),
-            'domestic' => $request->json('domestic'),
-            'capacity' => $request->json('capacity'),
-            'campaign_id' => $request->json('campaign_id')
-        ]);
+        $transport = $this->transport
+            ->withCount('passengers')
+            ->firstOrCreate([
+                'type' => $request->json('type'),
+                'vessel_no' => strtoupper(
+                    trim(
+                        $request->json('vessel_no', 'unassigned')
+                    )
+                ),
+                'name' => $request->json('name'),
+                'call_sign' => $request->json('call_sign', null),
+                'domestic' => $request->json('domestic'),
+                'capacity' => $request->json('capacity'),
+                'campaign_id' => $request->json('campaign_id')
+            ]);
 
         if ($request->json('activity_id')) {
             $transport->activities()->sync([$request->json('activity_id')], false);
@@ -74,7 +81,9 @@ class TransportsController extends Controller
      */
     public function show($id)
     {
-        $transport = $this->transport->findOrFail($id);
+        $transport = $this->transport
+            ->withCount('passengers')
+            ->findOrFail($id);
 
         return $this->response->item($transport, new TransportTransformer);
     }
@@ -88,7 +97,9 @@ class TransportsController extends Controller
      */
     public function update($id, TransportRequest $request)
     {
-        $transport = $this->transport->findOrFail($id);
+        $transport = $this->transport
+            ->withCount('passengers')
+            ->findOrFail($id);
 
         $transport->update([
             'type' => $request->json('type', $transport->type),
@@ -101,7 +112,9 @@ class TransportsController extends Controller
         ]);
 
         if ($request->json('activity_id')) {
-            $transport->activities()->sync([$request->json('activity_id')], false);
+            $transport->activities()->sync([
+                $request->json('activity_id')
+            ], false);
         }
 
         return $this->response->item($transport, new TransportTransformer);

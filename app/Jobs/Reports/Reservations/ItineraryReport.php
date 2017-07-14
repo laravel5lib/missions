@@ -61,17 +61,15 @@ class ItineraryReport extends Job implements ShouldQueue
     {
         return $reservations->map(function($reservation) {
             $data = [
-                'Surname' => $reservation->surname,
-                'Given Names' => $reservation->given_names,
-                'Group' => $reservation->trip->group->name,
-                'Campaign' => $reservation->trip->campaign->name,
-                'Arrival Designation' => $reservation->designation ?
-                    implode('', array_flatten($reservation->designation->content)) : 'none'
+                'Last Name' => $reservation->surname,
+                'First Name' => getFirstName($reservation->given_names),
+                'Type' => $reservation->trip->type,
+                'Role' => teamRole($reservation->desired_role),
+                'Group' => $reservation->trip->group->name
             ];
 
             $data = collect($data)
-                ->merge($this->domesticHotelInfo($reservation))
-                ->merge($this->internationalTravel($reservation))
+                ->merge($this->tripDetails($reservation))
                 ->all();
 
             return $data;
@@ -79,82 +77,103 @@ class ItineraryReport extends Job implements ShouldQueue
 
     }
 
-    private function domesticHotelInfo($reservation)
+    private function tripDetails($reservation)
     {
+        $designation = implode('', array_flatten($reservation->designation ? $reservation->designation->content : []));
+
         $data = collect([
-            'Hotel Check-In Date' => null,
-            'Hotel Check-In Time' => null
+            'Hotel Dep' => null,
+            'Dep Board' => null,
+            'Dep Flight' => null,
+            'Dep Time' => null,
+            'Dep AM' => null,
+            'Dep Port' => null,
+            'Dep Arr Time' => null,
+            'Dep Arr AM' => null,
+            'Ret Board' => null,
+            'Ret Flt' => null,
+            'Ret Time' => null,
+            'Ret AM' => null,
+            'Ret Port' => null,
+            'Ret Arr Time' => null,
+            'Ret Arr AM' => null,
+            'State' => null,
+            'Hotel Name' => null,
+            'Hotel Phone' => null,
+            'Hotel Address' => null
         ]);
 
-        if (! $reservation->designation) {
-            $data['Hotel Check-In Date'] = 'July 21';
-            $data['Hotel Check-In Time'] = '4:00 pm';
-        } else {
-            switch (implode('', array_flatten($reservation->designation->content))){
-                case 'eastern':
-                    $data['Hotel Check-In Date'] = 'July 22';
-                    $data['Hotel Check-In Time'] = '10:00 pm';
-                    break;
-                case 'western':
-                    $data['Hotel Check-In Date'] = 'July 21';
-                    $data['Hotel Check-In Time'] = '4:00 pm';
-                    break;
-                case 'international':
-                    $data['Hotel Check-In Date'] = 'July 21';
-                    $data['Hotel Check-In Time'] = '4:00 pm';
-                    break;
-                default:
-                    $data['Hotel Check-In Date'] = 'July 21';
-                    $data['Hotel Check-In Time'] = '4:00 pm';
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * Get international travel columns
-     *
-     * @param $reservation
-     * @return \Illuminate\Support\Collection
-     */
-    private function internationalTravel($reservation)
-    {
-        $transports = collect([
-            'Hotel Check-Out Date' => null,
-            'Hotel Check-Out Time' => null,
-            'Shuttle Departure At' => null,
-            'Intl Departure At' => null,
-            'Intl Arrival At' => null
-        ]);
-
+        // Grab reservation's flights ordered by earliest departure date
         $flights = array_values($reservation->transports()->orderBy('depart_at', 'asc')->get()->filter(function ($transport) {
             return $transport->domestic == false && $transport->type == 'flight';
         })->all());
 
         $len = count($flights);
+        if ($len == 0) return $data;
 
-        if ($len == 0) return $transports;
+        collect($flights)->each(function ($flight, $key) use($len, $data, $reservation, $designation) {
+            // we get the first departure from the US
+            if ($key == 0 && $flight->departureHub && $flight->departureHub->country_code == 'us') {
+                $data['Hotel Dep'] = $flight->depart_at->subHours(3)->format('h:i a');
+                $data['Dep Board'] = $flight->depart_at->subHours(1)->format('h:i a');
+                $data['Dep Flight'] = strtoupper($flight->vessel_no);
+                $data['Dep Time'] = $flight->depart_at->format('h:i a');
+                $data['Dep AM'] = strtoupper($flight->arrive_at->format('a'));
+                $data['Dep Port'] = strtoupper($flight->departureHub->call_sign);
+                $data['Dep Arr Time'] = $flight->arrive_at->format('h:i a');
+                $data['Dep Arr AM'] = strtoupper($flight->arrive_at->format('a'));
+            }
 
-        collect($flights)->each(function ($transport, $key) use($len, $transports, $reservation) {
-                if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
-                    // we get the first iteration for the departure
-                    // and make sure departure is from the US
+            // we get the last return departing from outside the US and arriving in the US
+            if ($key == $len - 1 && $flight->arrivalHub && $flight->arrivalHub->country_code == 'us') {
+                // we get the last iteration for the return
+                // and make sure arrival is in the US
+                $data['Ret Board'] = $flight->depart_at->subHours(1)->format('h:i a');
+                $data['Ret Flt'] = strtoupper($flight->vessel_no);
+                $data['Ret Time'] = $flight->depart_at->format('h:i a');
+                $data['Ret AM'] = strtoupper($flight->arrive_at->format('a'));
+                $data['Ret Port'] = strtoupper($flight->departureHub->call_sign);
+                $data['Ret Arr Time'] = $flight->arrive_at->format('h:i a');
+                $data['Ret Arr AM'] = strtoupper($flight->arrive_at->format('a'));
+            }
+        });
 
-                    if (implode('', array_flatten($reservation->designation ? $reservation->designation->content : [])) == 'eastern') {
-                        $transports['Hotel Check-Out Date'] = 'July 22';
-                        $transports['Hotel Check-Out Time'] = '09:00 am';
-                    } else {
-                        $transports['Hotel Check-Out Date'] = $transport->depart_at->subHours(3)->subMinutes(30)->format('F d');
-                        $transports['Hotel Check-Out Time'] = $transport->depart_at->subHours(3)->subMinutes(30)->format('h:i a');
-                    }
+        $data['State'] = $this->getRegionAssignment($reservation);
+        $data['Hotel Name'] = implode(',', $this->getInCountryAccommodations($reservation)->pluck('name')->all());
+        $data['Hotel Phone'] = implode(',', $this->getInCountryAccommodations($reservation)->pluck('phone')->all());
+        $data['Hotel Address'] = implode(',', $this->getInCountryAccommodations($reservation)->pluck('address')->all());
 
-                    $transports['Shuttle Departure At'] = $transport->depart_at->subHours(3)->format('h:i a');
-                    $transports['Intl Departure At'] = $transport->depart_at->format('F d, h:i a');
-                    $transports['Intl Arrival At'] = $transport->arrive_at->format('F d, h:i a');
-                }
-            });
+        return $data;
+    }
 
-        return $transports;
+    private function getRegionAssignment($reservation)
+    {
+        return implode(',', $reservation->squads
+            ->pluck('team')
+            ->flatten()
+            ->pluck('regions')
+            ->flatten()
+            ->pluck('name')
+            ->all()
+        );
+    }
+
+    private function getInCountryAccommodations($reservation)
+    {
+        $accommodations = $reservation->rooms->pluck('accommodations')->flatten()->filter(function ($hotel) {
+            return $hotel->country_code != 'us';
+        })->all();
+
+        $hotels = [];
+
+        foreach ($accommodations as $hotel) {
+            $hotels[$hotel->id] = [
+                'name' => $hotel ? ucwords($hotel->name) : null,
+                'phone' => $hotel ? $hotel->phone : null,
+                'address' => $hotel ? $hotel->address_one.' '.$hotel->address_two.', '.$hotel->city.', '.$hotel->state.' '.$hotel->zip : null
+            ];
+        }
+
+        return collect($hotels);
     }
 }

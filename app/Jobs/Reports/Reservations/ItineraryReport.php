@@ -136,12 +136,19 @@ class ItineraryReport extends Job implements ShouldQueue
 
         if ($len == 0) return $transports;
 
-        collect($flights)->each(function ($transport, $key) use($len, $transports) {
+        collect($flights)->each(function ($transport, $key) use($len, $transports, $reservation) {
                 if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
                     // we get the first iteration for the departure
                     // and make sure departure is from the US
-                    $transports['Hotel Check-Out Date'] = $transport->depart_at->subHours(3)->subMinutes(30)->format('F d');
-                    $transports['Hotel Check-Out Time'] = $transport->depart_at->subHours(3)->subMinutes(30)->format('h:i a');
+
+                    if (implode('', array_flatten($reservation->designation ? $reservation->designation->content : [])) == 'eastern') {
+                        $transports['Hotel Check-Out Date'] = 'July 22';
+                        $transports['Hotel Check-Out Time'] = '09:00 am';
+                    } else {
+                        $transports['Hotel Check-Out Date'] = $transport->depart_at->subHours(3)->subMinutes(30)->format('F d');
+                        $transports['Hotel Check-Out Time'] = $transport->depart_at->subHours(3)->subMinutes(30)->format('h:i a');
+                    }
+
                     $transports['Shuttle Departure At'] = $transport->depart_at->subHours(3)->format('h:i a');
                     $transports['Intl Departure At'] = $transport->depart_at->format('F d, h:i a');
                     $transports['Intl Arrival At'] = $transport->arrive_at->format('F d, h:i a');

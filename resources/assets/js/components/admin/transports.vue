@@ -73,9 +73,9 @@
                                                 <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>
                                             </ul>
                                         </dropdown>
-                                        <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-                                            <i class="fa fa-angle-down"></i>
-                                        </a>
+                                        <!--<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">-->
+                                            <!--<i class="fa fa-angle-down"></i>-->
+                                        <!--</a>-->
                                     </div>
                                 </div>
                                 <hr class="divider sm">
@@ -99,21 +99,21 @@
 
                             </div>
                         </div>
-                        <div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>Travel Groups</label>
-                                        <p class="small" v-if="transport.groups.length > 0">
-                                            <template v-for="group in transport.groups">
-                                                {{ group.name }}
-                                                <template v-if="($index + 1) < transport.groups.length">&middot;</template>
-                                            </template>
-                                        </p>
-                                        <p class="small" v-else>
-                                            Add passengers to see groups
-                                        </p>
-                                    </div>
+                        <!--<div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<label>Travel Groups</label>-->
+                                        <!--<p class="small" v-if="transport.groups.length > 0">-->
+                                            <!--<template v-for="group in transport.groups">-->
+                                                <!--{{ group.name }}-->
+                                                <!--<template v-if="($index + 1) < transport.groups.length">&middot;</template>-->
+                                            <!--</template>-->
+                                        <!--</p>-->
+                                        <!--<p class="small" v-else>-->
+                                            <!--Add passengers to see groups-->
+                                        <!--</p>-->
+                                    <!--</div>-->
                                     <!--<div class="col-sm-6">-->
                                         <!--<label>Designations</label>-->
                                         <!--<p class="small" v-if="transport.designations.length > 0">-->
@@ -127,8 +127,8 @@
                                         <!--</p>-->
 
                                     <!--</div>-->
-                                </div><!-- end row -->
-                            </div>
+                                <!--</div>&lt;!&ndash; end row &ndash;&gt;-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -321,7 +321,7 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
-                    sort: 'depart_at|asc',
+
                     include: 'departureHub,arrivalHub'
                 },
                 options: {
@@ -329,8 +329,7 @@
                         isDomestic: 'no',
                         campaign: this.campaignId,
                         per_page: 10,
-                        search: '',
-                        with: ['groups','designations']
+                        search: ''
                     }
                 },
                 pagination: { current_page: 1},

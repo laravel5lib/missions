@@ -36,11 +36,7 @@ class ItineraryReport extends Job implements ShouldQueue
      */
     public function handle(Reservation $reservation)
     {
-        $reservations = $reservation->whereHas('rooms', function ($room) {
-            return $room->whereHas('accommodations', function($accommodation) {
-                return $accommodation->where('country_code', '=', 'us');
-            });
-        })
+        $reservations = $reservation
             ->filter(array_filter($this->request))
             ->with(
                 'trip.group', 'trip.campaign', 'designation',
@@ -107,7 +103,7 @@ class ItineraryReport extends Job implements ShouldQueue
                     $data['Hotel Check-In Date'] = 'July 21';
                     $data['Hotel Check-In Time'] = '4:00 pm';
                     break;
-                default :
+                default:
                     $data['Hotel Check-In Date'] = 'July 21';
                     $data['Hotel Check-In Time'] = '4:00 pm';
             }

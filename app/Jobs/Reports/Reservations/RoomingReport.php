@@ -107,7 +107,7 @@ class RoomingReport extends Job implements ShouldQueue
             return $data;
         })->all();
     }
-    
+
 //    private function getCompanions($companions)
 //    {
 //        $array = $companions->map(function($companion) {

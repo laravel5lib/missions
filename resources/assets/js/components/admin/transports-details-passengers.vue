@@ -251,7 +251,8 @@
                     designation: '',
                     age: [0, 120],
 	                search: '',
-                    notInTransport: this.transport.id
+                    notInTransport: this.transport.id,
+					notTraveling: this.transport.designation
                 },
 
 	            PassengersResource: this.$resource('transports{/transport}/passengers{/passenger}', { transport: this.transport.id })

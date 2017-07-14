@@ -26,6 +26,7 @@ class CampaignTransportRequest extends FormRequest
         $rules = [
             'type' => 'required|string|in:flight,bus,vehicle,train',
             'vessel_no' => 'string',
+            'designation' => 'required|string',
             'name' => 'required|string',
             'call_sign' => 'string',
             'domestic' => 'required|boolean',
@@ -39,6 +40,7 @@ class CampaignTransportRequest extends FormRequest
         if ($this->isMethod('put')) {
             $rules['type'] = 'sometimes|required|string|in:flight,bus,vehicle,train';
             $rules['vessel_no'] = 'sometimes|required|string';
+            $rules['designation'] = 'sometimes|required|string';
             $rules['name'] = 'sometimes|required|string';
             $rules['domestic'] = 'sometimes|required|boolean';
             $rules['depart_at'] = 'date';

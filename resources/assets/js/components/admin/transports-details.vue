@@ -8,7 +8,8 @@
 					<br />
 					<small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
 					{{ transport.type | capitalize }}
-					<span class="label label-default" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+					<span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+					<span class="label label-primary" v-text="transport.designation | capitalize"></span>
 					</small>
 				</h3>
 			</div>
@@ -21,6 +22,9 @@
 			</div>
 		</div>
 		<tabs v-if="transport">
+			<tab header="Passengers">
+				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
+			</tab>
 			<tab header="Details">
 				<div class="row">
 					<div class="col-sm-6">
@@ -46,9 +50,6 @@
 						</p>
 					</div>
 				</div>
-			</tab>
-			<tab header="Passengers">
-				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Notes">
 				<notes type="campaign_transports"

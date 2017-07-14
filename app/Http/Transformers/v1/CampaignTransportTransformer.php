@@ -35,6 +35,7 @@ class CampaignTransportTransformer extends TransformerAbstract
             'passengers'  => (int) $transport->passengers_count,
             'seats_left'  => $transport->seatsLeft(),
             'call_sign'   => strtoupper($transport->call_sign),
+            'designation' => $transport->designation,
             'depart_at'   => $transport->depart_at ? $transport->depart_at->toDateTimeString() : null,
             'arrive_at'   => $transport->arrive_at ? $transport->arrive_at->toDateTimeString() : null,
             'created_at'  => $transport->created_at->toDateTimeString(),

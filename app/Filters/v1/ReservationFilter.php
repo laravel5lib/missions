@@ -472,4 +472,11 @@ class ReservationFilter extends Filter
             return $transport->where('transports.id', $transportId);
         });
     }
+
+    public function notTraveling($designation)
+    {
+        return $this->whereDoesntHave('transports', function ($transport) use ($designation) {
+            return $transport->where('transports.designation', $designation);
+        });
+    }
 }

@@ -56,7 +56,7 @@
                                                     <br />
                                                     <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
                                                         {{ transport.type | capitalize }}
-                                                        <span class="label label-default" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+                                                        <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation | capitalize"></span>
                                                     </small>
                                                 </h4>
                                             </div><!-- end media-body -->
@@ -114,19 +114,19 @@
                                             Add passengers to see groups
                                         </p>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <label>Designations</label>
-                                        <p class="small" v-if="transport.designations.length > 0">
-                                            <template v-for="designation in transport.designations">
-                                                {{ designation.content }}
-                                                <template v-if="($index + 1) < transport.designations.length">&middot;</template>
-                                            </template>
-                                        </p>
-                                        <p class="small" v-else>
-                                            Add passengers to see designations
-                                        </p>
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<label>Designations</label>-->
+                                        <!--<p class="small" v-if="transport.designations.length > 0">-->
+                                            <!--<template v-for="designation in transport.designations">-->
+                                                <!--{{ designation.content }}-->
+                                                <!--<template v-if="($index + 1) < transport.designations.length">&middot;</template>-->
+                                            <!--</template>-->
+                                        <!--</p>-->
+                                        <!--<p class="small" v-else>-->
+                                            <!--Add passengers to see designations-->
+                                        <!--</p>-->
 
-                                    </div>
+                                    <!--</div>-->
                                 </div><!-- end row -->
                             </div>
                         </div>
@@ -157,6 +157,12 @@
                                 <option value="">-- Select--</option>
                                 <option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
                             </select>
+                        </div>
+
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.designation, client: 'designation' }">
+                            <label for="transportType" class="control-label">Designation</label>
+                            <input type="text" class="form-control" v-model="selectedTransport.designation" placeholder="i.e. outbound, return, etc.">
+                            <span>A passenger can only be added one transport with the given designation.</span>
                         </div>
 
                         <template v-if="selectedTransport.type === 'flight'">
@@ -315,6 +321,7 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
+                    sort: 'depart_at|asc',
                     include: 'departureHub,arrivalHub'
                 },
                 options: {
@@ -415,6 +422,7 @@
                     type: '',
                     vessel_no: '',
                     domestic: false,
+                    designation: null,
                     capacity: 0,
                     campaign_id: this.campaignId,
                     departure: {
@@ -455,6 +463,7 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
+                    sort: 'depart_at|asc',
                     include: 'departureHub,arrivalHub'
                 };
             },

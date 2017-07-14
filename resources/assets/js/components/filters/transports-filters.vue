@@ -10,15 +10,11 @@
 			</div>
 
 			<div class="form-group" v-if="propertyExists('designation')">
-				<label>Arrival Designation</label>
+				<label>Designation</label>
 				<select  class="form-control input-sm" v-model="filters.designation">
 					<option value="">Any</option>
-					<option value="eastern">Eastern</option>
-					<option value="western">Western</option>
-					<option value="international">International</option>
-					<option value="weekend">Weekend</option>
-					<option value="other">Other</option>
-					<option value="none">None</option>
+					<option value="outbound">Outbound</option>
+					<option value="return">Return</option>
 				</select>
 			</div>
 

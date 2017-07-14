@@ -38,7 +38,7 @@ class ItineraryReport extends Job implements ShouldQueue
     {
         $reservations = $reservation->whereHas('rooms', function ($room) {
             return $room->whereHas('accommodations', function($accommodation) {
-                return $accommodation->where('country_code', '<>', 'us');
+                return $accommodation->where('country_code', '=', 'us');
             });
         })
             ->filter(array_filter($this->request))

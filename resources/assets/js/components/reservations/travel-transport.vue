@@ -20,19 +20,20 @@
 						<template v-if="transport && transport.type === 'flight'">
 							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
 								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
-								<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-								          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
-								          placeholder="Select Airline" v-if="editMode"></v-select>
+								<template v-if="editMode">
+									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+									          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+									          placeholder="Select Airline"></v-select>
+									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+									        v-model="transport.name">
+										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
+											{{airline.extended_name | capitalize}}
+										</option>
+									</select>
+									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
+								</template>
 								<p v-else>{{ transport.name | uppercase }}</p>
-								<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
-								        v-model="transport.name">
-									<option :value="airline.name" v-for="airline in UTILITIES.airlines">
-										{{airline.extended_name | capitalize}}
-									</option>
-								</select>
-								<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
-
-								<template v-if="manualAirlineData">
+								<template v-if="manualAirlineData && editMode">
 									<div class="form-group">
 										<label for="">Airline</label>
 										<input type="text" class="form-control" v-model="transport.name" v-if="editMode">

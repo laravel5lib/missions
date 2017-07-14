@@ -40,7 +40,8 @@ class ItineraryReport extends Job implements ShouldQueue
             return $room->whereHas('accommodations', function($accommodation) {
                 return $accommodation->where('country_code', '<>', 'us');
             });
-        })->filter(array_filter($this->request))
+        })
+            ->filter(array_filter($this->request))
             ->with(
                 'trip.group', 'trip.campaign', 'designation',
                 'transports.departureHub', 'transports.arrivalHub'
@@ -84,10 +85,10 @@ class ItineraryReport extends Job implements ShouldQueue
 
     private function domesticHotelInfo($reservation)
     {
-        $data = [
+        $data = collect([
             'Hotel Check-In Date' => null,
             'Hotel Check-In Time' => null
-        ];
+        ]);
 
         if (! $reservation->designation) {
             $data['Hotel Check-In Date'] = 'July 21';

@@ -104,7 +104,6 @@ class PassengersByTransport extends Job implements ShouldQueue
             'Passport Number' => $passport ? $passport->number : null,
             'Citizenship' => $passport ? country($passport->citizenship) : null,
             'Nationality' => $passport ? country($passport->birth_country) : null,
-            'Issued' => $passport ? $passport->issued_at->toFormattedDateString() : null,
             'Expires' => $passport ? $passport->expires_at->toFormattedDateString() : null
         ];
     }

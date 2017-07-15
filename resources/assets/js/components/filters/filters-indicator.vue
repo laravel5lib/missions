@@ -100,6 +100,22 @@
 				No Room
 				<i class="fa fa-close"></i>
 			</span>
+			<span v-if="propertyExists('inTransport')" style="margin-right:2px;" class="label label-default" v-show="filters.inTransport !== null" @click="filters.inTransport = null,syncFilters()" >
+				Has Transportation
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('notInTransport')" style="margin-right:2px;" class="label label-default" v-show="filters.notInTransport !== null" @click="filters.notInTransport = null,syncFilters()" >
+				No Transportation
+				<i class="fa fa-close"></i>
+			</span>
+            <span v-if="propertyExists('traveling')" style="margin-right:2px;" class="label label-default" v-show="filters.traveling !== null" @click="filters.traveling = null,syncFilters()" >
+				Travel Designation
+				<i class="fa fa-close"></i>
+			</span>
+            <span v-if="propertyExists('notTraveling')" style="margin-right:2px;" class="label label-default" v-show="filters.notTraveling !== null" @click="filters.notTraveling = null,syncFilters()" >
+				Travel Designation
+				<i class="fa fa-close"></i>
+			</span>
 		</div>
 	</div>
 </template>

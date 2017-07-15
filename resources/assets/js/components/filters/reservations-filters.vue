@@ -466,10 +466,12 @@
                 }
             },
             'traveling': function (val, oldVal) {
-                if (this.hasTransportation == 'yes') {
+                if (this.hasTransportation === 'yes') {
                     this.filters.traveling = val;
-                } else if(this.hasTransportation == 'no') {
+                    this.filters.notTraveling = null;
+                } else if(this.hasTransportation === 'no') {
                     this.filters.notTraveling = val;
+                    this.filters.traveling = null;
                 } else {
                     this.filters.traveling = null;
                     this.filters.notTraveling = null;

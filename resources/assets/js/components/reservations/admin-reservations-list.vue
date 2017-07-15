@@ -542,6 +542,8 @@
                         transportation: true,
                         inTransport: null,
                         notInTransport: null,
+                        traveling: null,
+                        notTraveling: null,
                     }
 				});
 
@@ -592,7 +594,8 @@
 					transportation: true,
                     inTransport: null,
                     notInTransport: null,
-
+                    traveling: null,
+                    notTraveling: null
                 };
 			},
 			country(code){

@@ -93,7 +93,7 @@
                                 <div class="row">
                                     <div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
                                     <div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
-                                    <div class="col-sm-3"><label>Passengers</label> {{transport.passengers}}</div>
+                                    <div class="col-sm-3"><label>Passengers</label> {{transport.passengers.Total}}</div>
                                     <div class="col-sm-3"><label>Seats Left</label> {{transport.seats_left}}</div>
                                 </div>
 

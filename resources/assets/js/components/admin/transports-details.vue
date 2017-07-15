@@ -27,7 +27,18 @@
 				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Details">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>Passengers by Region</h4>
+                        <button class="btn btn-xs btn-primary" @click="getTransport()">Refresh <i class="fa fa-refresh"></i></button>
+                        <hr class="divider inv">
+                    </div>
+                    <div class="col-sm-4" v-for="(key, value) in transport.passengers">
+                        <strong>{{key}}</strong>: <code>{{value}}</code>
+                    </div>
+                </div>
 				<div class="row">
+                    <hr class="divider">
                     <div class="col-sm-6">
                         <h4>Departure</h4>
                         <small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' false true }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>

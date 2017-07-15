@@ -37,6 +37,7 @@ class PassengersByTransport extends Job implements ShouldQueue
     public function handle(CampaignTransport $transport)
     {
         $passengers = $transport->filter(array_filter($this->request))
+            ->whereNotNull('designation')
             ->with([
                 'passengers.reservation.designation',
                 'passengers.campaignTransport.departureHub',
@@ -62,6 +63,7 @@ class PassengersByTransport extends Job implements ShouldQueue
             $reservation = [
                 'Given Names' => $passenger->reservation->given_names,
                 'Surname' => $passenger->reservation->surname,
+                'DOB' => $passenger->reservation->birthday->format('Y-m-d'),
                 'Designation' => $passenger->reservation->designation ?
                     implode('', array_flatten($passenger->reservation->designation->content)) : 'none',
             ];
@@ -76,11 +78,11 @@ class PassengersByTransport extends Job implements ShouldQueue
                 'Call Sign' => strtoupper($passenger->campaignTransport->call_sign),
                 'Vessel No.' => strtoupper($passenger->campaignTransport->vessel_no),
                 'Departure Date' => $passenger->campaignTransport->depart_at ? $passenger->campaignTransport->depart_at->format('Y-m-d') : null,
-                'Departure Time' => $passenger->campaignTransport->depart_at ? $passenger->campaignTransport->depart_at->format('h::i a') : null,
+                'Departure Time' => $passenger->campaignTransport->depart_at ? $passenger->campaignTransport->depart_at->format('h:i a') : null,
                 'Departure Call Sign' => $passenger->campaignTransport->departureHub->call_sign,
                 'Departure Location' => $passenger->campaignTransport->departureHub->name,
                 'Arrival Date' => $passenger->campaignTransport->arrive_at ? $passenger->campaignTransport->arrive_at->format('Y-m-d') : null,
-                'Arrival Time' => $passenger->campaignTransport->arrive_at ? $passenger->campaignTransport->arrive_at->format('H::i a') : null,
+                'Arrival Time' => $passenger->campaignTransport->arrive_at ? $passenger->campaignTransport->arrive_at->format('H:i a') : null,
                 'Arrival Call Sign' => $passenger->campaignTransport->arrivalHub ? $passenger->campaignTransport->arrivalHub->call_sign : null,
                 'Arrival Location' => $passenger->campaignTransport->arrivalHub ? $passenger->campaignTransport->arrivalHub->name : null
             ];

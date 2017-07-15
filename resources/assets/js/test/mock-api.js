@@ -870,6 +870,84 @@ export default {
     },
 
     // Users API
+    ['GET *users/:id/accolades(/:name)'] (pathMatch, query, request) {
+        let body;
+
+        switch (pathMatch.name) {
+            case 'trip_history':
+                body = {
+                    data: [{
+                        "name": "trip_history",
+                        "display_name": "Trip History",
+                        "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+            case 'countries_visited':
+                body = {
+                    data: [{
+                        "name": "countries_visited",
+                        "display_name": "Countries Visited",
+                        "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
+                            "code": "vg",
+                            "name": "Virgin Islands (British)"
+                        }, {"code": "bj", "name": "Benin"}],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
+    ['PUT *users/:id/accolades(/:name)'] (pathMatch, query, request) {
+        let body;
+
+        switch (pathMatch.name) {
+            case 'trip_history':
+                body = {
+                    data: [{
+                        "name": "trip_history",
+                        "display_name": "Trip History",
+                        "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+            case 'countries_visited':
+                body = {
+                    data: [{
+                        "name": "countries_visited",
+                        "display_name": "Countries Visited",
+                        "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
+                            "code": "vg",
+                            "name": "Virgin Islands (British)"
+                        }, {"code": "bj", "name": "Benin"}],
+                        "created_at": "2017-05-05 15:01:44",
+                        "updated_at": "2017-05-05 15:01:44"
+                    }]
+                };
+                break;
+        }
+
+        return {
+            body: body,
+            status: 200,
+            statusText: 'OK',
+            headers: {/*headers*/},
+            delay: Settings.delay, // millisecond
+        }
+    },
     ['GET *users(/:user)(?include=:include)'] (pathMatch, query, request) {
         // before respond, you can check the path and query parameters with `pathMatch` & `query`
         // powered by 'url-pattern' & 'qs'
@@ -1711,54 +1789,6 @@ export default {
             delay: Settings.delay, // millisecond
         }
     },
-    ['GET *users/:id/accolades/trip_history'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {
-            "data": [{
-                "name": "trip_history",
-                "display_name": "Trip History",
-                "items": ["2012 Bangkok, Thailand", "2006 Cap Haitien, Haiti", "2012 Lima, Peru", "2011 Croix-de-Bouquet, Haiti"],
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:01:44"
-            }]
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-    ['GET *users/:id/accolades/countries_visited'] (pathMatch, query, request) {
-        // before respond, you can check the path and query parameters with `pathMatch` & `query`
-        // powered by 'url-pattern' & 'qs'
-        // https://www.npmjs.com/package/url-pattern
-        // https://www.npmjs.com/package/qs
-        let body = {
-            "data": [{
-                "name": "countries_visited",
-                "display_name": "Countries Visited",
-                "items": [{"code": "jo", "name": "Jordan"}, {"code": "ci", "name": "Cote d'Ivoire"}, {
-                    "code": "vg",
-                    "name": "Virgin Islands (British)"
-                }, {"code": "bj", "name": "Benin"}],
-                "created_at": "2017-05-05 15:01:44",
-                "updated_at": "2017-05-05 15:01:44"
-            }]
-        };
-        return {
-            body: body,
-            status: 200,
-            statusText: 'OK',
-            headers: {/*headers*/},
-            delay: Settings.delay, // millisecond
-        }
-    },
-
     // Groups API
     ['GET *groups(/:group)'] (pathMatch, query, request) {
         let body = {

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId" transports></reservations-filters>
+			<reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
 		</aside>
 
 		<div class="row">
@@ -376,7 +376,9 @@
                     maxPercentRaised: '',
                     minAmountRaised: '',
                     maxAmountRaised: '',
-					transportation: true
+					transportation: true,
+                    inTransport: null,
+                    notInTransport: null,
 				},
 				showFilters: false,
 				exportOptions: {
@@ -537,8 +539,10 @@
                         maxPercentRaised: this.filters.maxPercentRaised ? this.filters.maxPercentRaised : null,
                         minAmountRaised: this.filters.minAmountRaised ? this.filters.minAmountRaised : null,
                         maxAmountRaised: this.filters.maxAmountRaised ? this.filters.maxAmountRaised : null,
-                        transportation: true
-					}
+                        transportation: true,
+                        inTransport: null,
+                        notInTransport: null,
+                    }
 				});
 
 				this.$root.$emit('reservations-filters:update-storage');
@@ -585,8 +589,11 @@
                     maxPercentRaised: '',
                     minAmountRaised: '',
                     maxAmountRaised: '',
-					transportation: true
-				};
+					transportation: true,
+                    inTransport: null,
+                    notInTransport: null,
+
+                };
 			},
 			country(code){
 				return code;
@@ -648,10 +655,10 @@
 			// load view state
 			if (window.localStorage[this.storageName]) {
 				let config = JSON.parse(window.localStorage[this.storageName]);
-				this.activeFields = config.activeFields;
+				this.activeFields = _.extend(this.activeFields, config.activeFields);
                 this.per_page = config.per_page;
                 this.maxActiveFields = config.maxActiveFields;
-				this.filters = config.filters;
+				this.filters = _.extend(this.filters, config.filters);
 			}
 
 			// assign values from url search

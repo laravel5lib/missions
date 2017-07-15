@@ -126,9 +126,7 @@
                     this.accolades = response.body.data;
                     this.selectedTrips = [];
                     this.filterAccolades();
-				}, function (response) {
-                    console.log(response);
-                });
+				}, this.$root.handleApiError);
             },
             getAccolades(){
                 this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
@@ -137,9 +135,7 @@
    						this.filterAccolades();
 					}
 					return this.accolades;
-                }, function (response) {
-                    return response;
-                });
+                }, this.$root.handleApiError);
             },
             filterAccolades(){
             	// If isUser() filter only trips not already included in accolades

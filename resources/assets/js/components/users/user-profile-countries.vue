@@ -140,7 +140,7 @@
 					if (this.isUser()) {
    						this.filterAccolades();
 					}
-                });
+                }, this.$root.handleApiError);
             },
             filterAccolades(){
             	// If isUser() filter only countries not already included in accolades

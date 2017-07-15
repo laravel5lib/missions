@@ -14,5 +14,6 @@ const vm = new Vue(RootInstance).$mount('app');
 let userProfileCountries = vm.$refs.testComponent;
 
 test('countries visited accolades object check', (t) => {
-    t.true(userProfileCountries.accolades.name === 'countries_visited' && _.isArray(userProfileCountries.accolades.items));
+    t.is(userProfileCountries.accolades.name, 'countries_visited');
+    t.not(userProfileCountries.accolades.items, null);
 });

@@ -469,9 +469,13 @@
                 if (this.hasTransportation === 'yes') {
                     this.filters.traveling = val;
                     this.filters.notTraveling = null;
+                    this.filters.inTransport = null;
+                    this.filters.notInTransport = null;
                 } else if(this.hasTransportation === 'no') {
                     this.filters.notTraveling = val;
                     this.filters.traveling = null;
+                    this.filters.inTransport = null;
+                    this.filters.notInTransport = null;
                 } else {
                     this.filters.traveling = null;
                     this.filters.notTraveling = null;

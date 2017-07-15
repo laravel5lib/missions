@@ -279,6 +279,27 @@
                         </label>
                     </div>
                 </div>
+
+                <!-- Transports -->
+                <template v-if="propertyExists('transportation')">
+                    <div class="form-group">
+                        <label>Transportation</label>
+                        <select class="form-control input-sm" v-model="hasTransportation" style="width:100%;">
+                            <option value="">Any</option>
+                            <option value="yes">Has Transportation</option>
+                            <option value="no">No Transportation</option>
+                        </select>
+                    </div>
+                    <div class="form-group" v-if="hasTransportation">
+                        <label>Designation</label>
+                        <select class="form-control input-sm" v-model="traveling" style="width:100%;">
+                            <option value="">Any</option>
+                            <option value="outbound">Outbound</option>
+                            <option value="return">Return</option>
+                        </select>
+                    </div>
+                </template>
+                <!-- End Transports -->
 			</template>
 
 			<hr class="divider inv sm">
@@ -383,6 +404,8 @@
                 requirementOptions: [],
                 repOptions: [],
                 dueOptions: [],
+                hasTransportation: null,
+                traveling: null
             }
         },
 	    watch: {
@@ -429,6 +452,19 @@
                 } else {
                     this.filters.noRoom = null;
                 }
+            },
+            'hasTransportation': function (val, oldVal) {
+                if (val == 'yes') {
+                    this.filters.inTransport = true;
+                } else if (val == 'no') {
+                    this.filters.notInTransport = true;
+                } else {
+                    this.filters.inTransport = null;
+                    this.filters.notInTransport = null;
+                }
+            },
+            'traveling': function (val, oldVal) {
+                //
             }
 
 	    },

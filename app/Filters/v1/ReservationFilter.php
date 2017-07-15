@@ -479,4 +479,11 @@ class ReservationFilter extends Filter
             return $transport->where('transports.designation', $designation);
         });
     }
+
+    public function region($id)
+    {
+        return $this->whereHas('squads.team.regions', function ($region) use ($id) {
+            return $region->where('id', $id);
+        });
+    }
 }

@@ -56,6 +56,10 @@
 				Designation
 				<i class="fa fa-close"></i>
 			</span>
+			<span v-if="propertyExists('region')" style="margin-right:2px;" class="label label-default" v-show="filters.region != ''" @click="filters.region = '',syncFilters()" >
+				Region
+				<i class="fa fa-close"></i>
+			</span>
 			<span v-if="propertyExists('requirementName')" style="margin-right:2px;" class="label label-default" v-show="filters.requirementName != ''" @click="filters.requirementName = '', filters.requirementStatus = '',syncFilters()" >
 				{{ requirement }}
 				<i class="fa fa-close"></i>

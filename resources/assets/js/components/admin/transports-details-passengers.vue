@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" storage="" transports></reservations-filters>
+			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
 		</aside>
 		<aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" storage="" teams></reservations-filters>
+			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
 		</aside>
 
 		<div class="row">
@@ -234,9 +234,9 @@
 	            passengersFilters: {
                     groups: [],
                     gender: '',
-                    designation: '',
                     role: '',
-                    age: [0, 120],
+                    designation: '',
+                    region: '',
                     hasCompanions: null,
                     search: '',
 		            per_page: 10
@@ -249,7 +249,7 @@
                     hasCompanions: null,
                     role: '',
                     designation: '',
-                    age: [0, 120],
+                    region: '',
 	                search: '',
                     notInTransport: this.transport.id,
 					notTraveling: this.transport.designation
@@ -273,8 +273,33 @@
 		    },
 	    },
         methods: {
-            resetPassengerFilters(){},
-            resetReservationFilters(){},
+            resetPassengerFilters(){
+                this.passengersFilters = {
+                    groups: [],
+                    gender: '',
+                    role: '',
+                    designation: '',
+                    region: '',
+                    hasCompanions: null,
+                    search: '',
+                    per_page: 10
+                }
+            },
+            resetReservationFilters(){
+                this.reservationFilters = {
+                    type: '',
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+                    role: '',
+                    designation: '',
+                    region: '',
+                    search: '',
+                    notInTransport: this.transport.id,
+                    notTraveling: this.transport.designation
+                }
+            },
             getGenderStatusIcon(reservation){
                 if (reservation.gender == 'male') {
                     if (reservation.status == 'married') {

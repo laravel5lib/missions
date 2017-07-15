@@ -379,7 +379,9 @@
 					transportation: true,
                     inTransport: null,
                     notInTransport: null,
-				},
+                    traveling: null,
+                    notTraveling: null
+                },
 				showFilters: false,
 				exportOptions: {
 					managing_user: 'Managing User',

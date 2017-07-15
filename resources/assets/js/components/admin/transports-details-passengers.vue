@@ -323,6 +323,7 @@
                 this.PassengersResource.get(params).then(function (response) {
                     this.passengers = response.body.data;
                     this.passengersPagination = response.body.meta.pagination;
+                    this.$dispatch('updatePassengersCount', this.passengersPagination.total);
                 }, this.$root.handleApiError);
             },
 	        addPassenger(reservation) {

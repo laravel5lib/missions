@@ -116,6 +116,9 @@ class CampaignTransportTransformer extends TransformerAbstract
         $data = $transport->passengers
             ->pluck('reservation.designation')
             ->flatten()
+            ->map(function($designation) {
+                return ['content' => $designation ? ucwords(implode('', array_flatten($designation->content))) : 'Unassigned'];
+            })
             ->groupBy('content')
             ->map(function ($designation) {
                 return count($designation);

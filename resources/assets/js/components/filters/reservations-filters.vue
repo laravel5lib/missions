@@ -464,7 +464,14 @@
                 }
             },
             'traveling': function (val, oldVal) {
-                //
+                if (this.hasTransportation == 'yes') {
+                    this.filters.traveling = val;
+                } else if(this.hasTransportation == 'no') {
+                    this.filters.notTraveling = val;
+                } else {
+                    this.filters.traveling = null;
+                    this.filters.notTraveling = null;
+                }
             }
 
 	    },
@@ -551,7 +558,6 @@
                     this.regionOptions = response.body.data;
                 }, this.$root.handleApiError);
             }
-
         },
 	    created(){
 

@@ -283,7 +283,7 @@
                     hasCompanions: null,
                     search: '',
                     per_page: 10,
-                    sortBy: 'created_at'
+                    sortBy: 'created_at|desc'
                 }
             },
             resetReservationFilters(){

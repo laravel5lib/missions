@@ -39,6 +39,7 @@ class PassengersController extends Controller
         $passengers = $this->passenger
                            ->where('transport_id', $transportId)
                            ->filter($request->all())
+                           ->latest()
                            ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($passengers, new PassengerTransformer);

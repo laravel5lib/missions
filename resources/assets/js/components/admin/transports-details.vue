@@ -28,13 +28,31 @@
 			</tab>
 			<tab header="Details">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-6">
                         <h4>Passengers by Region</h4>
-                        <button class="btn btn-xs btn-primary" @click="getTransport()">Refresh <i class="fa fa-refresh"></i></button>
-                        <hr class="divider inv">
+                        <div class="row">
+                            <div class="col-sm-6" v-for="(key, value) in transport.passengers.regions">
+                                <strong>{{key}}</strong>: <code>{{value}}</code>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-4" v-for="(key, value) in transport.passengers">
-                        <strong>{{key}}</strong>: <code>{{value}}</code>
+                    <div class="col-sm-6">
+                        <h4>Passengers by Group</h4>
+                        <hr class="divider inv">
+                        <div class="row">
+                            <div class="col-sm-6" v-for="(key, value) in transport.passengers.groups">
+                                <strong>{{key}}</strong>: <code>{{value}}</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <hr class="divider inv">
+                        <h4>
+                            Total: <code>{{ transport.passengers.total }}</code>
+                            <button class="pull-right btn btn-xs btn-primary" @click="getTransport()">
+                                Refresh <i class="fa fa-refresh"></i>
+                            </button>
+                        </h4>
                     </div>
                 </div>
 				<div class="row">

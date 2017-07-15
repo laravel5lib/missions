@@ -33,7 +33,11 @@ class CampaignTransportTransformer extends TransformerAbstract
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
 //            'passengers'  => (int) $transport->passengers_count,
-            'passengers'  => $this->passengersByRegion($transport) + ['Total' => (int) $transport->passengers_count],
+            'passengers'  => [
+                    'regions' =>  $this->passengersByRegion($transport),
+                    'groups' => $this->passengersByGroup($transport),
+                    'total' => (int) $transport->passengers_count
+                ],
             'seats_left'  => $transport->seatsLeft(),
             'call_sign'   => strtoupper($transport->call_sign),
             'designation' => $transport->designation,
@@ -77,6 +81,26 @@ class CampaignTransportTransformer extends TransformerAbstract
             ->groupBy('name')
             ->map(function ($region) {
                 return count($region);
+            })
+            ->all();
+
+        ksort($data);
+
+        return $data;
+    }
+
+    private function passengersByGroup($transport)
+    {
+        $transport->load('passengers.reservation.trip.group');
+
+        $data = $transport->passengers
+            ->pluck('reservation.trip')
+            ->flatten()
+            ->pluck('group')
+            ->flatten()
+            ->groupBy('name')
+            ->map(function ($group) {
+                return count($group);
             })
             ->all();
 

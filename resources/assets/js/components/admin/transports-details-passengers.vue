@@ -282,7 +282,8 @@
                     region: '',
                     hasCompanions: null,
                     search: '',
-                    per_page: 10
+                    per_page: 10,
+                    sortBy: 'created_at'
                 }
             },
             resetReservationFilters(){

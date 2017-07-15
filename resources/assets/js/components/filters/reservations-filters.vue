@@ -454,10 +454,12 @@
                 }
             },
             'hasTransportation': function (val, oldVal) {
-                if (val == 'yes') {
+                if (val === 'yes') {
                     this.filters.inTransport = true;
-                } else if (val == 'no') {
+                    this.filters.notInTransport = null;
+                } else if (val === 'no') {
                     this.filters.notInTransport = true;
+                    this.filters.inTransport = null;
                 } else {
                     this.filters.inTransport = null;
                     this.filters.notInTransport = null;

@@ -8,24 +8,51 @@
 					<br />
 					<small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
 					{{ transport.type | capitalize }}
-					<span class="label label-default" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+					<span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+					<span class="label label-primary" v-text="transport.designation | capitalize"></span>
 					</small>
 				</h3>
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-4"><label>Vessel No.</label> {{transport.vessel_no}}</div>
-					<div class="col-sm-4"><label>Call Sign</label> {{transport.call_sign}}</div>
-					<div class="col-sm-4"><label>Capacity</label> {{transport.capacity}}</div>
+					<div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
+					<div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
+                    <div class="col-sm-3"><label>Total Passengers</label> <code>{{passengersCount}}</code></div>
+					<div class="col-sm-3"><label>Seats Left</label> <code>{{transport.capacity - passengersCount}}</code></div>
 				</div>
 			</div>
 		</div>
 		<tabs v-if="transport">
+			<tab header="Passengers">
+				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
+			</tab>
 			<tab header="Details">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>Passengers by Region</h4>
+                        <button class="btn btn-xs btn-primary" @click="getTransport()">Refresh <i class="fa fa-refresh"></i></button>
+                        <hr class="divider inv">
+                    </div>
+                    <div class="col-sm-4" v-for="(key, value) in transport.passengers">
+                        <strong>{{key}}</strong>: <code>{{value}}</code>
+                    </div>
+                </div>
 				<div class="row">
+                    <hr class="divider">
+                    <div class="col-sm-6">
+                        <h4>Departure</h4>
+                        <small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' false true }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
+
+                        <p class="">
+                            {{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
+                            <span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
+                            <span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
+                            <span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
+                        </p>
+                    </div>
 					<div class="col-sm-6">
 						<h4>Arrival</h4>
-						<small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+						<small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' false true }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
 
 						<p class="">
 							{{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
@@ -34,21 +61,7 @@
 							<span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
 						</p>
 					</div>
-					<div class="col-sm-6">
-						<h4>Departure</h4>
-						<small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
-
-						<p class="">
-							{{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
-							<span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
-							<span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
-							<span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
-						</p>
-					</div>
 				</div>
-			</tab>
-			<tab header="Passengers">
-				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Notes">
 				<notes type="campaign_transports"
@@ -98,6 +111,11 @@
         },
         ready(){
 			this.getTransport();
+        },
+        events: {
+            'updatePassengersCount': function (passengers) {
+                this.passengersCount = passengers;
+            }
         }
     }
 </script>

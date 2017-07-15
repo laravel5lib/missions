@@ -56,7 +56,7 @@
                                                     <br />
                                                     <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
                                                         {{ transport.type | capitalize }}
-                                                        <span class="label label-default" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
+                                                        <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation | capitalize"></span>
                                                     </small>
                                                 </h4>
                                             </div><!-- end media-body -->
@@ -73,9 +73,9 @@
                                                 <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>
                                             </ul>
                                         </dropdown>
-                                        <a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-                                            <i class="fa fa-angle-down"></i>
-                                        </a>
+                                        <!--<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">-->
+                                            <!--<i class="fa fa-angle-down"></i>-->
+                                        <!--</a>-->
                                     </div>
                                 </div>
                                 <hr class="divider sm">
@@ -93,42 +93,42 @@
                                 <div class="row">
                                     <div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
                                     <div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
-                                    <div class="col-sm-3"><label>Passengers</label> {{transport.passengers}}</div>
+                                    <div class="col-sm-3"><label>Passengers</label> {{transport.passengers.Total}}</div>
                                     <div class="col-sm-3"><label>Seats Left</label> {{transport.seats_left}}</div>
                                 </div>
 
                             </div>
                         </div>
-                        <div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label>Travel Groups</label>
-                                        <p class="small" v-if="transport.groups.length > 0">
-                                            <template v-for="group in transport.groups">
-                                                {{ group.name }}
-                                                <template v-if="($index + 1) < transport.groups.length">&middot;</template>
-                                            </template>
-                                        </p>
-                                        <p class="small" v-else>
-                                            Add passengers to see groups
-                                        </p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label>Designations</label>
-                                        <p class="small" v-if="transport.designations.length > 0">
-                                            <template v-for="designation in transport.designations">
-                                                {{ designation.content }}
-                                                <template v-if="($index + 1) < transport.designations.length">&middot;</template>
-                                            </template>
-                                        </p>
-                                        <p class="small" v-else>
-                                            Add passengers to see designations
-                                        </p>
+                        <!--<div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<label>Travel Groups</label>-->
+                                        <!--<p class="small" v-if="transport.groups.length > 0">-->
+                                            <!--<template v-for="group in transport.groups">-->
+                                                <!--{{ group.name }}-->
+                                                <!--<template v-if="($index + 1) < transport.groups.length">&middot;</template>-->
+                                            <!--</template>-->
+                                        <!--</p>-->
+                                        <!--<p class="small" v-else>-->
+                                            <!--Add passengers to see groups-->
+                                        <!--</p>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-sm-6">-->
+                                        <!--<label>Designations</label>-->
+                                        <!--<p class="small" v-if="transport.designations.length > 0">-->
+                                            <!--<template v-for="designation in transport.designations">-->
+                                                <!--{{ designation.content }}-->
+                                                <!--<template v-if="($index + 1) < transport.designations.length">&middot;</template>-->
+                                            <!--</template>-->
+                                        <!--</p>-->
+                                        <!--<p class="small" v-else>-->
+                                            <!--Add passengers to see designations-->
+                                        <!--</p>-->
 
-                                    </div>
-                                </div><!-- end row -->
-                            </div>
+                                    <!--</div>-->
+                                <!--</div>&lt;!&ndash; end row &ndash;&gt;-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -157,6 +157,12 @@
                                 <option value="">-- Select--</option>
                                 <option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
                             </select>
+                        </div>
+
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.designation, client: 'designation' }">
+                            <label for="transportType" class="control-label">Designation</label>
+                            <input type="text" class="form-control" v-model="selectedTransport.designation" placeholder="i.e. outbound, return, etc.">
+                            <span>A passenger can only be added one transport with the given designation.</span>
                         </div>
 
                         <template v-if="selectedTransport.type === 'flight'">
@@ -315,6 +321,7 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
+
                     include: 'departureHub,arrivalHub'
                 },
                 options: {
@@ -322,8 +329,7 @@
                         isDomestic: 'no',
                         campaign: this.campaignId,
                         per_page: 10,
-                        search: '',
-                        with: ['groups','designations']
+                        search: ''
                     }
                 },
                 pagination: { current_page: 1},
@@ -415,6 +421,7 @@
                     type: '',
                     vessel_no: '',
                     domestic: false,
+                    designation: null,
                     capacity: 0,
                     campaign_id: this.campaignId,
                     departure: {
@@ -455,6 +462,7 @@
                     type: '',
                     max_passengers: 9999,
                     min_passengers: 0,
+                    sort: 'depart_at|asc',
                     include: 'departureHub,arrivalHub'
                 };
             },

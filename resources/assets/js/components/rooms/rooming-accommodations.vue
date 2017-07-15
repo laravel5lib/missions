@@ -263,11 +263,17 @@
 														</a>
 													</div>
 													<div class="col-xs-12">
-														<label>Rooms</label><br />
-														<span v-for="(key, val) in plan.rooms_count">
-								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>
+														<label>Groups</label><br />
+														<span v-for="group in plan.groups.data">
+								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{group.name | capitalize}}</p>
 								                        </span>
 													</div>
+													<!--<div class="col-xs-12">-->
+														<!--<label>Rooms</label><br />-->
+														<!--<span v-for="(key, val) in plan.rooms_count">-->
+								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
+								                        <!--</span>-->
+													<!--</div>-->
 												</div>
 											</div>
 										</div>
@@ -280,6 +286,11 @@
 														<button :disabled="!currentAccommodation" class="btn btn-xs btn-primary-hollow pull-right" type="button" @click="addRoomToAccommodation(room, currentAccommodation)">
 															<i class="fa fa-plus"></i>
 														</button>
+                                                        <p class="small" style="line-height:1;margin-bottom:2px;">
+                                                            <span v-for="occupant in room.occupants.data">
+                                                                <br /> &middot; {{ occupant.given_names }} {{ occupant.surname }}
+                                                            </span>
+                                                        </p>
 													</div>
 
 												</div>
@@ -502,7 +513,7 @@
             getRoomingPlans(){
                 let regionId = this.currentRegion ? this.currentRegion.id : '';
                 let params = {
-                    include: 'rooms:notInUse('+ regionId +'),rooms.occupants',
+                    include: 'rooms:notInUse('+ regionId +'),rooms.occupants,groups',
                 };
                 params = _.extend(params, {
                     campaign: this.campaignId,

@@ -11,7 +11,7 @@ class CampaignTransportFilter extends Filter
      * @var array
      */
     public $relations = [
-        'passengers' => ['designation', 'groups']
+        'passengers' => ['groups']
     ];
 
     public $sortable = [
@@ -35,6 +35,11 @@ class CampaignTransportFilter extends Filter
         return $isDomestic == 'yes' ?
             $this->where('domestic', true) :
             $this->where('domestic', false);
+    }
+
+    public function designation($designation)
+    {
+        return $this->where('designation', $designation);
     }
 
     public function type($type)

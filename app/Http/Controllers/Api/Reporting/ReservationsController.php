@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Reporting;
 
+use App\Jobs\Reports\Reservations\ItineraryReport;
 use App\Jobs\Reports\Reservations\RoomingReport;
 use App\Models\v1\User;
 use Illuminate\Http\Request;
@@ -40,7 +41,8 @@ class ReservationsController extends Controller
             'funds' => FundsReport::class,
             'requirements' => RequirementsReport::class,
             'travel' => TravelReport::class,
-            'rooming' => RoomingReport::class
+            'rooming' => RoomingReport::class,
+            'itinerary' => ItineraryReport::class
         ];
 
         return $reports[$type];

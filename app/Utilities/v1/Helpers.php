@@ -306,3 +306,12 @@ function addLeadingZeros($value, $digits = 4)
 {
     return str_pad($value, 4, '0', STR_PAD_LEFT);
 }
+
+function getFirstName($givenNames)
+{
+    $array = explode(' ',trim($givenNames));
+
+    if (empty($array)) return null;
+
+    return $array[0];
+}

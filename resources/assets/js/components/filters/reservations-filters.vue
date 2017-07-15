@@ -43,16 +43,11 @@
 
 			<template v-if="isAdminRoute || facilitator || teams || rooms || transports">
 
-				<div class="form-group" v-if="propertyExists('role') && (!isAdminRoute || transports)">
+				<div class="form-group" v-if="propertyExists('role')">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
 					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
-
-					<!--<select class="form-control input-sm" id="desiredRole" v-model="filters.role">
-						<option value="">Any Role</option>
-						<option v-for="role in UTILITIES.roles" :value="role.value">{{role.name}}</option>
-					</select>-->
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute && (propertyExists('users') || propertyExists('user'))">
@@ -116,6 +111,14 @@
                         <option value="other">Other</option>
                         <option value="none">None</option>
 					</select>
+				</div>
+
+				<div class="form-group" v-if="isAdminRoute && propertyExists('region') && campaignId">
+					<label>Region Assignment</label>
+                    <select  class="form-control input-sm" v-model="filters.region">
+                        <option value="">Any</option>
+                        <option :value="region.id" v-for="region in regionOptions | orderBy 'name'">{{ region.name}}</option>
+                    </select>
 				</div>
 
 				<!-- Requirements -->
@@ -265,13 +268,13 @@
 					</div>
 				</div>
 
-                <div class="form-group" v-if="!transports">
+                <div class="form-group" v-if="(propertyExists('hasRoomInPlan') || propertyExists('noRoomInPlan'))">
                     <label>Rooms</label>
                     <div>
-                        <label class="checkbox-inline">
+                        <label class="checkbox-inline" v-if="propertyExists('hasRoomInPlan')">
                             <input type="checkbox" v-model="hasRoomInPlan"> Has Room in Plan
                         </label>
-                        <label class="checkbox-inline">
+                        <label class="checkbox-inline" v-if="propertyExists('noRoomInPlan')">
                             <input type="checkbox" v-model="noRoomInPlan"> No Room in Plan
                         </label>
                     </div>
@@ -351,7 +354,11 @@
 			    type: Boolean,
 			    default: false
 		    },
-
+            // We need to know the campaign we're scoped to
+            campaignId: {
+                type: String,
+                default: null
+            }
         },
         data(){
             return {
@@ -363,6 +370,7 @@
                 groupsOptions: [],
                 usersOptions: [],
                 campaignOptions: [],
+                regionOptions: [],
                 shirtSizeOptions: [
                     {id: 'XS', name: 'Extra Small'},
                     {id: 'S', name: 'Small'},
@@ -498,6 +506,14 @@
                 }}).then(function (response) {
                     this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
                 }, this.$root.handleApiError);
+            },
+            getRegions(){
+                return this.$http.get('campaigns/'+this.campaignId+'/regions', { params: {
+                    'per_page': 100,
+                    'unique': true
+                }}).then(function (response) {
+                    this.regionOptions = response.body.data;
+                }, this.$root.handleApiError);
             }
 
         },
@@ -547,6 +563,8 @@
                 promises.push(this.getReps());
             if (this.facilitator && !this.isAdminRoute || this.teams)
                 promises.push(this.getRoles());
+            if (this.campaignId)
+                promises.push(this.getRegions());
 
             Promise.all(promises).then(function () {
                 if (!self.starter)

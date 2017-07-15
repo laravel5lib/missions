@@ -32,9 +32,11 @@ class CampaignTransportTransformer extends TransformerAbstract
             'name'        => ucwords($transport->name),
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
-            'passengers'  => (int) $transport->passengers_count,
+//            'passengers'  => (int) $transport->passengers_count,
+            'passengers'  => $this->passengersByRegion($transport) + ['Total' => (int) $transport->passengers_count],
             'seats_left'  => $transport->seatsLeft(),
             'call_sign'   => strtoupper($transport->call_sign),
+            'designation' => $transport->designation,
             'depart_at'   => $transport->depart_at ? $transport->depart_at->toDateTimeString() : null,
             'arrive_at'   => $transport->arrive_at ? $transport->arrive_at->toDateTimeString() : null,
             'created_at'  => $transport->created_at->toDateTimeString(),
@@ -59,6 +61,28 @@ class CampaignTransportTransformer extends TransformerAbstract
         }
 
         return $array;
+    }
+
+    private function passengersByRegion($transport)
+    {
+        $transport->load('passengers.reservation.squads.team.regions');
+
+        $data = $transport->passengers
+            ->pluck('reservation.squads')
+            ->flatten()
+            ->pluck('team')
+            ->flatten()
+            ->pluck('regions')
+            ->flatten()
+            ->groupBy('name')
+            ->map(function ($region) {
+                return count($region);
+            })
+            ->all();
+
+        ksort($data);
+
+        return $data;
     }
 
     /**

@@ -46,6 +46,11 @@ class CampaignTransport extends Model
         $this->attributes['name'] = strtolower(trim($value));
     }
 
+    public function setDesignationAttribute($value)
+    {
+        $this->attributes['designation'] = strtolower(trim($value));
+    }
+
     public function setCallSignAttribute($value)
     {
         if (! is_null($value)) {

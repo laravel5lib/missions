@@ -32,10 +32,10 @@ class CampaignTransportTransformer extends TransformerAbstract
             'name'        => ucwords($transport->name),
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
-//            'passengers'  => (int) $transport->passengers_count,
             'passengers'  => [
                     'regions' =>  $this->passengersByRegion($transport),
                     'groups' => $this->passengersByGroup($transport),
+                    'designations' => $this->passengersByDesignation($transport),
                     'total' => (int) $transport->passengers_count
                 ],
             'seats_left'  => $transport->seatsLeft(),
@@ -101,6 +101,24 @@ class CampaignTransportTransformer extends TransformerAbstract
             ->groupBy('name')
             ->map(function ($group) {
                 return count($group);
+            })
+            ->all();
+
+        ksort($data);
+
+        return $data;
+    }
+
+    private function passengersByDesignation($transport)
+    {
+        $transport->load('passengers.reservation.designation');
+
+        $data = $transport->passengers
+            ->pluck('reservation.designation')
+            ->flatten()
+            ->groupBy('content')
+            ->map(function ($designation) {
+                return count($designation);
             })
             ->all();
 

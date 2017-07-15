@@ -99,37 +99,6 @@
 
                             </div>
                         </div>
-                        <!--<div :id="'transportItem' + $index" class="panel-collapse collapse transport-item" role="tabpanel" aria-labelledby="headingOne">-->
-                            <!--<div class="panel-body">-->
-                                <!--<div class="row">-->
-                                    <!--<div class="col-sm-6">-->
-                                        <!--<label>Travel Groups</label>-->
-                                        <!--<p class="small" v-if="transport.groups.length > 0">-->
-                                            <!--<template v-for="group in transport.groups">-->
-                                                <!--{{ group.name }}-->
-                                                <!--<template v-if="($index + 1) < transport.groups.length">&middot;</template>-->
-                                            <!--</template>-->
-                                        <!--</p>-->
-                                        <!--<p class="small" v-else>-->
-                                            <!--Add passengers to see groups-->
-                                        <!--</p>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-sm-6">-->
-                                        <!--<label>Designations</label>-->
-                                        <!--<p class="small" v-if="transport.designations.length > 0">-->
-                                            <!--<template v-for="designation in transport.designations">-->
-                                                <!--{{ designation.content }}-->
-                                                <!--<template v-if="($index + 1) < transport.designations.length">&middot;</template>-->
-                                            <!--</template>-->
-                                        <!--</p>-->
-                                        <!--<p class="small" v-else>-->
-                                            <!--Add passengers to see designations-->
-                                        <!--</p>-->
-
-                                    <!--</div>-->
-                                <!--</div>&lt;!&ndash; end row &ndash;&gt;-->
-                            <!--</div>-->
-                        </div>
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">

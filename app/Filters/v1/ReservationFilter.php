@@ -459,15 +459,21 @@ class ReservationFilter extends Filter
         return $this->has('squads', '<', 1);
     }
 
-    public function notInTransport($transportId)
+    public function notInTransport($transportId = null)
     {
+        if (! $transportId)
+            return $this->doesntHave('transports');
+
         return $this->whereDoesntHave('transports', function ($transport) use ($transportId) {
             return $transport->where('transports.id', $transportId);
         });
     }
 
-    public function inTransport($transportId)
+    public function inTransport($transportId = null)
     {
+        if (! $transportId)
+            return $this->has('transports');
+
         return $this->whereHas('transports', function ($transport) use ($transportId) {
             return $transport->where('transports.id', $transportId);
         });
@@ -476,6 +482,13 @@ class ReservationFilter extends Filter
     public function notTraveling($designation)
     {
         return $this->whereDoesntHave('transports', function ($transport) use ($designation) {
+            return $transport->where('transports.designation', $designation);
+        });
+    }
+
+    public function traveling($designation)
+    {
+        return $this->whereHas('transports', function ($transport) use ($designation) {
             return $transport->where('transports.designation', $designation);
         });
     }

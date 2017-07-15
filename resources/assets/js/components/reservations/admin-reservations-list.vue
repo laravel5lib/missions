@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
+			<reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId" transports></reservations-filters>
 		</aside>
 
 		<div class="row">
@@ -375,7 +375,8 @@
                     minPercentRaised: '',
                     maxPercentRaised: '',
                     minAmountRaised: '',
-                    maxAmountRaised: ''
+                    maxAmountRaised: '',
+					transportation: true
 				},
 				showFilters: false,
 				exportOptions: {
@@ -531,7 +532,12 @@
 						dueName: this.filters.dueName,
 						dueStatus: this.filters.dueStatus,
 						rep: this.filters.rep,
-						age: this.filters.age
+						age: this.filters.age,
+                        minPercentRaised: this.filters.minPercentRaised ? this.filters.minPercentRaised : null,
+                        maxPercentRaised: this.filters.maxPercentRaised ? this.filters.maxPercentRaised : null,
+                        minAmountRaised: this.filters.minAmountRaised ? this.filters.minAmountRaised : null,
+                        maxAmountRaised: this.filters.maxAmountRaised ? this.filters.maxAmountRaised : null,
+                        transportation: true
 					}
 				});
 
@@ -575,6 +581,11 @@
 					dueName: '',
 					dueStatus: '',
 					age: [0, 120],
+                    minPercentRaised: '',
+                    maxPercentRaised: '',
+                    minAmountRaised: '',
+                    maxAmountRaised: '',
+					transportation: true
 				};
 			},
 			country(code){

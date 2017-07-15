@@ -32,7 +32,13 @@
                         <h4>Passengers by Region</h4>
                         <div class="row">
                             <div class="col-sm-6" v-for="(key, value) in transport.passengers.regions">
-                                <strong>{{key}}</strong>: <code>{{value}}</code>
+                                {{key}}: <code>{{value}}</code>
+                            </div>
+                        </div>
+                        <h4>Passengers by Designation</h4>
+                        <div class="row">
+                            <div class="col-sm-6" v-for="(key, value) in transport.passengers.designations">
+                                {{key}}: <code>{{value}}</code>
                             </div>
                         </div>
                     </div>
@@ -41,7 +47,7 @@
                         <hr class="divider inv">
                         <div class="row">
                             <div class="col-sm-6" v-for="(key, value) in transport.passengers.groups">
-                                <strong>{{key}}</strong>: <code>{{value}}</code>
+                                {{key}}: <code>{{value}}</code>
                             </div>
                         </div>
                     </div>

@@ -23,9 +23,13 @@
 					</div>
 					<div class="col-xs-12">
 						<filters-indicator :filters.sync="passengersFilters"></filters-indicator>
+						<hr class="divider">
 					</div>
 				</form>
 				<div class="panel-group" id="PassengerAccordion" role="tablist" aria-multiselectable="true">
+					<p class="lead text-center text-muted" v-if="passengers.length < 1">
+						There are no passengers in this transport. <br /> Add passengers from the reservations list to get started.
+					</p>
 					<div class="panel panel-default" v-for="passenger in passengers">
 						<div class="panel-heading" role="tab" id="headingOne">
 							<h4 class="panel-title">
@@ -121,6 +125,7 @@
 					</div>
 					<div class="col-xs-12">
 						<filters-indicator :filters.sync="reservationFilters"></filters-indicator>
+						<hr class="divider">
 					</div>
 
 				</form>

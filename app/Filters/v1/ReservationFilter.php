@@ -1,5 +1,6 @@
 <?php namespace App\Filters\v1;
 
+use App\Utilities\v1\TeamRole;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -498,5 +499,62 @@ class ReservationFilter extends Filter
         return $this->whereHas('squads.team.regions', function ($region) use ($id) {
             return $region->where('id', $id);
         });
+    }
+
+    /*
+     * Search Improvements
+     */
+
+    public function name($value)
+    {
+        $searchTerms = collect(explode(' ', $value));
+
+        $first = $searchTerms->first();
+        $last = $searchTerms->last();
+
+        $this->when(($searchTerms->count() > 1), function ($query) use ($searchTerms, $first, $last) {
+            return $query->where('surname', 'LIKE', "%$last%")->where('given_names', 'LIKE', "%$first%");
+        })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
+            return $query->where('given_names', 'LIKE', "%$first%")
+                ->orWhere('surname', 'LIKE', "%$first%");
+        });
+    }
+
+    public function givenNames($value)
+    {
+        return $this->where('given_names', 'LIKE', "%$value%");
+    }
+
+    public function surname($value)
+    {
+        return $this->where('surname', 'LIKE', "%$value%");
+    }
+
+    public function email($value)
+    {
+        return $this->where('email', 'LIKE', "%$value%");
+    }
+
+    public function phone($value)
+    {
+        return $this->where('phone_one', 'LIKE', "%$value%")
+            ->orWhere('phone_two', 'LIKE', "%$value%");;
+    }
+
+    public function phoneOne($value)
+    {
+        return $this->where('phone_one', 'LIKE', "%$value%");
+    }
+
+    public function phoneTwo($value)
+    {
+        return $this->where('phone_two', 'LIKE', "%$value%");
+    }
+
+    public function teamRole($value)
+    {
+        $code = TeamRole::get_code($value);
+
+        return $this->where('desired_role', $code);
     }
 }

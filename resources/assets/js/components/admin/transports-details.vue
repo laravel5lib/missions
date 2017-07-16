@@ -4,7 +4,7 @@
 			<div class="panel-heading">
 				<h3>
 					<a :href="'/admin/campaigns/' + campaignId + '/transports'" class="btn btn-xs btn-primary pull-right"><i class="fa fa-chevron-left"></i> Back to Transports</a>
-					{{ transport.name }}
+					{{ transport.name }} <small>&middot; {{ transport.vessel_no }}</small>
 					<br />
 					<small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
 					{{ transport.type | capitalize }}
@@ -12,13 +12,32 @@
 					<span class="label label-primary" v-text="transport.designation | capitalize"></span>
 					</small>
 				</h3>
+				<p>
+					<strong>{{ transport.depart_at | moment 'MMM d, hh:mm a' false true }}</strong>
+					{{ transport.departureHub.data.call_sign }}
+					<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+					<strong>{{ transport.arrive_at | moment 'hh:mm a' false true }}</strong>
+					{{ transport.arrivalHub.data.call_sign }}
+				</p>
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
-					<div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
-                    <div class="col-sm-3"><label>Total Passengers</label> <code>{{passengersCount}}</code></div>
-					<div class="col-sm-3"><label>Seats Left</label> <code>{{transport.capacity - passengersCount}}</code></div>
+					<div class="col-sm-4">
+                        <label>Capacity</label>
+                        <h4>{{transport.capacity}}</h4>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Total Passengers</label>
+						<h4 :class="{ 'text-success': passengersCount > 0}">
+							{{passengersCount}}
+						</h4>
+					</div>
+					<div class="col-sm-4">
+                        <label>Seats Left</label>
+						<h4 :class="{ 'text-success': seatsLeft > 0, 'text-danger': seatsLeft < 0}">
+							{{seatsLeft}}
+						</h4>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -29,34 +48,45 @@
 			<tab header="Details">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>Passengers by Region</h4>
-                        <div class="row">
-                            <div class="col-sm-6" v-for="(key, value) in transport.passengers.regions">
-                                {{key}}: <code>{{value}}</code>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Passengers by Region</h4>
                             </div>
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="(key, value) in transport.passengers.regions">
+                                    {{key}} <span class="badge">{{value}}</span>
+                                </li>
+                            </ul>
                         </div>
-                        <h4>Passengers by Designation</h4>
-                        <div class="row">
-                            <div class="col-sm-6" v-for="(key, value) in transport.passengers.designations">
-                                {{key}}: <code>{{value}}</code>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Passengers by Designation</h4>
                             </div>
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="(key, value) in transport.passengers.designations">
+                                    {{key}} <span class="badge">{{value}}</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <h4>Passengers by Group</h4>
-                        <hr class="divider inv">
-                        <div class="row">
-                            <div class="col-sm-6" v-for="(key, value) in transport.passengers.groups">
-                                {{key}}: <code>{{value}}</code>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Passengers by Group</h4>
                             </div>
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="(key, value) in transport.passengers.groups">
+                                    {{key}} <span class="badge">{{value}}</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <hr class="divider inv">
-                        <h4>
-                            Total: <code>{{ transport.passengers.total }}</code>
+                        <h4 class="text-left">
+                            Total Passengers: <span class="text-primary">{{ transport.passengers.total }}</span>
                             <button class="pull-right btn btn-xs btn-primary" @click="getTransport()">
-                                Refresh <i class="fa fa-refresh"></i>
+                                Refresh Passenger Count <i class="fa fa-refresh"></i>
                             </button>
                         </h4>
                     </div>
@@ -64,26 +94,36 @@
 				<div class="row">
                     <hr class="divider">
                     <div class="col-sm-6">
-                        <h4>Departure</h4>
-                        <small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' false true }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
-
-                        <p class="">
-                            {{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
-                            <span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
-                            <span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
-                            <span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
-                        </p>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Departure</h4>
+                                <small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' false true }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
+                            </div>
+                            <div class="panel-body">
+                                <p>
+                                    {{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
+                                    <span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
+                                    <span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
+                                    <span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
 					<div class="col-sm-6">
-						<h4>Arrival</h4>
-						<small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' false true }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
-
-						<p class="">
-							{{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
-							<span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}</span><br>
-							<span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
-							<span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
-						</p>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+						        <h4>Arrival</h4>
+                                <small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' false true }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
+                            </div>
+                            <div class="panel-body">
+                                <p>
+                                    {{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
+                                    <span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}</span><br>
+                                    <span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
+                                    <span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
+                                </p>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</tab>
@@ -122,6 +162,11 @@
 	            passengersCount: 0,
             }
         },
+		computed: {
+            'seatsLeft': function() {
+				return this.transport.capacity - this.passengersCount;
+			}
+		},
         methods: {
             getTransport() {
                 let params = {

@@ -47,18 +47,34 @@
                                 <div class="row">
                                     <div class="col-xs-9">
                                         <div class="media">
-                                            <div class="media-body" style="vertical-align:middle;">
-                                                <h4 class="media-heading text-capitalize" style="margin-bottom:3px;">
-                                                    <a :href="'transports/' + transport.id">
-                                                        {{ transport.name }}
-                                                        <small> &middot; {{transport.vessel_no}}</small>
-                                                    </a>
-                                                    <br />
-                                                    <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
-                                                        {{ transport.type | capitalize }}
-                                                        <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation | capitalize"></span>
-                                                    </small>
+                                            <div class="media-left">
+                                                <h4 class="media-heading text-capitalize">
+                                                    {{ transport.depart_at | moment 'MMM D' false true }}
                                                 </h4>
+                                            </div>
+                                            <div class="media-body" style="vertical-align:middle;">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <h5 class="media-heading text-capitalize" style="margin-bottom:3px;">
+                                                            <a :href="'transports/' + transport.id">
+                                                                {{ transport.name }}
+                                                                <small> &middot; {{transport.vessel_no}}</small>
+                                                            </a>
+                                                            <br />
+                                                            <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
+                                                                {{ transport.type | capitalize }}
+                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation | capitalize"></span>
+                                                            </small>
+                                                        </h5>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <strong>{{ transport.depart_at | moment 'hh:mm a' false true }}</strong>
+                                                        {{ transport.departureHub.data.call_sign }}
+                                                        <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                                        <strong>{{ transport.arrive_at | moment 'hh:mm a' false true }}</strong>
+                                                        {{ transport.arrivalHub.data.call_sign }}
+                                                    </div>
+                                                </div>
                                             </div><!-- end media-body -->
                                         </div><!-- end media -->
                                     </div>
@@ -73,28 +89,22 @@
                                                 <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>
                                             </ul>
                                         </dropdown>
-                                        <!--<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" :href="'#transportItem' + $index" aria-expanded="true" aria-controls="collapseOne">-->
-                                            <!--<i class="fa fa-angle-down"></i>-->
-                                        <!--</a>-->
                                     </div>
                                 </div>
                                 <hr class="divider sm">
                                 <div class="row">
-                                    <div class="col-sm-3"><label>Depart At</label>
-                                        {{transport.depart_at | moment 'lll' false true}}
-                                    </div>
-                                    <div class="col-sm-3"><label>Depart From</label> {{ transport.departureHub.data.call_sign }}</div>
-                                    <div class="col-sm-3"><label>Arrive At</label>
-                                        {{transport.arrive_at | moment 'lll' false true}}
-                                    </div>
-                                    <div class="col-sm-3"><label>Arrive In</label> {{ transport.arrivalHub.data.call_sign }}</div>
-                                </div>
-                                <hr class="divider sm">
-                                <div class="row">
-                                    <div class="col-sm-3"><label>Vessel No.</label> {{transport.vessel_no}}</div>
                                     <div class="col-sm-3"><label>Call Sign</label> {{transport.call_sign}}</div>
-                                    <div class="col-sm-3"><label>Passengers</label> {{transport.passengers.total}}</div>
-                                    <div class="col-sm-3"><label>Seats Left</label> {{transport.seats_left}}</div>
+                                    <div class="col-sm-3"><label>Capacity</label> {{transport.capacity}}</div>
+                                    <div class="col-sm-3"><label>Passengers</label>
+                                        <span :class="{ 'text-success': transport.passengers.total > 0}">
+                                            {{transport.passengers.total}}
+                                        </span>
+                                    </div>
+                                    <div class="col-sm-3"><label>Seats Left</label>
+                                        <span :class="{ 'text-success': transport.seats_left > 0, 'text-danger': transport.seats_left < 0}">
+                                            {{transport.seats_left}}
+                                        </span>
+                                    </div>
                                 </div>
 
                             </div>
@@ -161,7 +171,7 @@
 
                             <div class="form-group">
                                 <label for="">Flight No.</label>
-                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -178,7 +188,7 @@
 
                             <div class="form-group">
                                 <label for="">Schedule/Route No.</label>
-                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -198,7 +208,7 @@
 
                             <div class="form-group">
                                 <label for="">Train No.</label>
-                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -215,6 +225,7 @@
                             <div class="form-group">
                                 <label for="">Callsign</label>
                                 <input type="text" class="form-control" v-model="selectedTransport.call_sign">
+                                <input type="hidden" class="form-control" value="1" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 

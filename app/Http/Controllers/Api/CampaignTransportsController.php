@@ -34,6 +34,7 @@ class CampaignTransportsController extends Controller
             ->whereNotNull('designation')
             ->filter(request()->all())
             ->withCount('passengers')
+            ->orderBy('depart_at')
             ->paginate(request()->get('per_page', 25));
 
         return $this->response->paginator($transports, new CampaignTransportTransformer);

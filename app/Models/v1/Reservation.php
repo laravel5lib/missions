@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use App\Models\Presenters\ReservationPresenter;
 use Carbon\Carbon;
 use App\UuidForKey;
 use App\Traits\Rewardable;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reservation extends Model
 {
-    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable;
+    use SoftDeletes, Filterable, UuidForKey, Taggable, Rewardable, ReservationPresenter;
 
     /**
      * The table associated with the model.

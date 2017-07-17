@@ -560,12 +560,13 @@
             },
             getRegions(){
                 return this.$http.get('campaigns/'+this.campaignId+'/regions', { params: {
+                    'campaign': this.campaignId,
                     'per_page': 100,
                     'unique': true
                 }}).then(function (response) {
                     this.regionOptions = response.body.data;
                 }, this.$root.handleApiError);
-            }
+            },
         },
 	    created(){
 

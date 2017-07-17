@@ -169,26 +169,20 @@
 								</div>
 								<div :id="'regionItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 									<div class="panel-body">
-										<div class="row">
-											<div class="col-sm-6">
-												<label>Travel Groups</label>
-											</div><!-- end col -->
-											<div class="col-sm-6">
-												<ul style="margin:3px 0;" v-if="region.teams && region.teams.data.length">
-													<template v-for="team in region.teams.data">
-														<template v-if="team.groups">
-															<li class="small" v-for="group in team.groups.data">
-																{{ group.name | capitalize }}
-															</li>
-														</template>
-
-													</template>
-												</ul>
-												<p class="small" v-else>None</p>
-											</div><!-- end col -->
-										</div><!-- end row -->
-										<hr class="divider sm">
-									</div><!-- end panel-body -->
+										<label>Travel Groups In this Region</label>
+									</div>
+									<ul class="list-group" style="margin:3px 0;" v-if="region.teams && region.teams.data.length">
+										<template v-for="team in region.teams.data">
+											<template v-if="team.groups">
+												<li class="list-group-item" v-for="group in team.groups.data">
+													{{ group.name | capitalize }}
+												</li>
+											</template>
+										</template>
+									</ul>
+									<div class="panel-body text-center" v-else>
+                                        No Groups Found
+                                    </div>
 								</div>
 							</div>
 							<div class="col-xs-12 text-center">

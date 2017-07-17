@@ -506,14 +506,10 @@
                 this.getGroups();
             }
 			this.getRoomingPlans().then(function (plans) {
-			    let plan;
 				if (this.isAdminRoute && location.search.length > 1) {
-				    // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
-                    let search = location.search.substring(1);
-                    let searchObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-                        function (key, value) {
-                            return key === "" ? value : decodeURIComponent(value)
-                        }) : {};
+                    let plan;
+                    let searchObj = this.$root.convertSearchToObject();
+                    // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
                     if (searchObj.hasOwnProperty('plan')) {
                         plan = _.findWhere(plans, {id: searchObj.plan});
                         if (plan)

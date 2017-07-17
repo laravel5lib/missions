@@ -994,6 +994,13 @@ new Vue({
             console.error(response.body.message ? response.body.message : response.body);
             this.$root.$emit('showError', response.body.message)
         },
+        convertSearchToObject() {
+            let search = location.search.substring(1);
+            return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+                function (key, value) {
+                    return key === "" ? value : decodeURIComponent(value)
+                }) : {};
+        }
 
     },
     events: {

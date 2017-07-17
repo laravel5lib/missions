@@ -401,7 +401,9 @@
 
 	            Promise.all(promises).then(function (values) {
 		            this.$root.$emit('showSuccess', 'Companions Added');
-                }.bind(this));
+                }.then(function(error) {
+                    this.$root.$emit('showError', error.message);
+				}).bind(this));
 
             }
         },

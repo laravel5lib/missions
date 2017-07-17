@@ -56,6 +56,10 @@
 				Designation
 				<i class="fa fa-close"></i>
 			</span>
+			<span v-if="propertyExists('region')" style="margin-right:2px;" class="label label-default" v-show="filters.region != ''" @click="filters.region = '',syncFilters()" >
+				Region
+				<i class="fa fa-close"></i>
+			</span>
 			<span v-if="propertyExists('requirementName')" style="margin-right:2px;" class="label label-default" v-show="filters.requirementName != ''" @click="filters.requirementName = '', filters.requirementStatus = '',syncFilters()" >
 				{{ requirement }}
 				<i class="fa fa-close"></i>
@@ -94,6 +98,22 @@
 			</span>
 			<span v-if="propertyExists('noRoom')" style="margin-right:2px;" class="label label-default" v-show="filters.noRoom !== null" @click="filters.noRoom = null,syncFilters()" >
 				No Room
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('inTransport')" style="margin-right:2px;" class="label label-default" v-show="filters.inTransport !== null" @click="filters.inTransport = null,syncFilters()" >
+				Has Transportation
+				<i class="fa fa-close"></i>
+			</span>
+			<span v-if="propertyExists('notInTransport')" style="margin-right:2px;" class="label label-default" v-show="filters.notInTransport !== null" @click="filters.notInTransport = null,syncFilters()" >
+				No Transportation
+				<i class="fa fa-close"></i>
+			</span>
+            <span v-if="propertyExists('traveling')" style="margin-right:2px;" class="label label-default" v-show="filters.traveling !== null" @click="filters.traveling = null,syncFilters()" >
+				Travel Designation
+				<i class="fa fa-close"></i>
+			</span>
+            <span v-if="propertyExists('notTraveling')" style="margin-right:2px;" class="label label-default" v-show="filters.notTraveling !== null" @click="filters.notTraveling = null,syncFilters()" >
+				Travel Designation
 				<i class="fa fa-close"></i>
 			</span>
 		</div>

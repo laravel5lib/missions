@@ -34,4 +34,34 @@ class Passenger extends Model
     {
         return $this->belongsTo(CampaignTransport::class, 'transport_id');
     }
+
+    public function transportCompanions()
+    {
+        return $this->reservation
+            ->companionReservations()
+            ->whereHas('transports', function ($transport) {
+                return $transport->where('transports.id', $this->transport_id);
+            })
+            ->get([
+                'reservations.id',
+                'reservations.given_names',
+                'reservations.surname'
+            ]);
+    }
+
+    public function validate($transportId, $reservationId)
+    {
+        $transport = Transport::with('passengers')->find($transportId);
+
+        if (in_array($reservationId, $transport->passengers->pluck('reservation_id')->all()))
+            abort(422, 'Passenger is already on this transport.');
+
+        $reservation = Reservation::find($reservationId);
+        $designations = $reservation->transports->pluck('designation')->all();
+
+        if (in_array($transport->designation, $designations))
+            abort(422, "Passenger is already on a $transport->designation transport");
+
+        return true;
+    }
 }

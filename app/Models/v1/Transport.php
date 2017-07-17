@@ -14,7 +14,7 @@ class Transport extends Model
     protected $guarded = [];
 
     protected $dates = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'depart_at', 'arrive_at'
     ];
 
     public function seatsLeft()
@@ -22,41 +22,6 @@ class Transport extends Model
         $this->load('passengers');
 
         return $this->capacity - $this->passengers()->count();
-    }
-
-    public function groups()
-    {
-        $this->load('passengers.reservation.trip.group');
-
-        if ($this->passengers)
-            $groups = $this->passengers()
-                ->get()
-                ->pluck('reservation')
-                ->flatten()
-                ->pluck('trip')
-                ->flatten()
-                ->pluck('group')
-                ->flatten()
-                ->unique();
-
-            return $groups;
-
-        return [];
-    }
-
-    public function designations()
-    {
-        $this->load('passengers.reservation');
-
-        if ($this->passengers)
-            $designations = $this->passengers()
-                ->get()
-                ->pluck('reservation.designation')
-                ->unique();
-
-        return $designations;
-
-        return [];
     }
 
     public function campaign()
@@ -74,13 +39,13 @@ class Transport extends Model
         return $this->morphToMany(Activity::class, 'activitable');
     }
 
-    public function addPassenger()
+    public function departureHub()
     {
-        //
+        return $this->belongsTo(Hub::class, 'departure_hub_id');
     }
 
-    public function removePassenger()
+    public function arrivalHub()
     {
-        //
+        return $this->belongsTo(Hub::class, 'arrival_hub_id');
     }
 }

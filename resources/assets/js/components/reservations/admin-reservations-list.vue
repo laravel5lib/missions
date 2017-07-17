@@ -360,8 +360,8 @@
 					status: '',
 					shirtSize: [],
 					hasCompanions: null,
-                    hasRoom: null,
-                    noRoom: null,
+                    hasRoomInPlan: null,
+                    noRoomInPlan: null,
 					due: '',
 					todoName: '',
 					todoStatus: null,
@@ -375,8 +375,13 @@
                     minPercentRaised: '',
                     maxPercentRaised: '',
                     minAmountRaised: '',
-                    maxAmountRaised: ''
-				},
+                    maxAmountRaised: '',
+					transportation: true,
+                    inTransport: null,
+                    notInTransport: null,
+                    traveling: null,
+                    notTraveling: null
+                },
 				showFilters: false,
 				exportOptions: {
 					managing_user: 'Managing User',
@@ -531,8 +536,17 @@
 						dueName: this.filters.dueName,
 						dueStatus: this.filters.dueStatus,
 						rep: this.filters.rep,
-						age: this.filters.age
-					}
+						age: this.filters.age,
+                        minPercentRaised: this.filters.minPercentRaised ? this.filters.minPercentRaised : null,
+                        maxPercentRaised: this.filters.maxPercentRaised ? this.filters.maxPercentRaised : null,
+                        minAmountRaised: this.filters.minAmountRaised ? this.filters.minAmountRaised : null,
+                        maxAmountRaised: this.filters.maxAmountRaised ? this.filters.maxAmountRaised : null,
+                        transportation: true,
+                        inTransport: null,
+                        notInTransport: null,
+                        traveling: null,
+                        notTraveling: null,
+                    }
 				});
 
 				this.$root.$emit('reservations-filters:update-storage');
@@ -575,7 +589,16 @@
 					dueName: '',
 					dueStatus: '',
 					age: [0, 120],
-				};
+                    minPercentRaised: '',
+                    maxPercentRaised: '',
+                    minAmountRaised: '',
+                    maxAmountRaised: '',
+					transportation: true,
+                    inTransport: null,
+                    notInTransport: null,
+                    traveling: null,
+                    notTraveling: null
+                };
 			},
 			country(code){
 				return code;
@@ -637,10 +660,10 @@
 			// load view state
 			if (window.localStorage[this.storageName]) {
 				let config = JSON.parse(window.localStorage[this.storageName]);
-				this.activeFields = config.activeFields;
+				this.activeFields = _.extend(this.activeFields, config.activeFields);
                 this.per_page = config.per_page;
                 this.maxActiveFields = config.maxActiveFields;
-				this.filters = config.filters;
+				this.filters = _.extend(this.filters, config.filters);
 			}
 
 			// assign values from url search

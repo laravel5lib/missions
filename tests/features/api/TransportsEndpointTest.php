@@ -104,8 +104,8 @@ class TransportsEndpointTest extends TestCase
         $this->delete('/api/campaigns/'.$campaign->id.'/transports/'. $transport->id);
 
         $this->assertResponseStatus(204)
-            ->seeInDatabase('campaign_transports', ['id' => $transport->id])
-            ->dontSeeInDatabase('campaign_transports', [
+            ->seeInDatabase('transports', ['id' => $transport->id])
+            ->dontSeeInDatabase('transports', [
                 'id' => $transport->id,
                 'deleted_at' => null
             ]);

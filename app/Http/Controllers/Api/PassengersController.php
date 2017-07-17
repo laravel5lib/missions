@@ -39,6 +39,7 @@ class PassengersController extends Controller
         $passengers = $this->passenger
                            ->where('transport_id', $transportId)
                            ->filter($request->all())
+                           ->latest()
                            ->paginate($request->get('per_page', 10));
 
         return $this->response->paginator($passengers, new PassengerTransformer);
@@ -53,6 +54,8 @@ class PassengersController extends Controller
      */
     public function store($transportId, PassengerRequest $request)
     {
+        $this->passenger->validate($transportId, $request->get('reservation_id'));
+
         $passenger = $this->passenger->firstOrCreate([
             'transport_id' => $transportId,
             'reservation_id' => $request->json('reservation_id')

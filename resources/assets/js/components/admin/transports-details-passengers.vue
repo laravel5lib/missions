@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" storage="" transports></reservations-filters>
+			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
 		</aside>
 		<aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" storage="" teams></reservations-filters>
+			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
 		</aside>
 
 		<div class="row">
@@ -23,9 +23,13 @@
 					</div>
 					<div class="col-xs-12">
 						<filters-indicator :filters.sync="passengersFilters"></filters-indicator>
+						<hr class="divider">
 					</div>
 				</form>
 				<div class="panel-group" id="PassengerAccordion" role="tablist" aria-multiselectable="true">
+					<p class="lead text-center text-muted" v-if="passengers.length < 1">
+						There are no passengers in this transport. <br /> Add passengers from the reservations list to get started.
+					</p>
 					<div class="panel panel-default" v-for="passenger in passengers">
 						<div class="panel-heading" role="tab" id="headingOne">
 							<h4 class="panel-title">
@@ -121,6 +125,7 @@
 					</div>
 					<div class="col-xs-12">
 						<filters-indicator :filters.sync="reservationFilters"></filters-indicator>
+						<hr class="divider">
 					</div>
 
 				</form>
@@ -234,11 +239,12 @@
 	            passengersFilters: {
                     groups: [],
                     gender: '',
-                    designation: '',
                     role: '',
-                    age: [0, 120],
+                    designation: '',
+                    region: '',
                     hasCompanions: null,
                     search: '',
+		            per_page: 10
 	            },
                 reservationFilters: {
                     type: '',
@@ -248,9 +254,10 @@
                     hasCompanions: null,
                     role: '',
                     designation: '',
-                    age: [0, 120],
+                    region: '',
 	                search: '',
-                    notInTransport: this.transport.id
+                    notInTransport: this.transport.id,
+					notTraveling: this.transport.designation
                 },
 
 	            PassengersResource: this.$resource('transports{/transport}/passengers{/passenger}', { transport: this.transport.id })
@@ -271,8 +278,34 @@
 		    },
 	    },
         methods: {
-            resetPassengerFilters(){},
-            resetReservationFilters(){},
+            resetPassengerFilters(){
+                this.passengersFilters = {
+                    groups: [],
+                    gender: '',
+                    role: '',
+                    designation: '',
+                    region: '',
+                    hasCompanions: null,
+                    search: '',
+                    per_page: 10,
+                    sortBy: 'created_at|desc'
+                }
+            },
+            resetReservationFilters(){
+                this.reservationFilters = {
+                    type: '',
+                    groups: [],
+                    gender: '',
+                    status: '',
+                    hasCompanions: null,
+                    role: '',
+                    designation: '',
+                    region: '',
+                    search: '',
+                    notInTransport: this.transport.id,
+                    notTraveling: this.transport.designation
+                }
+            },
             getGenderStatusIcon(reservation){
                 if (reservation.gender == 'male') {
                     if (reservation.status == 'married') {
@@ -296,7 +329,8 @@
                 this.PassengersResource.get(params).then(function (response) {
                     this.passengers = response.body.data;
                     this.passengersPagination = response.body.meta.pagination;
-                });
+                    this.$dispatch('updatePassengersCount', this.passengersPagination.total);
+                }, this.$root.handleApiError);
             },
 	        addPassenger(reservation) {
                 return this.PassengersResource.save({
@@ -332,7 +366,7 @@
                     //params.trip = this.reservationsTrips.length ? this.reservationsTrips : new Array();
                 }
 
-                $.extend(params, this.reservationFilters);
+                params = _.extend(params, this.reservationFilters);
 
 
                 // this.$refs.spinner.show();
@@ -345,20 +379,17 @@
                     this.reservations = response.body.data;
                     this.reservationsPagination = response.body.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
+                }, this.$root.handleApiSoftError);
             },
             companionsPresentTransport(passenger) {
 				let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
-				let passengerIds = _.pluck(this.passengers, 'reservation_id');
+				let passengerIds = _.pluck(passenger.transportCompanions, 'id');
                 let presentIds =  _.intersection(companionIds, passengerIds);
                 return companionIds.length - presentIds.length;
             },
             addCompanionsToTransport(passenger) {
                 let companionIds = _.pluck(passenger.reservation.data.companions.data, 'id');
-                let passengerIds = _.pluck(this.passengers, 'reservation_id');
+                let passengerIds = _.pluck(passenger.transportCompanions, 'id');
 				let notPresentIds = _.difference(companionIds, passengerIds);
                 // Check Limitations
 	            // Available Space
@@ -370,9 +401,11 @@
 
 	            Promise.all(promises).then(function (values) {
 		            this.$root.$emit('showSuccess', 'Companions Added');
-                }.bind(this));
+                }.then(function(error) {
+                    this.$root.$emit('showError', error.message);
+				}).bind(this));
 
-            },
+            }
         },
         ready(){
 			this.getPassengers();

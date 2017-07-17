@@ -31,8 +31,10 @@ class CampaignTransportsController extends Controller
     {
         $transports = $this->transport
             ->whereCampaignId($campaignId)
+            ->whereNotNull('designation')
             ->filter(request()->all())
             ->withCount('passengers')
+            ->orderBy('depart_at')
             ->paginate(request()->get('per_page', 25));
 
         return $this->response->paginator($transports, new CampaignTransportTransformer);
@@ -66,6 +68,7 @@ class CampaignTransportsController extends Controller
             'vessel_no' => $vessel_no,
             'capacity' => $request->get('capacity'),
             'call_sign' => $request->get('call_sign'),
+            'designation' => $request->get('designation'),
             'depart_at' => $request->get('depart_at'),
             'arrive_at' => $request->get('arrive_at'),
             'departure_hub_id' => $request->get('departure_hub_id'),
@@ -95,6 +98,7 @@ class CampaignTransportsController extends Controller
             'vessel_no' => $vessel_no,
             'capacity' => $request->get('capacity'),
             'call_sign' => $request->get('call_sign', $transport->call_sign),
+            'designation' => $request->get('designation', $transport->designation),
             'depart_at' => $request->get('depart_at', $transport->depart_at),
             'arrive_at' => $request->get('arrive_at', $transport->arrive_at),
             'departure_hub_id' => $request->get('departure_hub_id'),

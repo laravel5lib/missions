@@ -7,6 +7,7 @@ use League\Fractal\TransformerAbstract;
 
 class PassengerTransformer extends TransformerAbstract {
 
+    protected $defaultIncludes = [];
     /**
      * List of resources available to include
      *
@@ -24,7 +25,9 @@ class PassengerTransformer extends TransformerAbstract {
      */
     public function transform(Passenger $passenger)
     {
+
         return [
+            'transportCompanions' => $passenger->transportCompanions(),
             'id'             => $passenger->id,
             'reservation_id' => $passenger->reservation_id,
             'transport_id'   => $passenger->transport_id,

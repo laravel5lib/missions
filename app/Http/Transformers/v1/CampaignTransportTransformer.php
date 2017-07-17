@@ -32,9 +32,15 @@ class CampaignTransportTransformer extends TransformerAbstract
             'name'        => ucwords($transport->name),
             'domestic'    => (bool) $transport->domestic,
             'capacity'    => (int) $transport->capacity,
-            'passengers'  => (int) $transport->passengers_count,
+            'passengers'  => [
+                    'regions' =>  $this->passengersByRegion($transport),
+                    'groups' => $this->passengersByGroup($transport),
+                    'designations' => $this->passengersByDesignation($transport),
+                    'total' => (int) $transport->passengers_count
+                ],
             'seats_left'  => $transport->seatsLeft(),
             'call_sign'   => strtoupper($transport->call_sign),
+            'designation' => $transport->designation,
             'depart_at'   => $transport->depart_at ? $transport->depart_at->toDateTimeString() : null,
             'arrive_at'   => $transport->arrive_at ? $transport->arrive_at->toDateTimeString() : null,
             'created_at'  => $transport->created_at->toDateTimeString(),
@@ -59,6 +65,69 @@ class CampaignTransportTransformer extends TransformerAbstract
         }
 
         return $array;
+    }
+
+    private function passengersByRegion($transport)
+    {
+        $transport->load('passengers.reservation.squads.team.regions');
+
+        $data = $transport->passengers
+            ->pluck('reservation.squads')
+            ->flatten()
+            ->pluck('team')
+            ->flatten()
+            ->pluck('regions')
+            ->flatten()
+            ->groupBy('name')
+            ->map(function ($region) {
+                return count($region);
+            })
+            ->all();
+
+        ksort($data);
+
+        return $data;
+    }
+
+    private function passengersByGroup($transport)
+    {
+        $transport->load('passengers.reservation.trip.group');
+
+        $data = $transport->passengers
+            ->pluck('reservation.trip')
+            ->flatten()
+            ->pluck('group')
+            ->flatten()
+            ->groupBy('name')
+            ->map(function ($group) {
+                return count($group);
+            })
+            ->all();
+
+        ksort($data);
+
+        return $data;
+    }
+
+    private function passengersByDesignation($transport)
+    {
+        $transport->load('passengers.reservation.designation');
+
+        $data = $transport->passengers
+            ->pluck('reservation.designation')
+            ->flatten()
+            ->map(function($designation) {
+                return ['content' => $designation ? ucwords(implode('', array_flatten($designation->content))) : 'Unassigned'];
+            })
+            ->groupBy('content')
+            ->map(function ($designation) {
+                return count($designation);
+            })
+            ->all();
+
+        ksort($data);
+
+        return $data;
     }
 
     /**

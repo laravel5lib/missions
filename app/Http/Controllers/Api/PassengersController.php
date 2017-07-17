@@ -54,6 +54,8 @@ class PassengersController extends Controller
      */
     public function store($transportId, PassengerRequest $request)
     {
+        $this->passenger->validate($transportId, $request->get('reservation_id'));
+
         $passenger = $this->passenger->firstOrCreate([
             'transport_id' => $transportId,
             'reservation_id' => $request->json('reservation_id')

@@ -18,6 +18,8 @@ class PassengersController extends Controller
      */
     private $passenger;
 
+    protected $with = ['reservation'];
+
     /**
      * PassengersController constructor.
      * @param Passenger $passenger

@@ -5,6 +5,7 @@ namespace App\Models\v1;
 use App\CampaignTransport;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Passenger extends Model
@@ -19,6 +20,21 @@ class Passenger extends Model
     protected $dates = [
         'created_at', 'updated_at'
     ];
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // only get passenger with active reservation
+        static::addGlobalScope('active', function(Builder $builder) {
+            $builder->has('reservation');
+        });
+    }
 
     public function reservation()
     {

@@ -5,7 +5,12 @@ class TeamFilter extends Filter
 {
     public $relations = [];
     public $sortable = ['callsign', 'created_at', 'updated_at'];
-    public $searchable = ['callsign'];
+    public $searchable = [];
+
+    public function search($query)
+    {
+        return $this->where('callsign', 'LIKE', "%$query%");
+    }
 
     public function type($type)
     {

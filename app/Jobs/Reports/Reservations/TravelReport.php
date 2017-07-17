@@ -6,6 +6,7 @@ use App\Jobs\Job;
 use App\Models\v1\Itinerary;
 use App\Models\v1\Reservation;
 use App\Services\Reports\CSVReport;
+use App\Services\Transportation;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -190,33 +191,32 @@ class TravelReport extends Job implements ShouldQueue
             'Intl Return Transport No.' => null,
         ]);
 
-        $flights = array_values($reservation->transports->filter(function ($transport) {
-            return $transport->domestic == false && $transport->type == 'flight';
+        $flights = array_values($reservation->transports()->orderBy('depart_at', 'asc')->get()->filter(function ($transport) {
+            return $transport->domestic == false && $transport->departureHub && $transport->arrivalHub;
         })->all());
 
-        $len = count($flights);
+        collect($flights)
+            ->filter(function ($transport) {
+                return $transport->designation == 'outbound';
+            })
+            ->each(function ($transport) use($transports)
+            {
+                $transports['Intl Departure Location'] = $transport->departureHub->name;
+                $transports['Intl Departure At'] = $transport->depart_at->toDateTimeString();
+                $transports['Intl Departure Transportation'] = $transport->name;
+                $transports['Intl Departure Transport No.'] = $transport->vessel_no;
+            });
 
-        if ($len == 0) return $transports;
-
-        collect($flights)->sortBy('depart_at')
-            ->each(function ($transport, $key) use($len, $transports) {
-                if ($key == 0 && $transport->departureHub && $transport->departureHub->country_code == 'us') {
-                    // we get the first iteration for the departure
-                    // and make sure departure is from the US
-                    $transports['Intl Departure Location'] = $transport->departureHub->name;
-                    $transports['Intl Departure At'] = $transport->depart_at->toDateTimeString();
-                    $transports['Intl Departure Transportation'] = $transport->name;
-                    $transports['Intl Departure Transport No.'] = $transport->vessel_no;
-                }
-
-                if ($key == $len - 1 && $transport->arrivalHub && $transport->arrivalHub->country_code == 'us') {
-                    // we get the last iteration for the return
-                    // and make sure arrival is in the US
-                    $transports['Intl Return Location'] = $transport->departureHub->name;
-                    $transports['Intl Return At'] = $transport->depart_at->toDateTimeString();
-                    $transports['Intl Return Transportation'] = $transport->name;
-                    $transports['Intl Return Transport No.'] = $transport->vessel_no;
-                }
+        collect($flights)
+            ->filter(function ($transport) {
+                return $transport->designation == 'return';
+            })
+            ->each(function ($transport) use($transports)
+            {
+                $transports['Intl Return Location'] = $transport->departureHub->name;
+                $transports['Intl Return At'] = $transport->depart_at->toDateTimeString();
+                $transports['Intl Return Transportation'] = $transport->name;
+                $transports['Intl Return Transport No.'] = $transport->vessel_no;
             });
 
         return $transports;

@@ -326,6 +326,7 @@
                 return this.PlansResource.get(params).then(function (response) {
 	                this.pagination = response.body.meta.pagination;
 	                this.plans = response.body.data;
+	                return this.plans;
                 })
 	        },
             getGroups(search, loading){
@@ -504,7 +505,23 @@
             if (this.isAdminRoute) {
                 this.getGroups();
             }
-			this.getRoomingPlans();
+			this.getRoomingPlans().then(function (plans) {
+			    let plan;
+				if (this.isAdminRoute && location.search.length > 1) {
+				    // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
+                    let search = location.search.substring(1);
+                    let searchObj = search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+                        function (key, value) {
+                            return key === "" ? value : decodeURIComponent(value)
+                        }) : {};
+                    if (searchObj.hasOwnProperty('plan')) {
+                        plan = _.findWhere(plans, {id: searchObj.plan});
+                        if (plan)
+                            this.loadManager(plan);
+                    }
+                }
+
+            });
 			this.getRoomTypes();
 
             this.$root.$on('campaign-scope', function (val) {

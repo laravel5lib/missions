@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    @forelse($reservation->transports()->whereNotNull('designation')->get() as $transport)
+    @forelse($reservation->internationalTransports() as $transport)
         <tr>
             <td class="col-xs-4">
                 {{ ucwords($transport->name) }}

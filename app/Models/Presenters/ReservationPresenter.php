@@ -32,4 +32,9 @@ trait ReservationPresenter
     {
         return (boolean) $this->trip->campaign->publish_transports;
     }
+
+    public function internationalTransports()
+    {
+        return $this->transports()->whereNotNull('designation')->orderBy('depart_at')->get();
+    }
 }

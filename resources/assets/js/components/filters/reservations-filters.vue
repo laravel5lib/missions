@@ -113,7 +113,7 @@
 					</select>
 				</div>
 
-				<div class="form-group" v-if="isAdminRoute && propertyExists('region') && campaignId">
+				<div class="form-group" v-if="isAdminRoute && propertyExists('region') && (campaignId || filters.campaign)">
 					<label>Region Assignment</label>
                     <select  class="form-control input-sm" v-model="filters.region">
                         <option value="">Any</option>
@@ -410,50 +410,61 @@
         },
 	    watch: {
             'filters': {
-                handler: function (val) {
+                handler (val, oldVal) {
                     if (this.starter)
                         return;
-                    // console.log(val);
+
+                    if (val.campaign) {
+                        if (this.campaignObj == null) {
+                            this.campaignObj = _.findWhere(this.campaignOptions, {id: val.campaign});
+                        }
+                    }
+
                     this.pagination.current_page = 1;
                     this.callback();
                 },
                 deep: true
             },
-            'campaignObj': function (val) {
+            'campaignObj' (val) {
 		        this.filters.campaign = val ? val.id : null;
-		     },
-		    'shirtSizeArr': function (val) {
+		        if (val)
+                    this.getRegions();
+            },
+            'campaignId' (val) {
+                this.getRegions();
+            },
+		    'shirtSizeArr' (val) {
 		        this.filters.shirtSize = _.pluck(val, 'id') || [];
 		     },
-		    'groupsArr': function (val) {
+		    'groupsArr' (val) {
 		        this.filters.groups = _.pluck(val, 'id') || [];
 		     },
-		    'usersArr': function (val) {
+		    'usersArr' (val) {
 		        this.filters.user = _.pluck(val, 'id') || [];
 		     },
-            'roleObj': function (val) {
+            'roleObj' (val) {
                 this.filters.role = val ? val.value : '';
             },
-            'facilitator': function (val) {
+            'facilitator' (val) {
                 if (val) {
                     this.getRoles();
                 }
             },
-            'hasRoomInPlan': function (val, oldVal) {
+            'hasRoomInPlan' (val, oldVal) {
                 if (val) {
                     this.filters.hasRoom = 'plans';
                 } else {
                     this.filters.hasRoom = null;
                 }
             },
-            'noRoomInPlan': function (val, oldVal) {
+            'noRoomInPlan' (val, oldVal) {
                 if (val) {
                     this.filters.noRoom = 'plans';
                 } else {
                     this.filters.noRoom = null;
                 }
             },
-            'hasTransportation': function (val, oldVal) {
+            'hasTransportation' (val, oldVal) {
                 if (val === 'yes') {
                     this.filters.inTransport = true;
                     this.filters.notInTransport = null;
@@ -465,7 +476,7 @@
                     this.filters.notInTransport = null;
                 }
             },
-            'traveling': function (val, oldVal) {
+            'traveling' (val, oldVal) {
                 if (this.hasTransportation === 'yes') {
                     this.filters.traveling = val;
                     this.filters.notTraveling = null;
@@ -559,8 +570,9 @@
                 }, this.$root.handleApiError);
             },
             getRegions(){
-                return this.$http.get('campaigns/'+this.campaignId+'/regions', { params: {
-                    'campaign': this.campaignId,
+                let campaign = this.campaignId || this.filters.campaign;
+                return this.$http.get('campaigns/'+campaign+'/regions', { params: {
+                    'campaign': campaign,
                     'per_page': 100,
                     'unique': true
                 }}).then(function (response) {
@@ -614,7 +626,7 @@
                 promises.push(this.getReps());
             if (this.facilitator && !this.isAdminRoute || this.teams)
                 promises.push(this.getRoles());
-            if (this.campaignId)
+            if (this.campaignId || this.filters.campaign)
                 promises.push(this.getRegions());
 
             Promise.all(promises).then(function () {

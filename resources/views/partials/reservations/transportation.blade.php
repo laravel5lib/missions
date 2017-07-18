@@ -10,8 +10,15 @@
     @forelse($reservation->internationalTransports() as $transport)
         <tr>
             <td class="col-xs-4">
-                {{ ucwords($transport->name) }}
-                <code>{{ strtoupper($transport->vessel_no) }}</code>
+                @if(Request::segment(1) == 'admin')
+                <a href="/admin/campaigns/{{ $transport->campaign_id }}/transports/{{ $transport->id }}" target="_blank">
+                    {{ ucwords($transport->name) }}
+                    <code>{{ strtoupper($transport->vessel_no) }}</code>
+                </a>
+                @else
+                    {{ ucwords($transport->name) }}
+                    <code>{{ strtoupper($transport->vessel_no) }}</code>
+                @endif
                 <br />
                 <small>
                     {{ ucwords($transport->type) }}

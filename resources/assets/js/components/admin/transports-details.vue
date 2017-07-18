@@ -13,7 +13,7 @@
 					</small>
 				</h3>
 				<p>
-					<strong>{{ transport.depart_at | moment 'MMM d, hh:mm a' false true }}</strong>
+					<strong>{{ transport.depart_at | moment 'MMM dd, hh:mm a' false true }}</strong>
 					{{ transport.departureHub.data.call_sign }}
 					<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
 					<strong>{{ transport.arrive_at | moment 'hh:mm a' false true }}</strong>

@@ -517,7 +517,7 @@ class ReservationFilter extends Filter
         })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
             return $query->where('given_names', 'LIKE', "%$first%")
                 ->orWhere('surname', 'LIKE', "%$first%");
-        });
+        })->current();
     }
 
     public function givenNames($value)

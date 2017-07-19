@@ -67,7 +67,9 @@ class ItineraryReport extends Job implements ShouldQueue
                 'Email' => $reservation->email,
                 'Type' => $reservation->trip->type,
                 'Role' => teamRole($reservation->desired_role),
-                'Group' => $reservation->trip->group->name
+                'Group' => $reservation->trip->group->name,
+                'Designation' => $reservation->designation ?
+                    implode('', array_flatten($reservation->designation->content)) : 'none',
             ];
 
             $data = collect($data)

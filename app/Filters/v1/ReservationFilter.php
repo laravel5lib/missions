@@ -557,4 +557,18 @@ class ReservationFilter extends Filter
 
         return $this->where('desired_role', $code);
     }
+
+    public function checkedIn()
+    {
+        $this->whereHas('todos', function($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
+    }
+
+    public function checkedOut()
+    {
+        $this->whereDoesntHave('todos', function($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
+    }
 }

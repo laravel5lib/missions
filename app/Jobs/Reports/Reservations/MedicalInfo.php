@@ -5,6 +5,7 @@ namespace App\Jobs\Reports\Reservations;
 use App\Jobs\Job;
 use App\Models\v1\Reservation;
 use App\Models\v1\ReservationRequirement;
+use App\Services\Reports\CSVReport;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -62,6 +63,20 @@ class MedicalInfo extends Job implements ShouldQueue
             $allergies = $requirement->document ? $requirement->document->allergies : [];
             $emergency = $requirement->document ? $requirement->document->emergency_contact : [];
 
+            if (!empty($conditions))
+                $conditions = implode(', ', $conditions->map(function ($condition) {
+                    return $condition->name
+                    . ($condition->diagnosed ? ' (Diagnosed)' : '')
+                    . ($condition->medication ? ' (Medication)' : '');
+                })->all());
+
+            if (!empty($allergies))
+                $allergies = implode(', ', $allergies->map(function ($allergy) {
+                    return $allergy->name
+                        . ($allergy->diagnosed ? ' (Diagnosed)' : '')
+                        . ($allergy->medication ? ' (Medication)' : '');
+                })->all());
+
             return [
                 'Surname' => $requirement->reservation->surname,
                 'Given Names' => $requirement->reservation->given_names,
@@ -72,8 +87,10 @@ class MedicalInfo extends Job implements ShouldQueue
                 'Weight' => $weight.' lb',
                 'Conditions' => $conditions,
                 'Allergies' => $allergies,
-                'Emergency Contact' => $emergency['name'],
-                'Emergency Phone' => $emergency['phone']
+                'Emergency Contact' => isset($emergency['name']) ? $emergency['name'] : null,
+                'Emergency Phone' => isset($emergency['phone']) ? $emergency['phone'] : null,
+                'Emergency Email' => isset($emergency['email']) ? $emergency['email'] : null,
+                'Emergency Relationship' => isset($emergency['relationship']) ? $emergency['relationship'] : null
             ];
         });
     }

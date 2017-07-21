@@ -47,7 +47,7 @@ class MedicalInfo extends Job implements ShouldQueue
 
         $data = $this->columnize($requirements);
 
-        $filename = 'reservations_basic_' . time();
+        $filename = 'reservations_medical_' . time();
 
         (new CSVReport($data, $this->user))->make($filename)->notify();
     }

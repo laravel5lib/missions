@@ -1748,8 +1748,19 @@
                 // load view state
                 if (localStorage[this.storageName]) {
                     let config = JSON.parse(localStorage[this.storageName]);
-                    if (config.currentTeam) {
-                    	this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                    if (this.isAdminRoute && location.search.length > 1) {
+                        let squad;
+                        let searchObj = this.$root.convertSearchToObject();
+                        // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
+                        if (searchObj.hasOwnProperty('squad')) {
+                            squad = _.findWhere(this.teams, {id: searchObj.squad});
+                            if (squad)
+                                this.makeTeamCurrent(squad);
+                        }
+                    } else {
+                        if (config.currentTeam) {
+                            this.makeTeamCurrent(_.findWhere(this.teams, { id: config.currentTeam}));
+                        }
                     }
                 }
             }.bind(this));

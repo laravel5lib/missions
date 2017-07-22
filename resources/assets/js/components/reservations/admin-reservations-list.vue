@@ -380,7 +380,8 @@
                     inTransport: null,
                     notInTransport: null,
                     traveling: null,
-                    notTraveling: null
+                    notTraveling: null,
+					region: '',
                 },
 				showFilters: false,
 				exportOptions: {
@@ -546,6 +547,7 @@
                         notInTransport: null,
                         traveling: null,
                         notTraveling: null,
+                        region: '',
                     }
 				});
 
@@ -597,7 +599,8 @@
                     inTransport: null,
                     notInTransport: null,
                     traveling: null,
-                    notTraveling: null
+                    notTraveling: null,
+                    region: '',
                 };
 			},
 			country(code){

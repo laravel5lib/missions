@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model.sync="filters.minDate" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.minDate|moment"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model.sync="filters.maxDate" v-if="filters"></date-picker>
+                    <date-picker :model.sync="filters.maxDate|moment"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -502,7 +502,6 @@
                     page: this.pagination.current_page,
                     sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc')
                 };
-
 
                 $.extend(params, this.filters);
 

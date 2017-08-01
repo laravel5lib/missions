@@ -264,7 +264,7 @@ class Trip extends Model
             return;
         }
 
-        $ids = $this->deadlines()->lists('id', 'id');
+        $ids = $this->deadlines()->pluck('id', 'id');
 
         foreach ($deadlines as $deadline) {
             if (! isset($deadline['id'])) {
@@ -292,7 +292,7 @@ class Trip extends Model
             return;
         }
 
-        $ids = $this->costs()->lists('id', 'id');
+        $ids = $this->costs()->pluck('id', 'id');
 
         foreach ($costs as $cost) {
             if (! isset($cost['id'])) {
@@ -320,7 +320,7 @@ class Trip extends Model
             return;
         }
 
-        $ids = $this->requirements()->lists('id', 'id');
+        $ids = $this->requirements()->pluck('id', 'id');
 
         foreach ($requirements as $requirement) {
             if (! isset($requirement['id'])) {

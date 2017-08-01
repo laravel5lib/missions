@@ -24,7 +24,7 @@ class ProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                  => 'required|unique:projects,name,' . $this->route('projects'),
+            'name'                  => 'required|unique:projects,name,' . $this->route('project'),
             'project_initiative_id' => 'required|exists:project_initiatives,id',
             'sponsor_id'            => 'required|string',
             'sponsor_type'          => 'required|in:users,groups',

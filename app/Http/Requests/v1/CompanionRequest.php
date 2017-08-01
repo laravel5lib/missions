@@ -24,7 +24,7 @@ class CompanionRequest extends FormRequest
     public function rules()
     {
         // return [];
-        $reservation = $this->route('reservations');
+        $reservation = $this->route('reservation');
 
         return [
             'companion_reservation_id' => 'required|exists:reservations,id,id,!'.$reservation.'|is_compatible:'.$reservation.'|unique:companions,companion_id,null,reservation_id,reservation_id,'.$reservation.'|within_companion_limit:'.$reservation,

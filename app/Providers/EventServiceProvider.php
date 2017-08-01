@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\v1\Campaign;
 use App\Models\v1\Cost;
 use App\Models\v1\Todo;
 use App\Models\v1\Trip;
@@ -10,12 +11,13 @@ use App\Models\v1\Group;
 use App\Models\v1\Upload;
 use App\Models\v1\Payment;
 use App\Models\v1\Project;
-use App\Models\v1\Campaign;
-use App\Models\v1\Referral;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\TripInterest;
 use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use App\Models\v1\Trip;
+use App\Models\v1\User;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -41,7 +43,7 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     /**
-     * The subscriber classes to register.
+     * Register any events for your application.
      *
      * @var array
      */
@@ -54,12 +56,11 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Register any other events for your application.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
-    public function boot(DispatcherContract $events)
+    public function boot()
     {
-        parent::boot($events);
+        parent::boot();
 
         Trip::created(function ($trip) {
             $name = generateFundName($trip);

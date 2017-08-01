@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use App\Models\v1\MedicalRelease;
 use League\Fractal\TransformerAbstract;
 

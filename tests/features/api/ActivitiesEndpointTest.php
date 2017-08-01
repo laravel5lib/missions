@@ -15,7 +15,7 @@ class ActivitiesEndpointTest extends TestCase
              ->assertResponseOk()
              ->seeJsonStructure([
                 'data' => [
-                    '*' => [ 
+                    '*' => [
                         'id',
                         'name',
                         'description',
@@ -27,7 +27,7 @@ class ActivitiesEndpointTest extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -50,7 +50,7 @@ class ActivitiesEndpointTest extends TestCase
                     'updated_at',
                     'deleted_at'
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

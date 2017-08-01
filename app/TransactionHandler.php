@@ -6,7 +6,8 @@ use App\Models\v1\Fund;
 use App\Models\v1\Transaction;
 use App\Services\PaymentGateway;
 
-class TransactionHandler {
+class TransactionHandler
+{
 
     public $transaction;
     public $merchant;

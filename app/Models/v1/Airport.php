@@ -27,5 +27,4 @@ class Airport extends Model
             $builder->where('iata', '<>', '')->whereNotNull('iata');
         });
     }
-
 }

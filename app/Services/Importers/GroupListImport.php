@@ -2,13 +2,13 @@
 
 namespace App\Services\Importers;
 
-class GroupListImport extends ListImport {
+class GroupListImport extends ListImport
+{
 
     /**
      * File name
-     * 
+     *
      * @var string
      */
     public $filename = 'groups';
-
 }

@@ -7,7 +7,8 @@ use App\Models\v1\Room as RoomModel;
 use App\Repositories\EloquentRepository;
 use App\Repositories\Rooming\Interfaces\Room;
 
-class EloquentRoom extends EloquentRepository implements Room {
+class EloquentRoom extends EloquentRepository implements Room
+{
 
     protected $model;
 
@@ -40,8 +41,7 @@ class EloquentRoom extends EloquentRepository implements Room {
 
     public function delete($id)
     {
-        DB::transaction(function () use ($id) 
-        {
+        DB::transaction(function () use ($id) {
             $this->getById($id)->occupants()->detach();
             $this->model->delete($id);
         });

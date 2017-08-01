@@ -128,10 +128,10 @@ class InfluencersController extends Controller
 
     /**
      * Import essays.
-     * 
-     * @param  ImportRequest   $request 
-     * @param  EssayListImport $import  
-     * @return response                   
+     *
+     * @param  ImportRequest   $request
+     * @param  EssayListImport $import
+     * @return response
      */
     public function import(ImportRequest $request, EssayListImport $import)
     {
@@ -139,5 +139,4 @@ class InfluencersController extends Controller
 
         return $this->response()->created(null, $response);
     }
-
 }

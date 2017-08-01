@@ -32,8 +32,7 @@ class CampaignRequest extends FormRequest
             'page_url'     => 'required_with:published_at|string|unique:slugs,url'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $required = [
                 'name'         => 'sometimes|required|max:100',
                 'country_code' => 'sometimes|required|string',

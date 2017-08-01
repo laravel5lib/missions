@@ -33,7 +33,7 @@ class TeamType extends Model
      */
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = strtolower( trim($value) );
+        $this->attributes['name'] = strtolower(trim($value));
     }
 
     /**

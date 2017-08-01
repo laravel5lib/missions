@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class TeamRole {
+class TeamRole
+{
 
     protected static $leadership = [
         'GPLR' => 'Group Leader',
@@ -71,8 +72,8 @@ class TeamRole {
 
     /**
      * Return all roles
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function all()
     {
@@ -84,8 +85,8 @@ class TeamRole {
 
     /**
      * Return leadership roles
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function leadership()
     {
@@ -94,8 +95,8 @@ class TeamRole {
 
     /**
      * Return general roles
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function general()
     {
@@ -104,8 +105,8 @@ class TeamRole {
 
     /**
      * Return medical roles
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function medical()
     {
@@ -114,13 +115,13 @@ class TeamRole {
 
     /**
      * Return a single role by code
-     * 
-     * @param  sting $code 
-     * @return array       
+     *
+     * @param  sting $code
+     * @return array
      */
     public static function get($code)
     {
-        $result = array_where(static::all(), function($key, $value) use($code) {
+        $result = array_where(static::all(), function ($key, $value) use ($code) {
             return $key === strtoupper($code);
         });
 
@@ -129,9 +130,9 @@ class TeamRole {
 
     /**
      * Return a single role by code
-     * 
-     * @param  sting $code 
-     * @return array       
+     *
+     * @param  sting $code
+     * @return array
      */
     public static function get_code($name)
     {
@@ -143,13 +144,14 @@ class TeamRole {
             $name = 'Medical Student';
         }
 
-        $result = array_where(static::all(), function($key, $value) use($name) {
+        $result = array_where(static::all(), function ($key, $value) use ($name) {
             return $value === trim($name);
         });
 
-        if (! $result) return 'MISS';
+        if (! $result) {
+            return 'MISS';
+        }
 
         return array_keys($result)[0];
     }
-    
 }

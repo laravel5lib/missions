@@ -9,18 +9,19 @@
 /**
  * Dashboard Routes
  */
-$this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'dashboard' ], function ()
-{
+$this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'dashboard' ], function () {
     $this->get('/', function () {
         return view('dashboard.index');
     });
 
-    $this->get('settings', function() {
+    $this->get('settings', function () {
         return view('dashboard.settings');
     });
 
-    $this->get('reports', function() {
-        if( ! auth()->user()->managing()->count()) abort(403);
+    $this->get('reports', function () {
+        if (! auth()->user()->managing()->count()) {
+            abort(403);
+        }
         return view('dashboard.reports.index');
     });
 
@@ -31,7 +32,7 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
     $this->get('groups/{groupId}/rooms', 'Dashboard\GroupsController@rooms');
 
     // Records Routes...
-    $this->get('records/{tab?}', function($tab = 'passports') {
+    $this->get('records/{tab?}', function ($tab = 'passports') {
         return view('dashboard.'.$tab.'.index', compact('tab'));
     });
     $this->resource('records/passports', 'Dashboard\PassportsController', [
@@ -73,17 +74,19 @@ $this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'das
  */
 
 // redirects
-$this->get('/signup/{slug}', function($slug) {
+$this->get('/signup/{slug}', function ($slug) {
     return redirect('/'.$slug.'/signup');
 });
-$this->get('/campaigns/{slug}', function($slug) {
+$this->get('/campaigns/{slug}', function ($slug) {
     return redirect('/'.$slug);
 });
-$this->get('/search', function() {
+$this->get('/search', function () {
     return redirect('/fundraisers');
 });
-$this->get('/go/{slug?}', function($slug = null) {
-    if (! $slug) return redirect('/fundraisers');
+$this->get('/go/{slug?}', function ($slug = null) {
+    if (! $slug) {
+        return redirect('/fundraisers');
+    }
     return redirect('/'.$slug);
 });
 

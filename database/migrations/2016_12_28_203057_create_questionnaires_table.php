@@ -20,8 +20,7 @@ class CreateQuestionnairesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('questionnaires', function($table)
-        {
+        Schema::table('questionnaires', function ($table) {
             $table->foreign('reservation_id')
                 ->references('id')->on('reservations')
                 ->onDelete('cascade');

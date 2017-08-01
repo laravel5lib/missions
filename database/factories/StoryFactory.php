@@ -3,8 +3,7 @@
 /**
  * Generic User Story
  */
-$factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Story::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->sentence,
         'content' => file_get_contents(resource_path('assets/sample_story.md')),
@@ -16,8 +15,7 @@ $factory->define(App\Models\v1\Story::class, function(Faker\Generator $faker)
 /**
  * Generic Group Story
  */
-$factory->defineAs(App\Models\v1\Story::class, 'group', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Story::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $story = $factory->raw(App\Models\v1\Story::class);
 
     return array_merge($story, [
@@ -25,4 +23,3 @@ $factory->defineAs(App\Models\v1\Story::class, 'group', function(Faker\Generator
         'author_id' => $faker->uuid
     ]);
 });
-

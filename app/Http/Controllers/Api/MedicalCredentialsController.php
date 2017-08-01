@@ -20,22 +20,22 @@ class MedicalCredentialsController extends Controller
 
     /**
      * Get a list of medical credentials
-     * 
+     *
      * @return response
      */
     public function index(Request $request)
     {
-       $credentials = $this->credential
+        $credentials = $this->credential
                            ->medical()
                            ->filter($request->all())
                            ->paginate($request->get('per_page', 10));
 
-       return $this->response->paginator($credentials, new CredentialTransformer);
+        return $this->response->paginator($credentials, new CredentialTransformer);
     }
 
     /**
      * Get a medical credentials by it's id
-     * 
+     *
      * @param  String $id
      * @return response
      */
@@ -43,12 +43,12 @@ class MedicalCredentialsController extends Controller
     {
         $credential = $this->credential->medical()->findOrFail($id);
 
-       return $this->response->item($credential, new CredentialTransformer);
+        return $this->response->item($credential, new CredentialTransformer);
     }
 
     /**
      * Create a new medical credential
-     * 
+     *
      * @param  MedicalCredentialRequest $request
      * @return response
      */
@@ -72,7 +72,7 @@ class MedicalCredentialsController extends Controller
 
     /**
      * Update a medical credential
-     * 
+     *
      * @param  MedicalCredentialRequest $request
      * @param  String                   $id
      * @return response
@@ -99,7 +99,7 @@ class MedicalCredentialsController extends Controller
 
     /**
      * Soft delete a medical credential
-     * 
+     *
      * @param  String $id
      * @return response
      */

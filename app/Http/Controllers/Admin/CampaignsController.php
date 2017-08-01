@@ -48,8 +48,9 @@ class CampaignsController extends Controller
 
         $campaign = $this->api->get('campaigns/'.$id);
 
-        if (!is_null($tabId))
+        if (!is_null($tabId)) {
             return view('admin.campaigns.tabs.'.$tab.'.details', compact('campaign', 'tab', 'tabId'));
+        }
 
         return view('admin.campaigns.tabs.'.$tab, compact('campaign', 'tab'));
     }

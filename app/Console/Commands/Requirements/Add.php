@@ -55,7 +55,6 @@ class Add extends Command
         ]);
 
         if ($requester == 'reservation') {
-
             $reservationId = $this->ask('Please enter a reservation ID:');
             $days = $this->ask('How many days grace period?', $requirement->grace_period);
 
@@ -69,8 +68,7 @@ class Add extends Command
                             'id'            => Uuid::uuid4()
                         ]
                     ], false);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->error('Unable to add requirement!');
             }
 

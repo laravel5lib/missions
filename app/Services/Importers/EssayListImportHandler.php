@@ -2,20 +2,21 @@
 
 namespace App\Services\Importers;
 
-class EssayListImportHandler extends ImportHandler {
+class EssayListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Essay';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
      * ['db_col' => 'doc_col']
-     * 
+     *
      * @var array
      */
     public $duplicates = ['author_name' => 'author_name', 'subject' => 'subject'];
@@ -33,5 +34,4 @@ class EssayListImportHandler extends ImportHandler {
             'updated_at' => $referral->updated_at
         ];
     }
-
 }

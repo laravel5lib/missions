@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Accommodation;
 use League\Fractal\TransformerAbstract;
 
-class AccommodationTransformer extends TransformerAbstract {
+class AccommodationTransformer extends TransformerAbstract
+{
 
     /**
      * List of resources available to include
@@ -72,7 +73,7 @@ class AccommodationTransformer extends TransformerAbstract {
 
     private function getAvailableRooms(Accommodation $accommodation)
     {
-        $available = $accommodation->availableRoomTypes->keyBy('name')->map(function($type) {
+        $available = $accommodation->availableRoomTypes->keyBy('name')->map(function ($type) {
             return $type->pivot->available_rooms;
         });
 

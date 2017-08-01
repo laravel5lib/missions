@@ -47,7 +47,7 @@ class BasicReport extends Job implements ShouldQueue
 
     private function columnize($reservations)
     {
-        return $reservations->map(function($reservation) {
+        return $reservations->map(function ($reservation) {
             return [
                 'given_names' => $reservation->given_names,
                 'surname' => $reservation->surname,
@@ -76,7 +76,7 @@ class BasicReport extends Job implements ShouldQueue
                 'start_date' => $reservation->trip->started_at->format('M d, Y'),
                 'end_date' => $reservation->trip->ended_at->format('M d, Y'),
                 'desired_role' => teamRole($reservation->desired_role),
-                'designation' => $reservation->designation ? 
+                'designation' => $reservation->designation ?
                     implode('', array_flatten($reservation->designation->content)) : 'none',
                 'Registered' => $reservation->created_at->timezone('America/Detroit')->format('F d, Y h:i a'),
                 'Updated' => $reservation->updated_at->timezone('America/Detroit')->format('F d, Y h:i a')

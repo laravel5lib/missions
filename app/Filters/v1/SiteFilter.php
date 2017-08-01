@@ -49,7 +49,9 @@ class SiteFilter extends Filter
      */
     public function reached($reached)
     {
-        if(count($reached) < 2) return $this;
+        if (count($reached) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('total_reached', $reached);
     }
@@ -62,9 +64,10 @@ class SiteFilter extends Filter
      */
     public function decisions($decisions)
     {
-        if(count($decisions) < 2) return $this;
+        if (count($decisions) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('total_decisions', $decisions);
     }
-
 }

@@ -31,5 +31,4 @@ class CampaignPromoHandler
 
         return $promos;
     }
-
 }

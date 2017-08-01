@@ -3,8 +3,7 @@
 /**
  * Generic User Slug
  */
-$factory->define(App\Models\v1\Slug::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Slug::class, function (Faker\Generator $faker) {
     return [
         'url' => $faker->unique()->slug,
         'slugable_type' => 'users',
@@ -15,8 +14,7 @@ $factory->define(App\Models\v1\Slug::class, function (Faker\Generator $faker)
 /**
  * Group Slug
  */
-$factory->defineAs(App\Models\v1\Slug::class, 'group', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Slug::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $slug = $factory->raw(App\Models\v1\Slug::class);
 
     return array_merge($slug, [
@@ -28,8 +26,7 @@ $factory->defineAs(App\Models\v1\Slug::class, 'group', function (Faker\Generator
 /**
  * Campaign Slug
  */
-$factory->defineAs(App\Models\v1\Slug::class, 'campaign', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Slug::class, 'campaign', function (Faker\Generator $faker) use ($factory) {
     $slug = $factory->raw(App\Models\v1\Slug::class);
 
     return array_merge($slug, [
@@ -37,4 +34,3 @@ $factory->defineAs(App\Models\v1\Slug::class, 'campaign', function (Faker\Genera
         'slugable_id' => $faker->uuid
     ]);
 });
-

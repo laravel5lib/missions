@@ -10,21 +10,21 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TripTest extends TestCase
 {
-    /** 
+    /**
      * @test
      */
     function trip_can_get_a_starting_cost()
     {
         $trip = factory(App\Models\v1\Trip::class)->create();
 
-        $trip->each(function($t) {
+        $trip->each(function ($t) {
             $t->costs()->saveMany([
                 factory(App\Models\v1\Cost::class, 'deposit')->make([
-                    'amount' => 100, 
+                    'amount' => 100,
                     'active_at' => Carbon::yesterday()
                 ]),
                 factory(App\Models\v1\Cost::class, 'general')->make([
-                    'amount' => 2000, 
+                    'amount' => 2000,
                     'active_at' => Carbon::yesterday()
                 ])
             ]);
@@ -33,21 +33,21 @@ class TripTest extends TestCase
         $this->assertSame(210000, $trip->starting_cost);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_can_get_starting_cost_in_dollars()
     {
         $trip = factory(App\Models\v1\Trip::class)->create();
 
-        $trip->each(function($t) {
+        $trip->each(function ($t) {
             $t->costs()->saveMany([
                 factory(App\Models\v1\Cost::class, 'deposit')->make([
-                    'amount' => 100, 
+                    'amount' => 100,
                     'active_at' => Carbon::yesterday()
                 ]),
                 factory(App\Models\v1\Cost::class, 'general')->make([
-                    'amount' => 2000, 
+                    'amount' => 2000,
                     'active_at' => Carbon::yesterday()
                 ])
             ]);
@@ -56,7 +56,7 @@ class TripTest extends TestCase
         $this->assertSame('2100.00', $trip->startingCostInDollars());
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_no_spots_is_closed()
@@ -69,7 +69,7 @@ class TripTest extends TestCase
         $this->assertEquals('closed', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_past_closed_at_date_is_closed()
@@ -82,7 +82,7 @@ class TripTest extends TestCase
         $this->assertEquals('closed', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_no_published_at_date_is_draft()
@@ -96,7 +96,7 @@ class TripTest extends TestCase
         $this->assertEquals('draft', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_future_published_at_date_is_scheduled()
@@ -110,7 +110,7 @@ class TripTest extends TestCase
         $this->assertEquals('scheduled', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_past_published_at_date_is_active()
@@ -173,5 +173,4 @@ class TripTest extends TestCase
 
         $this->assertEquals(10000, $reward);
     }
-
 }

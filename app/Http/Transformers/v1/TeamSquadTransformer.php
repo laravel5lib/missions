@@ -8,7 +8,7 @@ use App\Models\v1\TeamMember;
 use App\Models\v1\Reservation;
 use League\Fractal\TransformerAbstract;
 
-class TeamSquadTransformer extends TransformerAbstract 
+class TeamSquadTransformer extends TransformerAbstract
 {
     private $validParams = ['noRoom', 'hasRoom'];
 
@@ -57,13 +57,11 @@ class TeamSquadTransformer extends TransformerAbstract
     public function includeMembers(TeamSquad $squad, ParamBag $params = null)
     {
         // check for optional parameters :param(value1|value2)
-        if ( ! is_null($params)) {
-            
+        if (! is_null($params)) {
             $filters = [];
 
             // loop through parameters
-            foreach($params as $key => $value)
-            {   
+            foreach ($params as $key => $value) {
                 if (isset($value[1])) {
                     // if a second value is passed
                     $filters[$key] = $value[0] . '|' . $value[1];
@@ -75,7 +73,6 @@ class TeamSquadTransformer extends TransformerAbstract
 
             // get filtered members
             $members = $squad->members()->filter($filters)->get();
-        
         } else {
             // get members without filter parameters
             $members = $squad->members;

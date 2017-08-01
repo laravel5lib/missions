@@ -53,13 +53,15 @@ class SendReservationConfirmationEmail extends Command
 
         $reservation = $this->reservation->find($id);
 
-        if ( ! $reservation) $this->error('The reservation does not exist. Nothing sent.');
+        if (! $reservation) {
+            $this->error('The reservation does not exist. Nothing sent.');
+        }
 
         if ($reservation) {
             dispatch(new SendEmail($reservation, $email));
             $this->info('Done. Confirmation email processed.');
 
-            if($this->option('notify')) {
+            if ($this->option('notify')) {
                 dispatch(new SendFacilitatorNotificationEmail($reservation));
                 $this->info('Facilitators have been notified.');
             }

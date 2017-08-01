@@ -19,14 +19,14 @@ class RoomCount
                   return count($room);
               })->all();
 
-        return collect( array_merge($this->getRoomTypes(), $roomCounts) )
+        return collect(array_merge($this->getRoomTypes(), $roomCounts))
                     ->put('total', $this->getRooms()->count())
                     ->all();
     }
 
     public function byType($typeId)
     {
-        return $this->getRooms()->filter(function($room) use($typeId) {
+        return $this->getRooms()->filter(function ($room) use ($typeId) {
             return $room->room_type_id === $typeId;
         })->groupBy('type.name')->map(function ($room) {
             return count($room);
@@ -40,14 +40,14 @@ class RoomCount
 
     public function getRoomTypes()
     {
-       $types = RoomType::where('campaign_id', $this->roomable->campaign->id)->get();
+        $types = RoomType::where('campaign_id', $this->roomable->campaign->id)->get();
 
-       return $this->getDefaultCounts($types)->all();
+        return $this->getDefaultCounts($types)->all();
     }
 
     public function getDefaultCounts($types)
     {
-        return $types->keyBy('name')->map(function($name) {
+        return $types->keyBy('name')->map(function ($name) {
             return 0;
         });
     }

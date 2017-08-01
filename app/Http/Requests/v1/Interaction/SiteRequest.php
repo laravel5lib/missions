@@ -4,7 +4,8 @@ namespace App\Http\Requests\v1\Interaction;
 
 use App\Http\Requests\Request;
 
-class SiteRequest extends Request {
+class SiteRequest extends Request
+{
 
     /**
      * Determine if the user is authorized to make this request.

@@ -38,7 +38,9 @@ class ExamFilter extends Filter
      */
     public function parties($parties)
     {
-        if(count($parties) < 2) return $this;
+        if (count($parties) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('party_size', $parties);
     }

@@ -14,7 +14,7 @@ use App\Http\Requests\v1\ExportRequest;
 trait Exportable
 {
     public function export(ExportRequest $request)
-    {   
+    {
         $this->getExportHandler($request);
 
         return $this->response()->created(null, [

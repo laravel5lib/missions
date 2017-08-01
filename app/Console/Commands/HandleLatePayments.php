@@ -52,7 +52,7 @@ class HandleLatePayments extends Command
         } else {
             $reservations = $this->reservation->current()->get();
 
-            $reservations->each(function($reservation) {
+            $reservations->each(function ($reservation) {
                 $reservation->payments()->bump() ?
                     $this->info('Costs updated for reservation id: '. $reservation->id) :
                     $this->error('No changes made to reservation id: '. $reservation->id);

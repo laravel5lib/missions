@@ -54,14 +54,12 @@ class Remove extends Command
         ]);
 
         if ($requester == 'reservation') {
-
             $reservationId = $this->ask('Please enter a reservation ID:');
 
             try {
                 $requirement->reservations()
                     ->detach($reservationId);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->error('Unable to remove requirement!');
             }
 

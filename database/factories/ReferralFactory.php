@@ -3,8 +3,7 @@
 /**
  * Generic Pastoral Referral
  */
-$factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker) {
     return [
         'user_id' => $faker->uuid,
         'applicant_name' => $faker->firstName. ' '. $faker->lastName,
@@ -19,7 +18,7 @@ $factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker
         ],
         'response' => [
 
-            [ 
+            [
                 'q' => 'How long have you known the applicant?',
                 'a' => '',
                 'type' => 'textarea'
@@ -51,8 +50,7 @@ $factory->define(App\Models\v1\Referral::class, function (Faker\Generator $faker
 /**
  * Response to Generic Pastoral Referral
  */
-$factory->defineAs(App\Models\v1\Referral::class, 'response', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Referral::class, 'response', function (Faker\Generator $faker) use ($factory) {
     $referral = $factory->raw(App\Models\v1\Referral::class);
 
     return array_merge($referral, [
@@ -88,4 +86,3 @@ $factory->defineAs(App\Models\v1\Referral::class, 'response', function (Faker\Ge
         ]
     ]);
 });
-

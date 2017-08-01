@@ -33,8 +33,7 @@ class CardRequest extends FormRequest
             'zip'       => 'required_with:number'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $required = [
                 'card_id'    => 'sometimes|required_without:number',
                 'cardholder' => 'sometimes|required_without:card_id|string',

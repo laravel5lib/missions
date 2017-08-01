@@ -31,7 +31,7 @@ class Passenger extends Model
         parent::boot();
 
         // only get passenger with active reservation
-        static::addGlobalScope('active', function(Builder $builder) {
+        static::addGlobalScope('active', function (Builder $builder) {
             $builder->has('reservation');
         });
     }
@@ -69,14 +69,16 @@ class Passenger extends Model
     {
         $transport = Transport::with('passengers')->find($transportId);
 
-        if (in_array($reservationId, $transport->passengers->pluck('reservation_id')->all()))
+        if (in_array($reservationId, $transport->passengers->pluck('reservation_id')->all())) {
             abort(422, 'Passenger is already on this transport.');
+        }
 
         $reservation = Reservation::find($reservationId);
         $designations = $reservation->transports->pluck('designation')->all();
 
-        if (in_array($transport->designation, $designations))
+        if (in_array($transport->designation, $designations)) {
             abort(422, "Passenger is already on a $transport->designation transport");
+        }
 
         return true;
     }

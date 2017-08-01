@@ -31,7 +31,7 @@ class RegionsEndpointTest extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class RegionsEndpointTest extends TestCase
     {
         $campaign = factory(Campaign::class)->create();
         $region = factory(Region::class)->create([
-            'campaign_id' => $campaign->id, 
+            'campaign_id' => $campaign->id,
             'name' => 'New Region',
             'callsign' => 'Red'
         ]);

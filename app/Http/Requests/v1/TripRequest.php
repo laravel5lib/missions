@@ -35,8 +35,7 @@ class TripRequest extends FormRequest
             'public'       => 'required|boolean',
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $required = [
                 'campaign_id'  => 'sometimes|required|exists:campaigns,id',
                 'group_id'     => 'sometimes|required|exists:groups,id',

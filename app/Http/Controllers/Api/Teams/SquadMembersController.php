@@ -20,7 +20,7 @@ class SquadMembersController extends Controller
 
     /**
      * Get all squad members.
-     * 
+     *
      * @param  Request $request
      * @param  String  $squadId
      * @return Response
@@ -38,7 +38,7 @@ class SquadMembersController extends Controller
 
     /**
      * Get a specific squad member.
-     * 
+     *
      * @param  String $squadId
      * @param  String $memberId
      * @return Response
@@ -52,7 +52,7 @@ class SquadMembersController extends Controller
 
     /**
      * Add one or many members to squad.
-     * 
+     *
      * @param  SquadMemberRequest $request
      * @param  String             $squadId
      * @return Response
@@ -64,7 +64,6 @@ class SquadMembersController extends Controller
         $members = [ $request->get('id') => ['leader' => $request->get('leader', false)] ];
 
         if ($request->has('members')) {
-
             $members = collect($request->json('members'))->keyBy('id')->map(function ($member) {
                 return ['leader' => collect($member)->get('leader', false)];
             })->all();
@@ -77,8 +76,7 @@ class SquadMembersController extends Controller
         $members = $squad->members()->get();
 
         // We need to associate any new groups from added members with the team
-        foreach($members as $member)
-        {
+        foreach ($members as $member) {
             $squad->team->groups()->sync(['teamable_id' => $member->trip->group_id], false);
         }
 
@@ -111,8 +109,7 @@ class SquadMembersController extends Controller
         $squad = $this->squad->findOrFail($squadId);
 
         // We need to remove any groups from the team that don't have members
-        if ($squad->isLastMemberOfTravelGroup($memberId)) 
-        {
+        if ($squad->isLastMemberOfTravelGroup($memberId)) {
             $member = $squad->members()->findOrFail($memberId);
 
             $squad->team->groups()->detach($member->trip->group_id);

@@ -3,8 +3,7 @@
 /**
  * Generic Campaign
  */
-$factory->define(App\CampaignTransport::class, function (Faker\Generator $faker)
-{
+$factory->define(App\CampaignTransport::class, function (Faker\Generator $faker) {
     return [
         'type' => $faker->randomElement(['flight', 'train', 'bus', 'vehicle']),
         'name' => $faker->sentence(2),

@@ -20,7 +20,7 @@ class RoomTypesEndpoint extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

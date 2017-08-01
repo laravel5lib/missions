@@ -40,9 +40,9 @@ class PromotionalsController extends Controller
 
     public function store(PromotionalRequest $request)
     {
-       $promo = $this->getPromoHandler($request)->create($request);
+        $promo = $this->getPromoHandler($request)->create($request);
 
-       return $this->response->item($promo, new PromotionalTransformer);
+        return $this->response->item($promo, new PromotionalTransformer);
     }
 
     public function update($id, PromotionalRequest $request)
@@ -87,7 +87,7 @@ class PromotionalsController extends Controller
 
     /**
      * Get the promotional type handler
-     * 
+     *
      * @return mixed
      */
     private function getPromoHandler($request)

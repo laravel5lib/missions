@@ -13,18 +13,17 @@ class InjectJwtToken
 
     public function handle($request, Closure $next)
     {
-      if ($request instanceof InternalRequest) {
-        if($request->user()) {
-          
-          $token = JWTAuth::fromUser($request->user());
-          $request->headers->set('authorization', sprintf('Bearer %s', $token));
+        if ($request instanceof InternalRequest) {
+            if ($request->user()) {
+                $token = JWTAuth::fromUser($request->user());
+                $request->headers->set('authorization', sprintf('Bearer %s', $token));
 
-          Cookie::queue('api_token', sprintf('Bearer %s', $token), 60, '/', null, false, false);
+                Cookie::queue('api_token', sprintf('Bearer %s', $token), 60, '/', null, false, false);
 
-          return $next($request);
+                return $next($request);
+            }
         }
-      }
 
-      return$next($request);
+        return$next($request);
     }
 }

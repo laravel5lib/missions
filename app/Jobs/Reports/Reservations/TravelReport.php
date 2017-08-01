@@ -40,10 +40,15 @@ class TravelReport extends Job implements ShouldQueue
     {
         $reservations = $reservation->filter(array_filter($this->request))
                              ->with(
-                                 'requirements.document', 'trip.group',
-                                 'trip.campaign', 'trip.rep', 'rep',
-                                 'designation', 'squads.team.regions',
-                                 'transports.departureHub', 'transports.arrivalHub'
+                                 'requirements.document',
+                                 'trip.group',
+                                 'trip.campaign',
+                                 'trip.rep',
+                                 'rep',
+                                 'designation',
+                                 'squads.team.regions',
+                                 'transports.departureHub',
+                                 'transports.arrivalHub'
                              )
                              ->get();
 
@@ -63,7 +68,7 @@ class TravelReport extends Job implements ShouldQueue
     private function columnize($reservations)
     {
 
-        return $reservations->map(function($reservation) {
+        return $reservations->map(function ($reservation) {
             $data = [
                 'First Name' => $reservation->given_names,
                 'Last Name' => $reservation->surname,
@@ -93,7 +98,6 @@ class TravelReport extends Job implements ShouldQueue
                         ->all();
 
             return $data;
-
         })->all();
     }
 
@@ -149,9 +153,11 @@ class TravelReport extends Job implements ShouldQueue
             'Departure Transport No.' => null
         ]);
 
-        if (!$itinerary) return $travel;
+        if (!$itinerary) {
+            return $travel;
+        }
 
-        $itinerary->activities->each(function($act) use($travel) {
+        $itinerary->activities->each(function ($act) use ($travel) {
             if ($act->type->name == 'arrival') {
                 $travel['Arrival Method'] = $act->transports->first() ? $act->transports->first()->type : null;
                 $travel['Arrival Location'] = $act->hubs->first() ? $act->hubs->first()->name : null;
@@ -199,8 +205,7 @@ class TravelReport extends Job implements ShouldQueue
             ->filter(function ($transport) {
                 return $transport->designation == 'outbound';
             })
-            ->each(function ($transport) use($transports)
-            {
+            ->each(function ($transport) use ($transports) {
                 $transports['Intl Departure Location'] = $transport->departureHub->name;
                 $transports['Intl Departure At'] = $transport->depart_at->toDateTimeString();
                 $transports['Intl Departure Transportation'] = $transport->name;
@@ -211,8 +216,7 @@ class TravelReport extends Job implements ShouldQueue
             ->filter(function ($transport) {
                 return $transport->designation == 'return';
             })
-            ->each(function ($transport) use($transports)
-            {
+            ->each(function ($transport) use ($transports) {
                 $transports['Intl Return Location'] = $transport->departureHub->name;
                 $transports['Intl Return At'] = $transport->depart_at->toDateTimeString();
                 $transports['Intl Return Transportation'] = $transport->name;

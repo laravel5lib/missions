@@ -30,7 +30,7 @@ class AccountingTablesSeeder extends Seeder
             'MMC:Campus'
         ]);
         
-        $classes->each(function($class) {
+        $classes->each(function ($class) {
             factory(App\Models\v1\AccountingClass::class)->create([
                 'name' => $class
             ]);
@@ -41,7 +41,7 @@ class AccountingTablesSeeder extends Seeder
             'General Donation'
         ]);
         
-        $items->each(function($item) {
+        $items->each(function ($item) {
             factory(App\Models\v1\AccountingItem::class)->create([
                 'name' => $item
             ]);

@@ -3,8 +3,7 @@
 /**
  * Generic Visa
  */
-$factory->define(App\Models\v1\Visa::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Visa::class, function (Faker\Generator $faker) {
     return [
         'given_names'  => $faker->firstName . ' ' . $faker->firstName,
         'surname'      => $faker->lastName,
@@ -20,8 +19,7 @@ $factory->define(App\Models\v1\Visa::class, function (Faker\Generator $faker)
 /**
  * Expired Visa
  */
-$factory->defineAs(App\Models\v1\Visa::class, 'expired', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Visa::class, 'expired', function (Faker\Generator $faker) use ($factory) {
     $visa = $factory->raw(App\Models\v1\Visa::class);
 
     return array_merge($visa, [
@@ -29,4 +27,3 @@ $factory->defineAs(App\Models\v1\Visa::class, 'expired', function (Faker\Generat
         'expires_at'   => \Carbon\Carbon::yesterday(),
     ]);
 });
-

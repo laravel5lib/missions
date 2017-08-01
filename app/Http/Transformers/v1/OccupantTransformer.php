@@ -6,7 +6,8 @@ use App\Models\v1\Reservation;
 use League\Fractal\TransformerAbstract;
 use League\Fractal\ParamBag;
 
-class OccupantTransformer extends TransformerAbstract {
+class OccupantTransformer extends TransformerAbstract
+{
 
     private $validParams = ['status', 'type'];
 
@@ -38,7 +39,7 @@ class OccupantTransformer extends TransformerAbstract {
             ],
             'status'           => $occupant->status,
             'travel_group'        => $occupant->trip->group->name,
-            'arrival_designation' => $occupant->designation ? 
+            'arrival_designation' => $occupant->designation ?
                 implode('', array_flatten($occupant->designation->content)) : 'none',
             'room_leader'      => (bool) $occupant->pivot->room_leader,
             'created_at'       => $occupant->created_at->toDateTimeString(),
@@ -51,7 +52,7 @@ class OccupantTransformer extends TransformerAbstract {
             ]
         ];
 
-        if($occupant->pivot) {
+        if ($occupant->pivot) {
             $data['relationship'] = $occupant->pivot->relationship;
         }
 
@@ -94,27 +95,24 @@ class OccupantTransformer extends TransformerAbstract {
     public function includeCosts(Reservation $reservation, ParamBag $params = null)
     {
         // Optional params validation
-        if ( ! is_null($params)) {
+        if (! is_null($params)) {
             $this->validateParams($params);
 
             $costs = [];
 
-            if ($params->get('status') && in_array('active', $params->get('status')))
-            {
+            if ($params->get('status') && in_array('active', $params->get('status'))) {
                 $active = $reservation->activeCosts;
 
                 $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                $costs = $active->reject(function ($value, $key) use ($maxDate) {
                     return $value->type == 'incremental' && $value->active_at < $maxDate;
                 });
             }
 
-            if ($params->get('type'))
-            {
+            if ($params->get('type')) {
                 $costs = $reservation->costs()->where('type', $params->get('type'))->get();
             }
-
         } else {
             $costs = $reservation->costs;
         }

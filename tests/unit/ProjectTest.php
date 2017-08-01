@@ -13,24 +13,24 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ProjectTest extends TestCase
 {
-    /** 
+    /**
      * @test
      */
     function update_fundraiser_goal_amount_on_cost_changes()
     {
         $project = factory(Project::class)->create([
-            'project_initiative_id' => function() {
+            'project_initiative_id' => function () {
                 return factory(ProjectInitiative::class)->create()->id;
             },
-            'rep_id' => function() {
+            'rep_id' => function () {
                 return factory(User::class)->create()->id;
             },
-            'sponsor_id' => function() {
+            'sponsor_id' => function () {
                 return factory(User::class)->create()->id;
             },
         ]);
         $fund = factory(Fund::class, 'project')->create([
-            'fundable_id' => $project->id, 
+            'fundable_id' => $project->id,
         ]);
         $fundraiser = factory(Fundraiser::class)->create([
             'fund_id' => $fund->id, 'goal_amount' => 0
@@ -41,5 +41,4 @@ class ProjectTest extends TestCase
 
         $this->assertSame($project->fundraisers()->first()->goal_amount, $project->goal);
     }
-
 }

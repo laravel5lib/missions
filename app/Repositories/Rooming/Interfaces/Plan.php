@@ -5,7 +5,8 @@ namespace App\Repositories\Rooming\Interfaces;
 use Illuminate\Http\Request;
 use App\Http\Requests\v1\RoomingPlanRequest;
 
-interface Plan {
+interface Plan
+{
     public function filter(array $data);
     public function getById($id);
     public function create(array $data);

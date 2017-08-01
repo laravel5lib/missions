@@ -86,7 +86,7 @@ class DonationsController extends Controller
     {
         // has a credit card token already been created and provided?
         // if not, tokenize the card details.
-        if( ! $request->has('token')) {
+        if (! $request->has('token')) {
             $token = $this->payment->createCardToken($request->get('card'));
         } else {
             $token = $request->get('token');
@@ -132,7 +132,7 @@ class DonationsController extends Controller
 
         // we can pass donor details to try and find a match
         // or to create a new donor if a match isn't found.
-        if($request->has('donor')) {
+        if ($request->has('donor')) {
             $donor = $this->donor->firstOrCreate($request->get('donor'));
         // Alternatively, we can use an existing donor by id.
         } else {

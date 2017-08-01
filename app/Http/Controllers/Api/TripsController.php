@@ -77,15 +77,16 @@ class TripsController extends Controller
     {
         $trip = $this->trip->create($request->all());
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $trip->tag($request->get('tags'));
+        }
 
         return $this->response->item($trip, new TripTransformer);
     }
 
     /**
      * Duplicate a trip
-     * 
+     *
      * @param  TripRequest $request
      * @return \Dingo\Api\Http\Response
      */
@@ -97,8 +98,9 @@ class TripsController extends Controller
         $trip->syncRequirements($request->get('requirements'));
         // $trip->syncCosts($request->get('costs'));
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $trip->tag($request->get('tags'));
+        }
 
         return $this->response->item($trip, new TripTransformer);
     }
@@ -116,8 +118,9 @@ class TripsController extends Controller
 
         $trip->update($request->all());
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $trip->retag($request->get('tags'));
+        }
 
         $trip->syncFacilitators($request->get('facilitators'));
 
@@ -165,9 +168,14 @@ class TripsController extends Controller
             // create the charge with customer id, token, and donation details
             $charge = $this->gateway->createCharge(
                 $request->only(
-                    'donor', 'payment', 'token', 'amount', 
-                    'donor_id', 'currency', 'description'
-                    ),
+                    'donor',
+                    'payment',
+                    'token',
+                    'amount',
+                    'donor_id',
+                    'currency',
+                    'description'
+                ),
                 $customer['default_source'],
                 $customer['id']
             );
@@ -187,8 +195,9 @@ class TripsController extends Controller
         $weight = $request->get('weight'); // kilograms
         $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
 
-        if ($request->get('country_code') == 'us')
+        if ($request->get('country_code') == 'us') {
             $weight = convert_to_kg($request->get('weight'));
+        }
             $height = convert_to_cm($request->get('height_a'), $request->get('height_b'));
 
         $reservation = $trip->reservations()
@@ -238,7 +247,7 @@ class TripsController extends Controller
 
     /**
      * Import a list of trips.
-     * 
+     *
      * @param  TripListImport $import
      * @return response
      */
@@ -248,5 +257,4 @@ class TripsController extends Controller
 
         return $this->response()->created(null, $response);
     }
-
 }

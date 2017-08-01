@@ -6,7 +6,8 @@ use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 
 class ManageTeams
-{   
+{
+
     protected $teamableType;
     protected $teamableId;
 

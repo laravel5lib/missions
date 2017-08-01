@@ -36,15 +36,14 @@ class UpdateReservationRequirements extends Job implements ShouldQueue
         $resReqs = $reservationRequirement->where('requirement_id', $tripReq->id)->get();
 
         if (! $resReqs->count()) {
-
             $reservations = $tripReq->requester->reservations;
 
             if ($tripReq->conditions->count()) {
-                $reservations->reject(function($res) use ($tripReq) {
+                $reservations->reject(function ($res) use ($tripReq) {
 
                     $matches = collect([]);
 
-                    $tripReq->conditions->each(function($condition) use($res, $matches) {
+                    $tripReq->conditions->each(function ($condition) use ($res, $matches) {
                         if ($condition->type === 'role') {
                             $matches->push(in_array($res->desired_role, $condition->applies_to));
                         } elseif ($condition->type === 'age') {
@@ -55,8 +54,7 @@ class UpdateReservationRequirements extends Job implements ShouldQueue
                     });
 
                     return in_array(false, $matches->all());
-
-                })->each(function($reservation) use ($reservationRequirement, $tripReq) {
+                })->each(function ($reservation) use ($reservationRequirement, $tripReq) {
                     $reservationRequirement->create([
                         'reservation_id' => $reservation->id,
                         'requirement_id' => $tripReq->id,
@@ -67,7 +65,7 @@ class UpdateReservationRequirements extends Job implements ShouldQueue
                     ]);
                 });
             } else {
-                $reservations->each(function($reservation) use ($reservationRequirement, $tripReq) {
+                $reservations->each(function ($reservation) use ($reservationRequirement, $tripReq) {
                     $reservationRequirement->create([
                         'reservation_id' => $reservation->id,
                         'requirement_id' => $tripReq->id,
@@ -78,9 +76,7 @@ class UpdateReservationRequirements extends Job implements ShouldQueue
                     ]);
                 });
             }
-        }
-        else
-        {
+        } else {
             collect($resReqs)->each(function ($req) use ($tripReq) {
                 $req->update([
                     'grace_period' => $tripReq->grace_period,
@@ -90,6 +86,5 @@ class UpdateReservationRequirements extends Job implements ShouldQueue
                 ]);
             });
         }
-
     }
 }

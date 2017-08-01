@@ -24,7 +24,7 @@ class Teams
 
     public function totalsByType()
     {
-        $totals = $this->type->all()->keyBy('name')->map(function($type) {
+        $totals = $this->type->all()->keyBy('name')->map(function ($type) {
             return [
                 'teams' => $this->team->whereTypeId($type->id)->count(),
                 'members' => $this->team
@@ -43,7 +43,7 @@ class Teams
 
     public function totalsByTeams()
     {
-        return $this->team->with('squads.members')->get()->keyBy('callsign')->map(function($team) {
+        return $this->team->with('squads.members')->get()->keyBy('callsign')->map(function ($team) {
             return [
                 'groups' => $team->squads->count(),
                 'members' => $team->squads->pluck('members')->count()
@@ -53,7 +53,7 @@ class Teams
 
     public function totalMembers()
     {
-       return $this->team
+        return $this->team
                    ->with('squads.members')
                    ->get()
                    ->pluck('squads')

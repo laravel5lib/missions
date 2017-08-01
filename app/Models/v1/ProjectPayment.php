@@ -2,11 +2,11 @@
 
 namespace App\Models\v1;
 
-
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class ProjectPayment {
+class ProjectPayment
+{
 
     /**
      * @var Project
@@ -27,7 +27,9 @@ class ProjectPayment {
      */
     public function sync()
     {
-        if($this->project->has('dues')) $this->project->dues()->delete();
+        if ($this->project->has('dues')) {
+            $this->project->dues()->delete();
+        }
 
         $this->addDues($this->calculateDues());
 
@@ -66,12 +68,15 @@ class ProjectPayment {
      */
     public function addDues($dues)
     {
-        if ( ! $dues) return;
+        if (! $dues) {
+            return;
+        }
 
-        if ( ! $dues instanceof Collection)
+        if (! $dues instanceof Collection) {
             $dues = collect($dues);
+        }
 
-        $data = $dues->map(function($due) {
+        $data = $dues->map(function ($due) {
             is_null($due['due_at']) ? $due['due_at'] = Carbon::now() : $due['due_at'];
 
             return new Due($due);
@@ -89,14 +94,15 @@ class ProjectPayment {
     {
         // Fund balance should be spread out over the fund's balance
         // needs to decrement or increment a due's balance based on changes to the fund's balance.
-        while ($amount <> 0)
-        {
+        while ($amount <> 0) {
             $due = $this->project->dues()
                 ->withBalance()
                 ->sortRecent()
                 ->first();
 
-            if (! $due) break;
+            if (! $due) {
+                break;
+            }
 
             if ($due->outstanding_balance < $amount) {
                 $carryOver = $amount - $due->outstanding_balance;
@@ -119,7 +125,7 @@ class ProjectPayment {
      */
     public function late()
     {
-        return $this->project->dues()->with('payment')->get()->filter(function($due) {
+        return $this->project->dues()->with('payment')->get()->filter(function ($due) {
             return $due->getStatus() == 'overdue';
         });
     }
@@ -135,18 +141,17 @@ class ProjectPayment {
             ->costs()
             ->whereIn('id', $this->late()->pluck('payment.cost_id'))
             ->get()
-            ->reject(function($cost) {
+            ->reject(function ($cost) {
                 return  ! $cost->pivot->locked
                 and $cost->type == 'incremental';
             });
 
-        if ( ! $current->contains('type', 'incremental')) {
+        if (! $current->contains('type', 'incremental')) {
             $active = $this->project->initiative->activeCosts()->get();
 
             $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-            $costs = $active->reject(function ($value) use ($maxDate)
-            {
+            $costs = $active->reject(function ($value) use ($maxDate) {
                 return $value->type == 'incremental' && $value->active_at < $maxDate;
             });
 

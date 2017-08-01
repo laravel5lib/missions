@@ -38,7 +38,7 @@ class SendDonationNotificationEmail extends Job implements ShouldQueue
         $type = $this->donation->fund->fundable_type;
 
         switch ($type) {
-            case 'reservations' :
+            case 'reservations':
                 $user = $this->donation->fund->fundable->user;
 
                 $mailer->send('emails.donations.notification', [
@@ -51,10 +51,10 @@ class SendDonationNotificationEmail extends Job implements ShouldQueue
 
                 break;
 
-            case 'trips' :
+            case 'trips':
                 $facilitators = $this->donation->fund->fundable->facilitators;
 
-                foreach($facilitators as $facilitator) {
+                foreach ($facilitators as $facilitator) {
                     $mailer->send('emails.donations.notification', [
                         'donation' => $this->donation,
                         'recipient' => $facilitator

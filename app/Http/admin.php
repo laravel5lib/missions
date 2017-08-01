@@ -49,7 +49,7 @@ Route::resource('funds', 'FundsController');
 
 Route::resource('transactions', 'TransactionsController');
 
-Route::get('records/{tab?}', function($tab = 'passports') {
+Route::get('records/{tab?}', function ($tab = 'passports') {
     return view('admin.records.'.$tab.'.index', compact('tab'));
 });
 
@@ -118,7 +118,7 @@ Route::get('records/referrals/{id}/edit', function ($id) {
     return view('admin.records.referrals.edit', compact('id'));
 });
 
-Route::get('reports', function() {
+Route::get('reports', function () {
     return view('admin.reports.index');
 });
 

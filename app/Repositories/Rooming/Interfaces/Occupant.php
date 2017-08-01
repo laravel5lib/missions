@@ -2,7 +2,8 @@
 
 namespace App\Repositories\Rooming\Interfaces;
 
-interface Occupant {
+interface Occupant
+{
     public function getById($roomId, $id);
     public function getAll($roomId);
     public function create($data, $roomId);

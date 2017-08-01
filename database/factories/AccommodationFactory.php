@@ -1,7 +1,6 @@
 <?php
 
-$factory->define(App\Models\v1\Accommodation::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Accommodation::class, function (Faker\Generator $faker) {
 
     return [
         'id'           => $faker->unique()->uuid,

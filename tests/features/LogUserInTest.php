@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Session;
 
 class LogUserInTest extends TestCase
-{   
+{
+
     /**
      * @test
      */

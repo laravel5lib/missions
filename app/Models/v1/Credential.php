@@ -15,21 +15,21 @@ class Credential extends Model
 
     /**
      * Attributes that should be cast to date objects
-     * 
+     *
      * @var array
      */
     protected $dates = ['expired_at', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * Attributes that should be cast to native types
-     * 
+     *
      * @var array
      */
     protected $casts = ['content' => 'array'];
 
     /**
      * Set the content attribute
-     * 
+     *
      * @param Array $value
      */
     public function setContentAttribute($value)
@@ -39,7 +39,7 @@ class Credential extends Model
 
     /**
      * Get the holder of this credential
-     * 
+     *
      * @return MorphTo
      */
     public function holder()

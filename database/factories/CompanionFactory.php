@@ -3,8 +3,7 @@
 /**
  * Generic Companion
  */
-$factory->define(App\Models\v1\Companion::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Companion::class, function (Faker\Generator $faker) {
     return [
         'id' => $faker->unique()->uuid,
         'group_key' => $faker->uuid,

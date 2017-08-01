@@ -76,7 +76,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return mixed
      */
-    public function getJWTIdentifier(){
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
 
@@ -85,7 +86,8 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    public function getJWTCustomClaims(){
+    public function getJWTCustomClaims()
+    {
         return [];
     }
 
@@ -137,8 +139,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setAltEmailAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['alt_email'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -148,8 +151,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setPhoneOneAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['phone_one'] = trim(stripPhone($value));
+        }
     }
 
     /**
@@ -159,8 +163,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setPhoneTwoAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['phone_two'] = trim(stripPhone($value));
+        }
     }
 
     /**
@@ -192,8 +197,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setGenderAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['gender'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -214,8 +220,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setStatusAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['status'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -236,8 +243,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setStreetAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['street'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -258,8 +266,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setCityAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['city'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -280,8 +289,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setZipAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['zip'] = trim(strtoupper($value));
+        }
     }
 
     /**
@@ -291,8 +301,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setStateAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['state'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -315,8 +326,9 @@ class User extends Authenticatable implements JWTSubject
     {
 //        $afterSlash = trim(substr($value, strrpos($value, '/') + 1));
 //        $beforePeriod = substr($afterSlash, 0, strpos($afterSlash, '.'));
-        if ($value)
+        if ($value) {
             $this->attributes['url'] = trim(strtolower($value));
+        }
     }
 
     /**
@@ -326,8 +338,9 @@ class User extends Authenticatable implements JWTSubject
      */
     public function setBioAttribute($value)
     {
-        if ($value)
+        if ($value) {
             $this->attributes['bio'] = trim($value);
+        }
     }
 
     /**
@@ -470,12 +483,12 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Helper method to retrieve the user's avatar
-     * 
+     *
      * @return mixed
      */
     public function getAvatar()
     {
-        if( ! $this->avatar) {
+        if (! $this->avatar) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'placeholder',
@@ -502,12 +515,12 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Helper method to retrieve the user's banner
-     * 
+     *
      * @return mixed
      */
     public function getBanner()
     {
-        if( ! $this->banner) {
+        if (! $this->banner) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'default',
@@ -586,7 +599,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the user's profile slug.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function slug()
@@ -596,7 +609,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get the user's reports.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function reports()
@@ -606,7 +619,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get a user that is a rep
-     * 
+     *
      * @param  Builder $query
      * @return Builder
      */
@@ -618,7 +631,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get trips the user is representing
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function tripsRepresenting()
@@ -628,7 +641,7 @@ class User extends Authenticatable implements JWTSubject
 
     /**
      * Get reservations the user is representing
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function reservationsRepresenting()
@@ -643,16 +656,17 @@ class User extends Authenticatable implements JWTSubject
      */
     public function syncLinks($links)
     {
-        if ( ! $links) return;
+        if (! $links) {
+            return;
+        }
 
-        $links = collect($links)->reject(function($link) {
+        $links = collect($links)->reject(function ($link) {
             return strlen($link['url']) < 1;
         })->all();
 
         $names = $this->links()->pluck('id', 'name');
 
-        foreach($links as $link)
-        {
+        foreach ($links as $link) {
             array_forget($names, $link['name']);
 
             $link['url'] = remove_http($link['url']);
@@ -660,7 +674,9 @@ class User extends Authenticatable implements JWTSubject
             $this->links()->updateOrCreate(['name' => $link['name']], $link);
         }
 
-        if( ! $names->isEmpty()) Link::destroy(array_values($names->toArray()));
+        if (! $names->isEmpty()) {
+            Link::destroy(array_values($names->toArray()));
+        }
     }
 
     public function getCountriesVisited()
@@ -693,7 +709,7 @@ class User extends Authenticatable implements JWTSubject
              ->get()
              ->pluck('requirements')
              ->flatten()
-             ->reject(function($item) {
+             ->reject(function ($item) {
                  return $item->status == 'complete';
              })
              ->sortBy('due_at');
@@ -722,8 +738,7 @@ class User extends Authenticatable implements JWTSubject
             $query->has('membership')->with('membership.team.region.campaign', 'trip');
         }])->first()->reservations;
 
-        $data = collect($reservations)->map(function ($item, $key)
-        {
+        $data = collect($reservations)->map(function ($item, $key) {
             return $array = [
                 'label'          => $item->trip->started_at->format('Y') .
                                     ' ' . $item->membership->team->region->name .

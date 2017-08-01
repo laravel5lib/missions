@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use League\Fractal\TransformerAbstract;
 use Silber\Bouncer\Database\Role;
 

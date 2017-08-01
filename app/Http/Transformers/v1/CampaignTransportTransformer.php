@@ -116,7 +116,7 @@ class CampaignTransportTransformer extends TransformerAbstract
         $data = $transport->passengers
             ->pluck('reservation.designation')
             ->flatten()
-            ->map(function($designation) {
+            ->map(function ($designation) {
                 return ['content' => $designation ? ucwords(implode('', array_flatten($designation->content))) : 'Unassigned'];
             })
             ->groupBy('content')
@@ -141,7 +141,9 @@ class CampaignTransportTransformer extends TransformerAbstract
     {
         $hub = $transport->departureHub;
 
-        if (! $hub) return null;
+        if (! $hub) {
+            return null;
+        }
 
         return $this->item($hub, new HubTransformer);
     }
@@ -157,7 +159,9 @@ class CampaignTransportTransformer extends TransformerAbstract
     {
         $hub = $transport->arrivalHub;
 
-        if (! $hub) return null;
+        if (! $hub) {
+            return null;
+        }
 
         return $this->item($hub, new HubTransformer);
     }

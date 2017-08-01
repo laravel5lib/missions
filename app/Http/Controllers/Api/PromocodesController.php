@@ -10,7 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Transformers\v1\PromocodeTransformer;
 
 class PromocodesController extends Controller
-{   
+{
+
     private $promocode;
 
     function __construct(Promocode $promocode)
@@ -40,7 +41,7 @@ class PromocodesController extends Controller
 
         $promocodes = collect([]);
 
-        $codes->each(function($code) {
+        $codes->each(function ($code) {
             $promocode = $this->promocode->create([
                 'code' => $code,
                 'promotional_id' => $request->get('promotional_id')

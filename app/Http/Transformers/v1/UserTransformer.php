@@ -213,5 +213,4 @@ class UserTransformer extends TransformerAbstract
 
         return $this->collection($roles, new RoleTransformer);
     }
-
 }

@@ -3,7 +3,7 @@
 /**
  * Generic Reservation Todo
  */
-$factory->define(App\Models\v1\Todo::class, function(Faker\Generator $faker) {
+$factory->define(App\Models\v1\Todo::class, function (Faker\Generator $faker) {
     return [
         'task' => $faker->sentence(4),
         'todoable_id' => function () {
@@ -16,7 +16,7 @@ $factory->define(App\Models\v1\Todo::class, function(Faker\Generator $faker) {
 /**
  * Completed Todo
  */
-$factory->defineAs(App\Models\v1\Todo::class, 'completed', function(Faker\Generator $faker) use($factory) {
+$factory->defineAs(App\Models\v1\Todo::class, 'completed', function (Faker\Generator $faker) use ($factory) {
     
     $todo = $factory->raw(App\Models\v1\Todo::class);
 

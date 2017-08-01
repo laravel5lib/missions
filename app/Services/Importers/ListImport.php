@@ -5,54 +5,55 @@ namespace App\Services\Importers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
 
-class ListImport extends \Maatwebsite\Excel\Files\ExcelFile {
+class ListImport extends \Maatwebsite\Excel\Files\ExcelFile
+{
 
     /**
-     * The default directory path where 
+     * The default directory path where
      * the imported file should live.
-     * 
+     *
      * @var string
      */
     public $path = 'imports';
 
     /**
      * The default name for the imported file.
-     * 
+     *
      * @var string
      */
     public $filename = 'import';
 
     /**
      * The default format for the imported file.
-     * 
+     *
      * @var string
      */
     public $filetype = '.csv';
 
     /**
      * Default delimiter for .csv
-     * 
+     *
      * @var string
      */
     protected $delimiter  = ',';
 
     /**
      * Default enclosure for .csv
-     * 
+     *
      * @var string
      */
     protected $enclosure  = '"';
 
     /**
      * Default line ending for .csv
-     * 
+     *
      * @var string
      */
     protected $lineEnding = '\r\n';
 
     /**
      * Get the uploaded file.
-     * 
+     *
      * @return String
      */
     public function getFile()
@@ -66,7 +67,7 @@ class ListImport extends \Maatwebsite\Excel\Files\ExcelFile {
 
     /**
      * Put the file in storage.
-     * 
+     *
      * @param  String $file
      * @return String fully qualified path
      */
@@ -91,9 +92,9 @@ class ListImport extends \Maatwebsite\Excel\Files\ExcelFile {
     }
 
     /**
-     * Get any filters that can be 
+     * Get any filters that can be
      * used by the import handler.
-     * 
+     *
      * @return Array
      */
     public function getFilters()
@@ -102,5 +103,4 @@ class ListImport extends \Maatwebsite\Excel\Files\ExcelFile {
             'chunk'
         ];
     }
-
 }

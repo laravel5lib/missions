@@ -1,7 +1,6 @@
 <?php
 
-$factory->defineAs(App\Models\v1\Credential::class, 'medical', function(Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Credential::class, 'medical', function (Faker\Generator $faker) {
     return [
         'holder_id' => $faker->uuid,
         'holder_type' => 'users',
@@ -12,8 +11,7 @@ $factory->defineAs(App\Models\v1\Credential::class, 'medical', function(Faker\Ge
     ];
 });
 
-$factory->defineAs(App\Models\v1\Credential::class, 'media', function(Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Credential::class, 'media', function (Faker\Generator $faker) {
     return [
         'holder_id' => $faker->uuid,
         'holder_type' => 'users',

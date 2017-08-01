@@ -31,14 +31,14 @@ class TripTableSeeder extends Seeder
         $campaign = $this->seed_campaign();
         $groups = $this->seed_groups(10);
 
-        $groups->each(function($g) use($campaign) {
+        $groups->each(function ($g) use ($campaign) {
 
             $trips = factory(Trip::class, 3)->create([
                 'campaign_id' => $campaign->id,
                 'group_id' => $g['id']
             ]);
 
-            collect($trips)->each(function($t) use($g) {
+            collect($trips)->each(function ($t) use ($g) {
 
                 $t->rep->slug()->create(['url' => generate_slug($t->rep->name)]);
 
@@ -117,7 +117,7 @@ class TripTableSeeder extends Seeder
 
         $groups = Group::whereIn('id', $data->pluck('id'))->get();
 
-        collect($groups)->each(function($g) {
+        collect($groups)->each(function ($g) {
             $g->slug()->create(['url' => generate_slug($g->name)]);
         });
 
@@ -138,7 +138,7 @@ class TripTableSeeder extends Seeder
             ])
         ]);
 
-        collect($incrementalCosts)->each(function($ic) {
+        collect($incrementalCosts)->each(function ($ic) {
             Cost::findOrFail($ic->id)->payments()->saveMany([
                 factory(Payment::class)->make([
                     'cost_id' => $ic->id,
@@ -196,7 +196,7 @@ class TripTableSeeder extends Seeder
             factory(Cost::class, 'triple')->make(['cost_assignable_id' => $t->id]),
         ]);
 
-        collect($optionalCosts)->each(function($oc) use($late) {
+        collect($optionalCosts)->each(function ($oc) use ($late) {
             Cost::findOrFail($oc->id)->payments()->save(
                 factory(Payment::class)->make([
                     'cost_id' => $oc->id,
@@ -246,7 +246,7 @@ class TripTableSeeder extends Seeder
             // Companion::insert($companion);
 
             $note = factory(Note::class)->make([
-                'noteable_id' => $r->id, 
+                'noteable_id' => $r->id,
                 'user_id' => $r->trip->rep_id
             ])->toArray();
             Note::insert($note);
@@ -266,18 +266,15 @@ class TripTableSeeder extends Seeder
 
         $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-        $incrementalCosts = $active->filter(function ($value) use ($maxDate)
-        {
+        $incrementalCosts = $active->filter(function ($value) use ($maxDate) {
             return $value->type == 'incremental' && $value->active_at == $maxDate;
         });
 
-        $staticCosts = $active->filter(function ($value)
-        {
+        $staticCosts = $active->filter(function ($value) {
             return $value->type == 'static';
         });
 
-        $optionalCosts = $active->filter(function ($value)
-        {
+        $optionalCosts = $active->filter(function ($value) {
             return $value->type == 'optional';
         })->random(1);
 

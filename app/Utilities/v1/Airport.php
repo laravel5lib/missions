@@ -2,11 +2,12 @@
 
 namespace App\Utilities\v1;
 
-class Airport {
+class Airport
+{
 
     /**
      * All available airlines
-     * 
+     *
      * @var array
      */
     protected static $airlines = [
@@ -40,8 +41,8 @@ class Airport {
 
     /**
      * Return all airlines
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function all()
     {
@@ -50,13 +51,13 @@ class Airport {
 
     /**
      * Return a single country by iata
-     * 
-     * @param  sting $iata 
-     * @return array       
+     *
+     * @param  sting $iata
+     * @return array
      */
     public static function get($iata)
     {
-        $result = array_where(static::$airlines, function($key, $value) use($iata) {
+        $result = array_where(static::$airlines, function ($key, $value) use ($iata) {
             return $key === strtoupper($iata);
         });
 

@@ -22,8 +22,8 @@ class ReferralsEndpointTest extends TestCase
             ->seeJsonStructure([
                 'data' => [
                     '*' => [
-                        'id', 'user_id', 'applicant_name', 'type', 'attention_to', 
-                        'recipient_email', 'referrer', 'response', 'status', 'sent_at', 
+                        'id', 'user_id', 'applicant_name', 'type', 'attention_to',
+                        'recipient_email', 'referrer', 'response', 'status', 'sent_at',
                         'responded_at', 'created_at', 'updated_at'
                     ]
                 ]
@@ -36,7 +36,7 @@ class ReferralsEndpointTest extends TestCase
     public function creates_referral_and_sends()
     {
         $referral = factory(Referral::class)->make([
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ])->toArray();
@@ -55,7 +55,7 @@ class ReferralsEndpointTest extends TestCase
     {
         $referral = factory(Referral::class)->create([
             'applicant_name' => 'joe',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ]);

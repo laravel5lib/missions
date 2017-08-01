@@ -68,9 +68,9 @@ class ProjectFilter extends Filter
 
         $groups = $user->managing()->pluck('id');
 
-        return $this->where(function($query) use($groups) {
+        return $this->where(function ($query) use ($groups) {
             return $query->where('sponsor_type', 'groups')->whereIn('sponsor_id', $groups);
-        })->orWhere(function($query) use($user_id) {
+        })->orWhere(function ($query) use ($user_id) {
             return $query->where('sponsor_type', 'users')->where('sponsor_id', $user_id);
         });
     }
@@ -107,8 +107,8 @@ class ProjectFilter extends Filter
      */
     public function cause($id)
     {
-        return $this->whereHas('initiative', function($initiative) use($id) {
-           return $initiative->where('project_cause_id', $id);
+        return $this->whereHas('initiative', function ($initiative) use ($id) {
+            return $initiative->where('project_cause_id', $id);
         });
     }
 }

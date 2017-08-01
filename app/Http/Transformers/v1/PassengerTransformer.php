@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Passenger;
 use League\Fractal\TransformerAbstract;
 
-class PassengerTransformer extends TransformerAbstract {
+class PassengerTransformer extends TransformerAbstract
+{
 
     protected $defaultIncludes = [];
     /**
@@ -68,5 +69,4 @@ class PassengerTransformer extends TransformerAbstract {
 
         return $this->item($reservation, new ReservationTransformer);
     }
-
 }

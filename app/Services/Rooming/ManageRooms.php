@@ -18,7 +18,7 @@ class ManageRooms
 
     /**
      * Add rooms to the given repository.
-     * 
+     *
      * @param  array|string $rooms
      * @return boolean
      */
@@ -29,7 +29,7 @@ class ManageRooms
 
     /**
      * Remove rooms from the given repository.
-     * 
+     *
      * @param  array|string $rooms
      * @return boolean
      */
@@ -40,7 +40,7 @@ class ManageRooms
 
     /**
      * Get the repository to use.
-     * 
+     *
      * @return Repo
      */
     private function getRepository()
@@ -52,5 +52,4 @@ class ManageRooms
 
         return app()->make($repositories[$this->roomableType]);
     }
-
 }

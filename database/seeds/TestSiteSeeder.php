@@ -14,7 +14,7 @@ class TestSiteSeeder extends Seeder
     {
         //1n1d
         $oneNation = factory(App\Models\v1\Campaign::class, '1n1d2017')->create([
-                'avatar_upload_id' => function() {
+                'avatar_upload_id' => function () {
                     return factory(App\Models\v1\Upload::class, 'avatar')->create([
                         'name' => '1n1d17_white',
                         'source' => 'images/avatars/1n1d17-white-400x400.jpg'
@@ -27,7 +27,7 @@ class TestSiteSeeder extends Seeder
 
         factory(App\Models\v1\Trip::class, config('seeders.trips'))->create([
             'campaign_id' => $oneNation->id
-        ])->each(function($t) {
+        ])->each(function ($t) {
 
             $incrementalCosts = $t->costs()->saveMany([
                 factory(App\Models\v1\Cost::class, 'super')->make(),
@@ -35,7 +35,7 @@ class TestSiteSeeder extends Seeder
                 factory(App\Models\v1\Cost::class, 'general')->make()
             ]);
 
-            collect($incrementalCosts)->each(function($ic) {
+            collect($incrementalCosts)->each(function ($ic) {
                 Cost::findOrFail($ic->id)->payments()->saveMany([
                     factory(App\Models\v1\Payment::class)->make([
                         'due_at' => $ic->active_at->addMonths(6),
@@ -78,7 +78,7 @@ class TestSiteSeeder extends Seeder
                 factory(App\Models\v1\Cost::class, 'triple')->make(),
             ]);
 
-            collect($optionalCosts)->each(function($oc) use($late) {
+            collect($optionalCosts)->each(function ($oc) use ($late) {
                 Cost::findOrFail($oc->id)->payments()->save(
                     factory(App\Models\v1\Payment::class)->make([
                         'due_at' => $late->active_at,
@@ -111,7 +111,7 @@ class TestSiteSeeder extends Seeder
 
             factory(App\Models\v1\Reservation::class, config('seeders.reservations'))->create([
                 'trip_id' => $t->id
-            ])->each(function($r) {
+            ])->each(function ($r) {
                 $r->companions()->save(factory(App\Models\v1\Companion::class)->make());
 
                 $r->notes()->save(factory(App\Models\v1\Note::class)->make());
@@ -123,10 +123,9 @@ class TestSiteSeeder extends Seeder
 
                 // $this->addDependencies($r);
             });
-
         });
 
-        factory(App\Models\v1\User::class, 'admin')->create()->each(function($user) {
+        factory(App\Models\v1\User::class, 'admin')->create()->each(function ($user) {
             $user->slug()
                  ->save(factory(App\Models\v1\Slug::class)
                  ->make(['url' => str_slug($user->name)]));
@@ -150,7 +149,7 @@ class TestSiteSeeder extends Seeder
 
         // INDIA
         $india = factory(App\Models\v1\Campaign::class, 'india')->create([
-                'avatar_upload_id' => function() {
+                'avatar_upload_id' => function () {
                     return factory(App\Models\v1\Upload::class, 'avatar')->create([
                         'name' => 'angels_to_orphans',
                         'source' => 'images/avatars/orphansToAngelsSummer.jpg'
@@ -168,18 +167,15 @@ class TestSiteSeeder extends Seeder
 
         $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-        $incrementalCosts = $active->filter(function ($value) use ($maxDate)
-        {
+        $incrementalCosts = $active->filter(function ($value) use ($maxDate) {
             return $value->type == 'incremental' && $value->active_at == $maxDate;
         });
 
-        $staticCosts = $active->filter(function ($value)
-        {
+        $staticCosts = $active->filter(function ($value) {
             return $value->type == 'static';
         });
 
-        $optionalCosts = $active->filter(function ($value)
-        {
+        $optionalCosts = $active->filter(function ($value) {
             return $value->type == 'optional';
         })->random(1);
 

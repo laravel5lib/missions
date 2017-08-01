@@ -3,8 +3,7 @@
 /**
  * Generic Trip Requirement
  */
-$factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $faker) {
     return [
         'id'              => $faker->unique()->uuid,
         'name'            => $faker->randomElement(['Passport', 'Medical Release', 'Visa', 'Referral', 'Testimony']),
@@ -24,8 +23,7 @@ $factory->define(App\Models\v1\Requirement::class, function (Faker\Generator $fa
 /**
  * Passport Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'passport', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'passport', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -37,8 +35,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'passport', function (Faker
 /**
  * Visa Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'visa', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'visa', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -50,8 +47,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'visa', function (Faker\Gen
 /**
  * Medical Release Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'medical', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'medical', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -63,8 +59,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'medical', function (Faker\
 /**
  * Referral Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'referral', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'referral', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -76,8 +71,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'referral', function (Faker
 /**
  * Testimony Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'testimony', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'testimony', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -89,8 +83,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'testimony', function (Fake
 /**
  * Airport Preference Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'airport', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'airport', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -102,8 +95,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'airport', function (Faker\
 /**
  * Arrival Designation Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'arrival', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'arrival', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -115,8 +107,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'arrival', function (Faker\
 /**
  * Media Credentials Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'media-credentials', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'media-credentials', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -128,8 +119,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'media-credentials', functi
 /**
  * Medical Credentials Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'medical-credentials', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'medical-credentials', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -141,8 +131,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'medical-credentials', func
 /**
  * Influencer Application Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'influencer-application', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'influencer-application', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -154,8 +143,7 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'influencer-application', f
 /**
  * Travel Itinerary Requirement
  */
-$factory->defineAs(App\Models\v1\Requirement::class, 'travel-itinerary', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Requirement::class, 'travel-itinerary', function (Faker\Generator $faker) use ($factory) {
     $requirement = $factory->raw(App\Models\v1\Requirement::class);
 
     return array_merge($requirement, [
@@ -163,5 +151,3 @@ $factory->defineAs(App\Models\v1\Requirement::class, 'travel-itinerary', functio
         'document_type'   => 'travel_itineraries',
     ]);
 });
-
-

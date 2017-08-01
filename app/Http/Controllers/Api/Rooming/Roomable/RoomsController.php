@@ -40,8 +40,7 @@ class RoomsController extends Controller
 
     public function store($roomableType, $roomableId, RoomRequest $request)
     {
-        DB::transaction(function () use ($request, $roomableType, $roomableId) 
-        {
+        DB::transaction(function () use ($request, $roomableType, $roomableId) {
             $room = $this->room->create([
                 'room_type_id' => $request->get('room_type_id'),
                 'label'        => $request->get('label')
@@ -60,15 +59,14 @@ class RoomsController extends Controller
                      ->update([
                         'room_type_id' => $request->get('room_type_id'),
                         'label'        => $request->get('label')
-                    ], $id);
+                     ], $id);
 
         return $this->response->item($room, new RoomTransformer);
     }
 
     public function destroy($roomableType, $roomableId, $id)
     {
-        DB::transaction(function () use ($roomableType, $roomableId, $id)
-        {
+        DB::transaction(function () use ($roomableType, $roomableId, $id) {
             $this->room
                  ->filter([$roomableType => $roomableId])
                  ->delete($id);

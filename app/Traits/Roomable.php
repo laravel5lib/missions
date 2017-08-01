@@ -3,7 +3,8 @@
 namespace App\Traits;
 
 trait Roomable
-{   
+{
+
     public function addRooms($rooms, $id)
     {
         $model = $this->getByid($id);
@@ -48,7 +49,7 @@ trait Roomable
     {
         $model = $this->getById($id);
 
-        $model->availableRoomTypes()->updateExistingPivot($typeId, [ 
+        $model->availableRoomTypes()->updateExistingPivot($typeId, [
             'available_rooms' => $data['available_rooms']
         ]);
 

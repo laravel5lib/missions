@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Accolade;
 use League\Fractal\TransformerAbstract;
 
-class AccoladeTransformer extends TransformerAbstract {
+class AccoladeTransformer extends TransformerAbstract
+{
 
     /**
      * Transform the object into a basic array
@@ -24,9 +25,9 @@ class AccoladeTransformer extends TransformerAbstract {
         ];
 
         if ($accolade->name == 'countries_visited') {
-           $data['items'] = collect($accolade->items)->map(function($item) {
-               return ['code' => $item, 'name' => country($item)];
-           })->toArray();
+            $data['items'] = collect($accolade->items)->map(function ($item) {
+                return ['code' => $item, 'name' => country($item)];
+            })->toArray();
         }
 
         return $data;

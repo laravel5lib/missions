@@ -18,7 +18,7 @@ class UserTableSeeder extends Seeder
             'name' => 'Taylor Jensen', 'email' => 'tjensen@missions.me'
         ]);
         (new InternWithEverything)->create([
-            'name' => 'Esther Gualtieri', 'email' => 'egultieri@missions.me'
+            'name' => 'Esther Gualtieri', 'email' => 'egualtieri@missions.me'
         ]);
         (new InternWithEverything)->create([
             'name' => 'Cooper Moore', 'email' => 'cmoore@missions.me'
@@ -46,6 +46,15 @@ class UserTableSeeder extends Seeder
         ]);
         (new InternWithEverything)->create([
             'name' => 'Victoria Keller', 'email' => 'vkeller@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Taja Titus', 'email' => 'ttitus@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Jackie Rios', 'email' => 'jrios@missions.me'
+        ]);
+        (new InternWithEverything)->create([
+            'name' => 'Sara Kate Warner', 'email' => 'swarner@missions.me'
         ]);
 
         (new UserWithEverything)->times(10)->create();

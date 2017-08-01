@@ -117,7 +117,7 @@ class Fund extends Model
     public function archive()
     {
         if ($this->fundraisers->count()) {
-            $this->fundraisers->each(function($fundraiser) {
+            $this->fundraisers->each(function ($fundraiser) {
                 $fundraiser->close();
             });
         }
@@ -131,7 +131,7 @@ class Fund extends Model
     public function reactivate()
     {
         if ($this->fundraisers->count()) {
-            $this->fundraisers->each(function($fundraiser) {
+            $this->fundraisers->each(function ($fundraiser) {
                 $fundraiser->open();
             });
         }

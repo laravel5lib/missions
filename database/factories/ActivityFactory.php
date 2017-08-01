@@ -3,8 +3,7 @@
 use Carbon\Carbon;
 use App\Models\v1\ActivityType;
 
-$factory->define(App\Models\v1\Activity::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Activity::class, function (Faker\Generator $faker) {
     return [
         'id'                => $faker->unique()->uuid,
         'activity_type_id'  => function () {

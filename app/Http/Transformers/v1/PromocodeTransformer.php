@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Promocode;
 use League\Fractal\TransformerAbstract;
 
-class PromocodeTransformer extends TransformerAbstract {
+class PromocodeTransformer extends TransformerAbstract
+{
 
     /**
      * List of resources available to include
@@ -36,10 +37,13 @@ class PromocodeTransformer extends TransformerAbstract {
         return $data;
     }
 
-    public function includeRewardable(Promocode $promocode) {
+    public function includeRewardable(Promocode $promocode)
+    {
         $affiliate = $promocode->rewardable;
 
-        if (! $affiliate) return null;
+        if (! $affiliate) {
+            return null;
+        }
 
         return $this->item($affiliate, new ReservationTransformer);
     }

@@ -19,7 +19,7 @@ class MediaCredentialsEndpointTest extends TestCase
                         'content', 'expired_at', 'created_at', 'updated_at', 'deleted_at'
                     ]
                 ]
-            ])
+             ])
              ->seeJson(['type' => 'media']);
     }
 

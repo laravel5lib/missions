@@ -30,7 +30,7 @@ class CreateFinancialsTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('funds', function(Blueprint $table) {
+        Schema::create('funds', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('slug');
             $table->string('name');
@@ -55,8 +55,7 @@ class CreateFinancialsTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('transactions', function($table)
-        {
+        Schema::table('transactions', function ($table) {
             $table->foreign('fund_id')
                 ->references('id')->on('funds')
                 ->onDelete('cascade');
@@ -84,8 +83,7 @@ class CreateFinancialsTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('fundraisers', function($table)
-        {
+        Schema::table('fundraisers', function ($table) {
             $table->foreign('fund_id')
                 ->references('id')->on('funds')
                 ->onDelete('cascade');

@@ -119,7 +119,7 @@ class VisasController extends Controller
 
     /**
      * Import a list of Visas.
-     * 
+     *
      * @param  VisaListImport $import
      * @return response
      */

@@ -152,5 +152,4 @@ class ReservationTest extends TestCase
 
         $this->assertFalse(in_array($reservation->id, $squad->members->toArray()));
     }
-
 }

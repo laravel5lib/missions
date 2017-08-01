@@ -12,7 +12,7 @@ class AddDesignationToTransportsTable extends Migration
      */
     public function up()
     {
-        Schema::table('transports', function(Blueprint $table) {
+        Schema::table('transports', function (Blueprint $table) {
             $table->string('designation', 60)->nullable();
         });
     }
@@ -24,7 +24,7 @@ class AddDesignationToTransportsTable extends Migration
      */
     public function down()
     {
-        Schema::table('transports', function(Blueprint $table) {
+        Schema::table('transports', function (Blueprint $table) {
             $table->dropColumn('designation');
         });
     }

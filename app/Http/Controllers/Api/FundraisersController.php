@@ -79,7 +79,7 @@ class FundraisersController extends Controller
                              ->filter($request->all())
                              ->get()
                              ->groupBy('donor.id')
-                             ->map(function($donation) {
+                             ->map(function ($donation) {
                                 return [
                                     'name' => $donation->pluck('donor.name')->first(),
                                     'total_donated' => $donation->sum('amount')/100,
@@ -101,8 +101,8 @@ class FundraisersController extends Controller
 
         $donors = $donors->forPage($page, $per_page)->all();
 
-       return [
-        'data' => $donors, 
+        return [
+        'data' => $donors,
         'meta' => [
                 'pagination' => [
                     "total" => (int) $count,
@@ -141,7 +141,7 @@ class FundraisersController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function store(FundraiserRequest $request)
-    {   
+    {
         $fundraiser = $this->fundraiser->create($request->all());
 
         if ($request->has('tags')) {

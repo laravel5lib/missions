@@ -73,4 +73,5 @@ class ReservationsController extends Controller
     public function create()
     {
         $this->authorize('create', $this->reservation);
-    }}
+    }
+}

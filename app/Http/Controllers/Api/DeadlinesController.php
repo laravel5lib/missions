@@ -72,8 +72,9 @@ class DeadlinesController extends Controller
             'enforced'                 => $request->get('enforced', false)
         ]);
 
-        if ($deadline->deadlineAssignable instanceOf Trip)
+        if ($deadline->deadlineAssignable instanceof Trip) {
             $this->dispatch(new UpdateReservationDeadlines($deadline));
+        }
 
         return $this->response->item($deadline, new DeadlineTransformer);
     }
@@ -115,5 +116,4 @@ class DeadlinesController extends Controller
 
         return $this->response->noContent();
     }
-
 }

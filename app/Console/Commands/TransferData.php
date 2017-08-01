@@ -69,7 +69,7 @@ class TransferData extends Command
      * @return mixed
      */
     public function handle()
-    {   
+    {
         // $password = $this->secret('What is the password?');
 
         // if($password <> 'lakn2009t') {
@@ -77,8 +77,7 @@ class TransferData extends Command
         //     exit;
         // }
 
-        if ($this->confirm('Do you want to reset the database? [y|N]'))
-        {
+        if ($this->confirm('Do you want to reset the database? [y|N]')) {
             $this->line('Resetting database...');
             $this->callSilent('migrate:refresh');
             $this->callSilent('db:seed', [
@@ -90,9 +89,8 @@ class TransferData extends Command
             $this->info("\n" . 'Database re-migrated and seeded with defaults.');
         }
 
-        if ($this->confirm('Do you want start importing data? [y|N]'))
-        {
-            // setup indexes to match 
+        if ($this->confirm('Do you want start importing data? [y|N]')) {
+            // setup indexes to match
             // old ids with new ones
             $userIndex = new Collection;
             $groupIndex = new Collection;
@@ -158,9 +156,9 @@ class TransferData extends Command
 
     /**
      * Import users
-     * 
+     *
      * @param  Collection $userIndex
-     * @return void 
+     * @return void
      */
     private function import_users($userIndex)
     {
@@ -168,7 +166,7 @@ class TransferData extends Command
         $users = $this->users();
         $bar = $this->output->createProgressBar($users->count());
 
-        $newUsers = $users->map(function($item) use($userIndex, $bar) {
+        $newUsers = $users->map(function ($item) use ($userIndex, $bar) {
             $banner = Upload::randomBanner()->first();
             $user = [
                 'email' => $item->email,
@@ -190,7 +188,7 @@ class TransferData extends Command
                 'timezone' => $item->timezone == 'US/Eastern' ? 'America/Detroit' : $item->timezone,
                 'bio' => $item->bio,
                 'public' => $item->public ? true : false,
-                'avatar_upload_id' => trim($item->profile_pic_src) ? 
+                'avatar_upload_id' => trim($item->profile_pic_src) ?
                     $this->get_avatar_id($item->profile_pic_src, $item->name) : null,
                 'banner_upload_id' => $banner ? $banner->id : null,
                 'created_at' => $item->created_at,
@@ -206,7 +204,7 @@ class TransferData extends Command
 
             $userIndex->put($item->id, $newUser->id);
             
-            $links = $this->get_links($item)->map(function($link) {
+            $links = $this->get_links($item)->map(function ($link) {
                  return new Link([
                      'name' => $link['name'], 'url' => $link['url']
                  ]);
@@ -214,7 +212,6 @@ class TransferData extends Command
             $newUser->links()->saveMany($links);
 
             $bar->advance();
-  
         })->all();
         $bar->finish();
         $this->info("\n" . 'Users imported.');
@@ -222,7 +219,7 @@ class TransferData extends Command
 
     /**
      * Import Groups
-     * 
+     *
      * @param  Collection $groupIndex
      * @param  Collection $userIndex
      * @return void
@@ -232,7 +229,7 @@ class TransferData extends Command
         $this->line("\n" . 'Importing groups...');
         $groups = $this->groups();
         $bar = $this->output->createProgressBar($groups->count());
-        $groups->map(function($item) use($bar, $groupIndex, $userIndex) {
+        $groups->map(function ($item) use ($bar, $groupIndex, $userIndex) {
             $group = Group::create([
                 'name' => ucwords($item->name),
                 'type' => str_replace('-', '', strtolower($item->type)),
@@ -247,31 +244,31 @@ class TransferData extends Command
                 'phone_one' => $item->phone_one,
                 'email' => $item->email,
                 'status' => 'approved',
-                'avatar_upload_id' => trim($item->logo_src) ? 
+                'avatar_upload_id' => trim($item->logo_src) ?
                     $this->get_avatar_id($item->logo_src, $item->name) : null,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at
             ]);
                
            // add slug
-           $url = $item->slug ? $item->slug : generate_slug($group->name);
-           $group->slug()->create(['url' => $url]);
+            $url = $item->slug ? $item->slug : generate_slug($group->name);
+            $group->slug()->create(['url' => $url]);
            // add links
-           $links = $this->get_links($item)->map(function($link) {
+            $links = $this->get_links($item)->map(function ($link) {
                 return new Link([
                     'name' => $link['name'], 'url' => $link['url']
                 ]);
-           })->all();
-           $group->links()->saveMany($links);
+            })->all();
+            $group->links()->saveMany($links);
 
            // add managers
-           if ($item->manager_ids) {
+            if ($item->manager_ids) {
                 $managers = collect(explode(',', $item->manager_ids))
-                    ->map(function($manager_id) use($userIndex) {
+                    ->map(function ($manager_id) use ($userIndex) {
                         return $userIndex->get($manager_id);
                     })->flatten()->all();
-                $group->managers()->attach(implode(',', $managers));
-           }
+                 $group->managers()->attach(implode(',', $managers));
+            }
 
             $groupIndex->put($item->id, $group->id);
 
@@ -283,7 +280,7 @@ class TransferData extends Command
 
     /**
      * Import Passports
-     * 
+     *
      * @param  Collection $passportIndex
      * @param  Collection $userIndex
      * @return void
@@ -293,7 +290,7 @@ class TransferData extends Command
         $this->line('Importing passports ...');
         $oldPassports = $this->passports();
         $bar = $this->output->createProgressBar($oldPassports->count());
-        $oldPassports->map(function($passport) use($bar, $passportIndex, $userIndex) {
+        $oldPassports->map(function ($passport) use ($bar, $passportIndex, $userIndex) {
             $pass = new Passport([
                 'user_id' => $userIndex->get($passport->user_id),
                 'given_names' => $passport->given_names,
@@ -316,7 +313,7 @@ class TransferData extends Command
 
     /**
      * Import visas
-     * 
+     *
      * @param  Collection $visaIndex
      * @param  Collection $userIndex
      * @return void
@@ -326,7 +323,7 @@ class TransferData extends Command
         $this->line('Importing visas ...');
         $oldVisas = $this->visas();
         $bar = $this->output->createProgressBar($oldVisas->count());
-        $oldVisas->map(function($visa) use($bar, $visaIndex, $userIndex) {
+        $oldVisas->map(function ($visa) use ($bar, $visaIndex, $userIndex) {
             $newVisa = new Visa([
                 'user_id' => $userIndex->get($visa->user_id),
                 'given_names' => $visa->given_names,
@@ -349,7 +346,7 @@ class TransferData extends Command
 
     /**
      * Import Essays
-     * 
+     *
      * @param  Collection $essayIndex
      * @param  Collection $userIndex
      * @return Void
@@ -359,7 +356,7 @@ class TransferData extends Command
         $this->line('Importing testimonies ...');
         $testimonies = $this->testimonies();
         $bar = $this->output->createProgressBar($testimonies->count());
-        $testimonies->map(function($testimony) use($bar, $essayIndex, $userIndex) {
+        $testimonies->map(function ($testimony) use ($bar, $essayIndex, $userIndex) {
             $essay = Essay::create([
                 'user_id' => $userIndex->get($testimony->user_id),
                 'author_name' => ucwords(strtolower($testimony->name)),
@@ -394,7 +391,7 @@ class TransferData extends Command
 
     /**
      * Import referrals
-     * 
+     *
      * @param  Collection $referralIndex
      * @param  Collection $userIndex
      * @return void
@@ -404,7 +401,7 @@ class TransferData extends Command
         $this->line('Importing pastoral recommendations...');
         $recommendations = $this->recommendations();
         $bar = $this->output->createProgressBar($recommendations->count());
-        $recommendations->map(function($rec) use($bar, $referralIndex, $userIndex) {
+        $recommendations->map(function ($rec) use ($bar, $referralIndex, $userIndex) {
             $referral = Referral::create([
                 'user_id' => $userIndex->get($rec->user_id),
                 'applicant_name' => $rec->user_name,
@@ -466,9 +463,9 @@ class TransferData extends Command
 
     /**
      * Import medical releases
-     * 
+     *
      * @param  Collection $medicalIndex
-     * @param  Collection $userIndex 
+     * @param  Collection $userIndex
      * @return void
      */
     private function import_medical_releases($medicalIndex, $userIndex)
@@ -476,7 +473,7 @@ class TransferData extends Command
         $this->line('Importing medical releases...');
         $medicalReleases = $this->medicalReleases();
         $bar = $this->output->createProgressBar($medicalReleases->count());
-        $medicalReleases->map(function($release) use($bar, $medicalIndex, $userIndex) {
+        $medicalReleases->map(function ($release) use ($bar, $medicalIndex, $userIndex) {
             $medical = MedicalRelease::create([
                 'user_id' => $userIndex->get($release->user_id),
                 'name' => ucwords(strtolower($release->name)),
@@ -491,7 +488,7 @@ class TransferData extends Command
                 'created_at' => $release->created_at,
                 'updated_at' => $release->updated_at
             ]);
-            $conditions = $this->conditions($release->id)->map(function($condition) {
+            $conditions = $this->conditions($release->id)->map(function ($condition) {
                 return new MedicalCondition([
                     'name' => $condition->name,
                     'medication' => false,
@@ -500,15 +497,15 @@ class TransferData extends Command
             })->all();
             $medical->conditions()->saveMany($conditions);
             $notes = collect([
-                'other' => $release->other, 
-                'allergies' => $release->allergies, 
+                'other' => $release->other,
+                'allergies' => $release->allergies,
                 'medications' => $release->medications
-            ])->reject(function($item) {
+            ])->reject(function ($item) {
                 $string = trim(strtolower(preg_replace('[^A-Za-z]', '', $item)));
                 return in_array($string, [null, '', 'none', 'na', 'n/a', 'na/a', 'n/a.', 'n/s', 0, '0', '-', 'n.a.', 'nada', 'nil', 'nhone', 'nka', 'nkda', 'nope', 'npne', 'n\a', 'n /a', 'n.a', 'nine', 'nione'], true);
-            })->reject(function($item) {
+            })->reject(function ($item) {
                 return starts_with(strtolower($item), 'no') || starts_with(strtolower($item), 'nil') || starts_with(strtolower($item), 'n/a') || starts_with(strtolower($item), 'nka') || starts_with(strtolower($item), 'nkda') || empty($item) || $item === '';
-            })->map(function($value, $key) use($medical) {
+            })->map(function ($value, $key) use ($medical) {
                 return new Note([
                     'subject' => $key == 'other' ? 'Other Concerns' : ucwords($key),
                     'content' => ucfirst(strtolower($value)),
@@ -525,7 +522,7 @@ class TransferData extends Command
 
     /**
      * Import campaigns
-     * 
+     *
      * @param  Collection $campaignIndex
      * @return void
      */
@@ -534,13 +531,13 @@ class TransferData extends Command
         $campaigns = $this->campaigns();
         $bar = $this->output->createProgressBar($campaigns->count());
         $this->line('Importing Campaigns...' ."\n");
-        $campaigns->map(function($item) use($bar, $campaignIndex, $userIndex) {
+        $campaigns->map(function ($item) use ($bar, $campaignIndex, $userIndex) {
             $campaign = Campaign::create([
                 'name' => $item->name,
                 'country_code' => strtolower($item->country_code),
                 'short_desc' => null,
                 'page_src' => null,
-                'avatar_upload_id' => trim($item->image) ? 
+                'avatar_upload_id' => trim($item->image) ?
                     $this->get_avatar_id($item->image, $item->name) : null,
                 'banner_upload_id' => null,
                 'started_at' => $item->start_date,
@@ -566,11 +563,11 @@ class TransferData extends Command
 
     /**
      * Import trips
-     * 
-     * @param  Collection $tripIndex     
-     * @param  Collection $campaignIndex 
-     * @param  Collection $groupIndex    
-     * @param  Collection $userIndex     
+     *
+     * @param  Collection $tripIndex
+     * @param  Collection $campaignIndex
+     * @param  Collection $groupIndex
+     * @param  Collection $userIndex
      * @return void
      */
     private function import_trips($tripIndex, $campaignIndex, $groupIndex, $userIndex, $requirementIndex)
@@ -578,7 +575,7 @@ class TransferData extends Command
         $this->line("\n" . 'Importing trips...');
         $trips = $this->trips();
         $bar = $this->output->createProgressBar($trips->count());
-        $trips->map(function($item) use($bar, $tripIndex, $campaignIndex, $groupIndex, $userIndex, $requirementIndex) {
+        $trips->map(function ($item) use ($bar, $tripIndex, $campaignIndex, $groupIndex, $userIndex, $requirementIndex) {
             $campaign_id = $campaignIndex->get($item->campaign_id);
             $rep_id = $item->rep_id ? $userIndex->get($item->rep_id) : null;
             $country_code = Campaign::where('id', $campaign_id)->pluck('country_code')->first();
@@ -605,8 +602,8 @@ class TransferData extends Command
                 'description' => '### What to Expect'."\n\n".trim(strip_tags($item->what_to_expect))."\n\n".'### What\'s Included in my Trip Registration?'."\n\n".trim(strip_tags($item->included))."\n\n".'### What\'s not Included in my Trip Registration?'."\n\n".trim(strip_tags($item->not_included))."\n\n".'### Pre-trip Training'."\n\n".trim(strip_tags($item->training))."\n\n".'### How You\'ll Get There'."\n\n".trim(strip_tags($item->flight_information)),
                 'public' => true,
                 'published_at' => Carbon::now(),
-                'closed_at' => $item->registration ? 
-                                $item->registration : 
+                'closed_at' => $item->registration ?
+                                $item->registration :
                                 Carbon::parse($item->start_date)
                                             ->subDays(51)
                                             ->toDateTimeString(),
@@ -625,10 +622,10 @@ class TransferData extends Command
 
     /**
      * Import reservations
-     * 
+     *
      * @param  Collection $reservationIndex
-     * @param  Collection $tripIndex       
-     * @param  Collection $userIndex       
+     * @param  Collection $tripIndex
+     * @param  Collection $userIndex
      * @return void
      */
     private function import_reservations($reservationIndex, $tripIndex, $userIndex)
@@ -637,7 +634,7 @@ class TransferData extends Command
         // grab reservations from old sys and map to new format
         $reservations = $this->reservations();
         $bar = $this->output->createProgressBar($reservations->count());
-        $reservations->map(function($r) use($bar, $reservationIndex, $tripIndex, $userIndex) {
+        $reservations->map(function ($r) use ($bar, $reservationIndex, $tripIndex, $userIndex) {
             $user_id = $userIndex->get($r->user_id);
             $rep_id = $r->rep_id ? $userIndex->get($r->rep_id) : null;
             $trip_id = $tripIndex->get($r->trip_id);
@@ -706,7 +703,7 @@ class TransferData extends Command
                 'public' => $r->public ? true : false,
             ]));
             // add video to fundraiser
-            if($r->video_type && $r->video) {
+            if ($r->video_type && $r->video) {
                 $fundraiser->uploads()->create([
                     'name' => strtolower($r->video_type).'_'.time(),
                     'type' => 'video',
@@ -715,14 +712,14 @@ class TransferData extends Command
                 ]);
             }
             // add photos if they exist
-            if($r->photos) {
+            if ($r->photos) {
                 $this->add_uploads_to_fundraiser($fundraiser, $r->photos);
             }
             // add requirements, deadlines, and todos
             $reservation->syncRequirements($trip->requirements);
             $reservation->syncDeadlines($trip->deadlines);
             $reservation->addTodos($trip->todos);
-            if($r->notes && ($reservation->rep_id ?: $reservation->trip->rep_id)) {
+            if ($r->notes && ($reservation->rep_id ?: $reservation->trip->rep_id)) {
                 $reservation->notes()->create([
                     'subject' => 'Imported Notes',
                     'content' => $r->notes,
@@ -737,7 +734,7 @@ class TransferData extends Command
 
     /**
      * Import companions
-     * 
+     *
      * @param  Collection $reservationIndex
      * @return void
      */
@@ -746,7 +743,7 @@ class TransferData extends Command
         $companions = $this->companions();
         $this->line('Importing travel companions...' ."\n");
         $bar = $this->output->createProgressBar($companions->count());
-        $companions->map(function($comp) use($bar, $reservationIndex) {
+        $companions->map(function ($comp) use ($bar, $reservationIndex) {
             $companion = Companion::create([
                 'reservation_id' => $reservationIndex->get($comp->reservation_id),
                 'companion_id' => $reservationIndex->get($comp->co_reservation_id),
@@ -764,7 +761,7 @@ class TransferData extends Command
     {
         $this->line("\n" . 'Updating reservation requirements...' . "\n");
 
-        $this->reservation_requirements()->map(function($req) use($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex) {
+        $this->reservation_requirements()->map(function ($req) use ($reservationIndex, $passportIndex, $visaIndex, $referralIndex, $medicalIndex, $essayIndex, $requirementIndex) {
             $doc_type = $this->get_document_type($req->formable_type);
             $doc_id = null;
 
@@ -806,7 +803,7 @@ class TransferData extends Command
         $this->line('Importing causes and initiatives...' ."\n");
         $causes = $this->causes();
         $bar = $this->output->createProgressBar($causes->count());
-        $causes->map(function($c) use($bar, $causeIndex, $initiativeIndex) {
+        $causes->map(function ($c) use ($bar, $causeIndex, $initiativeIndex) {
             $cause = ProjectCause::create([
                 'name' => $c->name,
                 'countries' => $this->get_countries($c->countries),
@@ -818,7 +815,7 @@ class TransferData extends Command
             ]);
             $causeIndex->put($c->id, $cause->id);
             
-            $this->initiatives($c->id)->map(function($i) use($cause, $initiativeIndex) {
+            $this->initiatives($c->id)->map(function ($i) use ($cause, $initiativeIndex) {
                 $initiative = $cause->initiatives()->create([
                     'type' => $i->name,
                     'country_code' => strtolower($i->country_code),
@@ -833,8 +830,8 @@ class TransferData extends Command
                 $initiativeIndex->put($i->id, $initiative->id);
 
                 // add available deadlines
-                if($i->launch_dates) {
-                    $deadlines = collect(explode(',', $i->launch_dates))->map(function($date) {
+                if ($i->launch_dates) {
+                    $deadlines = collect(explode(',', $i->launch_dates))->map(function ($date) {
                         return new Deadline([
                             'name' => 'Launch Date',
                             'date' => $date,
@@ -855,7 +852,7 @@ class TransferData extends Command
     {
         $countries = collect(explode(',', strtolower($list)));
 
-        return $countries->transform(function($country) {
+        return $countries->transform(function ($country) {
             return [
                 'code' => $country,
                 'name' => country($country)
@@ -868,7 +865,7 @@ class TransferData extends Command
         $this->line('Importing projects...' ."\n");
         $projects = $this->projects();
         $bar = $this->output->createProgressBar($projects->count());
-        $projects->map(function($proj) use($bar, $initiativeIndex, $userIndex, $groupIndex) {
+        $projects->map(function ($proj) use ($bar, $initiativeIndex, $userIndex, $groupIndex) {
             $project = new Project([
                 'name' => trim($proj->name),
                 'project_initiative_id' => $initiativeIndex->get($proj->initiative_id),
@@ -880,7 +877,7 @@ class TransferData extends Command
                 'deleted_at' => $proj->deleted_at
             ]);
 
-            if($proj->sponsorable_type == 'Group') {
+            if ($proj->sponsorable_type == 'Group') {
                 $project->sponsor_id = $groupIndex->get($proj->sponsorable_id);
                 $project->sponsor_type = 'groups';
             } else {
@@ -909,7 +906,7 @@ class TransferData extends Command
                     'due_at' => Carbon::parse($proj->launch_date)->subdays($proj->full_due_days)
                 ])
             ]);
-            $this->project_optional_costs($proj->id)->map(function($c) use($project, $proj) {
+            $this->project_optional_costs($proj->id)->map(function ($c) use ($project, $proj) {
                 $cost = $project->costs()->create([
                     'name' => $c->name,
                     'description' => $c->short_desc,
@@ -955,7 +952,7 @@ class TransferData extends Command
                 'deleted_at' => $proj->fundraiser_deleted ?: Carbon::now()
             ]));
             // add video to fundraiser
-            if($proj->video_type && $proj->video_id) {
+            if ($proj->video_type && $proj->video_id) {
                 $fundraiser->uploads()->create([
                     'name' => strtolower($proj->video_type).'_'.time(),
                     'type' => 'video',
@@ -964,7 +961,7 @@ class TransferData extends Command
                 ]);
             }
             // add photos if they exist
-            if($proj->photos) {
+            if ($proj->photos) {
                 $this->add_uploads_to_fundraiser($fundraiser, $proj->photos);
             }
 
@@ -976,7 +973,7 @@ class TransferData extends Command
 
     /**
      * Add a list of photos to fundraiser.
-     * 
+     *
      * @param Collection $fundraiser
      * @param String $photos Comma seperated list
      */
@@ -984,7 +981,7 @@ class TransferData extends Command
     {
         $filenames = collect(explode(',', $photos));
 
-        $uploads = $filenames->map(function($file) use($fundraiser) {
+        $uploads = $filenames->map(function ($file) use ($fundraiser) {
             return new Upload([
                 'name' => uniqid('fundraiser_'),
                 'type' => 'other',
@@ -997,7 +994,7 @@ class TransferData extends Command
 
     /**
      * Get all costs applied to the reservation.
-     * 
+     *
      * @param  Integer $old_res    Old system reservation id
      * @param  Collection $trip    New system trip
      * @return Array               New system cost ids
@@ -1014,7 +1011,7 @@ class TransferData extends Command
         $optional = $this->get_applied_optional_costs($old_res->id, $trip->costs);
 
         // push to costs collection and remove any null values
-        $costs = $static->push($incremental)->push($optional)->reject(function($cost) { 
+        $costs = $static->push($incremental)->push($optional)->reject(function ($cost) {
             return $cost == null;
         })->all();
 
@@ -1023,7 +1020,7 @@ class TransferData extends Command
 
     /**
      * Get any reservation addons as applied optional costs.
-     * 
+     *
      * @param  integer $id       Old system reservation id
      * @param  Collection $costs New system Trip costs
      * @return Array             New system cost ids
@@ -1031,13 +1028,13 @@ class TransferData extends Command
     private function get_applied_optional_costs($id, $costs)
     {
         // grab all the reservation addon names from old system
-        $addons = $this->reservation_addons($id)->transform(function($addon) {
+        $addons = $this->reservation_addons($id)->transform(function ($addon) {
             return ucwords(strtolower($addon->name));
         })->pluck('name')->all();
 
         // find matching cost names with addon names
         // and return the ids
-        return $costs->filter(function($cost) use($addons) {
+        return $costs->filter(function ($cost) use ($addons) {
             return in_array($cost->name, $addons);
         })->pluck('id')->all();
     }
@@ -1045,13 +1042,13 @@ class TransferData extends Command
     /**
      * Get the current incremenal cost applied by looking
      * at the reservations payment status in the old sys.
-     * 
+     *
      * @param  Integer $payment_status
      * @param  Collection $costs New sys trip costs
      * @return String New sys cost id.
      */
     private function get_applied_incremental_cost($payment_status, $costs)
-    {   
+    {
         switch ($payment_status) {
             case 1:
                 return $costs->where('name', 'Early Registration')->pluck('id')->first();
@@ -1073,14 +1070,14 @@ class TransferData extends Command
 
     /**
      * Get transactions from old sys, format and save to new.
-     * 
+     *
      * @param  Integer $reservation_id Old sys reservation Id
      * @return Collection New sys transactions
      */
     private function get_transactions($id, $type, $userIndex)
     {
         // get old sys transactions, map to new format and save
-        return $this->transactions($id, $type)->map(function($trans) use($userIndex) {
+        return $this->transactions($id, $type)->map(function ($trans) use ($userIndex) {
             $user_id = $userIndex->get($trans->user_id);
             $transaction = new Transaction([
                 'amount' => $trans->amount,
@@ -1135,7 +1132,8 @@ class TransferData extends Command
         }
     }
 
-    private function get_donor_id($trans, $user_id = null) {
+    private function get_donor_id($trans, $user_id = null)
+    {
         if ($user_id) {
             $user = User::findOrFail($user_id);
 
@@ -1185,7 +1183,7 @@ class TransferData extends Command
 
     /**
      * Add trip costs
-     * 
+     *
      * @param  Collection $item
      * @return Collection
      */
@@ -1221,7 +1219,7 @@ class TransferData extends Command
         }
 
         // Set the super early registration cost
-        // if there is a super early registration cost, we save the cost 
+        // if there is a super early registration cost, we save the cost
         // to the trip and add a single payment for the full amount
         if ($item->cost_super_early > 0) {
             $super_early = new Cost([
@@ -1293,7 +1291,7 @@ class TransferData extends Command
         // Save any trip addons as optional costs
         // and add a single payment to each
         $this->trip_addons($item->id)
-             ->map(function($addon) use($item, $trip, $active_at, $addon_deadline) {
+             ->map(function ($addon) use ($item, $trip, $active_at, $addon_deadline) {
                 $cost = new Cost([
                     'name' => ucwords(strtolower($addon->name)),
                     'type' => 'optional',
@@ -1311,7 +1309,7 @@ class TransferData extends Command
 
     /**
      * Make a new payment object
-     * 
+     *
      * @param  Integer  $amount
      * @param  Integer  $percent
      * @param  DateTime  $due
@@ -1321,7 +1319,7 @@ class TransferData extends Command
     private function make_payment($amount, $percent, $due, $grace = 3)
     {
         return new Payment([
-            'amount_owed' => $amount/100, 
+            'amount_owed' => $amount/100,
             'percent_owed' => $percent,
             'due_at' => $due,
             'grace_period' => $grace,
@@ -1337,10 +1335,10 @@ class TransferData extends Command
     private function add_trip_requirements($item, $trip, $requirementIndex)
     {
         $requirements = $this->trip_requirements($item->id)
-            ->reject(function($requirement) {
+            ->reject(function ($requirement) {
                 return is_null($this->get_document_type($requirement->formable));
             })
-            ->map(function($requirement) use($item, $trip, $requirementIndex) {
+            ->map(function ($requirement) use ($item, $trip, $requirementIndex) {
                 $req = $trip->requirements()->create([
                     'name' => $requirement->name,
                     'short_desc' => $requirement->description,
@@ -1386,7 +1384,7 @@ class TransferData extends Command
 
     /**
      * Add trip deadlines
-     * 
+     *
      * @param Collection $item
      * @param Collection $trip
      */
@@ -1403,13 +1401,13 @@ class TransferData extends Command
 
     /**
      * Get a new group id from the old group id
-     * 
+     *
      * @param  Integer $old_id
-     * @return String 
+     * @return String
      */
     private function get_new_group_id($old_id)
     {
-        $group = $this->groups($old_id)->map(function($g) {
+        $group = $this->groups($old_id)->map(function ($g) {
             return $this->get_new_or_existing_group($g);
         })->first();
 
@@ -1418,7 +1416,7 @@ class TransferData extends Command
 
     /**
      * Create a new group or return existing.
-     * 
+     *
      * @param  Collection $item
      * @return Object
      */
@@ -1429,56 +1427,56 @@ class TransferData extends Command
                 'type' => str_replace('-', '', strtolower($item->type))
             ]);
 
-            if (! $group->id) {
-               $group->description = trim($item->description);
-               $group->public = $item->public ? true : false;
-               $group->timezone = $item->timezone;
-               $group->address_one = $item->address_one;
-               $group->city = $item->city;
-               $group->state = $item->state;
-               $group->zip = $item->zip;
-               $group->country_code = strtolower($item->country_code);
-               $group->phone_one = $item->phone_one;
-               $group->email = $item->email;
-               $group->status = 'approved';
-               $group->avatar_upload_id = trim($item->logo_src) ? $this->get_avatar_id($item->logo_src, $item->name) : null;
-               $group->created_at = $item->created_at;
-               $group->updated_at = $item->updated_at;
+        if (! $group->id) {
+            $group->description = trim($item->description);
+            $group->public = $item->public ? true : false;
+            $group->timezone = $item->timezone;
+            $group->address_one = $item->address_one;
+            $group->city = $item->city;
+            $group->state = $item->state;
+            $group->zip = $item->zip;
+            $group->country_code = strtolower($item->country_code);
+            $group->phone_one = $item->phone_one;
+            $group->email = $item->email;
+            $group->status = 'approved';
+            $group->avatar_upload_id = trim($item->logo_src) ? $this->get_avatar_id($item->logo_src, $item->name) : null;
+            $group->created_at = $item->created_at;
+            $group->updated_at = $item->updated_at;
 
-               $group->save();
+            $group->save();
                
-               // add slug
-               $url = $item->slug ? $item->slug : generate_slug($group->name);
-               $group->slug()->create(['url' => $url]);
+           // add slug
+            $url = $item->slug ? $item->slug : generate_slug($group->name);
+            $group->slug()->create(['url' => $url]);
 
-               // add links
-               $links = $this->get_links($item)->map(function($link) {
-                    return new Link([
-                        'name' => $link['name'], 'url' => $link['url']
-                    ]);
-               })->all();
-               $group->links()->saveMany($links);
+           // add links
+            $links = $this->get_links($item)->map(function ($link) {
+                return new Link([
+                    'name' => $link['name'], 'url' => $link['url']
+                ]);
+            })->all();
+            $group->links()->saveMany($links);
 
-               // add managers
-               if ($item->manager_ids) {
-                    $managers = collect(explode(',', $item->manager_ids))->map(function($manager_id) use($userIndex) {
-                        return $userIndex->get($manager_id);
-                    })->all();
-                    $group->managers()->sync($managers);
-               }
-
-                $groupIndex->push([$item->id => $group->id]);
+       // add managers
+            if ($item->manager_ids) {
+                $managers = collect(explode(',', $item->manager_ids))->map(function ($manager_id) use ($userIndex) {
+                    return $userIndex->get($manager_id);
+                })->all();
+                $group->managers()->sync($managers);
             }
+
+            $groupIndex->push([$item->id => $group->id]);
+        }
 
             return $group;
     }
 
     /**
      * Get avatar id
-     * 
-     * @param  String $source 
-     * @param  String $name   
-     * @return String         
+     *
+     * @param  String $source
+     * @param  String $name
+     * @return String
      */
     private function get_avatar_id($source, $name)
     {
@@ -1512,15 +1510,15 @@ class TransferData extends Command
 
     /**
      * Get links
-     * 
+     *
      * @param  Collection $collection
      * @return Collection
      */
     private function get_links($collection)
     {
-        return collect($collection)->filter(function($value, $key) {
+        return collect($collection)->filter(function ($value, $key) {
             return ends_with($key, '_url') && $value;
-        })->map(function($value, $key) {
+        })->map(function ($value, $key) {
             return [
                 'name' => chop($key, '_url'),
                 'url' => remove_http($value)
@@ -1530,7 +1528,7 @@ class TransferData extends Command
 
     /**
      * Get new user ids from the old ones.
-     * 
+     *
      * @param  Array $old_ids
      * @return Array
      */
@@ -1538,7 +1536,7 @@ class TransferData extends Command
     {
         $ids = is_array($old_ids) ? $old_ids : explode(',', $old_ids);
 
-        $users = $this->users($ids)->map(function($u) {
+        $users = $this->users($ids)->map(function ($u) {
             return $this->get_new_or_existing_user($u);
         });
 
@@ -1547,7 +1545,7 @@ class TransferData extends Command
 
     /**
      * Get a new user or return existing.
-     * 
+     *
      * @param  Collection $item
      * @return Object
      */
@@ -1582,7 +1580,7 @@ class TransferData extends Command
 
             $user->save();
 
-            if($item->admin > 0) {
+            if ($item->admin > 0) {
                 $user->assign('admin');
             } else {
                 $user->assign('member');
@@ -1593,7 +1591,7 @@ class TransferData extends Command
             $user->slug()->create(['url' => $url]);
             
             // add links
-            $links = $this->get_links($item)->map(function($link) {
+            $links = $this->get_links($item)->map(function ($link) {
                  return new Link([
                      'name' => $link['name'], 'url' => $link['url']
                  ]);
@@ -1607,7 +1605,7 @@ class TransferData extends Command
 
     /**
      * Match old trip types with new designations
-     * 
+     *
      * @param  String $type
      * @return String
      */
@@ -1634,14 +1632,14 @@ class TransferData extends Command
 
     /**
      * Convert team role names into codes.
-     * 
+     *
      * @param  String $roles
      * @return Array
      */
     private function get_team_role_codes($roles)
     {
         $roles = collect(explode(',', $roles));
-        $roles = $roles->transform(function($role) {
+        $roles = $roles->transform(function ($role) {
             return TeamRole::get_code($role);
         })->all();
 
@@ -1650,7 +1648,7 @@ class TransferData extends Command
 
     /**
      * Get campaigns
-     * 
+     *
      * @return Collection
      */
     private function campaigns()
@@ -1660,18 +1658,25 @@ class TransferData extends Command
             ->leftJoin('countries', 'countries.id', '=', 'campaigns.country_id')
             ->leftJoin('campaign_pages', 'campaigns.id', '=', 'campaign_pages.campaign_id')
             ->select(
-                'campaigns.id', 'campaigns.name', 'abbr AS country_code',
-                'campaigns.created_at', 'campaigns.updated_at', 'slug',
-                'public', 'start_date', 'end_date', 'image'
+                'campaigns.id',
+                'campaigns.name',
+                'abbr AS country_code',
+                'campaigns.created_at',
+                'campaigns.updated_at',
+                'slug',
+                'public',
+                'start_date',
+                'end_date',
+                'image'
             )
             ->get());
     }
 
     /**
      * Get trips
-     * 
+     *
      * @param Integer $campaign_id
-     * @return Collection 
+     * @return Collection
      */
     private function trips()
     {
@@ -1680,7 +1685,7 @@ class TransferData extends Command
             ->leftJoin('trip_types', 'trip_types.id', '=', 'trips.trip_type_id')
             ->leftJoin('trip_deadlines', 'trip_deadlines.trip_id', '=', 'trips.id')
             ->leftJoin('trip_pages', 'trip_pages.trip_id', '=', 'trips.id')
-            ->leftJoin('travelerables', function($join) {
+            ->leftJoin('travelerables', function ($join) {
                 $join->on('travelerables.travelerable_id', '=', 'trips.id')
                      ->where('travelerables.travelerable_type', '=', 'Trip');
             })
@@ -1690,12 +1695,23 @@ class TransferData extends Command
             ->leftJoin('reps', 'reps.id', '=', 'trips.rep_id')
             ->groupBy('trips.id')
             ->select(
-                'trips.id', 'group_id', 'start_date', 'end_date',
-                'spots', 'companion_limit', 'difficulty_id', 'rep_id',
-                'trip_types.type AS type', 'trip_deadlines.registration',
-                'trips.created_at', 'trips.updated_at', 
-                'trips.cost_super_early', 'trips.cost_deposit',
-                'trips.cost_early', 'trips.cost_regular', 'trips.cost_late',
+                'trips.id',
+                'group_id',
+                'start_date',
+                'end_date',
+                'spots',
+                'companion_limit',
+                'difficulty_id',
+                'rep_id',
+                'trip_types.type AS type',
+                'trip_deadlines.registration',
+                'trips.created_at',
+                'trips.updated_at',
+                'trips.cost_super_early',
+                'trips.cost_deposit',
+                'trips.cost_early',
+                'trips.cost_regular',
+                'trips.cost_late',
                 'trip_deadlines.super_early_cost_full',
                 'trip_deadlines.early_cost_half',
                 'trip_deadlines.early_cost_full',
@@ -1712,9 +1728,10 @@ class TransferData extends Command
                 'trip_pages.training',
                 'trip_pages.flight_information'
             )->addSelect(
-               DB::raw('GROUP_CONCAT(DISTINCT travelers.traveler) AS prospects')
+                DB::raw('GROUP_CONCAT(DISTINCT travelers.traveler) AS prospects')
             )->addSelect(
-               DB::raw('GROUP_CONCAT(DISTINCT roles.name) AS team_roles'))
+                DB::raw('GROUP_CONCAT(DISTINCT roles.name) AS team_roles')
+            )
             // )->addSelect(
             //    DB::raw("CONCAT('###WHAT TO EXPECT', '
 
@@ -1741,7 +1758,7 @@ class TransferData extends Command
 
     /**
      * Get Groups
-     * 
+     *
      * @param  Integer $group_id
      * @return Collection
      */
@@ -1757,20 +1774,37 @@ class TransferData extends Command
             ->leftJoin('timezones', 'groups.timezone_id', '=', 'timezones.id')
             ->leftJoin('group_types', 'group_types.id', '=', 'groups.group_type_id')
             ->leftJoin('group_profiles', 'group_profiles.group_id', '=', 'groups.id')
-            ->leftJoin('slugs', function($join) {
+            ->leftJoin('slugs', function ($join) {
                 $join->on('slugs.slugable_id', '=', 'group_profiles.id')
                      ->where('slugs.slugable_type', '=', 'GroupProfile');
             })
-            ->leftJoin('socials', function($join) {
+            ->leftJoin('socials', function ($join) {
                 $join->on('socials.socialable_id', '=', 'groups.id')
                      ->where('socials.socialable_type', '=', 'Group');
             })
             ->leftJoin('group_user', 'group_user.group_id', '=', 'groups.id')
             ->leftJoin('users', 'group_user.user_id', '=', 'users.id')
             ->groupBy('groups.id')
-            ->select('groups.id', 'groups.name', 'group_types.name AS type', 'slugs.name AS slug', 'group_profiles.public', 'group_profiles.short_desc AS description', 'address AS address_one', 'city', 'state', 'zip', 'countries.abbr AS country_code', 'phone AS phone_one', 'logo_src', 
-                'groups.email', 'timezones.iana AS timezone', 
-                'socials.website AS website_url', 'groups.created_at', 'groups.updated_at')
+            ->select(
+                'groups.id',
+                'groups.name',
+                'group_types.name AS type',
+                'slugs.name AS slug',
+                'group_profiles.public',
+                'group_profiles.short_desc AS description',
+                'address AS address_one',
+                'city',
+                'state',
+                'zip',
+                'countries.abbr AS country_code',
+                'phone AS phone_one',
+                'logo_src',
+                'groups.email',
+                'timezones.iana AS timezone',
+                'socials.website AS website_url',
+                'groups.created_at',
+                'groups.updated_at'
+            )
             ->addSelect(
                 DB::raw('GROUP_CONCAT(DISTINCT users.id) AS manager_ids')
             )
@@ -1791,7 +1825,7 @@ class TransferData extends Command
 
     /**
      * Get users
-     * 
+     *
      * @param  Array $ids
      * @return Collection
      */
@@ -1803,24 +1837,43 @@ class TransferData extends Command
             ->leftJoin('contacts', 'contacts.user_id', '=', 'users.id')
             ->leftJoin('countries', 'contacts.country_id', '=', 'countries.id')
             ->leftJoin('user_profiles', 'user_profiles.user_id', '=', 'users.id')
-            ->leftJoin('slugs', function($join) {
+            ->leftJoin('slugs', function ($join) {
                 $join->on('slugs.slugable_id', '=', 'user_profiles.id')
                      ->where('slugs.slugable_type', '=', 'UserProfile');
             })
-            ->leftJoin('socials', function($join) {
+            ->leftJoin('socials', function ($join) {
                 $join->on('socials.socialable_id', '=', 'users.id')
                      ->where('socials.socialable_type', '=', 'User');
             })
             ->leftJoin('permissions', 'permissions.user_id', '=', 'users.id')
             ->groupBy('users.id')
             ->select(
-                'users.id', 'email', 'password', 'address', 'city', 'state', 'zip', 
-                'abbr AS country_code', 'home_phone', 'cell_phone', 'gender', 
-                'status', 'bio', 'public', 'slugs.name AS url', 
-                'iana AS timezone', 'users.created_at', 'users.updated_at',
-                'last_login AS login_at', 'socials.website AS website_url', 'dob',
-                'profile_pic_src', 'shirt_sizes.name AS shirt_size', 'height_ft',
-                'height_in', 'weight'
+                'users.id',
+                'email',
+                'password',
+                'address',
+                'city',
+                'state',
+                'zip',
+                'abbr AS country_code',
+                'home_phone',
+                'cell_phone',
+                'gender',
+                'status',
+                'bio',
+                'public',
+                'slugs.name AS url',
+                'iana AS timezone',
+                'users.created_at',
+                'users.updated_at',
+                'last_login AS login_at',
+                'socials.website AS website_url',
+                'dob',
+                'profile_pic_src',
+                'shirt_sizes.name AS shirt_size',
+                'height_ft',
+                'height_in',
+                'weight'
             )
             ->addSelect(DB::raw("CASE WHEN permissions.user_id IS NOT NULL THEN 1 ELSE 0 END AS admin"))
             ->addSelect(DB::raw("CONCAT(first_name, ' ', last_name) AS name"))
@@ -1837,7 +1890,7 @@ class TransferData extends Command
 
     /**
      * Get trip addons.
-     * 
+     *
      * @param  Integer $trip_id
      * @return Collection
      */
@@ -1852,9 +1905,9 @@ class TransferData extends Command
 
     /**
      * Get Trip Requirements
-     * 
-     * @param  integer $trip_id 
-     * @return Collection          
+     *
+     * @param  integer $trip_id
+     * @return Collection
      */
     private function trip_requirements($trip_id)
     {
@@ -1872,7 +1925,10 @@ class TransferData extends Command
         return collect($this->connection()
             ->table('requireable_reservation AS rr')
             ->select(
-                'rr.reservation_id', 'rr.formable_type', 'rr.formable_id', 'rr.status', 
+                'rr.reservation_id',
+                'rr.formable_type',
+                'rr.formable_id',
+                'rr.status',
                 'rr.requireable_id'
             )
             ->get());
@@ -1880,9 +1936,9 @@ class TransferData extends Command
 
     /**
      * Get reservations
-     * 
-     * @param  Integer $trip_id 
-     * @return Collection          
+     *
+     * @param  Integer $trip_id
+     * @return Collection
      */
     private function reservations()
     {
@@ -1892,18 +1948,34 @@ class TransferData extends Command
             ->join('users', 'users.id', '=', 'reservations.user_id')
             ->join('roles', 'roles.id', '=', 'reservations.role_id')
             ->leftJoin('contacts', 'contacts.user_id', '=', 'users.id')
-            ->leftJoin('uploads', function($join) {
+            ->leftJoin('uploads', function ($join) {
                 $join->on('reservation_pages.id', '=', 'uploads.uploadable_id')
                      ->where('uploads.uploadable_type', '=', 'ReservationPage');
             })
             ->leftJoin('reps', 'reps.id', '=', 'reservations.rep_id')
             ->select(
-                'first_name', 'middle_name', 'last_name', 'reservations.user_id', 'roles.name AS role',
-                'dropped', 'shirt_sent', 'launch_guide_sent', 'luggage_tag_sent',
-                'sent_to_lgl', 'reps.user_id AS rep_id', 'reservations.created_at', 'reservations.updated_at',
-                'support_description', 'reservation_pages.slug', 'reservation_pages.public',
-                'reservations.status_id AS payment_status', 'reservations.id',
-                'reservation_pages.video', 'reservation_pages.video_type', 'notes', 'reservations.trip_id'
+                'first_name',
+                'middle_name',
+                'last_name',
+                'reservations.user_id',
+                'roles.name AS role',
+                'dropped',
+                'shirt_sent',
+                'launch_guide_sent',
+                'luggage_tag_sent',
+                'sent_to_lgl',
+                'reps.user_id AS rep_id',
+                'reservations.created_at',
+                'reservations.updated_at',
+                'support_description',
+                'reservation_pages.slug',
+                'reservation_pages.public',
+                'reservations.status_id AS payment_status',
+                'reservations.id',
+                'reservation_pages.video',
+                'reservation_pages.video_type',
+                'notes',
+                'reservations.trip_id'
             )
             ->addSelect(
                 DB::raw('GROUP_CONCAT(DISTINCT uploads.uuid) AS photos')
@@ -1929,19 +2001,19 @@ class TransferData extends Command
             ->table('transactions')
             ->where('transactionable_id', $transactionable_id)
             ->where('transactionable_type', $transactionable_type)
-            ->leftJoin('payment_creditcards AS cards', function($join) {
+            ->leftJoin('payment_creditcards AS cards', function ($join) {
                 $join->on('cards.id', '=', 'transactions.payment_method_id')
                      ->where('transactions.payment_method_type', '=', 'CreditCard');
             })
-            ->leftJoin('payment_checks AS checks', function($join) {
+            ->leftJoin('payment_checks AS checks', function ($join) {
                 $join->on('checks.id', '=', 'transactions.payment_method_id')
                      ->where('transactions.payment_method_type', '=', 'Check');
             })
-            ->leftJoin('payment_cash AS cash', function($join) {
+            ->leftJoin('payment_cash AS cash', function ($join) {
                 $join->on('cash.id', '=', 'transactions.payment_method_id')
                      ->where('transactions.payment_method_type', '=', 'Cash');
             })
-            ->leftJoin('payment_credits AS credits', function($join) {
+            ->leftJoin('payment_credits AS credits', function ($join) {
                 $join->on('credits.id', '=', 'transactions.payment_method_id')
                      ->where('transactions.payment_method_type', '=', 'Credit');
             })
@@ -1950,9 +2022,22 @@ class TransferData extends Command
             ->leftJoin('countries AS checks_country', 'checks_country.id', '=', 'checks.country_id')
             ->leftJoin('countries AS cash_country', 'cash_country.id', '=', 'cash.country_id')
             ->select(
-                'transactions.id', 'amount', 'anonymous', 'user_id', 'payment_method_type', 'comment',
-                'transactions.created_at', 'transactions.updated_at', 'auth', 'trans_id', 'cards.email',
-                'reason', 'check_number', 'transactions.deleted_at', 'card_type', 'cc_number'
+                'transactions.id',
+                'amount',
+                'anonymous',
+                'user_id',
+                'payment_method_type',
+                'comment',
+                'transactions.created_at',
+                'transactions.updated_at',
+                'auth',
+                'trans_id',
+                'cards.email',
+                'reason',
+                'check_number',
+                'transactions.deleted_at',
+                'card_type',
+                'cc_number'
             )
             ->addSelect(DB::raw('
                 CASE 
@@ -2008,7 +2093,7 @@ class TransferData extends Command
 
     /**
      * Get Passports
-     * 
+     *
      * @return Collection
      */
     private function passports()
@@ -2018,9 +2103,17 @@ class TransferData extends Command
             ->join('countries AS nationality', 'nationality.id', '=', 'passports.birth_country_id')
             ->join('countries AS citizenship', 'citizenship.id', '=', 'passports.citizenship_country_id')
             ->select(
-                'given_names', 'surname', 'number', 'expiration', 'nationality.abbr AS birth_country',
-                'citizenship.abbr AS citizenship', 'image_scan', 'passports.created_at', 'passports.updated_at',
-                'user_id', 'passports.id'
+                'given_names',
+                'surname',
+                'number',
+                'expiration',
+                'nationality.abbr AS birth_country',
+                'citizenship.abbr AS citizenship',
+                'image_scan',
+                'passports.created_at',
+                'passports.updated_at',
+                'user_id',
+                'passports.id'
             )
             ->get());
     }
@@ -2031,16 +2124,23 @@ class TransferData extends Command
             ->table('visas')
             ->join('users', 'visas.user_id', '=', 'users.id')
             ->select(
-                'number', 'expiration', 'issued', 'image', 
-                'visas.created_at', 'visas.updated_at', 'user_id', 'visas.id',
-                'first_name AS given_names', 'last_name AS surname'
+                'number',
+                'expiration',
+                'issued',
+                'image',
+                'visas.created_at',
+                'visas.updated_at',
+                'user_id',
+                'visas.id',
+                'first_name AS given_names',
+                'last_name AS surname'
             )
             ->get());
     }
 
     /**
      * Get testimonies
-     * 
+     *
      * @return Collection
      */
     private function testimonies()
@@ -2049,8 +2149,14 @@ class TransferData extends Command
             ->table('testimonies')
             ->join('users', 'users.id', '=', 'testimonies.user_id')
             ->select(
-                'user_id', 'decision', 'church', 'walk', 'missions_experience', 
-                'testimonies.created_at', 'testimonies.updated_at', 'testimonies.id'
+                'user_id',
+                'decision',
+                'church',
+                'walk',
+                'missions_experience',
+                'testimonies.created_at',
+                'testimonies.updated_at',
+                'testimonies.id'
             )
             ->addSelect(DB::raw('CONCAT(users.first_name, " ", users.last_name) AS name'))
             ->get());
@@ -2058,7 +2164,7 @@ class TransferData extends Command
 
     /**
      * Get recommendations.
-     * 
+     *
      * @return Collection
      */
     private function recommendations()
@@ -2069,10 +2175,27 @@ class TransferData extends Command
             ->join('users', 'requests.user_id', '=', 'users.id')
             ->join('countries', 'requests.country_id', '=', 'countries.id')
             ->select(
-                'requests.name', 'org_name', 'address', 'city', 'state', 'zip', 'countries.name AS country', 'phone',
-                'requests.email', 'requests.created_at', 'requests.updated_at', 'responses.created_at AS responded_at',
-                'offical_title', 'known_applicant', 'applicant_roles', 'applicant_walk', 'concerns',
-                'applicant_strength', 'applicant_weakness', 'leadership_recommendation', 'user_id',
+                'requests.name',
+                'org_name',
+                'address',
+                'city',
+                'state',
+                'zip',
+                'countries.name AS country',
+                'phone',
+                'requests.email',
+                'requests.created_at',
+                'requests.updated_at',
+                'responses.created_at AS responded_at',
+                'offical_title',
+                'known_applicant',
+                'applicant_roles',
+                'applicant_walk',
+                'concerns',
+                'applicant_strength',
+                'applicant_weakness',
+                'leadership_recommendation',
+                'user_id',
                 'requests.id'
             )
             ->addSelect(DB::raw('CONCAT(users.first_name, " ", users.last_name) AS user_name'))
@@ -2085,9 +2208,18 @@ class TransferData extends Command
             ->table('medical_releases')
             ->join('users', 'medical_releases.user_id', '=', 'users.id')
             ->select(
-                'provider', 'policy_number', 'emergency_name', 'emergency_email',
-                'emergency_phone', 'other', 'allergies', 'medications', 'medical_releases.created_at',
-                'medical_releases.updated_at', 'user_id', 'medical_releases.id'
+                'provider',
+                'policy_number',
+                'emergency_name',
+                'emergency_email',
+                'emergency_phone',
+                'other',
+                'allergies',
+                'medications',
+                'medical_releases.created_at',
+                'medical_releases.updated_at',
+                'user_id',
+                'medical_releases.id'
             )
             ->addSelect(DB::raw('CONCAT(users.first_name, " ", users.last_name) AS name'))
             ->get());
@@ -2131,19 +2263,31 @@ class TransferData extends Command
         return collect($this->connection()
             ->table('project_initiative_types')
             ->join(
-                'project_initiatives AS initiatives', 'initiatives.id', '=', 'project_initiative_types.project_initiative_id'
+                'project_initiatives AS initiatives',
+                'initiatives.id',
+                '=',
+                'project_initiative_types.project_initiative_id'
             )
             ->join('countries', 'initiatives.country_id', '=', 'countries.id')
             ->join(
-                'project_types AS types', 'types.id', '=', 'project_initiative_types.project_type_id'
+                'project_types AS types',
+                'types.id',
+                '=',
+                'project_initiative_types.project_type_id'
             )
             ->leftJoin('project_launch_dates', 'project_launch_dates.project_initiative_id', '=', 'initiatives.id')
             ->groupBy('project_initiative_types.id')
             ->where('initiatives.project_cause_id', $cause_id)
             ->select(
-                'types.name', 'types.short_desc', 'types.thumb_src',
-                'initiatives.created_at', 'initiatives.updated_at', 'initiatives.started_at',
-                'initiatives.ended_at', 'countries.abbr AS country_code', 'project_initiative_types.id'
+                'types.name',
+                'types.short_desc',
+                'types.thumb_src',
+                'initiatives.created_at',
+                'initiatives.updated_at',
+                'initiatives.started_at',
+                'initiatives.ended_at',
+                'countries.abbr AS country_code',
+                'project_initiative_types.id'
             )
             ->addSelect(
                 DB::raw('GROUP_CONCAT(DISTINCT project_launch_dates.launch_date) AS launch_dates')
@@ -2157,34 +2301,51 @@ class TransferData extends Command
             ->table('sponsored_projects')
             ->join('project_initiatives', 'sponsored_projects.project_initiative_id', '=', 'project_initiatives.id')
             ->join('project_types', 'sponsored_projects.project_type_id', '=', 'project_types.id')
-            ->join('project_initiative_types', function($join) {
+            ->join('project_initiative_types', function ($join) {
                 $join->on('project_initiative_types.project_initiative_id', '=', 'project_initiatives.id')
                      ->on('project_initiative_types.project_type_id', '=', 'project_types.id');
             })
             ->join('project_launch_dates', 'sponsored_projects.project_launch_date_id', '=', 'project_launch_dates.id')
             ->join('plaque_msg_prefixes', 'sponsored_projects.plaque_msg_prefix_id', '=', 'plaque_msg_prefixes.id')
-            ->leftJoin('fundraisers', function($join) {
+            ->leftJoin('fundraisers', function ($join) {
                 $join->on('fundraisers.fundable_id', '=', 'sponsored_projects.id')
                      ->where('fundraisers.fundable_type', '=', 'SponsoredProject');
             })
-            ->leftJoin('slugs', function($join) {
+            ->leftJoin('slugs', function ($join) {
                 $join->on('slugs.slugable_id', '=', 'sponsored_projects.id')
                      ->where('slugs.slugable_type', '=', 'Fundraiser');
             })
-            ->leftJoin('uploads', function($join) {
+            ->leftJoin('uploads', function ($join) {
                 $join->on('fundraisers.id', '=', 'uploads.uploadable_id')
                      ->where('uploads.uploadable_type', '=', 'Fundraiser');
             })
             ->groupBy('sponsored_projects.id')
             ->select(
-                'sponsored_projects.name', 'project_initiative_types.id AS initiative_id', 'sponsored_projects.id',
-                'sponsored_projects.plaque_msg', 'sponsored_projects.created_at', 'sponsored_projects.updated_at',
-                'project_initiative_types.amount', 'project_launch_dates.launch_date', 'project_launch_dates.half_due_days',
-                'project_launch_dates.full_due_days', 'plaque_msg_prefixes.prefix', 'sponsored_projects.completed',
-                'sponsored_projects.sponsorable_id', 'sponsored_projects.sponsorable_type', 'sponsored_projects.deleted_at',
-                'fundraisers.name AS fundraiser_name', 'fundraisers.deadline', 'fundraisers.video_id', 'fundraisers.video_type',
-                'fundraisers.support_msg', 'fundraisers.public', 'fundraisers.created_at AS fundraiser_created',
-                'fundraisers.updated_at AS fundraiser_updated', 'fundraisers.deleted_at AS fundraiser_deleted', 'slugs.name AS slug'
+                'sponsored_projects.name',
+                'project_initiative_types.id AS initiative_id',
+                'sponsored_projects.id',
+                'sponsored_projects.plaque_msg',
+                'sponsored_projects.created_at',
+                'sponsored_projects.updated_at',
+                'project_initiative_types.amount',
+                'project_launch_dates.launch_date',
+                'project_launch_dates.half_due_days',
+                'project_launch_dates.full_due_days',
+                'plaque_msg_prefixes.prefix',
+                'sponsored_projects.completed',
+                'sponsored_projects.sponsorable_id',
+                'sponsored_projects.sponsorable_type',
+                'sponsored_projects.deleted_at',
+                'fundraisers.name AS fundraiser_name',
+                'fundraisers.deadline',
+                'fundraisers.video_id',
+                'fundraisers.video_type',
+                'fundraisers.support_msg',
+                'fundraisers.public',
+                'fundraisers.created_at AS fundraiser_created',
+                'fundraisers.updated_at AS fundraiser_updated',
+                'fundraisers.deleted_at AS fundraiser_deleted',
+                'slugs.name AS slug'
             )
             ->addSelect(
                 DB::raw('GROUP_CONCAT(DISTINCT uploads.uuid) AS photos')
@@ -2204,7 +2365,7 @@ class TransferData extends Command
 
     /**
      * Define the database connection
-     * 
+     *
      * @return Builder
      */
     private function connection()

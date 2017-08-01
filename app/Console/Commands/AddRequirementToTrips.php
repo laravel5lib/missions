@@ -51,7 +51,7 @@ class AddRequirementToTrips extends Command
             'Passport', 'Visa', 'Personal Testimony', 'Pastoral Recommendation',
             'Medical Release', 'Minor Release', 'Media Credentials', 'Medical Credentials',
             'Airport Preference', 'Arrival Designation', 'Influencer Application', 'Travel Itinerary'
-        ]);     
+        ]);
         $desc = $this->ask('Please provide a short description:');
         $docType = $this->choice('What type of document?', config('requirements.document_types'));
         $due = $this->ask('When is this requirement due? (format: YYYY-MM-DD HH::MM::SS)');
@@ -70,15 +70,15 @@ class AddRequirementToTrips extends Command
 
         $query = $this->trip;
 
-        if($tripType) {
+        if ($tripType) {
             $query = $query->where('type', $tripType);
         }
 
-        if($campaignId) {
+        if ($campaignId) {
             $query = $query->where('campaign_id', $campaignId);
         }
 
-        if($groupId) {
+        if ($groupId) {
             $query = $query->where('group_id', $groupId);
         }
 
@@ -89,7 +89,7 @@ class AddRequirementToTrips extends Command
             return;
         }
 
-        collect($trips)->each(function ($trip) use($name, $desc, $docType, $due, $grace, $conditionType, $conditionOperator, $conditionAppliesTo) {
+        collect($trips)->each(function ($trip) use ($name, $desc, $docType, $due, $grace, $conditionType, $conditionOperator, $conditionAppliesTo) {
             $requirement = $trip->requirements()->create([
                 'name' => $name,
                 'short_desc' => $desc,

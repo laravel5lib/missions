@@ -13,7 +13,7 @@ class EloquentType extends EloquentRepository implements Type
 
     /**
      * Instance of RoomType Model.
-     * 
+     *
      * @var App\Models\v1\RoomType
      */
     protected $model;
@@ -22,7 +22,7 @@ class EloquentType extends EloquentRepository implements Type
 
     /**
      * Rooming Type Constructor
-     * 
+     *
      * @param App\Models\v1\RoomType $model
      */
     function __construct(RoomType $model)
@@ -32,7 +32,7 @@ class EloquentType extends EloquentRepository implements Type
 
     /**
      * Create a new room type and save in storage.
-     * 
+     *
      * @param  App\Http\Requests\v1\RoomTypeRequest $request
      * @return App\Repositories\Rooming\Type
      */
@@ -53,7 +53,7 @@ class EloquentType extends EloquentRepository implements Type
 
     /**
      * Update an existing room type and save in storage.
-     * 
+     *
      * @param  App\Http\Requests\v1\RoomTypeRequest $request
      * @return App\Repositories\Rooming\Type
      */

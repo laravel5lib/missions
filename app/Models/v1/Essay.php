@@ -18,21 +18,21 @@ class Essay extends Model
 
     /**
      * Attributes that should mutated to date instances.
-     * 
+     *
      * @var [type]
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * Attributes that should be cast to native types.
-     * 
+     *
      * @var array
      */
     protected $casts = ['content' => 'array'];
 
     /**
      * Set the essay's content attribute
-     * 
+     *
      * @param Array $value
      */
     public function setContentAttribute($value)
@@ -42,7 +42,7 @@ class Essay extends Model
 
     /**
      * Get the essay's attached reservations
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function reservations()
@@ -52,7 +52,7 @@ class Essay extends Model
 
     /**
      * Get the essay's parent user
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()

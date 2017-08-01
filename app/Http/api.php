@@ -19,11 +19,9 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', [
     'middleware' => 'api.throttle', 'limit' => 100, 'expires' => 1,
     'namespace' => 'App\Http\Controllers\Api'
-], function($api)
-{
+], function ($api) {
 
-    $api->get('/', function()
-    {
+    $api->get('/', function () {
         return [
             'message' => 'Welcome to the Missions.Me API',
         ];
@@ -33,7 +31,7 @@ $api->version('v1', [
     $api->get('images/{path}', 'UploadsController@display')->where('path', '.+');
     $api->get('files/{path}', 'UploadsController@display_file')->where('path', '.+');
 
-    $api->get('download/{path}', function($path) {
+    $api->get('download/{path}', function ($path) {
 
         $headers = [
             'Content-Type' => Storage::mimetype($path),
@@ -41,10 +39,9 @@ $api->version('v1', [
         ];
 
         return response()->make(Storage::get($path), 200, $headers);
-
     })->where('path', '.+');
 
-    $api->get('play/{path}', function($path) {
+    $api->get('play/{path}', function ($path) {
         return response()->make(Storage::disk('s3')->get($path), 200, [
                 'Content-Type' => 'audio/mp3'
             ]);
@@ -112,8 +109,7 @@ $api->version('v1', [
     $api->post('referrals/import', 'ReferralsController@import');
     $api->resource('campaigns.regions', 'RegionsController');
 
-    $api->group(['namespace' => 'Teams'], function($api)
-    {
+    $api->group(['namespace' => 'Teams'], function ($api) {
         $api->resource('teams/types', 'TeamTypesController');
         $api->resource('teams', 'TeamsController');
         $api->resource('{teamable_type}/{teamable_id}/teams', 'TeamablesController');
@@ -164,7 +160,7 @@ $api->version('v1', [
     $api->resource('accounting/items', 'AccountingItemsController');
     $api->resource('regions.accommodations', 'AccommodationsController');
 
-    $api->group(['prefix' => 'rooming'], function($api) {
+    $api->group(['prefix' => 'rooming'], function ($api) {
         $api->resource('plans', 'Rooming\PlansController');
         $api->post('plans/export', 'Rooming\PlansController@export');
         $api->resource('types', 'Rooming\TypesController');
@@ -185,21 +181,19 @@ $api->version('v1', [
     $api->resource('hubs', 'HubsController');
     $api->resource('hubs.activities', 'HubActivitiesController');
 
-    $api->group(['prefix' => 'credentials'], function($api)
-    {
+    $api->group(['prefix' => 'credentials'], function ($api) {
         $api->resource('medical', 'MedicalCredentialsController');
         $api->resource('media', 'MediaCredentialsController');
     });
 
-    $api->group(['prefix' => 'medical'], function($api)
-    {
+    $api->group(['prefix' => 'medical'], function ($api) {
         $api->resource('releases', 'Medical\ReleasesController');
         $api->post('releases/export', 'Medical\ReleasesController@export');
         $api->post('releases/import', 'Medical\ReleasesController@import');
-        $api->get('conditions', function() {
-           return ['data' => \App\Models\v1\MedicalCondition::available()];
+        $api->get('conditions', function () {
+            return ['data' => \App\Models\v1\MedicalCondition::available()];
         });
-        $api->get('allergies', function() {
+        $api->get('allergies', function () {
             return ['data' => \App\Models\v1\MedicalAllergy::available()];
         });
     });
@@ -219,13 +213,13 @@ $api->version('v1', [
         $api->get('timezones/{country_code?}', 'UtilitiesController@getTimezones');
         $api->get('past-trips', 'UtilitiesController@getPastTrips');
         $api->get('activities/types', 'UtilitiesController@getActivityTypes');
-        $api->get('make-slug/{string}', function($string) {
+        $api->get('make-slug/{string}', function ($string) {
             return ['slug' => generate_slug($string) ];
         });
-        $api->get('make-fundraiser-slug/{string}', function($string) {
+        $api->get('make-fundraiser-slug/{string}', function ($string) {
             return ['slug' => generate_fundraiser_slug($string) ];
         });
-        $api->get('make-fund-slug/{string}', function($string) {
+        $api->get('make-fund-slug/{string}', function ($string) {
             return ['slug' => generate_fundraiser_slug($string) ];
         });
     });
@@ -234,8 +228,7 @@ $api->version('v1', [
     $api->post('speaker', 'UtilitiesController@sendSpeakerRequestEmail');
     $api->post('sponsor-project', 'UtilitiesController@sendProjectSponsorEmail');
 
-    $api->group(['prefix' => 'reports'], function($api)
-    {
+    $api->group(['prefix' => 'reports'], function ($api) {
         $api->post('reservations/{type}', 'Reporting\ReservationsController@store');
         $api->post('{type}/rooms', 'Reporting\RoomsController@store');
         $api->post('transports/{type}', 'Reporting\TransportsController@store');
@@ -247,8 +240,7 @@ $api->version('v1', [
     |--------------------------------------------------------------------------
     */
     $api->group(['prefix' => 'mobile'], function ($api) {
-        $api->get('/', function()
-        {
+        $api->get('/', function () {
             return [
                 'message' => 'Welcome to the Missions.Me Mobile API',
             ];
@@ -260,8 +252,7 @@ $api->version('v1', [
 
         $api->get('/users/me', 'Mobile\UsersController@show');
 
-        $api->group(['prefix' => 'interactions'], function($api)
-        {
+        $api->group(['prefix' => 'interactions'], function ($api) {
             $api->resource('decisions', 'Interaction\DecisionsController');
             $api->resource('exams', 'Interaction\ExamsController');
             $api->resource('sites', 'Interaction\SitesController');

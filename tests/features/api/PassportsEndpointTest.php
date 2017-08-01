@@ -23,8 +23,8 @@ class PassportsEndpointTest extends TestCase
                 'data' => [
                     '*' => [
                         'id', 'given_names', 'surname', 'number',
-                        'birth_country', 'birth_country_name', 'citizenship', 
-                        'citizenship_name', 'upload_id', 'expires_at', 
+                        'birth_country', 'birth_country_name', 'citizenship',
+                        'citizenship_name', 'upload_id', 'expires_at',
                         'created_at', 'updated_at', 'expired'
                     ]
                 ]
@@ -37,7 +37,7 @@ class PassportsEndpointTest extends TestCase
     public function creates_passport()
     {
         $passport = factory(Passport::class)->make([
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ])->toArray();
@@ -53,7 +53,7 @@ class PassportsEndpointTest extends TestCase
     {
         $passport = factory(Passport::class)->create([
             'given_names' => 'joe smith',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
         ]);

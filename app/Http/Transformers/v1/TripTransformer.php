@@ -76,8 +76,9 @@ class TripTransformer extends TransformerAbstract
     {
         $campaign = $trip->campaign;
 
-        if($campaign)
+        if ($campaign) {
             return $this->item($campaign, new CampaignTransformer);
+        }
 
         return null;
     }
@@ -92,8 +93,9 @@ class TripTransformer extends TransformerAbstract
     {
         $group = $trip->group;
 
-        if($group)
+        if ($group) {
             return $this->item($group, new GroupTransformer);
+        }
 
         return null;
     }
@@ -108,8 +110,9 @@ class TripTransformer extends TransformerAbstract
     {
         $deadlines = $trip->deadlines;
 
-        if($deadlines)
+        if ($deadlines) {
             return $this->collection($deadlines, new DeadlineTransformer);
+        }
 
         return null;
     }
@@ -125,22 +128,20 @@ class TripTransformer extends TransformerAbstract
     {
 
         // Optional params validation
-        if ( ! is_null($params)) {
-            $this->validateParams($params); 
+        if (! is_null($params)) {
+            $this->validateParams($params);
 
             $costs = [];
             
-            if (in_array('active', $params->get('status')))
-            {
+            if (in_array('active', $params->get('status'))) {
                 $active = $trip->activeCosts;
 
                 $maxDate = $active->where('type', 'incremental')->max('active_at');
 
-                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                $costs = $active->reject(function ($value, $key) use ($maxDate) {
                     return $value->type == 'incremental' && $value->active_at < $maxDate;
                 });
             }
-        
         } else {
             $costs = $trip->costs;
         }
@@ -184,7 +185,9 @@ class TripTransformer extends TransformerAbstract
     {
         $rep = $trip->rep;
 
-        if ( ! $rep) return null;
+        if (! $rep) {
+            return null;
+        }
 
         return $this->item($rep, new UserTransformer);
     }
@@ -194,8 +197,8 @@ class TripTransformer extends TransformerAbstract
         $usedParams = array_keys(iterator_to_array($params));
         if ($invalidParams = array_diff($usedParams, $this->validParams)) {
             throw new \Exception(sprintf(
-                'Invalid param(s): "%s". Valid param(s): "%s"', 
-                implode(',', $usedParams), 
+                'Invalid param(s): "%s". Valid param(s): "%s"',
+                implode(',', $usedParams),
                 implode(',', $this->validParams)
             ));
         }

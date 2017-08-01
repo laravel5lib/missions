@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class Prospect {
+class Prospect
+{
     
     protected static $general = [
         'ADLT' => 'Adults',
@@ -37,8 +38,8 @@ class Prospect {
 
     /**
      * Return all prospects
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function all()
     {
@@ -49,8 +50,8 @@ class Prospect {
 
     /**
      * Return general prospects
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function general()
     {
@@ -59,8 +60,8 @@ class Prospect {
 
     /**
      * Return medical prospects
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function medical()
     {
@@ -69,17 +70,16 @@ class Prospect {
 
     /**
      * Return a single prospect by code
-     * 
-     * @param  sting $code 
-     * @return array       
+     *
+     * @param  sting $code
+     * @return array
      */
     public static function get($code)
     {
-        $result = array_where(static::all(), function($key, $value) use($code) {
+        $result = array_where(static::all(), function ($key, $value) use ($code) {
             return $key === strtoupper($code);
         });
 
         return $result;
     }
-
 }

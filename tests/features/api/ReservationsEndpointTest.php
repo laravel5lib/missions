@@ -76,13 +76,13 @@ class ReservationsEndpointTest extends TestCase
     {
         $reservation = factory(Reservation::class)->create();
         $fund = factory(Fund::class)->create([
-            'fundable_id' => $reservation->id, 
+            'fundable_id' => $reservation->id,
             'fundable_type' => 'reservations'
         ]);
         $trip = factory(Trip::class)->create();
 
         $this->post(
-            '/api/reservations/'.$reservation->id.'/transfer', 
+            '/api/reservations/'.$reservation->id.'/transfer',
             ['trip_id' => $trip->id, 'desired_role' => 'MISS']
         )
         ->assertResponseOk()

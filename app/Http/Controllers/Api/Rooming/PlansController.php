@@ -21,7 +21,7 @@ class PlansController extends Controller
 
     /**
      * Get all plans.
-     * 
+     *
      * @param  Request $request
      * @return Dingo\Api\Http\Response
      */
@@ -50,7 +50,7 @@ class PlansController extends Controller
 
     /**
      * Create a new plan and save in storage.
-     * 
+     *
      * @param  RoomingPlanRequest $request
      * @return Dingo\Api\Http\Response
      */
@@ -64,14 +64,14 @@ class PlansController extends Controller
 
         $this->plan->syncGroups($plan->id, $request->get('group_ids', []));
 
-        return $this->response->item($plan, new RoomingPlanTransformer); 
+        return $this->response->item($plan, new RoomingPlanTransformer);
     }
 
     /**
      * Update an existing plan.
-     * 
+     *
      * @param  RoomingPlanRequest $request
-     * @param  String             $id     
+     * @param  String             $id
      * @return Dingo\Api\Http\Response
      */
     public function update(RoomingPlanRequest $request, $id)
@@ -82,11 +82,13 @@ class PlansController extends Controller
             'campaign_id' => $request->get('campaign_id'),
         ], $id);
 
-        if ($request->get('locked') == true)
+        if ($request->get('locked') == true) {
             $this->plan->lock($id);
+        }
 
-        if ($request->get('locked') == false)
+        if ($request->get('locked') == false) {
             $this->plan->unlock($id);
+        }
 
         $this->plan->syncGroups($id, $request->get('group_ids', []));
 
@@ -95,7 +97,7 @@ class PlansController extends Controller
 
     /**
      * Delete a plan.
-     * 
+     *
      * @param  String $id
      * @return Dingo\Api\Http\Response
      */
@@ -114,7 +116,7 @@ class PlansController extends Controller
      */
     public function export(ExportRequest $request)
     {
-        $this->dispatch(new ExportRoomingPlans( array_filter($request->all()) ));
+        $this->dispatch(new ExportRoomingPlans(array_filter($request->all())));
 
         return $this->response()->created(null, [
             'message' => 'Report is being generated and will be available shortly.'

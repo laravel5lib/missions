@@ -54,8 +54,7 @@ class MedicalInfo extends Job implements ShouldQueue
 
     private function columnize($requirements)
     {
-        return $requirements->map(function ($requirement)
-        {
+        return $requirements->map(function ($requirement) {
             $height = convert_to_inches($requirement->reservation->height);
             $weight = convert_to_pounds($requirement->reservation->weight);
 
@@ -63,19 +62,21 @@ class MedicalInfo extends Job implements ShouldQueue
             $allergies = $requirement->document ? $requirement->document->allergies : [];
             $emergency = $requirement->document ? $requirement->document->emergency_contact : [];
 
-            if (!empty($conditions))
+            if (!empty($conditions)) {
                 $conditions = implode(', ', $conditions->map(function ($condition) {
                     return $condition->name
                     . ($condition->diagnosed ? ' (Diagnosed)' : '')
                     . ($condition->medication ? ' (Medication)' : '');
                 })->all());
+            }
 
-            if (!empty($allergies))
+            if (!empty($allergies)) {
                 $allergies = implode(', ', $allergies->map(function ($allergy) {
                     return $allergy->name
                         . ($allergy->diagnosed ? ' (Diagnosed)' : '')
                         . ($allergy->medication ? ' (Medication)' : '');
                 })->all());
+            }
 
             return [
                 'Surname' => $requirement->reservation->surname,

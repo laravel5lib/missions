@@ -6,7 +6,8 @@ use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 
 class CampaignTest extends TestCase
-{   
+{
+
     /**
      * @test
      */
@@ -53,11 +54,11 @@ class CampaignTest extends TestCase
         $promotional = $campaign->promotionals()->first();
 
         $this->assertEquals(
-            $campaign->id, 
+            $campaign->id,
             $campaign->promotionals()->first()->promoteable_id
         );
         $this->assertEquals(
-            $promotional->id, 
+            $promotional->id,
             $promotional->promocodes()->first()->promotional_id
         );
     }
@@ -70,17 +71,16 @@ class CampaignTest extends TestCase
         $reservations = factory(Reservation::class, 2)->create(['trip_id' => $trip->id]);
 
         $campaign->promote(
-            $name = 'Recruit1', 
-            $qty = 1, 
-            $reward = 10000, 
+            $name = 'Recruit1',
+            $qty = 1,
+            $reward = 10000,
             $expires = null,
             $affilates = 'reservations'
         );
 
         $this->assertEquals(
-            'reservations', 
+            'reservations',
             $campaign->promotionals()->first()->promocodes()->first()->rewardable_type
         );
     }
-
 }

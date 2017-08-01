@@ -7,7 +7,8 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
 
-class TeamTransformer extends TransformerAbstract {
+class TeamTransformer extends TransformerAbstract
+{
 
     /**
      * List of resources available to include
@@ -48,7 +49,7 @@ class TeamTransformer extends TransformerAbstract {
 
     /**
      * Include team squads.
-     * 
+     *
      * @param  Team   $team
      * @return Collection
      */
@@ -61,7 +62,7 @@ class TeamTransformer extends TransformerAbstract {
 
     /**
      * Include groups assocated with the team.
-     * 
+     *
      * @param  Team   $team
      * @return Collection
      */
@@ -74,7 +75,7 @@ class TeamTransformer extends TransformerAbstract {
 
     /**
      * Include campaigns associated with the team
-     * 
+     *
      * @param  Team   $team
      * @return Collection
      */

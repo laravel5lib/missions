@@ -3,8 +3,7 @@
 /**
  * Countries Visted Accolade
  */
-$factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Accolade::class, function (Faker\Generator $faker) {
     $countries = [];
 
     for ($i = 0; $i <= 10; $i++) {
@@ -22,8 +21,7 @@ $factory->define(App\Models\v1\Accolade::class, function(Faker\Generator $faker)
 /**
  * Trip History Accolade
  */
-$factory->defineAs(App\Models\v1\Accolade::class, 'trip_history', function(Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Accolade::class, 'trip_history', function (Faker\Generator $faker) {
     $trips = config('accolades.trips');
 
     return [

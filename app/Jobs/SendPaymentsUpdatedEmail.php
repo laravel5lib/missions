@@ -36,7 +36,7 @@ class SendPaymentsUpdatedEmail extends Job implements ShouldQueue
 
         $mailer->send('emails.reservations.payments.updated', [
             'reservation' => $reservation
-        ], function($m) use($reservation) {
+        ], function ($m) use ($reservation) {
             $m->to($reservation->user->email, $reservation->user->name)
               ->subject('Your trip costs have been updated!');
         });

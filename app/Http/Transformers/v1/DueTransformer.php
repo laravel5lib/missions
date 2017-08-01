@@ -36,5 +36,4 @@ class DueTransformer extends TransformerAbstract
             'status'       => $due->getStatus()
         ];
     }
-
 }

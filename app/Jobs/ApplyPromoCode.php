@@ -38,31 +38,30 @@ class ApplyPromoCode extends Job implements ShouldQueue
     {
         $code = $promocode->byCode($this->code)->fresh();
 
-         if ($code->exists()) {
+        if ($code->exists()) {
             $record = $code->first();
 
             $record->increment('use_count');
 
             $credit = $transaction->create([
-                'type' => 'credit',
-                'amount' => $record->promotional->reward/100,
-                'fund_id' => $this->model->fund->id,
-                'details' => ['reason' => $record->promotional->name.' Promotional Credit ' . '('.$record->code.')']
+              'type' => 'credit',
+              'amount' => $record->promotional->reward/100,
+              'fund_id' => $this->model->fund->id,
+              'details' => ['reason' => $record->promotional->name.' Promotional Credit ' . '('.$record->code.')']
             ]);
 
             event(new TransactionWasCreated($credit));
 
             if ($affiliate = $record->rewardable) {
                 $reward = $transaction->create([
-                    'type' => 'credit',
-                    'amount' => $record->promotional->reward/100,
-                    'fund_id' => $affiliate->fund->id,
-                    'details' => ['reason' => $record->promotional->name.' Promotional Credit ' . '('.$record->code.')']
+                   'type' => 'credit',
+                   'amount' => $record->promotional->reward/100,
+                   'fund_id' => $affiliate->fund->id,
+                   'details' => ['reason' => $record->promotional->name.' Promotional Credit ' . '('.$record->code.')']
                 ]);
 
                 event(new TransactionWasCreated($reward));
             }
-
-         }
+        }
     }
 }

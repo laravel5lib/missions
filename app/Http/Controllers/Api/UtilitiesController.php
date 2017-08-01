@@ -75,15 +75,15 @@ class UtilitiesController extends Controller
     {
         $timezones = \DateTimeZone::listIdentifiers();
 
-        if ($country_code)
+        if ($country_code) {
             $timezones = \DateTimeZone::listIdentifiers(\
-                DateTimeZone::PER_COUNTRY, strtoupper($country_code)
-            );
+                DateTimeZone::PER_COUNTRY, strtoupper($country_code));
+        }
 
         return response()->json(compact('timezones'));
     }
 
-    public function  sendContactEmail(Request $request)
+    public function sendContactEmail(Request $request)
     {
         $data = [
             'email' => $request->get('email'),
@@ -96,10 +96,9 @@ class UtilitiesController extends Controller
         Mail::queue('emails.contact', ['data' => $data], function ($m) use ($data) {
             $m->to('go@missions.me', 'Missions.me')->subject('Contact from Missions.Me Visitor!');
         });
-
     }
 
-    public function  sendSpeakerRequestEmail(Request $request)
+    public function sendSpeakerRequestEmail(Request $request)
     {
         $data = [
             'email' => $request->get('email'),
@@ -122,10 +121,9 @@ class UtilitiesController extends Controller
               ->cc('gabe@missions.me', 'Gabe Bahlhorn')
               ->subject('Speaker Request from Missions.Me Visitor!');
         });
-
     }
 
-    public function  sendProjectSponsorEmail(Request $request)
+    public function sendProjectSponsorEmail(Request $request)
     {
         $data = [
             'email' => $request->get('email'),
@@ -144,12 +142,11 @@ class UtilitiesController extends Controller
               ->cc('gabe@missions.me', 'Gabe Bahlhorn')
               ->subject('New Project Request!');
         });
-
     }
 
     public function getPastTrips()
     {
-       return config('accolades.trips');
+        return config('accolades.trips');
     }
 
     public function getActivityTypes()

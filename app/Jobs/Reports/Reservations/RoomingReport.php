@@ -38,8 +38,13 @@ class RoomingReport extends Job implements ShouldQueue
     {
         $reservations = $reservation->filter(array_filter($this->request))
             ->withCount('companionReservations')
-            ->with('rooms.type', 'rooms.plans', 'costs',
-                'trip.group', 'trip.campaign')
+            ->with(
+                'rooms.type',
+                'rooms.plans',
+                'costs',
+                'trip.group',
+                'trip.campaign'
+            )
             ->get();
 
         $data = $this->columnize($reservations);
@@ -67,7 +72,7 @@ class RoomingReport extends Job implements ShouldQueue
 //            $roommateCols['Roommate '.$number . ' Surname'] = null;
 //        }
 
-        return $reservations->map(function($reservation) {
+        return $reservations->map(function ($reservation) {
 
 //            foreach($reservation->companionReservations as $key => $companion)
 //            {
@@ -94,7 +99,7 @@ class RoomingReport extends Job implements ShouldQueue
                 'Marital Status' => $reservation->status,
                 'Designation' => $reservation->designation ?
                     implode('', array_flatten($reservation->designation->content)) : 'none',
-                'Rooming Cost(s)' => implode(", ", $reservation->costs()->type('optional')->get()->map(function($cost) {
+                'Rooming Cost(s)' => implode(", ", $reservation->costs()->type('optional')->get()->map(function ($cost) {
                     return $cost->name;
                 })->all()),
                 'Rooms' => implode(', ', $reservation->rooms->pluck('type.name')->all()),
@@ -120,5 +125,4 @@ class RoomingReport extends Job implements ShouldQueue
 //
 //        return $companions;
 //    }
-
 }

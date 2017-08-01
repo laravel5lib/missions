@@ -53,7 +53,8 @@ class ExportReservationPics extends Command
         $reservations->each(function ($reservation) use ($bar) {
 
             $newFilePath = strtolower(
-                sprintf("%s/%s/%s",
+                sprintf(
+                    "%s/%s/%s",
                     'export/pics',
                     camel_case($reservation->trip->campaign->name),
                     $reservation->squads()->first() ? $reservation->squads()->team->name : 'unassigned'
@@ -61,7 +62,8 @@ class ExportReservationPics extends Command
             );
 
             $newFilename = strtolower(
-                sprintf("%s_%s_%s",
+                sprintf(
+                    "%s_%s_%s",
                     snake_case(teamRole($reservation->desired_role)),
                     snake_case($reservation->given_names),
                     $reservation->surname
@@ -73,7 +75,7 @@ class ExportReservationPics extends Command
                     $reservation->getAvatar()->source,
                     $newFilePath . '/' . $newFilename
                 );
-            } catch(FileNotFoundException $e) {
+            } catch (FileNotFoundException $e) {
                 $this->error($e->getMessage());
             }
 

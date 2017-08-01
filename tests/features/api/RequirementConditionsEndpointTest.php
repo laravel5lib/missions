@@ -27,7 +27,7 @@ class RequirementConditionsEndpointTest extends TestCase
                         'updated_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -45,10 +45,10 @@ class RequirementConditionsEndpointTest extends TestCase
              ->assertResponseOk()
              ->seeJson([
                 'requirement_id' => $requirement->id,
-                'type' => 'role', 
-                'operator' => 'equal_to', 
+                'type' => 'role',
+                'operator' => 'equal_to',
                 'applies_to' => ['ABC', 'DEF']
-            ]);
+             ]);
     }
 
     /** @test */
@@ -69,14 +69,14 @@ class RequirementConditionsEndpointTest extends TestCase
              ->assertResponseOk()
              ->seeJson([
                 'requirement_id' => $requirement->id,
-                'type' => 'role', 
-                'operator' => 'not_equal_to', 
+                'type' => 'role',
+                'operator' => 'not_equal_to',
                 'applies_to' => ['GHI', 'JKL']
-            ]);
+             ]);
     }
 
     /** @test */
-    public function  deletes_a_requirement_condition()
+    public function deletes_a_requirement_condition()
     {
         $requirement = factory(App\Models\v1\Requirement::class)->create();
         $condition = factory(App\Models\v1\RequirementCondition::class)->create([

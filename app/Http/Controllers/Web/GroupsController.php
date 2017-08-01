@@ -22,7 +22,9 @@ class GroupsController extends Controller
 
         $authId = auth()->user() ? auth()->user()->id : null;
 
-        if ( !$group->public && ! $group->managers->pluck('id')->contains($authId) ) abort(403);
+        if (!$group->public && ! $group->managers->pluck('id')->contains($authId)) {
+            abort(403);
+        }
 
         return view('site.groups.profile', compact('group'));
     }

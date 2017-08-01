@@ -71,7 +71,9 @@ class TripFilter extends Filter
      */
     public function groups($ids)
     {
-        if($ids == []) return $this;
+        if ($ids == []) {
+            return $this;
+        }
 
         return $this->whereIn('group_id', $ids);
     }
@@ -84,7 +86,9 @@ class TripFilter extends Filter
      */
     public function campaign($id)
     {
-        if(!$id) return $this;
+        if (!$id) {
+            return $this;
+        }
 
         return $this->where('campaign_id', $id);
     }
@@ -97,7 +101,9 @@ class TripFilter extends Filter
      */
     public function reps($ids)
     {
-        if($ids == []) return $this;
+        if ($ids == []) {
+            return $this;
+        }
 
         return $this->whereIn('rep_id', $ids);
     }
@@ -110,7 +116,9 @@ class TripFilter extends Filter
      */
     public function countries($codes)
     {
-        if($codes == []) return $this;
+        if ($codes == []) {
+            return $this;
+        }
 
         return $this->whereIn('country_code', $codes);
     }
@@ -123,7 +131,9 @@ class TripFilter extends Filter
      */
     public function type($type)
     {
-        if(! $type) return $this;
+        if (! $type) {
+            return $this;
+        }
 
         return $this->where('type', $type);
     }
@@ -136,7 +146,9 @@ class TripFilter extends Filter
      */
     public function status($status)
     {
-        if(! $status) return $this;
+        if (! $status) {
+            return $this;
+        }
 
         return $this->{$status}();
     }
@@ -149,7 +161,9 @@ class TripFilter extends Filter
      */
     public function difficulties($difficulties)
     {
-        if($difficulties == []) return $this;
+        if ($difficulties == []) {
+            return $this;
+        }
 
         return $this->whereIn('difficulty', $difficulties);
     }
@@ -162,7 +176,9 @@ class TripFilter extends Filter
      */
     public function reservations($reservations)
     {
-        if(count($reservations) < 2) return $this;
+        if (count($reservations) < 2) {
+            return $this;
+        }
 
         return $this->has('reservations', '>=', $reservations[0])
                     ->has('reservations', '<=', $reservations[1]);
@@ -176,7 +192,9 @@ class TripFilter extends Filter
      */
     public function spots($spots)
     {
-        if(count($spots) < 2) return $this;
+        if (count($spots) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('spots', $spots);
     }
@@ -189,7 +207,9 @@ class TripFilter extends Filter
      */
     public function companions($companions)
     {
-        if(count($companions) < 2) return $this;
+        if (count($companions) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('companion_limit', $companions);
     }
@@ -202,7 +222,9 @@ class TripFilter extends Filter
      */
     public function hasFacilitators($hasFacilitators)
     {
-        if ($hasFacilitators == []) return $this;
+        if ($hasFacilitators == []) {
+            return $this;
+        }
 
         return $hasFacilitators == 'yes' ?
             $this->has('facilitators') :
@@ -217,7 +239,9 @@ class TripFilter extends Filter
      */
     public function hasNotes($hasNotes)
     {
-        if ($hasNotes == []) return $this;
+        if ($hasNotes == []) {
+            return $this;
+        }
 
         return $hasNotes == 'yes' ?
             $this->has('notes') :
@@ -232,7 +256,9 @@ class TripFilter extends Filter
      */
     public function published($published)
     {
-        if (! $published) return $this;
+        if (! $published) {
+            return $this;
+        }
 
         return $published == 'yes' ?
             $this->where('published_at', '<=', Carbon::now()) :
@@ -247,10 +273,11 @@ class TripFilter extends Filter
      */
     public function requirements($requirements)
     {
-        if($requirements == []) return $this;
+        if ($requirements == []) {
+            return $this;
+        }
 
-        return $this->whereHas('requirements', function ($r) use ($requirements)
-        {
+        return $this->whereHas('requirements', function ($r) use ($requirements) {
             return $r->whereIn('name', $requirements);
         });
     }
@@ -263,10 +290,11 @@ class TripFilter extends Filter
      */
     public function costs($costs)
     {
-        if ($costs == []) return $this;
+        if ($costs == []) {
+            return $this;
+        }
 
-        return $this->whereHas('costs', function ($c) use ($costs)
-        {
+        return $this->whereHas('costs', function ($c) use ($costs) {
             return $c->whereIn('name', $costs);
         });
     }
@@ -279,10 +307,11 @@ class TripFilter extends Filter
      */
     public function amounts($amounts)
     {
-        if(count($amounts) < 2) return $this;
+        if (count($amounts) < 2) {
+            return $this;
+        }
 
-        return $this->whereHas('costs', function ($c) use ($amounts)
-        {
+        return $this->whereHas('costs', function ($c) use ($amounts) {
             return $c->whereBetween('amount', $amounts);
         });
     }
@@ -295,7 +324,9 @@ class TripFilter extends Filter
      */
     public function starts($startDates)
     {
-        if(count($startDates) < 2) return $this;
+        if (count($startDates) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('started_at', $startDates);
     }
@@ -308,7 +339,9 @@ class TripFilter extends Filter
      */
     public function ends($endDates)
     {
-        if(count($endDates) < 2) return $this;
+        if (count($endDates) < 2) {
+            return $this;
+        }
 
         return $this->whereBetween('ended_at', $endDates);
     }

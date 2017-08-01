@@ -14,7 +14,7 @@ class TeamablesEndpointTest extends TestCase
                 'team_id' => $team->id,
                 'teamable_id' => $group->id,
                 'teamable_type' => 'groups'
-            ]);
+             ]);
     }
 
     /** @test */
@@ -29,12 +29,12 @@ class TeamablesEndpointTest extends TestCase
                 'team_id' => $team->id,
                 'teamable_id' => $campaign->id,
                 'teamable_type' => 'campaigns'
-            ]);
+             ]);
     }
 
     /** @test */
     public function add_teams_to_region()
-    {   
+    {
         $type = factory(App\Models\v1\TeamType::class)->create();
         $team = factory(App\Models\v1\Team::class)->create(['type_id' => $type->id]);
         $campaign = factory(App\Models\v1\Campaign::class)->create();
@@ -46,7 +46,7 @@ class TeamablesEndpointTest extends TestCase
                 'team_id' => $team->id,
                 'teamable_id' => $region->id,
                 'teamable_type' => 'regions'
-            ]);
+             ]);
     }
 
     /** @test */
@@ -62,7 +62,7 @@ class TeamablesEndpointTest extends TestCase
                 'team_id' => $team->id,
                 'teamable_id' => $group->id,
                 'teamable_type' => 'groups'
-            ]);
+             ]);
     }
 
     /** @test */
@@ -78,7 +78,7 @@ class TeamablesEndpointTest extends TestCase
                 'team_id' => $team->id,
                 'teamable_id' => $campaign->id,
                 'teamable_type' => 'campaigns'
-            ]);
+             ]);
     }
 
     /** @test */
@@ -96,6 +96,6 @@ class TeamablesEndpointTest extends TestCase
                 'team_id' => $team->id,
                 'teamable_id' => $region->id,
                 'teamable_type' => 'regions'
-            ]);
+             ]);
     }
 }

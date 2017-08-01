@@ -89,7 +89,6 @@ class PassengersByTransport extends Job implements ShouldQueue
             ];
 
             return ($reservation + $passport + $transport);
-
         })->all();
     }
 

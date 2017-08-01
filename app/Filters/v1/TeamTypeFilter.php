@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Filters\v1;
 
 class TeamTypeFilter extends Filter

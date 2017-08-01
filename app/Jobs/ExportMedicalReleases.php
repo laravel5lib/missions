@@ -19,23 +19,23 @@ class ExportMedicalReleases extends Exporter
             'name' => $release->name,
             'ins_provider' => $release->ins_provider,
             'ins_policy_no' => $release->ins_policy_no,
-            'emergency_name' => isset($release->emergency_contact['name']) ? 
+            'emergency_name' => isset($release->emergency_contact['name']) ?
                                     $release->emergency_contact['name'] : null,
-            'emergency_phone' => isset($release->emergency_contact['phone']) ? 
+            'emergency_phone' => isset($release->emergency_contact['phone']) ?
                                     $release->emergency_contact['phone'] : null,
-            'emergency_email' => isset($release->emergency_contact['email']) ? 
+            'emergency_email' => isset($release->emergency_contact['email']) ?
                                     $release->emergency_contact['email'] : null
         ]);
 
-        $conditions = $release->conditions->map(function($condition) {
-            return $condition->name . 
-                   ($condition->diagnosed ? ' (Diagnosed)' : ''). 
+        $conditions = $release->conditions->map(function ($condition) {
+            return $condition->name .
+                   ($condition->diagnosed ? ' (Diagnosed)' : '').
                    ($condition->medication ? ' (Medication)' : '');
         })->all();
 
-        $allergies = $release->allergies->map(function($allergy) {
-            return $allergy->name . 
-                   ($allergy->diagnosed ? ' (Diagnosed)' : ''). 
+        $allergies = $release->allergies->map(function ($allergy) {
+            return $allergy->name .
+                   ($allergy->diagnosed ? ' (Diagnosed)' : '').
                    ($allergy->medication ? ' (Medication)' : '');
         })->all();
 

@@ -24,7 +24,7 @@ class UserReportsController extends Controller
 
     /**
      * Get all user reports
-     * 
+     *
      * @param  string  $userId
      * @param  Request $request
      * @return response
@@ -43,7 +43,7 @@ class UserReportsController extends Controller
 
     /**
      * Delete the report
-     * 
+     *
      * @param  string $id
      * @return response
      */

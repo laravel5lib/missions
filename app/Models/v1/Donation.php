@@ -84,5 +84,4 @@ class Donation extends Model
     {
         return $this->belongsTo(Donor::class);
     }
-
 }

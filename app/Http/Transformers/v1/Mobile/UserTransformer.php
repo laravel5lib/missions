@@ -6,7 +6,8 @@ use App\Models\v1\User;
 use Intervention\Image\Facades\Image;
 use League\Fractal\TransformerAbstract;
 
-class UserTransformer extends TransformerAbstract {
+class UserTransformer extends TransformerAbstract
+{
 
     /**
      * Turn this item object into a generic array
@@ -46,8 +47,7 @@ class UserTransformer extends TransformerAbstract {
             ->with('membership.team.region', 'trip.campaign')
             ->get();
 
-        $mobileTrips = $reservations->map(function($reservation)
-        {
+        $mobileTrips = $reservations->map(function ($reservation) {
             $year = $reservation->trip->started_at->format('Y');
             $region = $reservation->membership->team->region;
             $name = $reservation->name;

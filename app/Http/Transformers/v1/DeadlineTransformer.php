@@ -33,8 +33,7 @@ class DeadlineTransformer extends TransformerAbstract
             'enforced'     => (bool) $deadline->enforced
         ];
 
-        if($deadline->pivot)
-        {
+        if ($deadline->pivot) {
             $array = [
                 'id'           => $deadline->id,
                 'name'         => $deadline->name,

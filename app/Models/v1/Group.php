@@ -105,7 +105,7 @@ class Group extends Model
 
     /**
      * Get all the group's active trip reservations.
-     * 
+     *
      * @return Response
      */
     public function activeReservations()
@@ -178,7 +178,7 @@ class Group extends Model
 
     /**
      * Get the group's promotionals.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function promotionals()
@@ -188,12 +188,12 @@ class Group extends Model
 
     /**
      * Helper method to retrieve the user's avatar
-     * 
+     *
      * @return mixed
      */
     public function getAvatar()
     {
-        if( ! $this->avatar) {
+        if (! $this->avatar) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'placeholder',
@@ -210,12 +210,12 @@ class Group extends Model
 
     /**
      * Helper method to retrieve the group's banner
-     * 
+     *
      * @return mixed
      */
     public function getBanner()
     {
-        if( ! $this->banner) {
+        if (! $this->banner) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'default',
@@ -274,7 +274,7 @@ class Group extends Model
 
     /**
      * Get the group's slug.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function slug()
@@ -321,7 +321,9 @@ class Group extends Model
      */
     public function syncManagers($user_ids = null)
     {
-        if ( is_null($user_ids)) return;
+        if (is_null($user_ids)) {
+            return;
+        }
 
         $this->managers()->sync($user_ids);
     }

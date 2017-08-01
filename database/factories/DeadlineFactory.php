@@ -3,8 +3,7 @@
 /**
  * Generic Deadline (trip default)
  */
-$factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker) {
     $trip = App\Models\v1\Trip::inRandomOrder()->first();
 
     return [
@@ -27,8 +26,7 @@ $factory->define(App\Models\v1\Deadline::class, function (Faker\Generator $faker
 /**
  * Reservation Deadline
  */
-$factory->defineAs(App\Models\v1\Deadline::class, 'reservation', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Deadline::class, 'reservation', function (Faker\Generator $faker) use ($factory) {
     $deadline = $factory->raw(App\Models\v1\Deadline::class);
 
     return array_merge($deadline, [
@@ -48,8 +46,7 @@ $factory->defineAs(App\Models\v1\Deadline::class, 'reservation', function (Faker
 /**
  * Project Deadline
  */
-$factory->defineAs(App\Models\v1\Deadline::class, 'project', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Deadline::class, 'project', function (Faker\Generator $faker) use ($factory) {
     $deadline = $factory->raw(App\Models\v1\Deadline::class);
 
     return array_merge($deadline, [
@@ -68,16 +65,14 @@ $factory->defineAs(App\Models\v1\Deadline::class, 'project', function (Faker\Gen
 /**
  * Real Deadline Names
  */
-$factory->defineAs(App\Models\v1\Deadline::class, 'real', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Deadline::class, 'real', function (Faker\Generator $faker) use ($factory) {
     $deadline = $factory->raw(App\Models\v1\Deadline::class);
 
     return array_merge($deadline, [
         'name' => $faker->randomElement([
-            'Last day to add companions', 
-            'Team training meetup', 
+            'Last day to add companions',
+            'Team training meetup',
             'Arrive in Miami'
         ])
     ]);
 });
-

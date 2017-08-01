@@ -19,7 +19,7 @@ class ReferralFilter extends Filter
      */
     public $sortable = [
         'applicant_name', 'attention_to', 'recipient_email',
-        'sent_at', 'responded_at', 'created_at', 
+        'sent_at', 'responded_at', 'created_at',
         'updated_at', 'type'
     ];
 
@@ -40,7 +40,9 @@ class ReferralFilter extends Filter
      */
     public function status($status)
     {
-        if (! in_array($status, ['draft', 'sent', 'received'])) return $this;
+        if (! in_array($status, ['draft', 'sent', 'received'])) {
+            return $this;
+        }
 
         return $this->{$status}();
     }
@@ -64,7 +66,7 @@ class ReferralFilter extends Filter
      */
     public function user($id)
     {
-        if ( ! key_exists('manager', $this->input)) {
+        if (! key_exists('manager', $this->input)) {
             return $this->where('user_id', $id);
         }
 

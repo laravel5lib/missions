@@ -30,7 +30,9 @@ class UserAbilitiesController extends Controller
 
         $class = $map->get($request->get('entity_type'));
 
-        if ($user->allow($request->get('name'), $class)) return ['message' => 'Ability allowed.'];
+        if ($user->allow($request->get('name'), $class)) {
+            return ['message' => 'Ability allowed.'];
+        }
 
         return ['message' => 'Unable to allow ability.'];
     }
@@ -43,7 +45,9 @@ class UserAbilitiesController extends Controller
 
         $class = $map->get($request->get('entity_type'));
 
-        if ($user->disallow($request->get('name'), $class)) return ['message' => 'Ability denied.'];
+        if ($user->disallow($request->get('name'), $class)) {
+            return ['message' => 'Ability denied.'];
+        }
 
         return ['message' => 'Unable to deny the ability.'];
     }

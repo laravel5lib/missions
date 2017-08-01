@@ -61,7 +61,7 @@ class ProjectTransformer extends Fractal\TransformerAbstract
      */
     public function includeSponsor(Project $project)
     {
-        if($project->sponsor instanceof Group) {
+        if ($project->sponsor instanceof Group) {
             return $this->item($project->sponsor, new GroupTransformer);
         }
 
@@ -89,7 +89,9 @@ class ProjectTransformer extends Fractal\TransformerAbstract
      */
     public function includeRep(Project $project)
     {
-        if (! $project->rep) return null;
+        if (! $project->rep) {
+            return null;
+        }
 
         return $this->item($project->rep, new UserTransformer);
     }
@@ -104,7 +106,9 @@ class ProjectTransformer extends Fractal\TransformerAbstract
     {
         $costs = $project->costs;
 
-        if ( ! $costs) return null;
+        if (! $costs) {
+            return null;
+        }
 
         return $this->collection($costs, new CostTransformer);
     }

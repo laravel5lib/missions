@@ -4,7 +4,8 @@ namespace App\Services;
 
 use Dingo\Api\Routing\Helpers;
 
-class TravelActivity {
+class TravelActivity
+{
 
     use Helpers;
     
@@ -13,13 +14,11 @@ class TravelActivity {
         $data = collect($data);
 
         try {
-
             $activity = $this->api
                 ->json($data->get('activity'))
                 ->post('activities');
 
             if ($data->get('transport')) {
-
                 $transport = $this->api
                     ->json($data->get('transport'))
                     ->post('transports');
@@ -42,7 +41,6 @@ class TravelActivity {
                     ->json(['activities' => [$activity->id]])
                     ->post('hubs/' . $hub->id . '/activities');
             }
-
         } catch (\Exception $e) {
             isset($transport) ? $transport->delete() : null;
             isset($passenger) ? $passenger->delete() : null;
@@ -53,7 +51,6 @@ class TravelActivity {
         }
 
         return $activity;
-
     }
 
     public function update(array $data)
@@ -61,7 +58,6 @@ class TravelActivity {
         $data = collect($data);
 
         try {
-            
             $activity = $this->api
                 ->json(array_filter($data->get('activity')))
                 ->put('activities/'.$data->get('activity')['id']);
@@ -77,10 +73,8 @@ class TravelActivity {
                     ->json(array_filter($data->get('hub')))
                     ->put('hubs/'.$data->get('hub')['id']);
             }
-
         } catch (\Exception $e) {
             throw $e;
         }
-
     }
 }

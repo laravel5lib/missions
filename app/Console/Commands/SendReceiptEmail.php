@@ -52,13 +52,15 @@ class SendReceiptEmail extends Command
 
         $donation = $this->transaction->type('donation')->find($id);
 
-        if ( ! $donation) $this->error('There is no donation matching that transaction ID. Nothing sent.');
+        if (! $donation) {
+            $this->error('There is no donation matching that transaction ID. Nothing sent.');
+        }
 
         if ($donation) {
             dispatch(new \App\Jobs\Transactions\SendReceiptEmail($donation, $email));
             $this->info('Done. Receipt email processed.');
 
-            if($this->option('notify')) {
+            if ($this->option('notify')) {
                 dispatch(new SendDonationNotificationEmail($donation));
                 $this->info('Recipient has been notified.');
             }

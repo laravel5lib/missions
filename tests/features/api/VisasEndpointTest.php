@@ -24,7 +24,7 @@ class VisasEndpointTest extends TestCase
                     '*' => [
                         'id', 'given_names', 'surname', 'number',
                         'country_code', 'country_name', 'upload_id',
-                        'issued_at', 'expires_at', 'created_at', 
+                        'issued_at', 'expires_at', 'created_at',
                         'updated_at', 'expired'
                     ]
                 ]
@@ -37,7 +37,7 @@ class VisasEndpointTest extends TestCase
     public function creates_visa()
     {
         $visa = factory(Visa::class)->make([
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ])->toArray();
@@ -53,7 +53,7 @@ class VisasEndpointTest extends TestCase
     {
         $visa = factory(Visa::class)->create([
             'given_names' => 'joe smith',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             },
         ]);

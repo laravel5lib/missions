@@ -4,27 +4,28 @@ namespace App\Services\Importers;
 
 use App\Models\v1\User;
 
-class GroupListImportHandler extends ImportHandler {
+class GroupListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Group';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
      * ['db_col' => 'doc_col']
-     * 
+     *
      * @var array
      */
     public $duplicates = ['name' => 'name', 'type' => 'type'];
 
     public function match_columns_to_properties($group)
     {
-        $group = $group->transform(function($item) {
+        $group = $group->transform(function ($item) {
             return trim($item);
         });
 
@@ -57,7 +58,7 @@ class GroupListImportHandler extends ImportHandler {
     }
 
     private function get_managers_by_email($emails)
-    {   
+    {
         $emails = is_array($emails) ? $emails : explode(',', $emails);
 
         $userIds = User::whereIn('email', $emails)->pluck('id')->all();
@@ -71,7 +72,9 @@ class GroupListImportHandler extends ImportHandler {
 
     private function attach_avatar($group)
     {
-        if (! $group->logo_source) return null;
+        if (! $group->logo_source) {
+            return null;
+        }
 
         $upload = Upload::firstOrNew(['source' => trim($group->logo_source)]);
 
@@ -85,20 +88,24 @@ class GroupListImportHandler extends ImportHandler {
 
     private function attach_banner($group)
     {
-        if (! $group->banner_source) return null;
+        if (! $group->banner_source) {
+            return null;
+        }
 
         $upload = Upload::firstOrNew(['source' => trim($group->banner_source)]);
 
-        if ($upload->id) return $upload->id;
+        if ($upload->id) {
+            return $upload->id;
+        }
 
         return null;
     }
 
     private function get_links($group)
     {
-        $links = $group->filter(function($value, $key) {
+        $links = $group->filter(function ($value, $key) {
             return ends_with($key, '_url');
-        })->map(function($value, $key) {
+        })->map(function ($value, $key) {
             return [
                 'name' => chop($key, '_url'),
                 'url' => remove_http($value)
@@ -107,5 +114,4 @@ class GroupListImportHandler extends ImportHandler {
 
         return $links;
     }
-
 }

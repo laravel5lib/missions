@@ -4,7 +4,8 @@ namespace App\Listeners;
 
 use App\Jobs\SendRequirementNotificationEmail;
 
-class RequirementEventListener {
+class RequirementEventListener
+{
 
     /**
      * Register for the Trip.
@@ -28,5 +29,4 @@ class RequirementEventListener {
             'App\Listeners\RequirementEventListener@statusChange'
         );
     }
-
 }

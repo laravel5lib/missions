@@ -3,7 +3,7 @@
 /**
  * Rescue Orphans Cause
  */
-$factory->defineAs(App\Models\v1\ProjectCause::class, 'orphans', function(Faker\Generator $faker) {
+$factory->defineAs(App\Models\v1\ProjectCause::class, 'orphans', function (Faker\Generator $faker) {
     return [
         'name' => 'Rescue Orphans',
         'short_desc' => $faker->realText(200),
@@ -20,7 +20,7 @@ $factory->defineAs(App\Models\v1\ProjectCause::class, 'orphans', function(Faker\
 /**
  * Clean Water Cause
  */
-$factory->defineAs(App\Models\v1\ProjectCause::class, 'water', function(Faker\Generator $faker) {
+$factory->defineAs(App\Models\v1\ProjectCause::class, 'water', function (Faker\Generator $faker) {
     return [
         'name' => 'Clean Water',
         'short_desc' => $faker->realText(200),

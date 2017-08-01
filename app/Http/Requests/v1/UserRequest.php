@@ -44,8 +44,7 @@ class UserRequest extends FormRequest
             'avatar_upload_id' => 'string|exists:uploads,id'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $user_id = $this->route('users') ? $this->route('users') : auth()->user()->id;
 
             $rules['password'] = 'sometimes|required|confirmed|min:8';

@@ -30,8 +30,7 @@ class AccommodationRequest extends FormRequest
             'country_code' => 'in:' . Country::codes()
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $required = [
                 'name'         => 'sometimes|required|string',
                 'country_code' => 'in:' . Country::codes(),

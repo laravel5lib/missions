@@ -26,12 +26,12 @@ class TeamTypesEndpointTest extends TestCase
         $this->get('api/teams/types')
              ->assertResponseOk()
              ->seeJson([
-                'id' => $type->id, 
-                'name' => $type->name, 
-                'rules' => $type->rules, 
-                'created_at' => $type->created_at->toDateTimeString(), 
+                'id' => $type->id,
+                'name' => $type->name,
+                'rules' => $type->rules,
+                'created_at' => $type->created_at->toDateTimeString(),
                 'updated_at' => $type->updated_at->toDateTimeString()
-            ]);
+             ]);
     }
 
     /** @test */
@@ -44,11 +44,11 @@ class TeamTypesEndpointTest extends TestCase
         $this->post('api/teams/types', $type)
              ->assertResponseOk()
              ->seeJson([
-                'name' => 'medical', 
+                'name' => 'medical',
                 'rules' => [
                     'max_members' => 25
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -62,12 +62,12 @@ class TeamTypesEndpointTest extends TestCase
 
         $this->put('api/teams/types/' . $type->id, $changes)
              ->assertResponseOk()
-             ->seeJson([ 
+             ->seeJson([
                 'rules' => [
                     'max_members' => 15,
                     'min_members' => 10
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

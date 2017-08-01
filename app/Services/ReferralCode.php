@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-class ReferralCode {
+class ReferralCode
+{
 
     /**
      * @var
@@ -25,7 +26,7 @@ class ReferralCode {
 
     /**
      * Limit the code by a number of characters
-     * 
+     *
      * @param $length
      * @param int $start
      * @return $this
@@ -44,4 +45,4 @@ class ReferralCode {
     {
         return $this->code;
     }
-} 
+}

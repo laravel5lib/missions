@@ -3,8 +3,7 @@
 /**
  * Generic Campaign
  */
-$factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker) {
     return [
         'id'               => $faker->unique()->uuid,
         'name'             => $faker->catchPhrase,
@@ -12,10 +11,10 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
         'short_desc'       => $faker->realText(120),
         'page_src'         => '_generic',
         'started_at'       => \Carbon\Carbon::now()->addYear(),
-        'ended_at'         => function(array $campaign) {
+        'ended_at'         => function (array $campaign) {
             return \Carbon\Carbon::parse($campaign['started_at'])->addDays(6);
         },
-        'published_at'     => function(array $campaign) {
+        'published_at'     => function (array $campaign) {
             return $campaign['started_at'];
         },
         'created_at' => \Carbon\Carbon::now(),
@@ -26,8 +25,7 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
 /**
  * 1Nation1Day 2017
  */
-$factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Generator $faker) use ($factory) {
     $campaign = $factory->raw(App\Models\v1\Campaign::class);
 
     return array_merge($campaign, [
@@ -44,8 +42,7 @@ $factory->defineAs(App\Models\v1\Campaign::class, '1n1d2017', function (Faker\Ge
 /**
  * Orphans to Angles 2017
  */
-$factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Campaign::class, 'india', function (Faker\Generator $faker) use ($factory) {
     $campaign = $factory->raw(App\Models\v1\Campaign::class);
 
     return array_merge($campaign, [

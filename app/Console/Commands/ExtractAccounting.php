@@ -44,7 +44,7 @@ class ExtractAccounting extends Command
 
         $bar = $this->output->createProgressBar(count($funds));
 
-        $funds->each(function($fund) use ($bar) {
+        $funds->each(function ($fund) use ($bar) {
             $class = AccountingClass::firstOrCreate(['name' => $fund->class]);
             $item = AccountingItem::firstOrCreate(['name' => $fund->item]);
             $fund->class_id = $class->id;

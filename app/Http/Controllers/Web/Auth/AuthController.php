@@ -38,7 +38,7 @@ class AuthController extends Controller
 
     /**
      * Show the login screen.
-     * 
+     *
      * @return Response
      */
     public function login()
@@ -48,7 +48,7 @@ class AuthController extends Controller
 
     /**
      * Show the registration form.
-     * 
+     *
      * @return Response
      */
     public function create()
@@ -67,7 +67,6 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            
             try {
                 // attempt to verify the credentials and create a token for the user
                 if (! $token = JWTAuth::attempt($credentials)) {
@@ -93,7 +92,7 @@ class AuthController extends Controller
 
     /**
      * Handle user registration.
-     * 
+     *
      * @param  Request $request
      * @return Response
      */
@@ -134,13 +133,12 @@ class AuthController extends Controller
 
     /**
      * Check if user is authenticated.
-     * 
+     *
      * @return Response
      */
     public function check()
     {
         if (Auth::check()) {
-            
             if ($request->ajax() || $request->wantsJson()) {
                 return response()->json(['message' => 'User is logged in.', 'authenticated' => true]);
             }
@@ -153,7 +151,7 @@ class AuthController extends Controller
 
     /**
      * Log the user out.
-     * 
+     *
      * @return Response
      */
     public function logout()
@@ -170,5 +168,4 @@ class AuthController extends Controller
     {
         return cookie('api_token', sprintf('Bearer %s', $token), 60, '/', null, false, false);
     }
-
 }

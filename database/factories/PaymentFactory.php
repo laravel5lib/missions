@@ -3,8 +3,7 @@
 /**
  * Generic Payment
  */
-$factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker) {
     return [
         'id'           => $faker->unique()->uuid,
         'cost_id'      => function () {
@@ -23,8 +22,7 @@ $factory->define(App\Models\v1\Payment::class, function (Faker\Generator $faker)
 /**
  * Upfront Payment
  */
-$factory->defineAs(App\Models\v1\Payment::class, 'upfront', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Payment::class, 'upfront', function (Faker\Generator $faker) use ($factory) {
     $cost = $factory->raw(App\Models\v1\Payment::class);
 
     return array_merge($cost, [

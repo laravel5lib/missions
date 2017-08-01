@@ -36,7 +36,7 @@ class PassportFilter extends Filter
      */
     public function user($id)
     {
-        if ( ! key_exists('manager', $this->input)) {
+        if (! key_exists('manager', $this->input)) {
             return $this->where('user_id', $id);
         }
 

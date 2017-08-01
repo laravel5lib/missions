@@ -187,7 +187,7 @@ class GroupsController extends Controller
 
     /**
      * Import a list of Groups.
-     * 
+     *
      * @param  GroupListImport $import
      * @return response
      */

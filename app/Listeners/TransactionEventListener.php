@@ -5,18 +5,20 @@ namespace App\Listeners;
 use App\Events\DonationWasMade;
 use App\Models\v1\Reservation;
 
-class TransactionEventListener {
+class TransactionEventListener
+{
 
     /**
      * Handle updating the fund balance.
      * @param $event
      */
-    public function updateFundBalance($event) {
+    public function updateFundBalance($event)
+    {
         $transaction = $event->transaction;
 
         $transaction->fund->reconcile();
 
-        if($transaction->type == 'donation') {
+        if ($transaction->type == 'donation') {
             event(new DonationWasMade($transaction, $transaction->donor));
         }
     }
@@ -26,7 +28,8 @@ class TransactionEventListener {
      *
      * @param $event
      */
-    public function applyAsPayment($event) {
+    public function applyAsPayment($event)
+    {
         // REFACTOR
         // Listen for changes to fund balance
         // Then update a reservation's dues
@@ -57,5 +60,4 @@ class TransactionEventListener {
             'App\Listeners\TransactionEventListener@applyAsPayment'
         );
     }
-
 }

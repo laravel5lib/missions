@@ -45,7 +45,7 @@ class SendConfirmationEmail extends Job implements ShouldQueue
 
         $mailer->send('emails.reservations.confirmation', [
             'reservation' => $reservation
-        ], function($m) use($reservation, $email) {
+        ], function ($m) use ($reservation, $email) {
             $m->to($email, $reservation->user->name)
               ->subject('Pack Your Bags!');
         });

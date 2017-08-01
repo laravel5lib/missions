@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Promotional;
 use League\Fractal\TransformerAbstract;
 
-class PromotionalTransformer extends TransformerAbstract {
+class PromotionalTransformer extends TransformerAbstract
+{
 
     /**
      * Transform the object into a basic array
@@ -20,7 +21,7 @@ class PromotionalTransformer extends TransformerAbstract {
             'name'             => $promotional->name,
             'reward'           => $promotional->getRewardInDollars(),
             'expires_at'       => $promotional->expires_at ? $promotional->expires_at->toDateTimeString() : null,
-            'promoteable_id'   => $promotional->promoteable_id, 
+            'promoteable_id'   => $promotional->promoteable_id,
             'promoteable_type' => $promotional->promoteable_type,
             'promocodes_count' => $promotional->promocodes_count,
             'created_at'       => $promotional->created_at->toDateTimeString(),

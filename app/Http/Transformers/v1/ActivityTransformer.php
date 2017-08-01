@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Transformers\v1;
+
 use App\Models\v1\Activity;
 use League\Fractal\TransformerAbstract;
 
@@ -30,8 +31,8 @@ class ActivityTransformer extends TransformerAbstract
             'occurred_at'       => $activity->occurred_at->toDateTimeString(),
             'created_at'        => $activity->created_at->toDateTimeString(),
             'updated_at'        => $activity->updated_at->toDateTimeString(),
-            'deleted_at'        => $activity->deleted_at ? 
-                                        $activity->deleted_at->toDateTimeString() : 
+            'deleted_at'        => $activity->deleted_at ?
+                                        $activity->deleted_at->toDateTimeString() :
                                         null,
         ];
     }

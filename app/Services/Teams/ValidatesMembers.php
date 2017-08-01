@@ -7,7 +7,7 @@ use App\Models\v1\Reservation;
 use App\Utilities\v1\TeamRole;
 use Illuminate\Support\Collection;
 
-class ValidatesMembers 
+class ValidatesMembers
 {
     protected $members;
     protected $squad;
@@ -34,7 +34,9 @@ class ValidatesMembers
 
     public function assertWithinTeamMemberLimit()
     {
-        if ( ! $this->rules->has('max_members')) return $this;
+        if (! $this->rules->has('max_members')) {
+            return $this;
+        }
 
         $this->squad->load('team.squads.members');
         $members = $this->squad->team->squads->pluck('members')->count();
@@ -50,12 +52,14 @@ class ValidatesMembers
 
     /**
      * Assert that members to be added are within the squad's member limit.
-     * 
+     *
      * @return this
      */
     public function assertWithinSquadMemberLimit()
     {
-        if ( ! $this->rules->has('max_group_members')) return $this;
+        if (! $this->rules->has('max_group_members')) {
+            return $this;
+        }
 
         $count = $this->members->count() + $this->squad->members()->count();
 
@@ -68,17 +72,18 @@ class ValidatesMembers
 
     /**
      * Assert that leaders to be added are witin the squad's leader limit.
-     * 
+     *
      * @return this
      */
     public function assertWithinSquadLeaderLimit()
     {
-        if ( ! $this->rules->has('max_group_leaders')) return $this;
+        if (! $this->rules->has('max_group_leaders')) {
+            return $this;
+        }
 
         $count = $this->getSquadLeaderCount();
 
         if ($count > $this->rules->max_group_leaders) {
-
             $limit = $this->rules->max_group_leaders;
             throw new \Exception("The group can only have a total of $limit leader(s).");
         }
@@ -88,15 +93,12 @@ class ValidatesMembers
 
     public function assertHasLeadershipRole()
     {
-        $this->members->filter( function($member) 
-        {
+        $this->members->filter(function ($member) {
             return $member['leader'] == true;
-
-        })->each( function($member, $key)
-        {
+        })->each(function ($member, $key) {
             $reservation = Reservation::findOrFail($key);
 
-            if ( ! in_array($reservation->desired_role, array_keys(TeamRole::leadership()) )) {
+            if (! in_array($reservation->desired_role, array_keys(TeamRole::leadership()))) {
                 throw new \Exception("$reservation->given_names $reservation->surname does not have an approved leadership role.");
             }
         });
@@ -106,7 +108,7 @@ class ValidatesMembers
 
     /**
      * Done with assertions.
-     * 
+     *
      * @return boolean.
      */
     public function done()
@@ -116,11 +118,11 @@ class ValidatesMembers
 
     private function getSquadLeaderCount()
     {
-        $newLeaders = $this->members->filter( function($member) {
+        $newLeaders = $this->members->filter(function ($member) {
             return $member['leader'] == true;
         })->count();
 
-        $existingLeaders = $this->squad->members->filter( function($member) {
+        $existingLeaders = $this->squad->members->filter(function ($member) {
             return $member->pivot->leader == true;
         })->count();
 

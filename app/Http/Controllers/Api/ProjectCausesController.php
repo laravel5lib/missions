@@ -109,5 +109,4 @@ class ProjectCausesController extends Controller
             'message' => 'Report is being generated and will be available shortly.'
         ]);
     }
-
 }

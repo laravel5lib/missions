@@ -11,7 +11,8 @@ use App\Http\Requests\v1\TravelItineraryRequest;
 use App\Http\Transformers\v1\ItineraryTransformer;
 
 class TravelItinerariesController extends Controller
-{   
+{
+
     private $itinerary;
     private $travelActivity;
 
@@ -23,7 +24,7 @@ class TravelItinerariesController extends Controller
 
     /**
      * Create a new travel itinerary
-     * 
+     *
      * @param  TravelItineraryRequest $request
      * @return Response
      */
@@ -52,7 +53,6 @@ class TravelItinerariesController extends Controller
             ];
 
             if ($transport) {
-
                 $data['transport'] = [
                     'type'        => $transport->get('type'),
                     'vessel_no'   => $transport->get('vessel_no') ?: 'unassigned',
@@ -96,7 +96,7 @@ class TravelItinerariesController extends Controller
 
     /**
      * Update an existing travel itinerary
-     * 
+     *
      * @param  TravelItineraryRequest $request
      * @param  String                 $id
      * @return Response
@@ -150,7 +150,7 @@ class TravelItinerariesController extends Controller
 
     /**
      * Delete a travel itinerary
-     * 
+     *
      * @param  String $id
      * @return Response
      */
@@ -158,8 +158,8 @@ class TravelItinerariesController extends Controller
     {
         $itinerary = $this->itinerary->findOrFail($id);
 
-        $itinerary->activities->each(function($activity) use($itinerary) {
-            $activity->transports->each(function($transport) use($itinerary) {
+        $itinerary->activities->each(function ($activity) use ($itinerary) {
+            $activity->transports->each(function ($transport) use ($itinerary) {
                 $transport->passengers()->whereReservationId($itinerary->curator_id)->delete();
             });
         });

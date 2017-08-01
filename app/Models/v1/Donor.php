@@ -64,7 +64,7 @@ class Donor extends Model
         $transactions = $this->hasMany(Transaction::class);
 
         // We can limit the results with a designation constraint.
-        if( $designation <> []) {
+        if ($designation <> []) {
             // Let's make the designation array a collection object
             // so it is easier to work with.
             $designation = collect($designation);

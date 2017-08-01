@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\TeamMember;
 use League\Fractal\TransformerAbstract;
 
-class TeamMemberTransformer extends TransformerAbstract {
+class TeamMemberTransformer extends TransformerAbstract
+{
 
     /**
      * List of resources available to include

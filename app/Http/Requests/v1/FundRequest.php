@@ -34,8 +34,7 @@ class FundRequest extends FormRequest
             'slug'           => 'unique:funds,slug'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $rules = [
                 'name'          => 'sometimes|required|string|unique:funds,name,' . $this->route('funds'),
                 'balance'       => 'integer',

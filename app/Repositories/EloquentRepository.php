@@ -13,14 +13,14 @@ abstract class EloquentRepository
 
     /**
      * The model attributes that can be modified.
-     * 
+     *
      * @var array
      */
     protected $attributes = [];
 
     /**
      * Get all of the models from the database.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getAll()
@@ -30,7 +30,7 @@ abstract class EloquentRepository
 
     /**
      * Get a specific model by it's ID including softdeleted models.
-     * 
+     *
      * @param  string $id
      * @return \Illuminate\Database\Eloquent\Model
      *
@@ -43,7 +43,7 @@ abstract class EloquentRepository
 
     /**
      * Create a new model and save in storage.
-     * 
+     *
      * @param  array  $data
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -54,7 +54,7 @@ abstract class EloquentRepository
 
     /**
      * Update an existing model and save changes in storage.
-     * 
+     *
      * @param  array  $data
      * @param  string $id
      * @param  string $attribute [description]
@@ -80,7 +80,7 @@ abstract class EloquentRepository
 
     /**
      * Get a paginated list of models.
-     * 
+     *
      * @param  integer $perPage
      * @param  array   $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
@@ -94,7 +94,7 @@ abstract class EloquentRepository
 
     /**
      * Filter the given query.
-     * 
+     *
      * @param  array  $data
      * @return Illuminate\Database\Eloquent\Builder
      */
@@ -114,8 +114,7 @@ abstract class EloquentRepository
     public function with($relations)
     {
 
-        if (is_string($relations))
-        {
+        if (is_string($relations)) {
             $this->with = explode(',', $relations);
 
             return $this;
@@ -138,17 +137,17 @@ abstract class EloquentRepository
 
     /**
      * Sanitize data
-     * 
+     *
      * @param  array  $data
      * @return array
      */
     public function sanitize(array $data)
     {
-        return collect($data)->filter(function($value, $key) {
-            return in_array($key, $this->attributes) 
-                && !is_null(trim($value)) 
+        return collect($data)->filter(function ($value, $key) {
+            return in_array($key, $this->attributes)
+                && !is_null(trim($value))
                 && trim($value) <> '';
-        })->map(function($value, $key) {
+        })->map(function ($value, $key) {
             return $data[$key] = trim($value);
         })->all();
     }

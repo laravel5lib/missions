@@ -52,15 +52,15 @@ class AddRoleToTrips extends Command
 
         $query = $this->trip;
 
-        if($tripType) {
+        if ($tripType) {
             $query = $query->where('type', $tripType);
         }
 
-        if($campaignId) {
+        if ($campaignId) {
             $query = $query->where('campaign_id', $campaignId);
         }
 
-        if($groupId) {
+        if ($groupId) {
             $query = $query->where('group_id', $groupId);
         }
 
@@ -71,11 +71,10 @@ class AddRoleToTrips extends Command
             return;
         }
 
-        collect($trips)->each(function ($trip) use($roleCode) {
+        collect($trips)->each(function ($trip) use ($roleCode) {
             $trip->team_roles = array_values(collect($trip->team_roles)->push($roleCode)->unique()->toArray());
             $trip->save();
             $this->info($roleCode . ' was added to trip ' . $trip->id);
         });
-
     }
 }

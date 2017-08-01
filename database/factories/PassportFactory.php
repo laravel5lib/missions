@@ -3,8 +3,7 @@
 /**
  * Generic Passport
  */
-$factory->define(App\Models\v1\Passport::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Passport::class, function (Faker\Generator $faker) {
     return [
         'given_names'   => $faker->firstName . ' ' . $faker->firstName,
         'surname'       => $faker->lastName,
@@ -20,12 +19,10 @@ $factory->define(App\Models\v1\Passport::class, function (Faker\Generator $faker
 /**
  * Expired Passport
  */
-$factory->defineAs(App\Models\v1\Passport::class, 'expired', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Passport::class, 'expired', function (Faker\Generator $faker) use ($factory) {
     $passport = $factory->raw(App\Models\v1\Passport::class);
 
     return array_merge($passport, [
         'expires_at' => \Carbon\Carbon::yesterday(),
     ]);
 });
-

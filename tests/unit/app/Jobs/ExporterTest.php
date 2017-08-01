@@ -12,9 +12,9 @@ class ExporterTest extends TestCase
     {
         $exporter = new Exporter([]);
 
-        $collection = $exporter->getColumns( collect([]) );
+        $collection = $exporter->getColumns(collect([]));
 
-        $this->assertTrue($collection instanceOf Collection ?: false);
+        $this->assertTrue($collection instanceof Collection ?: false);
     }
 
     /** @test */
@@ -34,9 +34,9 @@ class ExporterTest extends TestCase
     {
         $exporter = new Exporter([]);
 
-        $collection = $exporter->getData( collect([]) );
+        $collection = $exporter->getData(collect([]));
 
-        $this->assertTrue($collection instanceOf Collection ?: false);
+        $this->assertTrue($collection instanceof Collection ?: false);
     }
 
     /** @test */
@@ -67,7 +67,7 @@ class ExporterTest extends TestCase
 
         $data = $exporter->create([], 'Export', 'test_file');
 
-        $this->assertTrue( Storage::disk('s3')->exists($data->file['full']) );
+        $this->assertTrue(Storage::disk('s3')->exists($data->file['full']));
 
         // clean up
         Storage::disk('s3')->delete($data->file['full']);

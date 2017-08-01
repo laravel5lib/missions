@@ -2,11 +2,11 @@
 
 namespace App\Models\v1;
 
-
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
-class ReservationPayment {
+class ReservationPayment
+{
 
     /**
      * @var Reservation
@@ -27,7 +27,9 @@ class ReservationPayment {
      */
     public function sync()
     {
-        if($this->reservation->has('dues')) $this->reservation->dues()->delete();
+        if ($this->reservation->has('dues')) {
+            $this->reservation->dues()->delete();
+        }
 
         $this->addDues($this->calculateDues());
 
@@ -66,27 +68,29 @@ class ReservationPayment {
      */
     public function addDues($dues)
     {
-        if ( ! $dues) return;
+        if (! $dues) {
+            return;
+        }
 
-        if ( ! $dues instanceof Collection)
+        if (! $dues instanceof Collection) {
             $dues = collect($dues);
+        }
 
         // get lowest due_at in dues,
-        $min = $dues->reject(function($due) {
+        $min = $dues->reject(function ($due) {
             return is_null($due['due_at']);
         })->min('due_at');
 
         // subtract a day from that date and apply as date for nulls
         $upfrontDate = is_null($min) ? Carbon::now() : $min->subDay();
 
-        $data = $dues->map(function($due) use($upfrontDate) {
+        $data = $dues->map(function ($due) use ($upfrontDate) {
             
             $date = $upfrontDate->isPast() ? $upfrontDate : Carbon::now();
 
             is_null($due['due_at']) ? $due['due_at'] = $date : $due['due_at'];
 
             return new Due($due);
-            
         })->all();
 
         $this->reservation->dues()->saveMany($data);
@@ -111,14 +115,15 @@ class ReservationPayment {
     {
         // Fund balance should be spread out over the fund's balance
         // needs to decrement or increment a due's balance based on changes to the fund's balance.
-        while ($amount <> 0)
-        {
+        while ($amount <> 0) {
             $due = $this->reservation->dues()
                 ->withBalance()
                 ->sortRecent()
                 ->first();
 
-            if (! $due) break;
+            if (! $due) {
+                break;
+            }
 
             if ($due->outstanding_balance < $amount) {
                 $carryOver = $amount - $due->outstanding_balance;
@@ -141,8 +146,8 @@ class ReservationPayment {
      */
     public function late()
     {
-        return $this->reservation->dues()->with('payment')->get()->filter(function($due) {
-           return $due->getStatus() == 'overdue';
+        return $this->reservation->dues()->with('payment')->get()->filter(function ($due) {
+            return $due->getStatus() == 'overdue';
            // && $due->payment->enforced
         });
     }
@@ -158,7 +163,7 @@ class ReservationPayment {
                         ->costs()
                         ->whereIn('id', $this->late()->pluck('payment.cost_id'))
                         ->get()
-                        ->reject(function($cost) {
+                        ->reject(function ($cost) {
                             return  $cost->pivot->locked
                                     and $cost->type == 'incremental';
                         });

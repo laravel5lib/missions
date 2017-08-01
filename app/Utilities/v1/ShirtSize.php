@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class ShirtSize {
+class ShirtSize
+{
 
     /**
      * Available trip types
@@ -37,7 +38,7 @@ class ShirtSize {
      */
     public static function get($size)
     {
-        $result = array_where(static::all(), function($key) use($size) {
+        $result = array_where(static::all(), function ($key) use ($size) {
             return $key === strtoupper($size);
         });
 
@@ -48,5 +49,4 @@ class ShirtSize {
     {
         return implode(',', array_flatten(array_keys(static::all())));
     }
-
 }

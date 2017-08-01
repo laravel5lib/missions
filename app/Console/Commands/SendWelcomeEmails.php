@@ -50,9 +50,11 @@ class SendWelcomeEmails extends Command
 
         $email = $this->argument('email') ? $this->argument('email') : $user->email;
 
-        if( ! $user) $this->error('Could not find user with that id! Nothing sent.');
+        if (! $user) {
+            $this->error('Could not find user with that id! Nothing sent.');
+        }
 
-        if($user) {
+        if ($user) {
             dispatch(new SendWelcomeEmail($user, $email));
 
             $this->info('Processed email to ' . $email);

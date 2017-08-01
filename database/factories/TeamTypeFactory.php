@@ -1,7 +1,6 @@
 <?php
 
-$factory->define(App\Models\v1\TeamType::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\TeamType::class, function (Faker\Generator $faker) {
     return [
         'id'    => $faker->unique()->uuid,
         'name'  => $faker->word,
@@ -20,8 +19,7 @@ $factory->define(App\Models\v1\TeamType::class, function(Faker\Generator $faker)
     ];
 });
 
-$factory->defineAs(App\Models\v1\TeamType::class, 'ministry', function(Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\TeamType::class, 'ministry', function (Faker\Generator $faker) {
     return [
         'id'    => $faker->unique()->uuid,
         'name'  => 'ministry',
@@ -40,8 +38,7 @@ $factory->defineAs(App\Models\v1\TeamType::class, 'ministry', function(Faker\Gen
     ];
 });
 
-$factory->defineAs(App\Models\v1\TeamType::class, 'medical', function(Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\TeamType::class, 'medical', function (Faker\Generator $faker) {
     return [
         'id'    => $faker->unique()->uuid,
         'name'  => 'medical',
@@ -60,8 +57,7 @@ $factory->defineAs(App\Models\v1\TeamType::class, 'medical', function(Faker\Gene
     ];
 });
 
-$factory->defineAs(App\Models\v1\TeamType::class, 'leadership', function(Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\TeamType::class, 'leadership', function (Faker\Generator $faker) {
     return [
         'id'    => $faker->unique()->uuid,
         'name'  => 'leadership',

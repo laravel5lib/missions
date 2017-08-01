@@ -20,7 +20,7 @@ class TripsController extends Controller
 
     public function show($id, $tab = 'details')
     {
-        if($tab === 'edit') {
+        if ($tab === 'edit') {
             return $this->edit($id);
         }
 

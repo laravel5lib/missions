@@ -108,7 +108,7 @@ class UploadsController extends Controller
 
     /**
      * Display a file
-     * 
+     *
      * @param  string $path
      * @return response
      */
@@ -130,13 +130,12 @@ class UploadsController extends Controller
     {
         $upload = $this->upload->findOrFail($id);
 
-        if ($request->has('file'))
-        {
+        if ($request->has('file')) {
             $stream = $this->process($request);
 
             $source = $this->upload($stream, $request->only('path', 'name', 'file'));
 
-            if($source) {
+            if ($source) {
                 // delete old file
                 Storage::disk('s3')->delete($upload->source);
                 // clear cache
@@ -150,8 +149,9 @@ class UploadsController extends Controller
             'type' => $request->get('type')
         ]);
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $upload->retag($request->get('tags'));
+        }
 
         return $this->response->item($upload, new UploadTransformer);
     }
@@ -185,13 +185,14 @@ class UploadsController extends Controller
         // resize or crop and stream image
         $img = Image::make($request->get('file'));
 
-        if($request->has('x_axis') and $request->has('y_axis')) {
+        if ($request->has('x_axis') and $request->has('y_axis')) {
             $img->crop(
-                $request->get('width'), $request->get('height'),
-                $request->get('x_axis'), $request->get('y_axis')
+                $request->get('width'),
+                $request->get('height'),
+                $request->get('x_axis'),
+                $request->get('y_axis')
             );
-        }
-        elseif ($request->has('height') and $request->has('width')) {
+        } elseif ($request->has('height') and $request->has('width')) {
             $img->resize($request->get('width'), $request->get('height'));
         }
 
@@ -246,8 +247,9 @@ class UploadsController extends Controller
             ]
         ]);
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $new->tag($request->get('tags'));
+        }
 
         return $new;
     }

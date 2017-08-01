@@ -11,7 +11,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\User::class, 'admin')->create()->each(function($user) {
+        factory(App\Models\v1\User::class, 'admin')->create()->each(function ($user) {
             $user->slug()
                  ->save(factory(App\Models\v1\Slug::class)
                  ->make(['url' => str_slug($user->name)]));

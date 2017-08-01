@@ -162,7 +162,9 @@ class Project extends Model
     {
         $difference = $this->goal - $this->amount_raised;
 
-        if ($difference < 0) return 0;
+        if ($difference < 0) {
+            return 0;
+        }
 
         return $difference;
     }
@@ -190,7 +192,7 @@ class Project extends Model
      */
     public function scopeNew($query)
     {
-        return $query->whereHas('initiative', function($initiative) {
+        return $query->whereHas('initiative', function ($initiative) {
             return $initiative->new();
         });
     }
@@ -203,7 +205,7 @@ class Project extends Model
      */
     public function scopeOld($query)
     {
-        return $query->whereHas('initiative', function($initiative) {
+        return $query->whereHas('initiative', function ($initiative) {
             return $initiative->past();
         });
     }
@@ -226,10 +228,13 @@ class Project extends Model
      */
     public function syncCosts($costs)
     {
-        if ( ! $costs) return;
+        if (! $costs) {
+            return;
+        }
 
-        if ( ! $costs instanceof Collection)
+        if (! $costs instanceof Collection) {
             $costs = collect($costs);
+        }
 
         $data = $costs->keyBy('id')->toArray();
 

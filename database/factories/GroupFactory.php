@@ -3,8 +3,7 @@
 /**
  * Generic Group
  */
-$factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker) {
     return [
         'id'               => $faker->unique()->uuid,
         'name'             => $faker->company,
@@ -31,8 +30,7 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker)
 /**
  * Church Group
  */
-$factory->defineAs(App\Models\v1\Group::class, 'church', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Group::class, 'church', function (Faker\Generator $faker) use ($factory) {
     $group = $factory->raw(App\Models\v1\Group::class);
 
     return array_merge($group, [
@@ -43,8 +41,7 @@ $factory->defineAs(App\Models\v1\Group::class, 'church', function (Faker\Generat
 /**
  * Business Group
  */
-$factory->defineAs(App\Models\v1\Group::class, 'business', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Group::class, 'business', function (Faker\Generator $faker) use ($factory) {
     $group = $factory->raw(App\Models\v1\Group::class);
 
     return array_merge($group, [
@@ -55,8 +52,7 @@ $factory->defineAs(App\Models\v1\Group::class, 'business', function (Faker\Gener
 /**
  * Youth Group
  */
-$factory->defineAs(App\Models\v1\Group::class, 'youth', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Group::class, 'youth', function (Faker\Generator $faker) use ($factory) {
     $group = $factory->raw(App\Models\v1\Group::class);
 
     return array_merge($group, [
@@ -67,8 +63,7 @@ $factory->defineAs(App\Models\v1\Group::class, 'youth', function (Faker\Generato
 /**
  * Other Group
  */
-$factory->defineAs(App\Models\v1\Group::class, 'other', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Group::class, 'other', function (Faker\Generator $faker) use ($factory) {
     $group = $factory->raw(App\Models\v1\Group::class);
 
     return array_merge($group, [

@@ -20,5 +20,4 @@ class AccountingClass extends Model
     {
         return $this->hasMany(Fund::class, 'class_id');
     }
-
 }

@@ -74,11 +74,13 @@ class FundraiserTransformer extends TransformerAbstract
     {
         $sponsor = $fundraiser->sponsor;
 
-        if(is_a($sponsor, User::class))
+        if (is_a($sponsor, User::class)) {
             return $this->item($sponsor, new UserTransformer);
+        }
 
-        if(is_a($sponsor, Group::class))
+        if (is_a($sponsor, Group::class)) {
             return $this->item($sponsor, new GroupTransformer);
+        }
 
         return null;
     }
@@ -108,5 +110,4 @@ class FundraiserTransformer extends TransformerAbstract
 
         return $this->collection($uploads, new UploadTransformer);
     }
-
 }

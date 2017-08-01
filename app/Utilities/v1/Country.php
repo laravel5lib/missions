@@ -2,11 +2,12 @@
 
 namespace App\Utilities\v1;
 
-class Country {
+class Country
+{
 
     /**
      * All available countries
-     * 
+     *
      * @var array
      */
     protected static $countries = [
@@ -255,8 +256,8 @@ class Country {
     
     /**
      * Return all countries
-     * 
-     * @return array 
+     *
+     * @return array
      */
     public static function all()
     {
@@ -265,13 +266,13 @@ class Country {
 
     /**
      * Return a single country by code
-     * 
+     *
      * @param  string $code
-     * @return array       
+     * @return array
      */
     public static function get($code)
     {
-        $result = array_where(static::$countries, function($key, $value) use($code) {
+        $result = array_where(static::$countries, function ($key, $value) use ($code) {
             return $value === strtolower($code);
         });
 
@@ -280,20 +281,19 @@ class Country {
 
     public static function getCode($name)
     {
-        $result = array_where(static::$countries, function($key, $value) use($name) {
+        $result = array_where(static::$countries, function ($key, $value) use ($name) {
             return $key === trim($name);
         });
     }
 
     /**
      * Return a comma seperated string of country codes
-     * 
-     * @return string 
+     *
+     * @return string
      */
     public static function codes()
     {
 
         return implode(',', array_flatten(static::all()));
     }
-
 }

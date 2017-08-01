@@ -7,7 +7,7 @@ use App\Models\v1\Transaction;
 
 class FundraiserTest extends TestCase
 {
-    /** 
+    /**
      * @test
      */
     function can_get_amount_raised()
@@ -90,5 +90,4 @@ class FundraiserTest extends TestCase
 
         $this->assertEquals('open', $fundraiser->getStatus());
     }
-
 }

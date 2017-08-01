@@ -10,17 +10,18 @@ use App\Http\Requests\v1\RoomTypeRequest;
 use App\Http\Transformers\v1\RoomTypeTransformer;
 
 class TypesController extends Controller
-{   
+{
+
     /**
      * The room type instance
-     * 
+     *
      * @var App\Repositories\Rooming\Type
      */
     private $type;
 
     /**
      * RoomTypesControler constructor.
-     * 
+     *
      * @param App\Repositories\Rooming\Type $type
      */
     function __construct(Type $type)
@@ -30,7 +31,7 @@ class TypesController extends Controller
 
     /**
      * Get a paginated list of all room types.
-     * 
+     *
      * @param  Illuminate\Http\Request $request
      * @return \Dingo\Api\Http\Response
      */
@@ -45,7 +46,7 @@ class TypesController extends Controller
 
     /**
      * Show a specific room type.
-     * 
+     *
      * @param  String $id
      * @return \Dingo\Api\Http\Response
      */
@@ -58,7 +59,7 @@ class TypesController extends Controller
 
     /**
      * Create and store a new room type in storage.
-     * 
+     *
      * @param  App\Http\Requests\v1\RoomTypeRequest $request
      * @return \Dingo\Api\Http\Response
      */
@@ -75,9 +76,9 @@ class TypesController extends Controller
 
     /**
      * Update a room type in storage.
-     * 
+     *
      * @param  App\Http\Requests\v1\RoomTypeRequest $request
-     * @param  String          $id      
+     * @param  String          $id
      * @return \Dingo\Api\Http\Response
      */
     public function update(RoomTypeRequest $request, $id)
@@ -93,7 +94,7 @@ class TypesController extends Controller
 
     /**
      * Delete a room type from storage.
-     * 
+     *
      * @param  String $id
      * @return \Dingo\Api\Http\Response
      */

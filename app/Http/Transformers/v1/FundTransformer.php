@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Fund;
 use League\Fractal\TransformerAbstract;
 
-class FundTransformer extends TransformerAbstract {
+class FundTransformer extends TransformerAbstract
+{
 
     /**
      * Transform the object into a basic array

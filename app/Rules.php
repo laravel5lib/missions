@@ -6,7 +6,7 @@ abstract class Rules
 {
     /**
      * Get rule by it's key.
-     * 
+     *
      * @param  string $key
      * @return string
      */
@@ -17,7 +17,7 @@ abstract class Rules
 
     /**
      * Set new rule.
-     * 
+     *
      * @param array $rules
      */
     public function set($key, $value)
@@ -29,7 +29,7 @@ abstract class Rules
 
     /**
      * Check if room type has rule
-     * 
+     *
      * @param  String  $key
      * @return boolean
      */
@@ -40,7 +40,7 @@ abstract class Rules
 
     /**
      * Get all rules.
-     * 
+     *
      * @return array
      */
     public function all()
@@ -50,14 +50,14 @@ abstract class Rules
 
     /**
      * Merge rule attributes with existing rules.
-     * 
+     *
      * @param  array  $attributes
      * @return array
      */
     public function merge(array $attributes)
     {
         $this->rules = array_merge(
-            $this->rules, 
+            $this->rules,
             array_only($attributes, array_keys($this->rules))
         );
 
@@ -66,7 +66,7 @@ abstract class Rules
 
     /**
      * Return rule as property.
-     * 
+     *
      * @param  string $key
      * @return string
      */

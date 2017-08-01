@@ -30,7 +30,7 @@ class Campaign extends Model
      */
     protected $fillable = [
         'name', 'country_code', 'short_desc',
-        'started_at', 'ended_at', 'published_at', 
+        'started_at', 'ended_at', 'published_at',
         'page_src', 'created_at', 'updated_at', 'deleted_at',
         'avatar_upload_id', 'publish_squads', 'publish_regions',
         'publish_rooms', 'publish_transports', 'reservations_locked'
@@ -193,7 +193,7 @@ class Campaign extends Model
 
     /**
      * Get the campaign's slug.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
      */
     public function slug()
@@ -203,7 +203,7 @@ class Campaign extends Model
 
     /**
      * Get the campaign's promotionals.
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function promotionals()
@@ -265,7 +265,7 @@ class Campaign extends Model
 
     /**
      * Get inactive campaigns.
-     * 
+     *
      * @param $query
      * @return $mixed
      */
@@ -276,12 +276,12 @@ class Campaign extends Model
 
     /**
      * Get the campaign's avatar
-     * 
+     *
      * @return Object
      */
     public function getAvatar()
     {
-        if( ! $this->avatar) {
+        if (! $this->avatar) {
             return new Upload([
                 'id' => \Ramsey\Uuid\Uuid::uuid4(),
                 'name' => 'placeholder',
@@ -295,5 +295,4 @@ class Campaign extends Model
 
         return $this->avatar;
     }
-
 }

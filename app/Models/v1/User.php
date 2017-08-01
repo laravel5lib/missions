@@ -2,6 +2,7 @@
 
 namespace App\Models\v1;
 
+use Illuminate\Notifications\Notifiable;
 use App\UuidForKey;
 use EloquentFilter\Filterable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
+    use Notifiable;
     use SoftDeletes, Filterable, UuidForKey, HasRolesAndAbilities, CanResetPassword;
 
     /**

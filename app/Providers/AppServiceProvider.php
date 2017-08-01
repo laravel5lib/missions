@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
             return $result == 'text/csv';
         });
 
-        Validator::extend('is_compatable', function ($attribute, $value, $params, $validator) {
+        Validator::extend('is_compatible', function ($attribute, $value, $params, $validator) {
 
             if (isset($params[0])) {
                 $reservation = Reservation::find($params[0]);

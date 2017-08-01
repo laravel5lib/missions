@@ -138,7 +138,7 @@ class MedicalRelease extends Model
             return $this->conditions()->delete();
         }
 
-        $names = $this->conditions()->lists('name', 'name');
+        $names = $this->conditions()->pluck('name', 'name');
 
         foreach ($conditions as $condition) {
             array_forget($names, $condition['name']);
@@ -164,7 +164,7 @@ class MedicalRelease extends Model
             return $this->allergies()->delete();
         }
 
-        $names = $this->allergies()->lists('name', 'name');
+        $names = $this->allergies()->pluck('name', 'name');
 
         foreach ($allergies as $allergy) {
             array_forget($names, $allergy['name']);

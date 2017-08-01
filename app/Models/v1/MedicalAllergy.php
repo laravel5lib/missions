@@ -103,7 +103,7 @@ class MedicalAllergy extends Model
      *
      * @return string
      */
-    public static function lists()
+    public static function pluck()
     {
 
         return implode(',', array_flatten(static::available()));

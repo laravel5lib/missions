@@ -87,7 +87,7 @@ abstract class EloquentRepository
      *
      * @throws \InvalidArgumentException
      */
-    public function paginate($perPage = 15, $columns = array('*'))
+    public function paginate($perPage = 15, $columns = ['*'])
     {
         return $this->model->paginate($perPage, $columns);
     }

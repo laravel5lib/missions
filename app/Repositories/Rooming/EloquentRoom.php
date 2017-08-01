@@ -34,7 +34,7 @@ class EloquentRoom extends EloquentRepository implements Room
         return $this->model->withTrashed()->withCount('occupants')->findOrFail($id);
     }
 
-    public function paginate($perPage = 15, $columns = array('*'))
+    public function paginate($perPage = 15, $columns = ['*'])
     {
         return $this->model->withCount('occupants')->paginate($perPage, $columns);
     }

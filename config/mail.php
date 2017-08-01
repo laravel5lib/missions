@@ -55,7 +55,10 @@ return [
     |
     */
 
-    'from' => ['address' => 'go@missions.me', 'name' => 'Missions.Me'],
+    'from' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'mail@missions.me'),
+        'name' => env('MAIL_FROM_NAME', 'Missions.Me'),
+    ],
 
     /*
     |--------------------------------------------------------------------------

@@ -38,7 +38,7 @@ class GroupRequest extends FormRequest
         if ($this->isMethod('put')) {
             $required = [
                 'name'         => 'sometimes|required|max:100',
-                'url'          => 'sometimes|required_if:public,true|unique:slugs,url,'.$this->route('groups').',slugable_id',
+                'url'          => 'sometimes|required_if:public,true|unique:slugs,url,'.$this->route('group').',slugable_id',
                 'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
                 'timezone'     => 'sometimes|required|timezone',
                 'country_code' => 'sometimes|required|in:' . Country::codes(),

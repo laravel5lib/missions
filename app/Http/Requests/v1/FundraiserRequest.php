@@ -40,7 +40,7 @@ class FundraiserRequest extends FormRequest
 
         if ($this->isMethod('put')) {
             $rules['name'] = 'sometimes|required|string';
-            // $rules['url'] = 'string|unique:fundraisers,url,' . $this->route('fundraisers');
+            // $rules['url'] = 'string|unique:fundraisers,url,' . $this->route('fundraiser');
             $rules['name'] = 'sometimes|required|string';
             $rules['fund_id'] = 'sometimes|required|string';
             $rules['started_at'] = 'sometimes|required|date|before:ended_at';

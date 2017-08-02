@@ -184,12 +184,11 @@ return [
         Intervention\Image\ImageServiceProvider::class,
         Cartalyst\Stripe\Laravel\StripeServiceProvider::class,
         Conner\Tagging\Providers\TaggingServiceProvider::class,
-        Silber\Bouncer\BouncerServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
-        Haleks\Markdown\MarkdownServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
-
+        GrahamCampbell\Markdown\MarkdownServiceProvider::class,
     ],
 
     /*
@@ -239,12 +238,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
-        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
-        'Markdown' => Haleks\Markdown\Facades\Markdown::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
         'Promocodes' => App\Facades\Promocodes::class,
-
+        'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
     ],
 
 ];

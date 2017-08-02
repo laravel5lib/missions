@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\v1\Campaign;
 use App\Models\v1\Cost;
+use App\Models\v1\Group;
 use App\Models\v1\Project;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\Trip;

@@ -36,7 +36,7 @@ class Requirement
      */
     public static function get($code)
     {
-        $result = array_where(static::$requirements, function ($key, $value) use ($code) {
+        $result = array_where(static::$requirements, function ($value, $key) use ($code) {
             return $key === strtolower($code);
         });
 

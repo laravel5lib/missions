@@ -34,7 +34,7 @@ class TripType
      */
     public static function get($id)
     {
-        $result = array_where(static::all(), function ($key) use ($id) {
+        $result = array_where(static::all(), function ($value, $key) use ($id) {
             return $key === strtoupper($id);
         });
 

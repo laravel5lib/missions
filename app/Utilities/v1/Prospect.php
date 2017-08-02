@@ -76,7 +76,7 @@ class Prospect
      */
     public static function get($code)
     {
-        $result = array_where(static::all(), function ($key, $value) use ($code) {
+        $result = array_where(static::all(), function ($value, $key) use ($code) {
             return $key === strtoupper($code);
         });
 

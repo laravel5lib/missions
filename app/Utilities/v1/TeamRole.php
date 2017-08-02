@@ -121,7 +121,7 @@ class TeamRole
      */
     public static function get($code)
     {
-        $result = array_where(static::all(), function ($key, $value) use ($code) {
+        $result = array_where(static::all(), function ($value, $key) use ($code) {
             return $key === strtoupper($code);
         });
 
@@ -144,7 +144,7 @@ class TeamRole
             $name = 'Medical Student';
         }
 
-        $result = array_where(static::all(), function ($key, $value) use ($name) {
+        $result = array_where(static::all(), function ($value, $key) use ($name) {
             return $value === trim($name);
         });
 

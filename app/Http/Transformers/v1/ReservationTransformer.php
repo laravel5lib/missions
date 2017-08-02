@@ -185,7 +185,7 @@ class ReservationTransformer extends TransformerAbstract
             if ($params->get('status') && in_array('active', $params->get('status'))) {
                 $active = $reservation->activeCosts;
 
-                $maxDate = $active->where('type', 'incremental')->max('active_at');
+                $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
                 $costs = $active->reject(function ($value, $key) use ($maxDate) {
                     return $value->type == 'incremental' && $value->active_at < $maxDate;

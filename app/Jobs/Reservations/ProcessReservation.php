@@ -45,7 +45,7 @@ class ProcessReservation extends Job
         } else {
             $active = $this->reservation->trip->activeCosts()->get();
 
-            $maxDate = $active->where('type', 'incremental')->max('active_at');
+            $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
             $costs = $active->reject(function ($value) use ($maxDate) {
                 return ($value->type == 'incremental' && $value->active_at < $maxDate) or $value->type == 'optional';

@@ -40,7 +40,7 @@ class MedicalInfo extends Job implements ShouldQueue
     {
         $reservationIds = $reservation->filter(array_filter($this->request))->pluck('id');
 
-        $requirements = $requirement->where('document_type', '=', 'medical_releases')
+        $requirements = $requirement->whereStrict('document_type', '=', 'medical_releases')
             ->whereIn('reservation_id', $reservationIds)
             ->with('document.conditions', 'document.allergies', 'reservation')
             ->get();

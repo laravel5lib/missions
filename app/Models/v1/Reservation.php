@@ -436,7 +436,7 @@ class Reservation extends Model
                        });
 
         // we find the 'incremental' cost with the latest activation date
-        $maxDate = $active->where('type', 'incremental')->max('active_at');
+        $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
         // we remove optional costs so they don't
         // get added to the reservation
@@ -471,7 +471,7 @@ class Reservation extends Model
                     ->unique();
 
         // find the 'incremental' cost that has the earliest activation date
-        $minDate = $costs->where('type', 'incremental')->min('active_at');
+        $minDate = $costs->whereStrict('type', 'incremental')->min('active_at');
 
         // to make sure only one incremental cost is being applied,
         // we choose the 'incremental' cost that

@@ -110,7 +110,7 @@ class TravelReport extends Job implements ShouldQueue
     private function passport($reservation)
     {
         $requirement = $reservation->requirements
-            ->where('document_type', 'passports')
+            ->whereStrict('document_type', 'passports')
             ->first();
 
         $passport = $requirement ? $requirement->document : null;
@@ -133,7 +133,7 @@ class TravelReport extends Job implements ShouldQueue
      */
     private function itinerary($reservation)
     {
-        $requirement = $reservation->requirements->where('document_type', 'travel_itineraries')->first();
+        $requirement = $reservation->requirements->whereStrict('document_type', 'travel_itineraries')->first();
 
         $itinerary_id = $requirement ? $requirement['document_id'] : null;
 

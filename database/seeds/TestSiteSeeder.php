@@ -165,7 +165,7 @@ class TestSiteSeeder extends Seeder
     {
         $active = $res->trip->activeCosts()->get();
 
-        $maxDate = $active->where('type', 'incremental')->max('active_at');
+        $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
         $incrementalCosts = $active->filter(function ($value) use ($maxDate) {
             return $value->type == 'incremental' && $value->active_at == $maxDate;

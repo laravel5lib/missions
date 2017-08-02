@@ -84,7 +84,7 @@ trait Promoteable
         }
 
         if (method_exists($this, $promoter)) {
-            if ($this->{$promoter}()->where('id', $promocode->promotional->promoteable_id)->exists()) {
+            if ($this->{$promoter}()->whereStrict('id', $promocode->promotional->promoteable_id)->exists()) {
                 return $promocode;
             }
         }

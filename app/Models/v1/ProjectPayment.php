@@ -149,7 +149,7 @@ class ProjectPayment
         if (! $current->contains('type', 'incremental')) {
             $active = $this->project->initiative->activeCosts()->get();
 
-            $maxDate = $active->where('type', 'incremental')->max('active_at');
+            $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
             $costs = $active->reject(function ($value) use ($maxDate) {
                 return $value->type == 'incremental' && $value->active_at < $maxDate;

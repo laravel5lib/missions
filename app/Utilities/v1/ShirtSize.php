@@ -38,7 +38,7 @@ class ShirtSize
      */
     public static function get($size)
     {
-        $result = array_where(static::all(), function ($key) use ($size) {
+        $result = array_where(static::all(), function ($value, $key) use ($size) {
             return $key === strtoupper($size);
         });
 

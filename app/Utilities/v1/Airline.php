@@ -57,7 +57,7 @@ class Airline
      */
     public static function get($iata)
     {
-        $result = array_where(static::$airlines, function ($key, $value) use ($iata) {
+        $result = array_where(static::$airlines, function ($value, $key) use ($iata) {
             return $key === strtoupper($iata);
         });
 

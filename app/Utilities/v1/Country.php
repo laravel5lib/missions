@@ -272,7 +272,7 @@ class Country
      */
     public static function get($code)
     {
-        $result = array_where(static::$countries, function ($key, $value) use ($code) {
+        $result = array_where(static::$countries, function ($value, $key) use ($code) {
             return $value === strtolower($code);
         });
 
@@ -281,7 +281,7 @@ class Country
 
     public static function getCode($name)
     {
-        $result = array_where(static::$countries, function ($key, $value) use ($name) {
+        $result = array_where(static::$countries, function ($value, $key) use ($name) {
             return $key === trim($name);
         });
     }

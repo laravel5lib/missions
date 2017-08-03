@@ -218,6 +218,7 @@
                 if(story) {
                     story.author_id = this.$root.user.id;
                     story.author_type = 'users';
+                    story.publications = [{ type: 'users', id: this.id }];
 
                     this.$http.post('stories', story).then(function (response) {
                         this.newMode = false;

@@ -189,6 +189,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+        Laracademy\Commands\MakeServiceProvider::class,
     ],
 
     /*

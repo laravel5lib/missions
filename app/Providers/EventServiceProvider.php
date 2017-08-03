@@ -17,6 +17,7 @@ use App\Models\v1\TripInterest;
 use App\Jobs\SendReferralRequestEmail;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use App\Models\v1\Trip;
+use App\Models\v1\Upload;
 use App\Models\v1\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -119,8 +120,6 @@ class EventServiceProvider extends ServiceProvider
         });
 
         User::created(function ($user) {
-            $user->assign('member');
-
             $banner = Upload::randomBanner(['user'])->first();
             $user->banner_upload_id = $banner ? $banner->id : null;
             $user->save();

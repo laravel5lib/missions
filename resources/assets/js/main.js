@@ -953,7 +953,7 @@ new Vue({
                 return JSON.parse(localStorage.getItem('user'))
             } else {
                 let that = this;
-                this.$http.get('users/me?include=roles,abilities')
+                this.$http.get('users/me?include=roles,permissions')
                     .then(function (response) {
                             that.$root.$emit('userHasLoggedIn', response.body.data);
                             return response.body.data;
@@ -969,7 +969,7 @@ new Vue({
                 console.log('impersonating: ', this.impersonatedUser.name);
                 return this.impersonatedUser
             } else {
-                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities')
+                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,permissions')
                     .then(function (response) {
                         console.log('impersonating: ', response.data.data.name);
                         localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
@@ -978,8 +978,8 @@ new Vue({
             }
         },
         hasAbility(ability) {
-            let abilities = _.pluck(this.user.abilities.data, 'name');
-            return this.user ? _.contains(abilities, ability) : false;
+            let permissions = _.pluck(this.user.permissions.data, 'name');
+            return this.user ? _.contains(permissions, ability) : false;
         },
 
         startTour(){

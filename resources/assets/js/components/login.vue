@@ -434,7 +434,7 @@
 
             getUserData: function (redirectTo, ignoreRedirect) {
                 let that = this;
-                return that.$http.get('users/me?include=roles,abilities')
+                return that.$http.get('users/me?include=roles,permissions')
                     .then(function (response) {
                             that.$root.$emit('userHasLoggedIn', response.body.data);
                             // that.$dispatch('userHasLoggedIn', response.body.data);

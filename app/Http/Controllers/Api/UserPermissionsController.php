@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests;
 use App\Models\v1\User;
 use App\Http\Controllers\Controller;
 
-class UserRolesController extends Controller
+class UserPermissionsController extends Controller
 {
 
     /**
-     * UserRolesController constructor.
+     * UserPermissionsController constructor.
      *
      * @param User $user
      */
@@ -20,7 +19,7 @@ class UserRolesController extends Controller
     }
 
     /**
-     * Assign role to user.
+     * Give permission to user.
      *
      * @param $id
      * @return array
@@ -29,15 +28,15 @@ class UserRolesController extends Controller
     {
         $user = $this->user->findOrFail($id);
 
-        if ($user->assignRole(request()->get('name'))) {
-            return ['message' => 'Role assigned.'];
+        if ($user->givePermissionTo(request()->get('name'))) {
+            return ['message' => 'Permission given.'];
         }
 
-        return ['message' => 'Unable to assign role.'];
+        return ['message' => 'Unable to give permission.'];
     }
 
     /**
-     * Remove role from user.
+     * Revoke permission from user.
      *
      * @param $id
      * @return array
@@ -46,10 +45,10 @@ class UserRolesController extends Controller
     {
         $user = $this->user->findOrFail($id);
 
-        if ($user->removeRole(request()->get('name'))) {
-            return ['message' => 'Role revoked.'];
+        if ($user->revokePermissionTo(request()->get('name'))) {
+            return ['message' => 'Permission revoked.'];
         }
 
-        return ['message' => 'Unable to revoke role.'];
+        return ['message' => 'Unable to revoke permission.'];
     }
 }

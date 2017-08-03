@@ -11,8 +11,8 @@
 		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="/images/mm-icon-lightgray.png" alt="Missions.Me">
 		</div>
 			<ul class="nav navmenu-nav">
-				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
-				</li>
+				<li class="donate-nav"><a class="navDonate" href="/fundraisers">
+					<i class="fa fa-heart"></i> Donate To A Cause</a>
 				</li>
 				<li class="navlabel">Account</li>
 				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">

@@ -9,7 +9,7 @@
 /**
  * Dashboard Routes
  */
-$this->group(['middleware' => ['auth', 'can:access-dashboard'], 'prefix' => 'dashboard' ], function () {
+$this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('/', function () {
         return view('dashboard.index');
     });

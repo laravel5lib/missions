@@ -8,6 +8,7 @@ use App\Models\v1\Group;
 use App\Models\v1\Project;
 use App\Models\v1\ProjectCause;
 use App\Models\v1\Trip;
+use App\Models\v1\Upload;
 use App\Models\v1\User;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -110,8 +111,6 @@ class EventServiceProvider extends ServiceProvider
         });
 
         User::created(function ($user) {
-            $user->assign('member');
-
             $banner = Upload::randomBanner(['user'])->first();
             $user->banner_upload_id = $banner ? $banner->id : null;
             $user->save();

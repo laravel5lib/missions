@@ -7,7 +7,7 @@ $factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker) {
     return [
         'id'            => $faker->unique()->uuid,
         'subject'       => $faker->catchPhrase,
-        'content'       => $faker->realText(120),
+        'content'       => $faker->text(120),
         'user_id'       => function () {
             return factory(App\Models\v1\User::class)->create()->id;
         },

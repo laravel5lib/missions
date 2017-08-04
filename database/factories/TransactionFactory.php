@@ -15,7 +15,7 @@ $factory->define(App\Models\v1\Transaction::class, function (Faker\Generator $fa
             'last_four' => substr($faker->creditCardNumber, -4),
             'cardholder' => $faker->name,
             'brand' => $faker->creditCardType,
-            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2),
+            'comment' => $faker->text($maxNbChars = 120, $indexSize = 2),
             'charge_id' => 'ch_' . str_random(30)
         ],
         'created_at' => $faker->dateTimeThisMonth,
@@ -44,7 +44,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'check', function (Faker\Ge
         'details' => [
             'type' => 'check',
             'number' => $faker->randomDigitNotNull,
-            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'comment' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
@@ -58,7 +58,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'cash', function (Faker\Gen
     return array_merge($transaction, [
         'details' => [
             'type' => 'cash',
-            'comment' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'comment' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
@@ -104,7 +104,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'credit', function (Faker\G
         'donor_id' => null,
         'type' => 'credit',
         'details' => [
-            'reason' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'reason' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });
@@ -126,7 +126,7 @@ $factory->defineAs(App\Models\v1\Transaction::class, 'refund', function (Faker\G
             //         'fund_id' => $transaction['fund_id']
             //     ])->id;
             // },
-            'reason' => $faker->realText($maxNbChars = 120, $indexSize = 2)
+            'reason' => $faker->text($maxNbChars = 120, $indexSize = 2)
         ]
     ]);
 });

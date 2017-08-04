@@ -84,7 +84,7 @@ class RequirementConditionsEndpointTest extends TestCase
         ]);
 
         $this->delete('api/requirements/' . $requirement->id . '/conditions/' . $condition->id)
-             ->dontSeeInDatabase('requirement_conditions', $condition->toArray())
+             ->dontSeeInDatabase('requirement_conditions', ['id' => $condition->id])
              ->assertResponseStatus(204);
     }
 }

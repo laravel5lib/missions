@@ -8,7 +8,7 @@ $factory->define(App\Models\v1\Group::class, function (Faker\Generator $faker) {
         'id'               => $faker->unique()->uuid,
         'name'             => $faker->company,
         'type'             => $faker->randomElement(['church', 'business', 'youth', 'nonprofit', 'other']),
-        'description'      => $faker->realText(120),
+        'description'      => $faker->text(120),
         'timezone'         => $faker->randomElement(\DateTimeZone::listIdentifiers()),
         'address_one'      => $faker->optional(0.5)->streetAddress,
         'address_two'      => $faker->optional(0.5)->buildingNumber,

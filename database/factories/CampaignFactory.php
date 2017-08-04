@@ -8,7 +8,7 @@ $factory->define(App\Models\v1\Campaign::class, function (Faker\Generator $faker
         'id'               => $faker->unique()->uuid,
         'name'             => $faker->catchPhrase,
         'country_code'     => strtolower($faker->countryCode),
-        'short_desc'       => $faker->realText(120),
+        'short_desc'       => $faker->text(120),
         'page_src'         => '_generic',
         'started_at'       => \Carbon\Carbon::now()->addYear(),
         'ended_at'         => function (array $campaign) {

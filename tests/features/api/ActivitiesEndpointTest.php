@@ -54,44 +54,12 @@ class ActivitiesEndpointTest extends TestCase
     }
 
     /** @test */
-    // public function creates_a_new_activity()
-    // {
-    //     $data = [
-    //         'name'              => 'Test Activity',
-    //         'description'       => 'A test activity submitted for testing purposes.',
-    //         'activity_type_id'  => factory(ActivityType::class)->create()->id,
-    //         'participant_id'    => factory(Campaign::class)->create()->id,
-    //         'participant_type'  => 'campaigns',
-    //         'occurred_at'       => Carbon::now()->addMonths(6)->toDateTimeString()
-    //     ];
-
-    //     $this->post('/api/activities', $data)
-    //          ->assertResponseOk()
-    //          ->SeeJson(['name' => 'Test Activity']);
-    // }
-
-    // /** @test */
-    // public function updates_an_activity()
-    // {
-    //     $activity = factory(App\Models\v1\Activity::class)->create([
-    //         'name' => 'Test Activity',
-    //         'description' => 'A test activity submitted for testing purposes.',
-    //     ]);
-
-    //     $updates = ['name' => 'Updated Activity'];
-
-    //     $this->put('/api/activities/' . $activity->id, $updates)
-    //          ->assertResponseOk()
-    //          ->SeeJson(['name' => 'Updated Activity']);
-    // }
-
-    /** @test */
     public function deletes_an_activity()
     {
         $activity = factory(App\Models\v1\Activity::class)->create();
 
         $this->delete('/api/activities/' . $activity->id)
              ->assertResponseStatus(204)
-             ->dontSeeInDatabase('activities', $activity->toArray());
+             ->dontSeeInDatabase('activities', ['id' => $activity->id, 'deleted_at' => null]);
     }
 }

@@ -77,6 +77,6 @@ class TeamTypesEndpointTest extends TestCase
 
         $this->delete('api/teams/types/' . $type->id)
              ->assertResponseStatus(204)
-             ->dontSeeInDatabase('team_types', ['id' => $type->id]);
+             ->dontSeeInDatabase('team_types', ['id' => $type->id, 'deleted_at' => 'null']);
     }
 }

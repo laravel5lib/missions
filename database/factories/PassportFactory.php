@@ -11,8 +11,7 @@ $factory->define(App\Models\v1\Passport::class, function (Faker\Generator $faker
         'expires_at'    => \Carbon\Carbon::now()->addYears(10),
         'birth_country' => strtolower($faker->countryCode),
         'citizenship'   => strtolower($faker->countryCode),
-        'user_id'       => $faker->uuid,
-        'upload_id'     => null
+        'user_id'       => $faker->uuid
     ];
 });
 

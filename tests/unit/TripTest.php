@@ -139,7 +139,7 @@ class TripTest extends TestCase
 
         $reward = $trip->applyCode($code);
 
-        $this->assertEquals(10000, $reward);
+        $this->assertTrue(10000, (int) $reward);
     }
 
     /** @test */
@@ -157,7 +157,7 @@ class TripTest extends TestCase
 
         $reward = $trip->applyCode($code);
 
-        $this->assertEquals(10000, $reward);
+        $this->assertSame(10000, (int) $reward);
     }
 
     /** @test */

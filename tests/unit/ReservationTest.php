@@ -65,13 +65,13 @@ class ReservationTest extends TestCase
     {
         $reservation = $this->setup_reservation();
 
-        $this->assertSame(280000, $reservation->getTotalCost());
+        $this->assertSame(280000, (int) $reservation->getTotalCost());
         $this->assertSame('2800.00', $reservation->totalCostInDollars());
-        $this->assertSame(280000, $reservation->fund->fundraisers()->first()->goal_amount);
-        $this->assertSame(20000, $reservation->getTotalRaised());
+        $this->assertSame(280000, (int) $reservation->fund->fundraisers()->first()->goal_amount);
+        $this->assertSame(20000, (int) $reservation->getTotalRaised());
         $this->assertSame('200.00', $reservation->totalRaisedInDollars());
-        $this->assertSame(7, $reservation->getPercentRaised());
-        $this->assertSame(260000, $reservation->getTotalOwed());
+        $this->assertSame(7, (int) $reservation->getPercentRaised());
+        $this->assertSame(260000, (int) $reservation->getTotalOwed());
         $this->assertSame('2600.00', $reservation->totalOwedInDollars());
     }
 
@@ -145,7 +145,7 @@ class ReservationTest extends TestCase
     {
         $reservation = factory(Reservation::class)->create();
         $team = factory(Team::class)->create();
-        $squad = $team->squads(TeamSquad::class)->create(['team_id' => $team->id]);
+        $squad = $team->squads(TeamSquad::class)->create(['team_id' => $team->id, 'callsign' => 'test']);
         $squad->members()->attach($reservation->id);
 
         $reservation->drop();

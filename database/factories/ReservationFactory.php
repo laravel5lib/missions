@@ -5,7 +5,6 @@
  */
 $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $faker) {
     return [
-        'id'                 => $faker->unique()->uuid,
         'given_names'        => $faker->firstName . ' ' . $faker->firstName,
         'surname'            => $faker->lastName,
         'gender'             => $faker->randomElement(['male', 'female']),
@@ -28,8 +27,6 @@ $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $fa
         },
         'avatar_upload_id'   => function () {
             return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
-        },
-        'created_at' => \Carbon\Carbon::now(),
-        'updated_at' => \Carbon\Carbon::now()
+        }
     ];
 });

@@ -5,49 +5,20 @@ php:
 
 sudo: false
 
+cache:
+  directories:
+      - $HOME/.composer/cache/files
+
 before_script:
-#  - cp .env.ci .env
-  - composer install --prefer-source --no-interaction
-#  - php artisan key:generate
-#  - php artisan migrate --seed
+  - composer install --prefer-dist --no-interaction
 
 script:
-#  - vendor/bin/phpmd app text codesize design naming unusedcode
   - vendor/bin/phpunit
 
-#language: php
-#php:
-#- 7.0
-#- 7.1
-#dist: trusty
-#sudo: required
-#before_install:
-#- chmod +x ./script/*
-#- ./script/travis_mysql_5.7.sh
-#- ./script/mysql-reset-root-password.sh
-#services:
-#- mysql
-#before_script:
-#- mysql -e 'CREATE DATABASE IF NOT EXISTS test;'
-#- composer install --dev --prefer-source --no-interaction
-#- php artisan migrate:refresh --seed --force
-#- rm -rf ~/.nvm && git clone https://github.com/creationix/nvm.git ~/.nvm && (cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`) && source ~/.nvm/nvm.sh && nvm install $TRAVIS_NODE_VERSION
-#- npm install --global gulp-cli
-#- yarn
-#- gulp --production
-#cache: yarn
-#env:
-#  - TRAVIS_NODE_VERSION="6"
 #notifications:
-#  email: false
 #  slack:
 #    rooms:
 #      secure: VCYayy1eqf/0TcCCgQ6M/QQf+gpagPktymX7nyOiemgjEUoXJX16whhgkDuZxBXq6rfs+QJROQUxbc6gl6aQuwrrptdXVu2XbSGFphbXh8gqd9lnqZd4vH+XQdJbuES6DhKHHEOZ+bcI+saoDUfhln9MGsR1D7KSvjbLnIyE6hWAnJ5hNC6PYusoR2nK5KSVvaraxHexcs3kp+upoKjrbnU2ApPFAvn7CUYCaMx37BW6amVnqMWqtsyhVAUO1yRzNkgHZUnHEm4qoVupQrqMKQktctUqjs81VqHmNfkhwTHn0a7XVmVdFOFkskaCjTKL4NUSKr2JCukUQT5MHwRWlxF5VHI+4Ttod91OlqPoYhD5FWqHN6cdX6Smtjq9MAbNM28J3foYYoXjB0PCE7BybeOn5ZU3snhoe7+K1vEQi0qAi2lPoxCO+nZZim2S3fsGcYSPO/teEGFXUzLtw7yrS/zpyqtyfitDLvp4rsCQYpp2UN+v5D5FuaRt9yj2Y5sj1Y3vRuGEckH65tuFxwStUiYGZxVoFvR4ATn8ViUnz5gVQpVzgR1YyCBdDHb2u+c2eRTpvoNOH4E1wsw9ByNI8LoPzf2MZupqYI5AEfsjnI/wA7pxXgumW5eybDTdW8CBajxpP2HrOvF0BSQYRRJ99HdyhddsBZ3C11zCwJdCLq0=
 #    on_failure: always
-#    on_success: change
-#    on_pull_requests: false
-#  webhooks:
-#    urls:
-#      secure: bWaWZC3W/d/nEbO2K+l/Y6/UIwF1esuKGVR7iigPIpdqRa2KdmPzmMtiSW9+vqr44Ca7AcbnwlsUdp0U+i7wVulLWBjYYXfKIUoVjI8FRsa4fpi5F4Co3oZtVW76Dja95ukSAhW9mfZ6onhuPOQU8KKJKxrX5PUVZRs5qKmhrYR8A8tWn2jjq1ArKk8PukMWcPVTqY+2LRQ1cPODMQj24aWXN6iHTO48rz+mNFszEMCZL8OZnaZYeuYwtxe//bSp0zpM0M5bBF77PNIRTskLPQIiN8PwNRph9t5imXPgbnMQZWOhZmmwOeuDL8MrHEGJ4mQWiiwkwLy1IaUiwp0KwAX8zlmZqFQ32iHNswVa7xOtulKWZWCzkdJyc7gbI5aer19xhWj5KANC0JX3ulRvkFz+yiyhiV6yUga4aH6ITRL0hZPtmmbBridEh/yDNkjb0rnKr3hCfhykc9OEHY9kA/nZjJsF8kWfUhBj11jtC93Agh00Yl4uFrR1Rsbuix7yrABJ6e9t/ynmdhZwhIMnpBM87C0WWIbha8Cl9Ui4UFVVfgOuYqmXk37YQqJXkd0MkrcnmhvNHP6UE//LjNFESt00WWobCmhXnacrBaR7EeuR3cMPHs6lSdcVI6DAJNMAZYVZjLI99GjkgcyW4jZ9/ZiqimZe7rpgCMn3kmEVQds=
-#    on_failure: never
 #    on_success: always
+#    on_pull_requests: always

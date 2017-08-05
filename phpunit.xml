@@ -30,7 +30,4 @@
         <env name="DB_DATABASE" value=":memory:" />
         <ini name="memory_limit" value="1073741824"/>
     </php>
-    <logging>
-        <log type="coverage-html" target="public/code-coverage" charset="UTF-8"/>
-    </logging>
 </phpunit>

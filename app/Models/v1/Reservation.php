@@ -431,7 +431,7 @@ class Reservation extends Model
                        ->get()
                        ->transform(function ($cost) {
                             // set a "locked" attribute for
-                            // merge with reseration costs
+                            // merge with reservation costs
                             return $cost->setAttribute('locked', 0);
                        });
 
@@ -632,6 +632,8 @@ class Reservation extends Model
             return;
         }
 
+        $todos = array_map('strtolower', $todos);
+
         $this->todos()
              ->whereIn('task', $todos)
              ->whereNull('completed_at')
@@ -775,7 +777,7 @@ class Reservation extends Model
     }
 
     /**
-     * Find rewardable promotionals the
+     * Find rewardable promotions the
      * reservation can be enrolled in
      *
      * @return mixed

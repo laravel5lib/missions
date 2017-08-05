@@ -209,7 +209,7 @@ function generate_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Slug::whereRaw("url RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+    $count = Slug::where('url', $slug)->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }
@@ -224,7 +224,7 @@ function generate_fund_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Fund::whereRaw("slug RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+    $count = Fund::where('slug', $slug)->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }
@@ -239,7 +239,7 @@ function generate_fundraiser_slug($string)
 {
     $slug = str_slug($string);
 
-    $count = Fundraiser::whereRaw("url RLIKE '^{$slug}(-[0-9]+)?$'")->count();
+    $count = Fundraiser::where('url', $slug)->count();
 
     return $count ? "{$slug}-{$count}" : $slug;
 }

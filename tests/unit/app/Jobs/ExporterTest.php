@@ -61,19 +61,6 @@ class ExporterTest extends TestCase
     }
 
     /** @test */
-    public function creates_a_csv_file()
-    {
-        $exporter = new Exporter([]);
-
-        $data = $exporter->create([], 'Export', 'test_file');
-
-        $this->assertTrue(Storage::disk('s3')->exists($data->file['full']));
-
-        // clean up
-        Storage::disk('s3')->delete($data->file['full']);
-    }
-
-    /** @test */
     public function saves_the_report()
     {
         $exporter = new Exporter([]);

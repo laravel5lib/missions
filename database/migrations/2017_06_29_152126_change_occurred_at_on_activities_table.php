@@ -13,7 +13,7 @@ class ChangeOccurredAtOnActivitiesTable extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE activities MODIFY occurred_at  DATETIME;');
+//        DB::statement('ALTER TABLE activities MODIFY occurred_at  DATETIME;');
     }
 
     /**
@@ -23,6 +23,6 @@ class ChangeOccurredAtOnActivitiesTable extends Migration
      */
     public function down()
     {
-        DB::statement('ALTER TABLE activities MODIFY occurred_at  TIMESTAMP;');
+//        DB::statement('ALTER TABLE activities MODIFY occurred_at  TIMESTAMP;');
     }
 }

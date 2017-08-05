@@ -84,7 +84,7 @@ class SquadMembersController extends Controller
     }
 
 
-    public function update(SquadMemberRequest $request, $squadId, $memberId)
+    public function update($squadId, $memberId, SquadMemberRequest $request)
     {
         $squad = $this->squad->findOrFail($squadId);
 
@@ -97,7 +97,7 @@ class SquadMembersController extends Controller
                 ]);
 
         $member = $this->squad
-                       ->findOrFail($request->get('team_squad_id'))
+                       ->findOrFail($request->get('team_squad_id', $squadId))
                        ->members()
                        ->findOrFail($memberId);
 

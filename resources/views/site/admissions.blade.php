@@ -74,11 +74,88 @@
 						    </div>
 						    <div id="collapseOne" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">As a part of MMC, you and your peers will live in beautiful Rochester, Michigan. We can promise that the year you spend at MMC will challenge you academically, spiritually, and relationally. You and your MMC peers will hit the ground running, attending at least one mission trip a year. You will live in an apartment with up to 3 other students who will quickly become your closest friends and be with you for the full 11-month term.</p>
+						        <p class="small">The main components of Missions.Me College is to grow, serve, lead and go. The vision of Missions.Me is what drives our students to live the impossible. Our students have the opportunity to earn an associates or bachelors degree online with our accredited partner Southeastern University. As part of their education, students will earn college credit by serving within our ministry and leading others to live the impossible. Students will also attend at least one mission trip a year.</p>
 						      </div>
 						    </div>
 						  </div>
+						  
 						  <div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+						          How does MMC work with Southeastern University?
+						        </a>
+						    </div>
+						    <div id="collapseThree" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">MMC is an official extension campus of Southeastern University. This means that by virtue of your attendance, you are enrolled in a higher education university. Depending on your goals and previous education, you can complete an Associates Degree and/or Bachelors Degree online with Southeastern University.</p>
+						      </div>
+						    </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
+						          Can I get a degree at MMC?
+						        </a>
+						    </div>
+						    <div id="collapseNine" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">Yes. you have the opportunity to receive an Associates degree or a Bachelor of Science degree from Southeastern University.</p>
+
+								<p class="small">Missions.Me College is accredited through Southeastern University by the Southern Association of Colleges and Schools Commission on Colleges to award associate and baccalaureate degrees. Contact the Commission on Colleges at 1866 Southern Lane, Decatur, GA 30033-4097 or call 404-679-4500 for questions about the accreditation of Southeastern University.</p>
+						      </div>
+						    </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTen">
+						          How long is the program?
+						        </a>
+						    </div>
+						    <div id="collapseTen" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">Each year commitment is 11 months long. Students are required a commitment minimum of 1 year (11 months). Depending on a students academic goals, students can be enrolled in Missions.Me College for 1-4 years.</p>
+
+								<p class="small">Students will be enrolled in classes through Southeastern University in the Fall and Spring. During the summer months, students will be helping with preparations for our summer missions trips and as well as attending a mission trip.</p>
+						      </div>
+						    </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
+						          When does the program start and end?
+						        </a>
+						    </div>
+						    <div id="collapseSeven" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">August 21, 2017 - August 4, 2018</p>
+						      </div>
+						    </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseEleven">
+						          When is the application deadline?
+						        </a>
+						    </div>
+						    <div id="collapseEleven" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">The application deadline for Fall 2017 is June 30, 2017. Applications are currently open for Fall 2018.</p>
+						      </div>
+						    </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+						          What does a normal week at MMC look like?
+						        </a>
+						    </div>
+						    <div id="collapseFive" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">Students will attend online classes throughout the week, participating in a full-time academic schedule. When not in class or study hall, students will partake in a hands-on experience learning to live the impossible with training from our Missions.Me staff. Students will attend Chapel services weekly. Students will also have the opportunity to earn college credit while serving within Missions.Me.</p>
+						      </div>
+						    </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
 						          Will I get to go home during the year?
@@ -89,68 +166,60 @@
 						        <p class="small">Each MMC student will have vacation time and mandatory holidays where they are free to travel home and visit their families. A calendar will be provided to all students and parents with a full list of the time off and holidays.</p>
 						      </div>
 						    </div>
-						  </div>
-						  <div class="panel panel-default panel-primary">
-						    <div class="panel-heading">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-						          How does MMC work with Southeastern University?
-						        </a>
-						    </div>
-						    <div id="collapseThree" class="panel-collapse collapse">
-						      <div class="panel-body">
-						        <p class="small">MMC is an official extension campus of Southeastern University. This means that by virtue of your attendance, you are enrolled in a higher education university. After four years, whether on our campus or Southeastern, you will be a proud alumnus.</p>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="panel panel-default panel-primary">
-						    <div class="panel-heading">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
-						          What does a normal week at MMC look like?
-						        </a>
-						    </div>
-						    <div id="collapseFive" class="panel-collapse collapse">
-						      <div class="panel-body">
-						        <p class="small">Students will attend class throughout the week, participating in a full-time academic schedule. When not in class, students will partake in a hands-on experience working with Missions.Me, as well as serving in the local church.</p>
-						      </div>
-						    </div>
-						  </div>
-						  <div class="panel panel-default panel-primary">
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
 						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix">
-						          How does housing work?
+						          How does food and housing work?
 						        </a>
 						    </div>
 						    <div id="collapseSix" class="panel-collapse collapse">
 						      <div class="panel-body">
-						       	<p class="small">You will be living in the MMC designated apartments with other students in the stunning Dana Point, California region.</p>
+						       	<p class="small">You will be living with other students in our approved student housing complex. Rent and utilities are covered in the cost of your MMC tuition.</p>
+
+								<p class="small">Food is not included in the general tuition. However, we can accommodate a meal plan into your tuition that includes a monthly dining debit card that you will be able to use for groceries, restaurants, and midnight pizza runs.</p>
 						      </div>
 						    </div>
-						  </div>
-						  <div class="panel panel-default panel-primary">
+					  	</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven">
-						          When does the program start and end?
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve">
+						          What degrees are offered?
 						        </a>
 						    </div>
-						    <div id="collapseSeven" class="panel-collapse collapse">
+						    <div id="collapseTwelve" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">August 26, 2017 - August 1, 2018</p>
+						        <p class="small">Students can enroll in one of 3 degree programs offered through the Southeastern University extension site here at MMC. The academic programs of choice are the Associate of Arts (AA), Associate of Ministerial Leadership (AML) and Bachelor of Science in Ministerial Leadership.</p>
+
+								<p class="small">You can see what specific classes are offered in each academic program by clicking here and by clicking on the appropriate degree program.</p>
 						      </div>
 						    </div>
-						  </div>
-						  <div class="panel panel-default panel-primary">
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
 						    <div class="panel-heading">
-						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseNine">
-						          Can I get a degree at MMC?
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseThirteen">
+						          What are classes like?
 						        </a>
 						    </div>
-						    <div id="collapseNine" class="panel-collapse collapse">
+						    <div id="collapseThirteen" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">Yes. Upon completion you will receive either an Associates degree or a Bachelor of Science degree.</p>
-						        <p class="small">Missions.Me College is accredited through Southeastern University by the Southern Association of Colleges and Schools Commission on Colleges to award associate and baccalaureate degrees.</p>
+						        <p class="small">Every academic year, students are enrolled in two semesters. Students are enrolled as full time students completing two courses (six semester hours) every eight weeks during each semester. They are also enrolled in the ministerial practicum, which is college credit for serving within Missions.Me.</p> 
+
+								<p class="small">Students complete their education online with Southeastern University. Students are required to attend mandatory study hall times each day to allow the allotted time to complete class assignments. On site academic advising also occurs.</p>
 						      </div>
 						    </div>
-						  </div>
+						</div><!-- end panel -->
+						<div class="panel panel-default panel-primary">
+						    <div class="panel-heading">
+						        <a data-toggle="collapse" data-parent="#accordion" href="#collapseFourteen">
+						          Can I get a job while being in the program?
+						        </a>
+						    </div>
+						    <div id="collapseFourteen" class="panel-collapse collapse">
+						      <div class="panel-body">
+						        <p class="small">With a full time class schedule and being a part of Missions.Me College, students have a pretty demanding schedule. However, we understand that some of our students may need a job while attending MMC. That is why our schedules end at 5pm during the week and 12pm on Fridays. Weekends will also be available for students.</p> 
+						      </div>
+						    </div>
 						</div><!-- end panel -->
 					</div><!-- end accordian -->
 				</div><!-- end col -->
@@ -158,4 +227,29 @@
 		</div><!-- end content-section -->
 	</div><!-- end container -->
 </div><!-- end white-bg -->
+<hr class="divider" style="margin:0;">
+<div class="gray-bg-lighter" style="background:url('/images/college/map-bg.png') bottom no-repeat fixed;">
+	<div class="container">
+		<div class="content-section">
+			<div class="row">
+				<div class="col-sm-6 col-md-4 col-md-offset-2">
+					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Have Questions?</h2>
+					<p class="small">Please contact our Missions.Me College Director</p>
+					<p class="small">If you are interested in applying to Missions.Me College and would like to request more info:</p>
+					<p class="small"><a class="btn btn-primary btn-sm" href="http://partners.seu.edu/info/?site=MISME">Request More Info</a></p>
+				</div><!-- end col -->
+				<div class="col-sm-6 col-md-4">
+					<div class="panel panel-default text-center">
+						<div class="panel-body">
+							<h6 class="text-uppercase">MMC Director</h6>
+							<h2 class="text-serif" style="margin-top:10px;">Cat Keena</h2>
+							<p><a class="btn btn-primary" href="mailto:cat@missions.me">Send An Email</a></p>
+							<p class="small">Phone: <a href="tel:8773694532">877.369.4532</a> Ext: 1002</p>
+						</div><!-- end panel-body -->
+					</div><!-- end panel -->
+				</div><!-- end col -->
+			</div><!-- end row -->
+		</div><!-- end content-section -->
+	</div><!-- end container -->
+</div>
 @endsection

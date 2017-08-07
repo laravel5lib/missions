@@ -39,15 +39,19 @@
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-4 col-md-3">
+				<div class="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-4 col-lg-offset-0">
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Academics</h2>
 				</div>
-				<div class="col-sm-8 col-md-9">
-						<p class="small">MMC is committed to providing students with the best education. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program.</p>
+				<div class="col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
+						<p class="small">Missions.Me College is committed to providing students with the best education. As a partner and extension site of Southeastern University, an accredited university in Florida, our students experience just that. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program. In addition to education and experience, students of Missions.Me College are steps away from the beautiful beaches of Southern California.</p>
 
-						<p class="small">With a Bachelors of Science and Associate of Arts degree programs accredited under Southeastern University in Florida, students will receive the educational training they need to be successful in whatever field they desire.</p>
+						<p class="small">With three areas of study to choose from, Mission.Me’s two or four year programs allow students to learn in a community environment and experience hands-on training. After completion of the curriculum with Southeastern University, students will receive their associate’s or bachelor’s degrees.</p>
 
-						<p class="small">Our hands-on approach is like no other higher learning program in the country. By traveling around the world, working with team members, and serving in ministry, we are committed to equipping this generation of leaders who will influence the culture and guide a life-changing organization.</p>
+						<p class="small">As an extension site of Southeastern University, students will be enrolled in four classes (12 credits) each semester. An additional three credits will be granted as practicum credit each semester at no additional charge. Each student receives a total of 15 credits per semester. Our educational degrees are online courses taken over two 16 week semesters.</p>
+
+						<p class="small">Students can enroll in a wide number of degree programs offered through the Southeastern University extension site here at MMC. Additionally, the Southeastern University MMC Extension Site is proud to offer an Associate of Arts (AA), Associate of Ministerial Leadership (AML) and Bachelor of Science in Ministerial Leadership at a discounted rate.</p>
+
+						<p class="small">You can see what specific classes are offered in each academic program by clicking here and by clicking on the appropriate degree program.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->
@@ -58,17 +62,17 @@
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-4 col-md-3">
-					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Missions</h2>
+				<div class="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-4 col-lg-offset-0">
+					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Ministry Practicum</h2>
 				</div>
-				<div class="col-sm-8 col-md-9">
-					<p class="small">Missions is the heartbeat of our organization. At MMC you will have the opportunity to go on trips, participate on teams, build missions experiences, and learn how to operate a successful missions organization.</p>
+				<div class="col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
+					<p class="small">Missions.Me College offers a great space for Southeastern University students to enjoy classes and experience hands-on ministry learning. Our hands-on approach is like no other higher learning program in the country. By traveling around the world, working with team members, and serving in ministry, we are committed to equipping this generation of leaders who will influence the culture and guide a life-changing organization.</p>
 
-					<p class="small">At Missions.Me, nearly every aspect of the organization is fueled by people like you. Our staff will coach you as we push the limits of traditional missions together.</p>
+					<p class="small">The ministry practicum is a unique part of what sets our partnership with Southeastern University apart from other types of programs. Students get a chance to implement what they have been learning within the classroom. We believe hands-on, practical training and application is a crucial part of your education and will lead to a lifetime of success.</p>
 
-					<p class="small">We believe in you, and we believe you can change the world. The world of a child born on the streets in India. The world of a single-mother in Ghana who walks three miles everyday for water. The world of a family next door in your neighborhood. Missions isn’t for those called to live in another country their whole lives.</p>
-					<a href="/about-mm" class="btn btn-sm btn-primary">About Missions.Me</a>
-					<a href="/campaigns" class="btn btn-sm btn-primary">Go On A Trip With Us</a>
+					<p class="small">Students enrolled in one of Southeastern’s academic programs can earn up to 12 credit hours by participating in weekly ministry practicum.</p>
+
+					<p class="small" style="font-size:11px;">SEU Accreditation: Southeastern University is accredited by the Southern Association of Colleges and Schools Commission on Colleges to award associate, baccalaureate, masters, and doctorate degrees. Contact the Commission on Colleges at 1866 Southern Lane, Decatur, GA 30033-4097 or call 404-679-4500 for questions about the accreditation of Southeastern University.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

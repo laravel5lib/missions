@@ -39,9 +39,9 @@
 	<div class="container">
 		<div class="content-section">
 			<div class="row">
-				<div class="col-sm-10 col-md-6 col-sm-offset-1 col-md-offset-3 text-center">
+				<div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 text-center">
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Student Life</h2>
-					<p>Nestled in sunny Southern California, the Missions.Me College is an inspirational and disruptive environment that allows students to discover their divine design in beautiful natural surroundings and with friends that also want to change the world. </p>
+					<p>Student Life is an essential part of the Missions.Me College experience. We want to make sure our students are living each day with purpose and intentionality. There are several aspects to Student Life that help foster a unique community among the students at MMC. Every week you will experience life with fellow MMC students through devotion and worship time, weekly Chapel services and weekly leadership training. The Student Life environment is meant to help you grow spiritually and relationally while sharpening the gifts God has given you. Also with office and student housing only minutes from beautiful beaches, you are more than able to experience the OC culture and all of the perks of living close to LA and San Diego.</p>
 				</div>
 			</div><!-- end row -->
 		</div><!-- end content-section -->
@@ -56,7 +56,7 @@
 					<h2 class="text-serif text-lightweight" style="display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Location Matters</h2>
 				</div>
 				<div class="col-sm-4 col-sm-offset-2">
-						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">25</h1>
+						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">40</h1>
 						<p class="small">Minutes From Disneyland <i class="fa fa-angle-right pull-right" style="opacity:0.5;"></i></p>
 						<hr class="divider" style="opacity:0.3;">
 						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">70&deg;</h1>
@@ -82,11 +82,11 @@
 		<div class="content-section">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-0 col-lg-4 col-lg-offset-0">
-					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">About Dana Point, CA</h2>
+					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">About OC Living</h2>
 				</div>
 				<div class="col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
 					<h4 class="text-serif text-lightweight text-primary">Hike</h4>
-					<p class="small">Dana Point is surrounded by endless miles of walking trails of all intensity levels. At MMC we encourage an active lifestyle and we promise that Southern California will not disappoint.</p>
+					<p class="small">Our office is surrounded by endless miles of walking trails of all intensity levels. At MMC we encourage an active lifestyle and we promise that Southern California will not disappoint.</p>
 
 					<h4 class="text-serif text-lightweight text-primary">Surf</h4>
 					<p class="small">No matter your skill level you can surf Salt Creek or many world-famous spots along Southern California’s coastline, our location delivers consistent surf for all skill types.</p>
@@ -123,6 +123,57 @@
 
 					<h5 class="text-serif text-lightweight">Outlets at San Clemente</h5>
 					<p class="small">Outlets at San Clemente is Orange County’s first coastal outlet shopping experience where you can discover treasure after treasure amidst a village of Spanish Colonial-style storefronts that beckon you inside to find the perfect brand and the perfect fit.</p>
+
+					<p class="small">To learn more about what else is available near Missions.Me College, check out: <a href="http://www.visittheoc.com">www.visittheoc.com</a></p>
+				</div><!-- end col -->
+			</div><!-- end row -->
+		</div><!-- end content-section -->
+	</div><!-- end container -->
+</div><!-- end white-bg -->
+<hr class="divider" style="margin:0;">
+<div class="white-bg">
+	<div class="container">
+		<div class="content-section">
+			<div class="row">
+				<div class="col-sm-4 col-md-3">
+					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Spiritual Life</h2>
+				</div>
+				<div class="col-sm-8 col-md-9">
+					<p class="small">Your experience at Missions.Me College involves more than earning a degree. You’ll experience authentic relationships through devotional and worship, one on one mentoring times, Chapel services, exciting student events and more! As part of the Missions.Me family, you will be an important and valued member of our community.</p>
+				</div><!-- end col -->
+			</div><!-- end row -->
+		</div><!-- end content-section -->
+	</div><!-- end container -->
+</div><!-- end white-bg -->
+<div class="gray-lighter-bg">
+	<div class="container">
+		<div class="content-section">
+			<div class="row">
+				<div class="col-sm-4 col-md-3">
+					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Housing</h2>
+				</div>
+				<div class="col-sm-8 col-md-9">
+					<p class="small">As part of your tuition, you will be living with up to three other students in our approved student housing complex. Rent and utilities are covered in the cost of your MMC tuition. Students will be living in close proximity to the office and all that OC living has to offer.</p>
+				</div><!-- end col -->
+			</div><!-- end row -->
+		</div><!-- end content-section -->
+	</div><!-- end container -->
+</div><!-- end white-bg -->
+<div class="white-bg">
+	<div class="container">
+		<div class="content-section">
+			<div class="row">
+				<div class="col-sm-4 col-md-3">
+					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Missions</h2>
+				</div>
+				<div class="col-sm-8 col-md-9">
+					<p class="small">Missions is the heartbeat of our organization. At MMC you will have the opportunity to go on trips, participate on teams, build missions experiences, and learn how to operate a successful missions organization.</p>
+
+					<p class="small">At Missions.Me, nearly every aspect of the organization is fueled by people like you. Our staff will coach you as we push the limits of traditional missions together.</p>
+
+					<p class="small">We believe in you, and we believe you can change the world. The world of a child born on the streets in India. The world of a single-mother in Ghana who walks three miles everyday for water. The world of a family next door in your neighborhood. Missions isn’t for those called to live in another country their whole lives.</p>
+					<a href="/about-mm" class="btn btn-sm btn-primary">About Missions.Me</a>
+					<a href="/campaigns" class="btn btn-sm btn-primary">Go On A Trip With Us</a>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

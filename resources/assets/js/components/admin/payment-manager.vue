@@ -33,14 +33,14 @@
                             <label for="amountOwed">Owed</label>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('amount') }">
+                            <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('amount') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                 <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(newPayment)" number v-model="newPayment.amount_owed"
                                        v-validate:amount="{required: true, min: 0}" @change="modifyPercentOwed(newPayment)">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('percent') }">
+                            <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('percent') }">
                                 <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed|number 2"
                                        v-validate:percent="{required: true, min: 0}" @change="modifyAmountOwed(newPayment)">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
@@ -63,9 +63,9 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group" :class="{'has-error': checkForErrorPaymentAdd('grace') }">
+                            <div class="form-group" :class="{'has-error': errors.hasPaymentAdd('grace') }">
                                 <label for="grace_period">Grace Period</label>
-                                <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentAdd('grace') }">
+                                <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('grace') }">
                                     <input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
                                            v-validate:grace="{required: true, min:0}">
                                     <span class="input-group-addon">Days</span>
@@ -92,14 +92,14 @@
                                 <label for="amountOwed">Owed</label>
                             </div>
                             <div class="col-sm-6">
-                                <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('amount') }">
+                                <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('amount') }">
                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                     <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
                                            v-validate:amount="{required: true, min: 0}" @change="modifyPercentOwed(selectedPayment)" >
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('percent') }">
+                                <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('percent') }">
                                     <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
                                            v-validate:percent="{required: true, min: 0}" @change="modifyAmountOwed(selectedPayment)">
                                     <span class="input-group-addon"><i class="fa fa-percent"></i></span>
@@ -122,9 +122,9 @@
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="form-group" :class="{'has-error': checkForErrorPaymentEdit('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.hasPaymentEdit('grace') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForErrorPaymentEdit('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="selectedPayment.grace_period"
                                                v-validate:grace="{required: true, min:0}">
                                         <span class="input-group-addon">Days</span>
@@ -229,10 +229,10 @@
 
         },
         methods: {
-            checkForErrorPaymentAdd(field){
+            errors.hasPaymentAdd(field){
                 return this.$TripPricingCostPaymentAdd && this.$TripPricingCostPaymentAdd[field.toLowerCase()].invalid && this.attemptedAddPayment;
             },
-            checkForErrorPaymentEdit(field){
+            errors.hasPaymentEdit(field){
                 return this.$TripPricingCostPaymentEdit && this.$TripPricingCostPaymentEdit[field.toLowerCase()].invalid && this.attemptedAddPayment;
             },
             resetPayment(){

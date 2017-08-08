@@ -22,18 +22,18 @@
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
-													<div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+													<div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
 														<label for="cost_name">Name</label>
 														<input type="text" class="form-control input-sm" id="cost_name"
 															   v-model="newCost.name" v-validate:costName="{required: true}"
 															   placeholder="Name" autofocus>
 													</div>
-													<div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+													<div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
 														<label for="cost_description">Description</label>
 														<textarea class="form-control input-sm" id="cost_description"
 																  v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
 													</div>
-													<div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+													<div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
 														<label for="cost_type">Type</label>
 														<select id="cost_type" class="form-control input-sm" v-model="newCost.type" v-validate:costType="{ required: true }">
 															<option value="">-- select --</option>
@@ -44,7 +44,7 @@
 													</div>
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+															<div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
 																<label for="newCost_active_at">Active</label>
 																<date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 																<input type="datetime" id="newCost_active_at" class="form-control input-sm hidden"
@@ -53,7 +53,7 @@
 
 														</div>
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+															<div class="form-group" :class="{'has-error': errors.hasCost('costAmount')}">
 																<label for="newCost_amount">Amount</label>
 																<div class="input-group input-group-sm">
 																	<span class="input-group-addon"><i class="fa fa-usd"></i></span>
@@ -143,14 +143,14 @@
 														<label for="amountOwed">Owed</label>
 													</div>
 													<div class="col-sm-6">
-														<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('amount') }">
+														<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('amount') }">
 															<span class="input-group-addon"><i class="fa fa-usd"></i></span>
 															<input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(cost)" number v-model="newPayment.amount_owed"
 															   v-validate:amount="{required: true, min: 0.01}" debounce="100">
 														</div>
 													</div>
 													<div class="col-sm-6">
-														<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('percent') }">
+														<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('percent') }">
 															<input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
 																   v-validate:percent="{required: true, min: 0.01}" debounce="100">
 															<span class="input-group-addon"><i class="fa fa-percent"></i></span>
@@ -173,9 +173,9 @@
 														</div>
 													</div>
 													<div class="col-sm-6">
-														<div class="form-group" :class="{'has-error': checkForErrorPayment('grace') }">
+														<div class="form-group" :class="{'has-error': errors.hasPayment('grace') }">
 															<label for="grace_period">Grace Period</label>
-															<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('grace') }">
+															<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																<input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
 																	   v-validate:grace="{required: true, min:0}">
 																<span class="input-group-addon">Days</span>

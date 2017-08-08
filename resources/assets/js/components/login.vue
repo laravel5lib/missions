@@ -19,8 +19,7 @@
 								       v-validate="'required|email'"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" style="margin-bottom:0;"
-						     :class="{ 'has-error': errors.has('password') }">
+						<div class="form-group" style="margin-bottom:0;" :class="{ 'has-error': errors.has('password') }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="user.password" name="password"

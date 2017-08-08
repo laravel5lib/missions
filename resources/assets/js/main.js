@@ -5,12 +5,12 @@ Number.isInteger = Number.isInteger || function(value) {
 
 import Vue from 'vue';
 window.Vue =  Vue;
-import aside from './components/aside.vue';
+// import aside from './components/aside.vue';
 import pagination from './components/pagination.vue';
 import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
-// import markdownExampleModal from './components/markdown-example-modal.vue';
-// import contactForm from './components/contact-form.vue';
+import markdownExampleModal from './components/markdown-example-modal.vue';
+import contactForm from './components/contact-form.vue';
 // import speakerForm from './components/speaker-form.vue';
 // import sponsorProjectForm from './components/sponsor-project-form.vue';
 // import actionTrigger from './components/action-trigger.vue';
@@ -285,12 +285,15 @@ Vue.http.interceptors.push(function(request, next) {
         if (this.$refs.spinner && !request.params.hideLoader) {
             switch (request.method.toUpperCase()) {
                 case 'GET':
+                    // this.$root.$emit('show::spinner', {text: 'Loading'})
                     this.$refs.spinner.show({text: 'Loading'});
                     break;
                 case 'POST':
+                    // this.$root.$emit('show::spinner', {text: 'Saving'})
                     this.$refs.spinner.show({text: 'Saving'});
                     break;
                 case 'PUT':
+                    // this.$root.$emit('show::spinner', {text: 'Updating'})
                     this.$refs.spinner.show({text: 'Updating'});
                     break;
             }
@@ -335,6 +338,29 @@ Vue.filter('phone', {
             .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     }
 });
+Vue.component('phone-input', {
+    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    props: {
+        value: { type: String, default: '' },
+        label: { type: String, default: '' },
+        placeholder: { type: String, default: '(123) 456-7890' },
+    },
+    methods: {
+        updateValue(value) {
+            this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        },
+        formatValue() {
+            this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        },
+        selectAll(event) {
+            // Workaround for Safari bug
+            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+            setTimeout(function () {
+                event.target.select()
+            }, 0)
+        }
+    }
+})
 
 Vue.filter('number', {
     read: function (number, decimals) {
@@ -757,8 +783,8 @@ new Vue({
     components: {
         login,
         topNav,
-        // markdownExampleModal,
-        // contactForm,
+        markdownExampleModal,
+        contactForm,
         // speakerForm,
         // sponsorProjectForm,
         // fundraisers,
@@ -796,7 +822,6 @@ new Vue({
         // restoreReservation,
         // transferReservation,
         // restoreFund,
-        //
 
         // dashboard components
         // recordsList,

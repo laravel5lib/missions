@@ -33,7 +33,7 @@
 					</div>
 				</div>
 
-				<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
+				<div class="form-group" :class="{ 'has-error': (errors.has('start') || errors.has('end')) }">
 					<div class="col-sm-12">
 						<label for="started_at">Dates</label>
 						<div class="row">

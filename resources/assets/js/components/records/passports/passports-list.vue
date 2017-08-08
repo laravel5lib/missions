@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
 
@@ -22,7 +22,7 @@
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
-        </aside>
+        </mm-aside>
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">

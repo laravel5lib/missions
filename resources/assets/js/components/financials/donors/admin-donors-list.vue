@@ -1,7 +1,7 @@
 <template>
     <div style="position: relative;">
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -80,7 +80,7 @@
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
                 <hr class="divider inv">
             </form>
-        </aside>
+        </mm-aside>
 
         <div class="row">
             <div class="col-sm-12">

@@ -4,7 +4,7 @@
 			<validator name="TripSettings" @valid="onValid">
 				<form id="TripSettings" class="form-horizontal" novalidate>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('spots') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('spots') }">
 						<label for="spots" class="col-sm-2 control-label">Spots Available</label>
 						<div class="col-sm-10">
 							<div class="input-group input-group-sm">
@@ -18,7 +18,7 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('closed') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('closed') }">
 						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
 						<div class="col-sm-10">
 							<date-picker :input-sm="true" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>

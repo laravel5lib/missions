@@ -9,7 +9,7 @@
 							<p>{{$parent.campaign.name|capitalize}}</p>
 						</div>
 					</div>
-					<div class="form-group" :class="{ 'has-error': checkForError('group') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('group') }">
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
@@ -20,7 +20,7 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('type') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('type') }">
 						<label for="type" class="col-sm-2 control-label">Type</label>
 						<div class="col-sm-10">
 							<select id="type" class="form-control input-sm" v-model="type"
@@ -34,7 +34,7 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('prospects') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('prospects') }">
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('difficulty') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('difficulty') }">
 						<label for="difficulty" class="col-sm-2 control-label">Difficulty</label>
 						<div class="col-sm-10">
 							<select id="difficulty" class="form-control input-sm" v-model="difficulty"
@@ -59,7 +59,7 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('companions') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('companions') }">
 						<label for="companion_limit" class="col-sm-2 control-label">Companion Limit</label>
 						<div class="col-sm-10">
 							<div class="input-group input-group-sm">
@@ -73,25 +73,25 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
+					<div class="form-group" :class="{ 'has-error': (errors.has('start') || errors.has('end')) }">
 						<label for="started_at" class="col-sm-2 control-label">Dates</label>
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<date-picker addon="Start" :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<date-picker addon="Start" :has-error= "errors.has('start')" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 									       v-validate:start="{ required: true }" required>
 									<!--<div class="input-group input-group-sm"
-										 :class="{ 'has-error': checkForError('start') }">
+										 :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
 									</div>-->
 								</div>
 								<div class="col-sm-6">
-									<date-picker addon="End" :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<date-picker addon="End" :has-error= "errors.has('end')" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 									       v-validate:end="{ required: true }" required>
 									<!--<div class="input-group input-group-sm"
-										 :class="{ 'has-error': checkForError('end') }">
+										 :class="{ 'has-error': errors.has('end') }">
 										<span class="input-group-addon">End</span>
 									</div>-->
 								</div>
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 
-					<div class="form-group" :class="{ 'has-error': checkForError('rep') }">
+					<div class="form-group" :class="{ 'has-error': errors.has('rep') }">
 						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"

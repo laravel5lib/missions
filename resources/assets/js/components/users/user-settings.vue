@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row form-group" :class="{ 'has-error': !!changePassword && (checkForError('password')||checkForError('passwordconfirmation')) }">
+                                <div class="row form-group" :class="{ 'has-error': !!changePassword && (errors.has('password')|| errors.has('passwordconfirmation')) }">
                                     <div class="col-sm-12">
                                         <label for="name">Password</label>
                                         <div class="checkbox">
@@ -82,7 +82,7 @@
                                         </div>
                                         <div v-if="changePassword" class="row" v-error-handler="{ value: password, handle: 'password' }">
                                             <div class="col-sm-6">
-                                                <div class="input-group" :class="{ 'has-error': checkForError('password') }">
+                                                <div class="input-group" :class="{ 'has-error': errors.has('password') }">
                                                     <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
                                                            v-validate:password="{ minlength:8 }" placeholder="Enter password">
                                                     <span class="input-group-btn">
@@ -94,7 +94,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
-                                                <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
+                                                <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
                                                     <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
                                                            v-validate:passwordconfirmation="{ minlength:8 }" placeholder="Enter password again">
                                                     <span class="input-group-btn">

@@ -11,7 +11,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12" :class="{ 'has-error': checkForError('amount')}">
+                        <div class="col-sm-12" :class="{ 'has-error': errors.has('amount')}">
                             <label>Enter Donation Amount</label>
                             <div class="input-group">
                                 <span class="input-group-addon">$</span>
@@ -21,13 +21,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                        <div class="col-sm-12" :class="{ 'has-error': errors.has('donor')}">
                             <label>Donor Name</label>
                             <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12" :class="{ 'has-error': checkForError('donor')}">
+                        <div class="col-sm-12" :class="{ 'has-error': errors.has('donor')}">
                             <label>Company Name</label>
                             <input type="text" class="form-control" v-model="company_name">
                         </div>
@@ -55,7 +55,7 @@
                     <!-- Credit Card -->
                     <div class="row">
                         <div class="col-sm-12">
-                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
                                 <label for="cardHolderName">Card Holder's Name</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardnumber') || validationErrors.cardNumber }">
                                 <label for="cardNumber">Card Number</label>
                                 <div class="input-group">
                                     <span class="input-group-addon input input-sm"><span class="fa fa-lock"></span></span>
@@ -82,14 +82,14 @@
                     <div class="row">
                         <label style="display:block;margin-left: 10px;margin-top:6px;" for="expiryMonth">Exp Date</label>
                         <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
+                            <div :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
                                 <select v-model="cardMonth" class="form-control input input-sm" id="expiryMonth" v-validate:month="{ required: true }">
                                     <option v-for="month in monthList" :value="month">{{month}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
+                            <div :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
                                 <select v-model="cardYear" class="form-control input input-sm" id="expiryYear" v-validate:year="{ required: true }">
                                     <option v-for="year in yearList" :value="year">{{year}}</option>
                                 </select>
@@ -98,18 +98,18 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
+                            <div :class="{ 'has-error': errors.has('code') || validationErrors.cardCVC }">
                                 <label for="cvCode">
                                     CV CODE</label>
                                 <input type="text" class="form-control input input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
                                        placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 4 }"/>
-                                <span class="help-block" v-if="checkForError('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
+                                <span class="help-block" v-if= "errors.has('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <div :class="{ 'has-error': checkForError('email') }">
+                            <div :class="{ 'has-error': errors.has('email') }">
                                 <label for="infoEmailAddress">Billing Email</label>
                                 <input type="text" class="form-control input input-sm" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
                             </div>
@@ -117,13 +117,13 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('phone') }">
+                            <div :class="{ 'has-error': errors.has('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
                                 <input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div :class="{ 'has-error': checkForError('zip') }">
+                            <div :class="{ 'has-error': errors.has('zip') }">
                                 <label for="infoZip">ZIP</label>
                                 <input type="text" class="form-control input input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
                             </div>
@@ -358,7 +358,7 @@
                 this.donationState = major;
                 this.subState = minor
             },
-            checkForError(field){
+            errors.has(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$Donation[field].invalid && this.attemptSubmit;
             },

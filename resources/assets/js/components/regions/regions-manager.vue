@@ -1,7 +1,7 @@
 <template>
 	<div class="row" style="position:relative;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
-		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<mm-aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
@@ -15,8 +15,8 @@
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRegionFilter"><i class="fa fa-times"></i> Reset Region Filters</button>
 			</form>
-		</aside>
-		<aside :show.sync="showSquadsFilters" placement="left" header="Squad Filters" :width="375">
+		</mm-aside>
+		<mm-aside :show.sync="showSquadsFilters" placement="left" header="Squad Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
@@ -44,7 +44,7 @@
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetSquadFilter"><i class="fa fa-times"></i> Reset Squad Filters</button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<div class="col-sm-8">
 

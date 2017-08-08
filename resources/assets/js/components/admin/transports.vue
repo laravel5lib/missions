@@ -3,9 +3,9 @@
         <div class="row">
             <div class="col-sm-12">
                 <spinner ref="spinner" size="sm" text="Loading"></spinner>
-                <aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
+                <mm-aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
                     <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
-                </aside>
+                </mm-aside>
 
                 <div class="row">
                     <div class="col-xs-12">

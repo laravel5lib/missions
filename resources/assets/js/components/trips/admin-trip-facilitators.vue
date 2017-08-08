@@ -109,7 +109,7 @@
 			}
 		},
 		methods: {
-			/*checkForError: function checkForError(field) {
+			/*checkForError: function errors.has(field) {
 				// if user clicked submit button while the field is invalid trigger error styles
 
 				return this.$AddFacilitator[field].invalid && this.attemptSubmit;

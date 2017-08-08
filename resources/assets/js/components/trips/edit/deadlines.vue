@@ -24,16 +24,16 @@
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
-													<div class="form-group" :class="{'has-error': checkForError('item')}">
+													<div class="form-group" :class="{'has-error': errors.has('item')}">
 														<label for="name">Name</label>
 														<input type="text" id="name" v-model="newDeadline.name" class="form-control input-sm">
 													</div>
 
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('grace') }">
+															<div class="form-group" :class="{'has-error': errors.has('grace') }">
 																<label for="grace_period">Grace Period</label>
-																<div class="input-group input-group-sm" :class="{'has-error': checkForErrorPayment('grace') }">
+																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
 																		   v-validate:grace="{required: true, min:0}">
 																	<span class="input-group-addon">Days</span>
@@ -41,7 +41,7 @@
 															</div>
 														</div>
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': checkForError('due')}">
+															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
 																<date-picker :input-sm="true" :model.sync="newDeadline.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 																<input type="datetime" id="due_at" class="form-control input-sm hidden"

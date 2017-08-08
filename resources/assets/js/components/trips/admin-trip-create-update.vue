@@ -10,7 +10,7 @@
                             <h3>{{campaign.name|capitalize}}</h3>
                         </div>
                     </div>
-                    <div class="form-group" :class="{ 'has-error': checkForError('group') }">
+                    <div class="form-group" :class="{ 'has-error': errors.has('group') }">
                         <div class="col-sm-12">	
                         	<label class="control-label">Group</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
@@ -32,7 +32,7 @@
 							</div>
 						</div>
 						<div class="col-sm-6">
-							<div :class="{ 'has-error': checkForError('type') }">
+							<div :class="{ 'has-error': errors.has('type') }">
 								<label for="type" class="control-label">Type</label>
 								<select id="type" class="form-control" v-model="type"
 										v-validate:type="{ required: true }" required>
@@ -50,7 +50,7 @@
 					</div>
                     <div class="row">
 	                    <div class="col-sm-6">
-	                    	<div :class="{ 'has-error': checkForError('prospects') }">
+	                    	<div :class="{ 'has-error': errors.has('prospects') }">
 	                        	<label class="control-label">Perfect For</label>
 	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
 	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
@@ -61,7 +61,7 @@
 	                        </div>
 	                    </div><!-- end col -->
 	                    <div class="col-sm-6">
-	                    	<div :class="{ 'has-error': checkForError('teamroles') }">
+	                    	<div :class="{ 'has-error': errors.has('teamroles') }">
 	                        	<label class="control-label">Available Roles</label>
 	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="rolesObj"
 	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
@@ -73,7 +73,7 @@
                     </div><!-- end row -->
                     <div class="row">
 	                    <div class="col-sm-6">
-	                    		<div :class="{ 'has-error': checkForError('difficulty') }">
+	                    		<div :class="{ 'has-error': errors.has('difficulty') }">
 		                        	<label for="difficulty" class="control-label">Difficulty</label>
 		                            <select id="difficulty" class="form-control" v-model="difficulty"
 		                                    v-validate:difficulty="{ required: true }" required>
@@ -85,7 +85,7 @@
 		                        </div>
 	                    </div><!-- end col -->
 	                    <div class="col-sm-6">
-		                    <div :class="{ 'has-error': checkForError('companions') }">
+		                    <div :class="{ 'has-error': errors.has('companions') }">
 		                        	<label for="companion_limit" class="control-label">Companion Limit</label>
 		                            <div class="input-group">
 		                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
@@ -98,26 +98,26 @@
 		                    </div>
 	                    </div><!-- end col -->
                     </div><!-- end row -->
-                    <div class="form-group" :class="{ 'has-error': (checkForError('start') || checkForError('end')) }">
+                    <div class="form-group" :class="{ 'has-error': (errors.has('start') || errors.has('end')) }">
                         <div class="col-sm-12">
                         	<label for="started_at" class="control-label">Dates</label>
                             <div class="row">
                                 <div class="col-sm-6">
-	                                <date-picker :has-error="checkForError('start')" :model.sync="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
+	                                <date-picker :has-error= "errors.has('start')" :model.sync="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
 	                                       v-validate:start="['required']" required>
-	                                <!--<div class="input-group" :class="{ 'has-error': checkForError('start') }">
+	                                <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
 										<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
 											   v-validate:start="['required']" required>
 									</div>-->
                                 </div>
                                 <div class="col-sm-6">
-	                                <date-picker :has-error="checkForError('end')" :model.sync="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
+	                                <date-picker :has-error= "errors.has('end')" :model.sync="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
 	                                       v-validate:end="['required']" required>
 	                                <!--<div class="input-group"
-                                         :class="{ 'has-error': checkForError('end') }">
+                                         :class="{ 'has-error': errors.has('end') }">
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'" type="date"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
@@ -141,7 +141,7 @@
                     </div>
                     <div class="row">
 	                    <div class="col-sm-6">
-							<div :class="{ 'has-error': checkForError('spots') }">
+							<div :class="{ 'has-error': errors.has('spots') }">
 								<label for="spots" class="control-label">Spots Available</label>
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-users"></i></span>
@@ -154,9 +154,9 @@
 							</div>
 						</div><!-- end col -->
 						<div class="col-sm-6">
-							<div :class="{ 'has-error': checkForError('closed') }">
+							<div :class="{ 'has-error': errors.has('closed') }">
 								<label for="closed_at" class="control-label">Registration Closes</label>
-								<date-picker :has-error="checkForError('closed')" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
+								<date-picker :has-error= "errors.has('closed')" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
 								<!--<date-picker class="form-control" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
 								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" v-validate:closed="{ required: true }" id="closed_at">
 							</div>

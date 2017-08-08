@@ -46,7 +46,7 @@
             <div slot="modal-body" class="modal-body">
                 <validator name="AddCost">
                     <form class="for" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('costs') }">
+                        <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Costs</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
@@ -121,7 +121,7 @@
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
-            checkForError(field) {
+            errors.has(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
                 return this.$AddCost[field].invalid && this.attemptSubmit;
             },

@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
+		<mm-aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
 			<reservations-filters ref="filters" :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
-		</aside>
-		<aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
+		</mm-aside>
+		<mm-aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
 			<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
-		</aside>
+		</mm-aside>
 
 		<div class="row">
 			<!-- Passengers List -->

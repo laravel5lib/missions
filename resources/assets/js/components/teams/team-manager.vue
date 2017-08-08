@@ -34,7 +34,7 @@
 
 		<div class="row" style="position:relative;">
 			<spinner ref="spinner" size="sm" text="Loading"></spinner>
-			<aside :show.sync="showTeamsFilters" placement="left" header="Team Filters" :width="375">
+			<mm-aside :show.sync="showTeamsFilters" placement="left" header="Team Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
 
@@ -48,18 +48,18 @@
 					<hr class="divider inv sm">
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetTeamFilter()"><i class="fa fa-times"></i> Reset Team Filters</button>
 				</form>
-			</aside>
-			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
+			</mm-aside>
+			<mm-aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
 				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
-			</aside>
-			<aside :show.sync="showMembersFilters" placement="left" header="Members Filters" :width="375">
+			</mm-aside>
+			<mm-aside :show.sync="showMembersFilters" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
 
 					<hr class="divider inv sm">
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 				</form>
-			</aside>
+			</mm-aside>
 
 			<div class="col-xs-12" v-if="currentTeam">
 				<h3>{{ currentTeam.callsign }} <span v-if="isLocked" class="label label-info"><i class="fa fa-lock"></i> Locked</span> <small>&middot; Squad Name</small></h3>

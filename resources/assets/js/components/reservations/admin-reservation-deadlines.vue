@@ -39,7 +39,7 @@
             <div slot="modal-body" class="modal-body">
                 <validator name="AddDeadline">
                     <form class="form-horizontal" novalidate>
-                        <div class="form-group" :class="{ 'has-error': checkForError('deadlines') }"><label
+                        <div class="form-group" :class="{ 'has-error': errors.has('deadlines') }"><label
                                 class="col-sm-2 control-label">Available Deadlines</label>
                             <div class="col-sm-10">
                                 <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
@@ -159,7 +159,7 @@
         },
         computed:{},
         methods: {
-            checkForError(field) {
+            errors.has(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
                 return this.$AddDeadline[field].invalid && this.attemptSubmit;
             },

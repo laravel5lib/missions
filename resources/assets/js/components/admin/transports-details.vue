@@ -43,7 +43,7 @@
 		</div>
 		<tabs v-if="transport">
 			<tab header="Passengers">
-				<transports-details-passengers v-ref:passengers :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
+				<transports-details-passengers ref="passengers" :transport="transport" :campaign-id="campaignId"></transports-details-passengers>
 			</tab>
 			<tab header="Details">
                 <div class="row">
@@ -178,7 +178,7 @@
                 }, this.$root.handleApiError);
             }
         },
-        ready(){
+        mounted(){
 			this.getTransport();
         },
         events: {

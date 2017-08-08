@@ -1,7 +1,7 @@
 <template>
     <validator name="CreateUpdateEssay" @touched="onTouched">
         <form id="CreateUpdateEssay" class="form-horizontal" novalidate>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             
             <template v-if="forAdmin">
                 <div class="col-sm-12">
@@ -125,14 +125,14 @@
                         content: this.content,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Essay created.');
+                        this.$root.$emit('showSuccess', 'Essay created.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/essays/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create essay.')
+                        this.$root.$emit('showError', 'Unable to create essay.')
                     });
                 } else {
                     this.showError = true;
@@ -151,19 +151,19 @@
                         content: this.content,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment + '/records/essays/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
         },
-        ready(){
+        mounted(){
             if (this.isUpdate) {
                 this.resource.get({id: this.id}).then(function (response) {
 

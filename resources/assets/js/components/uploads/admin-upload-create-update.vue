@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div style="position:relative">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
 			<div class="row">
 				<div class="col-sm-offset-2 col-sm-10">
@@ -585,7 +585,7 @@
                 }
 	        },
         },
-		ready(){
+		mounted(){
             let self = this;
 			if (this.isUpdate) {
 				this.resource.get({id: this.uploadId}).then(function (response) {

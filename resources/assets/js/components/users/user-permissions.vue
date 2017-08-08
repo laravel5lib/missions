@@ -128,7 +128,7 @@
                     name: role.name
                 }).then(function (response) {
                     this.selectedRoles.push(role);
-                    this.$dispatch('showSuccess', 'User permissions updated.')
+                    this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
             },
             revoke(role) {
@@ -140,7 +140,7 @@
                     if (index !== -1) {
                       this.selectedRoles.splice(index, 1);
                     }
-                    this.$dispatch('showSuccess', 'User permissions updated.')
+                    this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
             },
             allow(ability) {
@@ -149,7 +149,7 @@
                     entity_type: ability.entity_type
                 }).then(function (response) {
                     this.selectedAbilities.push(ability);
-                    this.$dispatch('showSuccess', 'User permissions updated.')
+                    this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
             },
             deny(ability) {
@@ -162,11 +162,11 @@
                     if (index !== -1) {
                       this.selectedAbilities.splice(index, 1);
                     }
-                    this.$dispatch('showSuccess', 'User permissions updated.')
+                    this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

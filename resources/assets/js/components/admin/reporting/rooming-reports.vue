@@ -20,10 +20,10 @@ export default {
             $.extend(params, {search: this.search});
             console.log(report);
             this.$http.post('reports/' + report + '/rooms', params).then(function (response) {
-                this.$dispatch('showSuccess', response.body.message);
+                this.$root.$emit('showSuccess', response.body.message);
                 this.report = '';
             }, function (error) {
-                this.$dispatch('showError', 'Unable to create the report.');
+                this.$root.$emit('showError', 'Unable to create the report.');
             })
         }
     }

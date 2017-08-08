@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <spinner v-ref:loader size="xl" :fixed="false" text="Loading..."></spinner>
+        <spinner ref="loader" size="xl" :fixed="false" text="Loading..."></spinner>
         <div class="panel-heading">
             <h5>
                 Details
@@ -100,7 +100,7 @@
                     <hr class="divider">
                     <div class="col-md-6">
                         <label>Started At</label>
-                        <p>{{ project.created_at | moment 'll' }}</p>
+                        <p>{{ project.created_at | moment('ll') }}</p>
                     </div>
                     <div class="col-md-6">
                         <label>Funded At</label>
@@ -111,7 +111,7 @@
                     <hr class="divider">
                     <div class="col-md-6">
                         <label>Last Updated</label>
-                        <p>{{ project.updated_at | moment 'll' true }}</p>
+                        <p>{{ project.updated_at | moment('ll') true }}</p>
                     </div>
                 </div>
             </div>
@@ -242,10 +242,10 @@
                 this.$http.put('projects/' + this.id, this.project).then(function (response) {
                     this.editMode = false;
                     this.$refs.loader.hide();
-                    this.$dispatch('showSuccess', 'Your changes were saved successfully.');
+                    this.$root.$emit('showSuccess', 'Your changes were saved successfully.');
                 },function() {
                     this.$refs.loader.hide();
-                    this.$dispatch('showError', 'There are problems with the form.');
+                    this.$root.$emit('showError', 'There are problems with the form.');
                 });
             },
             create() {
@@ -255,7 +255,7 @@
                     window.location = '/admin/projects/' + response.body.data.id;
                 },function() {
                     this.$refs.loader.hide();
-                    this.$dispatch('showError', 'There are problems with the form.');
+                    this.$root.$emit('showError', 'There are problems with the form.');
                 });
             },
             cancel() {
@@ -267,7 +267,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             if( ! this.newOnly) {
                 this.fetch();
             }

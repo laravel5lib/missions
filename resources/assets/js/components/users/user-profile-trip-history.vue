@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="panel panel-default" data-aos="fade-up">
             <div class="panel-heading">
 				<div class="row">
@@ -153,7 +153,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
 			if (this.isUser()) {
 				this.searchTrips().then(function () {
                     this.getAccolades();

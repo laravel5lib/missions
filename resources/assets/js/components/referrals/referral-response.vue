@@ -1,6 +1,6 @@
 <template>
     <section>
-        <spinner v-ref:spinner size="xl" :fixed="false" text="Loading..."></spinner>
+        <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
         <validator name="validation" :classes="{ invalid: 'has-error' }">
         <div class="form-group" v-for="item in referral.response" :class="{ 'has-error' : $validation.item.invalid}">
             <label for="item_{{ $index }}">{{ item.q }}</label>
@@ -41,7 +41,7 @@
                 this.$http.get('referrals/' + this.id).then(function (response) {
                     this.referral = response.body.data;
                 },function () {
-                    this.$dispatch('showError', 'Unable to retrieve the referral request!')
+                    this.$root.$emit('showError', 'Unable to retrieve the referral request!')
                 });
             },
             reset() {
@@ -54,19 +54,19 @@
                 this.$validate(true, function () {
                     if (self.$validation.invalid) {
                         console.log('validation errors');
-                        self.$dispatch('showError', 'Could not submit. Please check the form.');
+                        self.$root.$emit('showError', 'Could not submit. Please check the form.');
                     } else {
                         self.referral.responded_at = moment().format('YYYY-MM-DD HH:MM:SS');
                         self.$http.put('referrals/' + self.id, self.referral).then(function (response) {
-                            self.$dispatch('showSuccess', 'Thank you for submitting your response.');
+                            self.$root.$emit('showSuccess', 'Thank you for submitting your response.');
                         },function () {
-                            self.$dispatch('showError', 'Unable to retrieve the referral request!');
+                            self.$root.$emit('showError', 'Unable to retrieve the referral request!');
                         });
                     }
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

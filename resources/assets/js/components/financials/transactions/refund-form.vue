@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default panel-body">
-        <spinner v-ref:transactionspinner size="xl" :fixed="false" text="Processing..."></spinner>
+        <spinner ref="transactionspinner" size="xl" :fixed="false" text="Processing..."></spinner>
         <div class="row">
             <div class="col-xs-12">
                 <label>Amount</label>

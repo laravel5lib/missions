@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div>
 		<validator name="UpdateCampaign" @touched="onTouched">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<form id="UpdateCampaignForm" class="form-horizontal" novalidate>
 			<div class="row">
 				<div class="col-sm-12">

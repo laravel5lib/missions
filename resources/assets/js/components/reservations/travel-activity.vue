@@ -27,7 +27,7 @@
 					<div class="form-group" v-if="transportDomestic" v-error-handler="{ value: activity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
 						<label for="" v-text="LABELS.dateTime"></label>
 						<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true" v-if="editMode"></date-picker>
-						<p v-else>{{ activity.occurred_at | moment 'LLLL' false true }}</p>
+						<p v-else>{{ activity.occurred_at | moment('LLLL') false true }}</p>
 						<input type="text" class="form-control hidden" v-model="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
 						       id="occurred_at" v-validate:occurred="['required', 'datetime']">
 					</div>
@@ -123,7 +123,7 @@
                 }
 	        },
         },
-        ready(){
+        mounted(){
 	        this.handleLabels();
         }
     }

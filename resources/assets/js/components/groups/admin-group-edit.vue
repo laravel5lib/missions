@@ -2,7 +2,7 @@
     <div>
     <validator name="UpdateGroup" @touched="onTouched">
         <form id="UpdateGroupForm" class="form-horizontal" novalidate style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="row form-group">
                 <div class="col-sm-6">
                     <label>Profile Photo (max file size:2mb)</label>
@@ -316,7 +316,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             // this.$refs.spinner.show();
             let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.body.countries;

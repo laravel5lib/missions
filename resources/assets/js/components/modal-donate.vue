@@ -140,7 +140,7 @@
                 let t = setTimeout(this.resetState, 1000);
             }
         },
-        ready: function () {
+        mounted() {
             // media query event handler
             /*if (matchMedia) {
                 this.mediaQuery = window.matchMedia("(max-width: 767px)");

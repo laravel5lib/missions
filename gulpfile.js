@@ -1,6 +1,8 @@
-const elixir = require('laravel-elixir');
-
+var gulp = require('gulp');
+// var glob = require('glob');
+var elixir = require('laravel-elixir');
 require('laravel-elixir-vueify');
+require('laravel-elixir-vue-2');
 
 /*
  |--------------------------------------------------------------------------
@@ -17,7 +19,9 @@ elixir(function(mix) {
     // compile sass
     mix.sass('app.scss');
     // compile js
-    mix.browserify('main.js');
+    mix.copy('resources/assets/js/vendors/slim.commonjs.js', 'public/js/slim.commonjs.js');
+    mix.webpack('main.js');
+    mix.webpack('vendor.js');
     mix.copy('resources/assets/js/vendor.js', 'public/js/vendor.js');
     mix.copy('resources/assets/js/vendors/slim.jquery.min.js', 'public/js/slim.js');
     mix.copy('resources/assets/js/vendors/slim.commonjs.js', 'public/js/slim.commonjs.js');

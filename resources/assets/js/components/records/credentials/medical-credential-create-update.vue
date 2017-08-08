@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<validator name="CreateUpdateMedicalCredential" @touched="onTouched" lazy>
 			<form id="CreateUpdateMedicalCredential" class="form-horizontal" novalidate>
 				<div class="panel panel-default">
@@ -194,8 +194,8 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<date-picker :model.sync="QA.a|moment 'YYYY-MM-DD'" type="date" ></date-picker>
-									<input type="datetime" class="form-control hidden" v-model="QA.a | moment 'LLLL'" id="started_at" required :field="'date' + $index" v-validate="">
+									<date-picker :model.sync="QA.a|moment('YYYY-MM-DD')" type="date" ></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + $index" v-validate="">
 								</div>
 								<div class="panel-footer" v-show="checkForError('date' + $index)">
 									<div class="errors-block"></div>
@@ -217,7 +217,7 @@
 							<div class="col-sm-12">
 								<ul class="list-group" v-if="uploads.length">
 									<li class="list-group-item" v-for="upload in uploads">
-										<i class="fa fa-file-pdf-o"></i> {{upload.name}} <span v-if="upload.expires">| Expires: {{upload.expires|moment 'YYYY-MM-DD'}}</span>
+										<i class="fa fa-file-pdf-o"></i> {{upload.name}} <span v-if="upload.expires">| Expires: {{upload.expires|moment('YYYY-MM-DD')}}</span>
                                     <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
 									</li>
 								</ul>
@@ -247,7 +247,7 @@
 										<div v-if="show_expire.license" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model.sync="expires.license|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model.sync="expires.license|moment('YYYY-MM-DD')" type="date" ></date-picker>
 												<input type="datetime" class="form-control hidden" v-validate:licenseexpires="['required']" v-model="expires.license" id="licenseexpires" required>
 											</div>
 										</div>
@@ -275,7 +275,7 @@
 									<div v-if="show_expire.certification" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)}">
 										<label class="control-label">Expires</label>
 										<div>
-											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model.sync="expires.certification|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model.sync="expires.certification|moment('YYYY-MM-DD')" type="date" ></date-picker>
 											<input type="datetime" class="form-control hidden" v-validate:certexpires="['required']" v-model="expires.certification" id="certexpires" required>
 										</div>
 									</div>
@@ -301,7 +301,7 @@
 									<div class="col-sm-6" v-if="show_expire.diploma" :class="{ 'has-error': checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)}">
 										<label class="control-label">Expires</label>
 										<div>
-											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model.sync="expires.diploma|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model.sync="expires.diploma|moment('YYYY-MM-DD')" type="date" ></date-picker>
 											<input type="datetime" class="form-control hidden" v-validate:diplomaexpires="['required']" v-model="expires.diploma" id="diplomaexpires" required>
 										</div>
 									</div>
@@ -328,7 +328,7 @@
 										<div v-if="show_expire.letter" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model.sync="expires.letter|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model.sync="expires.letter|moment('YYYY-MM-DD')" type="date" ></date-picker>
 												<input type="datetime" class="form-control hidden" v-validate:letterexpires="['required']" v-model="expires.letter" id="letterexpires" required>
 											</div>
 										</div>
@@ -354,7 +354,7 @@
 										<div v-if="show_expire.resume" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model.sync="expires.resume|moment 'YYYY-MM-DD'" type="date" ></date-picker>
+												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model.sync="expires.resume|moment('YYYY-MM-DD')" type="date" ></date-picker>
 												<input type="datetime" class="form-control hidden" v-validate:resumeexpires="['required']" v-model="expires.resume" id="resumeexpires" required>
 											</div>
 										</div>
@@ -619,18 +619,18 @@
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Medical Credential created.');
+                        this.$root.$emit('showSuccess', 'Medical Credential created.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/medical-credentials/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create medical release.');
+                        this.$root.$emit('showError', 'Unable to create medical release.');
                     });
                 } else {
                     this.showError = true;
-                    this.$dispatch('showError', 'Please check the form.');
+                    this.$root.$emit('showError', 'Please check the form.');
                 }
             },
             update(){
@@ -648,17 +648,17 @@
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/medical-credentials/' + that.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 } else {
-                    this.$dispatch('showError', 'Please check the form.');
+                    this.$root.$emit('showError', 'Please check the form.');
                 }
             },
             confirmUploadRemoval(upload){
@@ -781,7 +781,7 @@
                 this.uploadCounter++;
             }
         },
-        ready(){
+        mounted(){
             // set user data
             // this.userId = this.holder_id = this.$root.user.id;
             // this.holder_type = 'users';

@@ -40,7 +40,7 @@
             <div class="col-xs-12 panel panel-default" v-for="companion in companions" track-by="id">
                 <h5>
                     <a href="/admin/reservations/{{ companion.id }}">
-                        <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ companion.given_names }}">
+                        <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" companion.given_names ">
                         {{ companion.given_names }} {{ companion.surname }}
                         <small> &middot; <em>{{ companion.relationship | capitalize }}</em></small>
                     </a>
@@ -151,7 +151,7 @@ export default {
             }).value();
             loading(false);
         }, function (response) {
-            this.$dispatch('showError', 'Could not retreive reservations.');
+            this.$root.$emit('showError', 'Could not retreive reservations.');
         });
     },
     getReservation() {
@@ -160,14 +160,14 @@ export default {
             this.campaignId = response.body.data.trip.data.campaign_id;
             this.groupId = response.body.data.trip.data.group_id;
         }, function (response) {
-            this.$dispatch('showError', 'Could not retreive reservation.');
+            this.$root.$emit('showError', 'Could not retreive reservation.');
         });
     },
     fetch() {
         this.resource.get({reservation: this.reservationId}).then(function (response) {
             this.companions = response.body.data;
         }, function (response) {
-            this.$dispatch('showError', 'Could not retreive companions.');
+            this.$root.$emit('showError', 'Could not retreive companions.');
         });
     },
     join() {
@@ -175,36 +175,36 @@ export default {
             relationship: this.relationship,
             companion_reservation_id: this.companion_reservation_id
         }).then(function (response) {
-            this.$dispatch('showSuccess', 'Joined new companions.');
+            this.$root.$emit('showSuccess', 'Joined new companions.');
             $('#JoinCompanionsModal').modal('hide');
             this.reservationObj = null;
             this.reservations = [];
             this.fetch();
         }, function (response) {
             console.log(_.first(_.toArray(response.body.errors)));
-            this.$dispatch('showError', _.first(_.toArray(response.body.errors)));
+            this.$root.$emit('showError', _.first(_.toArray(response.body.errors)));
         });
     },
     leave() {
         this.resource.delete({reservation: this.reservationId}).then(function (response) {
-            this.$dispatch('showSuccess', 'Successfully left companions.');
+            this.$root.$emit('showSuccess', 'Successfully left companions.');
             $('#LeaveCompanionsModal').modal('hide');
             this.fetch();
         }, function (response) {
-            this.$dispatch('showError', 'Could not leave companions.');
+            this.$root.$emit('showError', 'Could not leave companions.');
         });
     },
     update() {
         this.$http.put('reservations/' + this.reservationId, {companion_limit: this.limit})
             .then(function (response) {
-                this.$dispatch('showSuccess', 'Successfully updated companion limit.');
+                this.$root.$emit('showSuccess', 'Successfully updated companion limit.');
                 this.editMode = false;
             }, function (response) {
-                this.$dispatch('showError', 'Could not update companion limit.');
+                this.$root.$emit('showError', 'Could not update companion limit.');
             });
     }
   },
-  ready() {
+  mounted() {
     this.fetch();
     this.getReservation();
   }

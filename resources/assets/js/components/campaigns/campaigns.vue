@@ -17,7 +17,6 @@
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
 
-	<div class="container">
 	<div class="container" v-if="campaigns.length < 1">
 		<div class="col-sm-8 col-sm-offset-2 text-center">
 			<h3>Looking for 2018 trips?</h3>
@@ -30,6 +29,16 @@
 
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<div class="col-xs-12">
+			<h4>Current Campaigns</h4>
+			<hr class="divider">
+		</div>
+		<div class="col-xs-6 text-right">
+			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+		</div>
+	</div>
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
 				<a class="hidden-xs hidden-sm" :href="campaign.page_url" role="button">
@@ -42,8 +51,8 @@
 						<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
 					</a>
 					<h6 style="font-size:12px;">
-						{{campaign.started_at | moment 'll'}} -
-						{{campaign.ended_at | moment 'll'}}
+						{{campaign.started_at | moment('ll')}} -
+						{{campaign.ended_at | moment('ll')}}
 					</h6>
 					<hr class="divider lg"/>
 					<p style="font-size:12px;" class="small">{{campaign.description}}</p>
@@ -460,7 +469,7 @@
 				this.campaignsLimit = this.campaigns.length
 			}
 		},
-		ready(){
+		mounted(){
 			// this.$refs.spinner.show();
 			this.resource.query().then(function (campaigns) {
 				this.campaigns = campaigns.data.data;

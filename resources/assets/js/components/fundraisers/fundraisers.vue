@@ -16,7 +16,7 @@
     </div>
     <hr class="divider inv lg">
     <div class="container" style="display:flex; flex-wrap: wrap;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <template v-if="fundraisers.length">
             <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="fundraiser in fundraisers|limitBy fundraisersLimit" style="display:flex; flex-direction:column;">
@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-xs-6 col-sm-12 col-md-6">
                                 <label style="margin-bottom:0;">Expires</label>
-                                <p class="small" style="margin-bottom:0;">{{ fundraiser.ended_at | moment 'll'  }}</p>
+                                <p class="small" style="margin-bottom:0;">{{ fundraiser.ended_at | moment('ll')  }}</p>
                             </div>
                         </div><!-- end row -->
                         <label><span>{{ fundraiser.raised_percent|number }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></label>
@@ -117,7 +117,7 @@
                 this.fundraisersLimit = this.fundraisers.length
             }
         },
-        ready() {
+        mounted() {
             this.searchFundraisers();
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-            <reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
+            <reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
         </aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
@@ -57,7 +57,7 @@
                 <hr class="divider sm inv">
             </div>
             <div class="col-xs-12 tour-step-list" style="position:relative">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <template v-if="reservations.length > 0">
                     <div class="row" v-if="layout == 'grid'">
                         <div class="col-xs-12 col-sm-6 col-md-4" v-for="reservation in reservations">
@@ -410,7 +410,7 @@
             },
 
         },
-        ready(){
+        mounted(){
             // load view state
             if (window.localStorage['DashboardReservations']) {
                 let config = JSON.parse(window.localStorage['DashboardReservations']);

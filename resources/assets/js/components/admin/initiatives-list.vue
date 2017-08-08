@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
@@ -100,10 +100,10 @@
             <tr v-for="initiative in initiatives|filterBy search|orderBy orderByField direction">
                 <td v-if="isActive('type')">{{initiative.type|capitalize}}</td>
                 <td v-if="isActive('country')">{{initiative.country.name|capitalize}}</td>
-                <td v-if="isActive('started_at')">{{initiative.started_at|moment 'll'}}</td>
-                <td v-if="isActive('ended_at')">{{initiative.ended_at|moment 'll'}}</td>
+                <td v-if="isActive('started_at')">{{initiative.started_at|moment('ll')}}</td>
+                <td v-if="isActive('ended_at')">{{initiative.ended_at|moment('ll')}}</td>
                 <td v-if="isActive('projects')">{{initiative.projects_count}}</td>
-                <td v-if="isActive('created_at')">{{initiative.created_at|moment 'll'}}</td>
+                <td v-if="isActive('created_at')">{{initiative.created_at|moment('ll')}}</td>
                 <td>
                     <a href="/admin/initiatives/{{initiative.id}}"><i class="fa fa-cog"></i></a>
                 </td>
@@ -231,7 +231,7 @@
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchInitiatives();
         }
     }

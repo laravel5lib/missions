@@ -65,7 +65,7 @@
         </div>
         <hr>
         <div style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -102,7 +102,7 @@
                     <td>{{trip.type|capitalize}}</td>
                     <td>{{trip.campaign.data.name|capitalize}}</td>
                     <td>{{trip.status}}</td>
-                    <td>{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
+                    <td>{{trip.started_at|moment('ll') false true}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
                     <td>{{trip.reservations}}</td>
                     <td>
                         <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-eye"></i></a>
@@ -225,7 +225,7 @@
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchTrips();
         }
     }

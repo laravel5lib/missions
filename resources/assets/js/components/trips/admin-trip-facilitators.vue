@@ -13,10 +13,10 @@
 			</div>
 		</div><!-- end panel-heading -->
 		<div class="panel-body" style="position:relative">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" track-by="id">
 					<h5>
-					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ facilitator.name }}">
+					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" facilitator.name ">
 					{{ facilitator.name }}
 					</h5>
 					<div style="position:absolute;right:25px;top:22px;">
@@ -30,7 +30,7 @@
 
 			<!--<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">-->
 				<!--<div class="panel panel-default">-->
-					<!--<img class="img-responsive" :src="facilitator.avatar" alt="{{ facilitator.name }}">-->
+					<!--<img class="img-responsive" :src="facilitator.avatar" :alt=" facilitator.name ">-->
 					<!--<div class="panel-body">-->
 						<!--<h5 class="text-center" v-text="facilitator.name"></h5>-->
 						<!--<p class="text-center">-->
@@ -157,7 +157,7 @@
 				});
 			}
 		},
-		ready: function ready() {
+		mounted() {
 			this.resource.get({id: this.tripId}).then(function (response) {
 				this.trip = response.body.data;
 				this.facilitators = this.trip.facilitators.data;

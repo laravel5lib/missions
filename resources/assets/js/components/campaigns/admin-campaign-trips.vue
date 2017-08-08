@@ -189,15 +189,15 @@
                         <td v-if="isActive('name')">{{trip.group.data.name}}</td>
                         <td v-if="isActive('type')">{{trip.type|capitalize}}</td>
                         <td v-if="isActive('status')">{{trip.status|capitalize}}</td>
-                        <td v-if="isActive('dates')">{{trip.started_at|moment 'll' false true}} - <br>{{trip.ended_at|moment 'll' false true}}</td>
+                        <td v-if="isActive('dates')">{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
                         <td v-if="isActive('starting_cost')" v-text="trip.starting_cost | currency"></td>
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
                         <td v-if="isActive('difficulty')" v-text="trip.difficulty|capitalize"></td>
-                        <td v-if="isActive('created_at')" v-text="trip.created_at|moment 'll'"></td>
-                        <td v-if="isActive('updated_at')" v-text="trip.updated_at|moment 'll'"></td>
+                        <td v-if="isActive('created_at')" v-text="trip.created_at|moment('ll')"></td>
+                        <td v-if="isActive('updated_at')" v-text="trip.updated_at|moment('ll')"></td>
 
                         <td v-if="isActive('public')"><i class="fa fa-check" v-if="trip.public"></i></td>
                         <td v-if="isActive('reservations')">{{trip.reservations}}</td>

@@ -61,14 +61,14 @@
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
                                 <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
-                                    <option v-for="month in monthList" value="{{month}}">{{month}}</option>
+                                    <option v-for="month in monthList" :value="month">{{month}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
                                 <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
-                                    <option v-for="year in yearList" value="{{year}}">{{year}}</option>
+                                    <option v-for="year in yearList" :value="year">{{year}}</option>
                                 </select>
                             </div>
                         </div>
@@ -374,7 +374,7 @@
                 return this.resetCaching();
             }
         },
-        ready: function () {
+        mounted() {
             this.$dispatch('payment-complete', true);
             if (this.devMode) {
                 this.cardNumber = '4242424242424242';

@@ -4,166 +4,205 @@ Number.isInteger = Number.isInteger || function(value) {
 };
 
 import Vue from 'vue';
-import markdownExampleModal from './components/markdown-example-modal.vue';
-import contactForm from './components/contact-form.vue';
-import speakerForm from './components/speaker-form.vue';
-import sponsorProjectForm from './components/sponsor-project-form.vue';
-import login from './components/login.vue';
+window.Vue =  Vue;
+import aside from './components/aside.vue';
 import pagination from './components/pagination.vue';
+import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
-import actionTrigger from './components/action-trigger.vue';
-import actionDropdownSelect from './components/action-dropdown-select.vue';
-import actionSelect from './components/action-select.vue';
-import listenText from './components/listen-text.vue';
-import donate from './components/donate.vue';
-import modalDonate from './components/modal-donate.vue';
-import campaigns from './components/campaigns/campaigns.vue';
-import groups from './components/groups/groups.vue';
-import fundraisers from './components/fundraisers/fundraisers.vue';
-import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
-import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
-import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
-import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
-import campaignGroups from './components/campaigns/campaign-groups.vue';
-import groupTrips from './components/campaigns/group-trips.vue';
-import groupProfileTrips from './components/groups/group-profile-trips.vue';
-import groupProfileStories from './components/groups/group-profile-stories.vue';
-import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
-import groupInterestSignup from './components/groups/group-interest-signup.vue';
-import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
-import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
-import userProjectsList from './components/projects/user-projects-list.vue';
-import reservationsList from './components/reservations/reservations-list.vue';
-import restoreReservation from './components/reservations/restore-reservation.vue';
-import transferReservation from './components/reservations/transfer-reservation.vue';
-import donationsList from './components/reservations/donations-list.vue';
-import recordsList from './components/records/records-list.vue';
-import groupsList from './components/groups/groups-list.vue';
-import visasList from './components/records/visas/visas-list.vue';
-import medicalsList from './components/records/medicals/medicals-list.vue';
-import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
-import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
-import passportsList from './components/records/passports/passports-list.vue';
-import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
-import essaysList from './components/records/essays/essays-list.vue';
-import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
-import referralsList from './components/records/referrals/referrals-list.vue';
-import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
-import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
-import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
-import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
-import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
-import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
-import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
-import reservationAvatar from './components/reservations/reservation-avatar.vue';
-import reservationCosts from './components/reservations/reservation-costs.vue';
-import reservationDues from './components/reservations/reservation-dues.vue';
-import funding from './components/funding.vue';
-import userSettings from './components/users/user-settings.vue';
-import userProfileCountries from './components/users/user-profile-countries.vue';
-import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
-import userProfileStories from './components/users/user-profile-stories.vue';
-import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
-import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
-import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
-import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
-import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
-import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
-import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
-import notes from './components/notes.vue';
-import todos from './components/todos.vue';
-import userPermissions from './components/users/user-permissions.vue';
-import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-import reservationRequirements from './components/reservations/reservation-requirements.vue';
-import referralResponse from './components/referrals/referral-response.vue';
-import sendEmail from './components/send-email.vue';
-import reportsList from './components/reports/reports-list.vue';
-import teamManager from './components/teams/team-manager.vue';
-import roomingWizard from './components/rooms/rooming-wizard.vue';
-import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
-import teamTypeManager from './components/teams/team-type-manager.vue';
-import regionsManager from './components/regions/regions-manager.vue';
+// import markdownExampleModal from './components/markdown-example-modal.vue';
+// import contactForm from './components/contact-form.vue';
+// import speakerForm from './components/speaker-form.vue';
+// import sponsorProjectForm from './components/sponsor-project-form.vue';
+// import actionTrigger from './components/action-trigger.vue';
+// import actionDropdownSelect from './components/action-dropdown-select.vue';
+// import actionSelect from './components/action-select.vue';
+// import listenText from './components/listen-text.vue';
+// import donate from './components/donate.vue';
+// import modalDonate from './components/modal-donate.vue';
+// import campaigns from './components/campaigns/campaigns.vue';
+// import groups from './components/groups/groups.vue';
+// import fundraisers from './components/fundraisers/fundraisers.vue';
+// import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
+// import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
+// import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
+// import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
+// import campaignGroups from './components/campaigns/campaign-groups.vue';
+// import groupTrips from './components/campaigns/group-trips.vue';
+// import groupProfileTrips from './components/groups/group-profile-trips.vue';
+// import groupProfileStories from './components/groups/group-profile-stories.vue';
+// import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+// import groupInterestSignup from './components/groups/group-interest-signup.vue';
+// import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
+// import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+// import userProjectsList from './components/projects/user-projects-list.vue';
+// import reservationsList from './components/reservations/reservations-list.vue';
+// import restoreReservation from './components/reservations/restore-reservation.vue';
+// import transferReservation from './components/reservations/transfer-reservation.vue';
+// import donationsList from './components/reservations/donations-list.vue';
+// import recordsList from './components/records/records-list.vue';
+// import groupsList from './components/groups/groups-list.vue';
+// import visasList from './components/records/visas/visas-list.vue';
+// import medicalsList from './components/records/medicals/medicals-list.vue';
+// import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
+// import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
+// import passportsList from './components/records/passports/passports-list.vue';
+// import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
+// import essaysList from './components/records/essays/essays-list.vue';
+// import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
+// import referralsList from './components/records/referrals/referrals-list.vue';
+// import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
+// import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
+// import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
+// import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
+// import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
+// import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
+// import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
+// import reservationAvatar from './components/reservations/reservation-avatar.vue';
+// import reservationCosts from './components/reservations/reservation-costs.vue';
+// import reservationDues from './components/reservations/reservation-dues.vue';
+// import funding from './components/funding.vue';
+// import userSettings from './components/users/user-settings.vue';
+// import userProfileCountries from './components/users/user-profile-countries.vue';
+// import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
+// import userProfileStories from './components/users/user-profile-stories.vue';
+// import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
+// import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
+// import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
+// import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+// import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
+// import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
+// import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
+// import notes from './components/notes.vue';
+// import todos from './components/todos.vue';
+// import userPermissions from './components/users/user-permissions.vue';
+// import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+// import reservationRequirements from './components/reservations/reservation-requirements.vue';
+// import referralResponse from './components/referrals/referral-response.vue';
+// import sendEmail from './components/send-email.vue';
+// import reportsList from './components/reports/reports-list.vue';
+// import teamManager from './components/teams/team-manager.vue';
+// import roomingWizard from './components/rooms/rooming-wizard.vue';
+// import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
+// import teamTypeManager from './components/teams/team-type-manager.vue';
+// import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
-import campaignCreate from './components/campaigns/admin-campaign-create.vue';
-import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
-import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
-import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
-import visibilityControls from './components/campaigns/visibility-controls.vue';
-import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
-import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
-import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
-import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
-import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
-import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
-import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
-import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
-import adminDeleteModal from './components/admin-delete-modal.vue';
-import costManager from './components/admin/cost-manager.vue';
-import adminTripDescription from './components/trips/admin-trip-description.vue';
-import deadlinesManager from './components/admin/deadlines-manager.vue';
-import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
-import adminTripTodos from './components/trips/admin-trip-todos.vue';
-import adminInterestsList from './components/interests/admin-interests-list.vue';
-import adminGroups from './components/groups/admin-groups-list.vue';
-import adminGroupCreate from './components/groups/admin-group-create.vue';
-import adminGroupEdit from './components/groups/admin-group-edit.vue';
-import adminGroupDelete from './components/groups/admin-group-delete.vue';
-import adminGroupManagers from './components/groups/admin-group-managers.vue';
-import adminReservationsList from './components/reservations/admin-reservations-list.vue';
-import adminReservationCreate from './components/reservations/admin-reservation-create.vue';
-import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
-import adminReservationCosts from './components/reservations/admin-reservation-costs.vue';
-import adminReservationDues from './components/reservations/admin-reservation-dues.vue';
-import adminReservationDeadlines from './components/reservations/admin-reservation-deadlines.vue';
-import adminUsersList from './components/users/admin-users-list.vue';
-import adminUserCreate from './components/users/admin-user-create.vue';
-import adminUserEdit from './components/users/admin-user-edit.vue';
-import adminUserDelete from './components/users/admin-user-delete.vue';
-import adminUploadsList from './components/uploads/admin-uploads-list.vue';
-import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-import reconcileFund from './components/reconcile-fund.vue';
-import projectCauses from './components/admin/project-causes.vue';
-import causeEditor from './components/admin/cause-editor.vue';
-import projectsList from './components/admin/projects-list.vue';
-import projectEditor from './components/admin/project-editor.vue';
-import projectCosts from './components/projects/project-costs.vue';
-import projectDues from './components/projects/project-dues.vue';
-import adminProjectCosts from './components/admin/admin-project-costs.vue';
-import adminProjectDues from './components/admin/admin-project-dues.vue';
-import initiativesList from './components/admin/initiatives-list.vue';
-import initiativeEditor from './components/admin/initiative-editor.vue';
-import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
-import adminFundsList from './components/financials/funds/admin-funds-list.vue';
-import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
-import donorForm from './components/financials/donors/donor-form.vue';
-import tripInterestEditor from './components/interests/trip-interests-editor.vue';
-import refundForm from './components/financials/transactions/refund-form.vue';
-import transactionDelete from './components/financials/transactions/transaction-delete.vue';
-import fundManager from './components/financials/funds/fund-manager.vue';
-import companionManager from './components/reservations/companion-manager.vue';
-import promotionals from './components/admin/promotionals.vue';
-import transports from './components/admin/transports.vue';
-import transportsDetails from './components/admin/transports-details.vue';
-import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
-import regionsAccommodations from './components/regions/regions-accommodations.vue';
-import restoreFund from './components/financials/funds/restore-fund.vue';
+// import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+// import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
+// import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
+// import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
+// import visibilityControls from './components/campaigns/visibility-controls.vue';
+// import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
+// import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
+// import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
+// import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
+// import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
+// import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
+// import adminTripDuplicate from './components/trips/admin-trip-duplicate.vue';
+// import adminTripCreateUpdate from './components/trips/admin-trip-create-update.vue';
+// import adminDeleteModal from './components/admin-delete-modal.vue';
+// import costManager from './components/admin/cost-manager.vue';
+// import adminTripDescription from './components/trips/admin-trip-description.vue';
+// import deadlinesManager from './components/admin/deadlines-manager.vue';
+// import adminTripRequirements from './components/trips/admin-trip-requirements.vue';
+// import adminTripTodos from './components/trips/admin-trip-todos.vue';
+// import adminInterestsList from './components/interests/admin-interests-list.vue';
+// import adminGroups from './components/groups/admin-groups-list.vue';
+// import adminGroupCreate from './components/groups/admin-group-create.vue';
+// import adminGroupEdit from './components/groups/admin-group-edit.vue';
+// import adminGroupDelete from './components/groups/admin-group-delete.vue';
+// import adminGroupManagers from './components/groups/admin-group-managers.vue';
+// import adminReservationsList from './components/reservations/admin-reservations-list.vue';
+// import adminReservationCreate from './components/reservations/admin-reservation-create.vue';
+// import adminReservationEdit from './components/reservations/admin-reservation-edit.vue';
+// import adminReservationCosts from './components/reservations/admin-reservation-costs.vue';
+// import adminReservationDues from './components/reservations/admin-reservation-dues.vue';
+// import adminReservationDeadlines from './components/reservations/admin-reservation-deadlines.vue';
+// import adminUsersList from './components/users/admin-users-list.vue';
+// import adminUserCreate from './components/users/admin-user-create.vue';
+// import adminUserEdit from './components/users/admin-user-edit.vue';
+// import adminUserDelete from './components/users/admin-user-delete.vue';
+// import adminUploadsList from './components/uploads/admin-uploads-list.vue';
+// import adminUploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+// import reconcileFund from './components/reconcile-fund.vue';
+// import projectCauses from './components/admin/project-causes.vue';
+// import causeEditor from './components/admin/cause-editor.vue';
+// import projectsList from './components/admin/projects-list.vue';
+// import projectEditor from './components/admin/project-editor.vue';
+// import projectCosts from './components/projects/project-costs.vue';
+// import projectDues from './components/projects/project-dues.vue';
+// import adminProjectCosts from './components/admin/admin-project-costs.vue';
+// import adminProjectDues from './components/admin/admin-project-dues.vue';
+// import initiativesList from './components/admin/initiatives-list.vue';
+// import initiativeEditor from './components/admin/initiative-editor.vue';
+// import adminDonorsList from './components/financials/donors/admin-donors-list.vue';
+// import adminFundsList from './components/financials/funds/admin-funds-list.vue';
+// import adminTransactionsList from './components/financials/transactions/admin-transactions-list.vue';
+// import donorForm from './components/financials/donors/donor-form.vue';
+// import tripInterestEditor from './components/interests/trip-interests-editor.vue';
+// import refundForm from './components/financials/transactions/refund-form.vue';
+// import transactionDelete from './components/financials/transactions/transaction-delete.vue';
+// import fundManager from './components/financials/funds/fund-manager.vue';
+// import companionManager from './components/reservations/companion-manager.vue';
+// import promotionals from './components/admin/promotionals.vue';
+// import transports from './components/admin/transports.vue';
+// import transportsDetails from './components/admin/transports-details.vue';
+// import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
+// import regionsAccommodations from './components/regions/regions-accommodations.vue';
+// import restoreFund from './components/financials/funds/restore-fund.vue';
 
 // filter components
-import reservationsFilters from './components/filters/reservations-filters.vue';
+// import reservationsFilters from './components/filters/reservations-filters.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
+
+(function($){
+    $.fn.easyScroller = function(options) {
+
+        var settings = $.extend({
+            backToTop: false,
+            scrollDownSpeed: 800,
+            scrollUpSpeed: 600,
+            topOffset: 0
+        }, options);
+
+        $(this).click(function(event) {
+            var $this = $(this),
+                sectionId = $this.attr('href');
+
+            $('html, body').animate({
+                scrollTop: $(sectionId).offset().top - settings.topOffset
+            }, settings.scrollDownSpeed);
+
+            return false;
+        });
+
+        if (settings.backToTop) {
+            $(settings.backToTop).click(function () {
+                $('html, body').animate({
+                    scrollTop: 0
+                }, settings.scrollUpSpeed);
+
+                return false;
+            });
+        }
+    };
+})(window.jQuery);
+
 // import slim from './vendors/slim.module.js';
 window.Slim = require('./vendors/slim.commonjs.js');
 window.moment = require('moment');
 window.timezone = require('moment-timezone');
 window._ = require('underscore');
 window.marked = require('marked');
-require('gsap');
-window.ScrollMagic = require('scrollmagic');
-require('scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap');
+
+import { TimelineMax, TweenMax, Linear } from 'gsap';
+import ScrollMagic from 'scrollmagic';
+import 'imports?define=>false!scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap';
+window.ScrollMagic = ScrollMagic;
 require('scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators');
+
 window.videojs = require('video.js');
 require('videojs-youtube');
 // require('videojs-vimeo');
@@ -192,7 +231,7 @@ Vue.component('pagination', pagination);
 Vue.component('modal', VueStrap.modal);
 Vue.component('accordion', VueStrap.accordion);
 Vue.component('alert', VueStrap.alert);
-Vue.component('aside', VueStrap.aside);
+Vue.component('mm-aside', VueStrap.aside);
 Vue.component('button-group', VueStrap.buttonGroup);
 Vue.component('panel', VueStrap.panel);
 Vue.component('radio', VueStrap.radio);
@@ -205,7 +244,7 @@ Vue.component('popover', VueStrap.popover);
 Vue.component('tabs', VueStrap.tabset);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
-// Vue.component('vSelect', require('vue-select'));
+Vue.component('vSelect', require('vue-select'));
 // import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
 // import myDatepicker from './components/date-picker.vue'
 import myDatepicker from './components/date-picker.vue'
@@ -213,17 +252,16 @@ Vue.component('date-picker', myDatepicker);
 // Vue.component('date-picker', require('vue-datetime-picker/src/vue-datetime-picker.js'));
 Vue.component('bootstrap-alert-error', {
     props: ['field', 'validator', 'message'],
-    template: '<div><div class="alert alert-danger alert-dismissible error-{{field}}-{{validator}}" role="alert">{{ message }} </div></div>',
+    template: '<div><div :class="\'alert alert-danger alert-dismissible error-\' + field + \'-\' + validator" role="alert" v-bind="message"></div></div>',
 });
 // Vue Cookie
 Vue.use(require('vue-cookie'));
 // Vue Resource
 Vue.use(require('vue-resource'));
 // Vue Validator
-Vue.use(require('vue-validator'));
+Vue.use(require('vee-validate'));
 // Vue Textarea Autosize
-var VueAutosize = require('vue-autosize');
-Vue.use(VueAutosize);
+Vue.use(require('vue-autosize'));
 // Vue Truncate
 Vue.use(require('vue-truncate'));
 
@@ -302,7 +340,7 @@ Vue.http.interceptors.push(function(request, next) {
 
 
 // Register email validator function.
-Vue.validator('email', function (val) {
+/*Vue.validator('email', function (val) {
     if (! val) return true;
 
     return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
@@ -313,7 +351,7 @@ Vue.validator('datetime ', function (val) {
     if (val === 'Invalid date') return false;
 
     return moment(val).isValid();
-});
+});*/
 
 Vue.filter('phone', {
     read: function (phone) {
@@ -705,7 +743,7 @@ Vue.mixin({
             return this.firstUrlSegment == 'dashboard';
         },
     },
-    ready() {
+    mounted() {
         function isTouchDevice() {
             return true == ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch);
         }
@@ -747,159 +785,160 @@ new Vue({
     },
     components: {
         login,
-        markdownExampleModal,
-        contactForm,
-        speakerForm,
-        sponsorProjectForm,
-        fundraisers,
-        campaigns,
-        groups,
-        campaignGroups,
-        groupTrips,
-        groupProfileTrips,
-        groupProfileStories,
-        groupProfileFundraisers,
-        groupTripWrapper,
-        groupInterestSignup,
-        tripDetailsMissionaries,
-        tripRegistrationWizard,
-        reservationsList,
-        userProjectsList,
-        donationsList,
-        fundraisersManager,
-        fundraisersStories,
-        fundraisersUploads,
-        fundraiserCollection,
         topNav,
-        actionTrigger,
-        actionDropdownSelect,
-        actionSelect,
-        listenText,
-        donate,
-        modalDonate,
-        notes,
-        todos,
-        userPermissions,
-        uploadCreateUpdate,
-        reservationRequirements,
-        referralResponse,
-        sendEmail,
-        restoreReservation,
-        transferReservation,
-        restoreFund,
+        // markdownExampleModal,
+        // contactForm,
+        // speakerForm,
+        // sponsorProjectForm,
+        // fundraisers,
+        // campaigns,
+        // groups,
+        // campaignGroups,
+        // groupTrips,
+        // groupProfileTrips,
+        // groupProfileStories,
+        // groupProfileFundraisers,
+        // groupTripWrapper,
+        // groupInterestSignup,
+        // tripDetailsMissionaries,
+        // tripRegistrationWizard,
+        // reservationsList,
+        // userProjectsList,
+        // donationsList,
+        // fundraisersManager,
+        // fundraisersStories,
+        // fundraisersUploads,
+        // fundraiserCollection,
+        // actionTrigger,
+        // actionDropdownSelect,
+        // actionSelect,
+        // listenText,
+        // donate,
+        // modalDonate,
+        // notes,
+        // todos,
+        // userPermissions,
+        // uploadCreateUpdate,
+        // reservationRequirements,
+        // referralResponse,
+        // sendEmail,
+        // restoreReservation,
+        // transferReservation,
+        // restoreFund,
+        //
 
-        //dashboard components
-        recordsList,
-        passportsList,
-        essaysList,
-        influencerQuestionnairesList,
-        referralsList,
-        essayCreateUpdate,
-        influencerQuestionnaireCreateUpdate,
-        referralCreateUpdate,
-        passportCreateUpdate,
-        visasList,
-        visaCreateUpdate,
-        medicalsList,
-        medicalCredentialsList,
-        mediaCredentialsList,
-        medicalCreateUpdate,
-        medicalCredentialCreateUpdate,
-        mediaCredentialCreateUpdate,
-        groupsList,
-        reservationAvatar,
-        reservationCosts,
-        reservationDues,
-        funding,
-        userSettings,
-        userProfileCountries,
-        userProfileTripHistory,
-        userProfileStories,
-        userProfileFundraisers,
-        userProfileFundraisersDonors,
-        userProfileFundraisersProgress,
-        dashboardGroupTrips,
-        dashboardGroupReservations,
-        dashboardInterestsList,
-        teamManager,
-        teamTypeManager,
-        regionsManager,
-        regionsAccommodations,
-        reportsList,
-        roomingWizard,
-        roomingTypeManager,
+        // dashboard components
+        // recordsList,
+        // passportsList,
+        // essaysList,
+        // influencerQuestionnairesList,
+        // referralsList,
+        // essayCreateUpdate,
+        // influencerQuestionnaireCreateUpdate,
+        // referralCreateUpdate,
+        // passportCreateUpdate,
+        // visasList,
+        // visaCreateUpdate,
+        // medicalsList,
+        // medicalCredentialsList,
+        // mediaCredentialsList,
+        // medicalCreateUpdate,
+        // medicalCredentialCreateUpdate,
+        // mediaCredentialCreateUpdate,
+        // groupsList,
+        // reservationAvatar,
+        // reservationCosts,
+        // reservationDues,
+        // funding,
+        // userSettings,
+        // userProfileCountries,
+        // userProfileTripHistory,
+        // userProfileStories,
+        // userProfileFundraisers,
+        // userProfileFundraisersDonors,
+        // userProfileFundraisersProgress,
+        // dashboardGroupTrips,
+        // dashboardGroupReservations,
+        // dashboardInterestsList,
+        // teamManager,
+        // teamTypeManager,
+        // regionsManager,
+        // regionsAccommodations,
+        // reportsList,
+        // roomingWizard,
+        // roomingTypeManager,
 
         // admin components
-        campaignCreate,
-        campaignEdit,
-        adminCampaignsList,
-        adminCampaignDetails,
-        visibilityControls,
-        campaignTripCreateWizard,
-        campaignTripEditWizard,
-        adminCampaignTrips,
-        adminGroupTrips,
-        adminTripCreateUpdate,
-        adminTripReservations,
-        adminTripFacilitators,
-        adminTripDuplicate,
-        adminDeleteModal,
-        costManager,
-        adminTripDescription,
-        deadlinesManager,
-        adminTripRequirements,
-        adminTripTodos,
-        adminInterestsList,
-        adminGroups,
-        adminGroupCreate,
-        adminGroupEdit,
-        adminGroupDelete,
-        adminGroupManagers,
-        adminReservationsList,
-        adminReservationCreate,
-        adminReservationEdit,
-        adminReservationCosts,
-        adminReservationDues,
-        adminReservationDeadlines,
-        adminUsersList,
-        adminUserCreate,
-        adminUserEdit,
-        adminUserDelete,
-        adminUploadsList,
-        adminUploadCreateUpdate,
-        reconcileFund,
-        projectCauses,
-        causeEditor,
-        projectsList,
-        projectEditor,
-        projectCosts,
-        projectDues,
-        adminProjectCosts,
-        adminProjectDues,
-        initiativesList,
-        initiativeEditor,
-        adminDonorsList,
-        adminFundsList,
-        adminTransactionsList,
-        donorForm,
-        tripInterestEditor,
-        refundForm,
-        transactionDelete,
-        fundManager,
-        companionManager,
-        promotionals,
-        transports,
-        transportsDetails,
-        roomingAccommodations,
-
-        reservationsFilters,
+        // campaignCreate,
+        // campaignEdit,
+        // adminCampaignsList,
+        // adminCampaignDetails,
+        // visibilityControls,
+        // campaignTripCreateWizard,
+        // campaignTripEditWizard,
+        // adminCampaignTrips,
+        // adminGroupTrips,
+        // adminTripCreateUpdate,
+        // adminTripReservations,
+        // adminTripFacilitators,
+        // adminTripDuplicate,
+        // adminDeleteModal,
+        // costManager,
+        // adminTripDescription,
+        // deadlinesManager,
+        // adminTripRequirements,
+        // adminTripTodos,
+        // adminInterestsList,
+        // adminGroups,
+        // adminGroupCreate,
+        // adminGroupEdit,
+        // adminGroupDelete,
+        // adminGroupManagers,
+        // adminReservationsList,
+        // adminReservationCreate,
+        // adminReservationEdit,
+        // adminReservationCosts,
+        // adminReservationDues,
+        // adminReservationDeadlines,
+        // adminUsersList,
+        // adminUserCreate,
+        // adminUserEdit,
+        // adminUserDelete,
+        // adminUploadsList,
+        // adminUploadCreateUpdate,
+        // reconcileFund,
+        // projectCauses,
+        // causeEditor,
+        // projectsList,
+        // projectEditor,
+        // projectCosts,
+        // projectDues,
+        // adminProjectCosts,
+        // adminProjectDues,
+        // initiativesList,
+        // initiativeEditor,
+        // adminDonorsList,
+        // adminFundsList,
+        // adminTransactionsList,
+        // donorForm,
+        // tripInterestEditor,
+        // refundForm,
+        // transactionDelete,
+        // fundManager,
+        // companionManager,
+        // promotionals,
+        // transports,
+        // transportsDetails,
+        // roomingAccommodations,
+        //
+        // reservationsFilters,
     },
     http: {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     },
-    ready: function () {
+    mounted() {
         // Track window resizing
         $(window).on('resize', function () {
             this.$emit('Window:resize');

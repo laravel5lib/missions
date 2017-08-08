@@ -53,7 +53,7 @@
                     <div class="col-xs-8">
                         <h5 class="list-group-item-heading">{{ note.subject }}
                             <br> <small>
-                                By {{ note.user.data.name }} &middot; {{ note.created_at | moment 'llll' }}
+                                By {{ note.user.data.name }} &middot; {{ note.created_at | moment('llll') }}
                                 <span v-if="note.created_at != note.updated_at">(modified)</span>
                             </small>
                         </h5>
@@ -217,9 +217,9 @@
                 this.$http.post('notes', this.selectedNote).then(function () {
                     this.reset();
                     this.fetch();
-                    this.$dispatch('showSuccess', 'Note created successfully.');
+                    this.$root.$emit('showSuccess', 'Note created successfully.');
                 }, function () {
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             edit() {
@@ -227,9 +227,9 @@
                 this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(function () {
                     this.reset();
                     this.fetch();
-                    this.$dispatch('showSuccess', 'Note saved successfully.');
+                    this.$root.$emit('showSuccess', 'Note saved successfully.');
                 }, function () {
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
             reset() {
@@ -248,13 +248,13 @@
                     this.reset();
                     // re-fetch list
                     this.fetch();
-                    this.$dispatch('showSuccess', 'Note deleted.');
+                    this.$root.$emit('showSuccess', 'Note deleted.');
                 }, function () {
-                    this.$dispatch('showError', 'Unable to delete note.');
+                    this.$root.$emit('showError', 'Unable to delete note.');
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch()
         }
     }

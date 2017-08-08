@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <date-picker v-if="loaded" :model.sync="birthday|moment 'YYYY-MM-DD' false true"></date-picker>
+                    <date-picker v-if="loaded" :model.sync="birthday|moment('YYYY-MM-DD', false, true)"></date-picker>
                 </div>
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">
@@ -319,7 +319,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.body.countries;
             });

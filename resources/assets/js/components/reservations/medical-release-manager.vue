@@ -1,6 +1,6 @@
 <template>
     <div class="row" v-if="loaded" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12">
             <div class="text-center">
                 <form novalidate>
@@ -27,7 +27,7 @@
                         {{medicalRelease.emergency_contact.email}}<br>
                         {{medicalRelease.emergency_contact.phone | phone}}<br>
                         <!--<br>-->
-                        <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
+                        <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment('ll')}}-->
                     </p>
                 </div>
             </div>
@@ -58,7 +58,7 @@
                                 {{medicalRelease.emergency_contact.email}}<br>
                                 {{medicalRelease.emergency_contact.phone | phone}}<br>
                                 <!--<br>-->
-                                <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment 'll'}}-->
+                                <!--<b>EXPIRES ON:</b> {{medicalRelease.expires_at|moment('ll')}}-->
                             </p>
                         </div><!-- end panel-body -->
                         <div class="panel-footer" style="padding: 0;">
@@ -170,7 +170,7 @@
 
             },
         },
-        ready(){
+        mounted(){
             this.$http.get('users/me?include=medical_releases').then(function (response) {
                 this.medicalReleases = response.body.data.medical_releases.data;
                 this.pagination.total_pages = Math.ceil(this.medicalReleases.length / this.per_page);

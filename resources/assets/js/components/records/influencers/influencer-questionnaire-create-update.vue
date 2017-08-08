@@ -2,7 +2,7 @@
     <div>
         <validator name="CreateUpdateInfluencer" @touched="onTouched">
             <form id="CreateUpdateInfluencer" class="" novalidate>
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 
                 <template v-if="forAdmin">
                 <div class="row">
@@ -167,14 +167,14 @@
                         user_id: this.user_id,
                         upload_ids: this.upload_ids,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Influencer created.');
+                        this.$root.$emit('showSuccess', 'Influencer created.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + resp.body.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create influencer questionnaire.')
+                        this.$root.$emit('showError', 'Unable to create influencer questionnaire.')
                     });
                 } else {
                     this.showError = true;
@@ -194,14 +194,14 @@
                         user_id: this.user_id,
                         upload_ids: this.upload_ids,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -223,7 +223,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             if (this.isUpdate) {
                 // this.$refs.spinner.show();
                 this.resource.get({ id: this.id, include: 'user' }).then(function (response) {

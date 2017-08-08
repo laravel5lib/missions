@@ -117,7 +117,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             if(this.document) {
                 this.editMode = false;
             }

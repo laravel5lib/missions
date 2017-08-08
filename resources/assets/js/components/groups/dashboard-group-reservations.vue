@@ -1,6 +1,6 @@
 <template>
     <div>
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
@@ -159,7 +159,7 @@
 						<img :src="reservation.avatar" class="img-circle img-md">
 						<hr class="divider inv sm">
 						<label style="margin-bottom:2px;">Registered On</label>
-						<h5 style="margin-top:5px;" class="text-center">{{ reservation.created_at | moment 'll' }}</h5>
+						<h5 style="margin-top:5px;" class="text-center">{{ reservation.created_at | moment('ll') }}</h5>
 						<!--<div class="btn-group btn-group-justified">
 							<a class="btn btn-sm btn-primary" href="/dashboard/groups{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i> Manage</a>
 						</div>-->
@@ -434,7 +434,7 @@
 				})
 			},
         },
-        ready(){
+        mounted(){
             // load view state
 			if (localStorage.AdminReservationsListConfig) {
 				let config = JSON.parse(localStorage.AdminReservationsListConfig);

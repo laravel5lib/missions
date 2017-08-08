@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="panel panel-default">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-xs-6">
@@ -16,7 +16,7 @@
 		<div class="panel-body">
 			<div class="col-xs-12 panel panel-default" v-for="manager in managers" track-by="id">
 				<h5>
-					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" alt="{{ manager.name }}">
+					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" manager.name ">
 					{{ manager.name }}
 				</h5>
 				<div style="position:absolute;right:25px;top:22px;">
@@ -132,7 +132,7 @@
 				});
 			}
 		},
-		ready: function ready() {
+		mounted() {
 			// this.$refs.spinner.show();
 			this.resource.get({id: this.groupId}).then(function (response) {
 				this.group = response.body.data;

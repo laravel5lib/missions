@@ -1,6 +1,6 @@
 <template>
     <div class="panel-body" style="position:relative">
-        <spinner v-ref:spinner size="md" text="Loading"></spinner>
+        <spinner ref="spinner" size="md" text="Loading"></spinner>
         <template v-if="editMode">
             <validator name="TripDescription">
                 <form>
@@ -69,7 +69,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             this.resource.get({ id: this.id }).then(function (response) {
                 // this.trip = response.body.data;
                 this.description = response.body.data.description;

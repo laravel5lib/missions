@@ -1,6 +1,6 @@
 <template>
     <section>
-        <spinner v-ref:spinner size="md" text="Loading"></spinner>
+        <spinner ref="spinner" size="md" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Active Date</label>
-                        <p>{{ cost.active_at|moment 'lll' }}</p>
+                        <p>{{ cost.active_at|moment('lll') }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Cost</label>
@@ -445,7 +445,7 @@
                 return _.contains(this.unSyncedCosts, cost.id);
             }
         },
-        ready(){
+        mounted(){
             this.searchCosts();
 
             let self = this;

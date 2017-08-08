@@ -23,7 +23,7 @@
 
 		<template v-if="groups.length > 0">
 			<div class="container flex-container">
-				<!--<spinner v-ref:spinner size="sm" text="Loading"></spinner>-->
+				<!--<spinner ref="spinner" size="sm" text="Loading"></spinner>-->
 					<div v-for="group in groups" class="flex-row">
 						<div class="flex-col">
 							<div class="panel panel-default flex-item">
@@ -31,7 +31,7 @@
 								<a role="button" @click="selectGroup(group)">
 									<h5 style="margin:0px;">
 									<img :src="group.avatar" :alt="group.name" class="av-left img-circle img-xs">
-									{{group.name | truncate 30 '...'}}
+									{{group.name | truncate (30, '...')}}
 									</h5>
 								</a>
 								</div><!-- end panel-body -->
@@ -120,7 +120,7 @@
 				}
 			}
 		},
-		ready(){
+		mounted(){
 			this.searchGroups();
 		},
 		activate(done){

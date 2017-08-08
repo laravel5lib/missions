@@ -378,7 +378,7 @@ let RootInstance = {
             return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : JSON.parse(localStorage.getItem('user'));
         },
     },
-    ready: function () {
+    mounted: function () {
         // Track window resizing
         $(window).on('resize', function () {
             this.$emit('Window:resize');

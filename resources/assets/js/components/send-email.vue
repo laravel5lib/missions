@@ -50,10 +50,10 @@
         this.$http.post('commands', {command: this.command, parameters: this.parameters})
             .then(function(response) {
               console.log(response);
-              this.$dispatch('showSuccess', 'Your request was processed successfully.');
+              this.$root.$emit('showSuccess', 'Your request was processed successfully.');
             }, function (error) {
               console.log(error);
-              this.$dispatch('showError', 'Unable to process your request.');
+              this.$root.$emit('showError', 'Unable to process your request.');
             });
       }
     }

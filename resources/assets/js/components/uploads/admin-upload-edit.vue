@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpload">
         <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
@@ -256,7 +256,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             this.resource.get({id:this.uploadId}).then(function (response) {
                 var upload = response.body.data;
                 this.name = upload.name;

@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5 v-if="id">Edit Promotional</h5>
                     <h5 v-else>Create New Promotional</h5>
@@ -69,7 +69,7 @@
 
                 <div class="form-group col-sm-6">
                     <label>Expires</label>
-                    <date-picker :model.sync="promo.expires_at|moment 'YYYY-MM-DD' false true"></date-picker>
+                    <date-picker :model.sync="promo.expires_at|moment('YYYY-MM-DD', false, true)"></date-picker>
                 </div>
             </div>
             </form>
@@ -126,7 +126,7 @@
                 this.$http.get('promotionals/' + this.id).then(function (response) {
                     this.promo = response.body.data;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                 })
             },
             create() {
@@ -134,10 +134,10 @@
                 if (this.$ModifyPromotional.valid) {
                     $.extend(this.promo, {promoteable_id: this.promoterId, promoteable_type: this.promoterType});
                     this.$http.post('promotionals', this.promo).then(function (response) {
-                        this.$dispatch('showSuccess', 'Promotional created.');
+                        this.$root.$emit('showSuccess', 'Promotional created.');
                         this.$dispatch('load-view', {view: 'details', id: response.body.data.id});
                     }, function (error) {
-                        this.$dispatch('showError', 'Could not create promotional.');
+                        this.$root.$emit('showError', 'Could not create promotional.');
                     })
                 }
             },
@@ -149,10 +149,10 @@
                 this.resetErrors();
                 if (this.$ModifyPromotional.valid) {
                     this.$http.put('promotionals/' + this.id, this.promo).then(function (response) {
-                        this.$dispatch('showSuccess', 'Promotional updated.');
+                        this.$root.$emit('showSuccess', 'Promotional updated.');
                         this.$dispatch('load-view', {view: 'details', id: response.body.data.id});
                     }, function (error) {
-                        this.$dispatch('showError', 'Could not update promotional.');
+                        this.$root.$emit('showError', 'Could not update promotional.');
                     })
                 }
             },
@@ -164,7 +164,7 @@
                 this.$dispatch('load-view', this.url);
             }
         },
-        ready() {
+        mounted() {
             if (this.id) this.fetch();
         }
     }

@@ -40,7 +40,7 @@
                 this.$http.get('fundraisers/', { params: { fund: this.fundId, include: 'sponsor' } }).then(function (response) {
                     this.fundraisers = response.body.data;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to retreive fundraisers.');
+                    this.$root.$emit('showError', 'Unable to retreive fundraisers.');
                 });
             }
         },
@@ -50,7 +50,7 @@
                 _.findWhere(this.fundraisers, {id: fundraiser.id}).url = fundraiser.url;
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

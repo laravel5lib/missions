@@ -1,7 +1,7 @@
 <template>
 	<div class="row" style="position:relative;">
 
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
@@ -674,7 +674,7 @@
                         });
             },
         },
-        ready(){
+        mounted(){
 			let promises = [];
             promises.push(this.getCountries());
             promises.push(this.getRegions());

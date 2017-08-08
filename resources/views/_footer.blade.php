@@ -1,5 +1,3 @@
-
-
 <footer id="footer-mm-last">
   <div class="container">
     <div class="row">

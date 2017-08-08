@@ -38,8 +38,8 @@
                     <hr class="divider sm">
                 </div>
                 <div class="col-xs-12 {{currentStep.view}}">
-                    <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
-                    <spinner v-ref:reservationspinner size="xl" :fixed="true" text="Creating Reservation"></spinner>
+                    <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
+                    <spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
                     <component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive :for-admin="true"></component>
                 </div>
             </div>
@@ -234,7 +234,7 @@
                 this.currentStep.complete = this.wizardComplete = val;
             }
         },
-        ready(){
+        mounted(){
             //get trip costs
             this.$http.get('trips/' + this.tripId, { params: {include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then(function (response) {
                 this.trip = response.body.data;

@@ -214,7 +214,7 @@
                     });
             }
         },
-        ready(){
+        mounted(){
             let self = this;
             let promises = [];
             if (this.transport.type === 'flight')

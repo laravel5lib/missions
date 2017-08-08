@@ -2,19 +2,19 @@
 	<div style="position:relative;">
 		<validator name="TravelItineraries">
 			<form id="TravelItinerariesForm" novalidate>
-				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 				<accordion :one-at-atime="true" type="info">
-					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries" v-ref:iList>
+					<panel is-open="false" :header="itinerary.name" v-for="itinerary in itineraries" ref="iList">
 						<div v-for="item in itinerary.items">
 							<h5>Activty</h5>
-							<travel-activity v-ref:activity :activity="item.activity"></travel-activity>
+							<travel-activity ref="activity" :activity="item.activity"></travel-activity>
 
 							<h5>Transport</h5>
-							<travel-transport v-ref:transport :reservation-id="reservationId" :transport="item.transport"></travel-transport>
+							<travel-transport ref="transport" :reservation-id="reservationId" :transport="item.transport"></travel-transport>
 
 							<h5>Hub</h5>
-							<travel-hub v-ref:hub :hub="item.hub"></travel-hub>
+							<travel-hub ref="hub" :hub="item.hub"></travel-hub>
 
 							<hr class="divider sm">
 
@@ -174,7 +174,7 @@
                 this.itineraries.push(this.itineraryObj);
             },
         },
-        ready(){
+        mounted(){
 //            this.getItineraries();
 
 //            this.saveItinerary();

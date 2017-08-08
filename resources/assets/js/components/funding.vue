@@ -50,7 +50,7 @@
 
         <hr class="divider inv sm">
         <div style="position:relative">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <template v-if="activeView === 'donor'">
                 <div class="list-group">
                     <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
@@ -92,11 +92,11 @@
                                 <small v-if="contains(['donation'], transaction.type)" class="small">by
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
                                 <span v-else>an anonymous donor</span>
-                                 <!--on {{ transaction.created_at|moment 'll'}}--></small>
+                                 <!--on {{ transaction.created_at|moment('ll')}}--></small>
                                 </h5>
                             </div><!-- end col -->
                             <div class="col-sm-6">
-                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment 'll'}}</h5>
+                                <h5 class="pull-right"><i class="fa fa-clock-o icon-left"></i> {{ transaction.created_at|moment('ll')}}</h5>
                             </div><!-- end col -->
                         </div><!-- end row -->
                         <small v-if="transaction.details">
@@ -207,7 +207,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             this.$http.get('funds/' + this.fundId).then(function (response) {
                 this.fund = response.body.data;
             });

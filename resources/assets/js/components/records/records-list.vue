@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <h3>Passports <a href="/dashboard/passports" class="btn btn-xs btn-default-hollow">View All</a></h3>
@@ -25,9 +25,9 @@
                             <br>
                             <b>BIRTH COUNTRY:</b> {{passport.citizenship_name}}
                             <br>
-                            <b>ISSUED ON:</b> {{passport.issued_at|moment 'll'}}
+                            <b>ISSUED ON:</b> {{passport.issued_at|moment('ll')}}
                             <br>
-                            <b>EXPIRES ON:</b> {{passport.expires_at|moment 'll'}}
+                            <b>EXPIRES ON:</b> {{passport.expires_at|moment('ll')}}
                         </p>
                     </div><!-- end panel-body -->
                 </div>
@@ -55,9 +55,9 @@
                         <p class="small">
                             <b>ID:</b> {{visa.number}}
                             <br>
-                            <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                            <b>ISSUED ON:</b> {{visa.issued_at|moment('ll')}}
                             <br>
-                            <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+                            <b>EXPIRES ON:</b> {{visa.expires_at|moment('ll')}}
                         </p>
                     </div><!-- end panel-body -->
                 </div>
@@ -78,7 +78,7 @@
                 loaded: false,
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.$http.get('users/me?include=passports,visas').then(function (response) {
                 this.visas = response.body.data.visas.data;

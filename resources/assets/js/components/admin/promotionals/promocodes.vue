@@ -35,7 +35,7 @@
                 <td><code>{{ code.code }}</code></td>
                 <td v-html="affiliate(code.rewardable)"></td>
                 <td>{{ code.use_count}} {{ code.use_count | pluralize 'time'}}</td>
-                <td>{{ code.created_at | moment 'lll' }}</td>
+                <td>{{ code.created_at | moment('lll') }}</td>
                 <td>
                     <button class="btn btn-xs btn-primary" 
                             v-show="code.deleted_at" 
@@ -124,7 +124,7 @@
                     this.pagination = response.body.meta.pagination;
                     this.loading = false;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                     this.loading = false;
                 });
             },
@@ -135,22 +135,22 @@
             },
             activate(codeId) {
                 this.$http.put('promocodes/' + codeId + '/restore').then(function (response) {
-                    this.$dispatch('showSuccess', 'Promo code activated.');
+                    this.$root.$emit('showSuccess', 'Promo code activated.');
                     this.fetch();
                 }, function (error) {
-                    this.$dispatch('showError', 'Could not activate promo code.');
+                    this.$root.$emit('showError', 'Could not activate promo code.');
                 });
             },
             deactivate(codeId) {
                 this.$http.delete('promocodes/' + codeId).then(function (response) {
-                    this.$dispatch('showSuccess', 'Promo code deactivated.');
+                    this.$root.$emit('showSuccess', 'Promo code deactivated.');
                     this.fetch();
                 }, function (error) {
-                    this.$dispatch('showError', 'Could not deactivate promo code.');
+                    this.$root.$emit('showError', 'Could not deactivate promo code.');
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

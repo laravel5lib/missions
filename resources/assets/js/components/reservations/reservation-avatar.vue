@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="media col-md-12 tour-step-avatar">
             <div class="media-left">
                 <a href="#">
@@ -74,7 +74,7 @@
                 });
             },
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.resource.get({id: this.id}).then(function(response) {
                 this.reservation = response.body.data;

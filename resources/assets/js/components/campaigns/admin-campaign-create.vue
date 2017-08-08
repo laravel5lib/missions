@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div>
 		<validator name="CreateCampaign">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<form id="CreateCampaignForm" class="form-horizontal" novalidate>
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
 					<div class="col-sm-12">
@@ -254,7 +254,7 @@
 				}
 			}
 		},
-		ready(){
+		mounted(){
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;

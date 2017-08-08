@@ -106,7 +106,7 @@
                 .then(function (response) {
                     this.groups = response.data.data.groups.data;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to find groups');
+                    this.$root.$emit('showError', 'Unable to find groups');
                 });
             },
             getTrips() {
@@ -114,7 +114,7 @@
                 .then(function (response) {
                     this.trips = response.data.data;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to find trips');
+                    this.$root.$emit('showError', 'Unable to find trips');
                 });
             },
             transfer() {
@@ -128,11 +128,11 @@
                     this.selectedRole = null;
                     this.button = 'Transfer';
                     $('#transferModal').modal('hide');
-                    this.$dispatch('showSuccess', 'Reservation transferred and registrant notified');
+                    this.$root.$emit('showSuccess', 'Reservation transferred and registrant notified');
                     setTimeout(location.reload.bind(location), 300);
                 }, function (error) {
                     this.button = 'Transfer';
-                    this.$dispatch('showError', 'Unable to transfer');
+                    this.$root.$emit('showError', 'Unable to transfer');
                 });
             },
             cancel() {
@@ -142,7 +142,7 @@
                 $('#transferModal').modal('hide');
             }
         },
-        ready() {
+        mounted() {
             this.getGroups();
         }
     }

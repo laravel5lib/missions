@@ -1,6 +1,6 @@
 <template>
 <div>
-    <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+    <spinner ref="spinner" size="sm" text="Loading"></spinner>
     <div class="row">
         <p v-if="trips.length < 1" class="text-center text-muted">
             This group does not have any trips yet. Please check back soon!
@@ -15,7 +15,7 @@
                     <h4>{{ trip.campaign.data.name }}</h4>
                     <p class="small">{{ trip.country_name }}</p>
                     <label>Travel Dates</label>
-                    <p class="small">{{ trip.started_at|moment 'MMMM DD' false true }} - {{ trip.ended_at|moment 'LL' false true }}</p>
+                    <p class="small">{{ trip.started_at|moment('MMMM DD', false, true) }} - {{ trip.ended_at|moment('LL', false, true) }}</p>
                     <label>Perfect For</label>
                     <p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
                                 {{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
@@ -40,7 +40,7 @@
                 resource: this.$resource('trips?include=campaign&status=current&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.resource.query().then(function(trips){
                 this.trips = trips.body.data

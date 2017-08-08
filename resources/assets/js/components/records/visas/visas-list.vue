@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <div class="col-xs-12 text-right">
             <form class="form-inline">
@@ -61,21 +61,21 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <label>ISSUED ON</label>
-                                <p class="small">{{visa.issued_at|moment 'll'}}</p>
+                                <p class="small">{{visa.issued_at|moment('ll')}}</p>
                             </div><!-- end col -->
                             <div class="col-sm-6">
                                 <label>EXPIRES ON</label>
-                                <p class="small">{{visa.expires_at|moment 'll'}}</p>
+                                <p class="small">{{visa.expires_at|moment('ll')}}</p>
                             </div><!-- end col -->
                         </div><!-- end row -->
                         <div class="row">
                             <div class="col-sm-6">
                                 <label>CREATED ON</label>
-                                <p class="small">{{visa.created_at|moment 'lll'}}</p>
+                                <p class="small">{{visa.created_at|moment('lll')}}</p>
                             </div><!-- end col -->
                              <div class="col-sm-6">
                                 <label>UPDATED ON</label>
-                                <p class="small">{{visa.updated_at|moment 'lll'}}</p>
+                                <p class="small">{{visa.updated_at|moment('lll')}}</p>
                             </div><!-- end col -->
                         </div><!-- end row -->
                     </div><!-- end panel-body -->
@@ -217,7 +217,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
                 let user = response.body.data;
                 let managing = [];

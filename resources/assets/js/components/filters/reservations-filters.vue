@@ -583,7 +583,7 @@
 	    created(){
 
         },
-        ready(){
+        mounted(){
             let self = this;
             this.$root.$on('reservations-filters:reset', function () {
                 // the reset callback handles reset of the filters object

@@ -103,24 +103,24 @@
                         	<label for="started_at" class="control-label">Dates</label>
                             <div class="row">
                                 <div class="col-sm-6">
-	                                <date-picker :has-error="checkForError('start')" :model.sync="started_at|moment 'YYYY-MM-DD' false true" type="date" addon="Start" ></date-picker>
-	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
+	                                <date-picker :has-error="checkForError('start')" :model.sync="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
+	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
 	                                       v-validate:start="['required']" required>
 	                                <!--<div class="input-group" :class="{ 'has-error': checkForError('start') }">
 										<span class="input-group-addon">Start</span>
-										<input type="datetime" class="form-control hidden" v-model="started_at | moment 'LLLL'" id="started_at"
+										<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
 											   v-validate:start="['required']" required>
 									</div>-->
                                 </div>
                                 <div class="col-sm-6">
-	                                <date-picker :has-error="checkForError('end')" :model.sync="ended_at|moment 'YYYY-MM-DD' false true" type="date" addon="End" ></date-picker>
-	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
+	                                <date-picker :has-error="checkForError('end')" :model.sync="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
+	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
 	                                       v-validate:end="['required']" required>
 	                                <!--<div class="input-group"
                                          :class="{ 'has-error': checkForError('end') }">
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'" type="date"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="ended_at | moment 'LLLL'" id="ended_at"
+										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
                                                v-validate:end="['required']" required>
                                     </div>-->
                                 </div>
@@ -158,7 +158,7 @@
 								<label for="closed_at" class="control-label">Registration Closes</label>
 								<date-picker :has-error="checkForError('closed')" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
 								<!--<date-picker class="form-control" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
-								<input type="datetime" class="form-control hidden" v-model="closed_at | moment 'LLLL'" v-validate:closed="{ required: true }" id="closed_at">
+								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" v-validate:closed="{ required: true }" id="closed_at">
 							</div>
 						</div><!-- end col -->
 					</div><!-- end row -->
@@ -170,7 +170,7 @@
 							<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
 							<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>
 							<!--<date-picker class="form-control" :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>-->
-							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment 'LLLL'" id="published_at" :disabled="toggleDraft">
+							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment('LLLL')" id="published_at" :disabled="toggleDraft">
 						</div>
 					</div>
 
@@ -368,9 +368,9 @@
 							$.extend(this, response.body.data);
 							this.difficulty = response.body.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
-							this.$dispatch('showSuccess', 'Trip Updated');
+							this.$root.$emit('showSuccess', 'Trip Updated');
 						}, function (error) {
-							this.$dispatch('ShowError', 'Please check the form.');
+							this.$root.$emit('showError', 'Please check the form.');
 							console.log(error);
 						});
 					} else {
@@ -383,7 +383,7 @@
 				}
 			}
 		},
-		ready(){
+		mounted(){
             // get some groups
             let groupsPromise = this.$http.get('groups').then(function (response) {
                 this.groups = response.body.data;

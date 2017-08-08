@@ -6,8 +6,8 @@
 			<span class="icon-bar"></span>
 			<span style="color:#f6323e;font-size:7px;text-align:center;text-transform:uppercase;line-height:0em;margin-top:7px;display:block;">Menu</span>
 		</button>
-		<aside :show.sync="showRight" placement="right" :width="275">
-		<div slot="header" class="text-center">
+		<mm-aside :show.sync="showRight" placement="right" :width="275">
+			<div slot="header" class="text-center">
 		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="/images/mm-icon-lightgray.png" alt="Missions.Me">
 		</div>
 			<ul class="nav navmenu-nav">
@@ -85,7 +85,7 @@
 				<li><a href="/support">Give To Missions.Me</a></li>
 				<li><a href="/contact">Contact Us</a></li>
 			</ul>
-		</aside>
+		</mm-aside>
 	</li>
 </template>
 <script type="text/javascript">
@@ -133,7 +133,7 @@
 				return this.admin && window.location.pathname.split('/')[1] === 'admin';
 			},
 		},
-		ready(){
+		mounted(){
 
 		}
 	}

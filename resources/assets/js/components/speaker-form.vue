@@ -1,7 +1,7 @@
 <template>
     <validator name="SpeakerForm">
         <form class="form-horizontal" novalidate style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group">
                 <div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
                     <label for="name">Name</label>
@@ -136,7 +136,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             
         }
     }

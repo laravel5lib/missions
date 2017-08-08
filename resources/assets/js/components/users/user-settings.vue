@@ -2,7 +2,7 @@
     <div>
     <validator name="UserSettings" @touched="onTouched">
         <form id="UserSettingsForm" class="" novalidate style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-8">
                     <div class="panel panel-default">
@@ -505,7 +505,7 @@
                         ]
                 }).then(function (response) {
                         this.setUserData(response.body.data);
-                        this.$dispatch('showSuccess', 'Settings updated successfully.');
+                        this.$root.$emit('showSuccess', 'Settings updated successfully.');
                         this.hasChanged = false;
 
                         if (this.public) {
@@ -525,10 +525,10 @@
                     }, function (error) {
                         console.log(error);
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Please check the form.');
+                        this.$root.$emit('showError', 'Please check the form.');
                     });
                 } else {
-                    this.$dispatch('showError', 'Please check the form.');
+                    this.$root.$emit('showError', 'Please check the form.');
                 }
             },
             back(force){
@@ -577,7 +577,7 @@
                 this.dobYear = moment(user.birthday).format('YYYY');
             }
         },
-        ready(){
+        mounted(){
             let promises = [];
             promises.push(this.getCountries());
             promises.push(this.getTimezones());

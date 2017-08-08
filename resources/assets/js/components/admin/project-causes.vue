@@ -132,7 +132,7 @@
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

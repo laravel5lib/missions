@@ -29,7 +29,7 @@
 		</div>
 		<hr class="divider sm">
 		<div style="position:relative;">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<table class="table table-striped">
 				<thead>
 				<tr>
@@ -156,7 +156,7 @@
 				})
 			}
         },
-        ready(){
+        mounted(){
             this.searchCampaigns();
         }
     }

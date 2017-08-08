@@ -1,6 +1,6 @@
 <template>
     <div class="row" v-if="loaded" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12">
             <div class="text-center">
                 <form novalidate>
@@ -23,9 +23,9 @@
                         <br>
                         <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}
                         <br>
-                        <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                        <b>ISSUED ON:</b> {{visa.issued_at|moment('ll')}}
                         <br>
-                        <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+                        <b>EXPIRES ON:</b> {{visa.expires_at|moment('ll')}}
                     </p>
                 </div>
             </div>
@@ -52,9 +52,9 @@
                                 <br>
                                 <b>BIRTH COUNTRY:</b> {{visa.citizenship_name}}
                                 <br>
-                                <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+                                <b>ISSUED ON:</b> {{visa.issued_at|moment('ll')}}
                                 <br>
-                                <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+                                <b>EXPIRES ON:</b> {{visa.expires_at|moment('ll')}}
                             </p>
                         </div><!-- end panel-body -->
                         <div class="panel-footer" style="padding: 0;">
@@ -166,7 +166,7 @@
 
             },
         },
-        ready(){
+        mounted(){
             this.$http.get('users/me?include=visas').then(function (response) {
                 this.visas = response.body.data.visas.data;
                 this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);

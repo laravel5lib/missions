@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
@@ -354,7 +354,7 @@
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchGroups();
             $('[data-toggle="tooltip"]').tooltip();
 

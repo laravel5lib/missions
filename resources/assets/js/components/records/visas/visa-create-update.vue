@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdateVisa" @touched="onTouched">
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             
             <template v-if="forAdmin">
                 <div class="col-sm-12">
@@ -47,13 +47,13 @@
                     <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment 'YYYY-MM-DD'"></date-picker>
+                            <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment('YYYY-MM-DD')"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
                                    v-validate:issued="{ required: true }" required>
                             <br>
                         </div>
                         <div class="col-lg-6">
-                            <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment 'YYYY-MM-DD'"></date-picker>
+                            <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment('YYYY-MM-DD')"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
                         </div>
@@ -206,13 +206,13 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Visa created.');
+                        this.$root.$emit('showSuccess', 'Visa created.');
                         setTimeout(function () {
                             window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create visa.');
+                        this.$root.$emit('showError', 'Unable to create visa.');
                     });
                 } else {
                     this.showError = true;
@@ -234,14 +234,14 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -259,7 +259,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.body.countries;
             });

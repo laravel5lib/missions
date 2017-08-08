@@ -242,7 +242,7 @@
 				}
 			}
 		},
-		ready(){
+		mounted(){
 			// Get Countries
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;

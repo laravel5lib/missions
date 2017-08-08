@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-sm-12">
 			<form class="form-inline text-right" novalidate>
 				<div class="input-group input-group-sm">
@@ -75,7 +75,7 @@
 				})
             },
         },
-        ready(){
+        mounted(){
             //this.getDonations();
         }
     }

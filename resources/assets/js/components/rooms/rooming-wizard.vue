@@ -62,7 +62,7 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
         </div><!-- end row -->
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" keep-alive></component>
 	</div>
 </template>
@@ -111,7 +111,7 @@
 				this.currentView = 'plans';
             },
         },
-	    ready() {
+	    mounted() {
             let self = this;
             this.$root.$on('campaign-scope', function (val) {
                 this.campaignId = val ? val.id : '';

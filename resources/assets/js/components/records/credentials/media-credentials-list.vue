@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 text-right">
 			<form class="form-inline">
 				<div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
@@ -39,11 +39,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{media_credential.created_at|moment 'lll'}}</p>
+                            <p class="small">{{media_credential.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{media_credential.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{media_credential.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -181,7 +181,7 @@
                 return _.findWhere(media_credential.content, { id: 'role'}).a.name;
 	        }
         },
-        ready(){
+        mounted(){
             this.$http.get('users/' + this.userId).then(function (response) {
                 let user = response.body.data;
                 let managing = [];

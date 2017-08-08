@@ -21,47 +21,49 @@
 
     @yield('styles')
 </head>
-<body id="app">
-    @yield('layout')
+<body>
+    <div id="app">
+        @yield('layout')
 
-    <div class="shepherd-backdrop"></div>
+        <div class="shepherd-backdrop"></div>
 
-    <alert :show.sync="showSuccess"
-           placement="top-right"
-           :duration="3000"
-           type="success"
-           width="350px"
-           dismissable>
-        <span class="icon-ok-circled alert-icon-float-left"></span>
-        <strong>Good job!</strong>
-        <p>@{{ message }}</p>
-    </alert>
+        <alert :show.sync="showSuccess"
+               placement="top-right"
+               :duration="3000"
+               type="success"
+               width="350px"
+               dismissable>
+            <span class="icon-ok-circled alert-icon-float-left"></span>
+            <strong>Good job!</strong>
+            <p>@{{ message }}</p>
+        </alert>
 
-    <alert :show.sync="showInfo"
-           placement="top-right"
-           :duration="3000"
-           type="info"
-           width="350px"
-           dismissable>
-        <span class="icon-info-circled alert-icon-float-left"></span>
-        <strong>Hey!</strong>
-        <p>@{{ message }}</p>
-    </alert>
+        <alert :show.sync="showInfo"
+               placement="top-right"
+               :duration="3000"
+               type="info"
+               width="350px"
+               dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Hey!</strong>
+            <p>@{{ message }}</p>
+        </alert>
 
-    <alert :show.sync="showError"
-           placement="top-right"
-           :duration="0"
-           type="danger"
-           width="350px"
-           dismissable>
-        <span class="icon-info-circled alert-icon-float-left"></span>
-        <strong>Oh No!</strong>
-        <p>@{{ message }}</p>
-    </alert>
+        <alert :show.sync="showError"
+               placement="top-right"
+               :duration="0"
+               type="danger"
+               width="350px"
+               dismissable>
+            <span class="icon-info-circled alert-icon-float-left"></span>
+            <strong>Oh No!</strong>
+            <p>@{{ message }}</p>
+        </alert>
+    </div>
 
     @yield('tour')
     <script src="{{ elixir('js/main.js') }}"></script>
-    <script src="/js/vendor.js"></script>
+    <script src="{{ asset('/js/vendor.js') }}"></script>
     @yield('scripts')
 
     <script>

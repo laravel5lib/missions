@@ -17,7 +17,7 @@
         data(){
             return{}
         },
-        ready(){
+        mounted(){
             this.$root.$on(this.event, function (val) {
                 this.text = val;
             }.bind(this));

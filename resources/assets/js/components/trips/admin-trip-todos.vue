@@ -1,5 +1,5 @@
 <template>
-	<spinner v-ref:spinner size="md" text="Loading"></spinner>
+	<spinner ref="spinner" size="md" text="Loading"></spinner>
 	<alert :show.sync="showError"
 		   placement="top-right"
 		   :duration="6000"
@@ -112,7 +112,7 @@
 				});
             }
         },
-        ready(){
+        mounted(){
             this.getTodos();
 
 			var self = this;

@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div v-if="display && donors.length > 0">
             <div class="btn-group btn-group-sm" role="group" aria-label="...">
                 <div class="btn-group btn-group-sm" role="group">
@@ -42,7 +42,7 @@
                                     {{ donation.name }}
                                 </span>
                                 <span v-if="donation.anonymous">an anonymous donor</span>
-                                on {{ donation.created_at|moment 'll'}}
+                                on {{ donation.created_at|moment('ll')}}
                             </small>
                             <br /><small>{{ donation.details.comment }}</small>
                         </h5>
@@ -154,7 +154,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             this.$root.$on('Fundraiser:DisplayDonors', function (display) {
                 this.display = display;
 

@@ -153,7 +153,7 @@
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Housing</h2>
 				</div>
 				<div class="col-sm-8 col-md-9">
-					<p class="small">As part of your tuition, you will be living with up to three other students in our approved student housing complex. Rent and utilities are covered in the cost of your MMC tuition. Students will be living in close proximity to the office and all that OC living has to offer.</p>
+					<p class="small">As part of your tuition, you will be living with other students in our approved student housing complex. Rent and utilities are covered in the cost of your MMC tuition. Students will be living in close proximity to the office and all that OC living has to offer.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

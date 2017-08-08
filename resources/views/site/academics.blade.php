@@ -43,7 +43,7 @@
 					<h2 class="text-serif" style="margin-top:0;display:inline-block;border-bottom:6px solid #f6323e;line-height:0.7em;">Academics</h2>
 				</div>
 				<div class="col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8 col-lg-offset-0">
-						<p class="small">Missions.Me College is committed to providing students with the best education. As a partner and extension site of Southeastern University, an accredited university in Florida, our students experience just that. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program. In addition to education and experience, students of Missions.Me College are steps away from the beautiful beaches of Southern California.</p>
+						<p class="small">Missions.Me College is committed to providing students with the best education. As a partner and extension site of Southeastern University, an accredited** university in Florida, our students experience just that. Our classroom environment, online learning, and hands on training offer a multi-faceted educational program. In addition to education and experience, students of Missions.Me College are steps away from the beautiful beaches of Southern California.</p>
 
 						<p class="small">With three areas of study to choose from, Mission.Me’s two or four year programs allow students to learn in a community environment and experience hands-on training. After completion of the curriculum with Southeastern University, students will receive their associate’s or bachelor’s degrees.</p>
 
@@ -52,6 +52,9 @@
 						<p class="small">Students can enroll in a wide number of degree programs offered through the Southeastern University extension site here at MMC. Additionally, the Southeastern University MMC Extension Site is proud to offer an Associate of Arts (AA), Associate of Ministerial Leadership (AML) and Bachelor of Science in Ministerial Leadership at a discounted rate.</p>
 
 						<p class="small">You can see what specific classes are offered in each academic program by clicking here and by clicking on the appropriate degree program.</p>
+
+					<hr class="divider inv">
+					<p class="small" style="font-size:11px;">**SEU Accreditation: Southeastern University is accredited by the Southern Association of Colleges and Schools Commission on Colleges to award associate, baccalaureate, masters, and doctorate degrees. Contact the Commission on Colleges at 1866 Southern Lane, Decatur, GA 30033-4097 or call 404-679-4500 for questions about the accreditation of Southeastern University.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->
@@ -71,8 +74,6 @@
 					<p class="small">The ministry practicum is a unique part of what sets our partnership with Southeastern University apart from other types of programs. Students get a chance to implement what they have been learning within the classroom. We believe hands-on, practical training and application is a crucial part of your education and will lead to a lifetime of success.</p>
 
 					<p class="small">Students enrolled in one of Southeastern’s academic programs can earn up to 12 credit hours by participating in weekly ministry practicum.</p>
-
-					<p class="small" style="font-size:11px;">SEU Accreditation: Southeastern University is accredited by the Southern Association of Colleges and Schools Commission on Colleges to award associate, baccalaureate, masters, and doctorate degrees. Contact the Commission on Colleges at 1866 Southern Lane, Decatur, GA 30033-4097 or call 404-679-4500 for questions about the accreditation of Southeastern University.</p>
 				</div><!-- end col -->
 			</div><!-- end row -->
 		</div><!-- end content-section -->

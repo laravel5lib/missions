@@ -47,7 +47,7 @@
 					<div class="panel panel-default text-center">
 						<div class="panel-body">
 							<h6 class="text-uppercase">Apply Now For</h6>
-							<h2 class="text-serif" style="margin-top:10px;">Fall 2017</h2>
+							<h2 class="text-serif" style="margin-top:10px;">Fall 2018</h2>
 							<p><a class="btn btn-primary" target="_blank" href="https://missionsme.wufoo.com/forms/r1aqae3s12tu8md/">Apply Online</a></p>
 						</div><!-- end panel-body -->
 					</div><!-- end panel -->
@@ -139,7 +139,7 @@
 						    </div>
 						    <div id="collapseEleven" class="panel-collapse collapse">
 						      <div class="panel-body">
-						        <p class="small">The application deadline for Fall 2017 is June 30, 2017. Applications are currently open for Fall 2018.</p>
+						        <p class="small">The application deadline for Fall 2017 is currently closed. Applications are currently open for Fall 2018.</p>
 						      </div>
 						    </div>
 						</div><!-- end panel -->

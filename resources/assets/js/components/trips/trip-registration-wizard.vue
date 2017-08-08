@@ -47,8 +47,8 @@
 					</ul>
 				</div>
 				<div class="col-sm-7 col-md-8 {{currentStep.view}}">
-					<spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
-					<spinner v-ref:reservationspinner size="xl" :fixed="true" text="Creating Reservation"></spinner>
+					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
+					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
 					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 					</component>
@@ -333,7 +333,7 @@
 			// login component skipped for now
 			this.currentStep = this.stepList[0];
 		},
-		ready(){
+		mounted(){
 			//get trip costs
 			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then(function (trip) {

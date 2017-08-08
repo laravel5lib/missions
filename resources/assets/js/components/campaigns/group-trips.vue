@@ -47,7 +47,7 @@
 							</div>
 							<div class="panel-body text-center">
 								<p class="badge">{{ trip.status | capitalize }}</p><br>
-								<p class="small">{{ trip.started_at | moment 'll' false true}} - {{ trip.ended_at | moment 'll' false true}}</p>
+								<p class="small">{{ trip.started_at | moment('ll', false, true)}} - {{ trip.ended_at | moment('ll', false, true)}}</p>
 								<label>Perfect For</label>
 								<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
 									{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
@@ -124,7 +124,7 @@
 			    this.$parent.restartView();
             }
 		},
-		ready(){
+		mounted(){
 			if (this.id && this.campaignId && this.id.length>0 && !this.$parent.currentView) {
 				this.getTrips();
 			}

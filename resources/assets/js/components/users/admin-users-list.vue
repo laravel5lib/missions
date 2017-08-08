@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="row">
             <div class="col-sm-12">
                 <form class="form-inline" novalidate>
@@ -264,7 +264,7 @@
                 <td v-if="isActive('alt_email')" v-text="user.alt_email"></td>
                 <td v-if="isActive('gender')" v-text="user.gender|capitalize"></td>
 				<td v-if="isActive('status')" v-text="user.status|capitalize"></td>
-				<td v-if="isActive('birthday')" v-text="user.birthday|moment 'll'"></td>
+				<td v-if="isActive('birthday')" v-text="user.birthday|moment('ll')"></td>
                 <td v-if="isActive('phone_one')" v-text="user.phone_one"></td>
                 <td v-if="isActive('phone_two')" v-text="user.phone_two"></td>
                 <td v-if="isActive('street')" v-text="user.street"></td>
@@ -489,7 +489,7 @@
 				})
 			}
         },
-        ready(){
+        mounted(){
             // load view state
 			if (localStorage.AdminUsersListConfig) {
 				var config = JSON.parse(localStorage.AdminUsersListConfig);

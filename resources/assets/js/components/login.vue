@@ -4,10 +4,9 @@
 			<h6 class="text-uppercase text-center">Welcome To Missions.Me</h6>
 			<hr class="divider inv">
 			<template v-if="currentState==='login'">
-				<validator name="LoginForm">
-					<form class="form-horizontal" role="form">
+				<form class="form-horizontal" role="form" name="LoginForm">
 						<div id="alerts" v-if="messages.length > 0">
-							<div v-for="message in messages" class="alert alert-{{ message.type }} alert-dismissible"
+							<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
 							     role="alert">
 								{{ message.message }}
 							</div>
@@ -17,7 +16,7 @@
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">E-Mail Address</label>
 								<input type="email" class="form-control" v-model="user.email"
-								       v-validate:email="['email', 'required']" required/>
+								       v-validate:email="'required|email'" required/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" style="margin-bottom:0;"
@@ -25,7 +24,7 @@
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="user.password"
-								       v-validate:password="{ required: true }" required/>
+								       v-validate:password="'required'" required/>
 								<span class="help-block"><a href="/password/email">Forgot password?</a></span>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
@@ -35,12 +34,11 @@
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 					</form><!-- end form -->
-				</validator>
 			</template>
 			<template v-if="currentState==='reset'">
 				<form class="form-horizontal" role="form" @submit.prevent="requestReset">
 					<div id="alerts" v-if="messages.length > 0">
-						<div v-for="message in messages" class="alert alert-{{ message.type }} alert-dismissible"
+						<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
 						     role="alert">
 							{{ message.message }}
 						</div>
@@ -67,23 +65,22 @@
 				</form><!-- end form -->
 			</template>
 			<template v-if="currentState==='create'">
-				<validator name="RegisterForm">
-					<form class="form-horizontal" role="form" @submit.prevent="registerUser" novalidate>
+				<form name="RegisterForm" class="form-horizontal" role="form" @submit.prevent="registerUser" novalidate>
 						<div id="alerts" v-if="messages.length > 0">
-							<div v-for="message in messages" class="alert alert-{{ message.type }} alert-dismissible"
+							<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
 							     role="alert">
 								{{ message.message }}
 							</div>
 						</div><!-- end alert -->
 						<div v-show="attemptRegister">
-							<validator-errors :component="'bootstrap-alert-error'" :validation="$RegisterForm"></validator-errors>
+							<!--<validator-errors :component="'bootstrap-alert-error'" :validation="$RegisterForm"></validator-errors>-->
 						</div>
 						<div class="form-group"
 						     :class="{ 'has-error': registerErrors.name || checkForRegisterError('name') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Name</label>
 								<input type="text" class="form-control" v-model="newUser.name" placeholder="John Doe"
-								       required v-validate:name="{ required: { rule: true, message: 'The name field is required.' } }"
+								       required v-validate:name="'required|alpha_spaces'"
 								       maxlength="100"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
@@ -309,7 +306,6 @@
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 					</form><!-- end form -->
-				</validator>
 			</template>
 			<!--<a v-if="currentState === 'login' || currentState === 'create'" @click="currentState='reset'">Forgot Your Password?</a>-->
 			<p class="text-center">
@@ -386,6 +382,7 @@
         methods: {
             checkForLoginError(field){
                 // if user clicked continue button while the field is invalid trigger error styles
+	            return false;
                 return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
             },
             checkForRegisterError(field){
@@ -415,7 +412,7 @@
                                         type: 'danger',
                                         message: 'An account with that email and password could not be found.'
                                     });
-                                    this.$dispatch('showError', 'Please check the form.');
+                                    this.$root.$emit('showError', 'Please check the form.');
                                 }
 
                                 if (response.status && response.status === 422) {
@@ -423,12 +420,12 @@
                                         type: 'danger',
                                         message: 'Please enter a valid email and password.'
                                     }];
-                                    this.$dispatch('showError', 'Please check the form.');
+                                    this.$root.$emit('showError', 'Please check the form.');
                                 }
                             })
                 } else {
                     this.messages = [{type: 'warning', message: 'Please check the form'}];
-                    this.$dispatch('showError', 'Please check the form.');
+                    this.$root.$emit('showError', 'Please check the form.');
                 }
             },
 
@@ -488,11 +485,11 @@
                                 })
                             }
                             this.messages = messages;
-                            this.$dispatch('showError', 'Please check the form.');
+                            this.$root.$emit('showError', 'Please check the form.');
                             this.attemptRegister = false;
                         });
                 } else {
-                    this.$dispatch('showError', 'Please check the form.');
+                    this.$root.$emit('showError', 'Please check the form.');
                 }
             },
 
@@ -507,7 +504,7 @@
             }
             done();
         },
-        ready: function () {
+        mounted() {
             if (_.contains(location.search.substr(1).split('='), 'signup')) {
                 this.currentState = 'create';
             }
@@ -536,4 +533,3 @@
         }
     }
 </script>
-

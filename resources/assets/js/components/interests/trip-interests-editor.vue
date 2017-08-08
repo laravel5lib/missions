@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <div class="panel-heading">
             <div class="row">
@@ -90,11 +90,11 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Received at</label>
-                    <p>{{ interest.created_at | moment 'lll' }}</p>
+                    <p>{{ interest.created_at | moment('lll') }}</p>
                 </div>
                 <div class="col-sm-6">
                     <label>Last Updated at</label>
-                    <p>{{ interest.updated_at | moment 'lll' }}</p>
+                    <p>{{ interest.updated_at | moment('lll') }}</p>
                 </div>
             </div>
         </div>
@@ -147,7 +147,7 @@
                 });
             },
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

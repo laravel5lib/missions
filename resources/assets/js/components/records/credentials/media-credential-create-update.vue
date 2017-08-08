@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<validator name="CreateUpdateMediaCredential" @touched="onTouched">
 			<form id="CreateUpdateMediaCredential" class="form-horizontal">
 				<div class="panel panel-default">
@@ -271,8 +271,8 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<date-picker :model.sync="QA.a|moment 'YYYY-MM-DD'" type="date" ></date-picker>
-									<input type="datetime" class="form-control hidden" v-model="QA.a | moment 'LLLL'" id="started_at" required :field="'date' + indexQA" v-validate="{}">
+									<date-picker :model.sync="QA.a|moment('YYYY-MM-DD')" type="date" ></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + indexQA" v-validate="{}">
 								</div>
 								<div class="panel-footer" v-show="checkForError('date' + indexQA)">
 									<div class="errors-block"></div>
@@ -494,14 +494,14 @@
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
 //                        uploads: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Media Credential created.');
+                        this.$root.$emit('showSuccess', 'Media Credential created.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.body.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create media credential.');
+                        this.$root.$emit('showError', 'Unable to create media credential.');
                     });
                 } else {
                     this.showError = true;
@@ -521,14 +521,14 @@
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
 //                        uploads: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + that.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -559,7 +559,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // set user data
             // this.userId = this.holder_id = this.$root.user.id;
             // this.holder_type = 'users';

@@ -1,7 +1,7 @@
 <template>
     <validator name="CreateUpdateReferral" @touched="onTouched">
         <form id="CreateUpdateReferral" class="form-horizontal" novalidate style="postition:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             
             <template v-if="forAdmin">
                 <div class="col-sm-12">
@@ -172,14 +172,14 @@
                         user_id: this.user_id,
                         attention_to: this.attention_to
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Referral created and sent.');
+                        this.$root.$emit('showSuccess', 'Referral created and sent.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment + '/records/referrals/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create referral.');
+                        this.$root.$emit('showError', 'Unable to create referral.');
                     });
                 } else {
                     this.showError = true;
@@ -200,19 +200,19 @@
                         response: this.response,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/referrals/' + that.id; 
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
         },
-        ready(){
+        mounted(){
             if (this.isUpdate) {
                 this.$http.get('referrals/' + this.id + '?include=user').then(function (response) {
 

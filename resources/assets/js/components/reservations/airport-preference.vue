@@ -169,7 +169,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             if(this.document) {
                 this.editMode = false;
                 this.choice_one = this.document.content[0];

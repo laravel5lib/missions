@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
@@ -292,7 +292,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setProjectData(response.body.data);

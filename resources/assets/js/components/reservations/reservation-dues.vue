@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-3">
                         <label v-if="due.type === 'static'">Immediately</label>
-                        <label v-else>Due {{ due.due_at | moment 'll' true }}</label>
+                        <label v-else>Due {{ due.due_at | moment('ll') true }}</label>
                         <p>
                             <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status|capitalize}}</span>
                         </p>
@@ -79,7 +79,7 @@
 
             }
         },
-        ready(){
+        mounted(){
             /*this.resource.get().then(function (response) {
                 this.setReservationData(response.body.data)
             });*/

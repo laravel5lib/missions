@@ -147,14 +147,14 @@
 											<div class="col-xs-6 col-lg-6">
 												<div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
 													<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" v-validate:month="{ required: true }">
-														<option v-for="month in monthList" value="{{month}}">{{month}}</option>
+														<option v-for="month in monthList" :value="month">{{month}}</option>
 													</select>
 												</div>
 											</div>
 											<div class="col-xs-6 col-lg-6">
 												<div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
 													<select v-model="cardYear" class="form-control input-sm" id="expiryYear" v-validate:year="{ required: true }">
-														<option v-for="year in yearList" value="{{year}}">{{year}}</option>
+														<option v-for="year in yearList" :value="year">{{year}}</option>
 													</select>
 												</div>
 											</div>
@@ -289,7 +289,7 @@
                 }
             }
 		},
-		ready: function () {
+		mounted() {
 			this.$dispatch('payment-complete', true);
 			if (this.devMode) {
 				this.cardNumber = '';
@@ -475,7 +475,7 @@
 					this.$http.post('donations/authorize', this.cardParams)
 							.then(this.createTokenCallback,
 									function (error) {
-										this.$dispatch('showError', error.data.message);
+										this.$root.$emit('showError', error.data.message);
 										this.$parent.$refs.validationspinner.hide();
 									});
 				}

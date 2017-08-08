@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="row" style="position:relative;">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<aside :show.sync="showTeamsFilters" placement="left" header="Team Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
@@ -50,7 +50,7 @@
 				</form>
 			</aside>
 			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
+				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
 			</aside>
 			<aside :show.sync="showMembersFilters" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
@@ -1698,7 +1698,7 @@
 
             },
         },
-        ready(){
+        mounted(){
         	console.log(this.userId);
             let self = this;
             let promises = [];

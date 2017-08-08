@@ -1,7 +1,7 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <spinner v-ref:spinner size="md" text="Updating..."></spinner>
+            <spinner ref="spinner" size="md" text="Updating..."></spinner>
             <div class="row">
                 <div class="col-xs-4">
                     <h5 class="panel-header">Details</h5>
@@ -69,7 +69,7 @@
             <label>Type</label>
             <p>{{ fund.type | capitalize }}</p>
             <label>Last Updated</label>
-            <p>{{ fund.updated_at | moment 'lll' }}</p>
+            <p>{{ fund.updated_at | moment('lll') }}</p>
         </validator>
         </div>
         <div class="panel-footer text-right">
@@ -159,7 +159,7 @@
                 this.reconcile();
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
             
             this.$http.get('accounting/classes').then(function (response) {

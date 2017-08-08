@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <p v-if="trips.length < 1" class="text-center text-muted lead">
                 This group does not have any trips yet. Please check back soon!
@@ -12,11 +12,11 @@
                     </div><!-- end panel-heading -->
                     <div class="panel-body text-center">
                         <p class="badge">{{ trip.status | capitalize }}</p><br>
-                        <img :src="trip.campaign.data.avatar" alt="{{ trip.campaign.data.name }}" class="img-circle img-md">
+                        <img :src="trip.campaign.data.avatar" :alt=" trip.campaign.data.name " class="img-circle img-md">
                         <h4>{{ trip.campaign.data.name }}</h4>
                         <p class="small">{{ trip.country_name }}</p>
                         <label>Travel Date</label>
-                        <p>{{ trip.started_at|moment 'MMMM DD' false true }} - {{ trip.ended_at|moment 'LL' false true }}</p>
+                        <p>{{ trip.started_at|moment('MMMM DD', false, true) }} - {{ trip.ended_at|moment('LL', false, true) }}</p>
                         <p class="text-left" data-toggle="tooltip" data-placement="top" title="Reservations"><i class="fa fa-user"></i> {{ trip.reservations }}</p>
                         <p><a class="btn btn-primary btn-block" :href="id + trip.links[0].uri">Details</a></p>
                     </div><!-- end panel-body -->
@@ -55,7 +55,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             this.searchTrips();
         }
     }

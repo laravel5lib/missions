@@ -1,5 +1,5 @@
 <template>
-    <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+    <spinner ref="spinner" size="sm" text="Loading"></spinner>
     <div class="row">
         <div class="col-sm-12">
             <form class="form-inline text-right" novalidate>
@@ -29,7 +29,7 @@
                     <label>Contact Pref.</label>
                     <p class="small" style="margin-bottom:5px;">{{ interest.communication_preferences}}</p>
                     <label>Interested since</label>
-                    <p class="small" style="margin-bottom:5px;">{{ interest.created | moment 'll'}}</p>
+                    <p class="small" style="margin-bottom:5px;">{{ interest.created | moment('ll')}}</p>
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@
                 });
             }
         },
-        ready() {
+        mounted() {
             this.searchInterests();
         }
     }

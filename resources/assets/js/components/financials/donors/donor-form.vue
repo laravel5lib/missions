@@ -1,8 +1,8 @@
 <template>
     <div class="panel panel-default">
         <validator name="validation" :classes="{ invalid: 'has-error' }">
-            <spinner v-ref:donorspinner size="xl" :fixed="false" text="Saving..."></spinner>
-            <spinner v-ref:spinner size="xl" :fixed="false" text="Loading..."></spinner>
+            <spinner ref="donorspinner" size="xl" :fixed="false" text="Saving..."></spinner>
+            <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
             <div class="panel-heading">
                 <h5>Personal Details</h5>
             </div>
@@ -200,24 +200,24 @@
                 this.$http.post('donors', this.donor).then(function (response) {
                     this.$refs.donorspinner.hide();
                     this.reset();
-                    this.$dispatch('showSuccess', 'Donor created successfully.');
+                    this.$root.$emit('showSuccess', 'Donor created successfully.');
                     this.$dispatch('donor-created', response.body.data.id);
                 },function (response) {
                     this.$refs.donorspinner.hide();
-                    this.$dispatch('showError', 'There are errors on the form');
+                    this.$root.$emit('showError', 'There are errors on the form');
                 });
             },
             update() {
                 this.accountError = false;
                 // this.$refs.spinner.show();
                 this.$http.put('donors/' + this.donorId, this.donor).then(function (response) {
-                    this.$dispatch('showSuccess', 'Donor updated successfully.');
+                    this.$root.$emit('showSuccess', 'Donor updated successfully.');
                     // this.$refs.spinner.hide();
                 },function (response) {
                     if(_.contains(_.keys(response.errors), 'account_id')) {
                         this.accountError = true;
                     }
-                    this.$dispatch('showError', 'There are errors on the form.');
+                    this.$root.$emit('showError', 'There are errors on the form.');
                     // this.$refs.spinner.hide();
                 });
             },
@@ -268,7 +268,7 @@
                 });
             }
         },
-        ready() {
+        mounted() {
             if (this.isUpdate) {
                 this.fetch();
             }

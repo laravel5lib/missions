@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="panel-body">
-            <spinner v-ref:spinner size="md" text="Loading..."></spinner>
+            <spinner ref="spinner" size="md" text="Loading..."></spinner>
             <div class="row">
                 <div class="col-sm-6">
                     <label>Type</label>
@@ -33,10 +33,10 @@
                 <div class="col-sm-6">
                     <label>Start Date</label>
                     <input type="text" class="form-control" v-model="initiative.started_at" v-if="editMode">
-                    <p v-else>{{ initiative.started_at | moment 'll' }}</p>
+                    <p v-else>{{ initiative.started_at | moment('ll') }}</p>
                     <label>End Date</label>
                     <input type="text" class="form-control" v-model="initiative.ended_at" v-if="editMode">
-                    <p v-else>{{ initiative.ended_at | moment 'll' }}</p>
+                    <p v-else>{{ initiative.ended_at | moment('ll') }}</p>
                 </div>
             </div>
 
@@ -111,9 +111,9 @@
                 this.$http.put('initiatives/' + this.id, this.initiative).then(function (response) {
                     this.initiative = response.body.data;
                     this.editMode = false;
-                    this.$dispatch('showSuccess', 'Your changes were saved successfully.');
+                    this.$root.$emit('showSuccess', 'Your changes were saved successfully.');
                 },function () {
-                    this.$dispatch('showError', 'Your changes could not be saved.');
+                    this.$root.$emit('showError', 'Your changes could not be saved.');
                 });
             },
             create() {
@@ -123,7 +123,7 @@
                     this.initiative = {};
                     window.location = '/admin/initiatives/' + response.body.data.id;
                 },function () {
-                    this.$dispatch('showError', 'The initiative could not be created.');
+                    this.$root.$emit('showError', 'The initiative could not be created.');
                 });
             },
             cancel() {

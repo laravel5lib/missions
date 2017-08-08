@@ -1,5 +1,5 @@
 <template>
-    <spinner v-ref:spinner size="md" text="Loading"></spinner>
+    <spinner ref="spinner" size="md" text="Loading"></spinner>
     <div class="panel-body" v-for="requirement in requirements">
         <div class="row">
             <div class="col-xs-12 text-right hidden-xs">
@@ -18,7 +18,7 @@
                 <p>{{ requirement.short_desc }}</p>
             </div>
             <div class="col-xs-4 text-right">
-                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment 'lll' }} </h5>
+                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment('lll') }} </h5>
                 <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
             </div>
         </div><!-- end row -->
@@ -277,7 +277,7 @@
             },
 
         },
-        ready(){
+        mounted(){
             this.searchRequirements();
             var self = this;
             this.$root.$on('NewRequirement', function () {

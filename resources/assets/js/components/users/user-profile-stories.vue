@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <template v-if="isUser()">
         <div class="row hidden-xs">
@@ -75,7 +75,7 @@
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment 'll' }}.</small></h5>
+                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at | moment('ll') }}.</small></h5>
                     </div>
                     <div class="col-sm-4 text-right hidden-xs">
                         <div style="padding: 0;" v-if="isUser()">
@@ -243,7 +243,7 @@
                 };
             }
         },
-        ready(){
+        mounted(){
             this.searchStories();
         }
     }

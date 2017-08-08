@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
@@ -126,10 +126,10 @@
                 <td v-if="isActive('funds_raised')">{{project.amount_raised|currency}}</td>
                 <td v-if="isActive('percent_raised')">{{project.percent_raised}}%</td>
                 <td v-if="isActive('funded_at')">
-                    <span v-if="project.funded">{{project.funded_at|moment 'll'}}</span>
+                    <span v-if="project.funded">{{project.funded_at|moment('ll')}}</span>
                     <span v-else>In progress</span>
                 </td>
-                <td v-if="isActive('created_at')">{{project.created_at|moment 'll'}}</td>
+                <td v-if="isActive('created_at')">{{project.created_at|moment('ll')}}</td>
                 <td>
                     <a href="/admin/projects/{{project.id}}"><i class="fa fa-cog"></i></a>
                 </td>
@@ -257,7 +257,7 @@
                 })
             }
         },
-        ready(){
+        mounted(){
             this.searchProjects();
         }
     }

@@ -117,7 +117,7 @@
                 this.callback();
             }
         },
-		ready() {
+		mounted() {
 
         }
     }

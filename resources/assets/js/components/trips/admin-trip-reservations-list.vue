@@ -338,7 +338,7 @@
         </div>
         <hr class="divider sm">
         <div style="position:relative;">
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -420,7 +420,7 @@
                     <td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
                     <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
                     <td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
-                    <td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
+                    <td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
                     <td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
                     <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
                     <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
@@ -894,7 +894,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // load view state
             if (localStorage[this.storageName]) {
                 let config = JSON.parse(localStorage[this.storageName]);

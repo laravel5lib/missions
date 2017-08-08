@@ -1,6 +1,6 @@
 <template>
     <div style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <template v-if="isUser()">
             <!--<div class="panel panel-default">-->
                 <!--<div class="panel-body">-->
@@ -205,7 +205,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.resource.get({id: this.id}).then(function (response) {
                 this.fundraiser = response.body.data;

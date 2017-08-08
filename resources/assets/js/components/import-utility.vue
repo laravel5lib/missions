@@ -6,7 +6,7 @@
 
         <modal :title="title" :show.sync="showImportModal" effect="zoom" width="400" ok-text="Import" :callback="importList">
             <div slot="modal-body" class="modal-body">
-                <spinner v-ref:spinner size="sm" text="importing"></spinner>
+                <spinner ref="spinner" size="sm" text="importing"></spinner>
                 
                 <div class="alert alert-info" v-if="totalRows > 0">
                     <p>{{ totalRows }} records are being processed. An email will be sent when importing is completed.</p>
@@ -106,7 +106,7 @@
                 var self = this;
                 this.$validate(true, function() {
                     if (self.$validation.invalid) {
-                        self.$dispatch('showError', _.first(self.$validation.errors).message)
+                        self.$root.$emit('showError', _.first(self.$validation.errors).message)
                         throw new Error("Validation errors");
                     }
                 });
@@ -114,16 +114,16 @@
                 this.$http.post(this.url, {file: this.file||undefined, required: this.requiredFields, email: this.$root.user.email, parent_id: this.parentId}).then(function (response) {
                     this.totalRows = response.body.total_rows;
                     this.totalImported = response.body.total_imported;
-                    this.$dispatch('showSuccess', response.body.message);
+                    this.$root.$emit('showSuccess', response.body.message);
                     this.$dispatch('importComplete', true);
                     // this.showImportModal = false;
                     this.file = null;
                     this.importFile = null;
                 }, function (error) {
                     if (error.data.errors) {
-                        this.$dispatch('showError', _.first(_.toArray(error.data.errors)));
+                        this.$root.$emit('showError', _.first(_.toArray(error.data.errors)));
                     } else {
-                        this.$dispatch('showError', error.data.message);
+                        this.$root.$emit('showError', error.data.message);
                     }
                 })
             }

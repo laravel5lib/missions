@@ -3,7 +3,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>{{ promo.name }}</h5>
                 </div>
@@ -39,11 +39,11 @@
             <div class="row">
                 <hr class="divider">
                 <div class="col-sm-4">
-                    {{ promo.created_at | moment 'lll' }}<br>
+                    {{ promo.created_at | moment('lll') }}<br>
                     <label>Created</label>
                 </div>
                 <div class="col-sm-4">
-                    {{ promo.updated_at | moment 'lll' }}<br>
+                    {{ promo.updated_at | moment('lll') }}<br>
                     <label>Updated</label>
                 </div>
                 <div class="col-sm-4">
@@ -132,7 +132,7 @@
                 this.$http.get('promotionals/' + this.id).then(function (response) {
                     this.promo = response.body.data;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
             callView(data) {
@@ -146,40 +146,40 @@
             deactivate()
             {
                 this.$http.delete('promotionals/' + this.id).then(function (response) {
-                    this.$dispatch('showSuccess', 'Deactivated successfully.');
+                    this.$root.$emit('showSuccess', 'Deactivated successfully.');
                     this.showStopModal = false;
                     this.fetch();
                     this.$broadcast('promotionalStatusChanged');
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to deactivate on server.');
+                    this.$root.$emit('showError', 'Unable to deactivate on server.');
                 });
             },
             deleteForever()
             {
                 this.$http.delete('promotionals/' + this.id +'?force=true').then(function (response) {
-                    this.$dispatch('showSuccess', 'Deleted promotional.');
+                    this.$root.$emit('showSuccess', 'Deleted promotional.');
                     this.showDeleteModal = false;
                     this.callView({view: 'list'});
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to delete on server.');
+                    this.$root.$emit('showError', 'Unable to delete on server.');
                 });
             },
             activate()
             {
                 this.$http.put('promotionals/' + this.id + '/restore').then(function (response) {
-                    this.$dispatch('showSuccess', 'Activated successfully.');
+                    this.$root.$emit('showSuccess', 'Activated successfully.');
                     this.showStartModal = false;
                     this.fetch();
                     this.$broadcast('promotionalStatusChanged');
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to activate on server.');
+                    this.$root.$emit('showError', 'Unable to activate on server.');
                 });
             },
             callView(data) {
                 this.$dispatch('load-view', data);
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

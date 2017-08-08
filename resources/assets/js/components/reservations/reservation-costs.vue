@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <!-- <div class="row">
             <div class="col-xs-4 tour-step-addons">
                 <button class="btn btn-primary btn-sm" @click="add">
@@ -291,7 +291,7 @@
                 });
             },
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.body.data);

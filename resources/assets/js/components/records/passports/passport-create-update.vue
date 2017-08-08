@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div><validator name="CreateUpdatePassport" @touched="onTouched">
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
             <template v-if="forAdmin">
                 <div class="col-sm-12">
@@ -58,7 +58,7 @@
                     <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment 'YYYY-MM-DD' false true" :input-sm="false" type="date"></date-picker>
+                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
                             <span v-if="attemptSubmit" class="help-block">
@@ -220,14 +220,14 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Passport created.');
+                        this.$root.$emit('showSuccess', 'Passport created.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create passport.');
+                        this.$root.$emit('showError', 'Unable to create passport.');
                     });
                 } else {
                     this.showError = true;
@@ -249,7 +249,7 @@
                         upload_id: this.upload_id,
                         user_id: this.user_id,
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
@@ -257,7 +257,7 @@
                         this.hasChanged = false;
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -275,7 +275,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             this.$http.get('utilities/countries').then(function (response) {
                 this.countries = response.body.countries;
             });

@@ -12,7 +12,7 @@
             <br>
             <b>STATUS:</b> {{referral.status | capitalize}}
             <br>
-            <b>LAST UPDATED:</b> {{referral.updated_at|moment 'll'}}
+            <b>LAST UPDATED:</b> {{referral.updated_at|moment('ll')}}
         </p>
     </div>
 </template>

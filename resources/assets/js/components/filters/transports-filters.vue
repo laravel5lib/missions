@@ -129,7 +129,7 @@
                 }, this.$root.handleApiError);
             },
         },
-        ready(){
+        mounted(){
             if (this.propertyExists('groups'))
 			this.getGroups();
         }

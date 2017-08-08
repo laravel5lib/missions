@@ -17,7 +17,7 @@
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-3">
-                        <label>{{ due.due_at | moment 'll' }}</label>
+                        <label>{{ due.due_at | moment('ll') }}</label>
                         <p>
                             <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status|capitalize}}</span>
                         </p>
@@ -76,7 +76,7 @@
 
             }
         },
-        ready(){
+        mounted(){
             /*this.resource.get().then(function (response) {
              this.setProjectData(response.body.data)
              });*/

@@ -1,6 +1,6 @@
 <template>
 	<div style="position:relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="text-muted text-center" v-if="fundraisers.length < 1">
 			<template v-if="isUser()">
 				<em><h4>Start Fundraising</h4>
@@ -28,7 +28,7 @@
 						<div class="col-xs-6 col-sm-12 col-md-6">
 							<label>Expires</label>
 							<p class="small">
-								{{ fundraiser.ended_at | moment 'll' }}
+								{{ fundraiser.ended_at | moment('ll') }}
 							</p>
 						</div>
 					</div><!-- end row -->
@@ -70,7 +70,7 @@
 					</div>
 					<div class="panel-body text-center">
 							<label>Closed</label>
-							<p class="small">{{ fundraiser.ended_at | moment 'll' }}</p>
+							<p class="small">{{ fundraiser.ended_at | moment('ll') }}</p>
 							<label><span class="text-success">${{ fundraiser.raised_amount }}</span>
 								<small>Raised / {{ fundraiser.donors_count }} Donors</small>
 							</label>
@@ -108,7 +108,7 @@
 				}
 			}
 		},
-		ready(){
+		mounted(){
 			this.$http.get('fundraisers?active=true', { params: {
 				sponsorId: this.id,
 				sponsorType: 'user',

@@ -1,10 +1,10 @@
 <template>
     <div style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <template v-if="reservations.length">
             <div class="col-xs-6 col-md-4" v-for="reservation in paginatedReservations">
                 <div class="panel panel-default">
-                    <img class="img-responsive" :src="'/api/' + reservation.avatar.source + '?q=25'" alt="{{ reservation.name }}">
+                    <img class="img-responsive" :src="'/api/' + reservation.avatar.source + '?q=25'" :alt=" reservation.name ">
                     <div class="panel-body text-center">
                         <h6>{{ reservation.given_names }} {{ reservation.surname }}</h6>
                     </div>
@@ -86,7 +86,7 @@
             },
 
         },
-        ready(){
+        mounted(){
             console.log(this.reservations);
             this.pagination.total_pages = Math.ceil(this.reservations.length / this.per_page);
             this.paginate();

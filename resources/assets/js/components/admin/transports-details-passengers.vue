@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<aside :show.sync="showPassengersFilters" placement="left" header="Passengers Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
+			<reservations-filters ref="filters" :filters.sync="passengersFilters" :reset-callback="resetPassengerFilters" :pagination="passengersPagination" :callback="getPassengers" :campaign-id="campaignId" storage="" transports></reservations-filters>
 		</aside>
 		<aside :show.sync="showReservationsFilters" placement="left" header="Reservations Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
+			<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetReservationFilters" :pagination="reservationsPagination" :callback="searchReservations" :campaign-id="campaignId" storage="" teams></reservations-filters>
 		</aside>
 
 		<div class="row">
@@ -407,7 +407,7 @@
 
             }
         },
-        ready(){
+        mounted(){
 			this.getPassengers();
 			this.searchReservations();
         }

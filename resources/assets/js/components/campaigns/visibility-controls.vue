@@ -88,7 +88,7 @@
                     publish_transports: self.publish_transports,
                     reservations_locked: self.reservations_locked
                }).then(function (response) {
-                    this.$dispatch('showSuccess', 'Assignment(s) Visibility Updated.');
+                    this.$root.$emit('showSuccess', 'Assignment(s) Visibility Updated.');
                     self.publish_squads = response.body.data.publish_squads;
                     self.publish_rooms = response.body.data.publish_rooms;
                     self.publish_regions = response.body.data.publish_regions;
@@ -97,7 +97,7 @@
                });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

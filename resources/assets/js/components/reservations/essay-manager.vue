@@ -1,6 +1,6 @@
 <template>
     <div class="row" v-if="loaded" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-sm-12">
             <div class="text-center">
                 <form novalidate>
@@ -116,7 +116,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             this.searchEssays();
         }
     }

@@ -10,7 +10,7 @@
 
 		<validator name="TravelItineraries">
 			<form id="TravelItinerariesForm" novalidate>
-				<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+				<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
 				<div v-if="itinerary">
 					<p>Please provide details about each step of your trip below.</p>
@@ -20,7 +20,7 @@
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
-						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" v-ref:items>
+						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" ref="items">
 
                             <strong slot="header">
                                 <i class="fa fa-map-marker"></i> Step : {{ item.activity.name }}
@@ -39,11 +39,11 @@
 								<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
 							</div>
 
-							<travel-transport v-if="item.transport" v-ref:transport :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
+							<travel-transport v-if="item.transport" ref="transport" :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
 
-							<travel-hub v-if="item.hub" v-ref:hub :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
+							<travel-hub v-if="item.hub" ref="hub" :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
-							<travel-activity v-ref:activity :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic"></travel-activity>
+							<travel-activity ref="activity" :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic"></travel-activity>
 
 						</panel>
 					</accordion>
@@ -436,7 +436,7 @@
 	        },
 
         },
-        ready(){
+        mounted(){
             let promises = [];
             // Get activity types
             promises.push(this.getTypes());

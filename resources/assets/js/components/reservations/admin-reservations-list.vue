@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
-			<reservations-filters v-ref:filters :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
+			<reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
 		</aside>
 
 		<div class="row">
@@ -146,7 +146,7 @@
         <filters-indicator :filters.sync="filters" :requirement="requirement" :due="due"></filters-indicator>
         <hr class="divider sm">
 		<div style="position:relative;">
-			<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<table class="table table-striped">
 				<thead>
 				<tr>
@@ -255,8 +255,8 @@
 					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
 					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
 					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
-					<td v-if="isActive('registered')" v-text="reservation.created_at|moment 'll'"></td>
-					<td v-if="isActive('dropped')" v-text="reservation.deleted_at|moment 'll'"></td>
+					<td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
+					<td v-if="isActive('dropped')" v-text="reservation.deleted_at|moment('ll')"></td>
 					<td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
 					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
@@ -659,7 +659,7 @@
 			},
 
 		},
-		ready(){
+		mounted(){
 			// load view state
 			if (window.localStorage[this.storageName]) {
 				let config = JSON.parse(window.localStorage[this.storageName]);

@@ -105,7 +105,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             if (this.api) {
                 if (!this.searchRoute) {
                     throw 'A search-route is needed if the api is being used.'

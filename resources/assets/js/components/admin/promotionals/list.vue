@@ -2,7 +2,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <div class="col-sm-8">
                     <h5>Promotionals</h5>
                 </div>
@@ -38,10 +38,10 @@
                     <td><span class="label label-default">{{ status(promo) }}</span></td>
                     <td>{{ promo.name | capitalize }}</td>
                     <td>{{ promo.reward | currency }}</td>
-                    <td>{{ promo.expires | moment 'll' }}</td>
+                    <td>{{ promo.expires | moment('ll') }}</td>
                     <td>{{ promo.promocodes_count }}</td>
-                    <td>{{ promo.created_at | moment 'll' }}</td>
-                    <td>{{ promo.updated_at | moment 'll' }}</td>
+                    <td>{{ promo.created_at | moment('ll') }}</td>
+                    <td>{{ promo.updated_at | moment('ll') }}</td>
                     <th><a @click="callView({view: 'details', id: promo.id})"><i class="fa fa-cog"></i></a></th>
                 </tr>
             </tbody>
@@ -100,14 +100,14 @@
                     this.promos = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
             callView(data) {
                 this.$dispatch('load-view', data);
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

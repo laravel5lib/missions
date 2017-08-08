@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div style="position:relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <!--<button class="btn btn-primary btn-xs" @click="add"><span
 					   class="fa fa-plus"></span> Add Existing
 			   </button>-->
@@ -29,7 +29,7 @@
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>
                     <td v-if="due.type === 'static'">Immedately</td>
-                    <td v-else>{{ due.due_at | moment 'lll' }}</td>
+                    <td v-else>{{ due.due_at | moment('lll') }}</td>
                     <td>{{ due.grace_period }} days</td>
                     <td>
                         <a class="btn btn-default btn-xs" @click="edit(due)"><i class="fa fa-pencil"></i></a>
@@ -280,7 +280,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.getDues();
 

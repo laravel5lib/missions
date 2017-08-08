@@ -1,5 +1,4 @@
 <template>
-	<!--<strap-select :placeholder="text" :options="options" options-label="name" options-value="id" :value.sync="selectedVal" :multiple="multiple" required close-on-select></strap-select>-->
     <div class="btn-group">
         <button type="button" class="btn btn-white-hollow dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{selectedOptions ? selectedOptions[label] : text}} <span class="caret"></span>
@@ -70,10 +69,11 @@
                 this.$root.$emit(this.event, val);
             },
             getOptions (search, loading) {
+                let newOptions;
                 loading ? loading(true) : void 0;
 
                 if (this.api) {
-                    return this.$http.get(this.searchRoute, { params: {search: search} }).then(function (response) {
+                    return this.$http.get(this.searchRoute, { params: {search: search} }).then(response => {
                         this.options = response.body.data;
                         if (loading) {
                             loading(false);
@@ -82,7 +82,7 @@
                         }
                     });
                 } else {
-                    let newOptions = _.filter(this.options, function (option) {
+                    newOptions = _.filter(this.options,(option) => {
                         return option.name.indexOf(search) !== -1;
                     });
                     loading(false);
@@ -90,31 +90,31 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             if (this.api) {
                 if (!this.searchRoute) {
                     throw 'A search-route is needed if the api is being used.'
                 }
 
-                this.getOptions().then(function () {
+                this.getOptions().then(() => {
                     if (this.autoSelectFirst)
                         this.selectedOptions = this.options[0];
                 });
 
-                this.$root.$on('select-options:update', function (val, property) {
-                    this.getOptions().then(function () {
+                this.$root.$on('select-options:update',(val, property) => {
+                    this.getOptions().then(() => {
                         this.$root.$emit('select-options:updated');
                         this.selectedOptions = _.findWhere(this.options, { id: val });
                     })
-                }.bind(this));
+                });
 
-                this.$root.$on('select-options:select', function (val, property) {
+                this.$root.$on('select-options:select',(val, property) => {
                     this.selectedOptions = _.findWhere(this.options, { id: val });
-                }.bind(this));
+                });
 
-                this.$root.$on('select-options:select-array', function (val, property) {
+                this.$root.$on('select-options:select-array', (val, property) => {
                     this.selectedOptions = _.some()
-                }.bind(this));
+                });
 
             }
         }

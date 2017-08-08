@@ -61,7 +61,7 @@
                         <div class="col-xs-9 col-sm-10" @dblclick="editTodo(todo)" v-else>
                             <span :class="{ 'text-strike' : todo.completed_at }">{{ todo.task }}</span>
                             <small class="text-muted" v-if="todo.completed_at"><br />
-                                Completed on {{ todo.completed_at | moment 'llll' }} by {{ todo.user.data.name }}
+                                Completed on {{ todo.completed_at | moment('llll') }} by {{ todo.user.data.name }}
                             </small>
                         </div>
                         <div class="col-xs-1 col-sm-1 text-right" v-if="canModify">
@@ -265,7 +265,7 @@
                 });
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

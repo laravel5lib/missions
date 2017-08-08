@@ -2,7 +2,7 @@
     <div>
         <validator name="Donation">
             <form class="" name="DonationForm" novalidate v-show="donationState === 'form'">
-                <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Validating"></spinner>
+                <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
                 <template v-if="isState('form', 1)">
                     <div class="row">
                         <div class="col-sm-12 text-center">
@@ -84,14 +84,14 @@
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
                                 <select v-model="cardMonth" class="form-control input input-sm" id="expiryMonth" v-validate:month="{ required: true }">
-                                    <option v-for="month in monthList" value="{{month}}">{{month}}</option>
+                                    <option v-for="month in monthList" :value="month">{{month}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
                                 <select v-model="cardYear" class="form-control input input-sm" id="expiryYear" v-validate:year="{ required: true }">
-                                    <option v-for="year in yearList" value="{{year}}">{{year}}</option>
+                                    <option v-for="year in yearList" :value="year">{{year}}</option>
                                 </select>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                 </template>
             </form>
             <div v-show="donationState === 'review'">
-                <spinner v-ref:donationSpinner size="xl" :fixed="false" text="Processing Donation"></spinner>
+                <spinner ref="donationSpinner" size="xl" :fixed="false" text="Processing Donation"></spinner>
                 <div class="row">
                     <div class="col-sm-12 text-center">
                         <label>Donation Amount</label>
@@ -590,7 +590,7 @@
                 return this.resetCaching();
             }
         },
-        ready: function () {
+        mounted() {
             this.$dispatch('payment-complete', true);
             if (this.devMode) {
                 this.cardNumber = '';

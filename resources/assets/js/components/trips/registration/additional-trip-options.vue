@@ -57,7 +57,7 @@
             },
 
         },
-		ready(){
+		mounted(){
 
 		},
 		activate(done){

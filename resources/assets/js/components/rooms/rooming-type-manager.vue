@@ -1,6 +1,6 @@
 <template>
 	<div class="row" style="position: relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="col-md-5 col-md-push-7">
 			<!-- Search and Filter -->
 			<form class="form-inline row">
@@ -217,7 +217,7 @@
                 });
             },
         },
-        ready(){
+        mounted(){
 			this.getRoomTypes();
         }
     }

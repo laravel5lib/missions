@@ -1,6 +1,6 @@
 <template>
     <div class="row" style="position:relative">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
                 <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
@@ -48,11 +48,11 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{essay.created_at|moment 'lll'}}</p>
+                            <p class="small">{{essay.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{essay.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{essay.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
@@ -173,7 +173,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
                 let user = response.body.data;
                 let managing = [];

@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
@@ -551,7 +551,7 @@
                 });
             }
         },
-        ready() {
+        mounted() {
             // load view state
             if (localStorage[this.storageName]) {
                 let config = JSON.parse(localStorage[this.storageName]);

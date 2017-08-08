@@ -26,7 +26,7 @@
         methods: {
             delete(){
                 this.$http.delete('transactions/' + this.transactionId).then(function (response) {
-                    this.$dispatch('showSuccess', 'Transaction deleted.');
+                    this.$root.$emit('showSuccess', 'Transaction deleted.');
                     window.location.href = '/admin/transactions';
                 }, function (error) {
                     console.log(error);

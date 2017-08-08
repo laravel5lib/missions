@@ -2,7 +2,7 @@
     <div>
         <validator name="Interest">
         <form novalidate id="TripInterestSignupForm">
-            <spinner v-ref:validationSpinner size="xl" :fixed="false" text="Saving"></spinner>
+            <spinner ref="validationSpinner" size="xl" :fixed="false" text="Saving"></spinner>
             <div class="row">
                 <div class="col-xs-12" v-error-handler="{ value: campaign, handle: 'campaign' }">
                     <label>Campaign of Interest</label>
@@ -139,14 +139,14 @@
                         this.errors = error.data.errors;
                         this.$refs.validationspinner.hide();
                         console.log(error);
-                        this.$dispatch('showSuccess', 'Request sent')
+                        this.$root.$emit('showSuccess', 'Request sent')
                     });
                 } else {
-                    this.$dispatch('showError', 'Please check the form for errors.')
+                    this.$root.$emit('showError', 'Please check the form for errors.')
                 }
             }
         },
-        ready() {
+        mounted() {
             this.$http.get('trips?groups[]=' + this.id, { params: {status: 'current', include: 'group,campaign'} }).then(function (response) {
                 // this.group = response.body.data.group.data;
                 this.allTrips = response.body.data;

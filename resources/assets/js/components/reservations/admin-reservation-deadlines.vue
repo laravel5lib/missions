@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
         <button class="btn btn-primary btn-xs" @click="add">
             <span class="fa fa-plus"></span> Add Existing
@@ -25,7 +25,7 @@
                     <i class="fa {{ isPast(deadline.date) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
                     {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
                 </td>
-                <td>{{ deadline.date | moment 'lll' }}</td>
+                <td>{{ deadline.date | moment('lll') }}</td>
                 <td>{{ deadline.grace_period }} {{ deadline.grace_period | pluralize 'day' }}</td>
                 <td>
                     <a class="btn btn-default btn-xs" @click="edit(deadline)"><i class="fa fa-pencil"></i></a>
@@ -301,7 +301,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.resource.get().then(function (response) {
                 this.setReservationData(response.body.data)

@@ -88,7 +88,7 @@
             marked: marked,
         },
         methods: {},
-        ready(){
+        mounted(){
 
         }
     }

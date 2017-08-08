@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12 text-center" v-if="!reports.length">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <p class="lead">
                     No reports found. <br />
                     <small class="text-muted" v-if="search">
@@ -25,7 +25,7 @@
                 </p>
             </div>
             <div class="col-xs-12" v-else>
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <div class="list-group">
                     <div class="list-group-item hidden-xs">
                         <div class="row">
@@ -64,10 +64,10 @@
                                 </div>
                             </div>
                             <div class="col-sm-3 hidden-xs">
-                                <p>{{ report.created_at | moment 'lll' }}</p>
+                                <p>{{ report.created_at | moment('lll') }}</p>
                             </div>
                             <div class="col-sm-3 visible-xs">
-                                <p class="text-center">{{ report.created_at | moment 'lll' }}</p>
+                                <p class="text-center">{{ report.created_at | moment('lll') }}</p>
                             </div>
                             <div class="col-sm-2 hidden-xs">
                                 <p><i class="fa fa-file-excel-o"></i> {{ report.type | uppercase }}</p>
@@ -152,7 +152,7 @@
                     this.reports = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to get reports from server.');
+                    this.$root.$emit('showError', 'Unable to get reports from server.');
                 });
             },
             prepareToDownload(source)
@@ -167,7 +167,7 @@
                     this.source = '';
                     window.open(source);
                 } else {
-                    this.$dispatch('showError', 'The file could not be found.');
+                    this.$root.$emit('showError', 'The file could not be found.');
                 }
             },
             destroy(id) {
@@ -175,7 +175,7 @@
                 $('#deleteConfirmationModal').modal()
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

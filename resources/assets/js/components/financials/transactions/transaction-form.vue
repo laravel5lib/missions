@@ -7,7 +7,7 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <spinner v-ref:transactionspinner size="xl" :fixed="false" :text="spinnerText"></spinner>
+                <spinner ref="transactionspinner" size="xl" :fixed="false" :text="spinnerText"></spinner>
                 <div class="row" v-if="editing">
                     <div class="col-xs-12">
                         <label>Designated Fund</label>
@@ -105,13 +105,13 @@
                         <div class="col-xs-4">
                             <label>Exp. Month</label>
                             <select class="form-control" v-model="card.exp_month" :disabled="editingCreditCard">
-                                <option v-for="month in monthList" value="{{month}}">{{month}}</option>
+                                <option v-for="month in monthList" :value="month">{{month}}</option>
                             </select>
                         </div>
                         <div class="col-xs-4">
                             <label>Exp. Year</label>
                             <select class="form-control" v-model="card.exp_year" :disabled="editingCreditCard">
-                                <option v-for="year in yearList" value="{{year}}">{{year}}</option>
+                                <option v-for="year in yearList" :value="year">{{year}}</option>
                             </select>
                         </div>
                     </div>
@@ -468,7 +468,7 @@
                 return data;
             }
         },
-        ready() {
+        mounted() {
             if (this.editing) { this.fetch() };
         }
     }

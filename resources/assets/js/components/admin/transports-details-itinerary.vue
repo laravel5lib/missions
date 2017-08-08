@@ -18,8 +18,8 @@
 				<span class="input-group-addon"><i class="fa fa-search"></i></span>
 			</div>
 			<button class="btn btn-default btn-sm" @click="showActivityFilters = true;">Filters</button>
-			<date-picker :has-error="" :model.sync="activityFilters.starts|moment 'YYYY-MM-DD' false true" type="date" placeholder="Start DateTime" input-sm></date-picker>
-			<date-picker :has-error="" :model.sync="activityFilters.ends|moment 'YYYY-MM-DD' false true" type="date" placeholder="End DateTime" input-sm></date-picker>
+			<date-picker :has-error="" :model.sync="activityFilters.starts|moment('YYYY-MM-DD', false, true)" type="date" placeholder="Start DateTime" input-sm></date-picker>
+			<date-picker :has-error="" :model.sync="activityFilters.ends|moment('YYYY-MM-DD', false, true)" type="date" placeholder="End DateTime" input-sm></date-picker>
 
 			<button type="button" class="btn btn-primary btn-sm" @click="newActivity();">Add Activity</button>
 		</form>
@@ -35,7 +35,7 @@
 						<article class="timeline-entry" v-for="activity in activities">
 
 							<div class="timeline-entry-inner">
-								<time class="timeline-time" datetime="{{ activity.occurred_at }}">
+								<time class="timeline-time" :datetime=" activity.occurred_at ">
 									<span>{{ activity.occurred_at | moment 'h:mm A zz' }}</span>
 									<span>{{ activity.occurred_at | moment 'ddd, ll' }}</span>
 								</time>
@@ -157,12 +157,12 @@
 						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
 					</select>
 				</div>
-				<travel-activity v-ref:activity :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
+				<travel-activity ref="activity" :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
 			</div>
 		</modal>
 		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :show.sync="hubModal">
 			<div slot="modal-body" class="modal-body" v-if="selectedHub">
-				<travel-hub v-ref:hub :hub.sync="selectedHub" :activity-types="activityTypes"></travel-hub>
+				<travel-hub ref="hub" :hub.sync="selectedHub" :activity-types="activityTypes"></travel-hub>
 			</div>
 		</modal>
 		<modal title="Delete Hub" small ok-text="Delete" :callback="deleteHub" :show.sync="showHubDeleteModal">
@@ -361,7 +361,7 @@
                 }, this.handleApiError);
 	        },
         },
-        ready(){
+        mounted(){
             this.getActivityTypes();
 			this.getActivities();
         }

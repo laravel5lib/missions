@@ -1,6 +1,6 @@
 <template>
     <div style="position: relative;">
-        <spinner v-ref:spinner size="md" text="Loading"></spinner>
+        <spinner ref="spinner" size="md" text="Loading"></spinner>
         <div class="panel-body" v-for="deadline in deadlines">
             <div class="row">
                 <div class="col-xs-12 text-right hidden-xs">
@@ -18,7 +18,7 @@
                     <h6><small>Enforced: {{ deadline.enforced ? 'Yes' : 'No' }}</small></h6>
                 </div>
                 <div class="col-xs-4 text-right">
-                    <h5><i class="fa fa-calendar"></i> {{ deadline.date | moment 'lll' }}</h5>
+                    <h5><i class="fa fa-calendar"></i> {{ deadline.date | moment('lll') }}</h5>
                     <h6><small>Grace Period: {{ deadline.grace_period }} {{ deadline.grace_period > 1 ? 'days' : 'day' }}</small></h6>
                 </div>
             </div><!-- end row -->
@@ -234,7 +234,7 @@
             },
 
         },
-        ready(){
+        mounted(){
             this.searchDeadlines();
             var self = this;
             this.$root.$on('NewDeadline', function () {

@@ -236,7 +236,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             let self = this;
 
             let activityType = _.findWhere(this.activityTypes, { id: this.activityType});

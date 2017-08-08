@@ -23,7 +23,7 @@
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </aside>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="col-xs-12 text-right">
             <form class="form-inline">
                 <div style="margin-right:5px;" class="checkbox" v-if="isFacilitator">
@@ -84,17 +84,17 @@
                         </div>
                         <div class="col-sm-6">
                             <label>EXPIRES ON</label>
-                            <p class="small">{{passport.expires_at|moment 'll'}}</p>
+                            <p class="small">{{passport.expires_at|moment('ll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div class="row">
                         <div class="col-sm-6">
                             <label>CREATED ON</label>
-                            <p class="small">{{passport.created_at|moment 'lll'}}</p>
+                            <p class="small">{{passport.created_at|moment('lll')}}</p>
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{passport.updated_at|moment 'lll'}}</p>
+                            <p class="small">{{passport.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end panel-body -->
@@ -237,7 +237,7 @@
             }
 
         },
-        ready(){
+        mounted(){
             this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
                 let user = response.body.data;
                 let managing = [];

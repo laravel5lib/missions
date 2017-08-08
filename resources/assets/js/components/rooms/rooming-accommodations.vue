@@ -1,6 +1,6 @@
 <template>
 	<div style="position: relative;">
-		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
+		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
@@ -601,7 +601,7 @@
                         }, this.$root.handleApiError);
             },
         },
-        ready() {
+        mounted() {
             let promises = [];
             promises.push(this.getGroups());
             promises.push(this.getRoomTypes());

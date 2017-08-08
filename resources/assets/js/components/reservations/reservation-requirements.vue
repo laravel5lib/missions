@@ -33,7 +33,7 @@
                                     <span v-show="isLocked">
                                         <i class="fa fa-lock"></i> Locked &middot;
                                     </span>
-                                    Due {{ requirement.due_at | moment 'lll' }}
+                                    Due {{ requirement.due_at | moment('lll') }}
                                 </label>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
                         </document-manager>
                     </div>
                     <div class="panel-footer">
-                        <label>Last Updated: {{ requirement.updated_at | moment 'lll' }}</label>
+                        <label>Last Updated: {{ requirement.updated_at | moment('lll') }}</label>
                     </div>
                 </div>
             </div>
@@ -225,7 +225,7 @@
                     grace_period: this.editedRequirement.grace_period
                 }).then(function (response) {
                     this.$emit('set-status', response.body.data);
-                    this.$dispatch('showSuccess', 'Requirement updated.');
+                    this.$root.$emit('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });
             }
@@ -239,7 +239,7 @@
                 }
             }
         },
-        ready() {
+        mounted() {
             this.fetch();
         }
     }

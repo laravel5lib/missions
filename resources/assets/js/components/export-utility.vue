@@ -85,7 +85,7 @@
                 var self = this;
                 this.$validate(true, function() {
                     if (self.$validation.invalid) {
-                        self.$dispatch('showError', _.first(self.$validation.errors).message)
+                        self.$root.$emit('showError', _.first(self.$validation.errors).message)
                         throw new Error("Validation errors");
                     }
                 });
@@ -95,12 +95,12 @@
                 $.extend(params, {author_id: this.$root.user.id});
 
                 this.$http.post(this.url, params).then(function (response) {
-                    this.$dispatch('showSuccess', response.body.message);
+                    this.$root.$emit('showSuccess', response.body.message);
                     this.showExportModal = false;
                     this.exportSettings.fields = [];
                     this.exportSettings.filename = '';
                 }, function (error) {
-                    this.$dispatch('showError', 'The server is unable to create the export.');
+                    this.$root.$emit('showError', 'The server is unable to create the export.');
                 })
             }
         }

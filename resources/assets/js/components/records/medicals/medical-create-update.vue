@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <validator name="CreateUpdateMedicalRelease" @touched="onTouched">
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
@@ -500,14 +500,14 @@
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Medical Release created.');
+                        this.$root.$emit('showSuccess', 'Medical Release created.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to create medical release.');
+                        this.$root.$emit('showError', 'Unable to create medical release.');
                     });
                 } else {
                     this.showError = true;
@@ -531,14 +531,14 @@
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
                     }).then(function (resp) {
-                        this.$dispatch('showSuccess', 'Changes saved.');
+                        this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
                             window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + that.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
-                        this.$dispatch('showError', 'Unable to save changes.');
+                        this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 }
             },
@@ -561,7 +561,7 @@
                 }
             }
         },
-        ready(){
+        mounted(){
             if (this.isUpdate) {
                 this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads,user'} }).then(function (response) {
                     this.user_id = response.body.data.id;

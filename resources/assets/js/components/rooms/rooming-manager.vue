@@ -2,7 +2,7 @@
 	<div>
 		<div class="row" style="position:relative;">
 			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters v-ref:filters :filters.sync="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
+				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
 			</aside>
 
 			<template v-if="currentPlan">
@@ -1121,7 +1121,7 @@
             this.currentPlan = this.$parent.currentPlan;
             done();
 	    },
-        ready(){
+        mounted(){
             let promises = [];
             if (this.isAdminRoute) {
                 this.searchReservations();

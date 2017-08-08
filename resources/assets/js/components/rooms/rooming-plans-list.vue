@@ -501,7 +501,7 @@
 
 	        },
         },
-        ready(){
+        mounted(){
             if (this.isAdminRoute) {
                 this.getGroups();
             }

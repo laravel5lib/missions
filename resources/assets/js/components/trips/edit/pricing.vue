@@ -459,7 +459,7 @@
 				return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
 			}
 		},
-		ready(){
+		mounted(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			this.$set('costs', this.$parent.trip.costs);
 			// add toggle data

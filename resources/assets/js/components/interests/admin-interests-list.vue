@@ -141,7 +141,7 @@
         </div>
         <hr class="divider sm">
         <div>
-            <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+            <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -204,7 +204,7 @@
                     <td v-if="isActive('campaign')">{{interest.trip.data.campaign.data.name}}</td>
                     <td v-if="isActive('type')">{{interest.trip.data.type}}</td>
                     <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
-                    <td v-if="isActive('created_at')">{{interest.created_at | moment 'lll'}}</td>
+                    <td v-if="isActive('created_at')">{{interest.created_at | moment('lll')}}</td>
                     <td>
                         <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
                     </td>
@@ -369,7 +369,7 @@
                 })
             }
         },
-        ready(){
+        mounted(){
             // populate
             // this.$refs.spinner.show();
             this.getGroups();

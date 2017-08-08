@@ -10,9 +10,9 @@
         <p class="small">
             <b>NUMBER:</b> {{visa.number}}
             <br>
-            <b>ISSUED ON:</b> {{visa.issued_at|moment 'll'}}
+            <b>ISSUED ON:</b> {{visa.issued_at|moment('ll')}}
             <br>
-            <b>EXPIRES ON:</b> {{visa.expires_at|moment 'll'}}
+            <b>EXPIRES ON:</b> {{visa.expires_at|moment('ll')}}
         </p>
     </div>
 </template>

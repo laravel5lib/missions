@@ -1,6 +1,6 @@
 <template>
     <div>
-        <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <template v-if="isUser()">
             <div class="row">
                 <div class="col-xs-12">
@@ -80,7 +80,7 @@
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
-                <li data-target="#uploads-carousel" class="{{ $index == 0 ? 'active' : '' }}" :data-slide-to="$index" v-for="upload in fundraiser.uploads.data"></li>
+                <li data-target="#uploads-carousel" :class=" $index == 0 ? 'active' : '' " :data-slide-to="$index" v-for="upload in fundraiser.uploads.data"></li>
             </ol>
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
@@ -297,7 +297,7 @@
                 });
             }
         },
-        ready(){
+        mounted(){
             // this.$refs.spinner.show();
             this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then(function (response) {
                 this.fundraiser = response.body.data;

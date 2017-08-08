@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <div class="col-sm-12">
-                <spinner v-ref:spinner size="sm" text="Loading"></spinner>
+                <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
                     <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
                 </aside>
@@ -454,7 +454,7 @@
                     this.transports = response.body.data;
                     this.pagination = response.body.meta.pagination;
                 }, function (error) {
-                    this.$dispatch('showError', 'Unable to get data from server.');
+                    this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
             openTransportModal(transport) {
@@ -554,7 +554,7 @@
                     $('.transport-item').collapse('show');
             },
         },
-        ready() {
+        mounted() {
             this.getActivityTypes();
             this.fetch();
             this.getAirlines();

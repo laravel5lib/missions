@@ -297,21 +297,6 @@ Vue.http.interceptors.push(function(request, next) {
         }
     }
 
-    // Only POST and PUT Requests to our API
-    //if (_.contains(['POST', 'PUT'], request.method) && request.root === '/api') {
-        // console.log(this);
-        // console.log(request);
-
-        /*
-         * Date Conversion: Local to UTC
-         */
-        // search nested objects/arrays for dates to convert
-        // YYYY-MM-DD
-        //let dateRegex = /^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/;
-        // YYYY-MM-DD HH:MM:SS
-        //let dateTimeRegex = /^\d\d\d\d-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01]) (00|[0-9]|1[0-9]|2[0-3]):([0-9]|[0-5][0-9]):([0-9]|[0-5][0-9])$/;
-    //}
-
     // continue to next interceptor
     next(function(response) {
 
@@ -337,21 +322,6 @@ Vue.http.interceptors.push(function(request, next) {
 
     });
 });
-
-
-// Register email validator function.
-/*Vue.validator('email', function (val) {
-    if (! val) return true;
-
-    return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)
-});
-// Validate datetime inputs
-Vue.validator('datetime ', function (val) {
-    if (! val) return true;
-    if (val === 'Invalid date') return false;
-
-    return moment(val).isValid();
-});*/
 
 Vue.filter('phone', {
     read: function (phone) {
@@ -466,86 +436,82 @@ Vue.filter('underscoreToSpace', function (value) {
 });
 
 Vue.directive('tour-guide', {
-    bind: function () {
+    inserted(el, binding, vnode) {
 
-        this.topScrollHandler = function(element){
+        function topScrollHandler (element){
             if (element) {
-                var $element = window.jQuery(element);
-                var topOfElement = $element.offset().top;
-                var heightOfElement = $element.height();
+                let $element = window.jQuery(element);
+                let topOfElement = $element.offset().top;
+                let heightOfElement = $element.height();
                 window.jQuery('html, body').animate({
                     scrollTop: topOfElement - heightOfElement
                 }, {
                     duration: 1000
                 });
             }
-        };
+        }
 
-        this.tour = window.tour = new Shepherd.Tour({
+        function storeTourRecord () {
+            let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
+            completed.push(location.pathname);
+            localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
+        }
+
+        let tour = window.tour = new Shepherd.Tour({
             defaults: {
                 classes: 'shepherd-element shepherd-open shepherd-theme-arrows step-class',
                 scrollTo: true,
-                scrollToHandler: this.topScrollHandler,
+                scrollToHandler: topScrollHandler,
                 showCancelLink: true
             }
         });
 
-        this.tour.addStep('intro', {
+        tour.addStep('intro', {
             title: 'Hello!',
             text: 'This guided tour will walk you through the features on this page. Take this tour anytime by clicking the <i class="fa fa-question-circle-o"></i> Tour link. Shall we begin?',
             showCancelLink: false,
             buttons: [
                 {
                     text: 'Not Now',
-                    action: this.tour.cancel,
+                    action: tour.cancel,
                     classes: 'shepherd-button-secondary'
                 },
                 {
                     text: 'Continue',
-                    action: this.tour.next
+                    action: tour.next
                 }
             ]
         });
 
         // if pageSteps exists, add them to tour
         if (window.pageSteps && window.pageSteps.length) {
-            _.each(window.pageSteps, function (step) {
+            _.each(window.pageSteps, (step) => {
                 // if buttons are present
                 if (step.buttons) {
                     _.each(step.buttons, function (button) {
                         // if action is present
                         if (button.action && _.isString(button.action))
-                            button['action'] = this.tour[button.action];
-                    }.bind(this));
+                            button['action'] = tour[button.action];
+                    });
                 }
                 tour.addStep(step);
-            }.bind(this))
+            })
         }
 
         // Initialize the tour
         let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
         if (!_.contains(completed, location.pathname)) {
-            this.tour.start();
+            tour.start();
         }
 
-        this.tour.on('cancel', function () {
-            this.storeTourRecord();
-        }.bind(this));
+        tour.on('cancel', storeTourRecord);
 
-        this.tour.on('complete', function () {
-            this.storeTourRecord();
-        }.bind(this));
-
-        this.storeTourRecord = function () {
-            let completed = JSON.parse(localStorage.getItem('ToursCompleted')) || [];
-            completed.push(location.pathname);
-            localStorage.setItem('ToursCompleted', JSON.stringify(_.uniq(completed)));
-        }
+        tour.on('complete',storeTourRecord)
     },
-    update: function () {
+    update() {
         // debugger
     },
-    unbind: function () {
+    unbind() {
     }
 });
 
@@ -779,8 +745,13 @@ new Vue({
         impersonatedToken() {
             return this.$cookie.get('impersonate');
         },
-        user() {
-            return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
+        user: {
+            get() {
+                return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
+            },
+            set(newValue) {
+
+            }
         },
     },
     components: {

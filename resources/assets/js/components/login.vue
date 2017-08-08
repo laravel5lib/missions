@@ -4,7 +4,7 @@
 			<h6 class="text-uppercase text-center">Welcome To Missions.Me</h6>
 			<hr class="divider inv">
 			<template v-if="currentState==='login'">
-				<form class="form-horizontal" role="form" name="LoginForm">
+				<form class="form-horizontal" role="form" name="LoginForm" @submit.prevent="attempt" novalidate>
 						<div id="alerts" v-if="messages.length > 0">
 							<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
 							     role="alert">
@@ -12,25 +12,25 @@
 							</div>
 						</div><!-- end alert -->
 						<div class="form-group" style="margin-bottom:0;"
-						     :class="{ 'has-error': checkForLoginError('email') }">
+						     :class="{ 'has-error': errors.has('email') }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">E-Mail Address</label>
-								<input type="email" class="form-control" v-model="user.email"
-								       v-validate:email="'required|email'" required/>
+								<input type="email" class="form-control" v-model="user.email" name="email"
+								       v-validate="'required|email'"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" style="margin-bottom:0;"
-						     :class="{ 'has-error': checkForLoginError('password') }">
+						     :class="{ 'has-error': errors.has('password') }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label class="control-label">Password</label>
-								<input type="password" class="form-control" v-model="user.password"
-								       v-validate:password="'required'" required/>
+								<input type="password" class="form-control" v-model="user.password" name="password"
+								       v-validate="'required'"/>
 								<span class="help-block"><a href="/password/email">Forgot password?</a></span>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group">
 							<div class="col-xs-10 col-xs-offset-1">
-								<button type="submit" class="btn btn-primary btn-block" @click="attempt">Login</button>
+								<button type="submit" class="btn btn-primary btn-block">Login</button>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 					</form><!-- end form -->
@@ -76,7 +76,7 @@
 							<!--<validator-errors :component="'bootstrap-alert-error'" :validation="$RegisterForm"></validator-errors>-->
 						</div>
 						<div class="form-group"
-						     :class="{ 'has-error': registerErrors.name || checkForRegisterError('name') }">
+						     :class="{ 'has-error': registerErrors.name || errors.has('name') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Name</label>
 								<input type="text" class="form-control" v-model="newUser.name" placeholder="John Doe"
@@ -84,7 +84,7 @@
 								       maxlength="100"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" :class="{ 'has-error': registerErrors.email || checkForRegisterError('email') }">
+						<div class="form-group" :class="{ 'has-error': registerErrors.email || errors.has('email') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">E-Mail Address</label>
 								<input type="email" class="form-control" v-model="newUser.email"
@@ -92,7 +92,7 @@
 								       required v-validate:email="['email',  { required: { rule: true, message: 'The email field is required.' }}]"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" :class="{ 'has-error': registerErrors.password || checkForRegisterError('password') }">
+						<div class="form-group" :class="{ 'has-error': registerErrors.password || errors.has('password') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="newUser.password" required
@@ -100,7 +100,7 @@
 								<div class="help-block">Password must be at least 8 characters long</div>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" :class="{ 'has-error': registerErrors.password || checkForRegisterError('password') }">
+						<div class="form-group" :class="{ 'has-error': registerErrors.password || errors.has('password') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Password Again</label>
 								<input type="password" class="form-control" v-model="newUser.password_confirmation"
@@ -261,7 +261,7 @@
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 
-						<div class="form-group" :class="{ 'has-error': registerErrors.gender || checkForRegisterError('gender') }">
+						<div class="form-group" :class="{ 'has-error': registerErrors.gender || errors.has('gender') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-labal">Gender</label><br>
 								<label class="radio-inline lightcolor">
@@ -330,7 +330,7 @@
     export default {
         name: 'login',
         components: {vSelect},
-        data: function () {
+        data() {
             return {
                 attemptedLogin: false,
                 currentState: 'login',
@@ -371,65 +371,57 @@
         },
 
         watch: {
-            'countryCodeObj': function (val) {
+            'countryCodeObj'(val) {
                 this.newUser.country_code = _.isObject(val) ? val.code : null;
             },
-            'currentState': function (val) {
+            'currentState'(val) {
                 this.messages = [];
             }
         },
         computed: {},
         methods: {
-            checkForLoginError(field){
-                // if user clicked continue button while the field is invalid trigger error styles
-	            return false;
-                return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
-            },
-            checkForRegisterError(field){
-                // if user clicked continue button while the field is invalid trigger error styles
-                return this.$RegisterForm[field.toLowerCase()].invalid && this.attemptRegister
-            },
-            attempt: function (e) {
-                e.preventDefault();
-                this.attemptedLogin = true;
-                let that = this;
-                if (this.$LoginForm.valid) {
-                    that.$http.post('/login', this.user)
+            attempt(e) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.messages = [{type: 'warning', message: 'Please check the form'}];
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+
+                    this.$http.post('/login', this.user)
                         .then(function (response) {
                                 // set cookie - name, token
                                 this.$cookie.set('api_token', response.body.token);
                                 // reload to set cookie
-									/*if (this.isChildComponent) {
-									 window.location.reload();
-									 }*/
+                                /*if (this.isChildComponent) {
+								 window.location.reload();
+								 }*/
                                 if (response.body.redirect_to)
-                                    that.getUserData(response.body.redirect_to, response.body.ignore_redirect || false);
+                                    this.getUserData(response.body.redirect_to, response.body.ignore_redirect || false);
                             },
                             function (response) {
-                                that.messages = [];
+                                this.messages = [];
                                 if (response.status && response.status === 401) {
-                                    that.messages.push({
+                                    this.messages.push({
                                         type: 'danger',
-                                        message: 'An account with that email and password could not be found.'
+                                        message: 'An account with this email and password could not be found.'
                                     });
                                     this.$root.$emit('showError', 'Please check the form.');
                                 }
 
                                 if (response.status && response.status === 422) {
-                                    that.messages = [{
+                                    this.messages = [{
                                         type: 'danger',
                                         message: 'Please enter a valid email and password.'
                                     }];
                                     this.$root.$emit('showError', 'Please check the form.');
                                 }
                             })
-                } else {
-                    this.messages = [{type: 'warning', message: 'Please check the form'}];
-                    this.$root.$emit('showError', 'Please check the form.');
-                }
+
+                });
             },
 
-            getUserData: function (redirectTo, ignoreRedirect) {
+            getUserData(redirectTo, ignoreRedirect) {
                 let that = this;
                 return that.$http.get('users/me?include=roles,abilities')
                     .then(function (response) {
@@ -450,7 +442,7 @@
                         });
             },
 
-            registerUser: function (e) {
+            registerUser(e) {
                 e.preventDefault();
                 $.extend(this.newUser, {
                     birthday: moment(this.newUser.dobYear + '-' + this.newUser.dobMonth + '-' + this.newUser.dobDay).format('YYYY-MM-DD')
@@ -493,11 +485,11 @@
                 }
             },
 
-            requestReset: function (e) {
+            requestReset(e) {
 
             }
         },
-        activate: function (done) {
+        activate(done) {
             // Enable child component behavior
             if (this.$parent != this.$root) {
                 this.isChildComponent = true;

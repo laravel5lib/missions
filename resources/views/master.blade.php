@@ -27,7 +27,7 @@
 
         <div class="shepherd-backdrop"></div>
 
-        <alert :show.sync="showSuccess"
+        <alert :value="showSuccess"
                placement="top-right"
                :duration="3000"
                type="success"
@@ -38,7 +38,7 @@
             <p>@{{ message }}</p>
         </alert>
 
-        <alert :show.sync="showInfo"
+        <alert :value="showInfo"
                placement="top-right"
                :duration="3000"
                type="info"
@@ -49,7 +49,7 @@
             <p>@{{ message }}</p>
         </alert>
 
-        <alert :show.sync="showError"
+        <alert :value="showError"
                placement="top-right"
                :duration="0"
                type="danger"
@@ -74,7 +74,6 @@
 
         ga('create', 'UA-47769770-1', 'auto');
         ga('send', 'pageview');
-
     </script>
 
     <!-- Hotjar Tracking Code for https://missions.me -->

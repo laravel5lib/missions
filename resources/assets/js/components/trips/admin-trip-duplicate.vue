@@ -11,7 +11,7 @@
                         <hr>
                         <validator name="TripDuplication">
                             <form class="form-horizontal" novalidate>
-                                <div class="form-group" :class="{ 'has-error': checkForError('group') }">
+                                <div class="form-group" :class="{ 'has-error': errors.has('group') }">
                                     <label class="col-sm-2 control-label">Group</label>
                                     <div class="col-sm-10">
                                         <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
@@ -22,7 +22,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group" :class="{ 'has-error': checkForError('type') }">
+                                <div class="form-group" :class="{ 'has-error': errors.has('type') }">
                                     <label for="type" class="col-sm-2 control-label">Type</label>
                                     <div class="col-sm-10">
                                         <select id="type" class="form-control input-sm" v-model="type"
@@ -79,7 +79,7 @@
                     loading(false);
                 });
             },
-            checkForError(field){
+            errors.has(field){
                 // if user clicked continue button while the field is invalid trigger error styles
                 return this.$TripDuplication[field.toLowerCase()].invalid && this.attemptedContinue;
             },

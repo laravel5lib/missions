@@ -58,7 +58,7 @@
                     <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker :has-error="checkForError('expires')" :model.sync="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
+                            <date-picker :has-error= "errors.has('expires')" :model.sync="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    v-validate:expires="{ required: true }" required>
                             <span v-if="attemptSubmit" class="help-block">

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+		<mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
@@ -13,7 +13,7 @@
 				<hr class="divider inv sm">
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetPlansFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<template v-if="isAdminRoute">
 			<div class="row">

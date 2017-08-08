@@ -62,7 +62,7 @@
 										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA  " v-validate="$index === 0 ?['required'] : void 0"> {{ choice.name }}
 									</label>
 								</div>
-								<div class="panel-footer" v-show="checkForError('radio' + indexQA)">
+								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -97,7 +97,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="panel-footer" v-show="checkForError('certifications')">
+									<div class="panel-footer" v-show= "errors.has('certifications')">
 										<div class="errors-block"></div>
 									</div>
 								</div>
@@ -120,7 +120,7 @@
     									</div>
                                     </div>
                                 </div>
-	                            <div class="panel-footer" v-show="checkForError('participations')">
+	                            <div class="panel-footer" v-show= "errors.has('participations')">
 		                            <div class="errors-block"></div>
 	                            </div>
                             </div>
@@ -138,7 +138,7 @@
 									<span class="help-block">Please Explain:</span>
 									<textarea class="form-control" v-model="QA.a" :field="'textarea' + $index" v-validate="['required']"></textarea>
 								</div>
-								<div class="panel-footer" v-show="checkForError('textarea' + $index)">
+								<div class="panel-footer" v-show= "errors.has('textarea' + $index)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -157,7 +157,7 @@
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>
 								</div>
-								<div class="panel-footer" v-show="checkForError('select' + $index)">
+								<div class="panel-footer" v-show= "errors.has('select' + $index)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -197,7 +197,7 @@
 									<date-picker :model.sync="QA.a|moment('YYYY-MM-DD')" type="date" ></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + $index" v-validate="">
 								</div>
-								<div class="panel-footer" v-show="checkForError('date' + $index)">
+								<div class="panel-footer" v-show= "errors.has('date' + $index)">
 									<div class="errors-block"></div>
 								</div>
 							</div>

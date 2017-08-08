@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<div class="row" style="position:relative;">
-			<aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
+			<mm-aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
 				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
-			</aside>
+			</mm-aside>
 
 			<template v-if="currentPlan">
 				<div class="col-xs-12" v-if="currentPlan">

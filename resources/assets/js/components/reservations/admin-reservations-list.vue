@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+		<mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
 			<reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
-		</aside>
+		</mm-aside>
 
 		<div class="row">
 			<div class="col-sm-12">

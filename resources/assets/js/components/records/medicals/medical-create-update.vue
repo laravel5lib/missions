@@ -14,7 +14,7 @@
                     
                     <template v-if="forAdmin">
                         <div class="col-sm-12">
-                            <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                            <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                 <label for="infoManager">Record Manager</label>
                                 <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                                 <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">

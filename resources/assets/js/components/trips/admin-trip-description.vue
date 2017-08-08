@@ -4,7 +4,7 @@
         <template v-if="editMode">
             <validator name="TripDescription">
                 <form>
-                    <div class="form-group" :class="{ 'has-error': checkForError('description') }">
+                    <div class="form-group" :class="{ 'has-error': errors.has('description') }">
                         <div class="row">
                             <div class="col-sm-12 text-right">
                                 <button class="btn btn-primary btn-xs" type="button" @click="update">
@@ -53,7 +53,7 @@
             marked: marked,
         },
         methods: {
-            checkForError(field){
+            errors.has(field){
                 // if user clicked continue button while the field is invalid trigger error styles
                 return this.$TripDescription[field.toLowerCase()].invalid && this.attemptedContinue
             },

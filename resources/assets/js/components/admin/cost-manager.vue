@@ -1,7 +1,7 @@
 <template>
     <section>
         <spinner ref="spinner" size="md" text="Loading"></spinner>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -16,7 +16,7 @@
                 <hr class="divider inv sm">
                 <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters It!</button>
             </form>
-        </aside>
+        </mm-aside>
         <form class="panel-body form-inline text-right" novalidate>
             <div class="input-group input-group-sm">
                 <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
@@ -93,18 +93,18 @@
                         <form class="form" novalidate>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+                                    <div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
                                                v-model="newCost.name" v-validate:costName="{required: true}"
                                                placeholder="Name" autofocus>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+                                    <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
                                                   v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+                                    <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
                                         <label for="cost_type">Type</label>
                                         <select id="cost_type" class="form-control" v-model="newCost.type" v-validate:costType="{ required: true }">
                                             <option value="">-- select --</option>
@@ -115,7 +115,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+                                            <div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
                                                 <label for="newCost_active_at">Active</label>
                                                 <br>
                                                 <date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
@@ -125,7 +125,7 @@
 
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+                                            <div class="form-group" :class="{'has-error': errors.hasCost('costAmount')}">
                                                 <label for="newCost_amount">Amount</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
@@ -154,18 +154,18 @@
                         <form class="form" novalidate>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costName')}">
+                                    <div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
                                                v-model="selectedCost.name" v-validate:costName="{required: true}"
                                                placeholder="Name" autofocus>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costDescription')}">
+                                    <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
                                                   v-model="selectedCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': checkForErrorCost('costType')}">
+                                    <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
                                         <label for="cost_type">Type</label>
                                         <select id="cost_type" class="form-control" v-model="selectedCost.type" v-validate:costType="{ required: true }">
                                             <option value="">-- select --</option>
@@ -176,7 +176,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costActive')}">
+                                            <div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
                                                 <date-picker :input-sm="true" :model.sync="selectedCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
@@ -186,7 +186,7 @@
 
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': checkForErrorCost('costAmount')}">
+                                            <div class="form-group" :class="{'has-error': errors.hasCost('costAmount')}">
                                                 <label for="selectedCost_amount">Amount</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
@@ -316,7 +316,7 @@
             }
         },
         methods: {
-            checkForErrorCost(field){
+            errors.hasCost(field){
                 return this.$validateCost && this.$validateCost[field.toLowerCase()].invalid && this.attemptedAddCost;
             },
             checkCostsErrors(){

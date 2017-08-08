@@ -118,7 +118,7 @@
 							<form novalidate role="form">
 								<div class="row">
 									<div class="col-sm-12 col-md-6">
-										<div class="form-group" :class="{ 'has-error': checkForError('cardholdername') }">
+										<div class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
 											<label for="cardHolderName">Card Holder's Name</label>
 											<div class="input-group">
 												<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
@@ -128,7 +128,7 @@
 										</div>
 									</div>
 									<div class="col-sm-12 col-md-6">
-										<div class="form-group" :class="{ 'has-error': checkForError('cardnumber') || validationErrors.cardNumber }">
+										<div class="form-group" :class="{ 'has-error': errors.has('cardnumber') || validationErrors.cardNumber }">
 											<label for="cardNumber">Card Number</label>
 											<div class="input-group">
 												<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
@@ -145,14 +145,14 @@
 										<label for="expiryMonth">EXPIRY DATE</label>
 										<div class="row">
 											<div class="col-xs-6 col-lg-6">
-												<div class="form-group" :class="{ 'has-error': checkForError('month') || validationErrors.cardMonth }">
+												<div class="form-group" :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
 													<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" v-validate:month="{ required: true }">
 														<option v-for="month in monthList" :value="month">{{month}}</option>
 													</select>
 												</div>
 											</div>
 											<div class="col-xs-6 col-lg-6">
-												<div class="form-group" :class="{ 'has-error': checkForError('year') || validationErrors.cardYear }">
+												<div class="form-group" :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
 													<select v-model="cardYear" class="form-control input-sm" id="expiryYear" v-validate:year="{ required: true }">
 														<option v-for="year in yearList" :value="year">{{year}}</option>
 													</select>
@@ -161,7 +161,7 @@
 										</div>
 									</div>
 									<div class="col-xs-5 col-md-5 pull-right">
-										<div class="form-group" :class="{ 'has-error': checkForError('code') || validationErrors.cardCVC }">
+										<div class="form-group" :class="{ 'has-error': errors.has('code') || validationErrors.cardCVC }">
 											<label for="cvCode">
 												CV CODE</label>
 											<input type="text" class="form-control input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
@@ -171,13 +171,13 @@
 								</div>
 								<div class="row">
 									<div class="col-sm-7">
-										<div class="form-group" :class="{ 'has-error': checkForError('email') }">
+										<div class="form-group" :class="{ 'has-error': errors.has('email') }">
 											<label for="infoEmailAddress">Billing Email Address</label>
 											<input type="text" class="form-control input-sm" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
 										</div>
 									</div>
 									<div class="col-sm-5">
-										<div class="form-group" :class="{ 'has-error': checkForError('zip') }">
+										<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
 											<label for="infoZip">Billing ZIP/Postal Code</label>
 											<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
 										</div>

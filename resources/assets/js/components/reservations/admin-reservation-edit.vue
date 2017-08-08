@@ -72,7 +72,7 @@
                             <input type="radio" v-model="gender" v-validate:gender value="female"> Female
                         </label>
                     </div>
-                    <span class="help-block" v-show="checkForError('gender')">Select a gender</span>
+                    <span class="help-block" v-show= "errors.has('gender')">Select a gender</span>
                 </div>
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: status, handle: 'status' }">
@@ -158,7 +158,7 @@
 
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <div class="form-group" :class="{ 'has-error': checkForError('desiredrole') }">
+                    <div class="form-group" :class="{ 'has-error': errors.has('desiredrole') }">
                         <label for="desiredRole">Desired Team Role</label>
                         <select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:desiredrole="{ required: true }">
                             <option v-for="role in roles" :value="role.value">{{role.name}}</option>

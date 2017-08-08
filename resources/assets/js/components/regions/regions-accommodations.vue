@@ -3,7 +3,7 @@
 
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
-		<aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<mm-aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group" v-if="isAdminRoute">
@@ -25,7 +25,7 @@
                     <i class="fa fa-times"></i> Reset Region Filters
                 </button>
 			</form>
-		</aside>
+		</mm-aside>
 
 		<div class="col-sm-8">
             <div class="row">

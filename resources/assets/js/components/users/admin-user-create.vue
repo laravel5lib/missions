@@ -24,12 +24,12 @@
                 </div>
             </div>
 
-            <div class="row" :class="{ 'has-error': checkForError('password')||checkForError('passwordconfirmation') }">
+            <div class="row" :class="{ 'has-error': errors.has('password')|| errors.has('passwordconfirmation') }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Password</label>
                     <div class="row" v-error-handler="{ value: password, handle: 'password' }">
                         <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('password') }">
+                            <div class="input-group" :class="{ 'has-error': errors.has('password') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
                                        v-validate:password="{ required: true, minlength:8 }" placeholder="Enter password"
                                        group="passwordGroup">
@@ -42,7 +42,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group" :class="{ 'has-error': checkForError('passwordconfirmation') }">
+                            <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
                                 <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
                                        v-validate:passwordconfirmation="{ required: true, minlength:8 }" placeholder="Enter password again"
                                        group="passwordGroup">
@@ -410,7 +410,7 @@
             }
         },
         methods: {
-            checkForError(field){
+            errors.has(field){
                 // if user clicked submit button while the field is invalid trigger error styles 
                 return this.$CreateUser[field].invalid && this.attemptSubmit;
             },

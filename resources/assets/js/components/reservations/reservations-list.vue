@@ -1,8 +1,8 @@
 <template>
     <div>
-        <aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
             <reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
-        </aside>
+        </mm-aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
                 <form class="form-inline">

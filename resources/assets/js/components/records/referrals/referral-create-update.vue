@@ -5,7 +5,7 @@
             
             <template v-if="forAdmin">
                 <div class="col-sm-12">
-                    <div class="form-group" :class="{ 'has-error': checkForError('manager') }">
+                    <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                         <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
@@ -39,13 +39,13 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('referraltitle') }">
+                <div class="col-sm-6" :class="{ 'has-error': errors.has('referraltitle') }">
                     <label for="author" class="control-label">Referral Title/Position</label>
                     <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
                        placeholder="Referral title or position" v-validate:referraltitle="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('referralname') }">
+                <div class="col-sm-6" :class="{ 'has-error': errors.has('referralname') }">
                     <label for="author" class="control-label">Referral Name</label>
                     <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referrer.name"
                        placeholder="Referral Name" v-validate:referralname="{ required: true, minlength:1, maxlength:100 }"
@@ -53,13 +53,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': checkForError('referralorg') }">
+                <div class="col-sm-6" :class="{ 'has-error': errors.has('referralorg') }">
                     <label for="author" class="control-label">Referral Organization</label>
                     <input type="text" class="form-control" name="referral_organization" id="referral_organization" v-model="referrer.organization"
                        placeholder="Referral Name" v-validate:referralorg="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-3" :class="{ 'has-error': checkForError('referralphone') }">
+                <div class="col-sm-3" :class="{ 'has-error': errors.has('referralphone') }">
                     <label for="author" class="control-label">Referral Phone</label>
                     <input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referrer.phone|phone"
                        placeholder="Referral Phone" v-validate:referralphone="{ required: true, minlength:1, maxlength:100 }"

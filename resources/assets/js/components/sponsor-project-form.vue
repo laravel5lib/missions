@@ -3,14 +3,14 @@
 		<validator name="SponsorProjectForm">
 			<form class="form-horizontal" novalidate>
 				<div class="form-group">
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('cause') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('cause') }">
 						<label for="name">Choose a cause to support</label>
 						<select class="form-control" v-model="causeId" v-validate:cause="['required']">
 							<option value="">Select a Cause</option>
 							<option :value="cause.id" v-for="cause in causes" v-text="cause.name"></option>
 						</select>
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('country') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('country') }">
 						<label for="name">Select a location</label>
 						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('initiative') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('initiative') }">
 						<label for="initiative">Select a type</label>
 						<select class="form-control" v-model="initiativeId" v-validate:initiative="['required']">
 							<option value="">Select a type</option>
@@ -30,7 +30,7 @@
 									v-text="initiative.type|capitalize"></option>
 						</select>
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('end') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('end') }">
 						<label for="name">Desired Completion Date</label>
 						<select class="form-control" v-validate:end="['required']" v-model="complete_at" required>
 							<option value="June 2017">June 2017</option>
@@ -52,7 +52,7 @@
 				</div>
 
 				<div class="form-group">
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('projectname') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('projectname') }">
 						<label for="project_name">Project Name</label>
 						<input type="text" class="form-control" name="project_name" id="project_name"
 							   v-model="project_name"
@@ -60,7 +60,7 @@
 							   v-validate:projectname="{ required: true, minlength:1, maxlength:100 }"
 							   maxlength="100" minlength="1" required>
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('name') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
 						<label for="name">Your Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Annie Smith"
@@ -70,12 +70,12 @@
 				</div>
 
 				<div class="row form-group">
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('email') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
 						<label for="name">Your Email</label>
 						<input type="text" class="form-control" name="email" id="email" v-model="email"
 							   v-validate:email="['required']">
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': checkForError('phone') }">
+					<div class="col-sm-6" :class="{ 'has-error': errors.has('phone') }">
 						<label for="name">Your Phone</label>
 						<input type="tel" class="form-control" v-model="phone_one | phone" id="infoPhone"
 							   placeholder="123-456-7890" v-validate:phone="['required', 'phone']">

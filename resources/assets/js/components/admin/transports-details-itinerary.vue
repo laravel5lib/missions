@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<aside :show.sync="showActivityFilters" placement="left" header="Activity Filters" :width="375">
+		<mm-aside :show.sync="showActivityFilters" placement="left" header="Activity Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
@@ -11,7 +11,7 @@
 					</select>
 				</div>
 			</form>
-		</aside>
+		</mm-aside>
 		<form class="form-inline">
 			<div class="input-group input-group-sm">
 				<input type="text" class="form-control" v-model="activityFilters.search" debounce="300" placeholder="Search">

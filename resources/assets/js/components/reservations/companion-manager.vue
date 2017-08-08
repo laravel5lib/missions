@@ -66,7 +66,7 @@
                                         <option value="other">Other</option>
                                     </select>
                                 </div>
-                                <div class="form-group" :class="{ 'has-error': checkForError('reservation') }">
+                                <div class="form-group" :class="{ 'has-error': errors.has('reservation') }">
                                     <label class="control-label">Reservation</label>
                                     <span class="help-block" v-show="reservations.length < 1"><i class="fa fa-warning"></i> If your search yields no options it could mean (1) the reservation does not exist or (2) the reservation belongs to another group or campaign.</span>
                                     <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
@@ -133,7 +133,7 @@ export default {
         }
     },
   methods: {
-    checkForError: function checkForError(field) {
+    errors.has: function errors.has(field) {
         // if user clicked submit button while the field is invalid trigger error styles
         return this.$AddCompanion[field].invalid && this.attemptSubmit;
     },

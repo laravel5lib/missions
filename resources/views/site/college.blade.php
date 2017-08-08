@@ -147,7 +147,7 @@ $('.video-modal').on('hide.bs.modal', function(e) {
 					{{-- <p>Nestled --}} in sunny Southern California, {{-- the Missions.Me College is --}} providing an inspirational and disruptive environment that allows students to discover their divine design in beautiful natural surroundings and with friends that also want to change the world.</p>
 				</div>
 				<div class="col-sm-4 col-sm-offset-2">
-						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">25</h1>
+						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">40</h1>
 						<p class="small">Minutes From Disneyland <i class="fa fa-angle-right pull-right" style="opacity:0.5;"></i></p>
 						<hr class="divider" style="opacity:0.3;">
 						<h1 class="text-hero text-serif text-lightweight text-primary" style="margin:0 0 15px;line-height:1em;">70&deg;</h1>

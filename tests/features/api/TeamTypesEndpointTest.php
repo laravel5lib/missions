@@ -1,6 +1,6 @@
 <?php
 
-class TeamTypesEndpointTest extends TestCase
+class TeamTypesEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function fetches_all_team_types()

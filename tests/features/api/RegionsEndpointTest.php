@@ -3,7 +3,7 @@
 use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 
-class RegionsEndpointTest extends TestCase
+class RegionsEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function gets_all_regions()

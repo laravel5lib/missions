@@ -13,7 +13,7 @@ use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\Transaction;
 
-class ReservationTest extends TestCase
+class ReservationTest extends BrowserKitTestCase
 {
     function setup_reservation()
     {

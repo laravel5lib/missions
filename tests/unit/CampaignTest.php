@@ -5,7 +5,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use App\Models\v1\Reservation;
 
-class CampaignTest extends TestCase
+class CampaignTest extends BrowserKitTestCase
 {
 
     /**

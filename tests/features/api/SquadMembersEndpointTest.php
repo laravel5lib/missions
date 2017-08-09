@@ -1,6 +1,6 @@
 <?php
 
-class SquadMembersEndpointTest extends TestCase
+class SquadMembersEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function fetches_all_squad_members()

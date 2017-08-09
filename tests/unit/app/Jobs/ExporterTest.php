@@ -5,7 +5,7 @@ use App\Models\v1\Report;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 
-class ExporterTest extends TestCase
+class ExporterTest extends BrowserKitTestCase
 {
     /** @test */
     public function returns_a_collection_of_columns()

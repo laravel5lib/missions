@@ -1,6 +1,6 @@
 <?php
 
-class MedicalCredentialsEndpointTest extends TestCase
+class MedicalCredentialsEndpointTest extends BrowserKitTestCase
 {
 
     /**

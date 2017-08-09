@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\Passport;
 
-class PassportsEndpointTest extends TestCase
+class PassportsEndpointTest extends BrowserKitTestCase
 {
 
     /**

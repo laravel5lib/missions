@@ -5,7 +5,7 @@ use App\Models\v1\Fund;
 use App\Models\v1\Trip;
 use App\Models\v1\Reservation;
 
-class ReservationsEndpointTest extends TestCase
+class ReservationsEndpointTest extends BrowserKitTestCase
 {
 
     /** @test */

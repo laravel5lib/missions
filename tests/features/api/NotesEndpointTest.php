@@ -3,7 +3,7 @@
 use App\Models\v1\Note;
 use App\Models\v1\User;
 
-class NotesEndpointTest extends TestCase
+class NotesEndpointTest extends BrowserKitTestCase
 {
     /**
      * @test

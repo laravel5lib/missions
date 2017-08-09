@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\MedicalRelease;
 
-class MedicalReleasesEndpointTest extends TestCase
+class MedicalReleasesEndpointTest extends BrowserKitTestCase
 {
 
     /**

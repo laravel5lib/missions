@@ -1,6 +1,6 @@
 <?php
 
-class PlansEndpointTest extends TestCase
+class PlansEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function gets_all_plans()

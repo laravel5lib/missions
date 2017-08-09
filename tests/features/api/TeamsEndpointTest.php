@@ -1,6 +1,6 @@
 <?php
 
-class TeamsEndpointTest extends TestCase
+class TeamsEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function fetches_all_teams()

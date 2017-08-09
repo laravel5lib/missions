@@ -4,7 +4,7 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class RequirementConditionsEndpointTest extends TestCase
+class RequirementConditionsEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function fetches_a_requirements_conditions()

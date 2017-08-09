@@ -4,7 +4,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\Requirement;
 use App\Models\v1\Reservation;
 
-class RequirementEndpointTest extends TestCase
+class RequirementEndpointTest extends BrowserKitTestCase
 {
     /**
      * @test

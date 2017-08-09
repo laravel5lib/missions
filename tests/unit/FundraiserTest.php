@@ -5,7 +5,7 @@ use App\Models\v1\Fund;
 use App\Models\v1\Fundraiser;
 use App\Models\v1\Transaction;
 
-class FundraiserTest extends TestCase
+class FundraiserTest extends BrowserKitTestCase
 {
     /**
      * @test

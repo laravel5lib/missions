@@ -5,7 +5,7 @@ use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Support\Facades\Session;
 
-class TripDetailsPageTest extends TestCase
+class TripDetailsPageTest extends BrowserKitTestCase
 {
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-class RewardableTraitTest extends TestCase
+class RewardableTraitTest extends BrowserKitTestCase
 {
     /** @test */
     public function create_codes()

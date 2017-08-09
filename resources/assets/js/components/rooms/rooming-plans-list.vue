@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+		<mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
@@ -79,12 +79,12 @@
                     <div class="col-sm-6">
                         <label>Rooms</label><br />
                         <span v-for="(key, val) in plan.rooms_count">
-                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
                         </span>
                         <br />
                         <label>Rooms Allowed</label><br />
                         <span v-for="(key, val) in plan.room_types">
-                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
                         </span>
                         <p>
                             <hr class="divider sm">
@@ -112,18 +112,18 @@
 		</div>
 
 		<!-- Modals -->
-		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :show.sync="showPlanModal">
+		<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :value="showPlanModal" @closed="showPlanModal=false">
 			<div slot="modal-body" class="modal-body">
-				<validator name="PlanCreate">
+
 					<form id="PlanCreateForm">
 						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedNewPlan.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" name="planname="['required']" v-model" v-validate="selectedNewPlan.name">
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanCreate.plandesc.invalid}">
 							<label for="createPlanDesc" class="control-label">Short Description</label>
-							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" v-validate:plandesc="['required']"></textarea>
+							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" name="plandesc" v-validate="['required']"></textarea>
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanCreate.teamgroup.invalid}" v-if="isAdminRoute">
@@ -131,8 +131,8 @@
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							          :value.sync="selectedNewPlan.groups" :options="groupsOptions" label="name"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedNewPlan.groups" multiple v-validate:teamgroup="['required']">
-								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+							<select class="hidden" v-model="selectedNewPlan.groups" multiple name="teamgroup" v-validate="['required']">
+								<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
 							</select>
 						</div>
 
@@ -145,21 +145,21 @@
 							</div>
 						</div>
 					</form>
-				</validator>
+
 			</div>
 		</modal>
-		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :show.sync="showPlanSettingsModal">
+		<modal title="Plan Settings" ok-text="Update" :callback="updatePlanSettings" :value="showPlanSettingsModal" @closed="showPlanSettingsModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedPlan && selectedPlanSettings">
-				<validator name="PlanSettings">
+
 					<form id="PlanCreateForm" class="form-horizontal">
 						<div class="form-group" :class="{'has-error': $PlanSettings.planname.invalid}">
 							<label for="updatePlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" v-validate:planname="['required']" v-model="selectedPlanSettings.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" name="planname="['required']" v-model" v-validate="selectedPlanSettings.name">
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanSettings.plandesc.invalid}">
 							<label for="updatePlanDesc" class="control-label">Short Description</label>
-							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" v-validate:plandesc="['required']"></textarea>
+							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" name="plandesc" v-validate="['required']"></textarea>
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanSettings.teamgroup.invalid}" v-if="isAdminRoute">
@@ -167,8 +167,8 @@
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							          :value.sync="selectedPlanSettings.groups" :options="groupsOptions" label="name"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedPlanSettings.groups" multiple v-validate:teamgroup="['required']">
-								<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+							<select class="hidden" v-model="selectedPlanSettings.groups" multiple name="teamgroup" v-validate="['required']">
+								<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
 							</select>
 						</div>
 
@@ -188,11 +188,11 @@
 							<!--<p v-else v-text="selectedPlanSettings.locked ? 'Yes' : 'No'"></p>-->
 						</div>
 					</form>
-				</validator>
+
 
 			</div>
 		</modal>
-		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :show.sync="showPlanDeleteModal">
+		<modal title="Delete Rooming Plan" small ok-text="Delete" :callback="deletePlan" :value="showPlanDeleteModal" @closed="showPlanDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedDeletePlan">
 					Are you sure you want to delete plan: "{{selectedDeletePlan.name}}" ?

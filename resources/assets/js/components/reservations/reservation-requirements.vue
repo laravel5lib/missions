@@ -24,7 +24,7 @@
                                     </a> {{ requirement.name }}
                                     <span class="label" :class="statusLabel(requirement.status)">
                                         <i class="fa" :class="statusIcon(requirement.status)"></i>
-                                        <span class="hidden-xs"> {{ requirement.status | capitalize }}</span>
+                                        <span class="hidden-xs"> {{ requirement.status ? requirement.status[0].toUpperCase() + requirement.status.slice(1) : '' }}</span>
                                     </span>
                                 </h5>
                             </div>
@@ -68,9 +68,9 @@
           </div>
         </div>
 
-        <modal :title="'Edit ' + editedRequirement.name" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
+        <modal :title="'Edit ' + editedRequirement.name" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="update">
             <div slot="modal-body" class="modal-body">
-                <validator name="EditRequirement">
+
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
@@ -78,7 +78,7 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditRequirementError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedRequirement.grace_period"
-                                               v-validate:grace="{required: { rule: true }}">
+                                               name="grace" v-validate="{required: { rule: true }}">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 

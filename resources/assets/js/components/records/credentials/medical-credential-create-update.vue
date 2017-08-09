@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div style="position:relative;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
-		<validator name="CreateUpdateMedicalCredential" @touched="onTouched" lazy>
+
 			<form id="CreateUpdateMedicalCredential" class="form-horizontal" novalidate>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -18,7 +18,7 @@
                                 <div class="form-group">
                                     <label for="infoManager">Record Manager</label>
                                     <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
                                         <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                     </select>
                                 </div>
@@ -29,14 +29,14 @@
     						<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name', messages: { req: 'Please provide credential holder\'s name.'} }">
     							<label for="name" class="control-label">Credential Holder's Name</label>
     							<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-    							       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+    							       placeholder="Name" name="name" v-validate="{ required: true, minlength:1 }"
     							       minlength="1" required>
     						</div>
                              <div class="col-sm-6" v-error-handler="{ value: selectedRole, handle: 'role', messages: { req: 'Please select a medical role.'} }">
                                 <label class="control-label">Medical Role</label>
 	                             <v-select @keydown.enter.prevent="" class="form-control" id="group" :value.sync="selectedRoleObj"
 	                                       :options="roles|orderBy 'name'" label="name" placeholder="Select Role"></v-select>
-	                             <select hidden class="form-control hidden" v-model="selectedRole" v-validate:role="['required']">
+	                             <select hidden class="form-control hidden" v-model="selectedRole" name="role" v-validate="['required']">
 		                             <option value="">-- Select Role --</option>
 		                             <option v-for="option in roles|orderBy 'name'" :value="option.value">{{option.name}}</option>
 	                             </select>
@@ -91,7 +91,7 @@
 										<div class="row">
 											<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.certifiedOptions">
 												<label>
-													<input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:certifications="$index === 0 ?{ minlength: 1 } : void 0">
+													<input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" name="certifications" v-validate="$index === 0 ?{ minlength: 1 } : void 0">
 													{{ choice.name }}
 												</label>
 											</div>
@@ -114,7 +114,7 @@
                                     <div class="row">
     									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.allOptions">
     										<label>
-											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" v-validate:participations="$index === 0 ?{ minlength: 1 } : void 0">
+											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" name="participations" v-validate="$index === 0 ?{ minlength: 1 } : void 0">
 											    {{ choice.name }}
                                             </label>
     									</div>
@@ -227,7 +227,7 @@
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('license') || optionalByRole('license')) && !uploadSatisfied('license')">
                                 <hr class="divider">
-								<validator name="UploadLicenseForm">
+
 									<form id="UploadLicenseForm">
 										<!-- <div class="form-group"> -->
 										<div class="col-xs-12">
@@ -248,16 +248,16 @@
 											<label class="control-label">Expires</label>
 											<div>
 												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model.sync="expires.license|moment('YYYY-MM-DD')" type="date" ></date-picker>
-												<input type="datetime" class="form-control hidden" v-validate:licenseexpires="['required']" v-model="expires.license" id="licenseexpires" required>
+												<input type="datetime" class="form-control hidden" name="licenseexpires="['required']" v-model="expires.license" id" v-validate="licenseexpires" required>
 											</div>
 										</div>
 										<!-- </div> -->
 									</form>
-								</validator>
+
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('certification') || optionalByRole('certification')) && !uploadSatisfied('certification')">
                                 <hr class="divider">
-								<validator name="UploadCertificationForm">
+
 								<form id="UploadCertificationForm">
 									<div class="col-xs-12">
 										<div class="col-sm-6"><label>Certification</label></div>
@@ -276,15 +276,15 @@
 										<label class="control-label">Expires</label>
 										<div>
 											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model.sync="expires.certification|moment('YYYY-MM-DD')" type="date" ></date-picker>
-											<input type="datetime" class="form-control hidden" v-validate:certexpires="['required']" v-model="expires.certification" id="certexpires" required>
+											<input type="datetime" class="form-control hidden" name="certexpires="['required']" v-model="expires.certification" id" v-validate="certexpires" required>
 										</div>
 									</div>
 								</form>
-								</validator>
+
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('diploma') || optionalByRole('diploma')) && !uploadSatisfied('diploma')">
                                 <hr class="divider">
-								<validator name="UploadDiplomaForm">
+
 								<form id="UploadDiplomaForm">
 									<div class="col-xs-12">
 										<div class="col-sm-6"><label>Diploma</label></div>
@@ -302,15 +302,15 @@
 										<label class="control-label">Expires</label>
 										<div>
 											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model.sync="expires.diploma|moment('YYYY-MM-DD')" type="date" ></date-picker>
-											<input type="datetime" class="form-control hidden" v-validate:diplomaexpires="['required']" v-model="expires.diploma" id="diplomaexpires" required>
+											<input type="datetime" class="form-control hidden" name="diplomaexpires="['required']" v-model="expires.diploma" id" v-validate="diplomaexpires" required>
 										</div>
 									</div>
 								</form>
-								</validator>
+
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('letter') || optionalByRole('letter')) && !uploadSatisfied('letter')">
                                 <hr class="divider">
-								<validator name="UploadLetterForm">
+
 									<form id="UploadLetterForm">
 										<div class="col-xs-12">
 											<div class="col-sm-6"><label>Note from Professor</label></div>
@@ -329,15 +329,15 @@
 											<label class="control-label">Expires</label>
 											<div>
 												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model.sync="expires.letter|moment('YYYY-MM-DD')" type="date" ></date-picker>
-												<input type="datetime" class="form-control hidden" v-validate:letterexpires="['required']" v-model="expires.letter" id="letterexpires" required>
+												<input type="datetime" class="form-control hidden" name="letterexpires="['required']" v-model="expires.letter" id" v-validate="letterexpires" required>
 											</div>
 										</div>
 									</form>
-								</validator>
+
 							</div>
 							<div class="col-sm-12" v-if="(requiredByRole('resume') || optionalByRole('resume')) && !uploadSatisfied('resume')">
                                 <hr class="divider">
-								<validator name="UploadResumeForm">
+
 									<form id="UploadResumeForm">
 										<div class="col-sm-12">
 											<div class="col-sm-6"><label>Resume</label></div>
@@ -355,11 +355,11 @@
 											<label class="control-label">Expires</label>
 											<div>
 												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model.sync="expires.resume|moment('YYYY-MM-DD')" type="date" ></date-picker>
-												<input type="datetime" class="form-control hidden" v-validate:resumeexpires="['required']" v-model="expires.resume" id="resumeexpires" required>
+												<input type="datetime" class="form-control hidden" name="resumeexpires="['required']" v-model="expires.resume" id" v-validate="resumeexpires" required>
 											</div>
 										</div>
 									</form>
-								</validator>
+
 							</div>
 						</div>
 					</div>
@@ -375,17 +375,17 @@
 				</div>
 			</form>
 
-			<modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+			<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
 				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
 				<div slot="modal-footer" class="modal-footer">
 					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
 					<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
 				</div>
 			</modal>
-			<modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+			<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
-		</validator>
+
 	</div>
 
 </template>

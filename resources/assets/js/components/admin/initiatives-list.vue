@@ -98,8 +98,8 @@
             </thead>
             <tbody v-if="initiatives.length > 0">
             <tr v-for="initiative in initiatives|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('type')">{{initiative.type|capitalize}}</td>
-                <td v-if="isActive('country')">{{initiative.country.name|capitalize}}</td>
+                <td v-if="isActive('type')">{{initiative.type ? initiative.type[0].toUpperCase() + initiative.type.slice(1) : ''}}</td>
+                <td v-if="isActive('country')">{{initiative.country.name ? initiative.country.name[0].toUpperCase() + initiative.country.name.slice(1) : ''}}</td>
                 <td v-if="isActive('started_at')">{{initiative.started_at|moment('ll')}}</td>
                 <td v-if="isActive('ended_at')">{{initiative.ended_at|moment('ll')}}</td>
                 <td v-if="isActive('projects')">{{initiative.projects_count}}</td>

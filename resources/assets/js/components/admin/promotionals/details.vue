@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <modal title="Stop Promotional" small :show.sync="showStopModal">
+    <modal title="Stop Promotional" small :value="showStopModal" @closed="showStopModal=false">
         <div slot="modal-body" class="modal-body">Are you sure you want to stop this promotional? Doing so will deactivate all it's promo codes. You can always undo this action or reactivate individual promo codes.</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showStopModal = false">Cancel</button>
@@ -67,7 +67,7 @@
           </div>
     </modal>
 
-    <modal title="Start Promotional" small :show.sync="showStartModal">
+    <modal title="Start Promotional" small :value="showStartModal" @closed="showStartModal=false">
         <div slot="modal-body" class="modal-body">Are you sure you want to start this promotional? Doing so will activate all it's promo codes. You can always undo this action or deactivate individual promo codes.</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showStartModal = false">Cancel</button>
@@ -75,7 +75,7 @@
           </div>
     </modal>
 
-    <modal title="Delete Forever" small :show.sync="showDeleteModal">
+    <modal title="Delete Forever" small :value="showDeleteModal" @closed="showDeleteModal=false">
         <div slot="modal-body" class="modal-body">Are you sure you want to delete this promotional and all it's promo codes? This action cannot be undone.</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default" @click="showDeleteModal = false">Keep</button>

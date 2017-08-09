@@ -1,7 +1,7 @@
 <template>
 	<div style="position: relative;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
-		<mm-aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
@@ -16,7 +16,7 @@
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRegionFilter"><i class="fa fa-times"></i> Reset Region Filters</button>
 			</form>
 		</mm-aside>
-		<mm-aside :show.sync="showPlansFilters" placement="left" header="Plans Filters" :width="375">
+		<mm-aside :show="showPlansFilters" @open="showPlansFilters=true" @close="showPlansFilters=false" placement="left" header="Plans Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
@@ -30,7 +30,7 @@
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetPlansFilter()"><i class="fa fa-times"></i> Reset Filters</button>
 			</form>
 		</mm-aside>
-		<mm-aside :show.sync="showRoomsFilters" placement="left" header="Rooms Filters" :width="375">
+		<mm-aside :show="showRoomsFilters" @open="showRoomsFilters=true" @close="showRoomsFilters=false" placement="left" header="Rooms Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
@@ -58,7 +58,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h5>
-								{{ currentAccommodation.name | capitalize }} <span> &middot; Rooms</span>
+								{{ currentAccommodation.name ? currentAccommodation.name[0].toUpperCase() + currentAccommodation.name.slice(1) : '' }} <span> &middot; Rooms</span>
                                 <span v-if="currentAccommodation.room_types.total === currentAccommodation.rooms_count.total" class="badge text-uppercase pull-right" style="padding:3px 10px;font-size:10px;line-height:1.4;">Full</span>
 							</h5>
 						</div>
@@ -127,9 +127,9 @@
                             </span>
                             <h5>{{region.name}}</h5>
                             <span v-if="region.callsign">
-                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign ? region.callsign[0].toUpperCase() + region.callsign.slice(1) : ''"></span>
                             </span>
-                            <span class="small">{{ region.country.name | capitalize }}</span>
+                            <span class="small">{{ region.country.name ? region.country.name[0].toUpperCase() + region.country.name.slice(1) : '' }}</span>
                             <button class="btn btn-xs btn-primary pull-right" type="button" @click="selectRegion(region)">
                                 Select
                             </button>
@@ -190,13 +190,13 @@
 										<label>Rooms</label>
 										<div class="small">
 											<span v-for="(key, val) in accommodation.rooms_count">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 										<label>Rooms Allowed</label>
 										<div class="small">
 										<span v-for="(key, val) in accommodation.room_types">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong></p>
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 									</div><!-- end col -->
@@ -265,13 +265,13 @@
 													<div class="col-xs-12">
 														<label>Groups</label><br />
 														<span v-for="group in plan.groups.data">
-								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{group.name | capitalize}}</p>
+								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</p>
 								                        </span>
 													</div>
 													<!--<div class="col-xs-12">-->
 														<!--<label>Rooms</label><br />-->
 														<!--<span v-for="(key, val) in plan.rooms_count">-->
-								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key | capitalize}}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
+								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
 								                        <!--</span>-->
 													<!--</div>-->
 												</div>

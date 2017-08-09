@@ -2,7 +2,7 @@
     <div class="panel-body" style="position:relative">
         <spinner ref="spinner" size="md" text="Loading"></spinner>
         <template v-if="editMode">
-            <validator name="TripDescription">
+
                 <form>
                     <div class="form-group" :class="{ 'has-error': errors.has('description') }">
                         <div class="row">
@@ -17,13 +17,13 @@
                             </div>
                             <div class="col-sm-12">
                                 <textarea rows="5" v-autosize="description" v-model="description" class="form-control"
-                                          v-validate:description="{ required: true}" placeholder="Please add a description" v-html="description"></textarea>
+                                          name="description="'required'" placeholder="Please add a description" v-html" v-validate="description"></textarea>
                             </div>
                         </div>
                     </div>
                     <hr class="divider inv">
                 </form>
-            </validator>
+
         </template>
         <template v-else>
             <div v-html="(description || 'No Description') | marked"></div>

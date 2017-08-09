@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <h5>{{ requirement.name|capitalize }}</h5>
+                <h5>{{ requirement.name ? requirement.name[0].toUpperCase() + requirement.name.slice(1) : '' }}</h5>
                 <h6><small>Type: {{ requirement.document_type }}</small></h6>
                 <p>{{ requirement.short_desc }}</p>
             </div>
@@ -24,9 +24,9 @@
         </div><!-- end row -->
         <hr class="divider">
     </div>
-    <modal class="text-center" :show.sync="showAddModal" title="Add Requirement">
+    <modal class="text-center" :value="showAddModal" @closed="showAddModal=false" title="Add Requirement">
         <div slot="modal-body" class="modal-body">
-            <validator name="TripRequirementsCreate">
+
                 <form class="form" novalidate>
                     <div class="row">
                         <div class="col-sm-12">
@@ -34,7 +34,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForAddError('name')}">
                                         <label for="name">Name</label>
-                                        <input type="text" id="name" class="form-control input-sm" v-model="newRequirement.name" v-validate:name="{ required: true }">
+                                        <input type="text" id="name" class="form-control input-sm" v-model="newRequirement.name" name="name" v-validate="'required'">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -54,7 +54,7 @@
                                         <label for="grace_period">Grace Period</label>
                                         <div class="input-group input-group-sm" :class="{'has-error': checkForAddError('grace') }">
                                             <input id="grace_period" type="number" class="form-control" number v-model="newRequirement.grace_period"
-                                                   v-validate:grace="{required: true, min:0}">
+                                                   name="grace" v-validate="{required: true, min:0}">
                                             <span class="input-group-addon">Days</span>
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                                         <label for="due_at">Due</label>
                                         <date-picker :input-sm="true" :model.sync="newRequirement.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                         <input type="datetime" id="due_at" class="form-control input-sm hidden"
-                                               v-model="newRequirement.due_at" v-validate:due="{required: true}">
+                                               v-model="newRequirement.due_at" name="due" v-validate="'required'">
                                     </div>
 
                                 </div>
@@ -82,16 +82,16 @@
                         </div>
                     </div>
                 </form>
-            </validator>
+
         </div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetRequirement()'>Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" @click='addRequirement'>Add</button>
         </div>
     </modal>
-    <modal class="text-center" :show.sync="showEditModal" title="Edit Requirement">
+    <modal class="text-center" :value="showEditModal" @closed="showEditModal=false" title="Edit Requirement">
         <div slot="modal-body" class="modal-body">
-            <validator name="TripRequirementsEdit">
+
                 <form class="form" novalidate v-if="selectedRequirement">
                     <div class="row">
                         <div class="col-sm-12">
@@ -99,7 +99,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForEditError('name')}">
                                         <label for="name">Name</label>
-                                        <input type="text" class="form-control input-sm" v-model="selectedRequirement.name" v-validate:name="{ required: true }">
+                                        <input type="text" class="form-control input-sm" v-model="selectedRequirement.name" name="name" v-validate="'required'">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -119,7 +119,7 @@
                                         <label for="grace_period">Grace Period</label>
                                         <div class="input-group input-group-sm" :class="{'has-error': checkForEditError('grace') }">
                                             <input id="grace_period" type="number" class="form-control" number v-model="selectedRequirement.grace_period"
-                                                   v-validate:grace="{required: true, min:0}">
+                                                   name="grace" v-validate="{required: true, min:0}">
                                             <span class="input-group-addon">Days</span>
                                         </div>
                                     </div>
@@ -129,7 +129,7 @@
                                         <label for="due_at">Due</label>
                                         <date-picker :input-sm="true" :model.sync="selectedRequirement.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                         <input type="datetime" id="due_at" class="form-control input-sm hidden"
-                                               v-model="selectedRequirement.due_at" v-validate:due="{required: true}">
+                                               v-model="selectedRequirement.due_at" name="due" v-validate="'required'">
                                     </div>
 
                                 </div>
@@ -148,14 +148,14 @@
                     </div>
                 </form>
 
-            </validator>
+
         </div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, resetRequirement()'>Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" @click='updateRequirement'>Update</button>
         </div>
     </modal>
-    <modal class="text-center" :show.sync="showDeleteModal" title="Delete Requirement" small="true">
+    <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Requirement" small="true">
         <div slot="modal-body" class="modal-body text-center" v-if="selectedRequirement">Delete {{ selectedRequirement.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Keep</button>

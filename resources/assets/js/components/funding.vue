@@ -64,7 +64,7 @@
                         <nav>
                             <ul class="pagination pagination-sm">
                                 <li>
-                                    <a>{{ donorPagination.total }} {{ activeView | capitalize }}s</a>
+                                    <a>{{ donorPagination.total }} {{ activeView ? activeView[0].toUpperCase() + activeView.slice(1) : '' }}s</a>
                                 </li>
                                 <li :class="{ 'disabled': donorPagination.current_page == 1 }">
                                     <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">

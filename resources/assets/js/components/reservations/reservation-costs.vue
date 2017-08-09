@@ -52,9 +52,9 @@
         </div>
         </div><!-- end panel -->
 
-        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts" ok-text="Add">
+        <modal title="Add Costs" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addCosts" ok-text="Add">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddCost">
+
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Addons or Requests</label>
@@ -65,16 +65,16 @@
                             </p>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
+                            <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
                             </select>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

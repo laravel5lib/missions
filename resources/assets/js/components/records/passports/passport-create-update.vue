@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <div><validator name="CreateUpdatePassport" @touched="onTouched">
+    <div>
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
@@ -8,7 +8,7 @@
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                         <label for="infoManager">Passport Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
                         <span class="help-block">The user account that manages this passport.</span>
@@ -21,7 +21,7 @@
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                               placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Given Names" name="givennames" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="150" minlength="1" required>
                         <span v-if="attemptSubmit" class="help-block">
                             <span v-if="
@@ -37,7 +37,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                               placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Surname" name="surname" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
 
                     </div>
@@ -47,7 +47,7 @@
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Passport Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
-                           placeholder="Passport Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Passport Number" name="number" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
 
                 </div>
@@ -60,7 +60,7 @@
                         <div class="col-lg-6">
                             <date-picker :has-error= "errors.has('expires')" :model.sync="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                   v-validate:expires="{ required: true }" required>
+                                   name="expires" v-validate="'required'" required>
                             <span v-if="attemptSubmit" class="help-block">
                         </span>
                         </div>
@@ -72,7 +72,7 @@
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
-                    <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate:birth="{ required: true }">
+                    <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" name="birth" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
-                    <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate:citizenship="{ required: true }">
+                    <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" name="citizenship" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
                 </div>
@@ -119,11 +119,11 @@
             </div>
         </form>
 
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
 
-    </validator></div>
+
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

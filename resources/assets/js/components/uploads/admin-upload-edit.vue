@@ -1,12 +1,12 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpload">
+
         <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -14,7 +14,7 @@
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
                     <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
-                    <select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
+                    <select hidden id="tags" name="tags" v-model="tags" multiple name="tags" v-validate="'required'">
                         <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
                     </select>
                 </div>
@@ -22,7 +22,7 @@
             <div class="form-group" v-error-handler="{ value: type, handle: 'type' }">
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
-                    <select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" disabled>
+                    <select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" disabled>
                         <option :value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 1280 x 1280</option>
                         <option value="banner">Image (Banner) - 1300 x 500</option>
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </form>
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from 'vue-select'

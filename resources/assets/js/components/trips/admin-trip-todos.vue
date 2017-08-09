@@ -45,7 +45,7 @@
 			</div>
 		</div>
     </div>
-	<modal class="text-center" :show.sync="deleteModal" title="Delete Todo" small="true">
+	<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" small="true">
 		<div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>
 		<div slot="modal-footer" class="modal-footer">
 			<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

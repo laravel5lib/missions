@@ -1,7 +1,7 @@
 <template>
     <div>
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -175,7 +175,7 @@
             <tr v-for="fund in funds|filterBy search|orderBy orderByField direction">
                 <td v-if="isActive('name')" v-text="fund.name"></td>
                 <td v-if="isActive('type')">
-                    <span class="label label-default" v-text="fund.type|capitalize"></span>
+                    <span class="label label-default" v-text="fund.type ? fund.type[0].toUpperCase() + fund.type.slice(1) : ''"></span>
                 </td>
                 <td v-if="isActive('item')">
                     <code>{{ fund.item }}</code>

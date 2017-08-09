@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<mm-aside :show.sync="showActivityFilters" placement="left" header="Activity Filters" :width="375">
+		<mm-aside :show="showActivityFilters" @open="showActivityFilters=true" @close="showActivityFilters=false" placement="left" header="Activity Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group">
 					<label>Activity Type</label>
 					<select class="form-control" v-model="activityFilters.type">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''"></option>
 					</select>
 				</div>
 			</form>
@@ -54,8 +54,8 @@
 
 								<div class="timeline-label">
 									<h2>
-										<a href="#">{{ activity.name | capitalize }}</a>
-										<span class="label label-default" v-text="activity.type.name|capitalize"></span>
+										<a href="#">{{ activity.name ? activity.name[0].toUpperCase() + activity.name.slice(1) : '' }}</a>
+										<span class="label label-default" v-text="activity.type.name ? activity.type.name[0].toUpperCase() + activity.type.name.slice(1) : ''"></span>
 										<br />
 										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
 									</h2>
@@ -96,7 +96,7 @@
 											<div class="list-group">
 												<div class="list-group-item" v-for="hub in activity.hubs.data">
 													<h5 class="list-group-item-heading">
-														{{hub.name | capitalize}} <span v-if="hub.call_sign">({{hub.call_sign}})</span>
+														{{hub.name ? hub.name[0].toUpperCase() + hub.name.slice(1) : ''}} <span v-if="hub.call_sign">({{hub.call_sign}})</span>
 
 														<a @click="confirmDeleteHub(hub)" class="btn btn-xs btn-default-hollow pull-right">
 															<i class="fa fa-trash"></i> Delete
@@ -148,31 +148,31 @@
 			<p class="text-center text-muted"><em>No activities</em></p>
 		</template>
 
-		<modal :title="editMode?'Edit Activity':'Create Activity'" :ok-text="editMode?'Update':'Create'" :callback="saveActivity" :show.sync="activityModal">
+		<modal :title="editMode?'Edit Activity':'Create Activity'" :ok-text="editMode?'Update':'Create'" :callback="saveActivity" :value="activityModal" @closed="activityModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedActivity">
 				<div class="form-group">
 					<label>Activity Type</label>
 					<select class="form-control" v-model="selectedActivity.activity_type_id">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''"></option>
 					</select>
 				</div>
 				<travel-activity ref="activity" :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
 			</div>
 		</modal>
-		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :show.sync="hubModal">
+		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :value="hubModal" @closed="hubModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedHub">
 				<travel-hub ref="hub" :hub.sync="selectedHub" :activity-types="activityTypes"></travel-hub>
 			</div>
 		</modal>
-		<modal title="Delete Hub" small ok-text="Delete" :callback="deleteHub" :show.sync="showHubDeleteModal">
+		<modal title="Delete Hub" small ok-text="Delete" :callback="deleteHub" :value="showHubDeleteModal" @closed="showHubDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedHub">
 					Are you sure you want to delete {{selectedHub.name}} ?
 				</p>
 			</div>
 		</modal>
-		<modal title="Delete Activity" small ok-text="Delete" :callback="deleteActivity" :show.sync="showActivityDeleteModal">
+		<modal title="Delete Activity" small ok-text="Delete" :callback="deleteActivity" :value="showActivityDeleteModal" @closed="showActivityDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedActivity">
 					Are you sure you want to delete {{selectedActivity.name}} ?

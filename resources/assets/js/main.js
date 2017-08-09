@@ -12,7 +12,7 @@ import topNav from './components/top-nav.vue';
 import markdownExampleModal from './components/markdown-example-modal.vue';
 import contactForm from './components/contact-form.vue';
 // import speakerForm from './components/speaker-form.vue';
-// import sponsorProjectForm from './components/sponsor-project-form.vue';
+import sponsorProjectForm from './components/sponsor-project-form.vue';
 // import actionTrigger from './components/action-trigger.vue';
 // import actionDropdownSelect from './components/action-dropdown-select.vue';
 // import actionSelect from './components/action-select.vue';
@@ -62,12 +62,12 @@ import contactForm from './components/contact-form.vue';
 // import reservationDues from './components/reservations/reservation-dues.vue';
 // import funding from './components/funding.vue';
 // import userSettings from './components/users/user-settings.vue';
-// import userProfileCountries from './components/users/user-profile-countries.vue';
-// import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
-// import userProfileStories from './components/users/user-profile-stories.vue';
-// import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
-// import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
-// import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
+import userProfileCountries from './components/users/user-profile-countries.vue';
+import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
+import userProfileStories from './components/users/user-profile-stories.vue';
+import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
+import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
+import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
 // import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
 // import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
 // import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
@@ -786,7 +786,7 @@ new Vue({
         markdownExampleModal,
         contactForm,
         // speakerForm,
-        // sponsorProjectForm,
+        sponsorProjectForm,
         // fundraisers,
         // campaigns,
         // groups,
@@ -847,12 +847,12 @@ new Vue({
         // reservationDues,
         // funding,
         // userSettings,
-        // userProfileCountries,
-        // userProfileTripHistory,
-        // userProfileStories,
-        // userProfileFundraisers,
-        // userProfileFundraisersDonors,
-        // userProfileFundraisersProgress,
+        userProfileCountries,
+        userProfileTripHistory,
+        userProfileStories,
+        userProfileFundraisers,
+        userProfileFundraisersDonors,
+        userProfileFundraisersProgress,
         // dashboardGroupTrips,
         // dashboardGroupReservations,
         // dashboardInterestsList,
@@ -941,22 +941,29 @@ new Vue({
         }.bind(this));
 
         this.$on('userHasLoggedIn', function (user) {
+            localStorage.setItem('user', JSON.stringify(user));
             this.user = user;
             this.authenticated = true;
         });
 
         this.$on('showSuccess', function (msg) {
             this.message = msg;
+            this.showError = false;
+            this.showInfo = false;
             this.showSuccess = true;
         });
 
         this.$on('showInfo', function (msg) {
             this.message = msg;
+            this.showError = false;
             this.showInfo = true;
+            this.showSuccess = false;
         });
 
         this.$on('showError', function (msg) {
             this.message = msg;
+            this.showInfo = false;
+            this.showSuccess = false;
             this.showError = true;
         });
 
@@ -1037,28 +1044,5 @@ new Vue({
                 }) : {};
         }
 
-    },
-    events: {
-        'showSuccess': function (msg) {
-            this.message = msg;
-            this.showError = false;
-            this.showInfo = false;
-            this.showSuccess = true;
-        },
-        'showInfo': function (msg) {
-            this.message = msg;
-            this.showError = false;
-            this.showInfo = true;
-            this.showSuccess = false;
-        },
-        'showError': function (msg) {
-            this.message = msg;
-            this.showInfo = false;
-            this.showSuccess = false;
-            this.showError = true;
-        },
-        'userHasLoggedIn': function (user) {
-            localStorage.setItem('user', JSON.stringify(user));
-        }
     }
 });

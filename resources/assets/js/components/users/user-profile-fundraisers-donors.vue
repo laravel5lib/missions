@@ -14,7 +14,7 @@
             <hr class="divider inv sm">
             <template v-if="activeView==='donors'">
                 <div class="panel panel-default" v-for="donor in donors">
-                    <div class="panel-heading" role="tab" id="heading-{{ donor.id }}">
+                    <div class="panel-heading" role="tab" :id="'heading-' + donor.id">
                         <h5 class="text-capitalize">
                             <a role="button" :href="'/'+donor.account_url" v-if="donor.account_url">
                                 {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
@@ -29,7 +29,7 @@
 
             <template v-if="activeView === 'donations'">
                 <div class="panel panel-default" v-for="donation in donations">
-                    <div class="panel-heading" role="tab" id="heading-{{ donation.id }}">
+                    <div class="panel-heading" role="tab" :id="'heading-' + donation.id">
                         <h5>
                             <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
                             <small class="small">by 

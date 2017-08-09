@@ -1,13 +1,13 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div>
-		<validator name="CreateCampaign">
+
 			<spinner ref="spinner" size="sm" text="Loading"></spinner>
 			<form id="CreateCampaignForm" class="form-horizontal" novalidate>
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
 					<div class="col-sm-12">
 						<label for="name">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
-						       placeholder="Campaign Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+						       placeholder="Campaign Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
 						       maxlength="100" minlength="1" required>
 					</div>
 				</div>
@@ -17,7 +17,7 @@
 						<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 						          label="name"></v-select>
 						<select hidden name="country" id="country" class="hidden" v-model="country_code"
-						        v-validate:country="{ required: true }">
+						        name="country" v-validate="'required'">
 							<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 						</select>
 
@@ -27,7 +27,7 @@
 					<div class="col-sm-12">
 						<label for="description">Description</label>
 						<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
-						          v-validate:description="{ required: true, minlength:1, maxlength:120 }" maxlength="120"
+						          name="description="{ required: true, minlength:1, maxlength:120 }" maxlength" v-validate="120"
 						          minlength="1"></textarea>
 						<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
 					</div>
@@ -40,7 +40,7 @@
 							<div class="col-sm-6">
 								<date-picker addon="Start" :model.sync="started_at|moment 'MM-DD-YYYY HH:mm:ss'" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }"></date-picker>
 								<input type="datetime" class="form-control hidden" v-model="started_at|moment 'MM-DD-YYYY HH:mm:ss'" id="started_at"
-								       v-validate:start="{ required: true }" required>
+								       name="start" v-validate="'required'" required>
 								<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
 									<span class="input-group-addon">Start</span>
 									<date-picker class="form-control" :model.sync="started_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
@@ -51,7 +51,7 @@
 								<date-picker :model.sync="ended_at|moment 'MM-DD-YYYY HH:mm:ss'" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ednded_at' }"></date-picker>
 								<input type="datetime" class="form-control hidden" v-model="ended_at|moment 'MM-DD-YYYY HH:mm:ss'" id="ended_at"
 								       :min="started_at"
-								       v-validate:end="{ required: true }" required>
+								       name="end" v-validate="'required'" required>
 								<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ednded_at' }">
 															<span class="input-group-addon">End</span>
 								</div>-->
@@ -81,7 +81,7 @@
 							<div class="input-group">
 								<span class="input-group-addon">www.missions.me/campaigns/</span>
 								<input type="text" id="page_url" v-model="page_url" class="form-control"
-								       v-validate:url="{ required: false }"/>
+								       name="url" v-validate="{ required: false }"/>
 							</div>
 							<!--<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>-->
 						</div>
@@ -93,7 +93,7 @@
 							<div class="input-group">
 								<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 								<input type="text" id="page_src" v-model="page_src" class="form-control"
-								       v-validate:src="{ required: false,  }"/>
+								       name="src" v-validate="{ required: false,  }"/>
 								<span class="input-group-addon">.blade.php</span>
 							</div>
 						</div>
@@ -151,7 +151,7 @@
 				<p>There are errors on the form.</p>
 			</alert>
 
-		</validator>
+
 	</div>
 
 </template>

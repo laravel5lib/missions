@@ -4,11 +4,11 @@
             <h4>Rooming and Additional Trip Options</h4>
             <hr class="divider" />
             <hr class="divider inv sm" />
-			<validator name="AdditionalOptions" @valid="onValid">
+
 				<form novalidate name="AdditionalOptionsForm">
 					<div class="" v-for="option in optionalCosts | orderBy 'name'">
 						<label style="display:block" for="option{{$index}}">
-							<input type="radio" id="option{{$index}}" v-model="selectedOptions" :value="option" v-validate:additional="$index === 0 ? ['required'] : ''">
+							<input type="radio" id="option{{$index}}" v-model="selectedOptions" :value="option" name="additional" v-validate="$index === 0 ? ['required'] : ''">
 							{{option.name}}
 							<span class="pull-right">{{option.amount | currency}}</span>
 						</label>
@@ -19,7 +19,7 @@
 						No additional options available
 					</h5>
 				</form>
-			</validator>
+
         </div>
     </div>
 </template>

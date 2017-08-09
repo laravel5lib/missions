@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -279,7 +279,7 @@
                 <tbody>
                 <tr v-for="transaction in transactions|filterBy search|orderBy orderByField direction">
                     <td v-if="isActive('type')">
-                        <span class="label label-default" v-text="transaction.type|capitalize"></span>
+                        <span class="label label-default" v-text="transaction.type ? transaction.type[0].toUpperCase() + transaction.type.slice(1) : ''"></span>
                     </td>
                     <td v-if="isActive('description')" v-text="transaction.description"></td>
                     <td v-if="isActive('amount')">

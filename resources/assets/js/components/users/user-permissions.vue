@@ -8,7 +8,7 @@
 
             <div class="row" v-for="role in availableRoles">
                 <div class="col-xs-12">
-                    {{ role.name | capitalize }}
+                    {{ role.name ? role.name[0].toUpperCase() + role.name.slice(1) : '' }}
                     <button class="btn btn-xs btn-default-hollow pull-right"
                             v-if="!hasRole(role)"
                             @click="assign(role)">Assign</button>
@@ -31,9 +31,9 @@
         <div class="panel-body" v-if="showAbilities">
             <div class="row">
                 <div class="col-xs-12" v-for="ability in abilitiesList">
-                    <h5>{{ $key | capitalize }}</h5>
+                    <h5>{{ $key ? $key[0].toUpperCase() + $key.slice(1) : '' }}</h5>
                     <p v-for="item in ability">
-                        {{ item.name | capitalize }}
+                        {{ item.name ? item.name[0].toUpperCase() + item.name.slice(1) : '' }}
                         <button class="btn btn-xs btn-default-hollow pull-right"
                                 v-if="! hasAbility(item)"
                                 @click="allow(item)">Allow</button>

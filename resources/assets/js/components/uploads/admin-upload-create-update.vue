@@ -40,24 +40,24 @@
 				</div>
 			</div>
 		</div>
-		<validator v-if="!isChild||uiSelector===2" name="CreateUpload">
+
 			<form id="CreateUploadForm" class="form" novalidate @submit.prevent="">
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
-							   placeholder="Name" v-validate:name="{ required: true, maxlength:100 }"
+							   placeholder="Name" name="name" v-validate="{ required: true, maxlength:100 }"
 							   maxlength="100" minlength="1" required>
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
 					<label for="tags" class="control-label">Tags</label>
 						<v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
-						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate:tags="{ required:true }">
+						<select hidden id="tags" name="tags" v-model="tags" multiple name="tags" v-validate="'required'">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>
 				</div>
 				<div class="form-group" v-error-handler="{ value: type, handle: 'type' }" v-show="!uiLocked" >
 					<label for="type" class="control-label">Type</label>
-					<select class="form-control" id="type" v-model="type" v-validate:type="{ required: true }" :disabled="lockType">
+					<select class="form-control" id="type" v-model="type" name="type="'required'" :disabled" v-validate="lockType">
 						<option :value="">-- select type --</option>
 						<option value="avatar">Image (Avatar) - 1280 x 1280</option>
 						<option value="banner">Image (Banner) - 1300 x 500</option>
@@ -129,9 +129,9 @@
 					<a @click="update()" v-if="isUpdate" class="btn btn-primary">{{buttonText}}</a>
 				</div>
 			</form>
-		</validator>
 
-		<modal title="Preview" :show.sync="previewModal" effect="zoom" width="400" ok-text="Select" :callback="selectExistingPreview">
+
+		<modal title="Preview" :value="previewModal" @closed="previewModal=false" effect="zoom" width="400" ok-text="Select" :callback="selectExistingPreview">
 			<div slot="modal-body" class="modal-body" v-if="previewUpload">
 				<h5 class="text-center">{{previewUpload.name}}</h5>
 				<img :src="previewUpload.source + '?w=720&fit=max&q=65'" :alt="previewUpload.name" class="img-responsive">

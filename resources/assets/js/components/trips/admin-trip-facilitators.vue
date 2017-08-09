@@ -51,20 +51,20 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-sm-12 text-center">
-								<validator name="AddFacilitator">
+
 									<form class="form-horizontal" novalidate>
 										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 												class="col-sm-2 control-label">User</label>
 											<div class="col-sm-10">
 												<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value.sync="userObj" :options="users"
 														  :on-search="getUsers" label="name"></v-select>
-												<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
+												<select hidden="" v-model="user_id" name="user" v-validate="'required'">
 													<option :value="user.id" v-for="user in users">{{user.name}}</option>
 												</select>
 											</div>
 										</div>
 									</form>
-								</validator>
+
 							</div>
 						</div>
 						<div class="row">

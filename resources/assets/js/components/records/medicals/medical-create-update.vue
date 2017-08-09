@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdateMedicalRelease" @touched="onTouched">
+
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="panel panel-default">
@@ -17,7 +17,7 @@
                             <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                 <label for="infoManager">Record Manager</label>
                                 <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
                                     <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                 </select>
                             </div>
@@ -28,7 +28,7 @@
                             <div v-error-handler="{ value: name, handle: 'name', messages: { req: 'Please enter the release holder\'s name.'} }">
                                 <label for="name" class="control-label">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                       placeholder="Name" v-validate:name="{ required: true, minlength:1 }"
+                                       placeholder="Name" name="name" v-validate="{ required: true, minlength:1 }"
                                        minlength="1" required>
 
                             </div>
@@ -39,7 +39,7 @@
                             <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
                                 <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
-                                       placeholder="Insurance Provider" v-validate:provider="{ required: true, minlength:1, maxlength:100 }"
+                                       placeholder="Insurance Provider" name="provider" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                             <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
                                 <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
                                 <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
-                                       placeholder="Insurance Policy Number" v-validate:policy="{ required: true, minlength:1 }"
+                                       placeholder="Insurance Policy Number" name="policy" v-validate="{ required: true, minlength:1 }"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
@@ -135,14 +135,14 @@
                             </div>
                             <div class="collapse" id="newCondition">
                                 <div class="list-group-item">
-                                    <validator name="NewCondition">
+
                                         <form name="NewCondition">
                                             <label>Name</label>
                                             <input type="text" class="form-control" v-model="newCondition.name" required>
                                             <hr class="divider inv sm">
                                             <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
                                         </form>
-                                    </validator>
+
                                 </div>
                             </div>
                         </div>
@@ -215,14 +215,14 @@
                             </div>
                             <div class="collapse" id="newAllergy">
                                 <div class="list-group-item">
-                                    <validator name="newAllergy">
+
                                         <form name="newAllergy">
                                             <label>Name</label>
                                             <input type="text" class="form-control" v-model="newAllergy.name">
                                             <hr class="divider inv sm">
                                             <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
                                         </form>
-                                    </validator>
+
                                 </div>
                             </div>
                         </div>
@@ -271,7 +271,7 @@
                                     <input type="text" 
                                            class="form-control" 
                                            v-model="emergency_contact.name" 
-                                           v-validate:emergencyname="{ required: true, minlength:1 }"
+                                           name="emergencyname" v-validate="{ required: true, minlength:1 }"
                                            minlength="1" 
                                            required>
                                 </div>
@@ -282,7 +282,7 @@
                                     <input type="email" 
                                            class="form-control" 
                                            v-model="emergency_contact.email" 
-                                           v-validate:emergencyemail="{ required: true, minlength:1, email:true }"
+                                           name="emergencyemail" v-validate="{ required: true, minlength:1, email:true }"
                                            minlength="1" 
                                            required>
                                 </div>
@@ -295,7 +295,7 @@
                                     <input type="tel" 
                                            class="form-control" 
                                            v-model="emergency_contact.phone|phone" 
-                                           v-validate:emergencyphone="{ required: true, minlength:1 }"
+                                           name="emergencyphone" v-validate="{ required: true, minlength:1 }"
                                            minlength="1" 
                                            required>
 
@@ -307,7 +307,7 @@
                                     <select type="tel" 
                                             class="form-control" 
                                             v-model="emergency_contact.relationship" 
-                                            v-validate:emergencyrelationship="{ required: true }"
+                                            name="emergencyrelationship" v-validate="'required'"
                                             required>
                                         <option value="friend">Friend</option>
                                         <option value="spouse">Spouse</option>
@@ -332,18 +332,18 @@
             </div>
         </form>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
             </div>
         </modal>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
 
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

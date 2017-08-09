@@ -111,7 +111,7 @@
             <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 
-        <modal class="text-center" v-if="isManager()" :show.sync="deleteModal" title="Delete Story" small="true">
+        <modal class="text-center" v-if="isManager()" :value="deleteModal" @closed="deleteModal=false" title="Delete Story" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

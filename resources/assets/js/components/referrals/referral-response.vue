@@ -1,7 +1,7 @@
 <template>
     <section>
         <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
-        <validator name="validation" :classes="{ invalid: 'has-error' }">
+
         <div class="form-group" v-for="item in referral.response" :class="{ 'has-error' : $validation.item.invalid}">
             <label for="item_{{ $index }}">{{ item.q }}</label>
 
@@ -12,10 +12,10 @@
                 </p>
             </span>
             <span v-else>
-                <textarea id="item_{{ $index }}" class="form-control" v-model="item.a" rows="5" initial="off" v-validate:item="{required: true}"></textarea>
+                <textarea id="item_{{ $index }}" class="form-control" v-model="item.a" rows="5" initial="off" name="item" v-validate="'required'"></textarea>
             </span>
         </div>
-        </validator>
+
         <div class="form-group text-center">
             <button class="btn btn-default" @click="reset">Clear</button>
             <button class="btn btn-primary" @click="save">Submit</button>

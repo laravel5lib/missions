@@ -42,7 +42,7 @@
                     <a href="/admin/reservations/{{ companion.id }}">
                         <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" companion.given_names ">
                         {{ companion.given_names }} {{ companion.surname }}
-                        <small> &middot; <em>{{ companion.relationship | capitalize }}</em></small>
+                        <small> &middot; <em>{{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }}</em></small>
                     </a>
                 </h5>
             </div>
@@ -54,7 +54,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                         <h4 class="modal-title">Join Companions</h4></div>
                     <div class="modal-body">
-                        <validator name="AddCompanion">
+
                             <form novalidate>
                                 <div class="form-group">
                                     <label class="control-label">Relationship</label>
@@ -70,12 +70,12 @@
                                     <label class="control-label">Reservation</label>
                                     <span class="help-block" v-show="reservations.length < 1"><i class="fa fa-warning"></i> If your search yields no options it could mean (1) the reservation does not exist or (2) the reservation belongs to another group or campaign.</span>
                                     <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
-                                    <!-- <select hidden="" v-model="newCompanion.companion_reservation_id" v-validate:reservation="{ required: true}">
+                                    <!-- <select hidden="" v-model="newCompanion.companion_reservation_id" name="reservation" v-validate="'required'">
                                         <option :value="reservation.id" v-for="reservation in reservations">{{reservation.name}}</option>
                                     </select> -->
                                 </div>
                             </form>
-                        </validator>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>

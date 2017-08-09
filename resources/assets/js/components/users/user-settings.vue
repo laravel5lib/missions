@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-    <validator name="UserSettings" @touched="onTouched">
+
         <form id="UserSettingsForm" class="" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="row">
@@ -51,7 +51,7 @@
                                     <div class="col-sm-12">
                                         <label for="name">Name</label>
                                         <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                               placeholder="User Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                                               placeholder="User Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                                maxlength="100" minlength="1" required>
                                     </div>
                                 </div>
@@ -59,7 +59,7 @@
                                     <div class="col-sm-12">
                                         <label for="name">Email</label>
                                         <input type="email" class="form-control" name="email" id="email" v-model="email"
-                                               v-validate:email="{ required: true, minlength:1, maxlength:100 }">
+                                               name="email" v-validate="{ required: true, minlength:1, maxlength:100 }">
                                         <div v-show="errors.email" class="help-block">{{errors.email}}</div>
                                     </div>
                                 </div>
@@ -84,7 +84,7 @@
                                             <div class="col-sm-6">
                                                 <div class="input-group" :class="{ 'has-error': errors.has('password') }">
                                                     <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                                           v-validate:password="{ minlength:8 }" placeholder="Enter password">
+                                                           name="password="{ minlength:8 }" placeholder" v-validate="Enter password">
                                                     <span class="input-group-btn">
                                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -96,7 +96,7 @@
                                             <div class="col-sm-6">
                                                 <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
                                                     <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
-                                                           v-validate:passwordconfirmation="{ minlength:8 }" placeholder="Enter password again">
+                                                           name="passwordconfirmation="{ minlength:8 }" placeholder" v-validate="Enter password again">
                                                     <span class="input-group-btn">
                                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
                                                         <i class="fa fa-eye" v-if="!showPassword"></i>
@@ -151,7 +151,7 @@
                                     <label for="gender" class="col-sm-3">Gender</label>
                                     <div class="col-sm-9">
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate:gender="{required: {rule: true}}"> Male
+                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" name="gender" v-validate="{required: {rule: true}}"> Male
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
@@ -189,7 +189,7 @@
                                     <label for="url" class="control-label">Url Slug</label>
                                     <div class="input-group">
                                         <span class="input-group-addon">www.missions.me/</span>
-                                        <input type="text" id="url" v-model="url" class="form-control" required v-validate:url="{ required: !!public }"/>
+                                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="{ required: !!public }"/>
                                     </div>
                                 </div>
                             </div>
@@ -237,7 +237,7 @@
                                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
                                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }" >
+                                        <select hidden name="country" id="country" class="hidden" v-model="country_code" name="country" v-validate="'required'" >
                                             <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                                         </select>
                                     </div>
@@ -247,7 +247,7 @@
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
                                     <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="UTILITIES.timezones"></v-select>
-                                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate:timezone="{ required: true }">
+                                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" name="timezone" v-validate="'required'">
                                         <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                                     </select>
                                 </div>
@@ -324,11 +324,11 @@
                     </div><!-- end col -->
                 </div><!-- end row -->
 
-                <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+                <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                     <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
                 </modal>
             </form>
-        </validator>
+
     </div>
 </template>
 <style>

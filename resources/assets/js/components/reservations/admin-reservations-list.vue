@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+		<mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
 			<reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
 		</mm-aside>
 
@@ -237,8 +237,8 @@
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
 					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
-					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
-					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
+					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name ? reservation.trip.data.group.data.name[0].toUpperCase() + reservation.trip.data.group.data.name.slice(1) : ''"></td>
+					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name ? reservation.trip.data.campaign.data.name[0].toUpperCase() + reservation.trip.data.campaign.data.name.slice(1) : ''"></td>
 					<td v-if="isActive('teams')">
 						<template v-if="reservation.squads.data.length">
 							<span v-for="squad in reservation.squads.data">
@@ -251,17 +251,17 @@
 							No Team
 						</template>
 					</td>
-					<td v-if="isActive('fund')"><a :href="'/admin/funds/'+reservation.fund.data.id" target="_blank">{{ reservation.fund.data.name|capitalize }}</a></td>
-					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
+					<td v-if="isActive('fund')"><a :href="'/admin/funds/'+reservation.fund.data.id" target="_blank">{{ reservation.fund.data.name ? reservation.fund.data.name[0].toUpperCase() + reservation.fund.data.name.slice(1) : '' }}</a></td>
+					<td v-if="isActive('type')" v-text="reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : ''"></td>
 					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
 					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
 					<td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
 					<td v-if="isActive('dropped')" v-text="reservation.deleted_at|moment('ll')"></td>
-					<td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
-					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
+					<td v-if="isActive('gender')" v-text="reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''"></td>
+					<td v-if="isActive('status')" v-text="reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''"></td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-					<td v-if="isActive('designation')" v-text="reservation.arrival_designation|capitalize"></td>
+					<td v-if="isActive('email')" v-text="reservation.user.data.email ? reservation.user.data.email[0].toUpperCase() + reservation.user.data.email.slice(1) : ''"></td>
+					<td v-if="isActive('designation')" v-text="reservation.arrival_designation ? reservation.arrival_designation[0].toUpperCase() + reservation.arrival_designation.slice(1) : ''"></td>
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
 							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
@@ -278,7 +278,7 @@
 							</popover>
 						</div>
 					</td>
-					<td v-if="isActive('rep')" v-text="reservation.rep.data.name|capitalize"></td>
+					<td v-if="isActive('rep')" v-text="reservation.rep.data.name ? reservation.rep.data.name[0].toUpperCase() + reservation.rep.data.name.slice(1) : ''"></td>
 					<td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
 				</tr>
 				</tbody>

@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<div v-if="activity">
-			<validator name="TravelActivity">
+
 				<form id="TravelActivityForm" novalidate>
 					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.name, client: 'name' }">
 						<label for="">Name</label>
 						<template v-if="editMode">
-							<input type="text" class="form-control" v-model="activity.name" v-validate:name="['required']">
+							<input type="text" class="form-control" v-model="activity.name" name="name" v-validate="['required']">
 						</template>
 						<p v-else>{{ activity.name | uppercase }}</p>
 					</div>
@@ -20,7 +20,7 @@
 					<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: activity.description, client: 'description', messages: { req: 'Please provide an explanation.'} }">
 						<label for="">Please explain why you don't need Missions.Me to arrange transportation.</label>
 						<template v-if="editMode">
-							<textarea type="text" class="form-control" v-model="activity.description" v-validate:description="['required']"></textarea>
+							<textarea type="text" class="form-control" v-model="activity.description" name="description" v-validate="['required']"></textarea>
 						</template>
 						<p v-else>{{ activity.description | uppercase }}</p>
 					</div>
@@ -29,13 +29,13 @@
 						<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true" v-if="editMode"></date-picker>
 						<p v-else>{{ activity.occurred_at | moment('LLLL') false true }}</p>
 						<input type="text" class="form-control hidden" v-model="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-						       id="occurred_at" v-validate:occurred="['required', 'datetime']">
+						       id="occurred_at" name="occurred" v-validate="['required', 'datetime']">
 					</div>
 					<!--<template v-if="isUpdate && editMode">
 						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Arrival</button>
 					</template>-->
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>

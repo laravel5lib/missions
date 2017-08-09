@@ -1,5 +1,5 @@
 <template>
-    <validator name="CreateUpdateReferral" @touched="onTouched">
+
         <form id="CreateUpdateReferral" class="form-horizontal" novalidate style="postition:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             
@@ -8,7 +8,7 @@
                     <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
                     </div>
@@ -19,7 +19,7 @@
                 <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
                     <label for="author" class="control-label">Applicant Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-                       placeholder="Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                       placeholder="Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
             </div>
@@ -27,13 +27,13 @@
                 <div class="col-sm-6" v-error-handler="{ value: attention_to, client: 'attentionto', server: 'attention_to' }">
                     <label for="author" class="control-label">Attention to</label>
                     <input type="text" class="form-control" name="attention_to" id="attention_to" v-model="attention_to"
-                           placeholder="Attention to" v-validate:attentionto="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Attention to" name="attentionto" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
                 <div class="col-sm-6" v-error-handler="{ value: recipient_email, client: 'recipientemail', server: 'recipient_email' }">
                     <label for="author" class="control-label">Recipient Email</label>
                     <input type="text" class="form-control" name="recipient_email" id="recipient_email" v-model="recipient_email"
-                           placeholder="Recipient Email" v-validate:recipientemail="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Recipient Email" name="recipientemail" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
             </div>
@@ -42,13 +42,13 @@
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('referraltitle') }">
                     <label for="author" class="control-label">Referral Title/Position</label>
                     <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
-                       placeholder="Referral title or position" v-validate:referraltitle="{ required: true, minlength:1, maxlength:100 }"
+                       placeholder="Referral title or position" name="referraltitle" v-validate="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('referralname') }">
                     <label for="author" class="control-label">Referral Name</label>
                     <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referrer.name"
-                       placeholder="Referral Name" v-validate:referralname="{ required: true, minlength:1, maxlength:100 }"
+                       placeholder="Referral Name" name="referralname" v-validate="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
             </div>
@@ -56,13 +56,13 @@
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('referralorg') }">
                     <label for="author" class="control-label">Referral Organization</label>
                     <input type="text" class="form-control" name="referral_organization" id="referral_organization" v-model="referrer.organization"
-                       placeholder="Referral Name" v-validate:referralorg="{ required: true, minlength:1, maxlength:100 }"
+                       placeholder="Referral Name" name="referralorg" v-validate="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
                 <div class="col-sm-3" :class="{ 'has-error': errors.has('referralphone') }">
                     <label for="author" class="control-label">Referral Phone</label>
                     <input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referrer.phone|phone"
-                       placeholder="Referral Phone" v-validate:referralphone="{ required: true, minlength:1, maxlength:100 }"
+                       placeholder="Referral Phone" name="referralphone" v-validate="{ required: true, minlength:1, maxlength:100 }"
                        maxlength="150" minlength="1" required>
                 </div>
             </div>
@@ -77,11 +77,11 @@
                 </div>
             </div>
         </form>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
 
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

@@ -35,27 +35,27 @@
             </tbody>
         </table>
 
-        <modal title="Add Deadlines" :show.sync="showAddModal" effect="fade" width="800" :callback="addDeadlines">
+        <modal title="Add Deadlines" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addDeadlines">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddDeadline">
+
                     <form class="form-horizontal" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('deadlines') }"><label
                                 class="col-sm-2 control-label">Available Deadlines</label>
                             <div class="col-sm-10">
                                 <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
                                           label="name"></v-select>
-                                <select hidden="" v-model="user_id" v-validate:deadlines="{ required: true }" multiple>
+                                <select hidden="" v-model="user_id" name="deadlines" v-validate="'required'" multiple>
                                     <option :value="deadline.id" v-for="deadline in deadlines">{{deadline.name}}</option>
                                 </select></div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal title="Edit Deadline" :show.sync="showEditModal" effect="fade" width="800" :callback="update">
+        <modal title="Edit Deadline" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="update">
             <div slot="modal-body" class="modal-body">
-                <validator name="EditDeadline">
+
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
@@ -63,26 +63,26 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditDeadlineError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDeadline.grace_period"
-                                               v-validate:grace="{required: true, min:0}">
+                                               name="grace" v-validate="{required: true, min:0}">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal title="New Deadline" :show.sync="showNewModal" effect="fade" width="800" :callback="addNew">
+        <modal title="New Deadline" :value="showNewModal" @closed="showNewModal=false" effect="fade" width="800" :callback="addNew">
             <div slot="modal-body" class="modal-body">
-                <validator name="NewDeadline">
+
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group" :class="{'has-error': checkForNewDeadlineError('name')}">
                                     <label for="name">Name</label>
-                                    <input type="text" id="name" v-model="newDeadline.name" v-validate:name="{require:true}" class="form-control input-sm">
+                                    <input type="text" id="name" v-model="newDeadline.name" name="name="{require:true}" class" v-validate="form-control input-sm">
                                 </div>
 
                                 <div class="row">
@@ -91,7 +91,7 @@
                                             <label for="grace_period">Grace Period</label>
                                             <div class="input-group input-group-sm" :class="{'has-error': checkForNewDeadlineError('grace') }">
                                                 <input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
-                                                       v-validate:grace="{required: true, min:0}">
+                                                       name="grace" v-validate="{required: true, min:0}">
                                                 <span class="input-group-addon">Days</span>
                                             </div>
                                         </div>
@@ -101,7 +101,7 @@
                                             <label for="due_at">Due</label>
                                             <date-picker :input-sm="true" :model.sync="newDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                             <input type="datetime" id="due_at" class="form-control input-sm hidden"
-                                                   v-model="newDeadline.date" v-validate:due="{required: true}">
+                                                   v-model="newDeadline.date" name="due" v-validate="'required'">
                                         </div>
 
                                     </div>
@@ -117,7 +117,7 @@
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
     </div>

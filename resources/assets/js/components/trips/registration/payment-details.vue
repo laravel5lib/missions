@@ -114,7 +114,7 @@
 						</div>
 					</div><!-- end alert -->
 					<div class="well" v-if="upfrontTotal > 0">
-						<validator name="PaymentDetails">
+
 							<form novalidate role="form">
 								<div class="row">
 									<div class="col-sm-12 col-md-6">
@@ -123,7 +123,7 @@
 											<div class="input-group">
 												<span class="input-group-addon input-sm"><span class="fa fa-user"></span></span>
 												<input type="text" class="form-control input-sm" id="cardHolderName" placeholder="Name on card"
-													   v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+													   v-model="cardHolderName" name="cardHolderName" v-validate="'required'" autofocus/>
 											</div>
 										</div>
 									</div>
@@ -133,7 +133,7 @@
 											<div class="input-group">
 												<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
 												<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
-													   v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+													   v-model="cardNumber" name="cardNumber" v-validate="{ required: true, maxlength: 19 }"
 													   @keyup="formatCard($event)" maxlength="19"/>
 											</div>
 											<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
@@ -146,14 +146,14 @@
 										<div class="row">
 											<div class="col-xs-6 col-lg-6">
 												<div class="form-group" :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
-													<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" v-validate:month="{ required: true }">
+													<select v-model="cardMonth" class="form-control input-sm" id="expiryMonth" name="month" v-validate="'required'">
 														<option v-for="month in monthList" :value="month">{{month}}</option>
 													</select>
 												</div>
 											</div>
 											<div class="col-xs-6 col-lg-6">
 												<div class="form-group" :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
-													<select v-model="cardYear" class="form-control input-sm" id="expiryYear" v-validate:year="{ required: true }">
+													<select v-model="cardYear" class="form-control input-sm" id="expiryYear" name="year" v-validate="'required'">
 														<option v-for="year in yearList" :value="year">{{year}}</option>
 													</select>
 												</div>
@@ -165,7 +165,7 @@
 											<label for="cvCode">
 												CV CODE</label>
 											<input type="text" class="form-control input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
-												   placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 4 }"/>
+												   placeholder="CV" name="code" v-validate="{ required: true, minlength: 3, maxlength: 4 }"/>
 										</div>
 									</div>
 								</div>
@@ -173,13 +173,13 @@
 									<div class="col-sm-7">
 										<div class="form-group" :class="{ 'has-error': errors.has('email') }">
 											<label for="infoEmailAddress">Billing Email Address</label>
-											<input type="text" class="form-control input-sm" v-model="cardEmail" v-validate:email="['email']" id="infoEmailAddress">
+											<input type="text" class="form-control input-sm" v-model="cardEmail" name="email="['email']" id" v-validate="infoEmailAddress">
 										</div>
 									</div>
 									<div class="col-sm-5">
 										<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
 											<label for="infoZip">Billing ZIP/Postal Code</label>
-											<input type="text" class="form-control input-sm" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+											<input type="text" class="form-control input-sm" v-model="cardZip" name="zip="'required'" id="infoZip" placeholder" v-validate="12345">
 										</div>
 									</div>
 									<!--<div class="col-sm-12">-->
@@ -200,7 +200,7 @@
 									</label>
 								</div>
 							</form>
-						</validator>
+
 					</div>
 				</div>
 			</div>

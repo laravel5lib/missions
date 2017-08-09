@@ -24,7 +24,7 @@
             <template v-for="cost in project.costs.data">
                 <tr>
                     <!--<td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</small>
                     </td>-->
                     <td class="text-muted">
 
@@ -32,7 +32,7 @@
                         <i class="fa fa-unlock" v-else @click="costLocking(cost, true)"></i>
                     </td>
                     <td>{{ cost.name || cost.cost }}</td>
-                    <td>{{ cost.type|capitalize}}</td>
+                    <td>{{ cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : ''}}</td>
                     <td>{{ cost.amount| currency }}</td>
                     <td>
                         <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
@@ -42,24 +42,22 @@
             </tbody>
         </table>
 
-        <modal title="Add Costs" :show.sync="showAddModal" effect="fade" width="800" :callback="addCosts">
+        <modal title="Add Costs" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addCosts">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddCost">
-                    <form class="for" novalidate>
-                        <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
-                            <label class="control-label">Available Costs</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
-                                      label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:costs="{ required: true }" multiple>
-                                <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                            </select>
-                        </div>
-                    </form>
-                </validator>
+                <form name="AddCost" class="for" novalidate>
+                    <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
+                        <label class="control-label">Available Costs</label>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                                  label="name"></v-select>
+                        <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
+                            <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
+                        </select>
+                    </div>
+                </form>
             </div>
         </modal>
 
-        <modal class="text-center" :show.sync="deleteModal" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

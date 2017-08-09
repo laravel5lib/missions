@@ -8,10 +8,10 @@
             <div class="col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips">
                 <div class="panel panel-default">
                     <div class="panel-heading" :class="'panel-' + trip.type">
-                        <h5 class="text-uppercase text-center">{{ trip.type|capitalize }} Trip</h5>
+                        <h5 class="text-uppercase text-center">{{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }} Trip</h5>
                     </div><!-- end panel-heading -->
                     <div class="panel-body text-center">
-                        <p class="badge">{{ trip.status | capitalize }}</p><br>
+                        <p class="badge">{{ trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : '' }}</p><br>
                         <img :src="trip.campaign.data.avatar" :alt=" trip.campaign.data.name " class="img-circle img-md">
                         <h4>{{ trip.campaign.data.name }}</h4>
                         <p class="small">{{ trip.country_name }}</p>

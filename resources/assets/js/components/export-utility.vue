@@ -4,9 +4,9 @@
             Export <span class="fa fa-download"></span>
         </button>
 
-        <modal title="Export List" :show.sync="showExportModal" effect="zoom" width="400" ok-text="Export" :callback="exportList">
+        <modal title="Export List" :value="showExportModal" @closed="showExportModal=false" effect="zoom" width="400" ok-text="Export" :callback="exportList">
             <div slot="modal-body" class="modal-body">
-                <validator name="validation" :classes="{ invalid: 'has-error' }">
+
                     <div class="row">
                         <div class="col-sm-12">
                             <label>Filename</label>
@@ -33,13 +33,13 @@
                                            v-model="exportSettings.fields"
                                            :value="key"
                                            initial="off"
-                                           v-validate:fields="{required: { rule: true, message: 'At least one field is required.' }}">
+                                           name="fields" v-validate="{required: { rule: true, message: 'At least one field is required.' }}">
                                     {{ value }}
                                 </label>
                             </div>
                         </div>
                     </div>
-                </validator>
+
             </div>
         </modal>
     </div>

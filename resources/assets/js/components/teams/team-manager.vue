@@ -34,7 +34,7 @@
 
 		<div class="row" style="position:relative;">
 			<spinner ref="spinner" size="sm" text="Loading"></spinner>
-			<mm-aside :show.sync="showTeamsFilters" placement="left" header="Team Filters" :width="375">
+			<mm-aside :show="showTeamsFilters" @open="showTeamsFilters=true" @close="showTeamsFilters=false" placement="left" header="Team Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
 
@@ -49,10 +49,10 @@
 					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetTeamFilter()"><i class="fa fa-times"></i> Reset Team Filters</button>
 				</form>
 			</mm-aside>
-			<mm-aside :show.sync="showReservationsFilters" placement="left" header="Reservation Filters" :width="375">
+			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
 				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
 			</mm-aside>
-			<mm-aside :show.sync="showMembersFilters" placement="left" header="Members Filters" :width="375">
+			<mm-aside :show="showMembersFilters" @open="showMembersFilters=true" @close="showMembersFilters=false" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
 				<form class="col-sm-12">
 
@@ -131,7 +131,7 @@
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname ? member.surname[0].toUpperCase() + member.surname.slice(1) : '' }}, {{ member.given_names ? member.given_names[0].toUpperCase() + member.given_names.slice(1) : '' }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
@@ -167,9 +167,9 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																			<label>Gender</label>
-																			<p class="small">{{member.gender | capitalize}}</p>
+																			<p class="small">{{member.gender ? member.gender[0].toUpperCase() + member.gender.slice(1) : ''}}</p>
 																			<label>Marital Status</label>
-																			<p class="small">{{member.status | capitalize}}</p>
+																			<p class="small">{{member.status ? member.status[0].toUpperCase() + member.status.slice(1) : ''}}</p>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -183,15 +183,15 @@
 																		<ul class="list-unstyled" v-if="member.companions.data.length">
 																			<li v-for="companion in member.companions.data">
 																				<i :class="getGenderStatusIcon(companion)"></i>
-																				{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-																				<span class="text-muted">({{ companion.relationship | capitalize }})</span>
+																				{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }}
+																				<span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
 																			</li>
 																		</ul>
 																		<p class="small" v-else>None</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Trip Type</label>
-																		<p class="small">{{member.trip.data.type | capitalize}}</p>
+																		<p class="small">{{member.trip.data.type ? member.trip.data.type[0].toUpperCase() + member.trip.data.type.slice(1) : ''}}</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Designation</label>
@@ -260,7 +260,7 @@
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname ? member.surname[0].toUpperCase() + member.surname.slice(1) : '' }}, {{ member.given_names ? member.given_names[0].toUpperCase() + member.given_names.slice(1) : '' }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
@@ -308,9 +308,9 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																			<label>Gender</label>
-																			<p class="small">{{member.gender | capitalize}}</p>
+																			<p class="small">{{member.gender ? member.gender[0].toUpperCase() + member.gender.slice(1) : ''}}</p>
 																			<label>Marital Status</label>
-																			<p class="small">{{member.status | capitalize}}</p>
+																			<p class="small">{{member.status ? member.status[0].toUpperCase() + member.status.slice(1) : ''}}</p>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -323,15 +323,15 @@
 																			<ul class="list-unstyled" v-if="member.companions.data.length">
 																				<li v-for="companion in member.companions.data">
 																					<i :class="getGenderStatusIcon(companion)"></i>
-																					{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
-																					<span class="text-muted">({{ companion.relationship | capitalize }})</span>
+																					{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }}
+																					<span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
 																				</li>
 																			</ul>
 																			<p class="small" v-else>None</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Trip Type</label>
-																			<p class="small">{{member.trip.data.type | capitalize}}</p>
+																			<p class="small">{{member.trip.data.type ? member.trip.data.type[0].toUpperCase() + member.trip.data.type.slice(1) : ''}}</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Designation</label>
@@ -372,9 +372,9 @@
 								<div class="col-sm-4">
 									<label for="" class="control-label">Type</label>
 									<!--<select v-if="isAdminRoute && editTeamMode" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
-										<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
+										<option :value="type.id" v-for="type in teamTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
 									</select>-->
-									<p v-text="currentTeam.type.data.name | capitalize"></p>
+									<p v-text="currentTeam.type.data.name ? currentTeam.type.data.name[0].toUpperCase() + currentTeam.type.data.name.slice(1) : ''"></p>
 								</div>
 								<div class="col-sm-2">
 									<label for="" class="control-label">Locked</label>
@@ -517,8 +517,8 @@
 										<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													{{ team.callsign | capitalize }}
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													{{ team.callsign ? team.callsign[0].toUpperCase() + team.callsign.slice(1) : '' }}
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name ? team.type.data.name[0].toUpperCase() + team.type.data.name.slice(1) : ''"></span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
@@ -615,7 +615,7 @@
 																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																<i :class="getGenderStatusIcon(reservation)"></i>
 																<a :href="getReservationLink(reservation)" target="_blank">
-																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
+																{{ reservation.surname ? reservation.surname[0].toUpperCase() + reservation.surname.slice(1) : '' }}, {{ reservation.given_names ? reservation.given_names[0].toUpperCase() + reservation.given_names.slice(1) : '' }}</a></h6>
 																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 															</div><!-- end media-body -->
 														</div><!-- end media -->
@@ -658,9 +658,9 @@
 												<div class="row">
 													<div class="col-sm-6">
 														<label>Gender</label>
-														<p class="small">{{reservation.gender | capitalize}}</p>
+														<p class="small">{{reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''}}</p>
 														<label>Marital Status</label>
-														<p class="small">{{reservation.status | capitalize}}</p>
+														<p class="small">{{reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''}}</p>
 													</div><!-- end col -->
 													<div class="col-sm-6">
 														<label>Age</label>
@@ -673,18 +673,18 @@
 														<ul class="list-unstyled" v-if="reservation.companions.data.length">
 															<li v-for="companion in reservation.companions.data">
 																<i :class="getGenderStatusIcon(companion)"></i>
-																{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
+																{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }} <span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
 															</li>
 														</ul>
 														<p class="small" v-else>None</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Trip Type</label>
-														<p class="small">{{reservation.trip.data.type | capitalize}}</p>
+														<p class="small">{{reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : ''}}</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Designation</label>
-														<p class="small">{{reservation.arrival_designation | capitalize}}</p>
+														<p class="small">{{reservation.arrival_designation ? reservation.arrival_designation[0].toUpperCase() + reservation.arrival_designation.slice(1) : ''}}</p>
 													</div>
 												</div><!-- end row -->
 											</div>
@@ -704,18 +704,18 @@
 			</div>
 
 			<!-- Modals -->
-			<modal title="Create a new Squad" small ok-text="Create" :callback="newTeam" :show.sync="showTeamCreateModal">
+			<modal title="Create a new Squad" small ok-text="Create" :callback="newTeam" :value="showTeamCreateModal" @closed="showTeamCreateModal=false">
 				<div slot="modal-body" class="modal-body">
-					<validator name="TeamCreate">
+
 						<form id="TeamCreateForm">
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
 								<label for="createTeamCallsign" class="control-label">Squad Name</label>
-								<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" v-validate:teamcallsign="['required']" v-model="newTeamCallSign">
+								<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" name="teamcallsign="['required']" v-model" v-validate="newTeamCallSign">
 							</div>
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
 								<label for="" class="control-label">Type</label>
-								<select class="form-control" v-model="newTeamType" v-validate:teamtype="['required']">
-									<option :value="type.id" v-for="type in teamTypes">{{type.name | capitalize}}</option>
+								<select class="form-control" v-model="newTeamType" name="teamtype" v-validate="['required']">
+									<option :value="type.id" v-for="type in teamTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
 								</select>
 							</div>
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
@@ -723,57 +723,57 @@
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 										  :value.sync="newTeamGroup" :options="groupsOptions" label="name"
 										  placeholder="Assign Travel Group"></v-select>
-								<select class="hidden" v-model="newTeamGroup" v-validate:teamgroup="['required']">
-									<option :value="group" v-for="group in groupsOptions">{{group.name | capitalize}}</option>
+								<select class="hidden" v-model="newTeamGroup" name="teamgroup" v-validate="['required']">
+									<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
 								</select>
 							</div>
 						</form>
-					</validator>
+
 				</div>
 			</modal>
-			<modal title="Delete Squad" small ok-text="Delete" :callback="deleteTeam" :show.sync="showTeamDeleteModal">
+			<modal title="Delete Squad" small ok-text="Delete" :callback="deleteTeam" :value="showTeamDeleteModal" @closed="showTeamDeleteModal=false">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
 						Are you sure you want to delete {{selectedSquadObj.callsign}} ?
 					</p>
 				</div>
 			</modal>
-			<modal title="Delete Group" small ok-text="Delete" :callback="deleteSquad" :show.sync="showSquadDeleteModal">
+			<modal title="Delete Group" small ok-text="Delete" :callback="deleteSquad" :value="showSquadDeleteModal" @closed="showSquadDeleteModal=false">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="selectedSquadObj">
 						Are you sure you want to delete {{selectedSquadObj.callsign}} ?
 					</p>
 				</div>
 			</modal>
-			<modal title="Remove Association" small ok-text="Remove" :callback="removeAssociation" :show.sync="removeAssociationData.show">
+			<modal title="Remove Association" small ok-text="Remove" :callback="removeAssociation" :value="removeAssociationData.show" @closed="removeAssociationData.show=false">
 				<div slot="modal-body" class="modal-body">
 					<p v-if="removeAssociationData.object">
 						Are you sure you want to disassociate {{removeAssociationData.object.name}} with this Team ?
 					</p>
 				</div>
 			</modal>
-			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :show.sync="showSquadCreateModal">
+			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :value="showSquadCreateModal" @closed="showSquadCreateModal=false">
 				<div slot="modal-body" class="modal-body">
-					<validator name="SquadCreate">
+
 						<form id="SquadCreateForm">
 							<div class="form-group" :class="{'has-error': $SquadCreate.squadcallsign.invalid}">
 								<label for="createSquadCallsign" class="control-label">Group Name</label>
-								<input @keydown.enter.prevent="newSquad" type="text" class="form-control" id="createSquadCallsign" placeholder="" v-validate:squadcallsign="['required']" v-model="newSquadCallsign">
+								<input @keydown.enter.prevent="newSquad" type="text" class="form-control" id="createSquadCallsign" placeholder="" name="squadcallsign="['required']" v-model" v-validate="newSquadCallsign">
 							</div>
 						</form>
-					</validator>
+
 				</div>
 			</modal>
-			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :show.sync="showSquadUpdateModal">
+			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :value="showSquadUpdateModal" @closed="showSquadUpdateModal=false">
 				<div slot="modal-body" class="modal-body">
-					<validator name="SquadEdit" v-if="selectedSquadObj">
+
 						<form id="SquadEditForm">
 							<div class="form-group" :class="{'has-error': $SquadEdit.editsquadcallsign.invalid}">
 								<label for="createSquadCallsign" class="control-label">Group Name</label>
-								<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" v-validate:editsquadcallsign="['required']" v-model="editSquadCallsign">
+								<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" name="editsquadcallsign="['required']" v-model" v-validate="editSquadCallsign">
 							</div>
 						</form>
-					</validator>
+
 				</div>
 			</modal>
 		</div>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -98,9 +98,9 @@
                 <tbody>
                 <tr v-for="upload in uploads">
                     <td><img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/></td>
-                    <td v-text="upload.name|capitalize"></td>
-                    <td v-text="upload.type|capitalize"></td>
-                    <td v-text="upload.tags|capitalize"></td>
+                    <td v-text="upload.name ? upload.name[0].toUpperCase() + upload.name.slice(1) : ''"></td>
+                    <td v-text="upload.type ? upload.type[0].toUpperCase() + upload.type.slice(1) : ''"></td>
+                    <td v-text="upload.tags ? upload.tags[0].toUpperCase() + upload.tags.slice(1) : ''"></td>
                     <td v-text="upload.created_at|moment('ll')"></td>
                     <td v-text="upload.updated_at|moment('ll')"></td>
                     <td class="text-center"><a href="/admin{{upload.links[0].uri}}/edit"><i class="fa fa-gear"></i></a></td>

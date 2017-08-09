@@ -1,21 +1,20 @@
 <template>
 	<div>
-		<validator name="SponsorProjectForm">
-			<form class="form-horizontal" novalidate>
+		<form name="SponsorProjectForm" class="form-horizontal" novalidate>
 				<div class="form-group">
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('cause') }">
-						<label for="name">Choose a cause to support</label>
-						<select class="form-control" v-model="causeId" v-validate:cause="['required']">
+						<label for="cause">Choose a cause to support</label>
+						<select class="form-control" v-model="causeIdentifier" v-validate="'required'" name="cause" id="cause">
 							<option value="">Select a Cause</option>
 							<option :value="cause.id" v-for="cause in causes" v-text="cause.name"></option>
 						</select>
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('country') }">
-						<label for="name">Select a location</label>
+						<label for="country">Select a location</label>
 						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
 						<select name="country" id="country" class="form-control" v-model="country_code"
-								v-validate:country="{ required: true }">
+								v-validate="'required'">
 							<option value="">Select a Country</option>
 							<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>
 						</select>
@@ -24,15 +23,15 @@
 				<div class="form-group">
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('initiative') }">
 						<label for="initiative">Select a type</label>
-						<select class="form-control" v-model="initiativeId" v-validate:initiative="['required']">
+						<select class="form-control" v-model="initiativeIdentifier" v-validate="'required'" name="initiative">
 							<option value="">Select a type</option>
 							<option :value="initiative.id" v-for="initiative in availableInitiatives"
-									v-text="initiative.type|capitalize"></option>
+									v-text="initiative.type ? initiative.type[0].toUpperCase() + initiative.type.slice(1) : ''"></option>
 						</select>
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('end') }">
 						<label for="name">Desired Completion Date</label>
-						<select class="form-control" v-validate:end="['required']" v-model="complete_at" required>
+						<select class="form-control" v-validate="'required'" name="end" v-model="complete_at" required>
 							<option value="June 2017">June 2017</option>
 							<option value="Dec. 2017">December 2017</option>
 							<option value="June 2018">June 2018</option>
@@ -40,7 +39,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group" v-if="initiativeId">
+				<div class="form-group" v-if="initiativeIdentifier">
 					<div class="col-sm-12">
 						<label for="name">Project Description</label>
 						<p v-text="initiative.short_desc"></p>
@@ -57,14 +56,14 @@
 						<input type="text" class="form-control" name="project_name" id="project_name"
 							   v-model="project_name"
 							   placeholder="Annie's Water Well"
-							   v-validate:projectname="{ required: true, minlength:1, maxlength:100 }"
+							   name="projectname" v-validate="'required|min:1|max:100'"
 							   maxlength="100" minlength="1" required>
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
 						<label for="name">Your Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
 							   placeholder="Annie Smith"
-							   v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+							   name="name" v-validate="'required|min:1|max:100'"
 							   maxlength="100" minlength="1" required>
 					</div>
 				</div>
@@ -73,12 +72,10 @@
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
 						<label for="name">Your Email</label>
 						<input type="text" class="form-control" name="email" id="email" v-model="email"
-							   v-validate:email="['required']">
+							   name="email" v-validate="'required'">
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('phone') }">
-						<label for="name">Your Phone</label>
-						<input type="tel" class="form-control" v-model="phone_one | phone" id="infoPhone"
-							   placeholder="123-456-7890" v-validate:phone="['required', 'phone']">
+						<phone-input v-model="phone_one" label="Your Phone" v-validate="'required'" data-vv-value-path="phone_one" data-vv-name="phone" :has-error="errors.has('phone')"></phone-input>
 					</div>
 				</div>
 
@@ -88,10 +85,10 @@
 					</div>
 				</div>
 			</form>
-		</validator>
 	</div>
 </template>
 <script type="text/javascript">
+	import $ from 'jquery';
 	import vSelect from "vue-select";
 	export default{
 		name: 'sponsor-project-form',
@@ -124,7 +121,8 @@
 				initiatives: [],
 				availableInitiatives: [],
 				countryCodeObj: null,
-				country: null,
+				causeIdentifier: '',
+                initiativeIdentifier: '',
 				causeResource: this.$resource('causes{/causeId}'),
 				intiativeResource: this.$resource('causes{/causeId}/initiatives{/initiativeId}'),
 			}
@@ -134,10 +132,10 @@
 				return _.findWhere(this.causes, {code: this.country_code});
 			},
 			cause(){
-				return _.findWhere(this.causes, {id: this.causeId});
+				return _.findWhere(this.causes, {id: this.causeIdentifier});
 			},
 			initiative(){
-				return _.findWhere(this.initiatives, {id: this.initiativeId});
+				return _.findWhere(this.initiatives, {id: this.initiativeIdentifier});
 			},
 			filteredCountries(){
 			    let cause = this.cause;
@@ -147,27 +145,26 @@
 			}
 		},
 		watch: {
-			'causeId': function (val) {
+			'causeIdentifier'(val) {
 				// Update Country List based on Cause selected
 				// Get all available country codes for the selected cause
 				let allCodes = _.findWhere(this.causes, { id: val }).countries;
 				// filter selectable countries
 				this.availableCountries = [];
 				_.each(allCodes, function (country) {
-					let test = undefined;
-					if (test = _.findWhere(this.countries, { code: country.code.toLowerCase()}))
-					    this.availableCountries.push(test);
+					let test = _.findWhere(this.countries, { code: country.code.toLowerCase()});
+					if (test) this.availableCountries.push(test);
 				}.bind(this));
 				this.getInitiatives();
 			},
-			'country_code': function (val) {
+			'country_code'(val) {
 				// Update Initiative/Project List based on Country selected
                 // this.availableInitiatives = _.where(this.initiatives, { country: { code: val } });
                 this.availableInitiatives = _.filter(this.initiatives, function (ini) {
 					return ini.country.code === val;
 				});
 			},
-			'initiativeId': function (val) {
+			'initiativeIdentifier'(val) {
 				this.$nextTick(function () {
 					// this.complete_at = this.initiative.ended_at;
 					// this.calculateTotal();
@@ -185,9 +182,6 @@
 				});
 				this.attemptSubmit = false;
 			},
-			checkForError(field){
-				return this.$SponsorProjectForm[field].invalid && this.attemptSubmit;
-			},
 			getCauses() {
 				this.causeResource
 						.get(null)
@@ -199,7 +193,7 @@
 			},
 			getInitiatives() {
 				this.intiativeResource
-						.get({causeId: this.causeId, current: true})
+						.get({causeId: this.causeIdentifier, current: true})
 						.then(function (response) {
 							this.initiatives = response.body.data;
 						}, function (error) {
@@ -216,18 +210,24 @@
 				this.total = total;
 			},
 			submit(){
-				this.attemptSubmit = true;
-				if (this.$SponsorProjectForm.valid) {
-					let data = {
-						project_name: this.project_name,
-						name: this.name,
-						phone_one: this.phone_one,
-						email: this.email,
-						complete_at: this.complete_at,
-						total: this.total,
-						causeId: this.causeId,
-						initiativeId: this.initiativeId,
-					};
+                this.$validator.validateAll().then(result => {
+                    let data;
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check that the form is complete');
+                        return false;
+                    }
+
+                    data = {
+                        project_name: this.project_name,
+                        name: this.name,
+                        phone_one: this.phone_one,
+                        email: this.email,
+                        complete_at: this.complete_at,
+                        total: this.total,
+                        causeId: this.causeIdentifier,
+                        initiativeId: this.initiativeIdentifier,
+                    };
+
 					this.$http.post('sponsor-project', data)
 							.then(function (response) {
 								console.log(response);
@@ -237,12 +237,12 @@
 								console.log(error);
 								this.$root.$emit('showError', 'Something went wrong...');
 							});
-				} else {
-					this.$root.$emit('showError', 'Please check that the form is complete');
-				}
+				})
 			}
 		},
 		mounted(){
+		    this.causeIdentifier = this.causeId;
+		    this.initiativeIdentifier = this.initiativeId;
 			// Get Countries
 			this.$http.get('utilities/countries').then(function (response) {
 				this.countries = response.body.countries;

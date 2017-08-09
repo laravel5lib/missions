@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <spinner ref="spinner" size="sm" text="Loading"></spinner>
-                <mm-aside :show.sync="showFilters" placement="left" header="Transport Filters" :width="375">
+                <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Transport Filters" :width="375">
                     <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
                 </mm-aside>
 
@@ -62,8 +62,8 @@
                                                             </a>
                                                             <br />
                                                             <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
-                                                                {{ transport.type | capitalize }}
-                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation | capitalize"></span>
+                                                                {{ transport.type ? transport.type[0].toUpperCase() + transport.type.slice(1) : '' }}
+                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation ? transport.designation[0].toUpperCase() + transport.designation.slice(1) : ''"></span>
                                                             </small>
                                                         </h5>
                                                     </div>
@@ -117,9 +117,9 @@
             </div>
         </div>
 
-        <modal :title="transportsModalEdit? 'Edit Transport' : 'Create Transport'" :ok-text="transportsModalEdit? 'Update' : 'Create'" :callback="handleTransport" :show.sync="showTransportsModal">
+        <modal :title="transportsModalEdit? 'Edit Transport' : 'Create Transport'" :ok-text="transportsModalEdit? 'Update' : 'Create'" :callback="handleTransport" :value="showTransportsModal" @closed="showTransportsModal=false">
             <div slot="modal-body" class="modal-body" v-if="selectedTransport">
-                <validator name="TransportsModal">
+
                     <form id="TransportsModalForm">
                         <div class="form-group">
                             <div class="checkbox">
@@ -132,9 +132,9 @@
                         <div class="form-group" v-error-handler="{ value: selectedTransport.type, client: 'type' }">
                             <label for="transportType" class="control-label">Type</label>
                             <select class="form-control" id="transportType"
-                                    v-validate:type="['required']" v-model="selectedTransport.type">
+                                    name="type="['required']" v-model" v-validate="selectedTransport.type">
                                 <option value="">-- Select--</option>
-                                <option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
+                                <option :value="option" v-for="option in travelTypeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
                             </select>
                         </div>
 
@@ -150,10 +150,10 @@
                                 <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
                                           :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
                                           placeholder="Select Airline"></v-select>
-                                <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+                                <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" name="airline" v-validate="['required']"
                                         v-model="selectedTransport.name">
                                     <option :value="airline.name" v-for="airline in UTILITIES.airlines">
-                                        {{airline.extended_name | capitalize}}
+                                        {{airline.extended_name ? airline.extended_name[0].toUpperCase() + airline.extended_name.slice(1) : ''}}
                                     </option>
                                 </select>
 	                            <label><input type="checkbox" v-model="manualAirlineData"> This is a chartered flight</label>
@@ -196,8 +196,8 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            v-validate:train="['required']" v-model="selectedTransport.name">
-                                        <option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
+                                            name="train="['required']" v-model" v-validate="selectedTransport.name">
+                                        <option :value="option" v-for="option in trainOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
                                     </select>
                             </div>
 
@@ -216,8 +216,8 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            v-validate:train="['required']" v-model="selectedTransport.name">
-                                        <option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
+                                            name="train="['required']" v-model" v-validate="selectedTransport.name">
+                                        <option :value="option" v-for="option in vehicleOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}
                                         </option>
                                     </select>
                             </div>
@@ -242,7 +242,7 @@
                             <label for="">Departing at Date & Time</label>
                             <date-picker :model.sync="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
                             <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-                                   id="depart_at" v-validate:occurred="['required', 'datetime']">
+                                   id="depart_at" name="occurred" v-validate="['required', 'datetime']">
                         </div>
                         <h4>Arrival</h4>
                         <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
@@ -252,14 +252,14 @@
                             <label for="">Arriving at Date & Time</label>
                             <date-picker :model.sync="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
                             <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-                                   id="arrive_at" v-validate:occurred="['required', 'datetime']">
+                                   id="arrive_at" name="occurred" v-validate="['required', 'datetime']">
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
 
-        <modal title="Delete Transport" small ok-text="Delete" :callback="deleteTransport" :show.sync="showTransportDeleteModal">
+        <modal title="Delete Transport" small ok-text="Delete" :callback="deleteTransport" :value="showTransportDeleteModal" @closed="showTransportDeleteModal=false">
             <div slot="modal-body" class="modal-body">
                 <p v-if="selectedTransport">
                     Are you sure you want to delete the transport: "{{selectedTransport.name}} {{selectedTransport.vessel_no}}" ?

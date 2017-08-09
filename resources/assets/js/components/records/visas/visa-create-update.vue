@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="CreateUpdateVisa" @touched="onTouched">
+
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             
@@ -8,7 +8,7 @@
                     <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
                     </div>
@@ -20,7 +20,7 @@
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                               placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Given Names" name="givennames" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="150" minlength="1" required>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                               placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Surname" name="surname" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Visa Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
-                           placeholder="Visa Number" v-validate:number="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Visa Number" name="number" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="9" required>
                 </div>
             </div>
@@ -49,13 +49,13 @@
                         <div class="col-lg-6">
                             <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model.sync="issued_at|moment('YYYY-MM-DD')"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
-                                   v-validate:issued="{ required: true }" required>
+                                   name="issued" v-validate="'required'" required>
                             <br>
                         </div>
                         <div class="col-lg-6">
                             <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model.sync="expires_at|moment('YYYY-MM-DD')"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                   v-validate:expires="{ required: true }" required>
+                                   name="expires" v-validate="'required'" required>
                         </div>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value.sync="countryObj" :options="countries" label="name"></v-select>
-                    <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate:country="{ required: true }">
+                    <select hidden name="country" id="country" class="hidden" v-model="country_code" name="country" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
 
@@ -109,11 +109,11 @@
             <strong>Oh No!</strong>
             <p>There are errors on the form.</p>
         </alert>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
 
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";

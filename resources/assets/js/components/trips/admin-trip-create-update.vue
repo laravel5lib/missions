@@ -2,19 +2,19 @@
     <div class="row">
         <div class="col-sm-12">
 
-            <validator name="TripCreateUpdate" @valid="onValid">
+
                 <form id="TripDetailsForm" class="form-horizontal" novalidate>
                     <div class="form-group">
                         <div class="col-sm-12 text-center">
                         	<label class="control-label">Campaign</label>
-                            <h3>{{campaign.name|capitalize}}</h3>
+                            <h3>{{campaign.name ? campaign.name[0].toUpperCase() + campaign.name.slice(1) : ''}}</h3>
                         </div>
                     </div>
                     <div class="form-group" :class="{ 'has-error': errors.has('group') }">
                         <div class="col-sm-12">	
                         	<label class="control-label">Group</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
-                            <select hidden v-model="group_id" v-validate:group="{ required: true}">
+                            <select hidden v-model="group_id" name="group" v-validate="'required'">
                                 <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
                             </select>
                         </div>
@@ -35,7 +35,7 @@
 							<div :class="{ 'has-error': errors.has('type') }">
 								<label for="type" class="control-label">Type</label>
 								<select id="type" class="form-control" v-model="type"
-										v-validate:type="{ required: true }" required>
+										name="type" v-validate="'required'" required>
 									<option value="">-- select --</option>
 									<option value="ministry">Ministry</option>
 									<option value="family">Family</option>
@@ -54,7 +54,7 @@
 	                        	<label class="control-label">Perfect For</label>
 	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
 	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-	                            <select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
+	                            <select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
 	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
 	                                </option>
 	                            </select>
@@ -65,7 +65,7 @@
 	                        	<label class="control-label">Available Roles</label>
 	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="rolesObj"
 	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
-	                            <select hidden multiple v-model="team_roles" v-validate:teamroles="{ required: true}">
+	                            <select hidden multiple v-model="team_roles" name="teamroles" v-validate="'required'">
 	                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
 	                            </select>
 	                        </div>
@@ -76,7 +76,7 @@
 	                    		<div :class="{ 'has-error': errors.has('difficulty') }">
 		                        	<label for="difficulty" class="control-label">Difficulty</label>
 		                            <select id="difficulty" class="form-control" v-model="difficulty"
-		                                    v-validate:difficulty="{ required: true }" required>
+		                                    name="difficulty" v-validate="'required'" required>
 		                                <option value="">-- select --</option>
 		                                <option value="level_1">Level 1</option>
 		                                <option value="level_2">Level 2</option>
@@ -90,7 +90,7 @@
 		                            <div class="input-group">
 		                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
 		                                <input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-		                                       v-validate:companions="{ required: true, min:0 }"/>
+		                                       name="companions" v-validate="{ required: true, min:0 }"/>
 		                            </div>
 		                            <div class="help-block">Number of companions a user can have. Leave at 0 to disable
 		                                companions.
@@ -105,23 +105,23 @@
                                 <div class="col-sm-6">
 	                                <date-picker :has-error= "errors.has('start')" :model.sync="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
-	                                       v-validate:start="['required']" required>
+	                                       name="start" v-validate="['required']" required>
 	                                <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
 										<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
-											   v-validate:start="['required']" required>
+											   name="start" v-validate="['required']" required>
 									</div>-->
                                 </div>
                                 <div class="col-sm-6">
 	                                <date-picker :has-error= "errors.has('end')" :model.sync="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
-	                                       v-validate:end="['required']" required>
+	                                       name="end" v-validate="['required']" required>
 	                                <!--<div class="input-group"
                                          :class="{ 'has-error': errors.has('end') }">
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'" type="date"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
-                                               v-validate:end="['required']" required>
+                                               name="end" v-validate="['required']" required>
                                     </div>-->
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                         	<label class="control-label">Trip Rep.</label>
                             <v-select @keydown.enter.prevent="" class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
                                       label="name"></v-select>
-                            <!--v-validate:rep="{ required: false}"-->
+                            <!--name="rep" v-validate="{ required: false}"-->
                             <select hidden v-model="rep_id">
                                 <option v-for="rep in reps" :value="rep">{{rep}}</option>
                             </select>
@@ -146,7 +146,7 @@
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-users"></i></span>
 									<input type="number" id="spots" v-model="spots" class="form-control"
-										   v-validate:spots="{ required: true, min:0 }"/>
+										   name="spots" v-validate="{ required: true, min:0 }"/>
 								</div>
 								<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 									companions.
@@ -158,7 +158,7 @@
 								<label for="closed_at" class="control-label">Registration Closes</label>
 								<date-picker :has-error= "errors.has('closed')" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
 								<!--<date-picker class="form-control" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
-								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" v-validate:closed="{ required: true }" id="closed_at">
+								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" name="closed="'required'" id" v-validate="closed_at">
 							</div>
 						</div><!-- end col -->
 					</div><!-- end row -->
@@ -184,7 +184,7 @@
 
 				</form>
 
-			</validator>
+
 			
 				</div>
 			</div>

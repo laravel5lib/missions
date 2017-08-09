@@ -39,6 +39,6 @@ class ProjectTest extends TestCase
             'cost_assignable_id' => $project->id,
         ]);
 
-        $this->assertSame( (int) $project->fundraisers()->first()->goal_amount, (int) $project->goal);
+        $this->assertSame((int) $project->fundraisers()->first()->goal_amount, (int) $project->goal);
     }
 }

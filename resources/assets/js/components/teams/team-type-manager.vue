@@ -76,7 +76,7 @@
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
 									<div class="form-group">
 										<label v-text="getRuleLabel(key)"></label>
-										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="['required']" :value="value" min="0">
+										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="'required'" :value="value" min="0">
 									</div>
 								</div>
 							</template>

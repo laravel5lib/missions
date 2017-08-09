@@ -8,7 +8,7 @@
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                         <label for="infoManager">Record Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
                     </div>
@@ -27,7 +27,7 @@
             <div class="row" v-for="QA in content" v-error-handler="{ value: QA.a, client: 'question' + $index, messages: { req: 'Please provide an answer.'} }">
                 <div class="col-sm-12">
                     <label class="control-label" v-text="QA.q"></label>
-                    <textarea class="form-control" v-model="QA.a" rows="10" :field="'question' + $index" v-validate="['required']"></textarea>
+                    <textarea class="form-control" v-model="QA.a" rows="10" :field="'question' + $index" v-validate="'required'"></textarea>
                     <div class="errors-block"></div>
                 </div>
             </div>

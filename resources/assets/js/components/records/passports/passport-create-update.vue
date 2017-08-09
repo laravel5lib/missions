@@ -8,7 +8,7 @@
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                         <label for="infoManager">Passport Manager</label>
                         <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
                         <span class="help-block">The user account that manages this passport.</span>
@@ -72,7 +72,7 @@
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
-                    <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" name="birth" v-validate="'required'">
+                    <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
                 </div>
@@ -81,7 +81,7 @@
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
-                    <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" name="citizenship" v-validate="'required'">
+                    <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
                 </div>

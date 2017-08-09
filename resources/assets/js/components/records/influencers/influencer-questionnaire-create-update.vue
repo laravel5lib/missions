@@ -10,7 +10,7 @@
                         <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                             <label for="infoManager">Record Manager</label>
                             <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                            <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+                            <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                 <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                             </select>
                         </div>
@@ -30,7 +30,7 @@
                         <div class="form-group"  v-if="QA.type === 'radio'" v-error-handler="{ value: QA.a, client: 'radio' + indexQA, messages: { req: 'Please select an option.'} }">
                             <label class="control-labal">{{QA.q}}</label><br>
                             <label class="radio-inline" v-for="choice in QA.options">
-                                <input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="['required']"> {{ choice.name }}
+                                <input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="'required'"> {{ choice.name }}
                             </label>
                         </div>
                         <div class="form-group"  v-if="QA.type === 'checkbox'" v-error-handler="{ value: QA.a, client: 'chex' + indexQA }">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group"  v-if="QA.type === 'textarea'" v-error-handler="{ value: QA.a, client: 'textarea' + $index, messages: { req: 'Please provide an answer.'} }">
                             <label class="control-label" v-text="QA.q"></label>
-                            <textarea class="form-control" v-model="QA.a" rows="10" :field="'textarea' + $index" v-validate="['required']"></textarea>
+                            <textarea class="form-control" v-model="QA.a" rows="10" :field="'textarea' + $index" v-validate="'required'"></textarea>
                         </div>
                         <template v-if="QA.type === 'file'">
                             <div class="form-group" >

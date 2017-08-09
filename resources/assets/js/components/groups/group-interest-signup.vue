@@ -17,7 +17,7 @@
             <div class="row" v-if="campaign_id">
                 <div class="col-xs-12" v-error-handler="{ value: trip, handle: 'trip' }">
                     <label>Trip Type</label>
-                    <select name="campaign" v-model="interest.trip_id" class="form-control" name="trip" v-validate="'required'">
+                    <select name="campaign" v-model="interest.trip_id" class="form-control" v-validate="'required'">
                         <option v-for="trip in trips" :value="trip.id">
                             {{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }} Trip
                         </option>

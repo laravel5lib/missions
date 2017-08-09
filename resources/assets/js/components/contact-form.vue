@@ -22,7 +22,7 @@
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
                     <label for="name">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" v-model="email" name="email" v-validate="'required|email'">
+                    <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'required|email'">
                 </div>
             </div>
 

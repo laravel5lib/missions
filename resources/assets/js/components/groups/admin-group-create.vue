@@ -48,7 +48,7 @@
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="hidden" v-model="country_code" name="country" v-validate="'required'" >
+                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
                     </div>
@@ -58,7 +58,7 @@
             <div class="form-group" v-error-handler="{ value: type, handle: 'type' }">
                 <div class="col-sm-12">
                     <label for="type">Type</label>
-                    <select name="type" id="type" class="form-control" v-model="type" name="type" v-validate="'required'" required>
+                    <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'" required>
                         <option value="">-- please select --</option>
                         <option :value="option" v-for="option in typeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
                     </select>
@@ -69,7 +69,7 @@
                 <div class="col-sm-12">
                     <label for="timezone">Timezone</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" name="timezone" v-validate="'required'">
+                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>
                 </div>

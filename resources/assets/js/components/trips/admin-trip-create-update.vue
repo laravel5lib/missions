@@ -105,23 +105,23 @@
                                 <div class="col-sm-6">
 	                                <date-picker :has-error= "errors.has('start')" :model.sync="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
-	                                       name="start" v-validate="['required']" required>
+	                                       name="start" v-validate="'required'" required>
 	                                <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
 										<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
-											   name="start" v-validate="['required']" required>
+											   name="start" v-validate="'required'" required>
 									</div>-->
                                 </div>
                                 <div class="col-sm-6">
 	                                <date-picker :has-error= "errors.has('end')" :model.sync="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
-	                                       name="end" v-validate="['required']" required>
+	                                       name="end" v-validate="'required'" required>
 	                                <!--<div class="input-group"
                                          :class="{ 'has-error': errors.has('end') }">
                                         <span class="input-group-addon">End</span>
 										<date-picker class="form-control" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'" type="date"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
-                                               name="end" v-validate="['required']" required>
+                                               name="end" v-validate="'required'" required>
                                     </div>-->
                                 </div>
                             </div>

@@ -82,7 +82,7 @@
 												       type="text"
 												       class="form-control"
 												       id="AccoName" placeholder=""
-												       name="name" v-validate="['required']"
+												       name="name" v-validate="'required'"
 												       v-model="currentAccommodation.name">
 											</div>
 											<div class="form-group col-sm-12"

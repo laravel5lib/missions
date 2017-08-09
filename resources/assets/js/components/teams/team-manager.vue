@@ -714,7 +714,7 @@
 							</div>
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
 								<label for="" class="control-label">Type</label>
-								<select class="form-control" v-model="newTeamType" name="teamtype" v-validate="['required']">
+								<select class="form-control" v-model="newTeamType" name="teamtype" v-validate="'required'">
 									<option :value="type.id" v-for="type in teamTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
 								</select>
 							</div>
@@ -723,7 +723,7 @@
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
 										  :value.sync="newTeamGroup" :options="groupsOptions" label="name"
 										  placeholder="Assign Travel Group"></v-select>
-								<select class="hidden" v-model="newTeamGroup" name="teamgroup" v-validate="['required']">
+								<select class="hidden" v-model="newTeamGroup" name="teamgroup" v-validate="'required'">
 									<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
 								</select>
 							</div>

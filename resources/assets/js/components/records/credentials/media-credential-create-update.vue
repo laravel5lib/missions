@@ -23,7 +23,7 @@
                                 <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                     <label for="infoManager">Record Manager</label>
                                     <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                         <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                     </select>
                                 </div>
@@ -45,7 +45,7 @@
 								</div>
 								<div class="panel-body">
 									<label class="radio-inline" v-for="choice in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="['required']"> {{ choice.name }}
+										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="'required'"> {{ choice.name }}
                                     </label>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">
@@ -153,7 +153,7 @@
 														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandEven' + $index), messages: { req: 'Please enter a brand or model name.'} }">
 															<div class="input-group">
 																<span class="input-group-addon input-sm">Brand/Model</span>
-																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandEven' + $index" v-validate="['required']">
+																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandEven' + $index" v-validate="'required'">
 															</div>
 															<hr class="divider md">
 														</div>
@@ -170,7 +170,7 @@
 														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandOdd' + $index), messages: { req: 'Please enter a brand or model name.'} }">
 															<div class="input-group">
 																<span class="input-group-addon input-sm">Brand/Model</span>
-																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandOdd' + $index" v-validate="['required']">
+																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandOdd' + $index" v-validate="'required'">
 															</div>
 															<hr class="divider md">
 														</div>
@@ -300,7 +300,7 @@
 					<div class="panel-body">
 						<div class="checkbox" v-error-handler="{ value: disclaimer, handle: 'disclaimer' }">
 							<label>
-								<input type="checkbox" :checked.sync="disclaimer" v-model="disclaimer" name="disclaimer" v-validate="['required']">
+								<input type="checkbox" :checked.sync="disclaimer" v-model="disclaimer" name="disclaimer" v-validate="'required'">
 								I agree that, Missions.Me is not responsible for any lost, stolen or broken equipment brought my your missions trip.
 							</label>
 						</div>

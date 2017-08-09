@@ -8,7 +8,7 @@
 							<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
 								<label for="infoManager">Reservation Manager</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
 									<option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
 								</select>
 							</div>
@@ -262,7 +262,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('country') }">
 									<label for="infoCountry">Country</label>
 									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" name="country" v-validate="'required'">
+									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" v-validate="'required'">
 										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 									</select>
 								</div>

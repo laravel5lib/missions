@@ -80,7 +80,7 @@
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
 									<div class="form-group" v-if="key === 'occupancy_limit'">
 										<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
-										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="['required']" :value="value" min="0">
+										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="'required'" :value="value" min="0">
 									</div>
 									<div class="form-group" v-else>
 										<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>

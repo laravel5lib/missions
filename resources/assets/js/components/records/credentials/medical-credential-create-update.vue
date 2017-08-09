@@ -18,7 +18,7 @@
                                 <div class="form-group">
                                     <label for="infoManager">Record Manager</label>
                                     <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                         <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                     </select>
                                 </div>
@@ -36,7 +36,7 @@
                                 <label class="control-label">Medical Role</label>
 	                             <v-select @keydown.enter.prevent="" class="form-control" id="group" :value.sync="selectedRoleObj"
 	                                       :options="roles|orderBy 'name'" label="name" placeholder="Select Role"></v-select>
-	                             <select hidden class="form-control hidden" v-model="selectedRole" name="role" v-validate="['required']">
+	                             <select hidden class="form-control hidden" v-model="selectedRole" name="role" v-validate="'required'">
 		                             <option value="">-- Select Role --</option>
 		                             <option v-for="option in roles|orderBy 'name'" :value="option.value">{{option.name}}</option>
 	                             </select>
@@ -136,7 +136,7 @@
 								</div>
 								<div class="panel-body">
 									<span class="help-block">Please Explain:</span>
-									<textarea class="form-control" v-model="QA.a" :field="'textarea' + $index" v-validate="['required']"></textarea>
+									<textarea class="form-control" v-model="QA.a" :field="'textarea' + $index" v-validate="'required'"></textarea>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('textarea' + $index)">
 									<div class="errors-block"></div>

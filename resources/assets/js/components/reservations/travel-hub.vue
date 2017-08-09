@@ -10,7 +10,7 @@
 								<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
 								          :value.sync="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
 								          placeholder="Select Airport"></v-select>
-								<select class="form-control hidden" name="airport" id="airport" name="hubname" v-validate="['required']"
+								<select class="form-control hidden" name="airport" id="airport" v-validate="'required'"
 								        v-model="hub.name">
 									<option :value="airport.name" v-for="airport in UTILITIES.airports">
 										{{airport.extended_name ? airport.extended_name[0].toUpperCase() + airport.extended_name.slice(1) : ''}}
@@ -24,13 +24,13 @@
 								<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 									<label for="">{{ LABELS[(transportType||'flight')] }}</label>
 									<template v-if="editMode">
-										<input type="text" class="form-control" v-model="hub.name" name="hubname" v-validate="['required']">
+										<input type="text" class="form-control" v-model="hub.name" name="hubname" v-validate="'required'">
 									</template>
 								</div>
 								<div  class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
 									<label for="">IATA Code</label>
 									<template v-if="editMode">
-										<input type="text" class="form-control" v-model="hub.call_sign" name="callsign" v-validate="['required']">
+										<input type="text" class="form-control" v-model="hub.call_sign" name="callsign" v-validate="'required'">
 									</template>
 								</div>
 							</template>
@@ -58,14 +58,14 @@
 						<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 							<label for="">{{ LABELS[(transportType||'flight')] }}</label>
 							<template v-if="editMode">
-								<input type="text" class="form-control" v-model="hub.name" name="hubname" v-validate="['required']">
+								<input type="text" class="form-control" v-model="hub.name" name="hubname" v-validate="'required'">
 							</template>
 							<p v-else>{{ hub.name | uppercase }}</p>
 						</div>
 						<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
 							<label for="">City</label>
 							<template v-if="editMode">
-								<input type="text" class="form-control" v-model="hub.city" name="city" v-validate="['required']">
+								<input type="text" class="form-control" v-model="hub.city" name="city" v-validate="'required'">
 							</template>
 							<p v-else>{{ hub.city | uppercase }}</p>
 						</div>
@@ -75,7 +75,7 @@
 								<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
 								          :value.sync="countryObj" :options="UTILITIES.countries" label="name"
 								          placeholder="Select Country"></v-select>
-								<select class="form-control hidden" name="country" id="country" name="country" v-validate="['required']"
+								<select class="form-control hidden" name="country" id="country" v-validate="'required'"
 								        v-model="hub.country_code">
 									<option :value="country.code" v-for="country in UTILITIES.countries">
 										{{country.name ? country.name[0].toUpperCase() + country.name.slice(1) : ''}}

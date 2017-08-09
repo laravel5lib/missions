@@ -31,6 +31,10 @@ Elixir.webpack.mergeConfig({
             {
                 test: /\.scss$/,
                 loaders: ["style-loader", "css-loader", "sass-loader"]
+            },
+            {
+                test: /\.png$/,
+                loaders: ["html-loader"]
             }],
         plugins: [
             new webpack.optimize.UglifyJsPlugin({

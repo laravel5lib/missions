@@ -17,7 +17,7 @@
                             <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                 <label for="infoManager">Record Manager</label>
                                 <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
+                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                     <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                 </select>
                             </div>

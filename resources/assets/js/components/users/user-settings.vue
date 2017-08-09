@@ -151,7 +151,7 @@
                                     <label for="gender" class="col-sm-3">Gender</label>
                                     <div class="col-sm-9">
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" name="gender" v-validate="{required: {rule: true}}"> Male
+                                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate="{required: {rule: true}}"> Male
                                         </label>
                                         <label class="radio-inline">
                                             <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
@@ -237,7 +237,7 @@
                                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
                                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                                        <select hidden name="country" id="country" class="hidden" v-model="country_code" name="country" v-validate="'required'" >
+                                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                                             <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                                         </select>
                                     </div>
@@ -247,7 +247,7 @@
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
                                     <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="UTILITIES.timezones"></v-select>
-                                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" name="timezone" v-validate="'required'">
+                                    <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                                         <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                                     </select>
                                 </div>

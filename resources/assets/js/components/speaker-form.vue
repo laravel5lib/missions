@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
                     <label for="name">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" v-model="email" name="email" v-validate="['required', 'email']">
+                    <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="['required', 'email']">
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
             <div class="form-group">
                 <div class="col-sm-12" :class="{ 'has-error': errors.has('comments') }">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" name="comments" v-validate="'required'" rows=10 autosize></textarea>
+                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate="'required'" rows=10 autosize></textarea>
                 </div>
             </div>
             <div class="form-group">

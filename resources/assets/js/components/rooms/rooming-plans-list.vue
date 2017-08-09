@@ -123,7 +123,7 @@
 
 						<div class="form-group" :class="{'has-error': $PlanCreate.plandesc.invalid}">
 							<label for="createPlanDesc" class="control-label">Short Description</label>
-							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" name="plandesc" v-validate="['required']"></textarea>
+							<textarea autosize="selectedNewPlan.short_desc" class="form-control" id="createPlanDesc" v-model="selectedNewPlan.short_desc" name="plandesc" v-validate="'required'"></textarea>
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanCreate.teamgroup.invalid}" v-if="isAdminRoute">
@@ -131,7 +131,7 @@
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							          :value.sync="selectedNewPlan.groups" :options="groupsOptions" label="name"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedNewPlan.groups" multiple name="teamgroup" v-validate="['required']">
+							<select class="hidden" v-model="selectedNewPlan.groups" multiple name="teamgroup" v-validate="'required'">
 								<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
 							</select>
 						</div>
@@ -159,7 +159,7 @@
 
 						<div class="form-group" :class="{'has-error': $PlanSettings.plandesc.invalid}">
 							<label for="updatePlanDesc" class="control-label">Short Description</label>
-							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" name="plandesc" v-validate="['required']"></textarea>
+							<textarea autosize="selectedPlanSettings.short_desc" class="form-control" id="updatePlanDesc" v-model="selectedPlanSettings.short_desc" name="plandesc" v-validate="'required'"></textarea>
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanSettings.teamgroup.invalid}" v-if="isAdminRoute">
@@ -167,7 +167,7 @@
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 							          :value.sync="selectedPlanSettings.groups" :options="groupsOptions" label="name"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedPlanSettings.groups" multiple name="teamgroup" v-validate="['required']">
+							<select class="hidden" v-model="selectedPlanSettings.groups" multiple name="teamgroup" v-validate="'required'">
 								<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
 							</select>
 						</div>

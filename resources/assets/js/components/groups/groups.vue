@@ -31,7 +31,7 @@
                       </div>
                       <div class="col-sm-6" v-error-handler="{ value: campaign, handle: 'campaign' }">
                           <label for="campaign">Which Campaign are you interested in?</label>
-                          <select name="type" id="campaign" class="form-control" v-model="campaign" name="campaign" v-validate="'required'" required>
+                          <select name="type" id="campaign" class="form-control" v-model="campaign" v-validate="'required'" required>
                               <option value="">-- please select --</option>
                               <option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
                           </select>
@@ -72,14 +72,14 @@
                           <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                               <label for="country">Country</label>
                               <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                              <select hidden name="country" id="country" class="hidden" v-model="country_code" name="country" v-validate="'required'" >
+                              <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                                   <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                               </select>
                           </div>
                       </div>
                       <div class="col-sm-6" v-error-handler="{ value: type, handle: 'type' }">
                           <label for="type">Type</label>
-                          <select name="type" id="type" class="form-control" v-model="type" name="type" v-validate="'required'" required>
+                          <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'" required>
                               <option value="">-- please select --</option>
                               <option :value="option" v-for="option in typeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
                           </select>
@@ -90,7 +90,7 @@
                       <div class="col-sm-4" v-error-handler="{ value: timezone, handle: 'timezone' }">
                           <label for="timezone">Timezone</label>
                           <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                          <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" name="timezone" v-validate="'required'">
+                          <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                               <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                           </select>
                       </div>
@@ -115,12 +115,12 @@
                       </div>
                       <div class="col-sm-4" v-error-handler="{ value: email, handle: 'email' }">
                           <label for="email">Email</label>
-                          <input type="text" class="form-control" name="email" id="email" v-model="email" name="email" v-validate="['email','require']">
+                          <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="['email','require']">
                           <p class="help-block" v-if="errors.email" v-text="errors.email"></p>
                       </div>
                       <div class="col-sm-4" v-error-handler="{ value: position, handle: 'position' }">
                           <label for="position">Your Position</label>
-                          <input type="text" class="form-control" name="position" id="position" v-model="position" name="position" v-validate="{ require: true, minlength:1 }">
+                          <input type="text" class="form-control" name="position" id="position" v-model="position" v-validate="{ require: true, minlength:1 }">
                           <p class="help-block" v-if="errors.position" v-text="errors.position"></p>
                       </div>
                   </div>
@@ -129,10 +129,10 @@
                       <label for="status" class="col-sm-8 control-label">Have you spoken with a Missions.Me representative?</label>
                       <div class="col-sm-4">
                           <label class="radio-inline">
-                              <input type="radio" name="status" id="status" value="yes" v-model="spoke_to_rep" name="spoken" v-validate="{ require: { rule: true } }"> Yes
+                              <input type="radio" name="status" id="status" value="yes" v-model="spoke_to_rep" v-validate="{ require: { rule: true } }"> Yes
                           </label>
                           <label class="radio-inline">
-                              <input type="radio" name="status2" id="status2" value="no" v-model="spoke_to_rep" name="spoken" v-validate=""> No
+                              <input type="radio" name="status2" id="status2" value="no" v-model="spoke_to_rep" v-validate=""> No
                           </label>
                           <!--<p class="help-block" v-if="errors.spoke_to_rep" v-text="errors.spoke_to_rep"></p>-->
                       </div>

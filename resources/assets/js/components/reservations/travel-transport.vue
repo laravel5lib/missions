@@ -24,7 +24,7 @@
 									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
 									          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
 									          placeholder="Select Airline"></v-select>
-									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" name="airline" v-validate="['required']"
+									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
 									        v-model="transport.name">
 										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
 											{{airline.extended_name ? airline.extended_name[0].toUpperCase() + airline.extended_name.slice(1) : ''}}

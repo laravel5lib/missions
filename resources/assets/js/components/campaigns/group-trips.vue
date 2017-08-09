@@ -43,14 +43,14 @@
 					<div class="flex-col">
 						<div class="panel panel-default" class="flex-item">
 							<div class="panel-heading" :class="'panel-' + trip.type">
-								<h5 class="text-uppercase text-center">{{ trip.type | capitalize }}</h5>
+								<h5 class="text-uppercase text-center">{{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }}</h5>
 							</div>
 							<div class="panel-body text-center">
-								<p class="badge">{{ trip.status | capitalize }}</p><br>
+								<p class="badge">{{ trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : '' }}</p><br>
 								<p class="small">{{ trip.started_at | moment('ll', false, true)}} - {{ trip.ended_at | moment('ll', false, true)}}</p>
 								<label>Perfect For</label>
 								<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
-									{{ prospect | capitalize }}<span v-show="$index + 1 != trip.prospects.length">, </span>
+									{{ prospect ? prospect[0].toUpperCase() + prospect.slice(1) : '' }}<span v-show="$index + 1 != trip.prospects.length">, </span>
 							</span><span v-show="trip.prospects.length > 3">...</span></p>
 								<label>Spots Available</label>
 								<p>{{ trip.spots }}</p>

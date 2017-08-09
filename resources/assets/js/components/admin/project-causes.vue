@@ -86,7 +86,7 @@
                         <h5 class="text-center">{{ cause.name }}</h5>
                     </div>
                     <div class="panel-body text-center">
-                        <!--<p class="badge">{{ cause.status | capitalize }}</p><br>-->
+                        <!--<p class="badge">{{ cause.status ? cause.status[0].toUpperCase() + cause.status.slice(1) : '' }}</p><br>-->
                         <p class="small">{{ cause.short_desc }}</p>
                         <label>Countries</label>
                         <p class="small"><span v-for="country in cause.countries">

@@ -2,7 +2,7 @@
 	<div style="position:relative;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="text-muted text-center" v-if="fundraisers.length < 1">
-			<template v-if="isUser()">
+			<template v-if="isUser">
 				<em><h4>Start Fundraising</h4>
 					<p>Join a trip or sponsor a project to start fundraising.</p></em>
 				<p class="text-center"><a class="btn btn-primary" href="/campaigns">Go On A Trip</a> <a class="btn btn-default" href="/sponsor-a-project">Sponsor A Project</a></p>
@@ -94,19 +94,15 @@
 				pathName: window.location.pathname
 			}
 		},
-		methods: {
-            isUser(){
+		computed: {
+            isUser() {
                 return this.$root.user && this.id === this.$root.user.id;
             },
+		},
+		methods: {
             isVisible(fundraiser) {
-				if(! fundraiser.public && this.$root.user.id == fundraiser.sponsor_id) {
-					return true;
-				} else if(fundraiser.public) {
-					return true;
-				} else {
-					return false;
-				}
-			}
+				return !fundraiser.public && this.$root.user.id === fundraiser.sponsor_id ? true : !!fundraiser.public;
+            }
 		},
 		mounted(){
 			this.$http.get('fundraisers?active=true', { params: {
@@ -115,7 +111,7 @@
 				per_page: 100
 			}}).then(function (response) {
 				this.fundraisers = response.body.data;
-			});
+			}, this.$root.handleApiError);
 
 			this.$http.get('fundraisers?archived=true', { params: {
 				sponsorId: this.id,
@@ -123,7 +119,7 @@
 				per_page: 100
 			}}).then(function (response) {
 				this.oldFundraisers = response.body.data;
-			})
+			}, this.$root.handleApiError)
 		}
 
 	}

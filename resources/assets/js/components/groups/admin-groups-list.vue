@@ -196,8 +196,8 @@
             <tbody>
             <tr v-for="group in groups">
                 <td v-if="isActive('name')">{{group.name}}</td>
-                <td v-if="isActive('type')">{{group.type|capitalize}}</td>
-                <td v-if="isActive('location')">{{group.state|capitalize}}, {{group.country_name|capitalize}}</td>
+                <td v-if="isActive('type')">{{group.type ? group.type[0].toUpperCase() + group.type.slice(1) : ''}}</td>
+                <td v-if="isActive('location')">{{group.state ? group.state[0].toUpperCase() + group.state.slice(1) : ''}}, {{group.country_name ? group.country_name[0].toUpperCase() + group.country_name.slice(1) : ''}}</td>
                 <template v-if="pending">
                     <td v-if="isActive('phone_one')">{{group.phone_one}}</td>
                     <td v-if="isActive('email')">{{group.email}}</td>

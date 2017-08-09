@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="panel-body">
-        <validator name="validation" :classes="{ invalid: 'has-error' }">
+
             <label>Balance</label>
             <h4 :class="{'text-success' : fund.balance > 0, 'text-danger' : fund.balance < 0}">
                 {{ fund.balance | currency }}
@@ -38,7 +38,7 @@
                 <label>Fund Name</label>
                 <template v-if="editMode">
                     <input class="form-control" v-model="fund.name"
-                           initial="off" v-validate:name="{required: true}">
+                           initial="off" name="name" v-validate="'required'">
                 </template>
                 <p v-else>{{ fund.name }}</p>
             </div>
@@ -46,7 +46,7 @@
                 <label>Account Class</label>
                 <template v-if="editMode">
                     <select class="form-control" v-model="fund.class_id"
-                           initial="off" v-validate:qbclass="{required: true}">
+                           initial="off" name="qbclass" v-validate="'required'">
                        <option v-for="class in accountingClasses" v-bind:value="class.id">
                             {{ class.name }}
                        </option>
@@ -58,7 +58,7 @@
                 <label>Account Item</label>
                 <template v-if="editMode">
                     <select class="form-control" v-model="fund.item_id"
-                           initial="off" v-validate:qbitem="{required: true}">
+                           initial="off" name="qbitem" v-validate="'required'">
                        <option v-for="item in accountingItems" v-bind:value="item.id">
                             {{ item.name }}
                        </option>
@@ -67,10 +67,10 @@
                 <p v-else><code>{{ fund.item }}</code></p>
             </div>
             <label>Type</label>
-            <p>{{ fund.type | capitalize }}</p>
+            <p>{{ fund.type ? fund.type[0].toUpperCase() + fund.type.slice(1) : '' }}</p>
             <label>Last Updated</label>
             <p>{{ fund.updated_at | moment('lll') }}</p>
-        </validator>
+
         </div>
         <div class="panel-footer text-right">
             <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#deleteConfirmationModal">

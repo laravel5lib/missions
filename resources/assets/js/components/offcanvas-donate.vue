@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <mm-aside :show.sync="showRight" placement="right" header="Donate" :width="275">
-            <validator name="Donation">
+        <mm-aside :show="showRight" @open="showRight=true" @close="showRight=false" placement="right" header="Donate" :width="275">
+
             <form class="form-horizontal" name="DonationForm" novalidate v-show="donationState === 'form'">
                 <div class="row">
                     <div class="col-sm-12 text-center">
@@ -15,7 +15,7 @@
                         <label>Amount</label>
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input type="number" class="form-control" v-model="amount" min="1" v-validate:amount="{required: true, min: 1}">
+                            <input type="number" class="form-control" v-model="amount" min="1" name="amount" v-validate="{required: true, min: 1}">
                         </div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-sm-12" :class="{ 'has-error': errors.has('donor')}">
                             <label>Donor Or Company Name</label>
-                            <input type="text" class="form-control" v-model="donor" v-validate:donor="{required: true}">
+                            <input type="text" class="form-control" v-model="donor" name="donor" v-validate="'required'">
                     </div>
                 </div>
                 <hr class="divider inv sm">
@@ -35,7 +35,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-user"></span></span>
                                     <input type="text" class="form-control input" id="cardHolderName" placeholder="Name on card"
-                                           v-model="cardHolderName" v-validate:cardHolderName="{ required: true }" autofocus/>
+                                           v-model="cardHolderName" name="cardHolderName" v-validate="'required'" autofocus/>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
                                     <input type="text" class="form-control input" id="cardNumber" placeholder="Valid Card Number"
-                                           v-model="cardNumber" v-validate:cardNumber="{ required: true, maxlength: 19 }"
+                                           v-model="cardNumber" name="cardNumber" v-validate="{ required: true, maxlength: 19 }"
                                            @keyup="formatCard($event)" maxlength="19"/>
                                 </div>
                                 <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
@@ -60,14 +60,14 @@
                         <label style="display:block;margin-left: 10px;" for="expiryMonth">EXPIRY DATE</label>
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
-                                <select v-model="cardMonth" class="form-control input" id="expiryMonth" v-validate:month="{ required: true }">
+                                <select v-model="cardMonth" class="form-control input" id="expiryMonth" name="month" v-validate="'required'">
                                     <option v-for="month in monthList" :value="month">{{month}}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xs-6 col-md-6">
                             <div :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
-                                <select v-model="cardYear" class="form-control input" id="expiryYear" v-validate:year="{ required: true }">
+                                <select v-model="cardYear" class="form-control input" id="expiryYear" name="year" v-validate="'required'">
                                     <option v-for="year in yearList" :value="year">{{year}}</option>
                                 </select>
                             </div>
@@ -80,7 +80,7 @@
                                 <label for="cvCode">
                                     CV CODE</label>
                                 <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
-                                       placeholder="CV" v-validate:code="{ required: true, minlength: 3, maxlength: 3 }"/>
+                                       placeholder="CV" name="code" v-validate="{ required: true, minlength: 3, maxlength: 3 }"/>
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                         <div class="col-sm-12">
                             <div :class="{ 'has-error': errors.has('email') }">
                                 <label for="infoEmailAddress">Billing Email</label>
-                                <input type="text" class="form-control input" v-model="cardEmail" v-validate:email="['oneOrOther']" id="infoEmailAddress">
+                                <input type="text" class="form-control input" v-model="cardEmail" name="email="['oneOrOther']" id" v-validate="infoEmailAddress">
                             </div>
                         </div>
                     </div>
@@ -98,13 +98,13 @@
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
-                                <input type="tel" class="form-control input" v-model="cardPhone | phone" v-validate:phone="['oneOrOther']" id="infoPhone">
+                                <input type="tel" class="form-control input" v-model="cardPhone | phone" name="phone="['oneOrOther']" id" v-validate="infoPhone">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('zip') }">
                                 <label for="infoZip">ZIP</label>
-                                <input type="text" class="form-control input" v-model="cardZip" v-validate:zip="{ required: true }" id="infoZip" placeholder="12345">
+                                <input type="text" class="form-control input" v-model="cardZip" name="zip="'required'" id="infoZip" placeholder" v-validate="12345">
                             </div>
                         </div>
                     </div>
@@ -158,7 +158,7 @@
                     <a @click="createToken" class="btn btn-primary">Donate</a>
                 </div>
             </div>
-        </validator>
+
         </mm-aside>
     </div>
 </template>

@@ -1,18 +1,18 @@
 <template>
-    <validator name="SpeakerForm">
+
         <form class="form-horizontal" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group">
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="John Smith" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="John Smith" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('organization') }">
                     <label for="name">Your Church/Organization</label>
                     <input type="text" class="form-control" name="organization" id="organization" v-model="organization"
-                           placeholder="Church Name" v-validate:organization="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Church Name" name="organization" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
                     <label for="name">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate:email="['required', 'email']">
+                    <input type="text" class="form-control" name="email" id="email" v-model="email" name="email" v-validate="['required', 'email']">
                 </div>
             </div>
 
@@ -57,7 +57,7 @@
             <div class="form-group">
                 <div class="col-sm-12" :class="{ 'has-error': errors.has('comments') }">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="{required: true}" rows=10 autosize></textarea>
+                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" name="comments" v-validate="'required'" rows=10 autosize></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -66,7 +66,7 @@
                 </div>
             </div>
         </form>
-    </validator>
+
 </template>
 <script type="text/javascript">
     export default{

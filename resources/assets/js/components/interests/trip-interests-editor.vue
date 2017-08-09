@@ -47,7 +47,7 @@
                               'label-success': interest.status == 'converted',
                               'label-default': interest.status == 'declined'
                               }">
-                            {{ interest.status | capitalize }}
+                            {{ interest.status ? interest.status[0].toUpperCase() + interest.status.slice(1) : '' }}
                         </span>
                     </p>
                 </div>
@@ -73,7 +73,7 @@
                         {{ interest.trip.campaign.name }} <br />
                         <small class="text-muted">
                             {{ interest.trip.group.name }} <br />
-                            <span class="label label-default">{{ interest.trip.type | capitalize }}</span>
+                            <span class="label label-default">{{ interest.trip.type ? interest.trip.type[0].toUpperCase() + interest.trip.type.slice(1) : '' }}</span>
                         </small>
                     </p>
                 </div>
@@ -81,7 +81,7 @@
                     <label>Communication Preferences</label>
                     <h5>
                         <span class="label label-default" style="margin-right:5px" v-for="preference in interest.communication_preferences">
-                            {{ preference | capitalize }}
+                            {{ preference ? preference[0].toUpperCase() + preference.slice(1) : '' }}
                         </span>
                     </h5>
                 </div>

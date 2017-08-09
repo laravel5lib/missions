@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
 
@@ -99,8 +99,8 @@
                 <tbody>
                 <tr v-for="trip in trips|filterBy search|orderBy orderByField direction">
                     <td>{{trip.group.data.name}}</td>
-                    <td>{{trip.type|capitalize}}</td>
-                    <td>{{trip.campaign.data.name|capitalize}}</td>
+                    <td>{{trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : ''}}</td>
+                    <td>{{trip.campaign.data.name ? trip.campaign.data.name[0].toUpperCase() + trip.campaign.data.name.slice(1) : ''}}</td>
                     <td>{{trip.status}}</td>
                     <td>{{trip.started_at|moment('ll') false true}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
                     <td>{{trip.reservations}}</td>

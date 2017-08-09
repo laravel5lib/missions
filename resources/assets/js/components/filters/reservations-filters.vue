@@ -177,7 +177,7 @@
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
 						<option v-for="option in repOptions" v-bind:value="option.id">
-							{{ option.name | capitalize }}
+							{{ option.name ? option.name[0].toUpperCase() + option.name.slice(1) : '' }}
 						</option>
 					</select>
 				</div>

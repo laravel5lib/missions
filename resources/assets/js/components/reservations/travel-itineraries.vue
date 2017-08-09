@@ -8,7 +8,7 @@
 			<hr class="divider lg">
 		</template>
 
-		<validator name="TravelItineraries">
+
 			<form id="TravelItinerariesForm" novalidate>
 				<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
@@ -62,14 +62,14 @@
 					</template>
 				</div>
 
-				<modal title="Make Changes" small :show.sync="showResetModal" ok-text="Confirm" :callback="resetItinerary">
+				<modal title="Make Changes" small :value="showResetModal" @closed="showResetModal=false" ok-text="Confirm" :callback="resetItinerary">
 					<div slot="modal-body" class="modal-body">
 						In order to make changes to a travel itinerary, you will need to start over and submit a new one. This action can't be undone. Do you want to continue making changes?
 					</div>
 				</modal>
 
 			</form>
-		</validator>
+
 
 	</div>
 </template>

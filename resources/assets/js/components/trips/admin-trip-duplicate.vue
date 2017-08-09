@@ -9,14 +9,14 @@
                     <div class="modal-body">
                         <p>Duplicate this trip?</p>
                         <hr>
-                        <validator name="TripDuplication">
+
                             <form class="form-horizontal" novalidate>
                                 <div class="form-group" :class="{ 'has-error': errors.has('group') }">
                                     <label class="col-sm-2 control-label">Group</label>
                                     <div class="col-sm-10">
                                         <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
                                                   label="name"></v-select>
-                                        <select hidden v-model="group_id" v-validate:group="{ required: true}">
+                                        <select hidden v-model="group_id" name="group" v-validate="'required'">
                                             <option :value="group.id" v-for="group in groups">{{group.name}}</option>
                                         </select>
                                     </div>
@@ -26,7 +26,7 @@
                                     <label for="type" class="col-sm-2 control-label">Type</label>
                                     <div class="col-sm-10">
                                         <select id="type" class="form-control input-sm" v-model="type"
-                                                v-validate:type="{ required: true }" required>
+                                                name="type" v-validate="'required'" required>
                                             <option value="">-- select --</option>
                                             <option value="ministry">Ministry</option>
                                             <option value="family">Family</option>
@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </validator>
+
                         <div class="row">
                             <div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">No</a></div>
                             <div class="col-xs-6"><a @click="duplicateTrip()" class="btn btn-sm btn-block btn-primary">Yes</a></div>

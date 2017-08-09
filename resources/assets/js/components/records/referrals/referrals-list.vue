@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <label>TYPE</label>
-                            <p class="small">{{referral.type|capitalize}} Reference</p>
+                            <p class="small">{{referral.type ? referral.type[0].toUpperCase() + referral.type.slice(1) : ''}} Reference</p>
                         </div>
                     </div>
                     <div class="row">
@@ -53,7 +53,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <label>STATUS:</label>
-                            <p class="small">{{referral.status | capitalize}}</p>
+                            <p class="small">{{referral.status ? referral.status[0].toUpperCase() + referral.status.slice(1) : ''}}</p>
                         </div>
                     </div>
                     <div class="row">

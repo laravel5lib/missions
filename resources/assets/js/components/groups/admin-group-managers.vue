@@ -33,19 +33,19 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Add Manager</h4></div>
 					<div class="modal-body">
-						<validator name="AddManager">
+
 							<form class="form-horizontal" novalidate>
 								<div class="form-group" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
 										<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value.sync="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
-										<select hidden="" v-model="user_id" v-validate:user="{ required: true}">
+										<select hidden="" v-model="user_id" name="user" v-validate="'required'">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>
 										</select></div>
 								</div>
 							</form>
-						</validator>
+
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>

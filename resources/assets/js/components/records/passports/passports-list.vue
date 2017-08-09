@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
 

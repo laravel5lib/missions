@@ -3,7 +3,7 @@
   <a :class="class" @click="confirm = true">
     <i :class="icon" v-if="icon"></i> {{ label }}
   </a>
-  <modal :title="label" :show.sync="confirm" effect="fade" small="true" ok-text="Send" :callback="fire">
+  <modal :title="label" :value="confirm" @closed="confirm=false" effect="fade" small="true" ok-text="Send" :callback="fire">
     <div slot="modal-body" class="modal-body text-center">
       <h5>Send Email?</h5>
       <hr class="divider inv">

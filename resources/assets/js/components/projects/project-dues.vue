@@ -19,7 +19,7 @@
                     <div class="col-md-3">
                         <label>{{ due.due_at | moment('ll') }}</label>
                         <p>
-                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status|capitalize}}</span>
+                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</span>
                         </p>
                         <hr class="divider inv hidden-lg">
                     </div>

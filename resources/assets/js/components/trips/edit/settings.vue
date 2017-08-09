@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripSettings" @valid="onValid">
+
 				<form id="TripSettings" class="form-horizontal" novalidate>
 
 					<div class="form-group" :class="{ 'has-error': errors.has('spots') }">
@@ -10,7 +10,7 @@
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon"><i class="fa fa-users"></i></span>
 								<input type="number" id="spots" v-model="spots" class="form-control"
-									   v-validate:spots="{ required: true, min:0 }"/>
+									   name="spots" v-validate="{ required: true, min:0 }"/>
 							</div>
 							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 								companions.
@@ -22,7 +22,7 @@
 						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
 						<div class="col-sm-10">
 							<date-picker :input-sm="true" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
-							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at" v-validate:closed="{ required: true }" id="closed_at">
+							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at" name="closed="'required'" id" v-validate="closed_at">
 						</div>
 					</div>
 
@@ -35,7 +35,7 @@
 					</div>
 
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>

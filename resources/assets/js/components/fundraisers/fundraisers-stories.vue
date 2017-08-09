@@ -119,7 +119,7 @@
             <pagination :pagination.sync="pagination" :callback="searchStories"></pagination>
         </div>
 
-        <modal v-if="isUser()" :show.sync="deleteModal" title="Remove Passport" small="true">
+        <modal v-if="isUser()" :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" small="true">
             <div slot="modal-body" class="modal-body">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

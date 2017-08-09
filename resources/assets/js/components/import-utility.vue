@@ -4,7 +4,7 @@
             Import <span class="fa fa-upload"></span>
         </button>
 
-        <modal :title="title" :show.sync="showImportModal" effect="zoom" width="400" ok-text="Import" :callback="importList">
+        <modal :title="title" :value="showImportModal" @closed="showImportModal=false" effect="zoom" width="400" ok-text="Import" :callback="importList">
             <div slot="modal-body" class="modal-body">
                 <spinner ref="spinner" size="sm" text="importing"></spinner>
                 
@@ -12,11 +12,11 @@
                     <p>{{ totalRows }} records are being processed. An email will be sent when importing is completed.</p>
                 </div>
 
-                <validator name="validation" :classes="{ invalid: 'has-error' }">
+
                     <div class="row">
                         <div v-validate-class class="col-sm-12 form-group">
                             <label for="file" class="control-label">File</label>
-                            <input type="file" id="file" accept=".csv" v-model="importFile" @change="handleFile" class="form-control" initial="off" v-validate:file="{file: { rule: true, message: 'A valid .csv file is required.'}}">
+                            <input type="file" id="file" accept=".csv" v-model="importFile" @change="handleFile" class="form-control" initial="off" name="file" v-validate="{file: { rule: true, message: 'A valid .csv file is required.'}}">
                             <span class="help-block">.csv files only</span>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                             <code>{{ optional }}</code>
                         </div>
                     </div>
-                </validator>
+
             </div>
         </modal>
     </div>

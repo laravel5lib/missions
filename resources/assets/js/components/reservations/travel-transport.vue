@@ -1,16 +1,16 @@
 <template>
 	<div>
 		<div v-if="transport">
-			<validator name="TravelTransport">
+
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
 							<label for="travel_methodA">Travel Method</label>
 							<template v-if="editMode">
 								<select class="form-control" name="travel_method" id="travel_method"
-								        v-validate:transporttype="['required']" v-model="transport.type">
+								        name="transporttype="['required']" v-model" v-validate="transport.type">
 									<option value="">-- Select--</option>
-									<option :value="option" v-for="option in travelTypeOptions">{{option | capitalize}}</option>
+									<option :value="option" v-for="option in travelTypeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
 								</select>
 							</template>
 
@@ -24,10 +24,10 @@
 									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
 									          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
 									          placeholder="Select Airline"></v-select>
-									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate:airline="['required']"
+									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" name="airline" v-validate="['required']"
 									        v-model="transport.name">
 										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
-											{{airline.extended_name | capitalize}}
+											{{airline.extended_name ? airline.extended_name[0].toUpperCase() + airline.extended_name.slice(1) : ''}}
 										</option>
 									</select>
 									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
@@ -70,8 +70,8 @@
 								<label for="travel_methodB">Company</label>
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
-									        v-validate:train="['required']" v-model="transport.name">
-										<option :value="option" v-for="option in trainOptions">{{option | capitalize}}</option>
+									        name="train="['required']" v-model" v-validate="transport.name">
+										<option :value="option" v-for="option in trainOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
 									</select>
 								</template>
 								<p v-else>{{ transport.name | uppercase }}</p>
@@ -88,8 +88,8 @@
 								<label for="travel_methodB">Company</label>
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
-									        v-validate:train="['required']" v-model="transport.name">
-										<option :value="option" v-for="option in vehicleOptions">{{option | capitalize}}
+									        name="train="['required']" v-model" v-validate="transport.name">
+										<option :value="option" v-for="option in vehicleOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}
 										</option>
 									</select>
 								</template>
@@ -99,7 +99,7 @@
 						</template>
 					</section>
 				</form>
-			</validator>
+
 		</div>
 
 	</div>

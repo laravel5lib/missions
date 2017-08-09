@@ -1,6 +1,6 @@
 <template>
 	<div style="position:relative;">
-		<validator name="TravelItineraries">
+
 			<form id="TravelItinerariesForm" novalidate>
 				<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
@@ -31,7 +31,7 @@
 					New Itinerary
 				</button>
 			</form>
-		</validator>
+
 	</div>
 </template>
 <style></style>

@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripPricing" @valid="onValid">
+
 				<form id="TripPricing" class="form-horizontal" novalidate>
 					<div class="text-right">
 						<button type="button" class="btn btn-sm btn-primary" @click="toggleNewCost=!toggleNewCost">
@@ -18,24 +18,24 @@
 									New Cost
 								</div>
 								<div class="panel-body">
-									<validator name="TripPricingCost">
+
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
 													<div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
 														<label for="cost_name">Name</label>
 														<input type="text" class="form-control input-sm" id="cost_name"
-															   v-model="newCost.name" v-validate:costName="{required: true}"
+															   v-model="newCost.name" name="costName" v-validate="'required'"
 															   placeholder="Name" autofocus>
 													</div>
 													<div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
 														<label for="cost_description">Description</label>
 														<textarea class="form-control input-sm" id="cost_description"
-																  v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+																  v-model="newCost.description" name="costDescription" v-validate="{required: true, minlength:1}"></textarea>
 													</div>
 													<div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
 														<label for="cost_type">Type</label>
-														<select id="cost_type" class="form-control input-sm" v-model="newCost.type" v-validate:costType="{ required: true }">
+														<select id="cost_type" class="form-control input-sm" v-model="newCost.type" name="costType" v-validate="'required'">
 															<option value="">-- select --</option>
 															<option value="static">Static</option>
 															<option value="incremental">Incremental</option>
@@ -48,7 +48,7 @@
 																<label for="newCost_active_at">Active</label>
 																<date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 																<input type="datetime" id="newCost_active_at" class="form-control input-sm hidden"
-																	   v-model="newCost.active_at" v-validate:costActive="{required: true}">
+																	   v-model="newCost.active_at" name="costActive" v-validate="'required'">
 															</div>
 
 														</div>
@@ -58,7 +58,7 @@
 																<div class="input-group input-group-sm">
 																	<span class="input-group-addon"><i class="fa fa-usd"></i></span>
 																	<input type="number" number id="newCost_amount" class="form-control"
-																		   v-model="newCost.amount" v-validate:costAmount="{required: true, min: 1}">
+																		   v-model="newCost.amount" name="costAmount" v-validate="{required: true, min: 1}">
 																</div>
 															</div>
 														</div>
@@ -66,7 +66,7 @@
 												</div>
 											</div>
 										</form>
-									</validator>
+
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewCost=false"><i class="fa fa-times"></i> Cancel</a>
@@ -84,7 +84,7 @@
 										</div>
 										<div class="col-sm-6">
 											<ul class="list-unstyled">
-												<li>{{cost.type|capitalize}}</li>
+												<li>{{cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : ''}}</li>
 												<li>{{cost.active_at|moment}}</li>
 												<li>{{cost.amount|currency}}</li>
 											</ul>
@@ -136,7 +136,7 @@
 								</table>
 								<ul class="list-group">
 									<li class="list-group-item" v-if="cost.toggleNewPayment">
-										<validator name="TripPricingCostPayment">
+
 											<form class="form-inline">
 												<div class="row">
 													<div class="col-sm-12">
@@ -146,13 +146,13 @@
 														<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('amount') }">
 															<span class="input-group-addon"><i class="fa fa-usd"></i></span>
 															<input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(cost)" number v-model="newPayment.amount_owed"
-															   v-validate:amount="{required: true, min: 0.01}" debounce="100">
+															   name="amount="{required: true, min: 0.01}" debounce" v-validate="100">
 														</div>
 													</div>
 													<div class="col-sm-6">
 														<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('percent') }">
 															<input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed|number 2"
-																   v-validate:percent="{required: true, min: 0.01}" debounce="100">
+																   name="percent="{required: true, min: 0.01}" debounce" v-validate="100">
 															<span class="input-group-addon"><i class="fa fa-percent"></i></span>
 														</div>
 													</div>
@@ -177,7 +177,7 @@
 															<label for="grace_period">Grace Period</label>
 															<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																<input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
-																	   v-validate:grace="{required: true, min:0}">
+																	   name="grace" v-validate="{required: true, min:0}">
 																<span class="input-group-addon">Days</span>
 															</div>
 														</div>
@@ -194,7 +194,7 @@
 													</div>
 												</div>
 											</form>
-										</validator>
+
 									</li>
 								</ul>
 								<div class="panel-footer text-right" v-if="calculateMaxAmount(cost) > 0">
@@ -205,7 +205,7 @@
 						</div>
 					</div>
 					</form>
-			</validator>
+
 		</div>
 	</div>
 </template>

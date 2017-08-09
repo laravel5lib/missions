@@ -6,7 +6,7 @@
 			<span class="icon-bar"></span>
 			<span style="color:#f6323e;font-size:7px;text-align:center;text-transform:uppercase;line-height:0em;margin-top:7px;display:block;">Menu</span>
 		</button>
-		<mm-aside :show.sync="showRight" placement="right" :width="275">
+		<mm-aside :show="showRight" @open="showRight=true" @close="showRight=false" placement="right" :width="275">
 			<div slot="header" class="text-center">
 		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="/images/mm-icon-lightgray.png" alt="Missions.Me">
 		</div>

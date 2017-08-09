@@ -118,10 +118,10 @@
             </thead>
             <tbody v-if="projects.length > 0">
             <tr v-for="project in projects|filterBy search|orderBy orderByField direction">
-                <td v-if="isActive('name')">{{project.name|capitalize}}</td>
-                <td v-if="isActive('type')">{{project.initiative.data.type|capitalize}}</td>
-                <td v-if="isActive('country')">{{project.initiative.data.country.name|capitalize}}</td>
-                <td v-if="isActive('sponsor')">{{project.sponsor.data.name|capitalize}}</td>
+                <td v-if="isActive('name')">{{project.name ? project.name[0].toUpperCase() + project.name.slice(1) : ''}}</td>
+                <td v-if="isActive('type')">{{project.initiative.data.type ? project.initiative.data.type[0].toUpperCase() + project.initiative.data.type.slice(1) : ''}}</td>
+                <td v-if="isActive('country')">{{project.initiative.data.country.name ? project.initiative.data.country.name[0].toUpperCase() + project.initiative.data.country.name.slice(1) : ''}}</td>
+                <td v-if="isActive('sponsor')">{{project.sponsor.data.name ? project.sponsor.data.name[0].toUpperCase() + project.sponsor.data.name.slice(1) : ''}}</td>
                 <td v-if="isActive('goal')">$ {{project.goal}}</td>
                 <td v-if="isActive('funds_raised')">{{project.amount_raised|currency}}</td>
                 <td v-if="isActive('percent_raised')">{{project.percent_raised}}%</td>

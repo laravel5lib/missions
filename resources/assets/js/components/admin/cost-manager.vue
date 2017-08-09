@@ -1,7 +1,7 @@
 <template>
     <section>
         <spinner ref="spinner" size="md" text="Loading"></spinner>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -35,7 +35,7 @@
             <div class="panel-body" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>{{ cost.name|capitalize }}</h4>
+                        <h4>{{ cost.name ? cost.name[0].toUpperCase() + cost.name.slice(1) : '' }}</h4>
                     </div>
                     <div class="col-sm-6 text-right hidden-xs">
                         <div style="padding: 0;">
@@ -65,7 +65,7 @@
                 <div class="row">
                     <div class="col-sm-4 text-center">
                         <label>Cost Type</label>
-                        <p>{{ cost.type|capitalize }}</p>
+                        <p>{{ cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : '' }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Active Date</label>
@@ -86,27 +86,27 @@
             <hr class="divider">
         </template>
 
-        <modal title="New Cost" :show.sync="showAddModal" effect="fade" width="800">
+        <modal title="New Cost" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
                 <template v-if="!selectedCost">
-                    <validator name="validateCost">
+
                         <form class="form" novalidate>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
-                                               v-model="newCost.name" v-validate:costName="{required: true}"
+                                               v-model="newCost.name" name="costName" v-validate="'required'"
                                                placeholder="Name" autofocus>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
-                                                  v-model="newCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+                                                  v-model="newCost.description" name="costDescription" v-validate="{required: true, minlength:1}"></textarea>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
                                         <label for="cost_type">Type</label>
-                                        <select id="cost_type" class="form-control" v-model="newCost.type" v-validate:costType="{ required: true }">
+                                        <select id="cost_type" class="form-control" v-model="newCost.type" name="costType" v-validate="'required'">
                                             <option value="">-- select --</option>
                                             <option value="static">Static</option>
                                             <option value="incremental">Incremental</option>
@@ -120,7 +120,7 @@
                                                 <br>
                                                 <date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                                 <input type="datetime" id="newCost_active_at" class="form-control hidden"
-                                                       v-model="newCost.active_at" v-validate:costActive="{required: true}">
+                                                       v-model="newCost.active_at" name="costActive" v-validate="'required'">
                                             </div>
 
                                         </div>
@@ -130,7 +130,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="newCost_amount" class="form-control"
-                                                           v-model="newCost.amount" v-validate:costAmount="{required: true}">
+                                                           v-model="newCost.amount" name="costAmount" v-validate="'required'">
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +138,7 @@
                                 </div>
                             </div>
                         </form>
-                    </validator>
+
                 </template>
             </div>
             <div slot="modal-footer" class="modal-footer">
@@ -147,27 +147,27 @@
             </div>
 
         </modal>
-        <modal title="Edit Cost" :show.sync="showEditModal" effect="fade" width="800">
+        <modal title="Edit Cost" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800">
             <div slot="modal-body" class="modal-body">
                 <template v-if="selectedCost">
-                    <validator name="validateCost">
+
                         <form class="form" novalidate>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
-                                               v-model="selectedCost.name" v-validate:costName="{required: true}"
+                                               v-model="selectedCost.name" name="costName" v-validate="'required'"
                                                placeholder="Name" autofocus>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
-                                                  v-model="selectedCost.description" v-validate:costDescription="{required: true, minlength:1}"></textarea>
+                                                  v-model="selectedCost.description" name="costDescription" v-validate="{required: true, minlength:1}"></textarea>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
                                         <label for="cost_type">Type</label>
-                                        <select id="cost_type" class="form-control" v-model="selectedCost.type" v-validate:costType="{ required: true }">
+                                        <select id="cost_type" class="form-control" v-model="selectedCost.type" name="costType" v-validate="'required'">
                                             <option value="">-- select --</option>
                                             <option value="static">Static</option>
                                             <option value="incremental">Incremental</option>
@@ -181,7 +181,7 @@
                                                 <br>
                                                 <date-picker :input-sm="true" :model.sync="selectedCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                                                 <input type="datetime" id="selectedCost_active_at" class="form-control hidden"
-                                                       v-model="selectedCost.active_at" v-validate:costActive="{required: true}">
+                                                       v-model="selectedCost.active_at" name="costActive" v-validate="'required'">
                                             </div>
 
                                         </div>
@@ -191,7 +191,7 @@
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                                     <input type="number" number id="selectedCost_amount" class="form-control"
-                                                           v-model="selectedCost.amount" v-validate:costAmount="{required: true}">
+                                                           v-model="selectedCost.amount" name="costAmount" v-validate="'required'">
                                                 </div>
                                             </div>
                                         </div>
@@ -199,7 +199,7 @@
                                 </div>
                             </div>
                         </form>
-                    </validator>
+
 
                 </template>
             </div>
@@ -209,7 +209,7 @@
             </div>
 
         </modal>
-        <modal title="Delete Cost" :show.sync="showDeleteModal" effect="fade" small="true">
+        <modal title="Delete Cost" :value="showDeleteModal" @closed="showDeleteModal=false" effect="fade" small="true">
             <div slot="modal-body" class="modal-body">
                 <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
             </div>
@@ -238,7 +238,6 @@
         </div>&lt;!&ndash; /.modal &ndash;&gt;-->
 
     </section>
-
 </template>
 <script type="text/javascript">
     import paymentManager from './payment-manager.vue'

@@ -1,7 +1,7 @@
 <template>
 	<div class="row" style="position:relative;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
-		<mm-aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
@@ -16,7 +16,7 @@
 				<button class="btn btn-default btn-sm btn-block" type="button" @click="resetRegionFilter"><i class="fa fa-times"></i> Reset Region Filters</button>
 			</form>
 		</mm-aside>
-		<mm-aside :show.sync="showSquadsFilters" placement="left" header="Squad Filters" :width="375">
+		<mm-aside :show="showSquadsFilters" @open="showSquadsFilters=true" @close="showSquadsFilters=false" placement="left" header="Squad Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 
@@ -24,7 +24,7 @@
 					<label for="" class="control-label">Type</label>
 					<select class="form-control" v-model="squadsFilters.type">
 						<option :value="">-- Select --</option>
-						<option :value="type.name" v-for="type in squadTypes">{{type.name | capitalize}}</option>
+						<option :value="type.name" v-for="type in squadTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
 					</select>
 				</div>
 
@@ -54,7 +54,7 @@
 					<div class="panel-heading">
 						<div class="row">
 							<div class="col-sm-6">
-								<h5>{{currentRegion.name | capitalize}} <span v-if="currentRegion.callsign">({{currentRegion.callsign}})</span><span class="small">&middot; Details</span></h5>
+								<h5>{{currentRegion.name ? currentRegion.name[0].toUpperCase() + currentRegion.name.slice(1) : ''}} <span v-if="currentRegion.callsign">({{currentRegion.callsign}})</span><span class="small">&middot; Details</span></h5>
 							</div>
 							<div class="col-sm-6 text-right">
 								<h5>{{currentRegion.country.name}}</h5>
@@ -72,8 +72,8 @@
 										<div class="list-group-item" v-for="team in currentRegion.teams.data">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign ? team.callsign[0].toUpperCase() + team.callsign.slice(1) : '' }}</a>
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name ? team.type.data.name[0].toUpperCase() + team.type.data.name.slice(1) : ''"></span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right">
@@ -137,12 +137,12 @@
 										<div class="row">
 											<div class="col-xs-9">
 												<a role="button" @click="makeCurrentRegion(region)">
-													<h4>{{ region.name | capitalize }}</h4>
+													<h4>{{ region.name ? region.name[0].toUpperCase() + region.name.slice(1) : '' }}</h4>
 													<p>
 					                                    <span v-if="region.callsign">
-					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign ? region.callsign[0].toUpperCase() + region.callsign.slice(1) : ''"></span>
 					                                    </span>
-														<span class="small">{{ region.country.name | capitalize }}</span>
+														<span class="small">{{ region.country.name ? region.country.name[0].toUpperCase() + region.country.name.slice(1) : '' }}</span>
 													</p>
 												</a>
 											</div>
@@ -175,7 +175,7 @@
 										<template v-for="team in region.teams.data">
 											<template v-if="team.groups">
 												<li class="list-group-item" v-for="group in team.groups.data">
-													{{ group.name | capitalize }}
+													{{ group.name ? group.name[0].toUpperCase() + group.name.slice(1) : '' }}
 												</li>
 											</template>
 										</template>
@@ -224,8 +224,8 @@
 							<div class="list-group-item" v-for="team in squads">
 								<div class="row list-group-item-heading">
 									<div class="col-xs-6">
-										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
-										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign ? team.callsign[0].toUpperCase() + team.callsign.slice(1) : '' }}</a>
+										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name ? team.type.data.name[0].toUpperCase() + team.type.data.name.slice(1) : ''"></span>
 										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>
 									<div class="col-xs-6 text-right">
@@ -255,13 +255,13 @@
 		</div>
 
 		<!-- Modals -->
-		<modal :title="editRegionModal?'Edit Region' : 'Create a Region'" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :show.sync="showRegionModal">
+		<modal :title="editRegionModal?'Edit Region' : 'Create a Region'" small :ok-text="editRegionModal?'Update' : 'Create'" :callback="createRegion" :value="showRegionModal" @closed="showRegionModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedRegion">
-				<validator name="RegionCreate">
+
 					<form id="RegionCreateForm">
 						<div class="form-group" :class="{'has-error': $RegionCreate.name.invalid}">
 							<label for="createPlanCallsign" class="control-label">Region Name</label>
-							<input @keydown.enter.prevent="createRegion" type="text" class="form-control" id="createRegionName" placeholder="" v-validate:name="['required']" v-model="selectedRegion.name">
+							<input @keydown.enter.prevent="createRegion" type="text" class="form-control" id="createRegionName" placeholder="" name="name="['required']" v-model" v-validate="selectedRegion.name">
 						</div>
 						<div class="form-group">
 							<label for="createPlanCallsign" class="control-label">Region Country</label>
@@ -274,30 +274,30 @@
 							<input  type="text" class="form-control" id="createRegionName" placeholder="" v-model="selectedRegion.callsign">
 						</div>
 					</form>
-				</validator>
+
 			</div>
 		</modal>
-		<modal title="Delete Region" small ok-text="Delete" :callback="deleteRegion" :show.sync="showRegionDeleteModal">
+		<modal title="Delete Region" small ok-text="Delete" :callback="deleteRegion" :value="showRegionDeleteModal" @closed="showRegionDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedRegion">
 					Are you sure you want to delete region: "{{selectedRegion.name}}" ?
 				</p>
 			</div>
 		</modal>
-		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :show.sync="showRoomModal">
+		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :value="showRoomModal" @closed="showRoomModal=false">
 			<div slot="modal-body" class="modal-body">
-				<validator name="RoomCreate">
+
 					<form id="RoomCreateForm">
 						<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}">
 							<label for="" class="control-label">Type</label>
-							<select class="form-control" v-model="selectedRoom.type" v-validate:roomtype="['required']" @change="selectedRoom.room_type_id = selectedRoom.type.id">
-								<option :value="type" v-for="type in roomTypes">{{type.name | capitalize}}</option>
+							<select class="form-control" v-model="selectedRoom.type" name="roomtype="['required']" @change" v-validate="selectedRoom.room_type_id = selectedRoom.type.id">
+								<option :value="type" v-for="type in roomTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
 							</select>
 							<hr class="divider sm">
 							<div v-if="selectedRoom.type" class="">
 								<template  v-for="(key, value) in selectedRoom.type.rules">
-									<label v-text="key | underscoreToSpace | capitalize"></label>
-									<p class="small" v-text="value | capitalize"></p>
+									<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
+									<p class="small" v-text="value ? value[0].toUpperCase() + value.slice(1) : ''"></p>
 								</template>
 							</div>
 						</div>
@@ -306,7 +306,7 @@
 							<input @keydown.enter.prevent="" type="text" class="form-control" id="roomname" v-model="selectedRoom.label">
 						</div>
 					</form>
-				</validator>
+
 			</div>
 		</modal>
 	</div>

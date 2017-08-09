@@ -28,7 +28,7 @@
 							<div class="row">
 								<div class="col-xs-9">
 									<a role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
-										<h4>{{ teamType.name | capitalize }}</h4>
+										<h4>{{ teamType.name ? teamType.name[0].toUpperCase() + teamType.name.slice(1) : '' }}</h4>
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
@@ -65,11 +65,11 @@
 		</div>
 		<div class="col-md-7 col-md-pull-5">
 			<template v-if="currentType">
-				<validator name="TypeForm">
+
 					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm">
 						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', messages: { req: 'Please name this type'} }">
 							<label class="control-label col-sm-4">Name</label>
-							<input type="text" class="form-control" v-validate:name="['required']" v-model="currentType.name">
+							<input type="text" class="form-control" name="name="['required']" v-model" v-validate="currentType.name">
 						</div>
 						<div class="row">
 							<template v-for="(key, value) in currentType.rules">
@@ -85,12 +85,12 @@
 							<button class="btn btn-primary btn-sm" type="submit" v-text="editTypeMode ? 'Update Squad Type' : 'Create Squad Type'"></button>
 						</div>
 					</form>
-				</validator>
+
 			</template>
 
 		</div>
 
-		<modal title="Delete Team Type" small ok-text="Delete" :callback="deleteType" :show.sync="showTypeDeleteModal">
+		<modal title="Delete Team Type" small ok-text="Delete" :callback="deleteType" :value="showTypeDeleteModal" @closed="showTypeDeleteModal=false">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="selectedType">
 					Are you sure you want to delete type: <b>{{selectedType.name}}</b> ?

@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-    <validator name="UpdateReservation" @touched="onTouched">
+
         <form id="UpdateReservation" novalidate class="form-horizontal">
             <div class="row">
                 <div class="col-sm-12">
@@ -22,7 +22,7 @@
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names">Given Names</label>
                         <input type=    "text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                               placeholder="Given Names" v-validate:givennames="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Given Names" name="givennames" v-validate="{ required: true, minlength:1, maxlength:100 }"
                                maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                     <label for="surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                           placeholder="Surname" v-validate:surname="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Surname" name="surname" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">
                         <label for="infoShirtSize">Shirt Sizes</label>
-                        <select class="form-control" v-model="shirt_size" v-validate:size="{ required: true }" :classes="{ invalid: 'has-error' }"
+                        <select class="form-control" v-model="shirt_size" name="size="'required'" :classes" v-validate="{ invalid: 'has-error' }"
                                 id="infoShirtSize">
                             <option value="XS">XS (Extra Small)</option>
                             <option value="S">S (Small)</option>
@@ -63,13 +63,13 @@
                     <label>Gender</label>
                     <div class="radios" v-error-handler="{ value: gender, handle: 'gender' }">
                         <label>
-                            <input type="radio" v-model="gender" v-validate:gender="{ required: { rule: true} }"
+                            <input type="radio" v-model="gender" name="gender" v-validate="{ required: { rule: true} }"
                                    value="male"> Male
                         </label>
                     </div>
                     <div class="radios" v-error-handler="{ value: gender, handle: 'gender' }">
                         <label>
-                            <input type="radio" v-model="gender" v-validate:gender value="female"> Female
+                            <input type="radio" v-model="gender" name="gender value" v-validate="female"> Female
                         </label>
                     </div>
                     <span class="help-block" v-show= "errors.has('gender')">Select a gender</span>
@@ -78,7 +78,7 @@
                     <div v-error-handler="{ value: status, handle: 'status' }">
                         <label for="infoRelStatus">Relationship Status</label>
                         <select class="form-control" v-model="status"
-                                v-validate:status="{ required: true }" :classes="{ invalid: 'has-error' }" id="infoRelStatus">
+                                name="status="'required'" :classes="{ invalid: 'has-error' }" id" v-validate="infoRelStatus">
                             <option value="single">Single</option>
                             <option value="married">Married</option>
                             <option value="divorced">Divorced</option>
@@ -102,29 +102,29 @@
             <div class="row">
                 <div class="col-sm-6" v-error-handler="{ value: email, handle: 'email' }">
                     <label for="infoEmail">Email</label>
-                    <input type="email" class="form-control" v-model="email" id="infoEmail" v-validate:email="['email']" placeholder="Email˚">
+                    <input type="email" class="form-control" v-model="email" id="infoEmail" name="email="['email']" placeholder" v-validate="Email˚">
                 </div>
                 <div class="col-sm-6">
                     <label for="infoAddress">Address 1</label>
-                    <input type="text" class="form-control" v-model="address" id="infoAddress" v-validate:address="{}" placeholder="Street Address 1">
+                    <input type="text" class="form-control" v-model="address" id="infoAddress" name="address="{}" placeholder" v-validate="Street Address 1">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-6">
                     <label for="infoCity">City</label>
-                    <input type="text" class="form-control" v-model="city" id="infoCity" v-validate:city="{}" placeholder="City">
+                    <input type="text" class="form-control" v-model="city" id="infoCity" name="city="{}" placeholder" v-validate="City">
                 </div>
                 <div class="col-sm-6">
                     <label for="infoState">State/Prov.</label>
-                    <input type="text" class="form-control" v-model="state" id="infoState" v-validate:state="{}" placeholder="State/Province">
+                    <input type="text" class="form-control" v-model="state" id="infoState" name="state="{}" placeholder" v-validate="State/Province">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-4">
                     <label for="infoZip">ZIP/Postal Code</label>
-                    <input type="text" class="form-control" v-model="zip" id="infoZip" v-validate:zip="{}" placeholder="12345">
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" name="zip="{}" placeholder" v-validate="12345">
                 </div>
                 <div class="col-sm-8">
                     <div>
@@ -143,7 +143,7 @@
                         <label for="manager">Managing User</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" :value.sync="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
-                        <select id="manager" hidden class="form-control hidden" v-model="user_id" v-validate:user="{require:true}">
+                        <select id="manager" hidden class="form-control hidden" v-model="user_id" name="user" v-validate="{require:true}">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
                         </select>
                     </div>
@@ -151,7 +151,7 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: companion_limit, client: 'companions', server: 'companion_limit' }">
                         <label for="companions">Companions</label>
-                        <input type="number" number class="form-control" v-validate:companions="{ require: true }" v-model="companion_limit" id="companions">
+                        <input type="number" number class="form-control" name="companions="{ require: true }" v-model="companion_limit" id" v-validate="companions">
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
                 <div class="col-sm-12 text-center">
                     <div class="form-group" :class="{ 'has-error': errors.has('desiredrole') }">
                         <label for="desiredRole">Desired Team Role</label>
-                        <select class="form-control input-sm" id="desiredRole" v-model="desired_role" v-validate:desiredrole="{ required: true }">
+                        <select class="form-control input-sm" id="desiredRole" v-model="desired_role" name="desiredrole" v-validate="'required'">
                             <option v-for="role in roles" :value="role.value">{{role.name}}</option>
                         </select>
                     </div><!-- end form-group -->
@@ -176,10 +176,10 @@
             </div>
 
         </form>
-        <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+        <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
-    </validator>
+
 </template>
 <script type="text/javascript">
     import vSelect from 'vue-select';

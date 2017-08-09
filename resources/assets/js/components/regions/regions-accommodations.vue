@@ -3,7 +3,7 @@
 
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
-		<mm-aside :show.sync="showRegionsFilters" placement="left" header="Region Filters" :width="375">
+		<mm-aside :show="showRegionsFilters" @open="showRegionsFilters=true" @close="showRegionsFilters=false" placement="left" header="Region Filters" :width="375">
 			<hr class="divider inv sm">
 			<form class="col-sm-12">
 				<div class="form-group" v-if="isAdminRoute">
@@ -66,7 +66,7 @@
 
 				<div class="collapse" id="AccommodationModal">
 					<div class="panel panel-default" v-if="showAccommodationManageModal">
-							<validator name="AccommodationForm">
+
 								<form id="AccommodationForm"
 								      name="AccommodationForm"
 								      @submit.prevent="manageAccommodation">
@@ -82,7 +82,7 @@
 												       type="text"
 												       class="form-control"
 												       id="AccoName" placeholder=""
-												       v-validate:name="['required']"
+												       name="name" v-validate="['required']"
 												       v-model="currentAccommodation.name">
 											</div>
 											<div class="form-group col-sm-12"
@@ -90,7 +90,7 @@
 												<label for="AccoDescription" class="control-label">Description</label>
 												<textarea class="form-control"
 												          id="AccoDescription"
-												          v-validate:shortdesc=""
+												          name="shortdesc" v-validate=""
 												          v-model="currentAccommodation.short_desc">
                                             </textarea>
 											</div>
@@ -101,7 +101,7 @@
 												       class="form-control"
 												       id="AccoAddressOne"
 												       placeholder=""
-												       v-validate:addressone=""
+												       name="addressone" v-validate=""
 												       v-model="currentAccommodation.address_one">
 											</div>
 											<div class="form-group col-sm-6"
@@ -111,7 +111,7 @@
 												       class="form-control"
 												       id="AccoAddressTwo"
 												       placeholder=""
-												       v-validate:addresstwo=""
+												       name="addresstwo" v-validate=""
 												       v-model="currentAccommodation.address_two">
 											</div>
 											<div class="form-group col-sm-4"
@@ -121,7 +121,7 @@
 												       class="form-control"
 												       id="AccoCity"
 												       placeholder=""
-												       v-validate:city=""
+												       name="city" v-validate=""
 												       v-model="currentAccommodation.city">
 											</div>
 											<div class="form-group col-sm-4"
@@ -131,7 +131,7 @@
 												       class="form-control"
 												       id="AccoState"
 												       placeholder=""
-												       v-validate:state=""
+												       name="state" v-validate=""
 												       v-model="currentAccommodation.state">
 											</div>
 											<div class="form-group col-sm-4"
@@ -141,7 +141,7 @@
 												       class="form-control"
 												       id="AccoZip"
 												       placeholder=""
-												       v-validate:zip=""
+												       name="zip" v-validate=""
 												       v-model="currentAccommodation.zip">
 											</div>
 											<div class="form-group col-sm-6"
@@ -151,7 +151,7 @@
 												       class="form-control"
 												       id="AccoPhone"
 												       placeholder=""
-												       v-validate:phone=""
+												       name="phone" v-validate=""
 												       v-model="currentAccommodation.phone">
 											</div>
 											<div class="form-group col-sm-6"
@@ -161,7 +161,7 @@
 												       class="form-control"
 												       id="AccoEmail"
 												       placeholder=""
-												       v-validate:email="['email']"
+												       name="email" v-validate="['email']"
 												       v-model="currentAccommodation.email">
 											</div>
 											<div class="form-group col-sm-6"
@@ -171,7 +171,7 @@
 												       class="form-control"
 												       id="AccoFax"
 												       placeholder=""
-												       v-validate:fax=""
+												       name="fax" v-validate=""
 												       v-model="currentAccommodation.fax">
 											</div>
 											<div class="form-group col-sm-6"
@@ -181,7 +181,7 @@
 												       class="form-control"
 												       id="AccoURL"
 												       placeholder=""
-												       v-validate:url=""
+												       name="url" v-validate=""
 												       v-model="currentAccommodation.url">
 											</div>
 										</div>
@@ -223,7 +223,7 @@
 										</div>
 									</template>
 								</form>
-							</validator>
+
 					    <div class="panel-footer text-center">
 						    <button type="button"
                                     class="btn btn-default btn-sm"
@@ -299,7 +299,7 @@
 											<div class="small">
 												<ul class="list-unstyled">
 													<li v-for="(key, value) in accommodation.rooms_count">
-														{{key|capitalize}}: {{value}}
+														{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: {{value}}
 													</li>
 												</ul>
 											</div>
@@ -307,7 +307,7 @@
 											<div class="small">
 												<ul class="list-unstyled">
 													<li v-for="(key, value) in accommodation.room_types">
-														{{key|capitalize}}: {{value}}
+														{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: {{value}}
 													</li>
 												</ul>
 											</div>
@@ -384,17 +384,17 @@
                                :class="{ 'active': currentRegion && currentRegion.id === region.id}"
                                v-for="region in regions">
 								<h4 class="list-group-item-heading">
-									{{ region.name | capitalize }}
+									{{ region.name ? region.name[0].toUpperCase() + region.name.slice(1) : '' }}
 									<span class="badge pull-right" v-text="region.accommodations.data.length"></span>
 								</h4>
                                 <p>
                                     <span v-if="region.callsign">
                                         <span class="label label-default"
                                               :style="'color: #FFF !important; background-color: ' + region.callsign"
-                                              v-text="region.callsign|capitalize">
+                                              v-text="region.callsign ? region.callsign[0].toUpperCase() + region.callsign.slice(1) : ''">
                                         </span>
                                     </span>
-                                    <span class="small">{{ region.country.name | capitalize }}</span>
+                                    <span class="small">{{ region.country.name ? region.country.name[0].toUpperCase() + region.country.name.slice(1) : '' }}</span>
                                 </p>
 							</a>
 						</div>

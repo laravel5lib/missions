@@ -1,6 +1,6 @@
 <template>
     <div class="panel panel-default">
-        <validator name="validation" :classes="{ invalid: 'has-error' }">
+
             <spinner ref="donorspinner" size="xl" :fixed="false" text="Saving..."></spinner>
             <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
             <div class="panel-heading">
@@ -14,7 +14,7 @@
                                class="form-control"
                                v-model="donor.name"
                                initial="off"
-                               v-validate:name="{required: true}">
+                               name="name" v-validate="'required'">
                     </div>
                     <div class="col-md-6">
                         <label>Company</label>
@@ -33,7 +33,7 @@
                                class="form-control"
                                v-model="donor.email"
                                initial="off"
-                               v-validate:email="{email: true}">
+                               name="email" v-validate="{email: true}">
                     </div>
                     <div class="col-md-6">
                         <label>Phone</label>
@@ -60,14 +60,14 @@
                     <div class="col-md-6" v-validate-class>
                         <label>Zip/Postal Code</label>
                         <input type="text" class="form-control" v-model="donor.zip" initial="off"
-                               v-validate:zip="{required: true}">
+                               name="zip" v-validate="'required'">
                     </div>
                     <div class="col-md-6" v-validate-class>
                         <label>Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
                                   :value.sync="countryCodeObj" :options="countries" label="name"
                                   placeholder="Select a country" initial="off"
-                                  v-validate:country_code="{required: true}"></v-select>
+                                  name="country_code" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                 <button class="btn btn-primary" v-if="!isUpdate" @click="create">Create</button>
                 <button class="btn btn-primary" v-if="isUpdate" @click="update">Save</button>
             </div>
-        </validator>
+
     </div>
 </template>
 <script type="text/javascript">

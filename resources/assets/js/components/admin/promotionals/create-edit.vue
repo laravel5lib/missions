@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="panel-body">
-            <validator name="ModifyPromotional" @touched="onTouched">
+
 
             <form id="ModifyPromotional" novalidate>
             <div class="row">
@@ -26,7 +26,7 @@
                     <input type="text" 
                            v-model="promo.name" 
                            class="form-control" 
-                           v-validate:name="{ required: true, minlength:3, maxlength:100 }"
+                           name="name" v-validate="{ required: true, minlength:3, maxlength:100 }"
                            required>
                     <span v-if="attemptSubmit" class="help-block">
                         <span v-if="$ModifyPromotional.name.required || $ModifyPromotional.name.minlength">
@@ -55,7 +55,7 @@
                         <input type="number" 
                                v-model="promo.reward" 
                                class="form-control" 
-                               v-validate:reward="{ required: true, min:1 }" 
+                               name="reward" v-validate="{ required: true, min:1 }"
                                required>
                         <span class="input-group-addon">.00</span>
                     </div>

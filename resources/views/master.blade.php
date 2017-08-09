@@ -27,7 +27,7 @@
 
         <div class="shepherd-backdrop"></div>
 
-        <alert :value="showSuccess"
+        <alert v-model="showSuccess"
                placement="top-right"
                :duration="3000"
                type="success"
@@ -38,7 +38,7 @@
             <p>@{{ message }}</p>
         </alert>
 
-        <alert :value="showInfo"
+        <alert v-model="showInfo"
                placement="top-right"
                :duration="3000"
                type="info"
@@ -49,7 +49,7 @@
             <p>@{{ message }}</p>
         </alert>
 
-        <alert :value="showError"
+        <alert v-model="showError"
                placement="top-right"
                :duration="0"
                type="danger"

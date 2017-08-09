@@ -21,10 +21,10 @@
 								<label>Date of Birth</label><p>{{userInfo.dob}}</p>
 							</div><!-- end col -->
 							<div class="col-sm-4">
-								<label>Gender</label><p>{{userInfo.gender|capitalize}}</p>
+								<label>Gender</label><p>{{userInfo.gender ? userInfo.gender[0].toUpperCase() + userInfo.gender.slice(1) : ''}}</p>
 							</div><!-- end col -->
 							<div class="col-sm-4">
-								<label>Relationship Status</label><p>{{userInfo.relationshipStatus|capitalize}}</p>
+								<label>Relationship Status</label><p>{{userInfo.relationshipStatus ? userInfo.relationshipStatus[0].toUpperCase() + userInfo.relationshipStatus.slice(1) : ''}}</p>
 							</div><!-- end col -->
 						</div><!-- end row -->
 						<div class="row">

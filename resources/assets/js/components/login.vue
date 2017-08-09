@@ -72,14 +72,14 @@
 							</div>
 						</div><!-- end alert -->
 						<div v-show="attemptRegister">
-							<!--<validator-errors :component="'bootstrap-alert-error'" :validation="$RegisterForm"></validator-errors>-->
+							<!--
 						</div>
 						<div class="form-group"
 						     :class="{ 'has-error': registerErrors.name || errors.has('name') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Name</label>
 								<input type="text" class="form-control" v-model="newUser.name" placeholder="John Doe"
-								       required v-validate:name="'required|alpha_spaces'"
+								       required name="name" v-validate="'required|alpha_spaces'"
 								       maxlength="100"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
@@ -88,14 +88,14 @@
 								<label class="control-label">E-Mail Address</label>
 								<input type="email" class="form-control" v-model="newUser.email"
 								       placeholder="example@gmail.com"
-								       required v-validate:email="['email',  { required: { rule: true, message: 'The email field is required.' }}]"/>
+								       required name="email" v-validate="['email',  { required: { rule: true, message: 'The email field is required.' }}]"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" :class="{ 'has-error': registerErrors.password || errors.has('password') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="newUser.password" required
-								       minlength="8" v-validate:password="{ required: { rule: true, message: 'The password field is required.' } }"/>
+								       minlength="8" name="password" v-validate="{ required: { rule: true, message: 'The password field is required.' } }"/>
 								<div class="help-block">Password must be at least 8 characters long</div>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
@@ -265,11 +265,11 @@
 								<label class="control-labal">Gender</label><br>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender"
-									       required v-validate:gender="{ required: { rule: true, message: 'Please select a gender.' }}">
+									       required name="gender" v-validate="{ required: { rule: true, message: 'Please select a gender.' }}">
 									Male</label>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Female" id="gender"
-									       v-model="newUser.gender" v-validate:gender="{ required: { rule: true, message: 'Please select a gender.' }}"> Female</label>
+									       v-model="newUser.gender" name="gender" v-validate="{ required: { rule: true, message: 'Please select a gender.' }}"> Female</label>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" :class="{ 'has-error': registerErrors.country_code }">

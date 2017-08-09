@@ -24,9 +24,9 @@
         </tr>
         </tbody>
     </table>
-    <modal title="New Payment" :show.sync="showAddModal" effect="fade" width="800">
+    <modal title="New Payment" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800">
         <div slot="modal-body" class="modal-body">
-            <validator name="TripPricingCostPaymentAdd">
+
                 <form class="form-inline">
                     <div class="row">
                         <div class="col-sm-12">
@@ -36,13 +36,13 @@
                             <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('amount') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                 <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(newPayment)" number v-model="newPayment.amount_owed"
-                                       v-validate:amount="{required: true, min: 0}" @change="modifyPercentOwed(newPayment)">
+                                       name="amount="{required: true, min: 0}" @change" v-validate="modifyPercentOwed(newPayment)">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('percent') }">
                                 <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed|number 2"
-                                       v-validate:percent="{required: true, min: 0}" @change="modifyAmountOwed(newPayment)">
+                                       name="percent="{required: true, min: 0}" @change" v-validate="modifyAmountOwed(newPayment)">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
@@ -67,14 +67,14 @@
                                 <label for="grace_period">Grace Period</label>
                                 <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('grace') }">
                                     <input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
-                                           v-validate:grace="{required: true, min:0}">
+                                           name="grace" v-validate="{required: true, min:0}">
                                     <span class="input-group-addon">Days</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-            </validator>
+
         </div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetPayment()'>Cancel</button>
@@ -82,10 +82,10 @@
         </div>
 
     </modal>
-    <modal title="Edit Payment" :show.sync="showEditModal" effect="fade" width="800">
+    <modal title="Edit Payment" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800">
         <div slot="modal-body" class="modal-body">
             <template v-if="selectedPayment">
-                <validator name="TripPricingCostPaymentEdit">
+
                     <form class="form-inline">
                         <div class="row">
                             <div class="col-sm-12">
@@ -95,13 +95,13 @@
                                 <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('amount') }">
                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                     <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
-                                           v-validate:amount="{required: true, min: 0}" @change="modifyPercentOwed(selectedPayment)" >
+                                           name="amount="{required: true, min: 0}" @change" v-validate="modifyPercentOwed(selectedPayment)" >
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('percent') }">
                                     <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
-                                           v-validate:percent="{required: true, min: 0}" @change="modifyAmountOwed(selectedPayment)">
+                                           name="percent="{required: true, min: 0}" @change" v-validate="modifyAmountOwed(selectedPayment)">
                                     <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                                 </div>
                             </div>
@@ -126,14 +126,14 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="selectedPayment.grace_period"
-                                               v-validate:grace="{required: true, min:0}">
+                                               name="grace" v-validate="{required: true, min:0}">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </template>
         </div>
         <div slot="modal-footer" class="modal-footer">
@@ -142,7 +142,7 @@
         </div>
 
     </modal>
-    <modal class="text-center" :show.sync="deletePaymentModal" title="Delete Payment" small="true">
+    <modal class="text-center" :value="deletePaymentModal" @closed="deletePaymentModal=false" title="Delete Payment" small="true">
         <div slot="modal-body" class="modal-body text-center" v-if="selectedPayment">Delete {{ selectedPayment.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='deletePaymentModal = false'>Keep</button>

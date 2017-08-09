@@ -7,9 +7,9 @@
 					{{ transport.name }} <small>&middot; {{ transport.vessel_no }}</small>
 					<br />
 					<small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
-					{{ transport.type | capitalize }}
+					{{ transport.type ? transport.type[0].toUpperCase() + transport.type.slice(1) : '' }}
 					<span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
-					<span class="label label-primary" v-text="transport.designation | capitalize"></span>
+					<span class="label label-primary" v-text="transport.designation ? transport.designation[0].toUpperCase() + transport.designation.slice(1) : ''"></span>
 					</small>
 				</h3>
 				<p>
@@ -101,7 +101,7 @@
                             </div>
                             <div class="panel-body">
                                 <p>
-                                    {{transport.departureHub.data.name | capitalize}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
+                                    {{transport.departureHub.data.name ? transport.departureHub.data.name[0].toUpperCase() + transport.departureHub.data.name.slice(1) : ''}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
                                     <span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
                                     <span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
                                     <span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
@@ -117,7 +117,7 @@
                             </div>
                             <div class="panel-body">
                                 <p>
-                                    {{transport.arrivalHub.data.name | capitalize}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
+                                    {{transport.arrivalHub.data.name ? transport.arrivalHub.data.name[0].toUpperCase() + transport.arrivalHub.data.name.slice(1) : ''}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
                                     <span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}</span><br>
                                     <span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
                                     <span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>

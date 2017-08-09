@@ -41,7 +41,7 @@
                                 </div>
                             </div>
 
-                            <modal title="View Upload" :show.sync="showView">
+                            <modal title="View Upload" :value="showView" @closed="showView=false">
                                 <div slot="modal-body" class="modal-body" v-if="selectedUpload && selectedUpload.hasOwnProperty('type')">
                                     <template v-if="selectedUpload.type === 'video'">
                                         <video id="preview" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
@@ -60,7 +60,7 @@
                                 </div>
                             </modal>
 
-                            <modal title="Delete Upload" small :show.sync="showDelete" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
+                            <modal title="Delete Upload" small :value="showDelete" @closed="showDelete=false" ok-text="Delete" cancel-text="Keep" :callback="doDelete">
                                 <div slot="modal-body" class="modal-body">Delete this upload?</div>
                             </modal>
                         </div>

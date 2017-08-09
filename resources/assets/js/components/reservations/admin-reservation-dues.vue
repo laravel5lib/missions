@@ -24,7 +24,7 @@
             <template v-for="due in dues" track-by="id">
                 <tr>
                     <td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status|capitalize}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</small>
                     </td>
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>
@@ -40,26 +40,26 @@
             </tbody>
         </table>
 
-        <!--<modal title="Add Dues" :show.sync="showAddModal" effect="fade" width="800" :callback="addDues">
+        <!--<modal title="Add Dues" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addDues">
             <div slot="modal-body" class="modal-body">
-                <validator name="AddDue">
+
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDues" :options="availableDues"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" v-validate:dues="{ required: true }" multiple>
+                            <select hidden="" v-model="user_id" name="dues" v-validate="'required'" multiple>
                                 <option :value="due.id" v-for="due in dues">{{due.name}}</option>
                             </select>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>-->
 
-        <modal title="Edit Due" :show.sync="showEditModal" effect="fade" width="800" :callback="updateDue">
+        <modal title="Edit Due" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="updateDue">
             <div slot="modal-body" class="modal-body">
-                <validator name="EditDue">
+
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
@@ -67,7 +67,7 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditDueError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDue.grace_period"
-                                               v-validate:grace="{required: { rule: true }}">
+                                               name="grace" v-validate="{required: { rule: true }}">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                     </form>
-                </validator>
+
             </div>
         </modal>
     </div>

@@ -1,7 +1,7 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripReqs" @valid="onValid">
+
 				<form id="TripReqs" class="form-horizontal" novalidate>
 
 					<div class="form-group">
@@ -20,7 +20,7 @@
 									New Requirement
 								</div>
 								<div class="panel-body">
-									<validator name="TripReqsCreate">
+
 										<form class="form" novalidate>
 											<div class="row">
 												<div class="col-sm-12">
@@ -28,7 +28,7 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('item')}">
 																<label for="item">Item</label>
-																<select id="item" class="form-control input-sm" v-model="newReq.item" v-validate:item="{ required: true }">
+																<select id="item" class="form-control input-sm" v-model="newReq.item" name="item" v-validate="'required'">
 																	<option value="">-- select --</option>
 																	<option :value="option" v-for="option in resources">{{option}}</option>
 																</select>
@@ -50,7 +50,7 @@
 																<label for="grace_period">Grace Period</label>
 																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newReq.grace_period"
-																		   v-validate:grace="{required: true, min:0}">
+																		   name="grace" v-validate="{required: true, min:0}">
 																	<span class="input-group-addon">Days</span>
 																</div>
 															</div>
@@ -60,7 +60,7 @@
 																<label for="due_at">Due</label>
 																<date-picker :input-sm="true" :model.sync="newReq.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 																<input type="datetime" id="due_at" class="form-control input-sm hidden"
-																	   v-model="newReq.due_at" v-validate:due="{required: true}">
+																	   v-model="newReq.due_at" name="due" v-validate="'required'">
 															</div>
 
 														</div>
@@ -76,7 +76,7 @@
 												</div>
 											</div>
 										</form>
-									</validator>
+
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewRequirement=false"><i class="fa fa-times"></i> Cancel</a>
@@ -118,7 +118,7 @@
 						</div>
 					</div>
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>

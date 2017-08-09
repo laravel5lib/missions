@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -187,15 +187,15 @@
                     <tbody>
                     <tr v-for="trip in trips|filterBy search|orderBy orderByField direction">
                         <td v-if="isActive('name')">{{trip.group.data.name}}</td>
-                        <td v-if="isActive('type')">{{trip.type|capitalize}}</td>
-                        <td v-if="isActive('status')">{{trip.status|capitalize}}</td>
+                        <td v-if="isActive('type')">{{trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : ''}}</td>
+                        <td v-if="isActive('status')">{{trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : ''}}</td>
                         <td v-if="isActive('dates')">{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
                         <td v-if="isActive('starting_cost')" v-text="trip.starting_cost | currency"></td>
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
-                        <td v-if="isActive('difficulty')" v-text="trip.difficulty|capitalize"></td>
+                        <td v-if="isActive('difficulty')" v-text="trip.difficulty ? trip.difficulty[0].toUpperCase() + trip.difficulty.slice(1) : ''"></td>
                         <td v-if="isActive('created_at')" v-text="trip.created_at|moment('ll')"></td>
                         <td v-if="isActive('updated_at')" v-text="trip.updated_at|moment('ll')"></td>
 

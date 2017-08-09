@@ -1,6 +1,6 @@
 <template>
     <div>
-        <mm-aside :show.sync="showFilters" placement="left" header="Filters" :width="375">
+        <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
             <hr class="divider inv sm">
             <form class="col-sm-12">
                 <div class="form-group">
@@ -191,7 +191,7 @@
                 </thead>
                 <tbody v-if="interests.length > 0">
                 <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
-                    <td v-if="isActive('name')">{{interest.name|capitalize}}</td>
+                    <td v-if="isActive('name')">{{interest.name ? interest.name[0].toUpperCase() + interest.name.slice(1) : ''}}</td>
                     <td v-if="isActive('email')">{{interest.email}}</td>
                     <td v-if="isActive('phone')">{{interest.phone}}</td>
                     <td v-if="isActive('status')">

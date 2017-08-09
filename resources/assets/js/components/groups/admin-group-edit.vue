@@ -1,6 +1,6 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-    <validator name="UpdateGroup" @touched="onTouched">
+
         <form id="UpdateGroupForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="row form-group">
@@ -44,7 +44,7 @@
                 <div class="col-sm-12">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Group Name" v-validate:name="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Group Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="" v-model="country_code" v-validate:country="{ required: true }" >
+                        <select hidden name="country" id="country" class="" v-model="country_code" name="country" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
                     </div>
@@ -96,16 +96,16 @@
             <div class="row" v-error-handler="{ value: type, handle: 'type' }">
                 <div class="col-sm-6">
                     <label for="country">Type</label>
-                    <select name="type" id="type" class="form-control" v-model="type" v-validate:type="{ required: true }" required>
+                    <select name="type" id="type" class="form-control" v-model="type" name="type" v-validate="'required'" required>
                         <option value="">-- please select --</option>
-                        <option :value="option" v-for="option in typeOptions">{{option|capitalize}}</option>
+                        <option :value="option" v-for="option in typeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
                     </select>
                 </div>
                 <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                     <div class="col-sm-6">
                         <label for="country">Timezone</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
-                        <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate:timezone="{ required: true }">
+                        <select hidden name="timezone" id="timezone" class="" v-model="timezone" name="timezone" v-validate="'required'">
                             <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                         </select>
 
@@ -158,7 +158,7 @@
                         <label for="url" class="control-label">Url Slug</label>
                         <div class="input-group">
                             <span class="input-group-addon">www.missions.me/</span>
-                            <input type="text" id="url" v-model="url" class="form-control" v-validate:url="{ required: !!public }"/>
+                            <input type="text" id="url" v-model="url" class="form-control" name="url" v-validate="{ required: !!public }"/>
                         </div>
                         <!--<span class="help-block" v-if="errors.url" v-text="errors.url"></span>-->
                     </div>
@@ -172,11 +172,11 @@
                 </div>
             </div>
 
-            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                 <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
             </modal>
         </form>
-    </validator>
+
     </div>
 </template>
 <script type="text/javascript">

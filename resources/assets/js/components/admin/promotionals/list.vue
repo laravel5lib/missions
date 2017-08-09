@@ -36,7 +36,7 @@
             <tbody>
                 <tr v-for="promo in promos" track-by="id">
                     <td><span class="label label-default">{{ status(promo) }}</span></td>
-                    <td>{{ promo.name | capitalize }}</td>
+                    <td>{{ promo.name ? promo.name[0].toUpperCase() + promo.name.slice(1) : '' }}</td>
                     <td>{{ promo.reward | currency }}</td>
                     <td>{{ promo.expires | moment('ll') }}</td>
                     <td>{{ promo.promocodes_count }}</td>

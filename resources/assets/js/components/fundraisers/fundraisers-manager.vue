@@ -42,9 +42,9 @@
                 <!--</div>-->
             <!--</div>-->
 
-            <modal v-if="fundraiser" title="Fundraiser Settings" :show.sync="settingsModal" effect="zoom" width="400" :callback="saveSettings">
+            <modal v-if="fundraiser" title="Fundraiser Settings" :value="settingsModal" @closed="settingsModal=false" effect="zoom" width="400" :callback="saveSettings">
                 <div slot="modal-body" class="modal-body">
-                    <validator name="FundraiserSettings">
+
                         <form id="FundraiserSettingsForm">
                             <div class="form-group">
                                 <label for="name">Fundraiser Name</label>
@@ -74,7 +74,7 @@
                                 </label>
                             </div>
                         </form>
-                    </validator>
+
                 </div>
             </modal>
 

@@ -1,12 +1,12 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
 	<div class="row">
 		<div class="col-sm-12">
-			<validator name="TripDetails" @valid="onValid">
+
 				<form id="TripDetailsForm" class="form-horizontal" novalidate>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Campaign</label>
 						<div class="col-sm-10">
-							<p>{{$parent.campaign.name|capitalize}}</p>
+							<p>{{$parent.campaign.name ? $parent.campaign.name[0].toUpperCase() + $parent.campaign.name.slice(1) : ''}}</p>
 						</div>
 					</div>
 					<div class="form-group" :class="{ 'has-error': errors.has('group') }">
@@ -14,7 +14,7 @@
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
 									  label="name"></v-select>
-							<select hidden v-model="group_id" v-validate:group="{ required: true}">
+							<select hidden v-model="group_id" name="group" v-validate="'required'">
 								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
 							</select>
 						</div>
@@ -24,7 +24,7 @@
 						<label for="type" class="col-sm-2 control-label">Type</label>
 						<div class="col-sm-10">
 							<select id="type" class="form-control input-sm" v-model="type"
-									v-validate:type="{ required: true }" required>
+									name="type" v-validate="'required'" required>
 								<option value="">-- select --</option>
 								<option value="full">Full</option>
 								<option value="media">Media</option>
@@ -39,7 +39,7 @@
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-							<select hidden multiple v-model="prospects" v-validate:prospects="{ required: true}">
+							<select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
 								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
 								</option>
 							</select>
@@ -50,7 +50,7 @@
 						<label for="difficulty" class="col-sm-2 control-label">Difficulty</label>
 						<div class="col-sm-10">
 							<select id="difficulty" class="form-control input-sm" v-model="difficulty"
-									v-validate:difficulty="{ required: true }" required>
+									name="difficulty" v-validate="'required'" required>
 								<option value="">-- select --</option>
 								<option value="level_1">Level 1</option>
 								<option value="level_2">Level 2</option>
@@ -65,7 +65,7 @@
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon"><i class="fa fa-users"></i></span>
 								<input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-									   v-validate:companions="{ required: true, min:0 }"/>
+									   name="companions" v-validate="{ required: true, min:0 }"/>
 							</div>
 							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 								companions.
@@ -80,7 +80,7 @@
 								<div class="col-sm-6">
 									<date-picker addon="Start" :has-error= "errors.has('start')" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
-									       v-validate:start="{ required: true }" required>
+									       name="start" v-validate="'required'" required>
 									<!--<div class="input-group input-group-sm"
 										 :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
@@ -89,7 +89,7 @@
 								<div class="col-sm-6">
 									<date-picker addon="End" :has-error= "errors.has('end')" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
-									       v-validate:end="{ required: true }" required>
+									       name="end" v-validate="'required'" required>
 									<!--<div class="input-group input-group-sm"
 										 :class="{ 'has-error': errors.has('end') }">
 										<span class="input-group-addon">End</span>
@@ -104,7 +104,7 @@
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"
 									  label="name"></v-select>
-							<!--v-validate:rep="{ required: false}"-->
+							<!--name="rep" v-validate="{ required: false}"-->
 							<select hidden v-model="rep_id">
 								<option v-for="rep in reps" :value="rep">{{rep}}</option>
 							</select>
@@ -112,7 +112,7 @@
 					</div>
 
 				</form>
-			</validator>
+
 		</div>
 	</div>
 </template>

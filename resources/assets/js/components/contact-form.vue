@@ -5,7 +5,7 @@
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="John Smith" v-validate:name="'required|alpha_spaces|min:1|max:100'"
+                           placeholder="John Smith" name="name" v-validate="'required|alpha_spaces|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
                 <div class="col-sm-6">
@@ -22,14 +22,14 @@
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
                     <label for="name">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate:email="'required|email'">
+                    <input type="text" class="form-control" name="email" id="email" v-model="email" name="email" v-validate="'required|email'">
                 </div>
             </div>
 
             <div class="form-group" :class="{ 'has-error': errors.has('comments') }">
                 <div class="col-sm-12">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate:comments="'required'" rows=10 maxlength="500" autosize></textarea>
+                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" name="comments="'required'" rows=10 maxlength" v-validate="500" autosize></textarea>
                 </div>
             </div>
             <div class="form-group">

@@ -1,12 +1,12 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
     <div>
-        <validator name="Interest">
+
         <form novalidate id="TripInterestSignupForm">
             <spinner ref="validationSpinner" size="xl" :fixed="false" text="Saving"></spinner>
             <div class="row">
                 <div class="col-xs-12" v-error-handler="{ value: campaign, handle: 'campaign' }">
                     <label>Campaign of Interest</label>
-                    <select v-model="campaign_id" class="form-control" v-validate:campaign="{required: true}">
+                    <select v-model="campaign_id" class="form-control" name="campaign" v-validate="'required'">
                         <option v-for="campaign in campaigns" :value="campaign.data.id">
                             {{   campaign.data.name }}
                         </option>
@@ -17,9 +17,9 @@
             <div class="row" v-if="campaign_id">
                 <div class="col-xs-12" v-error-handler="{ value: trip, handle: 'trip' }">
                     <label>Trip Type</label>
-                    <select name="campaign" v-model="interest.trip_id" class="form-control" v-validate:trip="{required: true}">
+                    <select name="campaign" v-model="interest.trip_id" class="form-control" name="trip" v-validate="'required'">
                         <option v-for="trip in trips" :value="trip.id">
-                            {{ trip.type | capitalize }} Trip
+                            {{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }} Trip
                         </option>
                     </select>
                 </div>
@@ -28,14 +28,14 @@
             <div class="row">
                 <div class="col-xs-12" v-error-handler="{ value: name, handle: 'name' }">
                     <label>Name</label>
-                    <input type="text" class="form-control" v-model="interest.name" v-validate:name="{required: true}">
+                    <input type="text" class="form-control" v-model="interest.name" name="name" v-validate="'required'">
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row">
                 <div class="col-xs-12" v-error-handler="{ value: email, handle: 'email' }">
                     <label>Email</label>
-                    <input type="text" class="form-control" v-model="interest.email" v-validate:email="{required: true, email: true}">
+                    <input type="text" class="form-control" v-model="interest.email" name="email" v-validate="{required: true, email: true}">
                 </div>
             </div>
             <hr class="divider inv sm">
@@ -73,7 +73,7 @@
             </div>
 
         </form>
-        </validator>
+
     </div>
 </template>
 <script type="text/javascript">

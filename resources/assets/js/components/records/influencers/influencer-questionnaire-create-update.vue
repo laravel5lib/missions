@@ -1,6 +1,6 @@
 <template>
     <div>
-        <validator name="CreateUpdateInfluencer" @touched="onTouched">
+
             <form id="CreateUpdateInfluencer" class="" novalidate>
                 <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 
@@ -10,7 +10,7 @@
                         <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                             <label for="infoManager">Record Manager</label>
                             <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                            <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate:manager="{ required: true }">
+                            <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" name="manager" v-validate="'required'">
                                 <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                             </select>
                         </div>
@@ -21,7 +21,7 @@
                 <div class="form-group" v-error-handler="{ value: author_name, handle: 'author' }">
                     <label for="author" class="control-label">Author Name</label>
                     <input type="text" class="form-control" name="author" id="author" v-model="author_name"
-                           placeholder="Author Name" v-validate:author="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Author Name" name="author" v-validate="{ required: true, minlength:1, maxlength:100 }"
                            maxlength="150" minlength="1" required>
                 </div>
 
@@ -71,11 +71,11 @@
                     </div>
                 </div>
             </form>
-            <modal title="Save Changes" :show.sync="showSaveAlert" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
+            <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
                 <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
             </modal>
 
-        </validator>
+
     </div>
 </template>
 <script type="text/javascript">

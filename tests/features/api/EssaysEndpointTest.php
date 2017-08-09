@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\Essay;
 
-class EssaysEndpointTest extends TestCase
+class EssaysEndpointTest extends BrowserKitTestCase
 {
 
     /**

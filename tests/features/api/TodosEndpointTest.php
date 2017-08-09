@@ -4,7 +4,7 @@ use App\Models\v1\Todo;
 use App\Models\v1\User;
 use App\Models\v1\Reservation;
 
-class TodosEndpointTest extends TestCase
+class TodosEndpointTest extends BrowserKitTestCase
 {
     /**
      * @test

@@ -1,6 +1,6 @@
 <?php
 
-class TransportsEndpointTest extends TestCase
+class TransportsEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function gets_all_transports()

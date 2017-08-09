@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\Referral;
 
-class ReferralsEndpointTest extends TestCase
+class ReferralsEndpointTest extends BrowserKitTestCase
 {
 
     /**

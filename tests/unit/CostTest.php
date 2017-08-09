@@ -2,7 +2,7 @@
 
 use App\Models\v1\Cost;
 
-class CostTest extends TestCase
+class CostTest extends BrowserKitTestCase
 {
     /**
      * @test

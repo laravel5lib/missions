@@ -1,6 +1,6 @@
 <?php
 
-class GroupsEndpointTest extends TestCase
+class GroupsEndpointTest extends BrowserKitTestCase
 {
     /**
      * @test

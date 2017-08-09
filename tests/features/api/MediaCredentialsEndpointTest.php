@@ -1,6 +1,6 @@
 <?php
 
-class MediaCredentialsEndpointTest extends TestCase
+class MediaCredentialsEndpointTest extends BrowserKitTestCase
 {
 
     /**

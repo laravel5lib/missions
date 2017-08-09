@@ -4,7 +4,7 @@ use Carbon\Carbon;
 use App\Models\v1\Campaign;
 use App\Models\v1\ActivityType;
 
-class ActivitiesEndpointTest extends TestCase
+class ActivitiesEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function gets_all_activities()

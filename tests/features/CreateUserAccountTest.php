@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Session;
 
-class CreateUserAccountTest extends TestCase
+class CreateUserAccountTest extends BrowserKitTestCase
 {
     /**
      * @test

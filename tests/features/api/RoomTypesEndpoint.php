@@ -1,6 +1,6 @@
 <?php
 
-class RoomTypesEndpoint extends TestCase
+class RoomTypesEndpoint extends BrowserKitTestCase
 {
     /** @test */
     public function fetches_all_room_types()

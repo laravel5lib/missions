@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\Visa;
 
-class VisasEndpointTest extends TestCase
+class VisasEndpointTest extends BrowserKitTestCase
 {
 
     /**

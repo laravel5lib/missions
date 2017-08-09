@@ -1,6 +1,6 @@
 <?php
 
-class RequirementConditionTest extends TestCase
+class RequirementConditionTest extends BrowserKitTestCase
 {
 
     /** @test */

@@ -1,6 +1,6 @@
 <?php
 
-class TeamablesEndpointTest extends TestCase
+class TeamablesEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function add_teams_to_group()

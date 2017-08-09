@@ -1,0 +1,274 @@
+--- app/Listeners/ReservationEventListener.php
++++ PHP_CodeSniffer
+@@ -109,27 +109,27 @@
+     public function subscribe($events)
+     {
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@setupFunding'
+         );
+ 
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@process'
+         );
+ 
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@promos'
+         );
+ 
+         $events->listen(
+-            'App\Events\ReservationWasCreated',
++            \App\Events\ReservationWasCreated::class,
+             'App\Listeners\ReservationEventListener@updateSpotsAvailable'
+         );
+ 
+         $events->listen(
+-            'App\Events\RegisteredForTrip',
++            \App\Events\RegisteredForTrip::class,
+             'App\Listeners\ReservationEventListener@register'
+         );
+     }
+
+--- app/Listeners/RequirementEventListener.php
++++ PHP_CodeSniffer
+@@ -25,7 +25,7 @@
+     public function subscribe($events)
+     {
+         $events->listen(
+-            'App\Events\RequirementWasUpdated',
++            \App\Events\RequirementWasUpdated::class,
+             'App\Listeners\RequirementEventListener@statusChange'
+         );
+     }
+
+--- app/Listeners/TransactionEventListener.php
++++ PHP_CodeSniffer
+@@ -51,12 +51,12 @@
+     public function subscribe($events)
+     {
+         $events->listen(
+-            'App\Events\TransactionWasCreated',
++            \App\Events\TransactionWasCreated::class,
+             'App\Listeners\TransactionEventListener@updateFundBalance'
+         );
+ 
+         $events->listen(
+-            'App\Events\TransactionWasCreated',
++            \App\Events\TransactionWasCreated::class,
+             'App\Listeners\TransactionEventListener@applyAsPayment'
+         );
+     }
+
+--- app/Providers/AppServiceProvider.php
++++ PHP_CodeSniffer
+@@ -129,12 +129,12 @@
+         $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);
+ 
+         // register and configure the transaction handler.
+-        $this->app->singleton('App\TransactionHandler', function ($app) {
++        $this->app->singleton(\App\TransactionHandler::class, function ($app) {
+             return new TransactionHandler(
+-                $app->make('App\Models\v1\Transaction'),
+-                $app->make('App\Services\PaymentGateway'),
+-                $app->make('App\Models\v1\Donor'),
+-                $app->make('App\Models\v1\Fund')
++                $app->make(\App\Models\v1\Transaction::class),
++                $app->make(\App\Services\PaymentGateway::class),
++                $app->make(\App\Models\v1\Donor::class),
++                $app->make(\App\Models\v1\Fund::class)
+             );
+         });
+ 
+
+--- app/Providers/EventServiceProvider.php
++++ PHP_CodeSniffer
+@@ -21,17 +21,17 @@
+      * @var array
+      */
+     protected $listen = [
+-        'App\Events\DonationWasMade' => [
+-            'App\Listeners\EmailReceipt',
+-            'App\Listeners\NotifyRecipient'
++        \App\Events\DonationWasMade::class => [
++            \App\Listeners\EmailReceipt::class,
++            \App\Listeners\NotifyRecipient::class
+         ],
+-        'App\Events\ReservationWasProcessed' => [
+-            'App\Listeners\EmailReservationConfirmation',
+-            'App\Listeners\NotifyFacilitatorsOfNewReservation'
++        \App\Events\ReservationWasProcessed::class => [
++            \App\Listeners\EmailReservationConfirmation::class,
++            \App\Listeners\NotifyFacilitatorsOfNewReservation::class
+         ],
+-        'App\Events\TripInterestWasCreated' => [
+-            'App\Listeners\NotifyFacilitatorsOfNewTripInterest',
+-            'App\Listeners\NotifyTripRepOfNewTripInterest'
++        \App\Events\TripInterestWasCreated::class => [
++            \App\Listeners\NotifyFacilitatorsOfNewTripInterest::class,
++            \App\Listeners\NotifyTripRepOfNewTripInterest::class
+         ]
+     ];
+ 
+@@ -41,8 +41,8 @@
+      * @var array
+      */
+     protected $subscribe = [
+-        'App\Listeners\ReservationEventListener',
+-        'App\Listeners\TransactionEventListener',
++        \App\Listeners\ReservationEventListener::class,
++        \App\Listeners\TransactionEventListener::class,
+ //        'App\Listeners\RequirementEventListener'
+     ];
+ 
+
+--- app/Providers/BackendServiceProvider.php
++++ PHP_CodeSniffer
+@@ -14,24 +14,24 @@
+     public function register()
+     {
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Type',
+-            'App\Repositories\Rooming\EloquentType'
++            \App\Repositories\Rooming\Interfaces\Type::class,
++            \App\Repositories\Rooming\EloquentType::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Plan',
+-            'App\Repositories\Rooming\EloquentPlan'
++            \App\Repositories\Rooming\Interfaces\Plan::class,
++            \App\Repositories\Rooming\EloquentPlan::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Accommodation',
+-            'App\Repositories\Rooming\EloquentAccommodation'
++            \App\Repositories\Rooming\Interfaces\Accommodation::class,
++            \App\Repositories\Rooming\EloquentAccommodation::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Room',
+-            'App\Repositories\Rooming\EloquentRoom'
++            \App\Repositories\Rooming\Interfaces\Room::class,
++            \App\Repositories\Rooming\EloquentRoom::class
+         );
+         $this->app->bind(
+-            'App\Repositories\Rooming\Interfaces\Occupant',
+-            'App\Repositories\Rooming\EloquentOccupant'
++            \App\Repositories\Rooming\Interfaces\Occupant::class,
++            \App\Repositories\Rooming\EloquentOccupant::class
+         );
+     }
+ }
+
+--- app/Services/Importers/ReferralListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Referral';
++    public $model = \App\Models\v1\Referral::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/TripListImportHandler.php
++++ PHP_CodeSniffer
+@@ -15,7 +15,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Trip';
++    public $model = \App\Models\v1\Trip::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/MedicalReleaseListImportHandler.php
++++ PHP_CodeSniffer
+@@ -12,7 +12,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\MedicalRelease';
++    public $model = \App\Models\v1\MedicalRelease::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/CampaignListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Campaign';
++    public $model = \App\Models\v1\Campaign::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/UserListImportHandler.php
++++ PHP_CodeSniffer
+@@ -12,7 +12,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\User';
++    public $model = \App\Models\v1\User::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/GroupListImportHandler.php
++++ PHP_CodeSniffer
+@@ -12,7 +12,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Group';
++    public $model = \App\Models\v1\Group::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/VisaListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Visa';
++    public $model = \App\Models\v1\Visa::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/PassportListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Passport';
++    public $model = \App\Models\v1\Passport::class;
+ 
+     /**
+      * The database columns and document
+
+--- app/Services/Importers/EssayListImportHandler.php
++++ PHP_CodeSniffer
+@@ -10,7 +10,7 @@
+      *
+      * @var string
+      */
+-    public $model = 'App\Models\v1\Essay';
++    public $model = \App\Models\v1\Essay::class;
+ 
+     /**
+      * The database columns and document
+

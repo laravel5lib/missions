@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-md-3">
                         <label>Amount</label>
-                        <p>{{ cost.amount|currency }}</p>
+                        <p>{{ '$' + cost.amount.toFixed(2) }}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
@@ -59,7 +59,8 @@
                         <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Addons or Requests</label>
                             <p class="help-block" v-for="cost in selectedCosts">
-                                <strong>{{ cost.name }} - {{ cost.amount | currency }}</strong><br />
+                                <strong>{{ cost.name }} - {{ '$' + cost.amount.toFixed(2) }}</strong>
+                                <br />
                                 {{ cost.description }}
                                 <hr class="divider">
                             </p>
@@ -130,10 +131,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            errors.has(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddCost[field].invalid && this.attemptSubmit;
             },
             isPast(date){
                 return moment().isAfter(date);

@@ -49,7 +49,7 @@
                                         <div class="media">
                                             <div class="media-left">
                                                 <h4 class="media-heading text-capitalize">
-                                                    {{ transport.depart_at | moment 'MMM D' false true }}
+                                                    {{ transport.depart_at | moment('MMM D', false, true) }}
                                                 </h4>
                                             </div>
                                             <div class="media-body" style="vertical-align:middle;">
@@ -68,10 +68,10 @@
                                                         </h5>
                                                     </div>
                                                     <div class="col-sm-6">
-                                                        <strong>{{ transport.depart_at | moment 'hh:mm a' false true }}</strong>
+                                                        <strong>{{ transport.depart_at | moment('hh:mm a', false, true) }}</strong>
                                                         {{ transport.departureHub.data.call_sign }}
                                                         <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-                                                        <strong>{{ transport.arrive_at | moment 'hh:mm a' false true }}</strong>
+                                                        <strong>{{ transport.arrive_at | moment('hh:mm a', false, true) }}</strong>
                                                         {{ transport.arrivalHub.data.call_sign }}
                                                     </div>
                                                 </div>
@@ -240,8 +240,8 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
+                            <date-picker :model.sync="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
+                            <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
                                    id="depart_at" name="occurred" v-validate="['required', 'datetime']">
                         </div>
                         <h4>Arrival</h4>
@@ -250,8 +250,8 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
+                            <date-picker :model.sync="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
+                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
                                    id="arrive_at" name="occurred" v-validate="['required', 'datetime']">
                         </div>
                     </form>

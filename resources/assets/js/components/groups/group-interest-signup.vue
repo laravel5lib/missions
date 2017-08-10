@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div>
 
         <form novalidate id="TripInterestSignupForm">
@@ -35,14 +35,15 @@
             <div class="row">
                 <div class="col-xs-12" v-error-handler="{ value: email, handle: 'email' }">
                     <label>Email</label>
-                    <input type="text" class="form-control" v-model="interest.email" name="email" v-validate="{required: true, email: true}">
+                    <input type="text" class="form-control" v-model="interest.email" name="email" v-validate="'required|email'">
                 </div>
             </div>
             <hr class="divider inv sm">
             <div class="row">
                 <div class="col-xs-12">
-                    <label>Phone</label>
-                    <input type="text" class="form-control" v-model="interest.phone | phone">
+                    <phone-input v-model="interest.phone" label="Phone"></phone-input>
+                    <!--<label>Phone</label>-->
+                    <!--<input type="text" class="form-control" v-model="interest.phone | phone">-->
                 </div>
             </div>
             <hr class="divider inv sm">
@@ -103,10 +104,6 @@
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Interest[field].invalid && this.attemptSubmit;
-            },*/
             removeDuplicates(arr, prop) {
                 let new_arr = [];
                 let lookup  = {};
@@ -123,7 +120,12 @@
             },
             save() {
                 this.resetErrors();
-                if (this.$Interest.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check the form for errors.')
+                        return false;
+                    }
+
                     this.$refs.validationspinner.show();
                     this.$http.post('interests', this.interest).then(function (response) {
                         this.$refs.validationspinner.hide();
@@ -141,9 +143,7 @@
                         console.log(error);
                         this.$root.$emit('showSuccess', 'Request sent')
                     });
-                } else {
-                    this.$root.$emit('showError', 'Please check the form for errors.')
-                }
+                });
             }
         },
         mounted() {

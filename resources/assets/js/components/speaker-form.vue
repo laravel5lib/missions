@@ -1,30 +1,31 @@
 <template>
 
-        <form class="form-horizontal" novalidate style="position:relative;">
+        <form class="form-horizontal" @submt.prevent="submit" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group">
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="John Smith" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="John Smith" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('organization') }">
                     <label for="name">Your Church/Organization</label>
                     <input type="text" class="form-control" name="organization" id="organization" v-model="organization"
-                           placeholder="Church Name" name="organization" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Church Name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-6">
-                    <label for="infoPhone">Phone 1</label>
-                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                    <phone-input label="Phone 1" v-model="phone_one"></phone-input>
+                    <!--<label for="infoPhone">Phone 1</label>-->
+                    <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
                 </div>
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
                     <label for="name">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="['required', 'email']">
+                    <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'required|email'">
                 </div>
             </div>
 
@@ -57,18 +58,20 @@
             <div class="form-group">
                 <div class="col-sm-12" :class="{ 'has-error': errors.has('comments') }">
                     <label for="name">Questions, Comments, or Ideas</label>
-                    <textarea type="text" class="form-control" name="comments" id="comments" v-model="comments" v-validate="'required'" rows=10 autosize></textarea>
+                    <textarea class="form-control" name="comments" id="comments" v-model="comments" v-validate="'required'" rows=10 autosize></textarea>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a @click="submit()" class="btn btn-primary">Send Request</a>
+                    <button type="submit" class="btn btn-primary">Send Request</button>
                 </div>
             </div>
         </form>
 
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
+
     export default{
     	name: 'speaker-form',
         data(){
@@ -83,14 +86,9 @@
                 state: '',
                 zip: '',
                 comments: '',
-                attemptSubmit:false,
             }
         },
         methods:{
-            errors.has(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$SpeakerForm[field].invalid && this.attemptSubmit;
-            },
             reset(){
                 $.extend(this, {
                     name:'',
@@ -103,12 +101,9 @@
                     state: '',
                     zip: '',
                     comments: '',
-                    attemptSubmit:false,
                 });
-                this.attemptSubmit = false;
             },
-            submit(){
-                this.attemptSubmit = true;
+            submit() {
                 let data = {
                     name: this.name,
                     organization: this.organization,
@@ -122,7 +117,12 @@
                     comments: this.comments,
                 };
 
-                if (this.$SpeakerForm.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check that the form is complete');
+                        return false;
+                    }
+
                     this.$http.post('speaker', data).then(function (response) {
                         console.log(response);
                         this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
@@ -131,9 +131,7 @@
                         console.log(error);
                         this.$root.$emit('showError', 'Something went wrong...');
                     });
-                } else {
-                    this.$root.$emit('showError', 'Please check that the form is complete');
-                }
+                })
             }
         },
         mounted(){

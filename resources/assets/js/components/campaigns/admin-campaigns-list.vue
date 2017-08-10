@@ -44,7 +44,7 @@
 				<tbody>
 				<tr v-for="campaign in campaigns">
 					<td>{{ campaign.country }}</td>
-					<td>{{ campaign.started_at|moment 'MM DD, YYYY'}} - {{ campaign.ended_at|moment 'MM DD, YYYY' }}</td>
+					<td>{{ campaign.started_at|moment('MM DD, YYYY')}} - {{ campaign.ended_at|moment('MM DD, YYYY') }}</td>
 					<td>{{ campaign.name }}</td>
 					<td>{{ campaign.groups.data.length }} <i class="fa fa-group"></i></td>
 					<td>

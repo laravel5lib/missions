@@ -88,7 +88,7 @@
                     <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span><span class="small"> &middot; {{ transaction.type|uppercase }}</span>
+                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
                                 <small v-if="contains(['donation'], transaction.type)" class="small">by
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
                                 <span v-else>an anonymous donor</span>

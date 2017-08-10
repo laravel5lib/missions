@@ -6,7 +6,7 @@ export default {
     data(){
         return {
             validatorHandle: false,
-            errors: {},
+            //errors: {},
             attemptSubmit: false,
             MESSAGES: {
                 DEFAULT: 'Field invalid.',
@@ -31,9 +31,6 @@ export default {
         }
     },
     watch: {
-        attemptSubmit(val) {
-            this.$emit('attemptSubmit', val);
-        },
         errors: {
             handler: function(val){
                 this.$emit('errors', val);
@@ -42,25 +39,12 @@ export default {
         },
     },
     methods: {
-        errors.has(field){
-            // if user clicked submit button while the field is invalid trigger error styles 
-            if (this.attemptSubmit) {
-                if (_.isString(field) && this['$' + this.validatorHandle] && this['$' + this.validatorHandle][field]) {
-                    return this['$' + this.validatorHandle][field].invalid;
-                }
-                //console.warn(field + ' does not exist in ' + this.validatorHandle);
-                return false
-            }
-            return false;
-        },
         resetErrors(){
-            this.errors = {};
+            //this.errors = {};
             this.attemptSubmit = true;
         },
     },
     mounted(){
-        if (!this.validatorHandle) {
-            console.error('Please set `validatorHandle` to validator name');
-        }
+
     }
 }

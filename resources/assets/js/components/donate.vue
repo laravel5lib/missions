@@ -111,21 +111,22 @@
                         <div class="col-sm-12">
                             <div :class="{ 'has-error': errors.has('email') }">
                                 <label for="infoEmailAddress">Billing Email</label>
-                                <input type="text" class="form-control input input-sm" v-model="cardEmail" name="email="['oneOrOther']" id" v-validate="infoEmailAddress">
+                                <input type="text" class="form-control input input-sm" v-model="cardEmail" name="email=" id="infoEmailAddress" v-validate="'email'">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('phone') }">
-                                <label for="infoPhone">Billing Phone</label>
-                                <input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone="['oneOrOther']" id" v-validate="infoPhone">
+                                <phone-input label="Billing Phone" v-model="cardPhone" name="phone"></phone-input>
+                                <!--<label for="infoPhone">Billing Phone</label>-->
+                                <!--<input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone=" id="infoPhone">-->
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('zip') }">
                                 <label for="infoZip">ZIP</label>
-                                <input type="text" class="form-control input input-sm" v-model="cardZip" name="zip="'required'" id="infoZip" placeholder" v-validate="12345">
+                                <input type="text" class="form-control input input-sm" v-model="cardZip" name="zip=" id="infoZip" placeholder="12345" v-validate="'required'">
                             </div>
                         </div>
                     </div>
@@ -145,7 +146,7 @@
                 <div class="row">
                     <div class="col-sm-12 text-center">
                         <label>Donation Amount</label>
-                        <h3 class="text-success" style="margin-top:0px;">{{amount|currency}}</h3>
+                        <h3 class="text-success" style="margin-top:0px;">{{'$' + amount.toFixed(2)}}</h3>
                         <label>Donation will go to</label>
                         <p>{{recipient}}</p>
                         <label>Who can see this?</label>
@@ -306,13 +307,14 @@
                 attemptedCreateToken: false,
             }
         },
-        validators: {
+        // TODO : convert validator
+        /*validators: {
             oneOrOther(val){
                 return val === this.vm.cardEmail
                         ? (!val.length && this.vm.cardPhone && this.vm.cardPhone.length > 0) || (val.length > 0 && /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val))
                         : (!val.length && this.vm.cardEmail && this.vm.cardEmail.length > 0) || val.length > 0;
             }
-        },
+        },*/
         watch: {
             'paymentComplete'(val, oldVal) {
                 this.$dispatch('payment-complete', val)
@@ -357,10 +359,6 @@
             toState(major, minor) {
                 this.donationState = major;
                 this.subState = minor
-            },
-            errors.has(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Donation[field].invalid && this.attemptSubmit;
             },
             resetCaching() {
                 console.log('resetting');

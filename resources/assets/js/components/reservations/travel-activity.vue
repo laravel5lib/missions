@@ -1,41 +1,41 @@
 <template>
 	<div>
 		<div v-if="activity">
-
-				<form id="TravelActivityForm" novalidate>
-					<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: activity.name, client: 'name' }">
-						<label for="">Name</label>
-						<template v-if="editMode">
-							<input type="text" class="form-control" v-model="activity.name" name="name" v-validate="'required'">
-						</template>
-						<p v-else>{{ activity.name | uppercase }}</p>
-					</div>
-					<div v-if="isAdminRoute" class="form-group">
-						<label for="">Description</label>
-						<template v-if="editMode">
-							<input type="text" class="form-control" v-model="activity.description">
-						</template>
-						<p v-else>{{ activity.description | uppercase }}</p>
-					</div>
-					<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: activity.description, client: 'description', messages: { req: 'Please provide an explanation.'} }">
-						<label for="">Please explain why you don't need Missions.Me to arrange transportation.</label>
-						<template v-if="editMode">
-							<textarea type="text" class="form-control" v-model="activity.description" name="description" v-validate="'required'"></textarea>
-						</template>
-						<p v-else>{{ activity.description | uppercase }}</p>
-					</div>
-					<div class="form-group" v-if="transportDomestic" v-error-handler="{ value: activity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
-						<label for="" v-text="LABELS.dateTime"></label>
-						<date-picker :model.sync="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true" v-if="editMode"></date-picker>
-						<p v-else>{{ activity.occurred_at | moment('LLLL') false true }}</p>
-						<input type="text" class="form-control hidden" v-model="activity.occurred_at | moment 'YYYY-MM-DD HH:mm:ss' false true"
-						       id="occurred_at" name="occurred" v-validate="['required', 'datetime']">
-					</div>
-					<!--<template v-if="isUpdate && editMode">
-						<button class="btn btn-xs btn-primary" type="button" @click="update">Update Arrival</button>
-					</template>-->
-				</form>
-
+			<form id="TravelActivityForm" novalidate>
+				<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: thisActivity.name, client: 'name' }">
+					<label for="">Name</label>
+					<template v-if="editMode">
+						<input type="text" class="form-control" v-model="thisActivity.name" name="name" v-validate="'required'">
+					</template>
+					<p v-else>{{ thisActivity.name.toUpperCase() }}</p>
+				</div>
+				<div v-if="isAdminRoute" class="form-group">
+					<label for="">Description</label>
+					<template v-if="editMode">
+						<input type="text" class="form-control" v-model="thisActivity.description">
+					</template>
+					<p v-else>{{ thisActivity.description.toUpperCase() }}</p>
+				</div>
+				<div v-if="!transportDomestic" class="form-group" v-error-handler="{ value: thisActivity.description, client: 'description', messages: { req: 'Please provide an explanation.'} }">
+					<label for="">Please explain why you don't need Missions.Me to arrange transportation.</label>
+					<template v-if="editMode">
+						<textarea type="text" class="form-control" v-model="thisActivity.description" name="description" v-validate="'required'"></textarea>
+					</template>
+					<p v-else>{{ thisActivity.description.toUpperCase() }}</p>
+				</div>
+				<div class="form-group" v-if="transportDomestic" v-error-handler="{ value: thisActivity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+					<label for="" v-text="LABELS.dateTime"></label>
+					<date-picker :model="thisActivity.occurred_at | moment('YYYY-MM-DD HH:mm:ss', false, true)" v-if="editMode"
+					             v-validate="'required'" data-vv-name="occurred" data-vv-value-path="model"></date-picker>
+					<p v-else>{{ thisActivity.occurred_at | moment('LLLL', false, true) }}</p>
+					<!--<datetime-input v-model="thisActivity.occurred_at" no-local validation="required"></datetime-input>-->
+					<!--<input type="text" class="form-control hidden" v-model="thisActivity.occurred_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
+					       id="occurred_at" name="occurred" v-validate="'required'">-->
+				</div>
+				<!--<template v-if="isUpdate && editMode">
+					<button class="btn btn-xs btn-primary" type="button" @click="update">Update Arrival</button>
+				</template>-->
+			</form>
 		</div>
 	</div>
 </template>
@@ -48,13 +48,7 @@
         mixins: [errorHandler],
 	    props: {
             activity: {
-                type: Object,
-	            default: {
-                    name: '',
-                    activity_type_id: '',
-                    description: '',
-                    occurred_at: '',
-	            }
+                type: Object
             },
             editMode: {
                 type: Boolean,
@@ -72,18 +66,23 @@
 	    },
         data(){
             return {
-                validatorHandle: 'TravelActivity',
-
+//                validatorHandle: 'TravelActivity',
+				thisActivity: {
+                    name: '',
+                    activity_type_id: '',
+                    description: '',
+                    occurred_at: '',
+                },
 				LABELS: {
                     dateTime: 'Date &amp; Time'
 				}
             }
         },
         computed: {
-            'isUpdate': function() {
+            isUpdate() {
                 return this && this.activity.hasOwnProperty('id') && _.isString(this.activity.id);
             },
-            isReady(){
+            isReady() {
 			    return this && _.isObject(this.activity);
 			}
         },
@@ -99,12 +98,10 @@
 	    },
         methods: {
             update(){
-				this.$http.put('activities/' + this.activity.id, this.activity).then(function (response) {
+				this.$http.put('activities/' + this.activity.id, this.thisActivity).then(function (response) {
+				    this.emit('updated', this.thisActivity)
 					this.$emit('showSuccess', 'Itinerary Arrival Date/Time Updated');
-                },
-                    function (response) {
-                        console.log(response);
-                    });
+                }, this.$root.handleApiError);
             },
 	        handleLabels(){
                 let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
@@ -124,6 +121,9 @@
 	        },
         },
         mounted(){
+            if (_.isObject(this.activity)) {
+                this.thisActivity = this.activity;
+            }
 	        this.handleLabels();
         }
     }

@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Payments Due</h5>
@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>
-                        <p>{{ due.balance | currency }}</p>
+                        <p>{{ '$' + due.balance.toFixed(2)}}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-3">
                         <label v-if="due.type === 'static'">Immediately</label>
-                        <label v-else>Due {{ due.due_at | moment('ll') true }}</label>
+                        <label v-else>Due {{ due.due_at | moment('ll', true) }}</label>
                         <p>
                             <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</span>
                         </p>

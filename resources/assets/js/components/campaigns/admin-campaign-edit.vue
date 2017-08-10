@@ -42,7 +42,7 @@
 					<label for="started_at">Dates</label>
 					<div class="row">
 						<div class="col-sm-6">
-							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 							       name="start" v-validate="'required'" required>
 							<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
@@ -51,12 +51,12 @@
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
-							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 							       name="end" v-validate="'required'" required>
 							<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
 								<span class="input-group-addon">End</span>
-								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							</div>-->
 							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
 						</div>
@@ -67,14 +67,14 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
-					<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+					<date-picker :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 					<!--<div class="input-group">
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
 						</span>
 					</div>-->
 					<input type="datetime" class="form-control hidden"
-						   v-model="published_at|moment 'YYYY-MM-DD HH:mm:ss'" id="published_at">
+						   v-model="published_at|moment('YYYY-MM-DD HH:mm:ss')" id="published_at">
 				</div>
 			</div>
 

@@ -270,7 +270,7 @@
         }
     }
 </script>
-<style lang="scss" scoped>
+<style scoped>
     div.list-group-item {
         cursor: pointer;
     }

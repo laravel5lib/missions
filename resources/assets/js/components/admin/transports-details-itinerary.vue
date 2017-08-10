@@ -36,8 +36,8 @@
 
 							<div class="timeline-entry-inner">
 								<time class="timeline-time" :datetime=" activity.occurred_at ">
-									<span>{{ activity.occurred_at | moment 'h:mm A zz' }}</span>
-									<span>{{ activity.occurred_at | moment 'ddd, ll' }}</span>
+									<span>{{ activity.occurred_at | moment('h:mm A zz') }}</span>
+									<span>{{ activity.occurred_at | moment('ddd, ll') }}</span>
 								</time>
 
 								<div class="timeline-icon bg-success" v-if="activity.type.name == 'departure'">
@@ -57,7 +57,7 @@
 										<a href="#">{{ activity.name ? activity.name[0].toUpperCase() + activity.name.slice(1) : '' }}</a>
 										<span class="label label-default" v-text="activity.type.name ? activity.type.name[0].toUpperCase() + activity.type.name.slice(1) : ''"></span>
 										<br />
-										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment 'dddd, MMMM D, YYYY zz' }}</small>
+										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment('dddd, MMMM D, YYYY zz') }}</small>
 									</h2>
 
 									<p>{{ activity.description }}</p>
@@ -109,7 +109,7 @@
 													<p class="list-group-item-text">
 														{{hub.address}}
 														{{hub.city}} {{hub.state}} {{hub.zip}}
-														{{hub.country_code | uppercase}}
+														{{hub.country_code.toUpperCase()}}
 													</p>
 												</div>
 											</div>

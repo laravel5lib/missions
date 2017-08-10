@@ -4,7 +4,7 @@
 			<h4>Travel Requirements</h4>
 			<p>The following items must be completed in order to travel. Your trip representative will contact you soon regarding these necessary documents. These are NOT required to register or to begin fundraising.</p>
 			<div class="list-group">
-				<div class="list-group-item" v-for="requirement in requirements | orderBy 'due_at'">
+				<div class="list-group-item" v-for="requirement in requirementsOrdered">
 					<h4 class="list-group-item-heading">
 						{{requirement.name}} <br />
 						<small>{{requirement.short_desc}}</small>
@@ -20,7 +20,7 @@
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 					{{cost.name}}
-					<span class="pull-right">{{cost.amount | currency}}</span>
+					<span class="pull-right">{{'$' + cost.amount.toFixed(2)}}</span>
 				</div>
 				<div class="panel-body">
 					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
@@ -30,7 +30,7 @@
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
-								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
+								The amount of <b>{{'$' + payment.amount_owed.toFixed(2)}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
 							</p>
 						</div>
 					</div>
@@ -40,7 +40,7 @@
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 					{{cost.name}}
-					<span class="pull-right">{{cost.amount | currency}}</span>
+					<span class="pull-right">{{'$' + cost.amount.toFixed(2)}}</span>
 				</div>
 				<div class="panel-body">
 					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
@@ -50,7 +50,7 @@
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
-								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
+								The amount of <b>{{'$' + payment.amount_owed.toFixed(2)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
 								If this amount is not received by the deadline, additional costs may be applied.
 							</p>
 						</div>
@@ -61,7 +61,7 @@
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 					{{cost.name}}
-					<span class="pull-right">{{cost.amount | currency}}</span>
+					<span class="pull-right">{{'$' + cost.amount.toFixed(2)}}</span>
 				</div>
 				<div class="panel-body">
 					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
@@ -71,7 +71,7 @@
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
-								The amount of <b>{{payment.amount_owed|currency}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
+								The amount of <b>{{'$' + payment.amount_owed.toFixed(2)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
 							</p>
 						</div>
 					</div>
@@ -102,6 +102,9 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import $ from 'jquery';
+	import _ from 'underscore';
+
 	export default{
 		name: 'deadline-agreement',
 		data(){
@@ -115,6 +118,9 @@
 			}
 		},
 		computed:{
+            requirementsOrdered() {
+                return _.sortBy(this.requirements, 'due_at');
+            },
 			deadlines(){
 				return this.$parent.deadlines;
 			},

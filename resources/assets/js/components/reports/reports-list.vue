@@ -70,10 +70,10 @@
                                 <p class="text-center">{{ report.created_at | moment('lll') }}</p>
                             </div>
                             <div class="col-sm-2 hidden-xs">
-                                <p><i class="fa fa-file-excel-o"></i> {{ report.type | uppercase }}</p>
+                                <p><i class="fa fa-file-excel-o"></i> {{ report.type.toUpperCase() }}</p>
                             </div>
                             <div class="col-sm-2 visible-xs">
-                                <p class="text-center"><i class="fa fa-file-excel-o"></i> {{ report.type | uppercase }}</p>
+                                <p class="text-center"><i class="fa fa-file-excel-o"></i> {{ report.type.toUpperCase() }}</p>
                             </div>
                             <div class="col-sm-2">
                                 <button @click="prepareToDownload(report.source)" class="btn btn-primary btn-sm btn-block">

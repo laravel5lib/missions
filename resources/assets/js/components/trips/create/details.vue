@@ -78,7 +78,7 @@
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<date-picker addon="Start" :has-error= "errors.has('start')" :model.sync="started_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<date-picker addon="Start" :has-error= "errors.has('start')" :model.sync="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 									       name="start" v-validate="'required'" required>
 									<!--<div class="input-group input-group-sm"
@@ -87,7 +87,7 @@
 									</div>-->
 								</div>
 								<div class="col-sm-6">
-									<date-picker addon="End" :has-error= "errors.has('end')" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+									<date-picker addon="End" :has-error= "errors.has('end')" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 									       name="end" v-validate="'required'" required>
 									<!--<div class="input-group input-group-sm"

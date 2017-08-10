@@ -14,9 +14,9 @@
 
 
                     <div class="row">
-                        <div v-validate-class class="col-sm-12 form-group">
+                        <div class="col-sm-12 form-group" v-validate-class>
                             <label for="file" class="control-label">File</label>
-                            <input type="file" id="file" accept=".csv" v-model="importFile" @change="handleFile" class="form-control" initial="off" name="file" v-validate="{file: { rule: true, message: 'A valid .csv file is required.'}}">
+                            <input type="file" id="file" accept=".csv" :value="importFile" @change="handleFile" class="form-control" initial="off" name="file" v-validate="{file: { rule: true, message: 'A valid .csv file is required.'}}">
                             <span class="help-block">.csv files only</span>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                             <label>Required Fields</label>
                         </div>
                         <div class="col-sm-4" v-for="required in requiredFields">
-                            <code>{{ required }}</code>
+                            <code v-text="required"></code>
                         </div>
                     </div>
                     <hr class="divider">
@@ -35,7 +35,7 @@
                             <label>Optional Fields</label>
                         </div>
                         <div class="col-sm-4" v-for="optional in optionalFields">
-                            <code>{{ optional }}</code>
+                            <code v-text="optional"></code>
                         </div>
                     </div>
 

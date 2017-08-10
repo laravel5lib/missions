@@ -53,7 +53,7 @@
 				<div class="form-group">
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('projectname') }">
 						<label for="project_name">Project Name</label>
-						<input type="text" class="form-control" name="project_name" id="project_name"
+						<input type="text" class="form-control" id="project_name"
 							   v-model="project_name"
 							   placeholder="Annie's Water Well"
 							   name="projectname" v-validate="'required|min:1|max:100'"
@@ -62,8 +62,7 @@
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
 						<label for="name">Your Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
-							   placeholder="Annie Smith"
-							   name="name" v-validate="'required|min:1|max:100'"
+							   placeholder="Annie Smith" v-validate="'required|min:1|max:100'"
 							   maxlength="100" minlength="1" required>
 					</div>
 				</div>
@@ -71,8 +70,7 @@
 				<div class="row form-group">
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
 						<label for="name">Your Email</label>
-						<input type="text" class="form-control" name="email" id="email" v-model="email"
-							   name="email" v-validate="'required'">
+						<input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'required'">
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('phone') }">
 						<phone-input v-model="phone_one" label="Your Phone" v-validate="'required'" data-vv-value-path="phone_one" data-vv-name="phone" :has-error="errors.has('phone')"></phone-input>

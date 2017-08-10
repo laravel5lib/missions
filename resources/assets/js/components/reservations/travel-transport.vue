@@ -5,16 +5,16 @@
 				<form id="TravelTransportForm" novalidate >
 					<section>
 						<div class="form-group" v-error-handler="{ value: transport, client: 'transporttype' }">
-							<label for="travel_methodA">Travel Method</label>
+							<label for="transporttype">Travel Method</label>
 							<template v-if="editMode">
-								<select class="form-control" name="travel_method" id="travel_method"
-								        name="transporttype="['required']" v-model" v-validate="transport.type">
+								<select class="form-control" id="travel_method"
+								        name="transporttype=" v-validate="'required'" v-model="transport.type">
 									<option value="">-- Select--</option>
 									<option :value="option" v-for="option in travelTypeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
 								</select>
 							</template>
 
-							<p v-else>{{ transport.type | uppercase }}</p>
+							<p v-else>{{ transport.type.toUpperCase() }}</p>
 						</div>
 
 						<template v-if="transport && transport.type === 'flight'">
@@ -32,22 +32,23 @@
 									</select>
 									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
 								</template>
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 								<template v-if="manualAirlineData && editMode">
 									<div class="form-group">
 										<label for="">Airline</label>
 										<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
-										<p v-else>{{ transport.name | uppercase }}</p>
+										<p v-else>{{ transport.name.toUpperCase() }}</p>
+									</div>
 									<div class="form-group">
 										<label for="">Callsign</label>
 										<input type="text" class="form-control" v-model="transport.call_sign" v-if="editMode">
-										<p v-else>{{ transport.name | uppercase }}</p>
+										<p v-else>{{ transport.name.toUpperCase() }}</p>
 									</div>
 								</template>
 								<div class="form-group">
 									<label for="">Flight No.</label>
 									<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-									<p v-else>{{ transport.vessel_no | uppercase }}</p>
+									<p v-else>{{ transport.vessel_no.toUpperCase() }}</p>
 								</div>
 							</div>
 						</template>
@@ -56,30 +57,30 @@
 							<div class="form-group">
 								<label for="">Company</label>
 								<input type="text" class="form-control" v-model="transport.name" v-if="editMode">
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Schedule/Route No.</label>
 								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-								<p v-else>{{ transport.vessel_no | uppercase }}</p>
+								<p v-else>{{ transport.vessel_no.toUpperCase() }}</p>
 							</div>
 						</template>
 
-						<template v-if="transport && transport.type === 'train'" v-if="editMode">
+						<template v-if="transport && transport.type === 'train'">
 							<div class="form-group">
 								<label for="travel_methodB">Company</label>
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
-									        name="train="['required']" v-model" v-validate="transport.name">
+									        v-model="transport.name" v-validate="'required'">
 										<option :value="option" v-for="option in trainOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
 									</select>
 								</template>
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 							</div>
 							<div class="form-group">
 								<label for="">Train No.</label>
 								<input type="text" class="form-control" v-model="transport.vessel_no" v-if="editMode">
-								<p v-else>{{ transport.vessel_no | uppercase }}</p>
+								<p v-else>{{ transport.vessel_no.toUpperCase() }}</p>
 							</div>
 						</template>
 
@@ -88,13 +89,13 @@
 								<label for="travel_methodB">Company</label>
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
-									        name="train="['required']" v-model" v-validate="transport.name">
+									        v-validate="'required'" v-model="transport.name">
 										<option :value="option" v-for="option in vehicleOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}
 										</option>
 									</select>
 								</template>
 
-								<p v-else>{{ transport.name | uppercase }}</p>
+								<p v-else>{{ transport.name.toUpperCase() }}</p>
 							</div>
 						</template>
 					</section>

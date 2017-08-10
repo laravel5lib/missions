@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
 	<div style="position:relative">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<form class="form-inline" v-if="isChild && !uiLocked" novalidate>
@@ -45,7 +45,7 @@
 				<div class="form-group" v-error-handler="{ value: name, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
-							   placeholder="Name" name="name" v-validate="{ required: true, maxlength:100 }"
+							   placeholder="Name" name="name" v-validate="'required|max:100'"
 							   maxlength="100" minlength="1" required>
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
@@ -57,7 +57,7 @@
 				</div>
 				<div class="form-group" v-error-handler="{ value: type, handle: 'type' }" v-show="!uiLocked" >
 					<label for="type" class="control-label">Type</label>
-					<select class="form-control" id="type" v-model="type" name="type="'required'" :disabled" v-validate="lockType">
+					<select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" :disabled="lockType">
 						<option :value="">-- select type --</option>
 						<option value="avatar">Image (Avatar) - 1280 x 1280</option>
 						<option value="banner">Image (Banner) - 1300 x 500</option>

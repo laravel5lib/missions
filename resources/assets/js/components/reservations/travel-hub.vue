@@ -35,7 +35,7 @@
 								</div>
 							</template>
 							<template v-if="!editMode">
-								<p>{{ hub.name | uppercase }}</p>
+								<p>{{ hub.name.toUpperCase() }}</p>
 							</template>
 						</div>
 						<div class="form-group" v-if="selectedAirportObj && isAdminRoute">
@@ -60,14 +60,14 @@
 							<template v-if="editMode">
 								<input type="text" class="form-control" v-model="hub.name" name="hubname" v-validate="'required'">
 							</template>
-							<p v-else>{{ hub.name | uppercase }}</p>
+							<p v-else>{{ hub.name.toUpperCase() }}</p>
 						</div>
 						<div class="form-group" v-error-handler="{ value: hub.city, client: 'city' }">
 							<label for="">City</label>
 							<template v-if="editMode">
 								<input type="text" class="form-control" v-model="hub.city" name="city" v-validate="'required'">
 							</template>
-							<p v-else>{{ hub.city | uppercase }}</p>
+							<p v-else>{{ hub.city.toUpperCase() }}</p>
 						</div>
 						<div class="form-group" v-error-handler="{ value: hub.country_code, client: 'country' }">
 							<label for="">Country</label>
@@ -83,14 +83,14 @@
 								</select>
 								<div class="errors-block"></div>
 							</template>
-							<p v-else>{{ hub.country_code | uppercase }}</p>
+							<p v-else>{{ hub.country_code.toUpperCase() }}</p>
 						</div>
 						<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
 							<label for="">CallSign</label>
 							<template v-if="editMode">
 								<input type="text" class="form-control" v-model="hub.call_sign" name="callsign="['required']" v-if" v-validate="editMode">
 							</template>
-							<p v-else>{{ hub.call_sign | uppercase }}</p>
+							<p v-else>{{ hub.call_sign.toUpperCase() }}</p>
 						</div>
 					</template>
 				</form>

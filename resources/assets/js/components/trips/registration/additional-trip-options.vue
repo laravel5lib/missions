@@ -6,11 +6,11 @@
             <hr class="divider inv sm" />
 
 				<form novalidate name="AdditionalOptionsForm">
-					<div class="" v-for="option in optionalCosts | orderBy 'name'">
-						<label style="display:block" for="option{{$index}}">
-							<input type="radio" id="option{{$index}}" v-model="selectedOptions" :value="option" name="additional" v-validate="$index === 0 ? ['required'] : ''">
+					<div class="" v-for="option in optionalCosts">
+						<label style="display:block" :for="'option' + $index">
+							<input type="radio" :id="'option' + $index" v-model="selectedOptions" :value="option" name="additional" v-validate="$index === 0 ? 'required' : ''">
 							{{option.name}}
-							<span class="pull-right">{{option.amount | currency}}</span>
+							<span class="pull-right">{{'$' + option.amount.toFixed(2)}}</span>
 						</label>
 						<span class="help-block">{{option.description}}</span>
 						<hr class="divider lg">
@@ -24,23 +24,25 @@
     </div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
+
 	export default{
 		name: 'additional-trip-options',
 		data(){
 			return {
 				title: 'Additional Trip Options',
 				atoComplete: true,
-				optionalCosts: [],
+//				optionalCosts: [],
 				selectedOptions: null
 			}
 		},
 		computed:{
 			optionalCosts(){
-			    let arr = this.$parent.tripCosts.optional;
+			    let arr = this.$parent.tripCosts.optional || [];
 			    if (!arr.length) {
                     this.$dispatch('ato-complete', true);
 			    }
-				return arr;
+				return _.sortBy(arr, 'name');
 			}
 		},
 		watch:{

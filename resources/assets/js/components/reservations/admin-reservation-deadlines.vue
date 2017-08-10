@@ -99,7 +99,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" :class="{'has-error': checkForNewDeadlineError('due')}">
                                             <label for="due_at">Due</label>
-                                            <date-picker :input-sm="true" :model.sync="newDeadline.date|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                                            <date-picker :input-sm="true" :model.sync="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                             <input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                    v-model="newDeadline.date" name="due" v-validate="'required'">
                                         </div>

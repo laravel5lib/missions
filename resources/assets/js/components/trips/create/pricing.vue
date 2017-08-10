@@ -46,7 +46,7 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
 																<label for="newCost_active_at">Active</label>
-																<date-picker :input-sm="true" :model.sync="newCost.active_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+																<date-picker :input-sm="true" :model.sync="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 																<input type="datetime" id="newCost_active_at" class="form-control input-sm hidden"
 																	   v-model="newCost.active_at" name="costActive" v-validate="'required'">
 															</div>
@@ -168,7 +168,7 @@
 													<div class="col-sm-6">
 														<div class="form-group">
 															<label for="dueAt">Due</label>
-															<date-picker :input-sm="true" :model.sync="newPayment.due_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+															<date-picker :input-sm="true" :model.sync="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 															<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>
 														</div>
 													</div>

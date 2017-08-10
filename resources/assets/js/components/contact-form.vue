@@ -4,7 +4,7 @@
             <div class="form-group">
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
                     <label for="name">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" v-model="name"
+                    <input type="text" class="form-control" id="name" v-model="name"
                            placeholder="John Smith" name="name" v-validate="'required|alpha_spaces|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>

@@ -119,7 +119,7 @@
 	                                <!--<div class="input-group"
                                          :class="{ 'has-error': errors.has('end') }">
                                         <span class="input-group-addon">End</span>
-										<date-picker class="form-control" :model.sync="ended_at|moment 'YYYY-MM-DD HH:mm:ss'" type="date"></date-picker>
+										<date-picker class="form-control" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')" type="date"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
                                                name="end" v-validate="'required'" required>
                                     </div>-->
@@ -156,8 +156,8 @@
 						<div class="col-sm-6">
 							<div :class="{ 'has-error': errors.has('closed') }">
 								<label for="closed_at" class="control-label">Registration Closes</label>
-								<date-picker :has-error= "errors.has('closed')" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'" ></date-picker>
-								<!--<date-picker class="form-control" :model.sync="closed_at|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>-->
+								<date-picker :has-error= "errors.has('closed')" :model.sync="closed_at|moment('YYYY-MM-DD HH:mm:ss')" ></date-picker>
+								<!--<date-picker class="form-control" :model.sync="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>-->
 								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" name="closed="'required'" id" v-validate="closed_at">
 							</div>
 						</div><!-- end col -->
@@ -168,8 +168,8 @@
 								Publish
 							</label>
 							<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
-							<date-picker :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>
-							<!--<date-picker class="form-control" :model.sync="published_at|moment 'YYYY-MM-DD HH:mm:ss'" v-if="!toggleDraft"></date-picker>-->
+							<date-picker :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>
+							<!--<date-picker class="form-control" :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>-->
 							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment('LLLL')" id="published_at" :disabled="toggleDraft">
 						</div>
 					</div>

@@ -117,7 +117,7 @@
 					<label>Region Assignment</label>
                     <select  class="form-control input-sm" v-model="filters.region">
                         <option value="">Any</option>
-                        <option :value="region.id" v-for="region in regionOptions | orderBy 'name'">{{ region.name}}</option>
+                        <option :value="region.id" v-for="region in regionOptionsOrdered">{{ region.name}}</option>
                     </select>
 				</div>
 
@@ -408,6 +408,11 @@
                 traveling: null
             }
         },
+	    computed: {
+            regionOptionsOrdered() {
+                return _.sortBy(this.regionOptions, 'name');
+            }
+	    },
 	    watch: {
             'filters': {
                 handler (val, oldVal) {

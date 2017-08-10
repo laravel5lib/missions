@@ -43,7 +43,7 @@
 
 							<travel-hub v-if="item.hub" ref="hub" :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
-							<travel-activity ref="activity" :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic"></travel-activity>
+							<travel-activity ref="activity" :edit-mode="editMode" :activity="item.activity" :simple="true" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id" :transport-domestic="item.transport && item.transport.domestic" @updated="updateActivity"></travel-activity>
 
 						</panel>
 					</accordion>
@@ -434,6 +434,9 @@
                         console.log(response);
                     });
 	        },
+	        updateActivity(activity) {
+				debugger;
+	        }
 
         },
         mounted(){

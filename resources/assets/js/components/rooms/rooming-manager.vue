@@ -65,8 +65,8 @@
 										<hr class="divider sm">
 										<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 											<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
-											<div class="row">
-												<div class="col-sm-12" v-for="member in currentRoom.occupants | orderBy '-room_leader' 'surname'">
+												<div class="row">
+												<div class="col-sm-12" v-for="member in currentRoomOccupantsOrdered">
 													<div class="panel panel-default" style="margin-bottom:8px;">
 														<div class="panel-heading" role="tab" id="headingOne">
 															<h5 class="panel-title">
@@ -173,6 +173,7 @@
 													</div>
 												</div><!-- end row -->
 											</div>
+											</div>
 										</template>
 										<template v-else>
 											<hr class="divider inv">
@@ -221,9 +222,9 @@
 									<template v-if="currentRooms.length">
 										<!-- List group List-->
 										<div class="list-group">
-											<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentRooms | orderBy 'label'" style="cursor: pointer;">
+											<div @click="setActiveRoom(room)" class="list-group-item" :class="{ 'active': currentRoom && currentRoom.id === room.id}" v-for="room in currentRoomsOrdered" style="cursor: pointer;">
 												{{(room.label ? (room.label + ' &middot; ' + room.type.data.name) : room.type.data.name) | capitalize}}
-												<span v-if="getRoomLeader(room)"> ({{ getRoomLeader(room).surname }}, {{ getRoomLeader(room).given_names ? .given_names[0].toUpperCase() + .given_names.slice(1) : '' }}) </span>
+												<span v-if="getRoomLeader(room)"> ({{ getRoomLeader(room).surname }}, {{ getRoomLeader(room).given_names ? getRoomLeader(room).given_names[0].toUpperCase() + getRoomLeader(room).given_names.slice(1) : '' }}) </span>
 												<span v-if="room.type.data.rules.occupancy_limit == room.occupants_count" class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">Full</span>
 												<span v-if="room.type.data.rules.occupancy_limit > room.occupants_count" class="badge text-uppercase" style="font-size:10px;line-height:1.4;letter-spacing: 0;">{{room.occupants_count}}</span>
 											</div>
@@ -606,6 +607,14 @@
 
         },
 	    computed: {
+            currentRoomOccupantsOrdered() {
+                return _(this.currentRoom.occupants).chain().sortBy('surname').sortBy((occupant) => {
+					return occupant.room_leader;
+                }).value();
+            },
+            currentRoomsOrdered() {
+                return _.sortBy(this.currentRooms, 'label');
+            },
             isLocked(){
                 return !this.isAdminRoute && this.currentPlan && this.currentPlan.locked;
             },

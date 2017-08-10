@@ -18,7 +18,7 @@
                         <input type="text" v-model="choice_one"
                                class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
-                        <p v-else>({{ choice_one | uppercase }}) <span v-if="choiceOneObj">{{ choiceOneObj.name | uppercase }}</span></p>
+                        <p v-else>({{ choice_one.toUpperCase() }}) <span v-if="choiceOneObj">{{ choiceOneObj.name.toUpperCase() }}</span></p>
                     </div>
                     <div class="col-sm-4">
                         <label>2nd Choice</label>
@@ -28,7 +28,7 @@
                         <input type="text" v-model="choice_two"
                                class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
-                        <p v-else>({{ choice_two | uppercase }}) <span v-if="choiceTwoObj">{{ choiceTwoObj.name | uppercase }}</span></p>
+                        <p v-else>({{ choice_two.toUpperCase() }}) <span v-if="choiceTwoObj">{{ choiceTwoObj.name.toUpperCase() }}</span></p>
                     </div>
                     <div class="col-sm-4">
                         <label>3rd Choice</label>
@@ -38,7 +38,7 @@
                         <input type="text" v-model="choice_three"
                                class="form-control hidden" maxlength="3"
                                minlength="3" style="text-transform: uppercase" v-if="editMode">
-                        <p v-else>({{ choice_three | uppercase }}) <span v-if="choiceThreeObj">{{ choiceThreeObj.name | uppercase }}</span></p>
+                        <p v-else>({{ choice_three.toUpperCase() }}) <span v-if="choiceThreeObj">{{ choiceThreeObj.name.toUpperCase() }}</span></p>
                     </div>
                 </div>
                 <div class="row" v-if="editMode">

@@ -38,7 +38,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('firstName') }">
 									<!--<label for="infoFirstName">First</label>-->
 									<input type="text" class="form-control input-sm" v-model="firstName"
-										   name="firstName="'required'" :classes="{ invalid: 'has-error' }" placeholder" v-validate="First & Middle Names"
+										   name="firstName=" :classes="{ invalid: 'has-error' }" placeholder="First & Middle Names" v-validate="'required'"
 										   id="infoFirstName">
 								</div>
 							</div>
@@ -49,7 +49,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('lastName') }">
 									<!--<label for="infoLastName">Last</label>-->
 									<input type="text" class="form-control input-sm" v-model="lastName"
-										   name="lastName="'required'" :classes="{ invalid: 'has-error' }" placeholder" v-validate="Last Name"
+										   name="lastName=" :classes="{ invalid: 'has-error' }" placeholder="Last Name" v-validate="'required'"
 										   id="infoLastName">
 								</div>
 							</div>
@@ -58,7 +58,7 @@
 						<div class="form-group" :class="{ 'has-error': (errors.has('email')) || ($BasicInfo.email.email && $BasicInfo.email.dirty) }">
 							<label for="infoEmailAddress">Email Address</label>
 							<input type="text" class="form-control input-sm" v-model="email" id="infoEmailAddress"
-								   :classes="{ invalid: 'has-error' }" name="email" v-validate="['required', 'email']">
+								   :classes="{ invalid: 'has-error' }" name="email" v-validate="'required|email'">
 							<span class="help-block" v-show="$BasicInfo.email.email && $BasicInfo.email.dirty">Invalid email address</span>
 						</div>
 
@@ -68,7 +68,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('dobMonth') }">
 									<!--<label for="infoDobMonth">Month</label>-->
 									<select class="form-control input-sm" v-model="dobMonth"
-											name="dobMonth="'required'" :classes="{ invalid: 'has-error' }" id" v-validate="infoDobMonth">
+											name="dobMonth=" :classes="{ invalid: 'has-error' }" id="infoDobMonth" v-validate="'required'">
 										<option value="">Month</option>
 										<option value="01">January</option>
 										<option value="02">February</option>
@@ -89,7 +89,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('dobDay') }">
 									<!--<label for="infoDobDay">Day</label>-->
 									<select class="form-control input-sm" v-model="dobDay"
-											name="dobDay="'required'" :classes="{ invalid: 'has-error' }" id" v-validate="infoDobDay">
+											name="dobDay=" :classes="{ invalid: 'has-error' }" id="infoDobDay" v-validate="'required'">
 										<option value="">Day</option>
 										<option value="01">01</option>
 										<option value="02">02</option>
@@ -129,10 +129,10 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('dobYear') }">
 									<!--<label for="infoDobYear">Year</label>-->
 									<select class="form-control input-sm" v-model="dobYearCalc"
-											name="dobYear="'required'" :classes="{ invalid: 'has-error' }" id" v-validate="infoDobYear">
+											name="dobYear=" :classes="{ invalid: 'has-error' }" id="infoDobYear" v-validate="'required'">
 										<option value="">Year</option>
-										<option v-for="n in 100 | orderBy true -1" :value="n">
-											{{ currentYear - 100 + n }}
+										<option v-for="year in selectableYears" :value="year">
+											{{ year }}
 										</option>
 									</select>
 								</div>
@@ -144,13 +144,13 @@
 								<label>Gender</label>
 								<div :class="{ 'has-error': errors.has('gender') }">
 									<label>
-										<input type="radio" v-model="gender" name="gender" v-validate="{ required: { rule: true} }"
+										<input type="radio" v-model="gender" name="gender" v-validate="'required'"
 											   value="male"> Male
 									</label>
 								</div>
 								<div :class="{ 'has-error': errors.has('gender') }">
 									<label>
-										<input type="radio" v-model="gender" name="gender="{ required: { rule: true} }" value" v-validate="female"> Female
+										<input type="radio" v-model="gender" name="gender=" value="female"> Female
 									</label>
 								</div>
 								<span class="help-block" v-show= "errors.has('gender')">Select a gender</span>
@@ -160,7 +160,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('relationshipStatus') }">
 									<label for="infoRelStatus">Relationship Status</label>
 									<select class="form-control input-sm" v-model="relationshipStatus"
-											name="relationshipStatus="'required'" :classes="{ invalid: 'has-error' }" id" v-validate="infoRelStatus">
+											name="relationshipStatus=" :classes="{ invalid: 'has-error' }" id="infoRelStatus" v-validate="'required'">
 										<option value="single">Single</option>
 										<option value="engaged">Engaged</option>
 										<option value="married">Married</option>
@@ -181,7 +181,7 @@
 									<div class="col-sm-6">
 										<div class="form-group" :class="{ 'has-error': errors.has('heightA') }">
 											<div class="input-group input-group-sm">
-												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" name="heightA="'required'" :classes" v-validate="{ invalid: 'has-error' }">
+												<input type="number" class="form-control" id="infoHeightA" v-model="heightA" number min="0" max="10" name="heightA=" :classes="{ invalid: 'has-error' }" v-validate="'required'">
 												<div class="input-group-addon" v-text="heightUnitA"></div>
 											</div>
 										</div>
@@ -189,7 +189,7 @@
 									<div class="col-sm-6">
 										<div class="form-group" :class="{ 'has-error': errors.has('heightB') }">
 											<div class="input-group input-group-sm">
-												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" name="heightB="'required'" :classes" v-validate="{ invalid: 'has-error' }">
+												<input type="number" class="form-control"  v-model="heightB" number min="0" max="11" name="heightB=" :classes="{ invalid: 'has-error' }" v-validate="'required'">
 												<div class="input-group-addon" v-text="heightUnitB"></div>
 											</div>
 										</div>
@@ -203,7 +203,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('weight') }">
 									<label for="infoWeight">Weight</label>
 									<div class="input-group input-group-sm">
-										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" name="weight="'required'" :classes" v-validate="{ invalid: 'has-error' }">
+										<input type="number" class="form-control" id="infoWeight" v-model="weight" number min="0" name="weight=" :classes="{ invalid: 'has-error' }" v-validate="'required'">
 										<div class="input-group-addon" v-text="weightUnit"></div>
 									</div>
 								</div>
@@ -211,7 +211,7 @@
 							<div class="col-sm-6">
 								<div class="form-group" :class="{ 'has-error': errors.has('size') }">
 									<label for="infoShirtSize">Shirt Sizes</label>
-									<select class="form-control input-sm" v-model="size" name="size="'required'" :classes" v-validate="{ invalid: 'has-error' }"
+									<select class="form-control input-sm" v-model="size" name="size=" :classes="{ invalid: 'has-error' }" v-validate="'required'"
 											id="infoShirtSize">
 										<option value="XS">XS (Extra Small)</option>
 										<option value="S">S (Small)</option>
@@ -229,7 +229,7 @@
 						<div class="form-group" :class="{ 'has-error': errors.has('address') }">
 							<label for="infoAddress">Address</label>
 							<input type="text" class="form-control input-sm" v-model="address"
-								   name="address="'required'" :classes="{ invalid: 'has-error' }" id" v-validate="infoAddress"
+								   name="address=" :classes="{ invalid: 'has-error' }" id="infoAddress" v-validate="'required'"
 								   placeholder="Street Address">
 						</div>
 
@@ -238,14 +238,14 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('city') }">
 									<label for="infoCity">City</label>
 									<input type="text" class="form-control input-sm" v-model="city"
-										   name="city="'required'" :classes="{ invalid: 'has-error' }" id="infoCity" placeholder" v-validate="">
+										   name="city=" :classes="{ invalid: 'has-error' }" id="infoCity" placeholder v-validate="'required'">
 								</div>
 							</div>
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': errors.has('state') }">
 									<label for="infoState">State/Prov.</label>
 									<input type="text" class="form-control input-sm" v-model="state"
-										   name="state="'required'" :classes="{ invalid: 'has-error' }" id="infoState" placeholder" v-validate="">
+										   name="state=" :classes="{ invalid: 'has-error' }" id="infoState" placeholder v-validate="'required'">
 								</div>
 							</div>
 						</div>
@@ -255,7 +255,7 @@
 								<div class="form-group" :class="{ 'has-error': errors.has('zip') }">
 									<label for="infoZip">Zip/Postal Code</label>
 									<input type="text" class="form-control input-sm" v-model="zipCode"
-										   name="zip="'required'" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder" v-validate="12345">
+										   name="zip=" :classes="{ invalid: 'has-error' }" id="infoZip" placeholder="12345" v-validate="'required'">
 								</div>
 							</div>
 							<div class="col-sm-12">
@@ -271,14 +271,16 @@
 
 						<div class="form-group" :class="{ 'has-error': errors.has('phone') }">
 							<label for="infoPhone">Home Phone</label>
-							<input type="text" class="form-control input-sm" v-model="phone | phone"
-								   name="phone="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error' }" id="infoPhone" placeholder" v-validate="123-456-7890">
+							<phone-input valication="required|min:10" v-model="phone"></phone-input>
+							<!--<input type="text" class="form-control input-sm" v-model="phone | phone"-->
+								   <!--name="phone="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error' }" id="infoPhone" placeholder" v-validate="123-456-7890">-->
 						</div>
 
 						<div class="form-group" :class="{ 'has-error': errors.has('mobile') }">
 							<label for="infoMobile">Cell Phone</label>
-							<input type="text" class="form-control input-sm" v-model="mobile | phone"
-								   name="mobile="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">
+							<phone-input valication="required|min:10" v-model="mobile"></phone-input>
+							<!--<input type="text" class="form-control input-sm" v-model="mobile | phone"-->
+								   <!--name="mobile="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">-->
 						</div>
 					</div>
 				</form>
@@ -337,20 +339,28 @@
 			}
 		},
 		computed: {
+		    selectableYears() {
+		        let i = 100;
+		        let arr = [];
+		        for(i;i >= 0;i--) {
+					arr.push(this.currentYear - i);
+		        }
+		        return arr;
+		    },
 			heightUnitA() {
-				if (this.country == 'us')
+				if (this.country === 'us')
 					return 'ft';
 
 				return 'm';
 			},
 			heightUnitB() {
-				if (this.country == 'us')
+				if (this.country === 'us')
 					return 'in';
 
 				return 'cm';
 			},
 			weightUnit() {
-				if (this.country == 'us')
+				if (this.country === 'us')
 					return 'lbs';
 
 				return 'kg';

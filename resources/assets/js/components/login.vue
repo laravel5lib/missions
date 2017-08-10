@@ -265,11 +265,11 @@
 								<label class="control-labal">Gender</label><br>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender"
-									       required name="gender" v-validate="{ required: { rule: true, message: 'Please select a gender.' }}">
+									       required v-validate="{ required: { rule: true, message: 'Please select a gender.' }}">
 									Male</label>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Female" id="gender"
-									       v-model="newUser.gender" name="gender" v-validate="{ required: { rule: true, message: 'Please select a gender.' }}"> Female</label>
+									       v-model="newUser.gender" v-validate="{ required: { rule: true, message: 'Please select a gender.' }}"> Female</label>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" :class="{ 'has-error': registerErrors.country_code }">

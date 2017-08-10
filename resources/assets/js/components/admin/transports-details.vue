@@ -13,10 +13,10 @@
 					</small>
 				</h3>
 				<p>
-					<strong>{{ transport.depart_at | moment 'MMM dd, hh:mm a' false true }}</strong>
+					<strong>{{ transport.depart_at | moment('MMM dd, hh:mm a', false, true) }}</strong>
 					{{ transport.departureHub.data.call_sign }}
 					<i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-					<strong>{{ transport.arrive_at | moment 'hh:mm a' false true }}</strong>
+					<strong>{{ transport.arrive_at | moment('hh:mm a', false, true) }}</strong>
 					{{ transport.arrivalHub.data.call_sign }}
 				</p>
 			</div>
@@ -97,14 +97,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4>Departure</h4>
-                                <small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment 'h:mm A zz' false true }} | {{ transport.depart_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
+                                <small><i class="fa fa-clock-o"></i> {{ transport.depart_at | moment('h:mm A zz', false, true) }} | {{ transport.depart_at|moment('dddd, MMMM D, YYYY zz', false, true) }}</small>
                             </div>
                             <div class="panel-body">
                                 <p>
                                     {{transport.departureHub.data.name ? transport.departureHub.data.name[0].toUpperCase() + transport.departureHub.data.name.slice(1) : ''}} <span v-if="transport.departureHub.data.call_sign">({{transport.departureHub.data.call_sign}})</span>
                                     <span v-if="transport.departureHub.data.address">{{transport.departureHub.data.address}}</span><br>
                                     <span v-if="transport.departureHub.data.city">{{transport.departureHub.data.city}}</span> <span v-if="transport.departureHub.data.state">{{transport.departureHub.data.state}}</span> <span v-if="transport.departureHub.data.zip">{{transport.departureHub.data.zip}}</span><br>
-                                    <span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code | uppercase}}</span>
+                                    <span v-if="transport.departureHub.data.country_code">{{transport.departureHub.data.country_code.toUpperCase()}}</span>
                                 </p>
                             </div>
                         </div>
@@ -113,14 +113,14 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
 						        <h4>Arrival</h4>
-                                <small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment 'h:mm A zz' false true }} | {{ transport.arrive_at|moment 'dddd, MMMM D, YYYY zz' false true }}</small>
+                                <small><i class="fa fa-clock-o"></i> {{ transport.arrive_at | moment('h:mm A zz', false, true) }} | {{ transport.arrive_at|moment('dddd, MMMM D, YYYY zz', false, true) }}</small>
                             </div>
                             <div class="panel-body">
                                 <p>
                                     {{transport.arrivalHub.data.name ? transport.arrivalHub.data.name[0].toUpperCase() + transport.arrivalHub.data.name.slice(1) : ''}} <span v-if="transport.arrivalHub.data.call_sign">({{transport.arrivalHub.data.call_sign}})</span>
                                     <span v-if="transport.arrivalHub.data.address">{{transport.arrivalHub.data.address}}</span><br>
                                     <span v-if="transport.arrivalHub.data.city">{{transport.arrivalHub.data.city}}</span> <span v-if="transport.arrivalHub.data.state">{{transport.arrivalHub.data.state}}</span> <span v-if="transport.arrivalHub.data.zip">{{transport.arrivalHub.data.zip}}</span><br>
-                                    <span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code | uppercase}}</span>
+                                    <span v-if="transport.arrivalHub.data.country_code">{{transport.arrivalHub.data.country_code.toUpperCase()}}</span>
                                 </p>
                             </div>
                         </div>

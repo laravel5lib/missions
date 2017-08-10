@@ -13,7 +13,7 @@
                             <i class="fa fa-times"></i> Cancel
                         </span>
                     </a>
-                    <a class="btn btn-primary-hollow btn-sm" href="/{{ firstUrlSegment }}/records/{{ url }}/create"><i class="fa fa-plus icon-left"></i> Create New</a>
+                    <a class="btn btn-primary-hollow btn-sm" :href="'/' + firstUrlSegment + '/records/' + url + '/create'"><i class="fa fa-plus icon-left"></i> Create New</a>
                     <a class="btn btn-default-hollow btn-sm" @click="removeDocument(document)" v-if="document">
                         <i class="fa fa-trash icon-left"></i> Remove
                     </a>
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div v-if="!document && list" role="alert"><p class="text-muted text-center">
-                <em>This requirement has no {{ label | lowercase }}(s) assigned to it. Please select one or add one.</em>
+                <em>This requirement has no {{ label.toLowerCase() }}(s) assigned to it. Please select one or add one.</em>
             </p></div>
         </div>
 

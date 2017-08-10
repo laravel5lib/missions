@@ -11,56 +11,56 @@ import login from './components/login.vue';
 import topNav from './components/top-nav.vue';
 import markdownExampleModal from './components/markdown-example-modal.vue';
 import contactForm from './components/contact-form.vue';
-// import speakerForm from './components/speaker-form.vue';
+import speakerForm from './components/speaker-form.vue';
 import sponsorProjectForm from './components/sponsor-project-form.vue';
-// import actionTrigger from './components/action-trigger.vue';
-// import actionDropdownSelect from './components/action-dropdown-select.vue';
-// import actionSelect from './components/action-select.vue';
-// import listenText from './components/listen-text.vue';
-// import donate from './components/donate.vue';
-// import modalDonate from './components/modal-donate.vue';
-// import campaigns from './components/campaigns/campaigns.vue';
-// import groups from './components/groups/groups.vue';
-// import fundraisers from './components/fundraisers/fundraisers.vue';
-// import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
-// import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
-// import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
-// import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
-// import campaignGroups from './components/campaigns/campaign-groups.vue';
-// import groupTrips from './components/campaigns/group-trips.vue';
-// import groupProfileTrips from './components/groups/group-profile-trips.vue';
-// import groupProfileStories from './components/groups/group-profile-stories.vue';
-// import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
-// import groupInterestSignup from './components/groups/group-interest-signup.vue';
-// import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
-// import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
-// import userProjectsList from './components/projects/user-projects-list.vue';
-// import reservationsList from './components/reservations/reservations-list.vue';
-// import restoreReservation from './components/reservations/restore-reservation.vue';
-// import transferReservation from './components/reservations/transfer-reservation.vue';
-// import donationsList from './components/reservations/donations-list.vue';
-// import recordsList from './components/records/records-list.vue';
-// import groupsList from './components/groups/groups-list.vue';
-// import visasList from './components/records/visas/visas-list.vue';
-// import medicalsList from './components/records/medicals/medicals-list.vue';
-// import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
-// import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
-// import passportsList from './components/records/passports/passports-list.vue';
-// import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
-// import essaysList from './components/records/essays/essays-list.vue';
-// import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
-// import referralsList from './components/records/referrals/referrals-list.vue';
-// import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
-// import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
-// import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
-// import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
-// import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
-// import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
-// import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
-// import reservationAvatar from './components/reservations/reservation-avatar.vue';
-// import reservationCosts from './components/reservations/reservation-costs.vue';
-// import reservationDues from './components/reservations/reservation-dues.vue';
-// import funding from './components/funding.vue';
+import actionTrigger from './components/action-trigger.vue';
+import actionDropdownSelect from './components/action-dropdown-select.vue';
+import actionSelect from './components/action-select.vue';
+import listenText from './components/listen-text.vue';
+import donate from './components/donate.vue';
+import modalDonate from './components/modal-donate.vue';
+import campaigns from './components/campaigns/campaigns.vue';
+import groups from './components/groups/groups.vue';
+import fundraisers from './components/fundraisers/fundraisers.vue';
+import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
+import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
+import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
+import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
+import campaignGroups from './components/campaigns/campaign-groups.vue';
+import groupTrips from './components/campaigns/group-trips.vue';
+import groupProfileTrips from './components/groups/group-profile-trips.vue';
+import groupProfileStories from './components/groups/group-profile-stories.vue';
+import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import groupInterestSignup from './components/groups/group-interest-signup.vue';
+import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
+import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+import userProjectsList from './components/projects/user-projects-list.vue';
+import reservationsList from './components/reservations/reservations-list.vue';
+import restoreReservation from './components/reservations/restore-reservation.vue';
+import transferReservation from './components/reservations/transfer-reservation.vue';
+import donationsList from './components/reservations/donations-list.vue';
+import recordsList from './components/records/records-list.vue';
+import groupsList from './components/groups/groups-list.vue';
+import visasList from './components/records/visas/visas-list.vue';
+import medicalsList from './components/records/medicals/medicals-list.vue';
+import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
+import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
+import passportsList from './components/records/passports/passports-list.vue';
+import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
+import essaysList from './components/records/essays/essays-list.vue';
+import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
+import referralsList from './components/records/referrals/referrals-list.vue';
+import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
+import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
+import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
+import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
+import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
+import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
+import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
+import reservationAvatar from './components/reservations/reservation-avatar.vue';
+import reservationCosts from './components/reservations/reservation-costs.vue';
+import reservationDues from './components/reservations/reservation-dues.vue';
+import funding from './components/funding.vue';
 // import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
@@ -68,23 +68,23 @@ import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
 import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
-// import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
-// import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
-// import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
-// import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
-// import notes from './components/notes.vue';
-// import todos from './components/todos.vue';
-// import userPermissions from './components/users/user-permissions.vue';
-// import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-// import reservationRequirements from './components/reservations/reservation-requirements.vue';
-// import referralResponse from './components/referrals/referral-response.vue';
-// import sendEmail from './components/send-email.vue';
-// import reportsList from './components/reports/reports-list.vue';
-// import teamManager from './components/teams/team-manager.vue';
-// import roomingWizard from './components/rooms/rooming-wizard.vue';
-// import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
-// import teamTypeManager from './components/teams/team-type-manager.vue';
-// import regionsManager from './components/regions/regions-manager.vue';
+import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
+import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
+import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
+import notes from './components/notes.vue';
+import todos from './components/todos.vue';
+import userPermissions from './components/users/user-permissions.vue';
+import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reservationRequirements from './components/reservations/reservation-requirements.vue';
+import referralResponse from './components/referrals/referral-response.vue';
+import sendEmail from './components/send-email.vue';
+import reportsList from './components/reports/reports-list.vue';
+import teamManager from './components/teams/team-manager.vue';
+import roomingWizard from './components/rooms/rooming-wizard.vue';
+import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
+import teamTypeManager from './components/teams/team-type-manager.vue';
+import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
 // import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -339,11 +339,40 @@ Vue.filter('phone', {
     }
 });
 Vue.component('phone-input', {
-    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder" v-validate="validation"></div>',
     props: {
         value: { type: String, default: '' },
         label: { type: String, default: '' },
         placeholder: { type: String, default: '(123) 456-7890' },
+        validation: { type: String, default: '' },
+
+    },
+    methods: {
+        updateValue(value) {
+            this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        },
+        formatValue() {
+            this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        },
+        selectAll(event) {
+            // Workaround for Safari bug
+            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+            setTimeout(function () {
+                event.target.select()
+            }, 0)
+        }
+    }
+});
+Vue.component('datetime-input', {
+    template: '<div><label v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    props: {
+        value: { type: String, default: '' },
+        label: { type: String, default: '' },
+        validation: { type: String, default: '' },
+        format: { type: String, default: 'YYYY-MM-DD HH:mm:ss' },
+        placeholder: { type: String, default: '(123) 456-7890' },
+        diff: { type: Boolean, default: false},
+        noLocal: { type: Boolean, default: false},
     },
     methods: {
         updateValue(value) {

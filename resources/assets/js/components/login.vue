@@ -397,16 +397,18 @@
                 this.attemptedLogin = true;
                 let that = this;
                 if (this.$LoginForm.valid) {
-                    that.$http.post('/login', this.user)
+                    that.$http.post('/oauth/token', {
+						grant_type: 'password',
+						client_id: 2,
+						client_secret: 'NvqY1KwxVL7PfkS5lxZ6Ha2fss9TpglGAH0oOquR',
+						username: this.user.email,
+						password: this.user.password,
+						scope: '*',
+					})
                         .then(function (response) {
-                                // set cookie - name, token
-                                this.$cookie.set('api_token', response.body.token);
-                                // reload to set cookie
-									/*if (this.isChildComponent) {
-									 window.location.reload();
-									 }*/
-                                if (response.body.redirect_to)
-                                    that.getUserData(response.body.redirect_to, response.body.ignore_redirect || false);
+
+                                // if (response.body.redirect_to)
+                                    that.getUserData('/dashboard', response.body.ignore_redirect || false);
                             },
                             function (response) {
                                 that.messages = [];

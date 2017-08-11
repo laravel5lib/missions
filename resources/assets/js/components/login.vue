@@ -379,24 +379,31 @@
         },
         computed: {},
         methods: {
-            attempt(e) {
-                this.$validator.validateAll().then(result => {
-                    if (!result) {
-                        this.messages = [{type: 'warning', message: 'Please check the form'}];
-                        this.$root.$emit('showError', 'Please check the form.');
-                        return false;
-                    }
-
-                    this.$http.post('/login', this.user)
+            checkForLoginError(field){
+                // if user clicked continue button while the field is invalid trigger error styles
+                return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
+            },
+            checkForRegisterError(field){
+                // if user clicked continue button while the field is invalid trigger error styles
+                return this.$RegisterForm[field.toLowerCase()].invalid && this.attemptRegister
+            },
+            attempt: function (e) {
+                e.preventDefault();
+                this.attemptedLogin = true;
+                let that = this;
+                if (this.$LoginForm.valid) {
+                    that.$http.post('/oauth/token', {
+						grant_type: 'password',
+						client_id: 2,
+						client_secret: 'NvqY1KwxVL7PfkS5lxZ6Ha2fss9TpglGAH0oOquR',
+						username: this.user.email,
+						password: this.user.password,
+						scope: '*',
+					})
                         .then(function (response) {
-                                // set cookie - name, token
-                                this.$cookie.set('api_token', response.body.token);
-                                // reload to set cookie
-                                /*if (this.isChildComponent) {
-								 window.location.reload();
-								 }*/
-                                if (response.body.redirect_to)
-                                    this.getUserData(response.body.redirect_to, response.body.ignore_redirect || false);
+
+                                // if (response.body.redirect_to)
+                                    that.getUserData('/dashboard', response.body.ignore_redirect || false);
                             },
                             function (response) {
                                 this.messages = [];

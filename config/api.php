@@ -168,7 +168,7 @@ return [
     */
 
     'auth' => [
-        'jwt' => 'Dingo\Api\Auth\Provider\JWT'
+        'Guard' => \App\Providers\GuardServiceProvider::class
     ],
 
     /*

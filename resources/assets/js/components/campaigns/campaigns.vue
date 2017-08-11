@@ -6,8 +6,8 @@
 				<div class="carousel-caption">
 					<h6 class="text-uppercase">Nicaragua</h6>
 					<h3>1Nation1Day 2017</h3>
-					<p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
-					<a href="/1n1d17" class="btn btn-primary btn-sm">More Details</a>
+					<p>1Nation1Day Nicaragua was the largest global missions outreach in history!</p>
+					<a href="http://1nation1day.com/" target="_blank" class="btn btn-primary btn-sm">Learn More</a>
 				</div>
 			</div>
 		</div>
@@ -16,7 +16,7 @@
 		</div>
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
-	<div class="container">
+	<div class="container" v-if="campaigns.length > 0">
 		<div class="col-xs-12">
 			<h4>Current Campaigns</h4>
 			<hr class="divider">
@@ -25,6 +25,17 @@
 			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
 		</div>
 	</div>
+
+	<div class="container" v-else>
+		<div class="row">
+			<div class="col-12-xs text-center">
+				<p class="lead">Looking for 2018 trips?</p>
+				<p>Click the button below to provide your email address and we'll notify you the second these trips become available.</p>
+				<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me</a>
+			</div>
+		</div>
+	</div>
+
 	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">

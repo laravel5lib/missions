@@ -2,13 +2,10 @@
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Dashboard Routes
 |--------------------------------------------------------------------------
 */
 
-/**
- * Dashboard Routes
- */
 $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('/', function () {
         return view('dashboard.index');
@@ -69,11 +66,12 @@ $this->group(['middleware' => ['auth'], 'prefix' => 'dashboard' ], function () {
     $this->get('projects/{id}/{tab?}', 'Dashboard\ProjectsController@show');
 });
 
-/**
- * Web Routes
- */
+/*
+|--------------------------------------------------------------------------
+| Redirects
+|--------------------------------------------------------------------------
+*/
 
-// redirects
 $this->get('/signup/{slug}', function ($slug) {
     return redirect('/'.$slug.'/signup');
 });
@@ -90,30 +88,18 @@ $this->get('/go/{slug?}', function ($slug = null) {
     return redirect('/'.$slug);
 });
 
-// Authentication and Registration Routes...
-$this->get('/login', 'Auth\AuthController@login');
-$this->post('/login', 'Auth\AuthController@authenticate');
-$this->get('/register', 'Auth\AuthController@create');
-$this->post('/register', 'Auth\AuthController@register');
-$this->get('/logout', 'Auth\AuthController@logout');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-// Password Reset Routes...
-$this->get('/password/email', 'Auth\PasswordController@showLinkRequestForm');
-$this->get('/password/reset/{token?}', 'Auth\PasswordController@showResetForm');
-$this->post('/password/email', 'Auth\PasswordController@sendResetLinkEmail');
-$this->post('/password/reset', 'Auth\PasswordController@reset');
+Auth::routes();
 
-// Donation Route...
 $this->get('/donate/{recipient?}', 'DonationsController@show');
-
-// Referral Form Route..
 $this->get('/referrals/{id}', 'ReferralsController@show');
-
-// Trip Routes...
 $this->get('/trips/{id}', 'TripsController@show');
 $this->get('/trips/{id}/register', 'TripsController@register');
-
-// Fundraisers, Groups, Campaigns, and Static Page Routes ...
 $this->get('/fundraisers', 'FundraisersController@index');
 $this->get('/groups', 'GroupsController@index');
 $this->get('/campaigns', 'CampaignsController@index');
@@ -126,8 +112,6 @@ $this->get('/{sponsor_slug}/{fundraiser_slug}', 'FundraisersController@show')
 $this->get('/{slug}', 'PagesController@show')
      ->where('sponsor_slug', '^(?!api).*$')
      ->middleware(['lowercase']);
-
-// Home Route ...
 $this->get('/', function () {
     return view('site.index');
 });

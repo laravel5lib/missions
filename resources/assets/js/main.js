@@ -230,16 +230,19 @@ Vue.use(require('vue-truncate'));
 Vue.http.options.root = '/api';
 Vue.http.interceptors.push(function(request, next) {
 
+    request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
+
+
     // modify request
-    let token, headers;
-
-    token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
-
-    headers = request.headers || (request.headers = {});
-
-    if (token !== null && token !== 'undefined') {
-        headers.set('Authorization', token);
-    }
+    // let token, headers;
+    //
+    // token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
+    //
+    // headers = request.headers || (request.headers = {});
+    //
+    // if (token !== null && token !== 'undefined') {
+    //     headers.set('Authorization', token);
+    // }
 
 
     // Show Spinners in all components where they exist
@@ -282,20 +285,20 @@ Vue.http.interceptors.push(function(request, next) {
             this.$refs.spinner.hide();
         }
 
-        if (response.status && response.status === 401) {
-            $.removeCookie('api_token');
-            console.log('not logged in');
-            // window.location.replace('/logout');
-        }
-        if (response.status && response.status === 500) {
-            console.log('Oops! Something went wrong with the server.')
-        }
-        if (response.headers && response.headers.has('Authorization')) {
-            $.cookie('api_token', response.headers.get('Authorization'));
-        }
-        if (response.data && response.data.token && response.data.token.length > 10) {
-            $.cookie('api_token', response.data.token);
-        }
+        // if (response.status && response.status === 401) {
+        //     $.removeCookie('api_token');
+        //     console.log('not logged in');
+        //     // window.location.replace('/logout');
+        // }
+        // if (response.status && response.status === 500) {
+        //     console.log('Oops! Something went wrong with the server.')
+        // }
+        // if (response.headers && response.headers.has('Authorization')) {
+        //     $.cookie('api_token', response.headers.get('Authorization'));
+        // }
+        // if (response.data && response.data.token && response.data.token.length > 10) {
+        //     $.cookie('api_token', response.data.token);
+        // }
 
     });
 });

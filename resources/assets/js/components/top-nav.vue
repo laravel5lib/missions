@@ -25,7 +25,7 @@
 						<li class=""><a :href="url" id="menu-profile-link">My Profile</a></li>
 						<li class=""><a href="/dashboard">Dashboard</a></li>
 						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
-						<li class=""><a href="/logout">Sign Out</a></li>
+						<li class=""><a :href="logout()">Sign Out</a></li>
 					</template>
 				</ul>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
@@ -132,6 +132,9 @@
 			isAdmin(){
 				return this.admin && window.location.pathname.split('/')[1] === 'admin';
 			},
+			logout(){
+			    this.$http.post('/logout');
+			}
 		},
 		ready(){
 

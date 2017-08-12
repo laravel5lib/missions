@@ -15,7 +15,6 @@ class UserTableSeeder extends Seeder
             $user->slug()
                  ->save(factory(App\Models\v1\Slug::class)
                  ->make(['url' => str_slug($user->name)]));
-            $user->assign('admin');
             $user->links()->saveMany([
                 factory(App\Models\v1\Link::class)->make(['name' => 'facebook', 'url' => 'https://facebook.com']),
                 factory(App\Models\v1\Link::class)->make(['name' => 'twitter', 'url' => 'https://twitter.com']),

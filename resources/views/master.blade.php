@@ -18,8 +18,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display" rel="stylesheet">
-    {{--<script src="//d2wy8f7a9ursnm.cloudfront.net/bugsnag-3.min.js"
-        data-apikey="0f5323b4f7858ae82155bb75688d8533"></script>--}}
+    <script>
+        window.Laravel = <?php echo json_encode([
+            'csrfToken' => csrf_token(),
+        ]); ?>
+    </script>
     @yield('styles')
 </head>
 <body id="app">
@@ -61,8 +64,8 @@
 
     @yield('tour')
     <script src="{{ elixir('js/main.js') }}"></script>
-    {{--<script src="/js/main.js"></script>--}}
     <script src="/js/vendor.js"></script>
+
     @yield('scripts')
 </body>
 </html>

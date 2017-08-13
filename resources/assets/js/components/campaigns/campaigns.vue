@@ -6,8 +6,8 @@
 				<div class="carousel-caption">
 					<h6 class="text-uppercase">Nicaragua</h6>
 					<h3>1Nation1Day 2017</h3>
-					<p>1Nation1Day Nicaragua will be the largest global missions outreach in history.</p>
-					<a href="/1n1d17" class="btn btn-primary btn-sm">More Details</a>
+					<p>July 29, 2017 marked the day that the hand of God touched the nation of Nicaragua in epic proportions.</p>
+					<a href="http://1nation1day.com" class="btn btn-primary btn-sm">Learn About 1N1D17</a>
 				</div>
 			</div>
 		</div>

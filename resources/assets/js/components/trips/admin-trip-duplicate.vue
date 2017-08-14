@@ -14,7 +14,7 @@
                                 <div class="form-group" :class="{ 'has-error': errors.has('group') }">
                                     <label class="col-sm-2 control-label">Group</label>
                                     <div class="col-sm-10">
-                                        <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+                                        <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value="groupObj" :options="groups" :on-search="getGroups"
                                                   label="name"></v-select>
                                         <select hidden v-model="group_id" name="group" v-validate="'required'">
                                             <option :value="group.id" v-for="group in groups">{{group.name}}</option>
@@ -74,8 +74,8 @@
         methods:{
             getGroups(search, loading){
                 loading(true);
-                this.$http.get('groups', { params: { search: search } }).then(function (response) {
-                    this.groups = response.body.data;
+                this.$http.get('groups', { params: { search: search } }).then((response) => {
+                    this.groups = response.data.data;
                     loading(false);
                 });
             },
@@ -87,7 +87,7 @@
                 this.$validate('group', true);
                 this.attemptedContinue = true;
                 if (this.$TripDuplication.valid) {
-                    this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (trip) {
+                    this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then((trip) => {
                         let payments = {};
                         this.trip = trip.data.data;
                         $.extend(this.trip, {
@@ -124,24 +124,24 @@
                         delete this.trip.created_at;
                         delete this.trip.updated_at;
 
-                        this.$http.post('trips/duplicate', this.trip, { params: { include: 'costs.payments'}}).then(function (response) {
+                        this.$http.post('trips/duplicate', this.trip, { params: { include: 'costs.payments'}}).then((response) => {
                             let costPromises = [];
                             _.each(this.trip.costs, function (cost) {
                                 // assign cost to trip
                                 cost.cost_assignable_type = 'trips';
-                                cost.cost_assignable_id = response.body.data.id;
+                                cost.cost_assignable_id = response.data.data.id;
 
                                 // add payments array from costs based on name
                                 cost.payments = payments[cost.name];
                                 // duplicate cost
-                                costPromises.push(this.$http.post('costs', cost).then(function (res) {
+                                costPromises.push(this.$http.post('costs', cost).then((res) => {
                                 }, function (error) {
                                     console.log(error);
                                 }));
                             }.bind(this));
 
-                            Promise.all(costPromises).then(function (newCosts) {
-                                window.location.href = '/admin' + response.body.data.links[0].uri;
+                            Promise.all(costPromises).then((newCosts) => {
+                                window.location.href = '/admin' + response.data.data.links[0].uri;
                             }.bind(this));
                         }, function (error) {
                             console.log(error);

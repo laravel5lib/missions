@@ -26,7 +26,7 @@
                     <input type="text" 
                            v-model="promo.name" 
                            class="form-control" 
-                           name="name" v-validate="{ required: true, minlength:3, maxlength:100 }"
+                           name="name" v-validate="'required|min:3|max:100'"
                            required>
                     <span v-if="attemptSubmit" class="help-block">
                         <span v-if="$ModifyPromotional.name.required || $ModifyPromotional.name.minlength">
@@ -55,7 +55,7 @@
                         <input type="number" 
                                v-model="promo.reward" 
                                class="form-control" 
-                               name="reward" v-validate="{ required: true, min:1 }"
+                               name="reward" v-validate="'required|min:1'"
                                required>
                         <span class="input-group-addon">.00</span>
                     </div>
@@ -69,7 +69,7 @@
 
                 <div class="form-group col-sm-6">
                     <label>Expires</label>
-                    <date-picker :model.sync="promo.expires_at|moment('YYYY-MM-DD', false, true)"></date-picker>
+                    <date-picker :model="promo.expires_at|moment('YYYY-MM-DD', false, true)"></date-picker>
                 </div>
             </div>
             </form>
@@ -123,8 +123,8 @@
                 this.hasChanged = true;
             },
             fetch() {
-                this.$http.get('promotionals/' + this.id).then(function (response) {
-                    this.promo = response.body.data;
+                this.$http.get('promotionals/' + this.id).then((response) => {
+                    this.promo = response.data.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 })
@@ -133,9 +133,9 @@
                 this.resetErrors();
                 if (this.$ModifyPromotional.valid) {
                     $.extend(this.promo, {promoteable_id: this.promoterId, promoteable_type: this.promoterType});
-                    this.$http.post('promotionals', this.promo).then(function (response) {
+                    this.$http.post('promotionals', this.promo).then((response) => {
                         this.$root.$emit('showSuccess', 'Promotional created.');
-                        this.$dispatch('load-view', {view: 'details', id: response.body.data.id});
+                        this.$dispatch('load-view', {view: 'details', id: response.data.data.id});
                     }, function (error) {
                         this.$root.$emit('showError', 'Could not create promotional.');
                     })
@@ -148,9 +148,9 @@
 
                 this.resetErrors();
                 if (this.$ModifyPromotional.valid) {
-                    this.$http.put('promotionals/' + this.id, this.promo).then(function (response) {
+                    this.$http.put('promotionals/' + this.id, this.promo).then((response) => {
                         this.$root.$emit('showSuccess', 'Promotional updated.');
-                        this.$dispatch('load-view', {view: 'details', id: response.body.data.id});
+                        this.$dispatch('load-view', {view: 'details', id: response.data.data.id});
                     }, function (error) {
                         this.$root.$emit('showError', 'Could not update promotional.');
                     })

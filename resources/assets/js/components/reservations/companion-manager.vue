@@ -69,7 +69,7 @@
                                 <div class="form-group" :class="{ 'has-error': errors.has('reservation') }">
                                     <label class="control-label">Reservation</label>
                                     <span class="help-block" v-show="reservations.length < 1"><i class="fa fa-warning"></i> If your search yields no options it could mean (1) the reservation does not exist or (2) the reservation belongs to another group or campaign.</span>
-                                    <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value.sync="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
+                                    <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
                                     <!-- <select hidden="" v-model="newCompanion.companion_reservation_id" name="reservation" v-validate="'required'">
                                         <option :value="reservation.id" v-for="reservation in reservations">{{reservation.name}}</option>
                                     </select> -->
@@ -140,8 +140,8 @@ export default {
     getReservations(search, loading) {
         loading(true);
         var that = this;
-        this.$http.get('reservations?campaign='+this.campaignId+'&groups[]='+this.groupId+'&search='+search+'&per_page=5&ignore[]=' + this.reservationId).then(function (response) {
-            this.reservations = _.chain(response.body.data).reject(function(reservation) {
+        this.$http.get('reservations?campaign='+this.campaignId+'&groups[]='+this.groupId+'&search='+search+'&per_page=5&ignore[]=' + this.reservationId).then((response) => {
+            this.reservations = _.chain(response.data.data).reject(function(reservation) {
                 return _.chain(that.companions).pluck('id').contains(reservation.id).value();
             }).map(function(reservation) {
                 return {
@@ -155,38 +155,38 @@ export default {
         });
     },
     getReservation() {
-        this.$http.get('reservations/'+this.reservationId+'?include=trip').then(function (response) {
-            this.limit = response.body.data.companion_limit;
-            this.campaignId = response.body.data.trip.data.campaign_id;
-            this.groupId = response.body.data.trip.data.group_id;
+        this.$http.get('reservations/'+this.reservationId+'?include=trip').then((response) => {
+            this.limit = response.data.data.companion_limit;
+            this.campaignId = response.data.data.trip.data.campaign_id;
+            this.groupId = response.data.data.trip.data.group_id;
         }, function (response) {
             this.$root.$emit('showError', 'Could not retreive reservation.');
         });
     },
     fetch() {
-        this.resource.get({reservation: this.reservationId}).then(function (response) {
-            this.companions = response.body.data;
+        this.resource.get({reservation: this.reservationId}).then((response) => {
+            this.companions = response.data.data;
         }, function (response) {
             this.$root.$emit('showError', 'Could not retreive companions.');
         });
     },
     join() {
-        this.resource.save({reservation: this.reservationId}, {
+        this.resource.post({reservation: this.reservationId}, {
             relationship: this.relationship,
             companion_reservation_id: this.companion_reservation_id
-        }).then(function (response) {
+        }).then((response) => {
             this.$root.$emit('showSuccess', 'Joined new companions.');
             $('#JoinCompanionsModal').modal('hide');
             this.reservationObj = null;
             this.reservations = [];
             this.fetch();
         }, function (response) {
-            console.log(_.first(_.toArray(response.body.errors)));
-            this.$root.$emit('showError', _.first(_.toArray(response.body.errors)));
+            console.log(_.first(_.toArray(response.data.errors)));
+            this.$root.$emit('showError', _.first(_.toArray(response.data.errors)));
         });
     },
     leave() {
-        this.resource.delete({reservation: this.reservationId}).then(function (response) {
+        this.resource.delete({reservation: this.reservationId}).then((response) => {
             this.$root.$emit('showSuccess', 'Successfully left companions.');
             $('#LeaveCompanionsModal').modal('hide');
             this.fetch();
@@ -196,7 +196,7 @@ export default {
     },
     update() {
         this.$http.put('reservations/' + this.reservationId, {companion_limit: this.limit})
-            .then(function (response) {
+            .then((response) => {
                 this.$root.$emit('showSuccess', 'Successfully updated companion limit.');
                 this.editMode = false;
             }, function (response) {

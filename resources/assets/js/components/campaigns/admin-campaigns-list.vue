@@ -57,7 +57,7 @@
 				<tfoot>
 				<tr>
 					<td colspan="10" class="text-center">
-						<pagination :pagination.sync="pagination" :callback="searchCampaigns"></pagination>
+						<pagination :pagination="pagination" :callback="searchCampaigns"></pagination>
 					</td>
 				</tr>
 				</tfoot>
@@ -150,9 +150,9 @@
 				$.extend(params, this.filters);
         this.exportFilters = params;
 
-				this.$http.get('campaigns', { params: params }).then(function (response) {
-					this.campaigns = response.body.data;
-					this.pagination = response.body.meta.pagination;
+				this.$http.get('campaigns', { params: params }).then((response) => {
+					this.campaigns = response.data.data;
+					this.pagination = response.data.meta.pagination;
 				})
 			}
         },

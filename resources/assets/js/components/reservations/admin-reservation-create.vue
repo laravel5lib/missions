@@ -186,10 +186,10 @@
                 }
 
 
-                this.$http.post('reservations', data).then(function (response) {
+                this.$http.post('reservations', data).then((response) => {
                     this.$root.$emit('AdminTrip:RefreshReservations');
                     this.$refs.reservationspinner.hide();
-                    location.href = '/admin/reservations/' + response.body.data.id
+                    location.href = '/admin/reservations/' + response.data.data.id
                     /*$('#addReservationModal').modal('hide');
                     $.extend(this, {
                         stepList:[
@@ -236,16 +236,16 @@
         },
         mounted(){
             //get trip costs
-            this.$http.get('trips/' + this.tripId, { params: {include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then(function (response) {
-                this.trip = response.body.data;
+            this.$http.get('trips/' + this.tripId, { params: {include: 'costs:status(active),costs.payments,deadlines,requirements' }}).then((response) => {
+                this.trip = response.data.data;
                 // deadlines, requirements, and companion_limit
-                this.deadlines =  response.body.data.deadlines.data;
-                this.requirements =  response.body.data.requirements.data;
-                this.companion_limit = response.body.data.companion_limit;
+                this.deadlines =  response.data.data.deadlines.data;
+                this.requirements =  response.data.data.requirements.data;
+                this.companion_limit = response.data.data.companion_limit;
 
                 // filter costs by type
                 var optionalArr = [], staticArr = [], incrementalArr = [];
-                response.body.data.costs.data.forEach(function (cost) {
+                response.data.data.costs.data.forEach(function (cost) {
                     switch (cost.type) {
                         case 'static':
                             staticArr.push(cost);

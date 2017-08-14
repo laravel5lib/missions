@@ -13,14 +13,14 @@
 				<div class="col-sm-12">
 					<label for="name">Name</label>
 					<input type="text" class="form-control" name="name" id="name" v-model="name"
-						   placeholder="Campaign Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
+						   placeholder="Campaign Name" name="name" v-validate="'required|min:1|max:100'"
 						   maxlength="100" minlength="1" required>
 				</div>
 			</div>
 			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries"
 							  label="name"></v-select>
 					<select hidden name="country" id="country" class="hidden" v-model="country_code"
 							name="country" v-validate="'required'">
@@ -32,7 +32,7 @@
 				<div class="col-sm-12">
 					<label for="description">Description</label>
 					<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
-							  name="description="{ required: true, minlength:1, maxlength:255 }" maxlength" v-validate="255"
+							  name="description="'required|min:1|max:255'" maxlength" v-validate="255"
 							  minlength="1"></textarea>
 					<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
 				</div>
@@ -42,7 +42,7 @@
 					<label for="started_at">Dates</label>
 					<div class="row">
 						<div class="col-sm-6">
-							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model.sync="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 							       name="start" v-validate="'required'" required>
 							<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
@@ -51,12 +51,12 @@
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
-							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 							       name="end" v-validate="'required'" required>
 							<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
 								<span class="input-group-addon">End</span>
-								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							</div>-->
 							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
 						</div>
@@ -67,7 +67,7 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
-					<date-picker :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+					<date-picker :model="published_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 					<!--<div class="input-group">
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
@@ -143,19 +143,19 @@
 
 			<div class="form-group">
 				<div class="col-sm-12 text-center">
-					<!--<a href="/admin/campaigns/{{campaignId}}" class="btn btn-default">Cancel</a>-->
+					<!--<a :href="'/admin/campaigns/' + campaignId + '" class='"btn btn-default">Cancel</a>-->
 					<a @click="back()" class="btn btn-default">Cancel</a>
 					<a @click="update()" class="btn btn-primary">Update</a>
 				</div>
 			</div>
 		</form>
 
-		<alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+		<alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
 			<strong>Well Done!</strong>
 			<p>Profile updated</p>
 		</alert>
-		<alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+		<alert :show="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
 			<strong>Oh No!</strong>
 			<p>There are errors on the form.</p>
@@ -282,7 +282,7 @@
 						avatar_upload_id: this.avatar_upload_id,
 						banner_upload_id: this.banner_upload_id,
 
-					}).then(function (resp) {
+					}).then((resp) => {
 						resp.data.data.published_at = moment(resp.data.data.published_at).format('YYYY-MM-DDTHH:mm:ss.SSS');
 						$.extend(this, resp.data.data);
 //						window.location.href = '/admin/campaigns/'
@@ -302,7 +302,7 @@
 			deleteCampaign(){
 				// delete campaign
 				// this.$refs.spinner.show();
-				this.resource.delete({id: this.campaignId}).then(function(response) {
+				this.resource.delete({id: this.campaignId}).then((response) => {
 					window.location.href = '/admin/campaigns/'
 				}, function (response) {
                     console.log(response);
@@ -328,16 +328,16 @@
 		},
 		created(){
 			// this.$refs.spinner.show();
-			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
+			this.$http.get('utilities/countries').then((response) => {
+				this.countries = response.data.countries;
 			}, function (response) {
                 console.log(response);
                 return response
             });
 
 			// get campaign data
-			this.resource.get({id: this.campaignId}).then(function(response) {
-				let campaign = response.body.data;
+			this.resource.get({id: this.campaignId}).then((response) => {
+				let campaign = response.data.data;
 				this.name = campaign.name;
 				this.short_desc = campaign.description;
 				this.started_at = campaign.started_at;

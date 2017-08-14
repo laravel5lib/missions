@@ -7,7 +7,7 @@
 			<div class="row visible-xs-block">
 				<div class="col-xs-12">
 					<div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-						<a @click="backStep()" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
+						<a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
 							<i class="fa fa-chevron-left"></i>
 						</a>
 						<div class="btn-group" role="group">
@@ -46,7 +46,7 @@
 
 					</ul>
 				</div>
-				<div class="col-sm-7 col-md-8 {{currentStep.view}}">
+				<div class="col-sm-7 col-md-8" :class="currentStep.view">
 					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
 					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
 					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
@@ -271,18 +271,18 @@
 				}
 
 
-				this.$http.post('trips/' + this.tripId + '/register', data).then(function (response) {
+				this.$http.post('trips/' + this.tripId + '/register', data).then((response) => {
 //					this.stripeDeferred.resolve(true);
 					this.$refs.reservationspinner.hide();
 
-					window.location.href = '/dashboard/reservations/' + response.body.data.id;
+					window.location.href = '/dashboard/reservations/' + response.data.data.id;
 					this.$refs.reservationspinner.hide();
 				}, function (response) {
                     this.$refs.reservationspinner.hide();
                     console.log(response);
-					this.$root.$emit('showError', response.body.message);
+					this.$root.$emit('showError', response.data.message);
                     this.fallbackStep(this.stepList[5]); // return to payment details step
-					this.paymentErrors.push(response.body.message);
+					this.paymentErrors.push(response.data.message);
 				});
 
 
@@ -336,7 +336,7 @@
 		mounted(){
 			//get trip costs
 			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
-			resource.query({id: this.tripId}).then(function (trip) {
+			resource.query({id: this.tripId}).then((trip) => {
 				this.trip = trip.data.data;
 				// deadlines, requirements, and companion_limit
 				this.deadlines =  trip.data.data.deadlines.data;

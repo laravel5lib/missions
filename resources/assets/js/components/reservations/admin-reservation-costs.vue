@@ -48,7 +48,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Costs</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
@@ -67,7 +67,7 @@
             </div>
         </modal>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>{{successMessage}}</p>
@@ -250,8 +250,8 @@
                 delete trip.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    let thisTrip = response.body.data;
+                this.$http.put('trips/' + trip.id, trip).then((response) => {
+                    let thisTrip = response.data.data;
                     this.selectedcosts = new Array(this.newDeadline);
 
                     return this.addCosts();
@@ -266,10 +266,10 @@
             doUpdate(reservation, success){
 
                 // this.$refs.spinner.show();
-                return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.body.data);
+                return this.resource.update(reservation).then((response) => {
+                    this.setReservationData(response.data.data);
                     this.selectedCosts = [];
-                    this.$root.$emit('AdminReservation:CostsUpdated', response.body.data);
+                    this.$root.$emit('AdminReservation:CostsUpdated', response.data.data);
                     this.successMessage = success || 'Costs updated Successfully';
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
@@ -296,8 +296,8 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setReservationData(response.body.data);
+            this.resource.get().then((response) => {
+                this.setReservationData(response.data.data);
                 // this.$refs.spinner.hide();
             });
 

@@ -118,8 +118,8 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('phone') }">
-                                <phone-input label="Billing Phone" v-model="cardPhone" name="phone"></phone-input>
-                                <!--<label for="infoPhone">Billing Phone</label>-->
+                                <label for="infoPhone">Billing Phone</label>
+                                <phone-input v-model="cardPhone" name="phone" id="infoPhone"></phone-input>
                                 <!--<input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone=" id="infoPhone">-->
                             </div>
                         </div>
@@ -482,7 +482,7 @@
                     }
                 }
                 this.$http.post('donations', data)
-                        .then(function (response) {
+                        .then((response) => {
                             this.stripeDeferred.resolve(true);
                             this.$refs.donationspinner.hide();
                             this.donationState = 'confirmation';
@@ -598,13 +598,13 @@
             }
 
             if (parseInt(this.auth)) {
-                this.$http.get('users/me').then(function (response) {
-                    this.donor = response.body.data.name;
-                    this.donor_id = response.body.data.donor_id || null;
-                    this.cardHolderName = response.body.data.name;
-                    this.cardEmail = response.body.data.email;
-                    this.cardPhone = response.body.data.phone_one;
-                    this.cardZip = response.body.data.zip
+                this.$http.get('users/me').then((response) => {
+                    this.donor = response.data.data.name;
+                    this.donor_id = response.data.data.donor_id || null;
+                    this.cardHolderName = response.data.data.name;
+                    this.cardEmail = response.data.data.email;
+                    this.cardPhone = response.data.data.phone_one;
+                    this.cardZip = response.data.data.zip
                 });
             }
 
@@ -626,7 +626,7 @@
                     return false;
                 }
 
-                $.when(this.createToken()).then(function (response) {
+                $.when(this.createToken()).then((response) => {
                     this.goToState('review');
                 }.bind(this));
             }.bind(this));

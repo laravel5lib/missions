@@ -22,12 +22,12 @@
 			</form>
 			<!-- Team Types Accordion -->
 			<div class="panel-group" id="teamTypesAccordion" role="tablist" aria-multiselectable="true">
-				<div class="panel panel-default" v-for="teamType in teamTypes | filterBy teamTypesSearch">
+				<div class="panel panel-default" v-for="(teamType, typeIndex) in teamTypesFiltered">
 					<div class="panel-heading" role="tab" id="headingOne">
 						<h4 class="panel-title">
 							<div class="row">
 								<div class="col-xs-9">
-									<a role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+									<a role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + typeIndex" aria-expanded="true" aria-controls="collapseOne">
 										<h4>{{ teamType.name ? teamType.name[0].toUpperCase() + teamType.name.slice(1) : '' }}</h4>
 									</a>
 								</div>
@@ -41,7 +41,7 @@
 											<li><a @click="confirmDelete(teamType)">Delete</a></li>
 										</ul>
 									</dropdown>
-									<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+									<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + typeIndex" aria-expanded="true" aria-controls="collapseOne">
 										<i class="fa fa-angle-down"></i>
 									</a>
 								</div>
@@ -49,7 +49,7 @@
 
 						</h4>
 					</div>
-					<div :id="'teamTypeItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+					<div :id="'teamTypeItem' + typeIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-sm-6" v-for="(key, value) in teamType.rules">
@@ -69,7 +69,7 @@
 					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm">
 						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', messages: { req: 'Please name this type'} }">
 							<label class="control-label col-sm-4">Name</label>
-							<input type="text" class="form-control" name="name="['required']" v-model" v-validate="currentType.name">
+							<input type="text" class="form-control" name="name=" v-model="currentType.name" v-validate="'required'">
 						</div>
 						<div class="row">
 							<template v-for="(key, value) in currentType.rules">
@@ -110,16 +110,24 @@
         data(){
             return {
                 // mixin settings
-                validatorHandle: 'TypeForm',
+//                validatorHandle: 'TypeForm',
 
                 currentType: null,
                 selectedType: null,
                 editTypeMode: false,
                 showTypeDeleteModal: false,
                 teamTypes: [],
-                teamTypeResource: this.$resource('teams/types{/id}')
+                teamTypeResource: this.$resource('teams/types{/id}'),
+                teamTypesSearch: '',
             }
         },
+	    computed: {
+            teamTypesFiltered() {
+                return this.teamTypes.filter((team) => {
+                    return team.name.indexOf(this.teamTypesSearch) !== -1
+                });
+            }
+	    },
         methods: {
             getRuleLabel(key){
                 switch(key) {
@@ -182,11 +190,11 @@
                     if (originalType.name === this.currentType.name)
 	                    delete updatingObject.name;
 
-                    return this.teamTypeResource.update({ id: updatingObject.id }, updatingObject).then(function (response) {
-                        _.extend(_.findWhere(this.teamTypes, { id: updatingObject.id}), response.body.data);
-                        this.$root.$emit('showSuccess', 'Team Type: ' + response.body.data.name + ', successfully updated');
+                    return this.teamTypeResource.update({ id: updatingObject.id }, updatingObject).then((response) => {
+                        _.extend(_.findWhere(this.teamTypes, { id: updatingObject.id}), response.data.data);
+                        this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully updated');
                     }, function (response) {
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
                     });
                 }
 
@@ -195,11 +203,11 @@
 
                 this.resetErrors();
                 if (this.$TypeForm.valid) {
-                    return this.teamTypeResource.save(this.currentType).then(function (response) {
-                        this.teamTypes.push(response.body.data);
-                        this.$root.$emit('showSuccess', 'Team Type: ' + response.body.data.name + ', successfully created');
+                    return this.teamTypeResource.post(this.currentType).then((response) => {
+                        this.teamTypes.push(response.data.data);
+                        this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully created');
                     }, function (response) {
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
 
                     });
                 }
@@ -211,7 +219,7 @@
             deleteType() {
                 this.teamTypeResource
 	                .delete({ id: this.selectedType.id})
-	                .then(function (response) {
+	                .then((response) => {
 	                    this.teamTypes = _.reject(this.teamTypes, function (type) {
 		                    return type.id === this.selectedType.id
                         }.bind(this));
@@ -221,12 +229,12 @@
                             this.selectedType = null;
                         });
                     }, function (response) {
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
                     });
             },
             getTeamTypes() {
-                return this.teamTypeResource.get({campaign: this.campaignId}).then(function (response) {
-                    return this.teamTypes = response.body.data;
+                return this.teamTypeResource.get({campaign: this.campaignId}).then((response) => {
+                    return this.teamTypes = response.data.data;
                 }, function (error) {
                     console.log(error);
                     return error;

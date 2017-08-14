@@ -10,7 +10,7 @@
 				</div>
 				<div class="form-group">
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-							  :value.sync="usersArr" :options="usersOptions" label="name"
+							  :value="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
 				<div class="form-group">
@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="form-group">
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -151,7 +151,7 @@
         <hr class="divider sm">
         <div class="row">
 			<div class="col-xs-12 col-sm-4 col-md-3">
-				<div class="panel panel-default" v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+				<div class="panel panel-default" v-for="reservation in reservationsOrderedFiltered">
 					<div class="panel-heading text-center">
 						<h5>{{ reservation.given_names }} {{ reservation.surname }}</h5>
 					</div>
@@ -185,8 +185,9 @@
 	}
 </style>
 <script type="text/javascript">
+	import _ from 'underscore';
 	import vSelect from "vue-select";
-	export default{
+	export default {
         name: 'dashboard-group-reservations',
 		components: {vSelect},
 		props:{
@@ -243,6 +244,14 @@
             }
         },
 		computed: {
+            reservationsOrderedFiltered() {
+                // |orderBy orderByField direction
+                let arr =  _.sortBy(this.reservations, this.orderByField);
+                if (this.direction === -1) {
+                    _.reverse(arr)
+                }
+                arr.filter
+            }
 		},
         watch: {
 			// watch filters obj
@@ -398,14 +407,14 @@
 					age: [ this.ageMin, this.ageMax]
 				});
 				// this.$refs.spinner.show();
-				this.$http.get('reservations', { params: params }).then(function (response) {
+				this.$http.get('reservations', { params: params }).then((response) => {
                     let self = this;
-                    _.each(response.body.data, function (reservation) {
+                    _.each(response.data.data, function (reservation) {
                         reservation.amount_raised = this.totalAmountRaised(reservation);
                         reservation.percent_raised = this.totalPercentRaised(reservation);
                     }, this);
-                    this.reservations = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.reservations = response.data.data;
+                    this.pagination = response.data.meta.pagination;
 					// this.$refs.spinner.hide();
 				}, function (error) {
 					// this.$refs.spinner.hide();
@@ -414,22 +423,22 @@
             },
 			getGroups(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('groups', { params: { search: search} }).then(function (response) {
-					this.groupsOptions = response.body.data;
+            	this.$http.get('groups', { params: { search: search} }).then((response) => {
+					this.groupsOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getCampaigns(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
-					this.campaignOptions = response.body.data;
+				this.$http.get('campaigns', { params: { search: search} }).then((response) => {
+					this.campaignOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { params: { search: search} }).then(function (response) {
-					this.usersOptions = response.body.data;
+				this.$http.get('users', { params: { search: search} }).then((response) => {
+					this.usersOptions = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},

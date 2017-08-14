@@ -12,7 +12,7 @@
                               class="form-control"
                               :debounce="250"
                               :on-search="getCountries"
-					          :value.sync="regionsFilters.country"
+					          :value="regionsFilters.country"
                               :options="UTILITIES.countries"
                               label="name"
 					          placeholder="Filter Countries">
@@ -199,7 +199,7 @@
 											          class="form-control"
 											          :debounce="250"
 											          :on-search="getCountries"
-											          :value.sync="currentAccommodation.country"
+											          :value="currentAccommodation.country"
 											          :options="UTILITIES.countries"
 											          label="name"
 											          placeholder="Select a Country">
@@ -318,7 +318,7 @@
 								</panel>
 							</accordion>
 							<div class="col-xs-12 text-center">
-								<pagination :pagination.sync="accommodationsPagination" :callback="getAccommodations"></pagination>
+								<pagination :pagination="accommodationsPagination" :callback="getAccommodations"></pagination>
 							</div>
 						</template>
 						<template v-else>
@@ -399,7 +399,7 @@
 							</a>
 						</div>
 						<div class="col-xs-12 text-center">
-							<pagination :pagination.sync="regionsPagination" :callback="getRegions"></pagination>
+							<pagination :pagination="regionsPagination" :callback="getRegions"></pagination>
 						</div>
 					</template>
 					<template v-else>
@@ -414,7 +414,7 @@
                small
                ok-text="Delete"
                :callback="deleteAccommodation"
-               :show.sync="showAccommodationDeleteModal">
+               :show="showAccommodationDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="currentAccommodation">
 					Are you sure you want to delete accommodation: "{{currentAccommodation.name}}" ?
@@ -536,7 +536,7 @@
 	        manageAccommodation() {
                 this.resetErrors();
                 if (this.$AccommodationForm.valid) {
-                    return this.editMode ? this.updateAccommodation() : this.saveAccommodation();
+                    return this.editMode ? this.updateAccommodation() : this.postAccommodation();
                 } else {
                     this.$root.$emit('showError', 'Please check the form.');
                     return false;
@@ -553,8 +553,8 @@
                 if (data.room_types_settings)
                     delete data.room_types_settings;
 
-                return this.AccommodationsResource.save({ region: this.currentRegion.id }, data).then(function (response) {
-	                let newAccommodation = response.body.data;
+                return this.AccommodationsResource.post({ region: this.currentRegion.id }, data).then((response) => {
+	                let newAccommodation = response.data.data;
                     this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, newAccommodation));
                     this.currentRegion.accommodations.data.push(newAccommodation);
                     this.accommodations.push(newAccommodation);
@@ -573,8 +573,8 @@
                 if (data.room_types_settings)
                     delete data.room_types_settings;
 
-                return this.AccommodationsResource.update({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }, data).then(function (response) {
-                    this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, response.body.data));
+                return this.AccommodationsResource.update({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }, data).then((response) => {
+                    this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, response.data.data));
                     this.currentAccommodation = null;
                     this.showAccommodationManageModal = false;
                     this.editMode = false;
@@ -583,7 +583,7 @@
                 });
 	        },
 	        deleteAccommodation() {
-                return this.AccommodationsResource.delete({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }).then(function () {
+                return this.AccommodationsResource.delete({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }).then(() => {
                     this.currentAccommodation = null;
                     this.showAccommodationDeleteModal = false;
                     return this.getAccommodations();
@@ -610,7 +610,7 @@
                         } else {
                             // only create setting if val > 0
                             if (val > 0)
-                                promise = this.AccommodationTypesResource.save({ accommodation: accommodation.id}, {
+                                promise = this.AccommodationTypesResource.post({ accommodation: accommodation.id}, {
                                     room_type_id: property,
                                     available_rooms: val
                                 });
@@ -624,7 +624,7 @@
 
                 }.bind(this));
 
-                Promise.all(promises).then(function () {
+                Promise.all(promises).then(() => {
                     this.$root.$emit('showSuccess', accommodation.name + ' settings updated successfully.');
                     this.getAccommodations();
                     this.$nextTick(function () {
@@ -638,14 +638,14 @@
                     region: this.currentRegion.id,
                 };
 
-                return this.AccommodationsResource.get(params).then(function (response) {
-                    this.accommodationsPagination = response.body.meta.pagination;
-                    let accommodations = _.each(response.body.data, function (acc) {
+                return this.AccommodationsResource.get(params).then((response) => {
+                    this.accommodationsPagination = response.data.meta.pagination;
+                    let accommodations = _.each(response.data.data, function (acc) {
 	                    acc = _.extend(acc, this.loadAccommodationRoomTypes(acc));
                     }.bind(this));
 					return this.accommodations = accommodations;
                 }, function (response) {
-                    return response.body.message;
+                    return response.data.message;
                 });
             },
             getRegions(){
@@ -657,20 +657,20 @@
                     country: _.isObject(this.regionsFilters.country) ? this.regionsFilters.country.code : undefined
                 };
 
-                return this.RegionsResource.get(params).then(function (response) {
-                    this.regionsPagination = response.body.meta.pagination;
-                    return this.regions = response.body.data;
+                return this.RegionsResource.get(params).then((response) => {
+                    this.regionsPagination = response.data.meta.pagination;
+                    return this.regions = response.data.data;
                 }, function (response) {
-                    return response.body.message;
+                    return response.data.message;
                 });
             },
             getRoomTypes(){
                 return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 } })
-                    .then(function (response) {
-                            return this.roomTypes = response.body.data;
+                    .then((response) => {
+                            return this.roomTypes = response.data.data;
                         },
                         function (response) {
-                            return response.body.data;
+                            return response.data.data;
                         });
             },
         },
@@ -679,7 +679,7 @@
             promises.push(this.getCountries());
             promises.push(this.getRegions());
             promises.push(this.getRoomTypes());
-			Promise.all(promises).then(function (values) {});
+			Promise.all(promises).then((values) => {});
         }
     }
 </script>

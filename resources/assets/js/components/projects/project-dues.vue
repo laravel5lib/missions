@@ -77,12 +77,12 @@
             }
         },
         mounted(){
-            /*this.resource.get().then(function (response) {
-             this.setProjectData(response.body.data)
+            /*this.resource.get().then((response) => {
+             this.setProjectData(response.data.data)
              });*/
 
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data)
+            this.resource.get().then((response) => {
+                this.setProjectData(response.data.data)
                 // this.$refs.spinner.hide();
             });
 

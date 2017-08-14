@@ -9,7 +9,7 @@
                     <div class="col-sm-12">
                         <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                             <label for="infoManager">Record Manager</label>
-                            <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                            <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                             <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                 <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                             </select>
@@ -21,16 +21,16 @@
                 <div class="form-group" v-error-handler="{ value: author_name, handle: 'author' }">
                     <label for="author" class="control-label">Author Name</label>
                     <input type="text" class="form-control" name="author" id="author" v-model="author_name"
-                           placeholder="Author Name" name="author" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Author Name" v-validate="'required|min:1|max:100'"
                            maxlength="150" minlength="1" required>
                 </div>
 
-                <template class="form-group" v-for="(indexQA, QA) in content">
+                <template class="form-group" v-for="(QA, indexQA) in content">
                     <template v-if="QA.type">
                         <div class="form-group"  v-if="QA.type === 'radio'" v-error-handler="{ value: QA.a, client: 'radio' + indexQA, messages: { req: 'Please select an option.'} }">
                             <label class="control-labal">{{QA.q}}</label><br>
-                            <label class="radio-inline" v-for="choice in QA.options">
-                                <input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="'required'"> {{ choice.name }}
+                            <label class="radio-inline" v-for="(choiceIndex, choice) in QA.options">
+                                <input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="choiceIndex === 0 ? 'required' : ''"> {{ choice.name }}
                             </label>
                         </div>
                         <div class="form-group"  v-if="QA.type === 'checkbox'" v-error-handler="{ value: QA.a, client: 'chex' + indexQA }">
@@ -39,9 +39,9 @@
                                 <input type="checkbox" :value="choice.value" v-model="QA.a" :field="'chex' + indexQA" v-validate=""> {{ choice.name }}
                             </label>
                         </div>
-                        <div class="form-group"  v-if="QA.type === 'textarea'" v-error-handler="{ value: QA.a, client: 'textarea' + $index, messages: { req: 'Please provide an answer.'} }">
+                        <div class="form-group"  v-if="QA.type === 'textarea'" v-error-handler="{ value: QA.a, client: 'textarea' + indexQA, messages: { req: 'Please provide an answer.'} }">
                             <label class="control-label" v-text="QA.q"></label>
-                            <textarea class="form-control" v-model="QA.a" rows="10" :field="'textarea' + $index" v-validate="'required'"></textarea>
+                            <textarea class="form-control" v-model="QA.a" rows="10" :field="'textarea' + indexQA" v-validate="'required'"></textarea>
                         </div>
                         <template v-if="QA.type === 'file'">
                             <div class="form-group" >
@@ -79,6 +79,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import vSelect from "vue-select";
     import errorHandler from'../../error-handler.mixin';
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
@@ -102,9 +103,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'CreateUpdateInfluencer',
-
                 uploads: [],
                 upload_ids: [],
                 uploadCounter: 1,
@@ -138,8 +136,8 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -157,35 +155,39 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateInfluencer.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+
                     // this.$refs.spinner.show();
-                    this.resource.save({
+                    this.resource.post({
                         author_name: this.author_name,
                         subject: this.subject,
                         content: this.content,
                         user_id: this.user_id,
                         upload_ids: this.upload_ids,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Influencer created.');
                         let that = this;
                         setTimeout(function () {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + resp.body.data.id;
+                            window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + resp.data.data.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create influencer questionnaire.')
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-
-                this.resetErrors();
-                if (this.$CreateUpdateInfluencer.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
                     // this.$refs.spinner.show();
                     this.resource.update({id: this.id}, {
                         author_name: this.author_name,
@@ -193,7 +195,7 @@
                         content: this.content,
                         user_id: this.user_id,
                         upload_ids: this.upload_ids,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
@@ -203,7 +205,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                })
             },
             confirmUploadRemoval(upload){
                 this.uploads.$remove(upload);
@@ -226,19 +228,20 @@
         mounted(){
             if (this.isUpdate) {
                 // this.$refs.spinner.show();
-                this.resource.get({ id: this.id, include: 'user' }).then(function (response) {
-                    let influencer = response.body.data;
+                this.resource.get({ id: this.id, include: 'user' }).then((response) => {
+                    let influencer = response.data.data;
                     this.author_name = influencer.author_name;
                     this.subject = influencer.subject;
                     this.content = influencer.content;
                     this.userObj = influencer.user.data;
                     this.usersArr.push(this.userObj);
 
+                    // TODO Find better reference to this data
                     if (this.content[7].a.length) {
                         this.uploadCounter += this.content[7].a.length;
                         _.each(this.content[7].a, function (id) {
-                            this.$http.get('uploads/' + id).then(function (resA) {
-                                this.uploads.push(resA.body.data);
+                            this.$http.get('uploads/' + id).then((resA) => {
+                                this.uploads.push(resA.data.data);
                                 this.upload_ids = this.content[7].a;
                             });
                         }.bind(this));

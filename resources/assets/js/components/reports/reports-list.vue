@@ -87,7 +87,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12 text-center">
-                <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                <pagination :pagination="pagination" :callback="fetch"></pagination>
             </div>
         </div>
 
@@ -97,7 +97,7 @@
                             redirect="/admin/reports">
         </admin-delete-modal>
 
-        <modal :show.sync="showDisclaimer" ok-text="Download" cancel-text="Cancel">
+        <modal :show="showDisclaimer" ok-text="Download" cancel-text="Cancel">
           <div slot="modal-header" class="modal-header">
             <h4 class="modal-title">Privacy Notice</h4>
           </div>
@@ -148,9 +148,9 @@
         },
         methods: {
             fetch() {
-                this.$http.get('users/'+this.user+'/reports?search='+this.search).then(function (response) {
-                    this.reports = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('users/'+this.user+'/reports?search='+this.search).then((response) => {
+                    this.reports = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to get reports from server.');
                 });

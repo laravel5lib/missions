@@ -17,12 +17,12 @@
 					<div class="col-sm-4 text-right hidden-xs">
 						<hr class="divider inv">
                 		<hr class="divider inv sm">
-						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
+						<a v-show="currentView!='groupSelection'" @click="restartView"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
 						<hr class="divider inv">
 					</div><!-- end col -->
 					<div class="col-xs-12 text-center visible-xs">
 						<hr class="divider inv sm">
-						<a v-show="currentView!='groupSelection'" @click="restartView()"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
+						<a v-show="currentView!='groupSelection'" @click="restartView"  class="btn btn-default"><span class="fa fa-chevron-left icon-left"></span> Change Group</a>
 						<hr class="divider inv">
 					</div><!-- end col -->
 				</div>
@@ -39,9 +39,9 @@
 				</div>
 			</div>
 			<div class="row flex-container">
-				<div v-for="trip in trips" class="flex-row">
+				<div v-for="(trip, index) in trips" class="flex-row">
 					<div class="flex-col">
-						<div class="panel panel-default" class="flex-item">
+						<div class="panel panel-default flex-item">
 							<div class="panel-heading" :class="'panel-' + trip.type">
 								<h5 class="text-uppercase text-center">{{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }}</h5>
 							</div>
@@ -49,14 +49,14 @@
 								<p class="badge">{{ trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : '' }}</p><br>
 								<p class="small">{{ trip.started_at | moment('ll', false, true)}} - {{ trip.ended_at | moment('ll', false, true)}}</p>
 								<label>Perfect For</label>
-								<p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
-									{{ prospect ? prospect[0].toUpperCase() + prospect.slice(1) : '' }}<span v-show="$index + 1 != trip.prospects.length">, </span>
+								<p class="small"><span v-for="prospect in limitedProspects(trip.prospects, 3)">
+									{{ prospect ? prospect[0].toUpperCase() + prospect.slice(1) : '' }}<span v-show="index + 1 != trip.prospects.length">, </span>
 							</span><span v-show="trip.prospects.length > 3">...</span></p>
 								<label>Spots Available</label>
 								<p>{{ trip.spots }}</p>
 								<label>Starting At</label>
-								<h3 style="margin-top:0px;" class="text-success">{{ trip.starting_cost | currency }}</h3>
-								<a href="/trips/{{ trip.id }}" class="btn btn-primary-hollow btn-sm">Select</a>
+								<h3 style="margin-top:0px;" class="text-success">{{ '$' + trip.starting_cost.toFixed(2) }}</h3>
+								<a :href="'/trips/' + trip.id" class="btn btn-primary-hollow btn-sm">Select</a>
 							</div>
 						</div>
 					</div><!-- end flex-direction -->
@@ -65,7 +65,7 @@
 
 			<div class="container">
 				<div class="col-sm-12 text-center">
-					<pagination :pagination.sync="pagination" :callback="getTrips"></pagination>
+					<pagination :pagination="pagination" :callback="getTrips"></pagination>
 				</div>
 			</div><!-- end container -->
 			<hr class="divider inv xlg">
@@ -86,6 +86,9 @@
 			}
 		},
 		methods: {
+            limitedProspects(propects, limit) {
+                return propects.slice(0, limit);
+            },
 			getTrips(){
 				let resource = this.$resource('trips', {
 					include: "costs",
@@ -99,9 +102,9 @@
 					page: this.pagination.current_page,
 				});
 				// this.$refs.spinner.show();
-				resource.query().then(function (response) {
-					this.pagination = response.body.meta.pagination;
-					this.trips = response.body.data;
+				resource.query().then((response) => {
+					this.pagination = response.data.meta.pagination;
+					this.trips = response.data.data;
 
 					let cId = this.campaignId, calcLowest = this.calcStartingCost;
 					_.each(this.trips, function (trip, index, list) {
@@ -132,8 +135,8 @@
 		activate(done){
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
-			this.$http.get('groups/' + this.id).then(function (response) {
-				this.group = response.body.data;
+			this.$http.get('groups/' + this.id).then((response) => {
+				this.group = response.data.data;
 			});
 			this.getTrips();
 			done();

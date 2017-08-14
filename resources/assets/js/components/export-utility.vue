@@ -94,8 +94,8 @@
                 $.extend(params, this.exportSettings);
                 $.extend(params, {author_id: this.$root.user.id});
 
-                this.$http.post(this.url, params).then(function (response) {
-                    this.$root.$emit('showSuccess', response.body.message);
+                this.$http.post(this.url, params).then((response) => {
+                    this.$root.$emit('showSuccess', response.data.message);
                     this.showExportModal = false;
                     this.exportSettings.fields = [];
                     this.exportSettings.filename = '';

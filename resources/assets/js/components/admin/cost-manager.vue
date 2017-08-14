@@ -31,8 +31,8 @@
             <a class="btn btn-primary btn-sm" @click="showAddModal=true">New <i class="fa fa-plus"></i></a>
         </form>
         <hr class="divider sm">
-        <template v-for="cost in costs">
-            <div class="panel-body" :class="{ 'panel-warning': costsErrors[$index] != false, 'panel-success': costsErrors[$index] === false }">
+        <template v-for="(cost, index) in costs">
+            <div class="panel-body" :class="{ 'panel-warning': costsErrors[index] != false, 'panel-success': costsErrors[index] === false }">
                 <div class="row">
                     <div class="col-sm-6">
                         <h4>{{ cost.name ? cost.name[0].toUpperCase() + cost.name.slice(1) : '' }}</h4>
@@ -81,7 +81,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <strong>Note!</strong> Please, check payments.
                 </div>
-                <payment-manager :id="cost.id" :cost="cost" :payments.sync="cost.payments.data"></payment-manager>
+                <payment-manager :id="cost.id" :cost="cost" :payments="cost.payments.data"></payment-manager>
             </div>
             <hr class="divider">
         </template>
@@ -102,7 +102,7 @@
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
-                                                  v-model="newCost.description" name="costDescription" v-validate="{required: true, minlength:1}"></textarea>
+                                                  v-model="newCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
                                         <label for="cost_type">Type</label>
@@ -118,7 +118,7 @@
                                             <div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
                                                 <label for="newCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker :input-sm="true" :model.sync="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                                <date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                                 <input type="datetime" id="newCost_active_at" class="form-control hidden"
                                                        v-model="newCost.active_at" name="costActive" v-validate="'required'">
                                             </div>
@@ -163,7 +163,7 @@
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
-                                                  v-model="selectedCost.description" name="costDescription" v-validate="{required: true, minlength:1}"></textarea>
+                                                  v-model="selectedCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
                                     <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
                                         <label for="cost_type">Type</label>
@@ -179,7 +179,7 @@
                                             <div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker :input-sm="true" :model.sync="selectedCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                                <date-picker :input-sm="true" :model="selectedCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                                 <input type="datetime" id="selectedCost_active_at" class="form-control hidden"
                                                        v-model="selectedCost.active_at" name="costActive" v-validate="'required'">
                                             </div>
@@ -219,7 +219,7 @@
             </div>
         </modal>
 
-        <!--<div class="modal fade" tabindex="-1" role="deleteDialog" :show.sync="showDeleteModal">
+        <!--<div class="modal fade" tabindex="-1" role="deleteDialog" :show="showDeleteModal">
             <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -364,7 +364,7 @@
                 this.showDeleteModal = true;
             },
             doRemove(cost){
-                this.resource.delete({ id: cost.id }).then(function (response) {
+                this.resource.delete({ id: cost.id }).then((response) => {
                     this.selectedCost = null;
                     this.showDeleteModal = false;
                     this.costs.$remove(cost);
@@ -373,8 +373,8 @@
             addCost(){
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
-                    this.resource.save(this.newCost, { include: 'payments'}).then(function (response) {
-                        this.costs.push(response.body.data);
+                    this.resource.post(this.newCost, { include: 'payments'}).then((response) => {
+                        this.costs.push(response.data.data);
                         this.resetCost();
                         this.showAddModal = false;
                         this.attemptedAddCost = false;
@@ -389,8 +389,8 @@
             updateCost(){
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
-                    this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then(function (response) {
-                        this.showReminder = response.body.data.id;
+                    this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then((response) => {
+                        this.showReminder = response.data.data.id;
                         $.extend(this.costs, this.selectedCost);
                         this.selectedCost = null;
                         this.attemptedAddCost = false;
@@ -418,8 +418,8 @@
                     search: this.search,
                     sort: this.sort,
                     type: this.filters.type
-                }).then(function (response) {
-                    this.costs = response.body.data;
+                }).then((response) => {
+                    this.costs = response.data.data;
                     // this.$refs.spinner.hide();
                     this.checkPaymentsSync();
                 });

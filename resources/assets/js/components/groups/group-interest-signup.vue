@@ -127,7 +127,7 @@
                     }
 
                     this.$refs.validationspinner.show();
-                    this.$http.post('interests', this.interest).then(function (response) {
+                    this.$http.post('interests', this.interest).then((response) => {
                         this.$refs.validationspinner.hide();
                         this.showSuccess = true;
                         this.attemptSubmit = false;
@@ -137,7 +137,7 @@
                         };
                         this.campaign_id = '';
                         console.log(response);
-                    }).then(function (error) {
+                    }).then((error) => {
                         this.errors = error.data.errors;
                         this.$refs.validationspinner.hide();
                         console.log(error);
@@ -147,10 +147,10 @@
             }
         },
         mounted() {
-            this.$http.get('trips?groups[]=' + this.id, { params: {status: 'current', include: 'group,campaign'} }).then(function (response) {
-                // this.group = response.body.data.group.data;
-                this.allTrips = response.body.data;
-                let campaigns = _.mapObject(response.body.data, 'campaign');
+            this.$http.get('trips?groups[]=' + this.id, { params: {status: 'current', include: 'group,campaign'} }).then((response) => {
+                // this.group = response.data.data.group.data;
+                this.allTrips = response.data.data;
+                let campaigns = _.mapObject(response.data.data, 'campaign');
                 this.campaigns = this.removeDuplicates(campaigns, 'id');
                 console.log(this.campaigns);
             })

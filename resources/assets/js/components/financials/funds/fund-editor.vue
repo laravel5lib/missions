@@ -112,8 +112,8 @@
         methods: {
             fetch() {
                 // this.$refs.spinner.show();
-                this.$http.get('funds/' + this.id).then(function (response) {
-                    this.fund = response.body.data;
+                this.$http.get('funds/' + this.id).then((response) => {
+                    this.fund = response.data.data;
                     // this.$refs.spinner.hide();
                 });
             },
@@ -129,7 +129,7 @@
                             'name': self.fund.name,
                             'class_id': self.fund.class_id,
                             'item_id': self.fund.item_id
-                        }).then(function (response) {
+                        }).then((response) => {
                             self.$refs.spinner.hide();
                             self.$root.$emit('showSuccess', 'Fund updated');
                             self.editMode = false;
@@ -142,13 +142,13 @@
                 })
             },
             reconcile() {
-                this.$http.put('funds/' + this.id + '/reconcile').then(function (response) {
+                this.$http.put('funds/' + this.id + '/reconcile').then((response) => {
                     this.$root.$emit('showSuccess', 'Fund reconciled');
                     this.fetch();
                 });
             },
             archive() {
-                this.$http.delete('funds/' + this.id).then(function (response) {
+                this.$http.delete('funds/' + this.id).then((response) => {
                     this.$root.$emit('showSuccess', 'Fund archived');
                     this.fetch();
                 });
@@ -162,12 +162,12 @@
         mounted() {
             this.fetch();
             
-            this.$http.get('accounting/classes').then(function (response) {
-                this.accountingClasses = response.body.data;
+            this.$http.get('accounting/classes').then((response) => {
+                this.accountingClasses = response.data.data;
             });
 
-            this.$http.get('accounting/items').then(function (response) {
-                this.accountingItems = response.body.data;
+            this.$http.get('accounting/items').then((response) => {
+                this.accountingItems = response.data.data;
             });
         }
     }

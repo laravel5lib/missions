@@ -44,7 +44,7 @@
                 <div class="col-sm-12">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Group Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Group Name" name="name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                 <div class="col-sm-8">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="" v-model="country_code" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -104,7 +104,7 @@
                 <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                     <div class="col-sm-6">
                         <label for="country">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate="'required'">
                             <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                         </select>
@@ -115,11 +115,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label for="infoPhone">Phone 1</label>
-                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
-                </div>
+                    <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
+            </div>
                 <div class="col-sm-6">
                     <label for="infoMobile">Phone 2</label>
-                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                    <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_two" name="mobile" id="infoMobile"></phone-input>
                 </div>
             </div>
 
@@ -301,7 +303,7 @@
                         email: this.email,
                         avatar_upload_id: this.avatar_upload_id,
                         banner_upload_id: this.banner_upload_id,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         let group = resp.data.data;
                         this.avatar = group.avatar;
                         this.banner = group.banner;
@@ -318,17 +320,17 @@
         },
         mounted() {
             // this.$refs.spinner.show();
-            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+            let countriesPromise = this.$http.get('utilities/countries').then((response) => {
+                this.countries = response.data.countries;
             });
 
-            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
+            let timezonesPromise = this.$http.get('utilities/timezones').then((response) => {
+                this.timezones = response.data.timezones;
             });
 
-            //Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
-                this.resource.get({id: this.groupId}).then(function (response) {
-                    let group = response.body.data;
+            //Promise.all([countriesPromise, timezonesPromise]).then((values) => {
+                this.resource.get({id: this.groupId}).then((response) => {
+                    let group = response.data.data;
                     this.name = group.name;
                     this.avatar = group.avatar;
                     this.avatar_upload_id = group.avatar_upload_id;

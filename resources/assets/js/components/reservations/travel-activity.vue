@@ -98,10 +98,10 @@
 	    },
         methods: {
             update(){
-				this.$http.put('activities/' + this.activity.id, this.thisActivity).then(function (response) {
+				this.$http.put('activities/' + this.activity.id, this.thisActivity).then((response) => {
 				    this.emit('updated', this.thisActivity)
 					this.$emit('showSuccess', 'Itinerary Arrival Date/Time Updated');
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
 	        handleLabels(){
                 let activityType = _.findWhere(this.activityTypes, { id: this.activityType});

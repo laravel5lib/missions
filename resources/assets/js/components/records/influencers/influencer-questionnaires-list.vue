@@ -73,9 +73,9 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchInfluencers"></pagination>
+            <pagination :pagination="pagination" :callback="searchInfluencers"></pagination>
         </div>
-        <modal :show.sync="deleteModal" title="Remove Influencer" small="true">
+        <modal :show="deleteModal" title="Remove Influencer" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Influencer?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -171,7 +171,7 @@
             },
             removeInfluencer(influencer){
                 if(influencer) {
-                    this.$http.delete('influencers/' + influencer.id).then(function (response) {
+                    this.$http.delete('influencers/' + influencer.id).then((response) => {
                         this.influencers = _.reject(this.influencers, function (item) {
                             return item.id === influencer.id;
                         });
@@ -184,17 +184,17 @@
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;
-                this.$http.get('essays', { params: params }).then(function (response) {
-                    this.influencers = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('essays', { params: params }).then((response) => {
+                    this.influencers = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });
             }
         },
         mounted(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

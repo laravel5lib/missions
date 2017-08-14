@@ -70,9 +70,9 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchEssays"></pagination>
+            <pagination :pagination="pagination" :callback="searchEssays"></pagination>
         </div>
-        <modal :show.sync="deleteModal" title="Remove Essay" small="true">
+        <modal :show="deleteModal" title="Remove Essay" small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Essay?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -152,7 +152,7 @@
             },
             removeEssay(essay){
                 if(essay) {
-                    this.$http.delete('essays/' + essay.id).then(function (response) {
+                    this.$http.delete('essays/' + essay.id).then((response) => {
                         this.essays = _.reject(this.essays, function (item) {
                             return item.id === essay.id;
                         });
@@ -165,17 +165,17 @@
                 if (this.includeManaging)
                     params.manager = this.userId;
                 this.exportFilters = params;
-                this.$http.get('essays', { params: params }).then(function (response) {
-                    this.essays = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('essays', { params: params }).then((response) => {
+                    this.essays = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });
             }
         },
         mounted(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

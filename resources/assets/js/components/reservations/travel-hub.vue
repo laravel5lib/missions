@@ -8,7 +8,7 @@
 							<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
 							<template v-if="editMode">
 								<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-								          :value.sync="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
+								          :value="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
 								          placeholder="Select Airport"></v-select>
 								<select class="form-control hidden" name="airport" id="airport" v-validate="'required'"
 								        v-model="hub.name">
@@ -73,7 +73,7 @@
 							<label for="">Country</label>
 							<template v-if="editMode">
 								<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
-								          :value.sync="countryObj" :options="UTILITIES.countries" label="name"
+								          :value="countryObj" :options="UTILITIES.countries" label="name"
 								          placeholder="Select Country"></v-select>
 								<select class="form-control hidden" name="country" id="country" v-validate="'required'"
 								        v-model="hub.country_code">
@@ -231,7 +231,7 @@
         },
         methods: {
             update(){
-                this.$http.put('hubs/' + this.hub.id, this.hub).then(function (response) {
+                this.$http.put('hubs/' + this.hub.id, this.hub).then((response) => {
                     this.$emit('showSuccess', 'Itinerary Station Updated');
                 });
             }
@@ -272,7 +272,7 @@
                 promises.push(this.getAirports(this.hub.name, false));
             promises.push(this.getCountries(this.hub.country_code, false));
 
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
 				// Update state data
                 // select airline
                 self.selectedAirportObj = _.findWhere(self.UTILITIES.airports, { name: self.hub.name });

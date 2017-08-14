@@ -41,7 +41,7 @@
 				<form name="AddCountry" class="for" @submit.prevent="" novalidate>
 					<div class="form-group" :class="">
 						<label class="control-label">Countries</label>
-						<v-select @keydown.enter.prevent="" class="form-control" multiple :value.sync="selectedCountries" :options="availableCountries"
+						<v-select @keydown.enter.prevent="" class="form-control" multiple :value="selectedCountries" :options="availableCountries"
 								  label="name"></v-select>
 						<select hidden v-model="selectedCodes" multiple>
 							<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>
@@ -93,7 +93,6 @@
                 manageModal: false,
                 deleteModal: false,
                 showSuccess: false,
-                resource: this.$resource('users{/id}/accolades{/name}')
             }
         },
 	    computed: {
@@ -134,26 +133,26 @@
                     });
 
                     // save to API
-                    this.resource.save({id: this.id}, {
+                    this.$http.post(`users/${this.id}/accolades`, {
                         name: "countries_visited",
                         display_name: "Countries Visited",
                         items: allCodes
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.showSuccess = true;
                         this.$root.$emit('showSuccess', 'Countries Visited Updated!');
-                        this.accolades = response.body.data;
+                        this.accolades = response.data.data;
                         this.selectedCountries = [];
                         this.filterAccolades();
-                    }, this.$root.handleApiError);
+                    }).catch(this.$root.handleApiError);
                 });
             },
             getAccolades(){
-                this.resource.get({id: this.id, name: 'countries_visited'}).then(function (response) {
-                    this.accolades = response.body.data[0] || { items: [] };
+                this.$http.get(`users/${this.id}/accolades/countries_visited`).then((response) => {
+                    this.accolades = response.data.data[0] || { items: [] };
 					if (this.isUser) {
    						this.filterAccolades();
 					}
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             filterAccolades() {
                 // If isUser filter only countries not already included in accolades
@@ -166,7 +165,7 @@
         },
         mounted(){
 			if (this.isUser) {
-				this.getCountries().then(function () {
+				this.getCountries().then(() => {
                     this.getAccolades();
                 });
 			} else {

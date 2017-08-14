@@ -172,7 +172,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="fund in funds|filterBy search|orderBy orderByField direction">
+            <tr v-for="fund in orderByProp(funds, orderByField, direction)">
                 <td v-if="isActive('name')" v-text="fund.name"></td>
                 <td v-if="isActive('type')">
                     <span class="label label-default" v-text="fund.type ? fund.type[0].toUpperCase() + fund.type.slice(1) : ''"></span>
@@ -193,7 +193,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" size="small" :callback="searchFunds"></pagination>
+                        <pagination :pagination="pagination" size="small" :callback="searchFunds"></pagination>
                     </div>
                 </td>
             </tr>
@@ -370,15 +370,15 @@
             searchFunds(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('funds', { params: params }).then(function (response) {
+                this.$http.get('funds', { params: params }).then((response) => {
                     let self = this;
-                    this.funds = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.funds = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
-                }).then(function () {
+                }).then(() => {
                     this.updateConfig();
                 });
             }

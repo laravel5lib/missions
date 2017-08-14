@@ -6,7 +6,7 @@
                 <div class="col-sm-12">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
-                           placeholder="Group Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Group Name" name="name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <div class="col-sm-8">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -68,7 +68,7 @@
             <div class="form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                 <div class="col-sm-12">
                     <label for="timezone">Timezone</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="timezones"></v-select>
                     <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>
@@ -77,14 +77,14 @@
 
             <div class="row form-group col-sm-offset-2">
                 <div class="col-sm-6">
-                        <label for="infoPhone">Phone 1</label>
-                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
-                </div>
+                    <label for="infoPhone">Phone 1</label>
+                    <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
                 <div class="col-sm-6">
-                        <label for="infoMobile">Phone 2</label>
-                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                    <label for="infoMobile">Phone 2</label>
+                    <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_two" name="mobile" id="infoMobile"></phone-input>
                 </div>
-            </div>
 
             <div class="form-group">
                 <div class="col-sm-12">
@@ -119,7 +119,7 @@
                     <a @click="submit()" class="btn btn-primary">Create</a>
                 </div>
             </div>
-            <alert :show.sync="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+            <alert :show="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
                 <span class="icon-info-circled alert-icon-float-left"></span>
                 <strong>Oh No!</strong>
                 <p>There are errors on the form.</p>
@@ -169,8 +169,8 @@
             'name': function (val) {
                 if (typeof val === 'string') {
                     // pre-populate slug
-                    this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then(function (response) {
-                        this.url = response.body.slug;
+                    this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then((response) => {
+                        this.url = response.data.slug;
                     });
                 }
             }
@@ -192,7 +192,7 @@
 
                     let formData = this.data
                     // this.$refs.spinner.show();
-                    resource.save(null, {
+                    resource.post(null, {
                         name: this.name,
                         description: this.description,
                         type: this.type,
@@ -208,7 +208,7 @@
                         public: this.public,
                         url: this.url,
                         email: this.email
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
                         // this.$refs.spinner.hide();
                     }, function (error) {
@@ -226,12 +226,12 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+            this.$http.get('utilities/countries').then((response) => {
+                this.countries = response.data.countries;
             });
 
-            this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
+            this.$http.get('utilities/timezones').then((response) => {
+                this.timezones = response.data.timezones;
                 // this.$refs.spinner.hide();
             });
             //TODO use promises defers here

@@ -54,7 +54,7 @@
                                         <label for="grace_period">Grace Period</label>
                                         <div class="input-group input-group-sm" :class="{'has-error': checkForAddError('grace') }">
                                             <input id="grace_period" type="number" class="form-control" number v-model="newRequirement.grace_period"
-                                                   name="grace" v-validate="{required: true, min:0}">
+                                                   name="grace" v-validate="'required|min:0'">
                                             <span class="input-group-addon">Days</span>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForAddError('due')}">
                                         <label for="due_at">Due</label>
-                                        <date-picker :input-sm="true" :model.sync="newRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                        <date-picker :input-sm="true" :model="newRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                         <input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                v-model="newRequirement.due_at" name="due" v-validate="'required'">
                                     </div>
@@ -119,7 +119,7 @@
                                         <label for="grace_period">Grace Period</label>
                                         <div class="input-group input-group-sm" :class="{'has-error': checkForEditError('grace') }">
                                             <input id="grace_period" type="number" class="form-control" number v-model="selectedRequirement.grace_period"
-                                                   name="grace" v-validate="{required: true, min:0}">
+                                                   name="grace" v-validate="'required|min:0'">
                                             <span class="input-group-addon">Days</span>
                                         </div>
                                     </div>
@@ -127,7 +127,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': checkForEditError('due')}">
                                         <label for="due_at">Due</label>
-                                        <date-picker :input-sm="true" :model.sync="selectedRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                        <date-picker :input-sm="true" :model="selectedRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                         <input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                v-model="selectedRequirement.due_at" name="due" v-validate="'required'">
                                     </div>
@@ -227,8 +227,8 @@
                 this.attemptedAddRequirement = true;
                 if(this.$TripRequirementsCreate.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.save({}, this.newRequirement).then(function (response) {
-                        this.requirements.push(response.body.data);
+                    this.resource.post({}, this.newRequirement).then((response) => {
+                        this.requirements.push(response.data.data);
                         this.resetRequirement();
                         this.attemptedAddRequirement = false;
                         this.showAddModal = false;
@@ -240,7 +240,7 @@
                 this.attemptedEditRequirement = true;
                 if(this.$TripRequirementsEdit.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then(function (response) {
+                    this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then((response) => {
                         this.attemptedEditRequirement = false;
                         this.showEditModal = false;
                         this.searchRequirements();
@@ -258,7 +258,7 @@
             },
             remove(requirement){
                 // this.$refs.spinner.show();
-                this.resource.delete({ id: requirement.id }).then(function (response) {
+                this.resource.delete({ id: requirement.id }).then((response) => {
                     this.requirements.$remove(requirement);
                     this.selectedRequirement = null;
                     this.searchRequirements();
@@ -270,8 +270,8 @@
                     requester: this.requester + '|' + this.id,
                     search: this.search,
                     sort: this.sort + '|' + this.direction,
-                }).then(function (response) {
-                    this.requirements = response.body.data;
+                }).then((response) => {
+                    this.requirements = response.data.data;
                     this.$refs.spinner.hide()
                 });
             },

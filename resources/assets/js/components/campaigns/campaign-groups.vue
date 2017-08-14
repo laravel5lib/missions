@@ -54,7 +54,7 @@
 
 		<div class="container">
 			<div class="col-sm-12 text-center">
-				<pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
+				<pagination :pagination="pagination" :callback="searchGroups"></pagination>
 			</div>
 		</div><!-- end container -->
 	</div>
@@ -95,7 +95,7 @@
 					page: this.pagination.current_page
 				});
 
-				resource.query().then(function (trips) {
+				resource.query().then((trips) => {
 					this.pagination = trips.data.meta.pagination;
 					let arr = [];
 					for (let i in trips.data.data) {

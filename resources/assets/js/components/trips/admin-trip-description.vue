@@ -26,10 +26,10 @@
 
         </template>
         <template v-else>
-            <div v-html="(description || 'No Description') | marked"></div>
+            <div v-html="marked(description || 'No Description'))"></div>
         </template>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>Trip Description Updated!</p>
@@ -61,18 +61,18 @@
                 // this.$refs.spinner.show();
                 this.resource.update({ id: this.id }, {
                     description: this.description
-                }).then(function (response) {
-                    this.trip = response.body.data;
-                    this.description = response.body.data.description;
+                }).then((response) => {
+                    this.trip = response.data.data;
+                    this.description = response.data.data.description;
                     // this.$refs.spinner.hide();
                     this.showSuccess = true;
                 });
             }
         },
         mounted(){
-            this.resource.get({ id: this.id }).then(function (response) {
-                // this.trip = response.body.data;
-                this.description = response.body.data.description;
+            this.resource.get({ id: this.id }).then((response) => {
+                // this.trip = response.data.data;
+                this.description = response.data.data.description;
             });
             var self = this;
             this.$root.$on('toggleMode', function () {

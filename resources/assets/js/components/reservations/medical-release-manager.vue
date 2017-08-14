@@ -155,7 +155,7 @@
                     this.medicalRelease = medicalRelease;
                     this.reservationResource.update({id: this.reservationId}, {
                         medical_release_id: medicalRelease.id
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.toggleChangeState();
                     });
                 }
@@ -171,8 +171,8 @@
             },
         },
         mounted(){
-            this.$http.get('users/me?include=medical_releases').then(function (response) {
-                this.medicalReleases = response.body.data.medical_releases.data;
+            this.$http.get('users/me?include=medical_releases').then((response) => {
+                this.medicalReleases = response.data.data.medical_releases.data;
                 this.pagination.total_pages = Math.ceil(this.medicalReleases.length / this.per_page);
                 this.medicalRelease = _.findWhere(this.medicalReleases, {id: this.medicalReleaseId});
                 this.loaded = true;

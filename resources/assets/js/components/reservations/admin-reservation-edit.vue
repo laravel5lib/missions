@@ -22,7 +22,7 @@
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names">Given Names</label>
                         <input type=    "text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                               placeholder="Given Names" name="givennames" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Given Names" name="givennames" v-validate="'required|min:1|max:100'"
                                maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                     <label for="surname">Surname</label>
                     <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                           placeholder="Surname" name="surname" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Surname" name="surname" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <date-picker v-if="loaded" :model.sync="birthday|moment('YYYY-MM-DD', false, true)"></date-picker>
+                    <date-picker v-if="loaded" :model="birthday|moment('YYYY-MM-DD', false, true)"></date-picker>
                 </div>
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">
@@ -91,11 +91,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label for="infoPhone">Phone 1</label>
-                    <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                    <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
                 </div>
                 <div class="col-sm-6">
                     <label for="infoMobile">Phone 2</label>
-                    <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                    <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_two" name="mobile" id="infoMobile"></phone-input>
                 </div>
             </div>
 
@@ -129,7 +131,7 @@
                 <div class="col-sm-8">
                     <div>
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="" v-model="country_code">
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -141,7 +143,7 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }">
                         <label for="manager">Managing User</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" :value.sync="userObj" :options="users" :debounce="250"
+                        <v-select @keydown.enter.prevent=""  class="form-control" :value="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
                         <select id="manager" hidden class="form-control hidden" v-model="user_id" name="user" v-validate="{require:true}">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
@@ -252,8 +254,8 @@
             },
             searchUsers(search, loading){
                 loading(true);
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.users = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.users = response.data.data;
                     loading(false);
                 });
             },
@@ -283,11 +285,11 @@
                         avatar_upload_id: this.avatar_upload_id,
                         user_id: this.user_id,
                         desired_role: this.desired_role,
-                    }).then(function (response) {
-                        $.extend(this, response.body.data);
+                    }).then((response) => {
+                        $.extend(this, response.data.data);
                         this.$root.$emit('showSuccess', 'Reservation updated!');
 						this.hasChanged = false;
-                        this.desired_role = response.body.data.desired_role.code;
+                        this.desired_role = response.data.data.desired_role.code;
                     }, function (error) {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'There are errors on the form.');
@@ -320,18 +322,18 @@
             }
         },
         mounted(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+            this.$http.get('utilities/countries').then((response) => {
+                this.countries = response.data.countries;
             });
 
-            this.$http.get('utilities/team-roles').then(function (response) {
-                _.each(response.body.roles, function (name, key) {
+            this.$http.get('utilities/team-roles').then((response) => {
+                _.each(response.data.roles, function (name, key) {
                     this.roles.push({ value: key, name: name});
                 }.bind(this));
             });
 
-            this.resource.get().then(function (response) {
-                var reservation = response.body.data;
+            this.resource.get().then((response) => {
+                var reservation = response.data.data;
                 this.given_names = reservation.given_names;
                 this.surname = reservation.surname;
                 this.gender = reservation.gender;

@@ -8,7 +8,7 @@
         </template>
         <template v-else>
             <v-select @keydown.enter.prevent="" :multiple="multiple" class="form-control" :debounce="debounce" :on-search="getOptions"
-                      :value.sync="selectedOptions" :options="options" :label="label" :on-change="execute"
+                      :value="selectedOptions" :options="options" :label="label" :on-change="execute"
                       :placeholder="text"></v-select>
         </template>
     </div>
@@ -88,12 +88,12 @@
                 loading ? loading(true) : void 0;
 
                 if (this.api) {
-                    return this.$http.get(this.searchRoute, { params: {search: search} }).then(function (response) {
-                        this.options = response.body.data;
+                    return this.$http.get(this.searchRoute, { params: {search: search} }).then((response) => {
+                        this.options = response.data.data;
                         if (loading) {
                             loading(false);
                         } else {
-                            return response.body.data;
+                            return response.data.data;
                         }
                     });
                 } else {
@@ -111,7 +111,7 @@
                     throw 'A search-route is needed if the api is being used.'
                 }
 
-                this.getOptions().then(function () {
+                this.getOptions().then(() => {
                     if (this.autoSelectFirst)
                         this.selectedOptions = this.options[0];
                 });

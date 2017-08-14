@@ -23,7 +23,7 @@
                 </div><!-- end panel -->
             </div><!-- end col -->
             <div v-if="trips.length" class="col-sm-12 text-center">
-                <pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
+                <pagination :pagination="pagination" :callback="searchTrips"></pagination>
             </div>
         </div><!-- end row -->
     </div>
@@ -43,14 +43,14 @@
         methods:{
             searchTrips(){
                 // this.$refs.spinner.show();
-                this.resource.query().then(function(response){
-                    this.trips = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.resource.query().then((response) =>{
+                    this.trips = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
-                }).then(function () {
+                }).then(() => {
                     $('[data-toggle="tooltip"]').tooltip();
                 });
             }

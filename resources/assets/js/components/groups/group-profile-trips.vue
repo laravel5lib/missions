@@ -17,8 +17,8 @@
                     <label>Travel Dates</label>
                     <p class="small">{{ trip.started_at|moment('MMMM DD', false, true) }} - {{ trip.ended_at|moment('LL', false, true) }}</p>
                     <label>Perfect For</label>
-                    <p class="small"><span v-for="prospect in trip.prospects | limitBy 3">
-                                {{ prospect ? prospect[0].toUpperCase() + prospect.slice(1) : '' }}<span v-show="$index + 1 != trip.prospects.length">, </span>
+                    <p class="small"><span v-for="(prospect, index) in limitedProspects(trip.prospects, 3)">
+                                {{ prospect ? prospect[0].toUpperCase() + prospect.slice(1) : '' }}<span v-show="index + 1 != trip.prospects.length">, </span>
                     </span><span v-show="trip.prospects.length > 3">...</span></p>
                     <label>Spots Available</label>
                     <p>{{ trip.spots }}</p>
@@ -40,15 +40,20 @@
                 resource: this.$resource('trips?include=campaign&status=current&onlyPublished=true&onlyPublic=true&groups[]=' + this.id)
             }
         },
+        methods: {
+            limitedProspects(propects, limit) {
+                return propects.slice(0, limit);
+            }
+        },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.query().then(function(trips){
-                this.trips = trips.body.data
+            this.resource.query().then((trips) =>{
+                this.trips = trips.data.data
                 // this.$refs.spinner.hide();
             }, function (error) {
                 // this.$refs.spinner.hide();
                 //TODO add error alert
-            }).then(function () {
+            }).then(() => {
                 $('[data-toggle="tooltip"]').tooltip();
             });
         }

@@ -45,7 +45,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedDues" :options="availableDues"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="dues" v-validate="'required'" multiple>
                                 <option :value="due.id" v-for="due in dues">{{due.name}}</option>
@@ -66,7 +66,7 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditDueError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDue.grace_period"
-                                               name="grace" v-validate="{required: { rule: true }}">
+                                               name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -232,8 +232,8 @@
                 delete initiative.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('initiatives/' + initiative.id, initiative).then(function (response) {
-                    let thisTrip = response.body.data;
+                this.$http.put('initiatives/' + initiative.id, initiative).then((response) => {
+                    let thisTrip = response.data.data;
                     this.selecteddues = new Array(this.newDeadline);
                     // this.$refs.spinner.hide();
                     return this.adddues();
@@ -247,8 +247,8 @@
             },
             doUpdate(project){
                 // this.$refs.spinner.show();
-                return this.resource.update(project).then(function (response) {
-                    this.setProjectData(response.body.data);
+                return this.resource.update(project).then((response) => {
+                    this.setProjectData(response.data.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
@@ -275,8 +275,8 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data)
+            this.resource.get().then((response) => {
+                this.setProjectData(response.data.data)
                 // this.$refs.spinner.hide();
             });
 

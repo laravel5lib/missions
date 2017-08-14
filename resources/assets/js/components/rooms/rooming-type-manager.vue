@@ -22,12 +22,12 @@
 			</form>
 			<!-- Room Types Accordion -->
 			<div class="panel-group" id="roomTypesAccordion" role="tablist" aria-multiselectable="true">
-				<div class="panel panel-default" v-for="roomType in roomTypes | filterBy roomTypesSearch">
+				<div class="panel panel-default" v-for="(roomType, typeIndex) in roomTypesFiltered">
 					<div class="panel-heading" role="tab" id="headingOne">
 						<h4 class="panel-title">
 							<div class="row">
 								<div class="col-xs-9">
-									<a role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+									<a role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + typeIndex" aria-expanded="true" aria-controls="collapseOne">
 										<h4>{{ roomType.name ? roomType.name[0].toUpperCase() + roomType.name.slice(1) : '' }}</h4>
 									</a>
 								</div>
@@ -41,7 +41,7 @@
 											<li><a @click="confirmDelete(roomType)">Delete</a></li>
 										</ul>
 									</dropdown>
-									<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+									<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + typeIndex" aria-expanded="true" aria-controls="collapseOne">
 										<i class="fa fa-angle-down"></i>
 									</a>
 								</div>
@@ -49,11 +49,11 @@
 
 						</h4>
 					</div>
-					<div :id="'roomTypeItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+					<div :id="'roomTypeItem' + typeIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 						<div class="panel-body">
 							<div class="row">
-								<div class="col-sm-6" v-for="(key, value) in roomType.rules">
-									<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
+								<div class="col-sm-6" v-for="(value, key) in roomType.rules">
+									<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace(): ''"></label>
 									<p class="small" v-text="value"></p>
 								</div>
 							</div><!-- end row -->
@@ -63,7 +63,7 @@
 			</div>
 
 			<div class="col-xs-12 text-center">
-				<pagination :pagination.sync="roomTypesPagination" :callback="getRoomTypes"></pagination>
+				<pagination :pagination="roomTypesPagination" :callback="getRoomTypes"></pagination>
 			</div>
 
 		</div>
@@ -73,17 +73,17 @@
 					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm">
 						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', messages: { req: 'Please name this type'} }">
 							<label class="control-label col-sm-4">Name</label>
-							<input type="text" class="form-control" name="name="['required']" v-model" v-validate="currentType.name">
+							<input type="text" class="form-control" name="name=" v-model="currentType.name" v-validate="'required'">
 						</div>
 						<div class="row">
 							<template v-for="(key, value) in currentType.rules">
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
 									<div class="form-group" v-if="key === 'occupancy_limit'">
-										<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
+										<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace(): ''"></label>
 										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="'required'" :value="value" min="0">
 									</div>
 									<div class="form-group" v-else>
-										<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
+										<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace(): ''"></label>
 										<select class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="[]">
 											<option :value="true">Yes</option>
 											<option :value="false">No</option>
@@ -130,7 +130,15 @@
                 showTypeDeleteModal: false,
                 roomTypes: [],
                 roomTypesPagination: { current_page: 1 },
-                roomTypeResource: this.$resource('rooming/types{/id}')
+                roomTypeResource: this.$resource('rooming/types{/id}'),
+                roomTypesSearch: ''
+            }
+        },
+        computed: {
+            roomTypesFiltered() {
+                return this.roomTypes.filter((room) => {
+                    return room.name.indexOf(this.roomTypesSearch) !== -1
+                });
             }
         },
         methods: {
@@ -165,11 +173,11 @@
                     if (originalType.name === this.currentType.name)
 	                    delete updatingObject.name;
 
-                    return this.roomTypeResource.update({ id: updatingObject.id }, updatingObject).then(function (response) {
-                        _.extend(_.findWhere(this.roomTypes, { id: updatingObject.id}), response.body.data);
-                        this.$root.$emit('showSuccess', 'Room Type: ' + response.body.data.name + ', successfully updated');
+                    return this.roomTypeResource.update({ id: updatingObject.id }, updatingObject).then((response) => {
+                        _.extend(_.findWhere(this.roomTypes, { id: updatingObject.id}), response.data.data);
+                        this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully updated');
                     }, function (response) {
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
                     });
                 }
 
@@ -178,11 +186,11 @@
 
                 this.resetErrors();
                 if (this.$TypeForm.valid) {
-                    return this.roomTypeResource.save(this.currentType).then(function (response) {
-                        this.roomTypes.push(response.body.data);
-                        this.$root.$emit('showSuccess', 'Room Type: ' + response.body.data.name + ', successfully created');
+                    return this.roomTypeResource.post(this.currentType).then((response) => {
+                        this.roomTypes.push(response.data.data);
+                        this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully created');
                     }, function (response) {
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
 
                     });
                 }
@@ -194,7 +202,7 @@
             deleteType() {
                 this.roomTypeResource
 	                .delete({ id: this.selectedType.id})
-	                .then(function (response) {
+	                .then((response) => {
 	                    this.roomTypes = _.reject(this.roomTypes, function (type) {
 		                    return type.id === this.selectedType.id
                         }.bind(this));
@@ -204,13 +212,13 @@
                             this.selectedType = null;
                         });
                     }, function (response) {
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
                     });
             },
             getRoomTypes() {
-                return this.roomTypeResource.get({campaign: this.campaignId, page: this.roomTypesPagination.current_page }).then(function (response) {
-                    this.roomTypesPagination = response.body.meta.pagination;
-                    return this.roomTypes = response.body.data;
+                return this.roomTypeResource.get({campaign: this.campaignId, page: this.roomTypesPagination.current_page }).then((response) => {
+                    this.roomTypesPagination = response.data.meta.pagination;
+                    return this.roomTypes = response.data.data;
                 }, function (error) {
                     console.log(error);
                     return error;

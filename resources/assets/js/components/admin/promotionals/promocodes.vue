@@ -34,7 +34,7 @@
             <tr v-for="code in codes" track-by="id" transition="stagger" stagger="50">
                 <td><code>{{ code.code }}</code></td>
                 <td v-html="affiliate(code.rewardable)"></td>
-                <td>{{ code.use_count}} {{ code.use_count | pluralize 'time'}}</td>
+                <td>{{ code.use_count}} {{ pluralize(code.use_count , 'time')}}</td>
                 <td>{{ code.created_at | moment('lll') }}</td>
                 <td>
                     <button class="btn btn-xs btn-primary" 
@@ -57,7 +57,7 @@
     <div class="panel-footer">
         <div class="row">
             <div class="col-xs-12 text-center">
-                <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                <pagination :pagination="pagination" :callback="fetch"></pagination>
             </div>
         </div>
     </div>
@@ -119,9 +119,9 @@
                     page: this.pagination.current_page
                 });
 
-                this.$http.get('promocodes', this.options).then(function (response) {
-                    this.codes = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('promocodes', this.options).then((response) => {
+                    this.codes = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loading = false;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to get data from server.');
@@ -134,7 +134,7 @@
                 return '<i class="fa fa-external-link text-muted"></i> <a href="/admin/reservations/'+rewardable.data.id+'" target="_blank">' + rewardable.data.given_names + ' ' + rewardable.data.surname + '</a>';
             },
             activate(codeId) {
-                this.$http.put('promocodes/' + codeId + '/restore').then(function (response) {
+                this.$http.put('promocodes/' + codeId + '/restore').then((response) => {
                     this.$root.$emit('showSuccess', 'Promo code activated.');
                     this.fetch();
                 }, function (error) {
@@ -142,7 +142,7 @@
                 });
             },
             deactivate(codeId) {
-                this.$http.delete('promocodes/' + codeId).then(function (response) {
+                this.$http.delete('promocodes/' + codeId).then((response) => {
                     this.$root.$emit('showSuccess', 'Promo code deactivated.');
                     this.fetch();
                 }, function (error) {

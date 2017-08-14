@@ -41,7 +41,7 @@
 					<div class="form-group" v-if="isAdminRoute">
 						<label>Travel Group</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-						          :value.sync="groupObj" :options="groupsOptions" label="name"
+						          :value="groupObj" :options="groupsOptions" label="name"
 						          placeholder="Filter Group"></v-select>
 					</div>
 
@@ -50,7 +50,7 @@
 				</form>
 			</mm-aside>
 			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
+				<reservations-filters ref="filters" :filters="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
 			</mm-aside>
 			<mm-aside :show="showMembersFilters" @open="showMembersFilters=true" @close="showMembersFilters=false" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">
@@ -103,7 +103,7 @@
 									</template>
 
 									<!-- Squad Leaders Group -->
-									<template v-for="(tgIndex, squad) in currentSquadGroups | filterBy membersSearch">
+									<template v-for="(squad, tgIndex) in currentSquadGroupsFiltered">
 										<template v-if="squad.callsign === 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -117,7 +117,7 @@
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" id="SquadLeaderAccordion" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in squad.members | orderBy '-leader'">
+														<div class="panel panel-default" v-for="(member, memberIndex) in sortByLeader(squad.members)">
 															<div class="panel-heading" role="tab" id="headingOne">
 																<h4 class="panel-title">
 																	<div class="row">
@@ -142,7 +142,7 @@
 																					<span class="fa fa-ellipsis-h"></span>
 																				</button>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<template v-for="subSquad in currentSquadGroups | orderBy 'callsign'">
+																					<template v-for="subSquad in currentSquadGroupsOrdered">
 																						<template v-if="subSquad.callsign !== 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(subSquad)"><a @click="moveToSquad(member, squad, subSquad, false)">Move to Squad Leaders</a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad, subSquad)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
@@ -155,14 +155,14 @@
 																					<li :class="{'disabled': isLocked}"><a @click="removeFromSquad(member, squad)">Remove</a></li>
 																				</ul>
 																			</dropdown>
-																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#SquadLeaderAccordion" :href="'#squadLeaderItem' + memberIndex" aria-expanded="true" aria-controls="collapseOne">
 																				<i class="fa fa-angle-down"></i>
 																			</a>
 																		</div>
 																	</div>
 																</h4>
 															</div>
-															<div :id="'squadLeaderItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+															<div :id="'squadLeaderItem' + memberIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 																<div class="panel-body">
 																	<div class="row">
 																		<div class="col-sm-6">
@@ -214,7 +214,7 @@
 									</p>
 									<hr class="divider sm">
 									<!-- Other Groups -->
-									<template v-for="(tgIndex, squad) in currentSquadGroups | orderBy 'callsign' | filterBy membersSearch">
+									<template v-for="(squad, tgIndex) in currentSquadGroupsOrderedFiltered">
 										<template v-if="squad.callsign !== 'Squad Leaders'">
 											<div class="panel panel-default">
 												<div class="panel-heading">
@@ -228,7 +228,7 @@
 																<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																	<li :class="{'disabled': isLocked}"><a @click="showSquadUpdateModal = true,selectedSquadObj = squad">Edit</a></li>
 																	<template v-for="subTeam in teams">
-																		<li role="separator" class="divider" v-if="$index === 0 && teams.length > 1"></li>
+																		<li role="separator" class="divider" v-if="tgIndex === 0 && teams.length > 1"></li>
 																		<li v-if="subTeam.id !== squad.team_id" :class="{'disabled': isLocked}"><a @click="moveToTeam(squad, subTeam)">Move group to {{subTeam.callsign}}</a></li>
 																	</template>
 																	<li role="separator" class="divider"></li>
@@ -246,7 +246,7 @@
 														Complete! You've filled all the positions.
 													</div>
 													<div class="panel-group" :id="'membersAccordion' + tgIndex" role="tablist" aria-multiselectable="true">
-														<div class="panel panel-default" v-for="member in squad.members | orderBy '-leader'">
+														<div class="panel panel-default" v-for="(member, memberIndex) in sortByLeader(squad.members)">
 															<div class="panel-heading" role="tab" id="headingOne">
 																<h4 class="panel-title">
 																	<div class="row">
@@ -271,7 +271,7 @@
 																					<span class="fa fa-ellipsis-h"></span>
 																				</button>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
-																					<template v-for="subSquad in currentSquadGroups | orderBy 'callsign'">
+																					<template v-for="subSquad in currentSquadGroupsOrdered">
 																						<template v-if="subSquad.callsign === 'Squad Leaders'">
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquadLeader(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, subSquad, true)" v-text="'Move to ' + subSquad.callsign + ' as leader'"></a></li>
 																							<li :class="{'disabled': isLocked}" v-if="canAssignToSquad(subSquad) && isLeadership(member)"><a @click="moveToSquad(member, squad, false)" v-text="'Move to ' + subSquad.callsign"></a></li>
@@ -296,14 +296,14 @@
 																					<li v-if="member.desired_role.name !== 'Group Leader'"><a @click="updateRole(member, 'Group Leader')">Group Leader</a></li>
 																				</ul>
 																			</dropdown>
-																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + $index" aria-expanded="true" aria-controls="collapseOne">
+																			<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#memberItem' + tgIndex + memberIndex" aria-expanded="true" aria-controls="collapseOne">
 																				<i class="fa fa-angle-down"></i>
 																			</a>
 																		</div>
 																	</div>
 																</h4>
 															</div>
-															<div :id="'memberItem' + tgIndex + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+															<div :id="'memberItem' + tgIndex + memberIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 																<div class="panel-body">
 																	<div class="row">
 																		<div class="col-sm-6">
@@ -407,7 +407,7 @@
 											<div class="form-group">
 												<div class="col-sm-8">
 													<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-													          :value.sync="addAssociationData.object" :options="unassociatedGroups" label="name"
+													          :value="addAssociationData.object" :options="unassociatedGroups" label="name"
 													          placeholder="Add a Travel Group"></v-select>
 												</div>
 												<div class="col-sm-4">
@@ -529,7 +529,7 @@
 										</a>
 									</ul>
 									<div class="col-xs-12 text-center">
-										<pagination :pagination.sync="teamsPagination" :callback="getTeams"></pagination>
+										<pagination :pagination="teamsPagination" :callback="getTeams"></pagination>
 									</div>
 
 								</template>
@@ -600,7 +600,7 @@
 						<div class="row">
 							<div class="col-xs-12">
 								<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-									<div class="panel panel-default" v-for="reservation in reservations">
+									<div class="panel panel-default" v-for="(reservation, reservationIndex) in reservations">
 										<div class="panel-heading" role="tab" id="headingOne">
 											<h4 class="panel-title">
 												<div class="row">
@@ -628,7 +628,7 @@
 															<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																<li class="dropdown-header">Assign To Squad</li>
 																<li role="separator" class="divider"></li>
-																<template v-for="squad in currentSquadGroups | orderBy 'callsign'">
+																<template v-for="squad in currentSquadGroupsOrdered">
 																	<template v-if="squad.callsign === 'Squad Leaders'">
 																		<li :class="{'disabled': isLocked}" v-if="canAssignToTeamLeaders(squad) && isLeadership(reservation)"><a @click="assignToSquad(reservation, squad, false)">Squad Leader</a></li>
 																	</template>
@@ -645,7 +645,7 @@
 
 															</ul>
 														</dropdown>
-														<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+														<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + reservationIndex" aria-expanded="true" aria-controls="collapseOne">
 															<i class="fa fa-angle-down"></i>
 														</a>
 													</div>
@@ -653,7 +653,7 @@
 
 											</h4>
 										</div>
-										<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+										<div :id="'reservationItem' + reservationIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 											<div class="panel-body">
 												<div class="row">
 													<div class="col-sm-6">
@@ -695,7 +695,7 @@
 									</div>
 								</div>
 								<div class="col-sm-12 text-center">
-									<pagination :pagination.sync="reservationsPagination" :callback="searchReservations"></pagination>
+									<pagination :pagination="reservationsPagination" :callback="searchReservations"></pagination>
 								</div>
 							</div>
 						</div>
@@ -721,7 +721,7 @@
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-										  :value.sync="newTeamGroup" :options="groupsOptions" label="name"
+										  :value="newTeamGroup" :options="groupsOptions" label="name"
 										  placeholder="Assign Travel Group"></v-select>
 								<select class="hidden" v-model="newTeamGroup" name="teamgroup" v-validate="'required'">
 									<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
@@ -946,6 +946,28 @@
 
         },
 	    computed: {
+            currentSquadGroupsFiltered() {
+                return this.currentSquadGroups.filter((group) => {
+                    return _.filter(group.members, (member) => {
+                        let search = this.membersSearch;
+	                    return member.given_names.includes(search) || member.surname.includes(search);
+                    });
+                })
+            },
+
+            currentSquadGroupsOrdered() {
+                return _.sortBy(this.currentSquadGroups, 'callsign');
+            },
+
+            currentSquadGroupsOrderedFiltred() {
+                return _(this.currentSquadGroups).chain().sortBy('callsign').filter((group) => {
+                    return _.filter(group.members, (member) => {
+                        let search = this.membersSearch;
+                        return member.given_names.includes(search) || member.surname.includes(search);
+                    });
+                }).value();
+            },
+
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
@@ -981,6 +1003,10 @@
 		    }
 	    },
         methods: {
+            sortByLeader(members) {
+                return _.sortBy(members, 'leader');
+            },
+
             getRuleLabel(key){
                 switch(key) {
 	                case 'min_members':
@@ -1033,17 +1059,17 @@
                 });
             },
             updateRole(member, roleName) {
-                this.getRoles().then(function (roles) {
+                this.getRoles().then((roles) => {
                     let role = _.findWhere(roles, { name: roleName});
                     this.$http.put('reservations/' + member.id, { desired_role: role.value },
                         { params: { include: 'trip.campaign,trip.group,fundraisers,costs.payments,user,companions' }
-                        }).then(function (response) {
+                        }).then((response) => {
                         this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' role updated!');
-                        member.desired_role = response.body.data.desired_role;
-                        return member = response.body.data;
+                        member.desired_role = response.data.data.desired_role;
+                        return member = response.data.data;
                     }, function (response) {
                         console.log(response);
-                        this.$root.$emit('showError', response.body.message);
+                        this.$root.$emit('showError', response.data.message);
                     });
                 });
             },
@@ -1081,8 +1107,8 @@
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                return this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
-                    this.campaignsOptions = response.body.data;
+                return this.$http.get('campaigns', { params: {search: search} }).then((response) => {
+                    this.campaignsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
@@ -1092,12 +1118,12 @@
             },
 	        getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                return this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
-                        return response.body.data;
+                        return response.data.data;
                     }
                 });
             },
@@ -1148,8 +1174,8 @@
                 this.$http.post('squads/' + squad.id + '/members', {
                     id: reservation.id,
                     leader: leader || false,
-                }, { params: { include: 'companions,trip.group'} }).then(function (response) {
-                    squad.members = response.body.data;
+                }, { params: { include: 'companions,trip.group'} }).then((response) => {
+                    squad.members = response.data.data;
                     squad.members_count = squad.members.length;
                     this.currentTeam.members_count++;
                 });
@@ -1166,8 +1192,8 @@
                 }
 
                 this.$http.post('squads/' + squad.id + '/members', { members: reservations },
-	                { params: { include: 'companions,trip.group'} }).then(function (response) {
-                    squad.members = response.body.data;
+	                { params: { include: 'companions,trip.group'} }).then((response) => {
+                    squad.members = response.data.data;
                     squad.members_count = squad.members.length
                 });
             },
@@ -1203,7 +1229,7 @@
                 }
 
                 this.$http.put('squads/' + oldSquad.id + '/members/' + reservation.id, { team_squad_id: newSquad.id, leader: leader }, { params: { include: 'trip.group,companions'}})
-	                .then(function (response) {
+	                .then((response) => {
                         console.log(response);
 		                // update old squad
                         oldSquad.members = _.reject(oldSquad.members, function (member) {
@@ -1211,14 +1237,14 @@
                         });
                         oldSquad.members_count = oldSquad.members.length;
 		                // update new Squad
-                        newSquad.members.push(response.body.data);
+                        newSquad.members.push(response.data.data);
                         newSquad.members_count = newSquad.members.length;
                     }, function (response) {
                         console.log(response);
 	                    return response;
 	                });
 
-                /*this.removeFromSquad(reservation, oldSquad).then(function (response) {
+                /*this.removeFromSquad(reservation, oldSquad).then((response) => {
 	                this.assignToSquad(reservation, newSquad, leader);
                 });*/
             },
@@ -1244,7 +1270,7 @@
                     include: 'companions,trip.group'
                 };
 
-                this.TeamSquadResource.update(params , data).then(function (response) {
+                this.TeamSquadResource.update(params , data).then((response) => {
                     let groups =_.reject(this.currentSquadGroups, function (sq) {
                         return sq.id === squad.id;
                     });
@@ -1264,7 +1290,7 @@
                 }
 
                 return this.$http.delete('squads/' + squad.id + '/members/' + memberObj.id)
-	                .then(function (response) {
+	                .then((response) => {
 	                    squad.members = _.reject(squad.members, function (member) {
 		                    return member.id === memberObj.id;
                         });
@@ -1303,9 +1329,9 @@
                         this.lastReservationRequest.abort();
                     }
                     this.lastReservationRequest = xhr;
-                } }).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.reservationsPagination = response.body.meta.pagination;
+                } }).then((response) => {
+                    this.reservations = response.data.data;
+                    this.reservationsPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
@@ -1327,18 +1353,18 @@
                     params.campaign = this.campaignId;
                 }
 
-                return this.TeamResource.get(params).then(function (response) {
-	                this.teamsPagination = response.body.meta.pagination;
-                    return this.teams = response.body.data;
+                return this.TeamResource.get(params).then((response) => {
+	                this.teamsPagination = response.data.meta.pagination;
+                    return this.teams = response.data.data;
                 },
                     function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
 	        getTeamTypes() {
-                return this.$http.get('teams/types?campaign='+this.campaignId).then(function (response) {
-	                return this.teamTypes = response.body.data;
+                return this.$http.get('teams/types?campaign='+this.campaignId).then((response) => {
+	                return this.teamTypes = response.data.data;
                 }, function (error) {
                     console.log(error);
                     return error;
@@ -1352,11 +1378,11 @@
                     page: this.squadsPagination.current_page,
                 };
 
-                return this.TeamResource.get(params).then(function (response) {
-                    _.each(response.body.data, function (squad) {
+                return this.TeamResource.get(params).then((response) => {
+                    _.each(response.data.data, function (squad) {
 	                    squad.members = squad.members && squad.members.data ? squad.members.data : [];
                     });
-                    return this.currentSquadGroups = response.body.data;
+                    return this.currentSquadGroups = response.data.data;
                 });
             },
 	        newTeam(){
@@ -1404,11 +1430,11 @@
                     let params = {
                         include: 'type,groups',
                     };
-                    this.TeamResource.save(data, params).then(function (response) {
-                        let team = response.body.data;
+                    this.TeamResource.post(data, params).then((response) => {
+                        let team = response.data.data;
 
                         this.teams.push(team);
-                        this.getTeams().then(function () {
+                        this.getTeams().then(() => {
 
                         });
                         this.currentSquadGroups = [];
@@ -1433,9 +1459,9 @@
 	            }
 
                 if (this.$SquadCreate.valid || _.isString(callsign)) {
-                    return this.TeamSquadResource.save({team: this.currentTeam.id}, {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
-                        .then(function (response) {
-							let squad = _.extend(response.body.data, {
+                    return this.TeamSquadResource.post({team: this.currentTeam.id}, {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
+                        .then((response) => {
+							let squad = _.extend(response.data.data, {
 							    members: [],
                                 members_count: 0
                             });
@@ -1448,17 +1474,17 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.TeamResource.update({team: team.id, include: 'type,groups'}, team).then(function (response) {
+	            this.TeamResource.update({team: team.id, include: 'type,groups'}, team).then((response) => {
 					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
 	        updateTeamSettings(ignoreMessage){
-	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign, locked: this.currentTeam.locked }).then(function (response) {
-                    this.currentTeam = response.body.data;
+	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign, locked: this.currentTeam.locked }).then((response) => {
+                    this.currentTeam = response.data.data;
                     if (!ignoreMessage)
 						this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
 					this.editTeamMode = false;
-					return response.body.data;
+					return response.data.data;
                 });
 	        },
 	        updateSquad(){
@@ -1478,10 +1504,10 @@
                     include: 'companions,trip.group'
                 };
 
-	            this.TeamSquadResource.update(params, data).then(function (response) {
+	            this.TeamSquadResource.update(params, data).then((response) => {
 	                let squad = _.findWhere(this.currentSquadGroups, { id: this.selectedSquadObj.id});
-	                squad.callsign = response.body.data.callsign;
-                    this.$root.$emit('showSuccess', response.body.data.callsign + ' Updated!');
+	                squad.callsign = response.data.data.callsign;
+                    this.$root.$emit('showSuccess', response.data.data.callsign + ' Updated!');
                     this.editSquadTeamId = undefined;
                     this.showSquadUpdateModal = false;
                     this.selectedSquadObj = null;
@@ -1493,7 +1519,7 @@
                     return;
                 }
 
-                this.TeamResource.delete({ team: team.id }).then(function (response) {
+                this.TeamResource.delete({ team: team.id }).then((response) => {
                     this.$root.$emit('showInfo', team.callsign + ' Deleted!');
                     window.location.reload();
                 });
@@ -1511,7 +1537,7 @@
 
                 let squadCopy = this.selectedSquadObj;
 
-                this.TeamSquadResource.delete({team: squadCopy.team_id, squad:squadCopy.id}).then(function (response) {
+                this.TeamSquadResource.delete({team: squadCopy.team_id, squad:squadCopy.id}).then((response) => {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
                     this.currentSquadGroups = _.reject(this.currentSquadGroups, function (squad) {
 	                    return squad.id === squadCopy.id;
@@ -1544,14 +1570,14 @@
 	            return total;
             },
 	        addAssociation(type, object) {
-                return this.$http.post(type + '/' + object.id + '/teams', { ids: [this.currentTeam.id] }).then(function (response) {
+                return this.$http.post(type + '/' + object.id + '/teams', { ids: [this.currentTeam.id] }).then((response) => {
                     this.additionalAssociatedGroup = null;
-                    this.updateTeamSettings(true).then(function () {
+                    this.updateTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now associated with ' + object.name);
                     });
                 }, function (response) {
-                    console.log(response.body);
-                    this.$root.$emit('showError', response.body.message);
+                    console.log(response.data);
+                    this.$root.$emit('showError', response.data.message);
                 });
 	        },
 	        removeAssociation() {
@@ -1567,16 +1593,16 @@
 		                break;
 		        }
 
-	            return this.$http.delete(this.removeAssociationData.type + '/' + this.removeAssociationData.object.id + '/teams/' + this.currentTeam.id).then(function (response) {
-                    this.updateTeamSettings(true).then(function () {
+	            return this.$http.delete(this.removeAssociationData.type + '/' + this.removeAssociationData.object.id + '/teams/' + this.currentTeam.id).then((response) => {
+                    this.updateTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now unassociated with ' + this.removeAssociationData.object.name);
                         this.removeAssociationData.type = null;
                         this.removeAssociationData.object = null;
                         this.removeAssociationData.show = false;
                     });
                 }, function (response) {
-                    console.log(response.body);
-                    this.$root.$emit('showError', response.body.message);
+                    console.log(response.data);
+                    this.$root.$emit('showError', response.data.message);
                 });
 	        },
 	        confirmRemoveAssociation(type, object) {
@@ -1596,7 +1622,7 @@
 
                 this.$http.put('squads/' + squad.id + '/members/' + member.id, {
 					leader: false
-                }).then(function (response) {
+                }).then((response) => {
                     this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' demoted to a group member');
 	                member.leader = false;
                     return member;
@@ -1616,7 +1642,7 @@
 
                 this.$http.put('squads/' + squad.id + '/members/' + member.id, {
                     leader: true
-                }).then(function (response) {
+                }).then((response) => {
                     this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' promoted to Group Leader');
                     member.leader = true;
                 });
@@ -1710,8 +1736,8 @@
             } else {
                 promises.push(this.$http.get('users/' + this.userId, {
                     params: {include: 'facilitating,managing.trips'}
-                }).then(function (response) {
-                    let user = response.body.data;
+                }).then((response) => {
+                    let user = response.data.data;
                     let managing = [];
                     if (user.facilitating.data.length) {
                         this.reservationsFacilitator = true;
@@ -1730,9 +1756,9 @@
             promises.push(this.getTeamTypes());
             promises.push(this.getCampaigns());
             promises.push(this.getRoles());
-            promises.push(this.$http.get('utilities/team-roles/leadership').then(function (response) {
+            promises.push(this.$http.get('utilities/team-roles/leadership').then((response) => {
                 let roles = [];
-	            _.each(response.body.roles, function (role, code) {
+	            _.each(response.data.roles, function (role, code) {
 		            roles.push(code);
                 });
 	            this.leadershipRoles = roles;
@@ -1741,7 +1767,7 @@
                 return error;
             }));
 
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 this.startUp = false;
                 this.searchReservations();
 

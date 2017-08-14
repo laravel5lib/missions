@@ -22,7 +22,7 @@
 								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
 								<template v-if="editMode">
 									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-									          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+									          :value="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
 									          placeholder="Select Airline"></v-select>
 									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
 									        v-model="transport.name">
@@ -199,15 +199,15 @@
         },
         methods: {
             getAirline(reference){
-                return this.$http.get('utilities/airlines/' + reference).then(function (response) {
-                    return response.body.data;
+                return this.$http.get('utilities/airlines/' + reference).then((response) => {
+                    return response.data.data;
                 },
                     function (response) {
                         console.log(response);
                     });
             },
             update(){
-                this.$http.put('transports/' + this.transport.id, this.transport).then(function (response) {
+                this.$http.put('transports/' + this.transport.id, this.transport).then((response) => {
                     this.$emit('showSuccess', 'Itinerary Travel Details Updated');
                 },
                     function (response) {
@@ -221,7 +221,7 @@
             if (this.transport.type === 'flight')
 	            promises.push(this.getAirlines(this.transport.name, false));
 
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 // Update state data
                 if (self.isUpdate) {
                     // select airline

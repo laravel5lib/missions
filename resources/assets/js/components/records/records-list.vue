@@ -63,8 +63,8 @@
                 </div>
             </div>
         </div>
+        <hr class="divider inv lg">
     </div>
-    <hr class="divider inv lg">
 </template>
 <script type="text/javascript">
     export default{
@@ -80,9 +80,9 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.$http.get('users/me?include=passports,visas').then(function (response) {
-                this.visas = response.body.data.visas.data;
-                this.passports = response.body.data.passports.data;
+            this.$http.get('users/me?include=passports,visas').then((response) => {
+                this.visas = response.data.data.visas.data;
+                this.passports = response.data.data.passports.data;
                 this.loaded = true;
                 // this.$refs.spinner.hide();
             });

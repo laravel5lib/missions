@@ -10,17 +10,17 @@
                 </div> -->
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-                              :value.sync="groupsArr" :options="groupsOptions" label="name"
+                              :value="groupsArr" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-                              :value.sync="usersArr" :options="usersOptions" label="name"
+                              :value="usersArr" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>
                 <div class="form-group" v-if="!tripId">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value.sync="campaignObj" :options="campaignOptions" label="name"
+                              :value="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
@@ -122,7 +122,7 @@
 
                 <div class="form-group">
                     <label>Shirt Size</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value="shirtSizeArr" multiple
                               :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
                 </div>
 
@@ -411,7 +411,7 @@
                 </tr>
                 </thead>
                 <tbody v-if="reservations.length > 0">
-                <tr v-for="reservation in reservations|filterBy search|orderBy orderByField direction">
+                <tr v-for="reservation in orderByProp(reservations, orderByField, direction)">
                     <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
                     <td v-if="isActive('surname')" v-text="reservation.surname"></td>
                     <td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
@@ -419,7 +419,7 @@
                     <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name ? reservation.trip.data.campaign.data.name[0].toUpperCase() + reservation.trip.data.campaign.data.name.slice(1) : ''"></td>
                     <td v-if="isActive('type')" v-text="reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : ''"></td>
                     <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
-                    <td v-if="isActive('percent_raised')">{{reservation.percent_raised|number '2'}}%</td>
+                    <td v-if="isActive('percent_raised')">{{reservation.percent_raised.toFixed(2) '2'}}%</td>
                     <td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
                     <td v-if="isActive('gender')" v-text="reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''"></td>
                     <td v-if="isActive('status')" v-text="reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''"></td>
@@ -428,16 +428,16 @@
                     <td v-if="isActive('requirements')">
                         <div style="position:relative;">
                             <popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
-                                <a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-success">{{ complete(reservation).length }}</span></a>
+                                <a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-success">{{ complete(reservation).length }}</span></a>
                             </popover>
                             <popover effect="fade" trigger="hover" placement="top" title="Needs Attention" :content="attention(reservation).join('<br>')">
-                                <a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-info">{{ attention(reservation).length }}</span></a>
+                                <a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-info">{{ attention(reservation).length }}</span></a>
                             </popover>
                             <popover effect="fade" trigger="hover" placement="top" title="Under Review" :content="reviewing(reservation).join('<br>')">
-                                <a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-default">{{ reviewing(reservation).length }}</span></a>
+                                <a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-default">{{ reviewing(reservation).length }}</span></a>
                             </popover>
                             <popover effect="fade" trigger="hover" placement="top" title="Incomplete" :content="getIncomplete(reservation).join('<br>')">
-                                <a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-danger" v-text="getIncomplete(reservation).length"></span></a>
+                                <a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-danger" v-text="getIncomplete(reservation).length"></span></a>
                             </popover>
                         </div>
                     </td>
@@ -455,7 +455,7 @@
                 <tfoot>
                 <tr>
                     <td colspan="10" class="text-center">
-                        <pagination :pagination.sync="pagination"
+                        <pagination :pagination="pagination"
                                     :callback="searchReservations"
                                     size="small">
                         </pagination>
@@ -832,37 +832,37 @@
             searchReservations(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('reservations', {params: params}).then(function (response) {
+                this.$http.get('reservations', {params: params}).then((response) => {
                     let self = this;
-                    _.each(response.body.data, function (reservation) {
+                    _.each(response.data.data, function (reservation) {
                         reservation.percent_raised = reservation.total_raised / reservation.total_cost * 100
                     }, this);
-                    this.reservations = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.reservations = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }).then(function () {
+                }).then(() => {
                     this.updateConfig();
                     // this.$refs.spinner.hide();
                 })
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
-                    this.campaignOptions = response.body.data;
+                this.$http.get('campaigns', { params: {search: search} }).then((response) => {
+                    this.campaignOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: {search: search} }).then(function (response) {
-                    this.usersOptions = response.body.data;
+                this.$http.get('users', { params: {search: search} }).then((response) => {
+                    this.usersOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -871,8 +871,8 @@
                     'type': 'reservations',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
+                }}).then((response) => {
+                    this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
                 });
             },
             getRequirements(){
@@ -880,8 +880,8 @@
                     'type': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.requirementOptions = _.uniq(_.pluck(response.body.data, 'name'));
+                }}).then((response) => {
+                    this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
                 });
             },
             getCosts(){
@@ -889,8 +889,8 @@
                     'assignment': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
+                }}).then((response) => {
+                    this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
                 });
             }
         },
@@ -915,8 +915,8 @@
                     let arr = search.split('=');
                     switch (arr[0]) {
                         case 'campaign':
-                            this.$http.get('campaigns/' + arr[1]).then(function (response) {
-                                this.campaignObj = response.body.data;
+                            this.$http.get('campaigns/' + arr[1]).then((response) => {
+                                this.campaignObj = response.data.data;
                             });
                         // this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
                     }

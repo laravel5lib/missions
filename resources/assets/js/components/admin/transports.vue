@@ -4,7 +4,7 @@
             <div class="col-sm-12">
                 <spinner ref="spinner" size="sm" text="Loading"></spinner>
                 <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Transport Filters" :width="375">
-                    <transports-filters :filters.sync="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
+                    <transports-filters :filters="filters" :reset-callback="resetFilters" :pagination="pagination" :callback="fetch"></transports-filters>
                 </mm-aside>
 
                 <div class="row">
@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                    <pagination :pagination="pagination" :callback="fetch"></pagination>
                 </div>
             </div>
         </div>
@@ -148,7 +148,7 @@
                             <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline' }">
                                 <label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
                                 <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-                                          :value.sync="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+                                          :value="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
                                           placeholder="Select Airline"></v-select>
                                 <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
                                         v-model="selectedTransport.name">
@@ -240,7 +240,7 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
+                            <date-picker :model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
                             <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
                                    id="depart_at" name="occurred" v-validate="['required', 'datetime']">
                         </div>
@@ -250,7 +250,7 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
-                            <date-picker :model.sync="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
+                            <date-picker :model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
                             <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
                                    id="arrive_at" name="occurred" v-validate="['required', 'datetime']">
                         </div>
@@ -450,9 +450,9 @@
                 let params = _.extend({}, this.options.params);
                 params = _.extend(params, this.filters);
                 params.page = _.isObject(this.pagination) ? this.pagination.current_page : 1;
-                this.TransportsResource.get(params).then(function (response) {
-                    this.transports = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.TransportsResource.get(params).then((response) => {
+                    this.transports = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 });
@@ -491,7 +491,7 @@
 
                     this.selectedTransport = thisTransport;
 
-                    this.getAirlines(transport.name).then(function (obj) {
+                    this.getAirlines(transport.name).then((obj) => {
                         let airline = _.findWhere(this.UTILITIES.airlines, { name: transport.name });
                         if (airline) {
                             this.selectedAirlineObj = airline;
@@ -519,30 +519,30 @@
                     if (this.transportsModalEdit) {
                         promise = this.TransportsResource
                             .update({ transport: this.selectedTransport.id}, this.selectedTransport)
-                            .then(function (response) {
+                            .then((response) => {
                                 this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport updated successfully');
                             });
                     } else {
                         promise = this.TransportsResource
-                            .save(this.selectedTransport)
-                            .then(function (response) {
+                            .post(this.selectedTransport)
+                            .then((response) => {
                                 this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport created successfully');
                             });
                     }
 
-                    promise.then(function () {
+                    promise.then(() => {
                         this.fetch();
                         this.showTransportsModal = false;
                         this.transportsModalEdit = false;
                         this.selectedTransport = null;
-                    }, this.$root.handleApiError)
+                    }).catch(this.$root.handleApiError)
                 } else {
                     console.log(this.$TransportsModal);
                     this.$root.$emit('showError', 'Please check the form.');
                 }
             },
             deleteTransport(){
-                this.TransportsResource.delete({ transport: this.selectedTransport.id}).then(function (response) {
+                this.TransportsResource.delete({ transport: this.selectedTransport.id}).then((response) => {
                     this.$root.$emit('showSuccess', 'Transport deleted');
                     this.fetch();
                     this.showTransportDeleteModal = false;

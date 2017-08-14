@@ -129,8 +129,8 @@
         },
         methods: {
             fetch() {
-                this.$http.get('promotionals/' + this.id).then(function (response) {
-                    this.promo = response.body.data;
+                this.$http.get('promotionals/' + this.id).then((response) => {
+                    this.promo = response.data.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 });
@@ -145,7 +145,7 @@
             },
             deactivate()
             {
-                this.$http.delete('promotionals/' + this.id).then(function (response) {
+                this.$http.delete('promotionals/' + this.id).then((response) => {
                     this.$root.$emit('showSuccess', 'Deactivated successfully.');
                     this.showStopModal = false;
                     this.fetch();
@@ -156,7 +156,7 @@
             },
             deleteForever()
             {
-                this.$http.delete('promotionals/' + this.id +'?force=true').then(function (response) {
+                this.$http.delete('promotionals/' + this.id +'?force=true').then((response) => {
                     this.$root.$emit('showSuccess', 'Deleted promotional.');
                     this.showDeleteModal = false;
                     this.callView({view: 'list'});
@@ -166,7 +166,7 @@
             },
             activate()
             {
-                this.$http.put('promotionals/' + this.id + '/restore').then(function (response) {
+                this.$http.put('promotionals/' + this.id + '/restore').then((response) => {
                     this.$root.$emit('showSuccess', 'Activated successfully.');
                     this.showStartModal = false;
                     this.fetch();

@@ -123,7 +123,7 @@
                         return false;
                     }
 
-                    this.$http.post('speaker', data).then(function (response) {
+                    this.$http.post('speaker', data).then((response) => {
                         console.log(response);
                         this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
                         this.reset();

@@ -121,7 +121,7 @@
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;">
 							<li>
 								<v-select @keydown.enter.prevent=""  class="form-control" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
-										  :value.sync="countriesArr" :options="countriesOptions" label="name"
+										  :value="countriesArr" :options="countriesOptions" label="name"
 										  placeholder="Filter Countries"></v-select>
 							</li>
 							<li>
@@ -258,7 +258,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="user in users|filterBy search|orderBy orderByField direction">
+            <tr v-for="user in orderByProp(users, orderByField, direction)">
                 <td v-if="isActive('name')" v-text="user.name ? user.name[0].toUpperCase() + user.name.slice(1) : ''"></td>
                 <td v-if="isActive('email')" v-text="user.email"></td>
                 <td v-if="isActive('alt_email')" v-text="user.alt_email"></td>
@@ -276,7 +276,7 @@
                 <td v-if="isActive('isAdmin')" v-text="user.isAdmin?'Yes':'No'"></td>
                 <td v-if="isActive('timezone')" v-text="user.timezone"></td>
                 <td>
-                    <a href="/admin{{user.links[0].uri}}"><i class="fa fa-gear"></i></a>
+                    <a :href="'/admin' + user.links[0].uri"><i class="fa fa-gear"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -284,7 +284,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-						<pagination :pagination.sync="pagination" :callback="searchUsers"></pagination>
+						<pagination :pagination="pagination" :callback="searchUsers"></pagination>
                     </div>
                 </td>
             </tr>
@@ -475,16 +475,16 @@
 				$.extend(params, this.filters);
         this.exportFilters = params;
 
-                this.$http.get('users', { params: params }).then(function (response) {
+                this.$http.get('users', { params: params }).then((response) => {
                     var self = this;
-                    this.users = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                    this.users = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 })
             },
 			getCountries(search, loading){
 				loading ? loading(true) : void 0;
-            	this.$http.get('utilities/countries', { params: { search: search} }).then(function (response) {
-					this.countriesOptions = response.body.countries;
+            	this.$http.get('utilities/countries', { params: { search: search} }).then((response) => {
+					this.countriesOptions = response.data.countries;
 					loading ? loading(false) : void 0;
 				})
 			}

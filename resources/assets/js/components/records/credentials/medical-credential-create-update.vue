@@ -17,7 +17,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="infoManager">Record Manager</label>
-                                    <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                                    <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                                     <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                         <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                     </select>
@@ -29,16 +29,16 @@
     						<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name', messages: { req: 'Please provide credential holder\'s name.'} }">
     							<label for="name" class="control-label">Credential Holder's Name</label>
     							<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-    							       placeholder="Name" name="name" v-validate="{ required: true, minlength:1 }"
+    							       placeholder="Name" v-validate="'required|min:1'"
     							       minlength="1" required>
     						</div>
                              <div class="col-sm-6" v-error-handler="{ value: selectedRole, handle: 'role', messages: { req: 'Please select a medical role.'} }">
                                 <label class="control-label">Medical Role</label>
-	                             <v-select @keydown.enter.prevent="" class="form-control" id="group" :value.sync="selectedRoleObj"
-	                                       :options="roles|orderBy 'name'" label="name" placeholder="Select Role"></v-select>
+	                             <v-select @keydown.enter.prevent="" class="form-control" id="group" :value="selectedRoleObj"
+	                                       :options="rolesOrdered" label="name" placeholder="Select Role"></v-select>
 	                             <select hidden class="form-control hidden" v-model="selectedRole" name="role" v-validate="'required'">
 		                             <option value="">-- Select Role --</option>
-		                             <option v-for="option in roles|orderBy 'name'" :value="option.value">{{option.name}}</option>
+		                             <option v-for="option in rolesOrdered" :value="option.value">{{option.name}}</option>
 	                             </select>
 	                             <div class="errors-block"></div>
                              </div>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 
-			    <div v-for="(indexQA, QA) in content">
+			    <div v-for="(QA, indexQA) in content">
                     
                     <!-- start has type designation -->
 					<template v-if="QA.type && checkConditions(QA)">
@@ -58,8 +58,8 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<label class="radio-inline" v-for="choice in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA  " v-validate="$index === 0 ?['required'] : void 0"> {{ choice.name }}
+									<label class="radio-inline" v-for="(choice, choiceIndex) in QA.options">
+										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA  " v-validate="choiceIndex === 0 ?['required'] : void 0"> {{ choice.name }}
 									</label>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">
@@ -75,7 +75,7 @@
 							<!--<template v-for="role in QA.roleOptions" v-show="role.id === selectedRole">
 								<div class="checkbox col-sm-6 col-xs-12" v-for="choice in role.options">
 									<label>
-										&lt;!&ndash;<checkbox :checked.sync="choice.value" :value="true">{{ choice.name }}</checkbox>&ndash;&gt;
+										&lt;!&ndash;<checkbox :checked="choice.value" :value="true">{{ choice.name }}</checkbox>&ndash;&gt;
 										<input type="checkbox" :value="true" v-model="choice.value"> {{ choice.name }}
                                     </label>
 								</div>
@@ -89,9 +89,9 @@
 									</div>
 									<div class="panel-body">
 										<div class="row">
-											<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.certifiedOptions">
+											<div class="checkbox col-sm-6 col-xs-12" v-for="(choice, choiceIndex) in QA.certifiedOptions">
 												<label>
-													<input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" name="certifications" v-validate="$index === 0 ?{ minlength: 1 } : void 0">
+													<input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value" name="certifications" v-validate="choiceIndex === 0 ?'min:1' : ''">
 													{{ choice.name }}
 												</label>
 											</div>
@@ -112,9 +112,9 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
-    									<div class="checkbox col-sm-6 col-xs-12" v-for="choice in QA.allOptions">
+    									<div class="checkbox col-sm-6 col-xs-12" v-for="(choice, choiceIndex) in QA.allOptions">
     										<label>
-											    <input type="checkbox" :checked.sync="choice.value" :value="true" v-model="choice.value" name="participations" v-validate="$index === 0 ?{ minlength: 1 } : void 0">
+											    <input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value" name="participations" v-validate="choiceIndex === 0 ? 'min:1' : ''">
 											    {{ choice.name }}
                                             </label>
     									</div>
@@ -130,15 +130,15 @@
                         
                         <!-- textarea -->
 						<template v-if="QA.type === 'textarea'">
-							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('textarea' + $index), class: 'panel-danger has-error', messages: { req: 'Please explain.'} }">
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('textarea' + indexQA), class: 'panel-danger has-error', messages: { req: 'Please explain.'} }">
 								<div class="panel-heading">
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
 									<span class="help-block">Please Explain:</span>
-									<textarea class="form-control" v-model="QA.a" :field="'textarea' + $index" v-validate="'required'"></textarea>
+									<textarea class="form-control" v-model="QA.a" :field="'textarea' + indexQA" v-validate="'required'"></textarea>
 								</div>
-								<div class="panel-footer" v-show= "errors.has('textarea' + $index)">
+								<div class="panel-footer" v-show= "errors.has('textarea' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -147,17 +147,17 @@
                         
                         <!-- start select -->
 						<template v-if="QA.type === 'select' && QA.id !== 'role'">
-							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('select' + $index), class: 'panel-danger has-error' }">
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('select' + indexQA), class: 'panel-danger has-error' }">
 								<div class="panel-heading">
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<select class="form-control" v-model="QA.a" :field="'select' + $index" v-validate="">
+									<select class="form-control" v-model="QA.a" :field="'select' + indexQA" v-validate="">
 										<option value="">-- Select Role --</option>
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>
 								</div>
-								<div class="panel-footer" v-show= "errors.has('select' + $index)">
+								<div class="panel-footer" v-show= "errors.has('select' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -189,15 +189,15 @@
                         
                         <!-- start date -->
 						<template v-if="QA.type === 'date'">
-							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('date' + $index), class: 'panel-danger has-error' }">
+							<div class="panel panel-default" v-error-handler="{ value: QA.a, client: ('date' + indexQA), class: 'panel-danger has-error' }">
 								<div class="panel-heading">
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<date-picker :model.sync="QA.a|moment('YYYY-MM-DD')" type="date" ></date-picker>
-									<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + $index" v-validate="">
+									<date-picker :model="QA.a|moment('YYYY-MM-DD')" type="date" :data-vv-name="'date' + indexQA"></date-picker>
+									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + $index" v-validate="">-->
 								</div>
-								<div class="panel-footer" v-show= "errors.has('date' + $index)">
+								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
 									<div class="errors-block"></div>
 								</div>
 							</div>
@@ -247,8 +247,8 @@
 										<div v-if="show_expire.license" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model.sync="expires.license|moment('YYYY-MM-DD')" type="date" ></date-picker>
-												<input type="datetime" class="form-control hidden" name="licenseexpires="['required']" v-model="expires.license" id" v-validate="licenseexpires" required>
+												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model="expires.license|moment('YYYY-MM-DD')" type="date" ></date-picker>
+												<!--<input type="datetime" class="form-control hidden" name="licenseexpires="['required']" v-model="expires.license" id" v-validate="licenseexpires" required>-->
 											</div>
 										</div>
 										<!-- </div> -->
@@ -275,8 +275,8 @@
 									<div v-if="show_expire.certification" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)}">
 										<label class="control-label">Expires</label>
 										<div>
-											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model.sync="expires.certification|moment('YYYY-MM-DD')" type="date" ></date-picker>
-											<input type="datetime" class="form-control hidden" name="certexpires="['required']" v-model="expires.certification" id" v-validate="certexpires" required>
+											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model="expires.certification|moment('YYYY-MM-DD')" type="date" ></date-picker>
+											<!--<input type="datetime" class="form-control hidden" name="certexpires="['required']" v-model="expires.certification" id" v-validate="certexpires" required>-->
 										</div>
 									</div>
 								</form>
@@ -301,8 +301,8 @@
 									<div class="col-sm-6" v-if="show_expire.diploma" :class="{ 'has-error': checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)}">
 										<label class="control-label">Expires</label>
 										<div>
-											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model.sync="expires.diploma|moment('YYYY-MM-DD')" type="date" ></date-picker>
-											<input type="datetime" class="form-control hidden" name="diplomaexpires="['required']" v-model="expires.diploma" id" v-validate="diplomaexpires" required>
+											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model="expires.diploma|moment('YYYY-MM-DD')" type="date" ></date-picker>
+											<!--<input type="datetime" class="form-control hidden" name="diplomaexpires="['required']" v-model="expires.diploma" id" v-validate="diplomaexpires" required>-->
 										</div>
 									</div>
 								</form>
@@ -328,8 +328,8 @@
 										<div v-if="show_expire.letter" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model.sync="expires.letter|moment('YYYY-MM-DD')" type="date" ></date-picker>
-												<input type="datetime" class="form-control hidden" name="letterexpires="['required']" v-model="expires.letter" id" v-validate="letterexpires" required>
+												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model="expires.letter|moment('YYYY-MM-DD')" type="date" ></date-picker>
+												<!--<input type="datetime" class="form-control hidden" name="letterexpires="['required']" v-model="expires.letter" id" v-validate="letterexpires" required>-->
 											</div>
 										</div>
 									</form>
@@ -354,8 +354,8 @@
 										<div v-if="show_expire.resume" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model.sync="expires.resume|moment('YYYY-MM-DD')" type="date" ></date-picker>
-												<input type="datetime" class="form-control hidden" name="resumeexpires="['required']" v-model="expires.resume" id" v-validate="resumeexpires" required>
+												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model="expires.resume|moment('YYYY-MM-DD')" type="date" ></date-picker>
+												<!--<input type="datetime" class="form-control hidden" name="resumeexpires="['required']" v-model="expires.resume" id" v-validate="resumeexpires" required>-->
 											</div>
 										</div>
 									</form>
@@ -367,10 +367,14 @@
 
 				<div class="form-group text-center">
 					<div class="col-xs-12">
-						<a v-if="!isUpdate" href="/{{ firstUrlSegment }}/records/medical-credentials" class="btn btn-default">Cancel</a>
-						<a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-						<a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-						<a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+						<template v-if="!isUpdate">
+							<a :href="'/' + firstUrlSegment + '/records/medical-credentials'" class="btn btn-default">Cancel</a>
+							<a @click="submit" class="btn btn-primary">Create</a>
+						</template>
+						<template v-else>
+							<a @click="back" class="btn btn-default">Cancel</a>
+							<a @click="update" class="btn btn-primary">Update</a>
+						</template>
 					</div>
 				</div>
 			</form>
@@ -390,6 +394,7 @@
 
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
@@ -542,6 +547,9 @@
             }
         },
         computed: {
+            rolesOrdered() {
+                return _.sortBy(this.roles, 'name');
+            },
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
@@ -574,8 +582,8 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -592,10 +600,10 @@
                 this.hasChanged = true;
             },
             checkboxMinimum(array){
-                return !_.findWhere(array, {value: true}) && this.attemptSubmit;
+                return !_.findWhere(array, {value: true});
             },
             checkCheckbox(id) {
-                debugger;
+                // debugger;
             },
             back(force){
                 if (this.hasChanged && !force ) {
@@ -611,14 +619,14 @@
                 this.resetErrors();
 //                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
                 if (this.$CreateUpdateMedicalCredential.valid) {
-                    this.resource.save(null, {
+                    this.resource.post(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
                         holder_type: 'users',
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Medical Credential created.');
                         let that = this;
                         setTimeout(function () {
@@ -647,7 +655,7 @@
                         content: this.content,
                         expired_at: moment(this.expired_at).startOf('day').format('YYYY-MM-DD HH:mm:ss'),
                         uploads: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
@@ -698,10 +706,6 @@
                     this.attemptUploadDoc = false;
 	            }
 	        },
-            checkForUploadDocError(form, field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return _.isString(field) && this['$' + form].invalid && this.attemptUploadDoc;
-            },
 	        dateIsValid(date){
                 return moment(date).isValid();
 	        },
@@ -773,7 +777,6 @@
                             this.content[contentIndex].a.other = _.uniq(this.content[contentIndex].a);
                             break;
                         }
-                        break;
 	                default:
 	                    this.$root.$emit('showError', 'Wrong file type, please try another file...');
 	                    break;
@@ -785,22 +788,22 @@
             // set user data
             // this.userId = this.holder_id = this.$root.user.id;
             // this.holder_type = 'users';
-            /*let teamRolesPromise = this.$http.get('utilities/team-roles/medical').then(function (response) {
-                _.each(response.body.roles, function (name, key) {
+            /*let teamRolesPromise = this.$http.get('utilities/team-roles/medical').then((response) => {
+                _.each(response.data.roles, function (name, key) {
                     this.roles.push({ value: key, name: name});
                 }.bind(this));
             });*/
 
             // this.$refs.spinner.show();
-            //Promise.all([teamRolesPromise]).then(function (values) {
+            //Promise.all([teamRolesPromise]).then((values) => {
                 if (this.isUpdate) {
-                    this.resource.get({ id: this.id, include: 'holder'}).then(function (response) {
-                        let credential = response.body.data;
+                    this.resource.get({ id: this.id, include: 'holder'}).then((response) => {
+                        let credential = response.data.data;
                         this.applicant_name = credential.applicant_name;
                         // this.holder_id = credential.holder_id;
                         // this.holder_type = credential.holder_type;
                         this.content = credential.content;
-                        this.syncCheckboxes();
+                        // thisCheckboxes();
                         this.expired_at = credential.expired_at;
                         this.userObj = credential.holder.data;
                         this.usersArr.push(this.userObj);
@@ -812,7 +815,7 @@
                         this.$activateValidator();
                         // until uploads relationship is added...
                         // gather all uploads ids
-                        let ids = [];
+                        // let ids = [];
                         let filesArr = _.findWhere(credential.content, { id: 'files'}).a;
                         _.each(filesArr, function (list, index) {
 	                        _.each(list, function (obj) {

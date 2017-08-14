@@ -128,7 +128,7 @@
 				}
 
 				var resource = this.$resource('trips');
-				resource.save(null, this.wizardData).then(function (resp) {
+				resource.post(null, this.wizardData).then((resp) => {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, function (error) {
 					console.log(error);
@@ -138,8 +138,8 @@
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-				this.campaign = response.body.data;
+			this.$http.get('campaigns/' + this.campaignId).then((response) => {
+				this.campaign = response.data.data;
 			});
 		},
 		events: {

@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div>
         <form id="CreateUpdatePassport" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -7,7 +7,7 @@
                 <div class="col-sm-12">
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                         <label for="infoManager">Passport Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                         <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
@@ -20,8 +20,8 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
-                        <input type="text" class="form-control" name="given_names" id="given_names" v-model="given_names"
-                               placeholder="Given Names" name="givennames" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                        <input type="text" class="form-control" id="given_names" v-model="given_names"
+                               placeholder="Given Names" name="givennames" v-validate="'required|min:1|max:100'"
                                maxlength="150" minlength="1" required>
                         <span v-if="attemptSubmit" class="help-block">
                             <span v-if="
@@ -37,7 +37,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                               placeholder="Surname" name="surname" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                               placeholder="Surname" v-validate="'required|min:1|max:100'"
                                maxlength="100" minlength="1" required>
 
                     </div>
@@ -47,7 +47,7 @@
                 <div class="col-sm-12">
                     <label for="number" class="control-label">Passport Number</label>
                     <input type="text" class="form-control" name="number" id="number" v-model="number"
-                           placeholder="Passport Number" name="number" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Passport Number" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="9" required>
 
                 </div>
@@ -58,7 +58,7 @@
                     <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker :has-error= "errors.has('expires')" :model.sync="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
+                            <date-picker :has-error= "errors.has('expires')" :model="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
                             <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
                                    name="expires" v-validate="'required'" required>
                             <span v-if="attemptSubmit" class="help-block">
@@ -71,7 +71,7 @@
             <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country', messages: { req: 'Please select country of nationality (where you were born).'} }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value.sync="birthCountryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value="birthCountryObj" :options="countries" label="name"></v-select>
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
@@ -80,7 +80,7 @@
             <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship', messages: { req: 'Please select country of citizenship.'} }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="citizenshipObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="citizenshipObj" :options="countries" label="name"></v-select>
                     <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate="'required'">
                         <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                     </select>
@@ -89,7 +89,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <accordion :one-at-atime="true">
-                        <panel header="Upload Photocopy" :is-open.sync="true">
+                        <panel header="Upload Photocopy" :is-open="true">
                             <div class="panel-body">
                                 <p>Please upload a full-color photocopy of your passport. Please be sure that both the photo page and signed signiture page are both clearly visible and legible.</p>
                                 <div class="media" v-if="selectedAvatar">
@@ -122,7 +122,7 @@
         <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
-
+    </div>
 
 </template>
 <script type="text/javascript">
@@ -189,8 +189,8 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -210,7 +210,7 @@
             submit(){
                 this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
-                    this.passportResource.save(null, {
+                    this.passportResource.post(null, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -219,7 +219,7 @@
                         citizenship: this.citizenship,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Passport created.');
                         let that = this;
                         setTimeout(function () {
@@ -248,7 +248,7 @@
                         citizenship: this.citizenship,
                         upload_id: this.upload_id,
                         user_id: this.user_id,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
@@ -276,13 +276,13 @@
             }
         },
         mounted(){
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+            this.$http.get('utilities/countries').then((response) => {
+                this.countries = response.data.countries;
             });
 
             if (this.isUpdate) {
-                this.passportResource.get({ id: this.id }).then(function (response) {
-                    let passport = response.body.data;
+                this.passportResource.get({ id: this.id }).then((response) => {
+                    let passport = response.data.data;
                     $.extend(this, passport);
 
                     this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});

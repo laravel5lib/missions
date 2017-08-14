@@ -71,10 +71,10 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination.sync="pagination" :callback="searchMedicals"></pagination>
+			<pagination :pagination="pagination" :callback="searchMedicals"></pagination>
 
 		</div>
-		<modal :show.sync="deleteModal" title="Remove Medical Release" small="true">
+		<modal :show="deleteModal" title="Remove Medical Release" small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Release?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -189,15 +189,15 @@
                     params.manager = this.userId;
                 params.include = 'conditions,allergies,uploads';
                 $.extend(params, this.filters);
-                this.$http.get('medical/releases', {params: params}).then(function (response) {
-                    this.medical_releases = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('medical/releases', {params: params}).then((response) => {
+                    this.medical_releases = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                 });
             },
             removeMedicalRelease(medical_release){
                 if (medical_release) {
-                    this.$http.delete('medical/releases/' + medical_release.id).then(function (response) {
+                    this.$http.delete('medical/releases/' + medical_release.id).then((response) => {
                         this.medical_releases.$remove(medical_release);
                         this.paginatedMedical_releases.$remove(medical_release);
                         this.pagination.total_pages = Math.ceil(this.medical_releases.length / this.per_page);
@@ -206,8 +206,8 @@
             }
         },
         mounted(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

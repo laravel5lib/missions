@@ -8,7 +8,7 @@
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Country</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250" :on-search="getCountries"
-					          :value.sync="regionsFilters.country" :options="UTILITIES.countries" label="name"
+					          :value="regionsFilters.country" :options="UTILITIES.countries" label="name"
 					          placeholder="Filter Countries"></v-select>
 				</div>
 
@@ -22,7 +22,7 @@
 				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-					          :value.sync="plansFilters.group" :options="groupsOptions" label="name"
+					          :value="plansFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>
 
@@ -36,13 +36,13 @@
 				<div class="form-group">
 					<label>Rooming Plans</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="plansFilter" multiple :debounce="250" :on-search="getRoomingPlansFilter"
-					          :value.sync="roomsFilters.plans" :options="plansOptions" label="name"
+					          :value="roomsFilters.plans" :options="plansOptions" label="name"
 					          placeholder="Filter by Plans"></v-select>
 				</div>
 				<div class="form-group">
 					<label>Room Type</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="typeFilter" :debounce="250" :on-search="getRoomTypes"
-					          :value.sync="roomsFilters.type" :options="roomTypes" label="name"
+					          :value="roomsFilters.type" :options="roomTypes" label="name"
 					          placeholder="Filter by Type"></v-select>
 				</div>
 
@@ -94,7 +94,7 @@
 									</div>
 								</div>
 								<div class="text-center">
-									<pagination :pagination.sync="currentAccommodationRoomsPagination"
+									<pagination :pagination="currentAccommodationRoomsPagination"
 									            :callback="getCurrentAccommodationRooms"
 									            size="small">
 									</pagination>
@@ -137,7 +137,7 @@
                         </ul>
 					</div>
 					<div class="text-center">
-						<pagination :pagination.sync="regionsPagination"
+						<pagination :pagination="regionsPagination"
 									:callback="getRegions"
 									size="small">
 						</pagination>
@@ -189,14 +189,14 @@
 									<div class="col-sm-6">
 										<label>Rooms</label>
 										<div class="small">
-											<span v-for="(key, val) in accommodation.rooms_count">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
+											<span v-for="(val, key, index) in accommodation.rooms_count">
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 										<label>Rooms Allowed</label>
 										<div class="small">
-										<span v-for="(key, val) in accommodation.room_types">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
+										<span v-for="(val, key, index) in accommodation.room_types">
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 									</div><!-- end col -->
@@ -204,7 +204,7 @@
 							</panel>
 						</accordion>
 						<div class="text-center">
-							<pagination :pagination.sync="accommodationsPagination"
+							<pagination :pagination="accommodationsPagination"
 							            :callback="getAccommodations"
 							            size="small">
 							</pagination>
@@ -243,7 +243,7 @@
 						<div class="col-sm-12">
 							<template v-if="plans.length">
 								<div class="panel-group" id="plansAccordion" role="tablist" aria-multiselectable="true">
-									<div class="panel panel-default" v-for="plan in plans">
+									<div class="panel panel-default" v-for="(plan, index) in plans">
 										<div class="panel-heading">
 											<div class="panel-title" slot="header">
 												<div class="row">
@@ -258,14 +258,14 @@
 														<button :disabled="!currentAccommodation" class="btn btn-xs btn-primary-hollow" type="button" @click="addPlanToAccommodation(plan, currentAccommodation)">
 															<i class="fa fa-plus"></i>
 														</button>
-														<a :class="{ 'disabled': plan.rooms.data.length === 0 }" class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#plansAccordion" :href="'#planItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+														<a :class="{ 'disabled': plan.rooms.data.length === 0 }" class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#plansAccordion" :href="'#planItem' + index" aria-expanded="true" aria-controls="collapseOne">
 															<i class="fa fa-angle-down"></i>
 														</a>
 													</div>
 													<div class="col-xs-12">
 														<label>Groups</label><br />
-														<span v-for="group in plan.groups.data">
-								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</p>
+														<span v-for="(group, groupIndex) in plan.groups.data">
+								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="groupIndex != 0"> &middot; </span>{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</p>
 								                        </span>
 													</div>
 													<!--<div class="col-xs-12">-->
@@ -277,7 +277,7 @@
 												</div>
 											</div>
 										</div>
-										<div :id="'planItem' + $index" class="panel-collapse collapse">
+										<div :id="'planItem' + index" class="panel-collapse collapse">
 
 											<div class="list-group">
 												<div class="list-group-item"  v-for="room in plan.rooms.data" >
@@ -301,7 +301,7 @@
 								</div>
 
 								<div class="text-center">
-									<pagination :pagination.sync="plansPagination" :callback="getRoomingPlans"
+									<pagination :pagination="plansPagination" :callback="getRoomingPlans"
 									            size="small">
 									</pagination>
 								</div>
@@ -450,38 +450,38 @@
                 this.selectRegionView = false;
 	        },
             addPlanToAccommodation(plan, accommodation) {
-                this.RoomingAccommodationsResource.save({ accommodation: accommodation.id, path: 'plans' }, { plan_ids: [plan.id] })
-		            .then(function (response) {
+                this.RoomingAccommodationsResource.post({ accommodation: accommodation.id, path: 'plans' }, { plan_ids: [plan.id] })
+		            .then((response) => {
                         this.AccommodationsResource
                             .get({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id})
-                            .then(function (response) {
-								accommodation = response.body.data;
+                            .then((response) => {
+								accommodation = response.data.data;
                                 this.getCurrentAccommodationRooms();
                                 this.getRoomingPlans();
                                 this.$root.$emit('showSuccess', plan.name + ' successfully added to accommodation.');
                             }, this.$root.handleApiErro);
 
-                    }, this.$root.handleApiError);
+                    }).catch(this.$root.handleApiError);
             },
             addRoomToAccommodation(room, accommodation) {
-                this.RoomingAccommodationsResource.save({ accommodation: accommodation.id, path: 'rooms' }, { room_ids: [room.id] })
-                    .then(function (response) {
+                this.RoomingAccommodationsResource.post({ accommodation: accommodation.id, path: 'rooms' }, { room_ids: [room.id] })
+                    .then((response) => {
                         accommodation.rooms_count[room.type]++;
                         accommodation.rooms_count.total++;
                         this.getCurrentAccommodationRooms();
                         this.getRoomingPlans();
                         this.$root.$emit('showSuccess', (room.label ? (room.label + ' - ' + room.type) : room.type) + ' successfully added to accommodation.');
-                    }, this.$root.handleApiError)
+                    }).catch(this.$root.handleApiError)
             },
             removeRoomFromAccommodation(room, accommodation) {
                 this.RoomingAccommodationsResource.delete({ accommodation: accommodation.id, path: 'rooms', pathId: room.id })
-                    .then(function (response) {
+                    .then((response) => {
                         accommodation.rooms_count[room.type]--;
                         accommodation.rooms_count.total--;
                         this.getCurrentAccommodationRooms();
                         this.getRoomingPlans();
                         this.$root.$emit('showSuccess', (room.label ? (room.label + ' - ' + room.type) : room.type) + ' successfully removed from accommodation.');
-                    }, this.$root.handleApiError)
+                    }).catch(this.$root.handleApiError)
             },
             getAccommodations(){
                 let params = {
@@ -489,10 +489,10 @@
 					page: this.accommodationsPagination.current_page,
                 };
 
-                return this.AccommodationsResource.get(params).then(function (response) {
-                    this.accommodationsPagination = response.body.meta.pagination;
-					return this.accommodations = response.body.data;
-                }, this.$root.handleApiError);
+                return this.AccommodationsResource.get(params).then((response) => {
+                    this.accommodationsPagination = response.data.meta.pagination;
+					return this.accommodations = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
             getRegions(){
                 let params = {
@@ -505,10 +505,10 @@
 
                 //params.country = this.regionsFilters.country;
 
-                return this.RegionsResource.get(params).then(function (response) {
-                    this.regionsPagination = response.body.meta.pagination;
-                    return this.regions = response.body.data;
-                }, this.$root.handleApiError);
+                return this.RegionsResource.get(params).then((response) => {
+                    this.regionsPagination = response.data.meta.pagination;
+                    return this.regions = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
             getRoomingPlans(){
                 let regionId = this.currentRegion ? this.currentRegion.id : '';
@@ -524,13 +524,13 @@
 	                page: this.plansPagination.current_page
                 });
 
-                return this.PlansResource.get(params).then(function (response) {
-                    _.each(response.body.data, function (plan) {
+                return this.PlansResource.get(params).then((response) => {
+                    _.each(response.data.data, function (plan) {
                         plan.rooms_count_remaining = _.countBy(plan.rooms.data, 'type');
                     });
-                    this.plansPagination = response.body.meta.pagination;
-                    return this.plans = response.body.data;
-                }, this.$root.handleApiError)
+                    this.plansPagination = response.data.meta.pagination;
+                    return this.plans = response.data.data;
+                }).catch(this.$root.handleApiError)
             },
             getRoomingPlansFilter(){
                 let params = {
@@ -543,10 +543,10 @@
                     per_page: this.per_page,
                 });
 
-                return this.PlansResource.get(params).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.plans = response.body.data;
-                }, this.$root.handleApiError)
+                return this.PlansResource.get(params).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.plans = response.data.data;
+                }).catch(this.$root.handleApiError)
             },
 	        getRoomLeader(room) {
                 return _.findWhere(room.occupants.data, { room_leader: true });
@@ -554,14 +554,14 @@
             getGroups(search, loading){
                 let promise;
                 loading ? loading(true) : void 0;
-                promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                promise = this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
 	        getAccommodationRooms(accommodation) {
                 let params = {
@@ -569,12 +569,12 @@
 	                page: accommodation.roomsPagination.current_page,
                 };
 
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
+                return this.$http.get('rooming/rooms', { params: params }).then((response) => {
                     return {
-                        rooms: response.body.data,
-                        pagination: response.body.meta.pagination
+                        rooms: response.data.data,
+                        pagination: response.data.meta.pagination
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
 	        },
             getCurrentAccommodationRooms() {
                 let params = {
@@ -589,16 +589,16 @@
 	                type: this.roomsFilters.type ? this.roomsFilters.type.id : undefined,
                 });
 
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
-                    this.currentAccommodationRooms = response.body.data;
-                    this.currentAccommodationRoomsPagination = response.body.meta.pagination;
-                }, this.$root.handleApiError);
+                return this.$http.get('rooming/rooms', { params: params }).then((response) => {
+                    this.currentAccommodationRooms = response.data.data;
+                    this.currentAccommodationRoomsPagination = response.data.meta.pagination;
+                }).catch(this.$root.handleApiError);
 	        },
             getRoomTypes(){
                 return this.$http.get('rooming/types')
-                    .then(function (response) {
-                            return this.roomTypes = response.body.data;
-                        }, this.$root.handleApiError);
+                    .then((response) => {
+                            return this.roomTypes = response.data.data;
+                        }).catch(this.$root.handleApiError);
             },
         },
         mounted() {
@@ -606,10 +606,10 @@
             promises.push(this.getGroups());
             promises.push(this.getRoomTypes());
             promises.push(this.getRegions());
-            promises.push(this.getRoomingPlans().then(function (plans) {
+            promises.push(this.getRoomingPlans().then((plans) => {
 				this.plansOptions = plans;
             }));
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
 
             });
         }

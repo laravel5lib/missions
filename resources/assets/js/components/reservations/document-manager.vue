@@ -249,9 +249,9 @@
                     {
                         document_id: document.id,
                         status: 'reviewing'
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.toggleChangeState();
-                        this.$dispatch('set-status', response.body.data);
+                        this.$dispatch('set-status', response.data.data);
                     });
                 }
             },
@@ -263,9 +263,9 @@
                     {
                         document_id: null,
                         status: 'incomplete'
-                    }).then(function (response) {
+                    }).then((response) => {
                         this.document = null;
-                        this.$dispatch('set-status', response.body.data);
+                        this.$dispatch('set-status', response.data.data);
                     });
                 }
             },
@@ -286,9 +286,9 @@
                     reservationId: this.reservationId,
                     requirementId: this.requirementId,
                     include: 'document'
-                }).then(function (response) {
-                    this.requirement = response.body.data;
-                    this.document = response.body.data.document ? response.body.data.document.data : null;
+                }).then((response) => {
+                    this.requirement = response.data.data;
+                    this.document = response.data.data.document ? response.data.data.document.data : null;
                     this.loaded = true;
                 });
             }

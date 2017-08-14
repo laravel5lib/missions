@@ -109,17 +109,17 @@
 				sponsorId: this.id,
 				sponsorType: 'user',
 				per_page: 100
-			}}).then(function (response) {
-				this.fundraisers = response.body.data;
-			}, this.$root.handleApiError);
+			}}).then((response) => {
+				this.fundraisers = response.data.data;
+			}).catch(this.$root.handleApiError);
 
 			this.$http.get('fundraisers?archived=true', { params: {
 				sponsorId: this.id,
 				sponsorType: 'user',
 				per_page: 100
-			}}).then(function (response) {
-				this.oldFundraisers = response.body.data;
-			}, this.$root.handleApiError)
+			}}).then((response) => {
+				this.oldFundraisers = response.data.data;
+			}).catch(this.$root.handleApiError)
 		}
 
 	}

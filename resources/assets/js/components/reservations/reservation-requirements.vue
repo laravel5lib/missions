@@ -61,7 +61,7 @@
         </div>
         <div class="row">
           <div class="col-xs-12 text-center">
-              <pagination :pagination.sync="pagination"
+              <pagination :pagination="pagination"
                           :callback="fetch"
                           size="small">
               </pagination>
@@ -78,7 +78,7 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditRequirementError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedRequirement.grace_period"
-                                               name="grace" v-validate="{required: { rule: true }}">
+                                               name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -210,9 +210,9 @@
                     //sort: this.orderByField + '|' + (this.direction === 1 ? 'asc' : 'desc'),
                 };
 
-                this.$http.get('reservations/' + this.id + '/requirements', { params: params }).then(function (response) {
-                    this.requirements = response.body.data
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('reservations/' + this.id + '/requirements', { params: params }).then((response) => {
+                    this.requirements = response.data.data
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             edit(requirement) {
@@ -223,8 +223,8 @@
                 this.$http.put('reservations/' + this.id + '/requirements/' + this.editedRequirement.id, {
                     status: this.editedRequirement.status,
                     grace_period: this.editedRequirement.grace_period
-                }).then(function (response) {
-                    this.$emit('set-status', response.body.data);
+                }).then((response) => {
+                    this.$emit('set-status', response.data.data);
                     this.$root.$emit('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });

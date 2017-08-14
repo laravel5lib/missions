@@ -58,7 +58,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Costs</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
@@ -234,8 +234,8 @@
                 let res = jQuery.extend(true, {}, this.project);
                 res.costs = costIds
 
-                return this.resource.update(res).then(function (response) {
-                    this.setProjectData(response.body.data);
+                return this.resource.update(res).then((response) => {
+                    this.setProjectData(response.data.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.$root.$emit('showSuccess', 'Costs updated successfully.');
@@ -270,15 +270,15 @@
             },
             revert(){
                 this.temporaryCosts = [];
-                this.resource.get().then(function (response) {
-                    this.setProjectData(response.body.data);
+                this.resource.get().then((response) => {
+                    this.setProjectData(response.data.data);
                 });
             },
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setProjectData(response.body.data);
+            this.resource.get().then((response) => {
+                this.setProjectData(response.data.data);
                 // this.$refs.spinner.hide();
             });
         }

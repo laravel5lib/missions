@@ -18,8 +18,8 @@
 				<span class="input-group-addon"><i class="fa fa-search"></i></span>
 			</div>
 			<button class="btn btn-default btn-sm" @click="showActivityFilters = true;">Filters</button>
-			<date-picker :has-error="" :model.sync="activityFilters.starts|moment('YYYY-MM-DD', false, true)" type="date" placeholder="Start DateTime" input-sm></date-picker>
-			<date-picker :has-error="" :model.sync="activityFilters.ends|moment('YYYY-MM-DD', false, true)" type="date" placeholder="End DateTime" input-sm></date-picker>
+			<date-picker :has-error="" :model="activityFilters.starts|moment('YYYY-MM-DD', false, true)" type="date" placeholder="Start DateTime" input-sm></date-picker>
+			<date-picker :has-error="" :model="activityFilters.ends|moment('YYYY-MM-DD', false, true)" type="date" placeholder="End DateTime" input-sm></date-picker>
 
 			<button type="button" class="btn btn-primary btn-sm" @click="newActivity();">Add Activity</button>
 		</form>
@@ -139,7 +139,7 @@
 				</div>
 			</div>
 				<div class="col-xs-12 text-center">
-					<pagination :pagination.sync="activitiesPagination" :callback="getActivities"></pagination>
+					<pagination :pagination="activitiesPagination" :callback="getActivities"></pagination>
 				</div>
 		</template>
 		<!-- Activities List Empty State -->
@@ -162,7 +162,7 @@
 		</modal>
 		<modal :title="editMode?'Edit Hub':'Create Hub'" :ok-text="editMode?'Update':'Create'" :callback="saveHub" :value="hubModal" @closed="hubModal=false">
 			<div slot="modal-body" class="modal-body" v-if="selectedHub">
-				<travel-hub ref="hub" :hub.sync="selectedHub" :activity-types="activityTypes"></travel-hub>
+				<travel-hub ref="hub" :hub="selectedHub" :activity-types="activityTypes"></travel-hub>
 			</div>
 		</modal>
 		<modal title="Delete Hub" small ok-text="Delete" :callback="deleteHub" :value="showHubDeleteModal" @closed="showHubDeleteModal=false">
@@ -261,9 +261,9 @@
                     include: 'hubs'
                 }, this.activityFilters);
 
-                return this.ActivityResource.get(params).then(function (response) {
-                    this.activitiesPagination = response.body.meta.pagination;
-                    return this.activities = response.body.data;
+                return this.ActivityResource.get(params).then((response) => {
+                    this.activitiesPagination = response.data.meta.pagination;
+                    return this.activities = response.data.data;
                 }, this.handleApiError);
             },
             newActivity() {
@@ -303,19 +303,19 @@
                 this.$broadcast('validate-itinerary');
 
 	            if (data.id) {
-	                promise = this.HubResource.update({ hub: data.id}, data).then(function (response) {
+	                promise = this.HubResource.update({ hub: data.id}, data).then((response) => {
                         this.editMode = false;
                         this.getActivities();
                     }, this.handleApiError);
 	            } else {
                     data.campaign_id = null;
-                    promise = this.HubResource.save(data).then(function (response) {
+                    promise = this.HubResource.post(data).then((response) => {
                         this.getActivities();
 
                     }, this.handleApiError);
 	            }
 
-	            promise.then(function () {
+	            promise.then(() => {
 		            this.hubModal = false;
                 });
 	        },
@@ -331,31 +331,31 @@
                 this.$broadcast('validate-itinerary');
 
                 if (data.id) {
-                    promise = this.ActivityResource.update({ activity: data.id}, data).then(function (response) {
+                    promise = this.ActivityResource.update({ activity: data.id}, data).then((response) => {
                         this.editMode = false;
                         this.getActivities();
                     }, this.handleApiError);
                 } else {
                     data.campaign_id = null;
-                    promise = this.ActivityResource.save(data).then(function (response) {
+                    promise = this.ActivityResource.post(data).then((response) => {
                         this.getActivities();
 
                     }, this.handleApiError);
                 }
 
-                promise.then(function () {
+                promise.then(() => {
                     this.activityModal = false;
                 });
 
             },
 	        deleteHub(){
-                this.HubResource.delete({ activity: this.selectedHub.id }).then(function () {
+                this.HubResource.delete({ activity: this.selectedHub.id }).then(() => {
                     this.getActivities();
                     this.showHubDeleteModal = false;
                 }, this.handleApiError);
 	        },
 	        deleteActivity(){
-	            this.ActivityResource.delete({ activity: this.selectedActivity.id }).then(function () {
+	            this.ActivityResource.delete({ activity: this.selectedActivity.id }).then(() => {
 	                this.getActivities();
                     this.showActivityDeleteModal = false;
                 }, this.handleApiError);

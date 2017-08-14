@@ -78,7 +78,7 @@
                     }
 
                     // this.$refs.spinner.show();
-                    this.$http.post('contact', data).then(function (response) {
+                    this.$http.post('contact', data).then((response) => {
                         console.log(response);
                         // this.$refs.spinner.hide();
                         this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');

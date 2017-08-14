@@ -185,7 +185,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="trip in trips|filterBy search|orderBy orderByField direction">
+                    <tr v-for="trip in orderByProp(trips, orderByField, direction)">
                         <td v-if="isActive('name')">{{trip.group.data.name}}</td>
                         <td v-if="isActive('type')">{{trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : ''}}</td>
                         <td v-if="isActive('status')">{{trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : ''}}</td>
@@ -210,7 +210,7 @@
                     <tr>
                         <td colspan="7">
                             <div class="col-sm-12 text-center">
-        						<pagination :pagination.sync="pagination" :callback="searchTrips"></pagination>
+        						<pagination :pagination="pagination" :callback="searchTrips"></pagination>
                             </div>
                         </td>
                     </tr>
@@ -336,9 +336,9 @@
                 };
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('trips', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.trips = response.body.data;
+                this.$http.get('trips', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.trips = response.data.data;
                 }, function (error) {
                 })
             }

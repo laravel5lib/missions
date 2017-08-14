@@ -59,7 +59,7 @@
                                     :options="exportOptions"
                                     :filters="exportFilters">
                     </export-utility>
-                    <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/initiatives/create">New <i class="fa fa-plus"></i></a>
+                    <a class="btn btn-primary btn-sm" :href="'/admin/causes/' +  causeId  + '/initiatives/create'">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -97,7 +97,7 @@
             </tr>
             </thead>
             <tbody v-if="initiatives.length > 0">
-            <tr v-for="initiative in initiatives|filterBy search|orderBy orderByField direction">
+            <tr v-for="initiative in orderByProp(initiatives, orderByField, direction)">
                 <td v-if="isActive('type')">{{initiative.type ? initiative.type[0].toUpperCase() + initiative.type.slice(1) : ''}}</td>
                 <td v-if="isActive('country')">{{initiative.country.name ? initiative.country.name[0].toUpperCase() + initiative.country.name.slice(1) : ''}}</td>
                 <td v-if="isActive('started_at')">{{initiative.started_at|moment('ll')}}</td>
@@ -118,7 +118,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination"
+                        <pagination :pagination="pagination"
                                     :callback="searchInitiatives"
                                     size="small">
                         </pagination>
@@ -224,9 +224,9 @@
             searchInitiatives(){
                 // this.$refs.spinner.show();
                 var params = this.getParameters();
-                this.$http.get('causes/' + this.causeId + '/initiatives', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.initiatives = response.body.data;
+                this.$http.get('causes/' + this.causeId + '/initiatives', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.initiatives = response.data.data;
                     // this.$refs.spinner.hide();
                 })
             }

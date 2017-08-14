@@ -1,7 +1,7 @@
 <template>
     <div>
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
-        <template v-if="isUser()">
+        <template v-if="isUser">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-default panel-body">
@@ -80,11 +80,11 @@
             <!-- Indicators -->
             <ol class="carousel-indicators">
                 <!--<li data-target="#uploads-carousel" data-slide-to="0" class="active"></li>-->
-                <li data-target="#uploads-carousel" :class=" $index == 0 ? 'active' : '' " :data-slide-to="$index" v-for="upload in fundraiser.uploads.data"></li>
+                <li data-target="#uploads-carousel" :class="{'active' : index == 0}" :data-slide-to="index" v-for="(upload, index) in fundraiser.uploads.data"></li>
             </ol>
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
-                <div class="item {{ $index == 0 ? 'active' : '' }}" v-for="upload in fundraiser.uploads.data">
+                <div class="item" :class="{'active' : index == 0}" v-for="upload in fundraiser.uploads.data">
                     <template v-if="upload.type === 'video'">
                         <video :id="upload.id" class="video-js vjs-default-skin vjs-big-play-centered" width="620">
                             <p class="vjs-no-js">
@@ -175,14 +175,16 @@
             randName(){
                 return (this.fundraiser.url || this.id) + '_' + moment().unix().toString();
             },
-        },
-        methods:{
             isUser(){
                 if (this.editable === 1) return true;
 
                 return this.sponsorId && this.$root.user && this.sponsorId === this.$root.user.id;
             },
+        },
+        methods:{
             viewUpload(upload){
+                let vjsOptions;
+
                 this.selectedUpload = upload;
                 this.showView = true;
 
@@ -190,7 +192,7 @@
                     // load preview player
                     this.$nextTick(function () {
                         if (this.selectedUploadPlayer === null) {
-                            var vjsOptions = {
+                            vjsOptions = {
                                 controls: true,
                                 autoplay: false,
                                 preload: 'metadata',
@@ -240,7 +242,7 @@
                 this.showDelete = true;
             },
             doDelete(){
-                this.$http.delete('uploads/' + this.selectedUpload.id).then(function (response) {
+                this.$http.delete('uploads/' + this.selectedUpload.id).then((response) => {
                     console.log(response);
                     this.fundraiser.uploads.data = _.reject(this.fundraiser.uploads.data, function (upload) {
                         return upload.id === this.selectedUpload.id;
@@ -248,16 +250,16 @@
                     this.showDelete = false;
                     this.selectedUpload = null;
 
-                });
+                }).catch(this.$root.handleApiError);
             },
             submit(){
                 console.log(this);
                 // this.$refs.spinner.show();
-                this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then(function (response) {
-                    this.fundraiser = response.body.data;
+                this.$http.put('fundraisers/' + this.id + '?include=uploads', {upload_ids: this.fundraiser.upload_ids}).then((response) => {
+                    this.fundraiser = response.data.data;
                     this.initVideoPlayers();
                     // this.$refs.spinner.hide();
-                });
+                }).catch(this.$root.handleApiError);
             },
             initVideoPlayers(){
                 // Handling Videos
@@ -265,7 +267,7 @@
                 // else videojs won't find the element
                 this.$nextTick(function () {
                     // We need to filter the `upload.type: 'video'` objs
-                    var videos = _.filter(this.fundraiser.uploads.data, function (upload) {
+                    let videos = _.filter(this.fundraiser.uploads.data, function (upload) {
                         return upload.type === 'video';
                     });
 
@@ -299,14 +301,11 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then(function (response) {
-                this.fundraiser = response.body.data;
+            this.$http.get('fundraisers/' + this.id, { params: { include: 'uploads'} }).then((response) => {
+                this.fundraiser = response.data.data;
                 this.initVideoPlayers();
                 // this.$refs.spinner.hide();
-            }, function (error) {
-                // this.$refs.spinner.hide();
-                //TODO add error alert
-            });
+            }).catch(this.$root.handleApiError);
         }
     }
 </script>

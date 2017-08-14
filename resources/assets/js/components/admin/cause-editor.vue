@@ -32,7 +32,7 @@
             <v-select @keydown.enter.prevent=""  class="form-control"
                       multiple
                       id="country"
-                      :value.sync="cause.countries"
+                      :value="cause.countries"
                       :options="countries"
                       label="name"
                       v-if="editMode">
@@ -47,7 +47,7 @@
             <p v-else>{{ cause.short_desc }}</p>
         </div>
 
-        <alert :show.sync="showSuccess"
+        <alert :show="showSuccess"
                placement="top-right"
                :duration="3000"
                type="success"
@@ -58,7 +58,7 @@
             <p>{{ message }}</p>
         </alert>
 
-        <alert :show.sync="showError"
+        <alert :show="showError"
                placement="top-right"
                :duration="6000"
                type="danger"
@@ -104,13 +104,13 @@
         },
         methods: {
             fetch () {
-                this.$http.get('causes/' + this.id).then(function (response) {
-                    this.cause = response.body.data;
+                this.$http.get('causes/' + this.id).then((response) => {
+                    this.cause = response.data.data;
                 });
             },
             save() {
-                this.$http.put('causes/' + this.id, this.cause).then(function (response) {
-                    this.cause = response.body.data;
+                this.$http.put('causes/' + this.id, this.cause).then((response) => {
+                    this.cause = response.data.data;
                     this.editMode = false;
                     this.message = 'Your changes were saved successfully.';
                     this.showSuccess = true;
@@ -120,7 +120,7 @@
                 });
             },
             create() {
-                this.$http.post('causes', this.cause).then(function (response) {
+                this.$http.post('causes', this.cause).then((response) => {
                     this.cause = {};
                     window.location.reload();
                 },function () {
@@ -143,8 +143,8 @@
                 this.editMode = false;
             }
 
-            this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
+            this.$http.get('utilities/countries').then((response) => {
+				this.countries = response.data.countries;
 			});
         }
     }

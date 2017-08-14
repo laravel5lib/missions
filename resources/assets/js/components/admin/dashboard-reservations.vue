@@ -40,8 +40,8 @@
 					per_page: 5,
 					sort: 'created_at+DESC',
 					page: 1
-				}}).then(function (response) {
-					this.reservations = response.body.data;
+				}}).then((response) => {
+					this.reservations = response.data.data;
 				})
 			}
 		},

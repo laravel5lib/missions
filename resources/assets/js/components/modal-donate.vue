@@ -6,7 +6,7 @@
         <hr class="divider inv sm">
         <div class="panel panel-default collapse" id="collapseDonate">
             <div class="panel-body">
-                <donate :donation-state.sync="donationState" :sub-state.sync="subState" :attempt-submit="attemptSubmit" :title="title"
+                <donate :donation-state="donationState" :sub-state="subState" :attempt-submit="attemptSubmit" :title="title"
                         :child="true" :stripe-key="stripeKey" :auth="auth" :type="type" type-id="typeId" :fund-id="fundId" :recipient="recipient" identifier="modal"></donate>
                 <!--<button type="button" class="btn btn-default btn-xs" @click="donationState='form',subState=1" v-if="!isState('form', 1)">Reset</button>-->
                 <div class="text-center">

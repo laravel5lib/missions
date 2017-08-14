@@ -93,7 +93,7 @@
             },
             save() {
                 if(this.document) {
-                    this.$http.delete('questionnaires/' + this.document.id).then(function (response) {
+                    this.$http.delete('questionnaires/' + this.document.id).then((response) => {
                         console.log('old removed');
                     });
                 }
@@ -101,10 +101,10 @@
                     content: [this.designation.content],
                     reservation_id: this.reservationId,
                     type: 'arrival_designation'
-                }).then(function (response) {
-                    this.designation = response.body.data;
+                }).then((response) => {
+                    this.designation = response.data.data;
                     this.editMode = false;
-                    this.setDesignation(response.body.data);
+                    this.setDesignation(response.data.data);
                 });
             },
             setDesignation(designation) {

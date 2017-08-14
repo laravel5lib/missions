@@ -173,9 +173,9 @@
                     transport: this.transportId,
                     include: 'departureHub,arrivalHub'
                 };
-                this.TransportsResource.get(params).then(function (response) {
-	                this.transport = response.body.data;
-                }, this.$root.handleApiError);
+                this.TransportsResource.get(params).then((response) => {
+	                this.transport = response.data.data;
+                }).catch(this.$root.handleApiError);
             }
         },
         mounted(){

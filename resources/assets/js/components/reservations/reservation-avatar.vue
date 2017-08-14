@@ -21,7 +21,7 @@
             </div>
             <hr class="divider inv sm"/>
         </div>
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>Reservation Avatar Updated!</p>
@@ -66,8 +66,8 @@
                 if(_.isObject(this.reservation.desired_role))
                     this.reservation.desired_role = this.reservation.desired_role.code;
 
-                this.resource.update({id: this.id}, this.reservation).then(function(response) {
-                    this.reservation = response.body.data;
+                this.resource.update({id: this.id}, this.reservation).then((response) => {
+                    this.reservation = response.data.data;
                     this.avatar = this.reservation.avatar;
                     this.showSuccess = true;
                     // this.$refs.spinner.hide();
@@ -76,8 +76,8 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get({id: this.id}).then(function(response) {
-                this.reservation = response.body.data;
+            this.resource.get({id: this.id}).then((response) => {
+                this.reservation = response.data.data;
                 this.avatar = this.reservation.avatar
                 // this.$refs.spinner.hide();
             });

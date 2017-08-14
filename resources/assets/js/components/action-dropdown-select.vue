@@ -74,11 +74,11 @@
 
                 if (this.api) {
                     return this.$http.get(this.searchRoute, { params: {search: search} }).then(response => {
-                        this.options = response.body.data;
+                        this.options = response.data.data;
                         if (loading) {
                             loading(false);
                         } else {
-                            return response.body.data;
+                            return response.data.data;
                         }
                     });
                 } else {

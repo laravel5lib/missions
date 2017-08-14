@@ -1,13 +1,13 @@
 <template>
-
+    <div>
         <form id="CreateUpdateReferral" class="form-horizontal" novalidate style="postition:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
-            
+
             <template v-if="forAdmin">
                 <div class="col-sm-12">
                     <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                         <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                             <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                         </select>
@@ -16,74 +16,80 @@
             </template>
 
             <div class="row">
-                <div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
+                <div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name' }">
                     <label for="author" class="control-label">Applicant Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-                       placeholder="Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
-                       maxlength="150" minlength="1" required>
+                           placeholder="Name" v-validate="'required|min:1|max:100'"
+                           maxlength="150" minlength="1" required>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6" v-error-handler="{ value: attention_to, client: 'attentionto', server: 'attention_to' }">
+                <div class="col-sm-6" v-error-handler="{ value: attention_to, client: 'attention_to', server: 'attention_to' }">
                     <label for="author" class="control-label">Attention to</label>
                     <input type="text" class="form-control" name="attention_to" id="attention_to" v-model="attention_to"
-                           placeholder="Attention to" name="attentionto" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Attention to" v-validate="'required|min:1|max:100'"
                            maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" v-error-handler="{ value: recipient_email, client: 'recipientemail', server: 'recipient_email' }">
+                <div class="col-sm-6" v-error-handler="{ value: recipient_email, client: 'recipient_email', server: 'recipient_email' }">
                     <label for="author" class="control-label">Recipient Email</label>
                     <input type="text" class="form-control" name="recipient_email" id="recipient_email" v-model="recipient_email"
-                           placeholder="Recipient Email" name="recipientemail" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Recipient Email" v-validate="'required|min:1|max:100'"
                            maxlength="150" minlength="1" required>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': errors.has('referraltitle') }">
+                <div class="col-sm-6" :class="{ 'has-error': errors.has('referral_title') }">
                     <label for="author" class="control-label">Referral Title/Position</label>
                     <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
-                       placeholder="Referral title or position" name="referraltitle" v-validate="{ required: true, minlength:1, maxlength:100 }"
-                       maxlength="150" minlength="1" required>
+                           placeholder="Referral title or position" v-validate="'required|min:1|max:100'"
+                           maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" :class="{ 'has-error': errors.has('referralname') }">
+                <div class="col-sm-6" :class="{ 'has-error': errors.has('referral_name') }">
                     <label for="author" class="control-label">Referral Name</label>
                     <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referrer.name"
-                       placeholder="Referral Name" name="referralname" v-validate="{ required: true, minlength:1, maxlength:100 }"
-                       maxlength="150" minlength="1" required>
+                           placeholder="Referral Name" v-validate="'required|min:1|max:100'"
+                           maxlength="150" minlength="1" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6" :class="{ 'has-error': errors.has('referralorg') }">
                     <label for="author" class="control-label">Referral Organization</label>
                     <input type="text" class="form-control" name="referral_organization" id="referral_organization" v-model="referrer.organization"
-                       placeholder="Referral Name" name="referralorg" v-validate="{ required: true, minlength:1, maxlength:100 }"
-                       maxlength="150" minlength="1" required>
+                           placeholder="Referral Name" v-validate="'required|min:1|max:100'"
+                           maxlength="150" minlength="1" required>
                 </div>
                 <div class="col-sm-3" :class="{ 'has-error': errors.has('referralphone') }">
                     <label for="author" class="control-label">Referral Phone</label>
-                    <input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referrer.phone|phone"
-                       placeholder="Referral Phone" name="referralphone" v-validate="{ required: true, minlength:1, maxlength:100 }"
-                       maxlength="150" minlength="1" required>
+                    <phone-input v-model="referrer.phone" validation="required|min:1|max:100" name="referral_phone" id="referral_phone"></phone-input>
+                    <!--<input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referrer.phone|phone"
+                           placeholder="Referral Phone" v-validate="'required|min:1|max:100'"
+                           maxlength="150" minlength="1" required>-->
                 </div>
             </div>
 
             <hr class="divider inv">
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" :href="'/'+ firstUrlSegment +'/records/referrals'" class="btn btn-default">Cancel</a>
-                    <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-                    <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                    <template v-if="!isUpdate">
+                        <a :href="'/'+ firstUrlSegment +'/records/referrals'" class="btn btn-default">Cancel</a>
+                        <a  @click="submit" class="btn btn-primary">Create</a>
+                    </template>
+                    <template v-else>
+                        <a @click="back" class="btn btn-default">Cancel</a>
+                        <a @click="update" class="btn btn-primary">Update</a>
+                    </template>
                 </div>
             </div>
         </form>
         <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
-
-
+    </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
+    import _ from 'underscore';
     import vSelect from "vue-select";
     import errorHandler from'../../error-handler.mixin';
     export default{
@@ -106,9 +112,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'CreateUpdateReferral',
-
                 type: 'pastoral',
                 referrer: {
                     title: null,
@@ -142,8 +145,8 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -161,9 +164,13 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateReferral.valid) {
-                    this.resource.save({
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        this.showError = true;
+                        return false;
+                    }
+                    this.resource.post({
                         applicant_name: this.applicant_name,
                         recipient_email: this.recipient_email,
                         referrer: this.referrer,
@@ -171,7 +178,7 @@
                         response: this.response,
                         user_id: this.user_id,
                         attention_to: this.attention_to
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Referral created and sent.');
                         let that = this;
                         setTimeout(function () {
@@ -181,16 +188,15 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create referral.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-                
-                this.resetErrors();
-                if (this.$CreateUpdateReferral.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+
                     this.resource.update({id: this.id}, {
                         attention_to: this.attention_to,
                         applicant_name: this.applicant_name,
@@ -199,24 +205,23 @@
                         type: this.type,
                         response: this.response,
                         user_id: this.user_id,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
-                        let that = this;
                         setTimeout(function () {
-                            window.location.href = '/'+ that.firstUrlSegment +'/records/referrals/' + that.id; 
+                            window.location.href = '/'+ this.firstUrlSegment +'/records/referrals/' + this.id;
                         }, 1000);
                     }, function (error) {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
         },
         mounted(){
             if (this.isUpdate) {
-                this.$http.get('referrals/' + this.id + '?include=user').then(function (response) {
+                this.$http.get('referrals/' + this.id + '?include=user').then((response) => {
 
-                    let referral = response.body.data;
+                    let referral = response.data.data;
                     $.extend(this, referral);
                     this.userObj = referral.user.data;
                     this.usersArr.push(this.userObj);

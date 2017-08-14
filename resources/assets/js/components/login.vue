@@ -34,7 +34,7 @@
 						</div><!-- end form-group -->
 					</form><!-- end form -->
 			</template>
-			<template v-if="currentState==='reset'">
+			<template v-else-if="currentState==='reset'">
 				<form class="form-horizontal" role="form" @submit.prevent="requestReset">
 					<div id="alerts" v-if="messages.length > 0">
 						<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
@@ -63,7 +63,7 @@
 					</div><!-- end form-group -->
 				</form><!-- end form -->
 			</template>
-			<template v-if="currentState==='create'">
+			<template v-else-if="currentState==='create'">
 				<form name="RegisterForm" class="form-horizontal" role="form" @submit.prevent="registerUser" novalidate>
 						<div id="alerts" v-if="messages.length > 0">
 							<div v-for="message in messages" :class="'alert alert-' + message.type + ' alert-dismissible'"
@@ -71,10 +71,7 @@
 								{{ message.message }}
 							</div>
 						</div><!-- end alert -->
-						<div v-show="attemptRegister">
-							<!--
-						</div>
-						<div class="form-group"
+						<div class="form-group" v-error-handler="{ value: newUser.name, handle: 'name'}"
 						     :class="{ 'has-error': registerErrors.name || errors.has('name') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Name</label>
@@ -88,31 +85,32 @@
 								<label class="control-label">E-Mail Address</label>
 								<input type="email" class="form-control" v-model="newUser.email"
 								       placeholder="example@gmail.com"
-								       required name="email" v-validate="['email',  { required: { rule: true, message: 'The email field is required.' }}]"/>
+								       required name="email" v-validate="'required|email'"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" :class="{ 'has-error': registerErrors.password || errors.has('password') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Password</label>
 								<input type="password" class="form-control" v-model="newUser.password" required
-								       minlength="8" name="password" v-validate="{ required: { rule: true, message: 'The password field is required.' } }"/>
+								       minlength="8" name="password" v-validate="'required'"/>
 								<div class="help-block">Password must be at least 8 characters long</div>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" :class="{ 'has-error': registerErrors.password || errors.has('password') }">
+						<div class="form-group" :class="{ 'has-error': registerErrors.password || errors.has('password_confirmation') }">
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Password Again</label>
 								<input type="password" class="form-control" v-model="newUser.password_confirmation"
-								       required
+								       required v-validate="'required'" name="password_confirmation"
 								       minlength="8"/>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
-						<div class="form-group" :class="{ 'has-error': registerErrors.birthday || ((newUser.dobMonth === null || newUser.dobDay === null) && attemptRegister) }">
+						<div class="form-group" :class="{ 'has-error': registerErrors.birthday || (errors.has('dob_month') || errors.has('dob_day') || errors.has('dob_year')) }">
+							<!-- registerErrors.birthday || (newUser.dobMonth === null || newUser.dobDay === null) -->
 							<div class="col-xs-10  col-xs-offset-1">
 								<label class="control-label">Date of Birth</label>
 								<div class="row">
 									<div class="col-xs-5">
-										<select class="form-control" name="dob_month" v-model="newUser.dobMonth"
+										<select class="form-control" name="dob_month" v-model="newUser.dobMonth" v-validate="'required'"
 										        required>
 											<option value="01">January</option>
 											<option value="02">February</option>
@@ -130,7 +128,7 @@
 										<h6 class="help-block lightcolor">Month</h6>
 									</div>
 									<div class="col-xs-3">
-										<select class="form-control" name="dob_day" v-model="newUser.dobDay" required>
+										<select class="form-control" name="dob_day" v-model="newUser.dobDay" v-validate="'required'" required>
 											<option value="01">1</option>
 											<option value="02">2</option>
 											<option value="03">3</option>
@@ -166,7 +164,7 @@
 										<h6 class="help-block lightcolor">Day</h6>
 									</div>
 									<div class="col-xs-4">
-										<select class="form-control" name="dob_year" v-model="newUser.dobYear">
+										<select class="form-control" name="dob_year" v-model="newUser.dobYear" v-validate="'required'" >
 											<option value="1930">1930</option>
 											<option value="1931">1931</option>
 											<option value="1932">1932</option>
@@ -265,18 +263,18 @@
 								<label class="control-labal">Gender</label><br>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Male" id="gender" v-model="newUser.gender"
-									       required v-validate="{ required: { rule: true, message: 'Please select a gender.' }}">
+									       required v-validate="'required'">
 									Male</label>
 								<label class="radio-inline lightcolor">
 									<input name="gender" type="radio" value="Female" id="gender"
-									       v-model="newUser.gender" v-validate="{ required: { rule: true, message: 'Please select a gender.' }}"> Female</label>
+									       v-model="newUser.gender" v-validate="''"> Female</label>
 							</div><!-- end col -->
 						</div><!-- end form-group -->
 						<div class="form-group" :class="{ 'has-error': registerErrors.country_code }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label for="country" class="control-label">Country</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="country"
-								          :value.sync="countryCodeObj"
+								          :value="countryCodeObj"
 								          :options="countries" label="name"></v-select>
 								<select hidden name="country" id="country" class="hidden" v-model="newUser.country_code"
 								        required >
@@ -288,7 +286,7 @@
 							<div class="col-xs-10 col-xs-offset-1">
 								<label for="timezone" class="control-label">Timezone</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="timezone"
-								          :value.sync="newUser.timezone"
+								          :value="newUser.timezone"
 								          :options="timezones"></v-select>
 								<select hidden name="timezone" id="timezone" class="hidden" v-model="newUser.timezone"
 								        required>
@@ -326,8 +324,10 @@
     import moment from 'moment';
     import timezone from 'moment-timezone';
     import vSelect from "vue-select";
+    import errorHandler from'./error-handler.mixin'
     export default {
         name: 'login',
+	    mixins: [errorHandler],
         components: {vSelect},
         data() {
             return {
@@ -364,7 +364,7 @@
                 timezones: [],
                 countries: [],
                 countryCodeObj: null,
-                attemptRegister: false,
+                // attemptRegister: false,
                 registerErrors: []
             }
         },
@@ -379,31 +379,24 @@
         },
         computed: {},
         methods: {
-            checkForLoginError(field){
-                // if user clicked continue button while the field is invalid trigger error styles
-                return this.$LoginForm[field.toLowerCase()].invalid && this.attemptedLogin
-            },
-            checkForRegisterError(field){
-                // if user clicked continue button while the field is invalid trigger error styles
-                return this.$RegisterForm[field.toLowerCase()].invalid && this.attemptRegister
-            },
-            attempt: function (e) {
-                e.preventDefault();
-                this.attemptedLogin = true;
-                let that = this;
-                if (this.$LoginForm.valid) {
-                    that.$http.post('/oauth/token', {
-						grant_type: 'password',
-						client_id: 2,
-						client_secret: 'NvqY1KwxVL7PfkS5lxZ6Ha2fss9TpglGAH0oOquR',
-						username: this.user.email,
-						password: this.user.password,
-						scope: '*',
-					})
-                        .then(function (response) {
+            attempt(e) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.messages = [{type: 'warning', message: 'Please check the form'}];
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
 
-                                // if (response.body.redirect_to)
-                                    that.getUserData('/dashboard', response.body.ignore_redirect || false);
+                    this.$http.post('/login', this.user)
+                        .then((response) => {
+                                // set cookie - name, token
+                                this.$cookie.set('api_token', response.data.token);
+                                // reload to set cookie
+                                /*if (this.isChildComponent) {
+								 window.location.reload();
+								 }*/
+                                if (response.data.redirect_to)
+                                    this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
                             },
                             function (response) {
                                 this.messages = [];
@@ -429,14 +422,14 @@
 
             getUserData(redirectTo, ignoreRedirect) {
                 let that = this;
-                return that.$http.get('users/me?include=roles,permissions')
-                    .then(function (response) {
-                            that.$root.$emit('userHasLoggedIn', response.body.data);
-                            // that.$dispatch('userHasLoggedIn', response.body.data);
+                return that.$http.get('users/me?include=roles,abilities')
+                    .then((response) => {
+                            that.$root.$emit('userHasLoggedIn', response.data.data);
+                            // that.$dispatch('userHasLoggedIn', response.data.data);
 
                             if (that.isChildComponent || ignoreRedirect) {
-                                that.userData = response.body.data;
-                                return response.body.data;
+                                that.userData = response.data.data;
+                                return response.data.data;
                             } else {
                                 location.href = redirectTo;
                             }
@@ -444,7 +437,7 @@
                         },
                         function (response) {
                             console.log(response);
-                            return response.body.data;
+                            return response.data.data;
                         });
             },
 
@@ -454,22 +447,27 @@
                     birthday: moment(this.newUser.dobYear + '-' + this.newUser.dobMonth + '-' + this.newUser.dobDay).format('YYYY-MM-DD')
                 });
 
-                this.attemptRegister = true;
-                if (this.$RegisterForm.valid) {
-                    this.$http.post('/register', this.newUser).then(function (response) {
-                            // console.log(response.body.token);
+                // this.attemptRegister = true;
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+
+                    this.$http.post('/register', this.newUser).then((response) => {
+                            // console.log(response.data.token);
                             // set cookie - name, token
-                            this.$cookie.set('api_token', response.body.token);
+                            this.$cookie.set('api_token', response.data.token);
                             // reload to set cookie
 								/*if (this.isChildComponent) {
 								 window.location.reload();
 								 }*/
-                            this.getUserData(response.body.redirect_to);
+                            this.getUserData(response.data.redirect_to);
                         },
                         function (response) {
                             // console.log(response);
                             let messages = [];
-                            this.registerErrors = response.body;
+                            this.registerErrors = response.data;
                             _.each(this.registerErrors, function (error) {
                                     messages.push({
                                         type: 'danger',
@@ -484,11 +482,9 @@
                             }
                             this.messages = messages;
                             this.$root.$emit('showError', 'Please check the form.');
-                            this.attemptRegister = false;
+                            // this.attemptRegister = false;
                         });
-                } else {
-                    this.$root.$emit('showError', 'Please check the form.');
-                }
+                });
             },
 
             requestReset(e) {
@@ -507,15 +503,15 @@
                 this.currentState = 'create';
             }
 
-            this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+            this.$http.get('utilities/countries').then((response) => {
+                this.countries = response.data.countries;
             },
                 function (response) {
                     console.log(response);
                 });
 
-            this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
+            this.$http.get('utilities/timezones').then((response) => {
+                this.timezones = response.data.timezones;
             },
                 function (response) {
                     console.log(response);

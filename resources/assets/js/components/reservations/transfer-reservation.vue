@@ -92,8 +92,8 @@
             'selectedTrip': function(val) {
                 if (! val) return;
 
-                this.$http.get('utilities/team-roles').then(function (response) {
-                    _.each(response.body.roles, function (name, key) {
+                this.$http.get('utilities/team-roles').then((response) => {
+                    _.each(response.data.roles, function (name, key) {
                         if (_.contains(val.team_roles, key))
                             this.roles.push({ value: key, name: name});
                     }.bind(this));
@@ -103,7 +103,7 @@
         methods: {
             getGroups() {
                 this.$http.get('campaigns/'+this.campaignId+'?include=groups')
-                .then(function (response) {
+                .then((response) => {
                     this.groups = response.data.data.groups.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to find groups');
@@ -111,7 +111,7 @@
             },
             getTrips() {
                 this.$http.get('trips?status=active&campaign='+this.campaignId+'&groups[]='+this.selectedGroupId)
-                .then(function (response) {
+                .then((response) => {
                     this.trips = response.data.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to find trips');
@@ -122,7 +122,7 @@
                 this.$http.post('reservations/' + this.id + '/transfer', {
                     trip_id: this.selectedTrip.id, desired_role: this.selectedRole
                 })
-                .then(function (response) {
+                .then((response) => {
                     this.selectedGroupId = null;
                     this.selectedTrip = null;
                     this.selectedRole = null;

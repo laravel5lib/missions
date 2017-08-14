@@ -125,7 +125,7 @@
 				}
 
 				var resource = this.$resource('trips{/id}');
-				resource.update({ id: this.tripId}, this.wizardData).then(function (resp) {
+				resource.update({ id: this.tripId}, this.wizardData).then((resp) => {
 
 				}, function (error) {
 					console.log(error);
@@ -138,8 +138,8 @@
 		created(){
 			this.currentStep = this.stepList[0];
 
-			this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
-				var trip = response.body.data;
+			this.$http.get('trips/' + this.tripId, { params: { include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then((response) => {
+				var trip = response.data.data;
 				$.extend(trip, {
 					type: this.type,
 					group_id: this.group_id

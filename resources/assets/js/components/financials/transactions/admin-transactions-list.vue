@@ -17,7 +17,7 @@
                 <div class="form-group" v-if="!donor">
                     <label>Donor</label>
                     <v-select @keydown.enter.prevent=""  class="form-control" id="donorFilter" :debounce="250" :on-search="getDonors"
-                              :value.sync="donorObj" :options="donorsOptions" label="name"
+                              :value="donorObj" :options="donorsOptions" label="name"
                               placeholder="Filter by Donor"></v-select>
                 </div>
 
@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model.sync="filters.minDate|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                    <date-picker :model="filters.minDate|moment"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model.sync="filters.maxDate|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
+                    <date-picker :model="filters.maxDate|moment"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -277,7 +277,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="transaction in transactions|filterBy search|orderBy orderByField direction">
+                <tr v-for="transaction in orderByProp(transactions, orderByField, direction)">
                     <td v-if="isActive('type')">
                         <span class="label label-default" v-text="transaction.type ? transaction.type[0].toUpperCase() + transaction.type.slice(1) : ''"></span>
                     </td>
@@ -302,7 +302,7 @@
                 <tr>
                     <td colspan="7">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination" size="small" :callback="searchTransactions"></pagination>
+                            <pagination :pagination="pagination" size="small" :callback="searchTransactions"></pagination>
                         </div>
                     </td>
                 </tr>
@@ -509,22 +509,22 @@
             },
             getDonors(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('donors', { params: { search: search} }).then(function (response) {
-                    this.donorsOptions = response.body.data;
+                this.$http.get('donors', { params: { search: search} }).then((response) => {
+                    this.donorsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             searchTransactions(){
                 let params = this.getListSettings();
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', { params: params }).then(function (response) {
-                    this.transactions = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('transactions', { params: params }).then((response) => {
+                    this.transactions = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
                     // TODO add error alert
-                }).then(function () {
+                }).then(() => {
                     this.updateConfig();
                 });
             }

@@ -5,6 +5,7 @@ Elixir.webpack.mergeConfig({
     module: {
         resolve: {
             alias: {
+                'images': Path.resolve(__dirname, './images'),
                 // "TweenLite": Path.resolve('node_modules', 'gsap/src/uncompressed/TweenLite.js'),
                 // "TweenMax": Path.resolve('node_modules', 'gsap/src/uncompressed/TweenMax.js'),
                 // "TimelineLite": Path.resolve('node_modules', 'gsap/src/uncompressed/TimelineLite.js'),

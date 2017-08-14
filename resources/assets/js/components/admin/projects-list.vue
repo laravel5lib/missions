@@ -74,7 +74,7 @@
                                     :options="exportOptions"
                                     :filters="exportFilters">
                     </export-utility>
-                    <a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/projects/create">New <i class="fa fa-plus"></i></a>
+                    <a class="btn btn-primary btn-sm" :href="'/admin/causes/' +  causeId  + '/projects/create'">New <i class="fa fa-plus"></i></a>
                 </form>
             </div>
         </div>
@@ -117,7 +117,7 @@
             </tr>
             </thead>
             <tbody v-if="projects.length > 0">
-            <tr v-for="project in projects|filterBy search|orderBy orderByField direction">
+            <tr v-for="project in orderByProp(projects, orderByField, direction)">
                 <td v-if="isActive('name')">{{project.name ? project.name[0].toUpperCase() + project.name.slice(1) : ''}}</td>
                 <td v-if="isActive('type')">{{project.initiative.data.type ? project.initiative.data.type[0].toUpperCase() + project.initiative.data.type.slice(1) : ''}}</td>
                 <td v-if="isActive('country')">{{project.initiative.data.country.name ? project.initiative.data.country.name[0].toUpperCase() + project.initiative.data.country.name.slice(1) : ''}}</td>
@@ -144,7 +144,7 @@
             <tr>
                 <td colspan="10">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination"
+                        <pagination :pagination="pagination"
                                     :callback="searchProjects"
                                     size="small">
                         </pagination>
@@ -250,9 +250,9 @@
             searchProjects(){
                 // this.$refs.spinner.show();
                 var params = this.getParameters();
-                this.$http.get('projects', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.projects = response.body.data;
+                this.$http.get('projects', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.projects = response.data.data;
                     // this.$refs.spinner.hide();
                 })
             }

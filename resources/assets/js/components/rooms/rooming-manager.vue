@@ -2,16 +2,16 @@
 	<div>
 		<div class="row" style="position:relative;">
 			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" :filters.sync="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
+				<reservations-filters ref="filters" :filters="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
 			</mm-aside>
 
 			<template v-if="currentPlan">
 				<div class="col-xs-12" v-if="currentPlan">
 					<h3>{{ currentPlan.name }} <button type="button" class="btn btn-xs btn-primary" @click="changePlan">Change Plan</button></h3>
 					<h5>
-						<template v-for="group in currentPlan.groups.data">
+						<template v-for="(group, groupIndex) in currentPlan.groups.data">
 							{{ group.name }}
-							<template v-if="($index + 1) < currentPlan.groups.data.length">&middot;</template>
+							<template v-if="(groupIndex + 1) < currentPlan.groups.data.length">&middot;</template>
 						</template>
 					</h5>
 					<hr class="divider lg">
@@ -66,7 +66,7 @@
 										<template v-if="currentRoom.occupants && currentRoom.occupants.length">
 											<div class="panel-group" id="occupantsAccordion" role="tablist" aria-multiselectable="true">
 												<div class="row">
-												<div class="col-sm-12" v-for="member in currentRoomOccupantsOrdered">
+												<div class="col-sm-12" v-for="(member, memberIndex) in currentRoomOccupantsOrdered">
 													<div class="panel panel-default" style="margin-bottom:8px;">
 														<div class="panel-heading" role="tab" id="headingOne">
 															<h5 class="panel-title">
@@ -98,14 +98,14 @@
 																				<li :class="{'disabled': isLocked}"><a @click="removeFromRoom(member, this.currentRoom)">Remove</a></li>
 																			</ul>
 																		</dropdown>
-																		<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+																		<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#membersAccordion" :href="'#occupantItem' + memberIndex" aria-expanded="true" aria-controls="collapseOne">
 																			<i class="fa fa-angle-down"></i>
 																		</a>
 																	</div>
 																</div>
 															</h5>
 														</div>
-														<div :id="'occupantItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+														<div :id="'occupantItem' + memberIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 															<div class="panel-body">
 																<div class="row">
 																	<div class="col-sm-3">
@@ -230,7 +230,7 @@
 											</div>
 										</div>
 										<div class="col-sm-12 text-center">
-											<pagination :pagination.sync="roomsPagination" :callback="getRooms"></pagination>
+											<pagination :pagination="roomsPagination" :callback="getRooms"></pagination>
 										</div>
 									</template>
 									<template v-else>
@@ -296,7 +296,7 @@
 					</form>
 					<hr class="divider sm inv">
 					<div class="panel-group" id="reservationsAccordion" role="tablist" aria-multiselectable="true">
-						<div class="panel panel-default" v-for="reservation in reservations">
+						<div class="panel panel-default" v-for="(reservation, reservationIndex) in reservations">
 							<div class="panel-heading" role="tab" id="headingOne">
 								<h4 class="panel-title">
 									<div class="row">
@@ -329,14 +329,14 @@
 													<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
 												</ul>
 											</dropdown>
-											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + $index" aria-expanded="true" aria-controls="collapseOne">
+											<a class="btn btn-xs btn-default-hollow" role="button" data-toggle="collapse" data-parent="#reservationsAccordion" :href="'#reservationItem' + reservationIndex" aria-expanded="true" aria-controls="collapseOne">
 												<i class="fa fa-angle-down"></i>
 											</a>
 										</div>
 									</div>
 								</h4>
 							</div>
-							<div :id="'reservationItem' + $index" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+							<div :id="'reservationItem' + reservationIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 								<div class="panel-body">
 									<div class="row">
 										<div class="col-sm-4">
@@ -396,7 +396,7 @@
 						</div>
 					</div>
 					<div class="col-sm-12 text-center">
-						<pagination :pagination.sync="reservationsPagination" :callback="searchReservations"></pagination>
+						<pagination :pagination="reservationsPagination" :callback="searchReservations"></pagination>
 					</div>
 				</div>
 			</template>
@@ -702,8 +702,8 @@
                     room_leader: true,
                 };
                 this.$http.put('rooming/rooms/' + this.currentRoom.id + '/occupants/' + occupant.id, data)
-                    .then(function (response) {
-						return occupant.room_leader = response.body.data.room_leader;
+                    .then((response) => {
+						return occupant.room_leader = response.data.data.room_leader;
                     })
             },
             demoteToOccupant(occupant) {
@@ -712,8 +712,8 @@
                     room_leader: false,
                 };
                 this.$http.put('rooming/rooms/' + this.currentRoom.id + '/occupants/' + occupant.id, data)
-	                .then(function (response) {
-                        return occupant.room_leader = response.body.data.room_leader;
+	                .then((response) => {
+                        return occupant.room_leader = response.data.data.room_leader;
                     });
             },
             setActiveRoom(room) {
@@ -782,13 +782,13 @@
                     return;
                 }
 
-                return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then(function (response) {
+                return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then((response) => {
                     room.occupants = _.reject(room.occupants, function (member) {
                         return member.id === occupant.id;
                     });
                     room.occupants_count--;
                     this.currentPlan.occupants_count--;
-                    return response.body;
+                    return response.data;
                 });
             },
             addToRoom(occupant, leader, room) {
@@ -814,13 +814,13 @@
                     room_leader: leader,
                 };
 
-                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions,squads.team,costs:type(optional)' } }).then(function (response) {
-	                let occupants = response.body.data;
+                return this.$http.post('rooming/rooms/' + room.id + '/occupants', data,  { params: { include: 'companions,squads.team,costs:type(optional)' } }).then((response) => {
+	                let occupants = response.data.data;
 	                room.occupants = occupants;
                     room.occupants_count = occupants.length;
                     this.currentPlan.occupants_count++;
                 }, function (response) {
-	                this.$root.$emit('showError', response.body.message)
+	                this.$root.$emit('showError', response.data.message)
                 });
             },
             searchReservations(){
@@ -852,9 +852,9 @@
                         this.lastReservationRequest.abort();
                     }
                     this.lastReservationRequest = xhr;
-                } }).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.reservationsPagination = response.body.meta.pagination;
+                } }).then((response) => {
+                    this.reservations = response.data.data;
+                    this.reservationsPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }, function (error) {
                     // this.$refs.spinner.hide();
@@ -862,35 +862,35 @@
                 });
             },
             getRoomTypes(){
-                return this.$http.get('rooming/types?campaign='+this.campaignId).then(function (response) {
-                        return this.roomTypes = response.body.data;
+                return this.$http.get('rooming/types?campaign='+this.campaignId).then((response) => {
+                        return this.roomTypes = response.data.data;
                     },
                     function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
             getPlans(){
                 let params = {
                     page: this.plansPagination.current_page,
                 };
-	                return this.$http.get('rooming/plans', { params: params }).then(function (response) {
-                        this.plansPagination = response.body.meta.pagination;
-                        return this.plans = response.body.data;
+	                return this.$http.get('rooming/plans', { params: params }).then((response) => {
+                        this.plansPagination = response.data.meta.pagination;
+                        return this.plans = response.data.data;
                     },
                     function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                return this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                return this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
-                        return response.body.data;
+                        return response.data.data;
                     }
                 });
             },
@@ -900,14 +900,14 @@
 	                include: 'type',
                     // page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming/rooms', { params: params }).then(function (response) {
-                        console.log(response.body.data)
-//                        this.plansPagination = response.body.meta.pagination;
-//                        return this.plans = response.body.data;
+                return this.$http.get('rooming/rooms', { params: params }).then((response) => {
+                        console.log(response.data.data)
+//                        this.plansPagination = response.data.meta.pagination;
+//                        return this.plans = response.data.data;
                     },
                     function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
             getRooms(plan){
@@ -920,15 +920,15 @@
 	                per_page: 25,
                 };
                 return this.$http.get('rooming/rooms', { params: params })
-	                .then(function (response) {
+	                .then((response) => {
 		                if (plan.id === this.currentPlan.id) {
-		                    this.roomsPagination = response.body.meta.pagination
-                            return this.currentRooms = response.body.data;
+		                    this.roomsPagination = response.data.meta.pagination
+                            return this.currentRooms = response.data.data;
                         }
                     },
                     function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
             getOccupants(){
@@ -937,12 +937,12 @@
 	                 include: 'companions,squads.team,costs:type(optional)',
                     // page: this.plansPagination.current_page,
                 };
-                return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then(function (response) {
-                        this.currentRoom.occupants = response.body.data
+                return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then((response) => {
+                        this.currentRoom.occupants = response.data.data
                     },
                     function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
             getCosts(){
@@ -950,8 +950,8 @@
                     'assignment': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
+                }}).then((response) => {
+                    this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
                 });
             },
             getTeams(){
@@ -997,16 +997,16 @@
                 if (this.membersFilters.type)
                     params.include += ':type(' + this.membersFilters.type + ')';
 
-                return this.$http.get('teams', { params: params }).then(function (response) {
-                        this.teamsPagination = response.body.meta.pagination;
-                        this.teams = response.body.data;
+                return this.$http.get('teams', { params: params }).then((response) => {
+                        this.teamsPagination = response.data.meta.pagination;
+                        this.teams = response.data.data;
                         if (currentSelection) {
                             this.currentTeam = _.findWhere(this.teams, { id: currentSelection.id});
                         }
                         return this.teams;
                     }, function (response) {
                         console.log(response);
-                        return response.body.data;
+                        return response.data.data;
                     });
             },
 
@@ -1024,16 +1024,16 @@
             },
 	        newPlan() {
                 if (this.$PlanCreate.valid) {
-                    return this.$http.post('rooming/plans', this.selectedPlan).then(function (response) {
-                        let plan = response.body.data;
+                    return this.$http.post('rooming/plans', this.selectedPlan).then((response) => {
+                        let plan = response.data.data;
                         this.plans.push(plan);
                         this.showPlanModal = false;
                         this.$root.$emit('select-options:update', plan.id, 'id');
                         return this.currentPlan = plan;
                     }, function (response) {
                         console.log(response);
-                        this.$root.$emit('showError', response.body.message);
-                        return response.body.data;
+                        this.$root.$emit('showError', response.data.message);
+                        return response.data.data;
                     });
                 } else {
                     this.$root.$emit('showError', 'Please provide a name for the new plan');
@@ -1066,25 +1066,25 @@
 	                        path: 'rooms',
 	                        pathId: this.selectedRoom.id,
 	                        include: 'type,occupants'
-                        }, this.selectedRoom).then(function (response) {
-                            let room = response.body.data;
+                        }, this.selectedRoom).then((response) => {
+                            let room = response.data.data;
                             this.showRoomModal = false;
                             this.currentRoom = _.extend(this.currentRoom, room)
                             this.getRooms();
                         });
 
                     } else {
-                        return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type,occupants'}}).then(function (response) {
-                            let room = response.body.data;
+                        return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type,occupants'}}).then((response) => {
+                            let room = response.data.data;
                             this.showRoomModal = false;
-                            return this.getRooms().then(function (rooms) {
+                            return this.getRooms().then((rooms) => {
                                 if (room)
                                     return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
                             });
                         }, function (response) {
                             console.log(response);
-                            this.$root.$emit('showError', response.body.message);
-                            return response.body.data;
+                            this.$root.$emit('showError', response.data.message);
+                            return response.data.data;
                         });
                     }
                 } else {
@@ -1100,7 +1100,7 @@
             },
             deletePlan() {
                 let plan = _.extend({}, this.currentPlan);
-                this.$http.delete('rooming/plans/' + plan.id).then(function (response) {
+                this.$http.delete('rooming/plans/' + plan.id).then((response) => {
                     this.showPlanDeleteModal = false;
                     this.$root.$emit('showInfo', plan.name + ' Deleted!');
                     this.plans = _.reject(this.plans, function (obj) {
@@ -1112,7 +1112,7 @@
             },
             deleteRoom() {
                 let room = _.extend({}, this.selectedRoom);
-                this.$http.delete('rooming/plans/' + this.currentPlan.id + '/rooms/' + room.id).then(function (response) {
+                this.$http.delete('rooming/plans/' + this.currentPlan.id + '/rooms/' + room.id).then((response) => {
                     this.$root.$emit('showInfo', room.label + ' Deleted!');
                     this.showRoomDeleteModal = false;
                     if (this.currentRoom && room.id === this.currentRoom.id)
@@ -1138,7 +1138,7 @@
 
             }
 
-            /*promises.push(this.getPlans().then(function (plans) {
+            /*promises.push(this.getPlans().then((plans) => {
                 //let pIds = _.pluck(plans, 'id');
 	            //this.getAllRooms(pIds);
             }));*/
@@ -1146,7 +1146,7 @@
             promises.push(this.getTeams());
             promises.push(this.getRoles());
             promises.push(this.getCosts());
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 this.startUp = false;
 
                 // load view state

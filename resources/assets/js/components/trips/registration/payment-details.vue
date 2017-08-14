@@ -454,10 +454,10 @@
 				return this.$PaymentDetails[field.toLowerCase()].invalid && this.attemptedCreateToken
 			},
 			checkPromo(){
-                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then(function (response) {
-                    this.promoValid = parseInt(response.body.replace(/,+/, ''));
+                this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then((response) => {
+                    this.promoValid = parseInt(response.data.replace(/,+/, ''));
                 }, function(error) {
-                    this.promoError = error.body.message;
+                    this.promoError = error.data.message;
                     this.promoValid = false;
                 });
 			},

@@ -26,7 +26,7 @@
                     {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
                 </td>
                 <td>{{ deadline.date | moment('lll') }}</td>
-                <td>{{ deadline.grace_period }} {{ deadline.grace_period | pluralize 'day' }}</td>
+                <td>{{ deadline.grace_period }} {{ pluralize(deadline.grace_period , 'day' )}}</td>
                 <td>
                     <a class="btn btn-default btn-xs" @click="edit(deadline)"><i class="fa fa-pencil"></i></a>
                     <a class="btn btn-danger btn-xs" @click="remove(deadline)"><i class="fa fa-times"></i></a>
@@ -42,7 +42,7 @@
                         <div class="form-group" :class="{ 'has-error': errors.has('deadlines') }"><label
                                 class="col-sm-2 control-label">Available Deadlines</label>
                             <div class="col-sm-10">
-                                <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDeadlines" :options="availableDeadlines"
+                                <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedDeadlines" :options="availableDeadlines"
                                           label="name"></v-select>
                                 <select hidden="" v-model="user_id" name="deadlines" v-validate="'required'" multiple>
                                     <option :value="deadline.id" v-for="deadline in deadlines">{{deadline.name}}</option>
@@ -63,7 +63,7 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditDeadlineError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDeadline.grace_period"
-                                               name="grace" v-validate="{required: true, min:0}">
+                                               name="grace" v-validate="'required|min:0'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                             <label for="grace_period">Grace Period</label>
                                             <div class="input-group input-group-sm" :class="{'has-error': checkForNewDeadlineError('grace') }">
                                                 <input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
-                                                       name="grace" v-validate="{required: true, min:0}">
+                                                       name="grace" v-validate="'required|min:0'">
                                                 <span class="input-group-addon">Days</span>
                                             </div>
                                         </div>
@@ -99,7 +99,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" :class="{'has-error': checkForNewDeadlineError('due')}">
                                             <label for="due_at">Due</label>
-                                            <date-picker :input-sm="true" :model.sync="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                            <date-picker :input-sm="true" :model="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                             <input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                    v-model="newDeadline.date" name="due" v-validate="'required'">
                                         </div>
@@ -256,9 +256,9 @@
                 delete trip.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then(function (response) {
-                    let thisTrip = response.body.data;
-                    this.selectedDeadlines = new Array(_.findWhere(response.body.data.deadlines.data, { name: this.newDeadline.name }));
+                this.$http.put('trips/' + trip.id + '?include=deadlines', trip).then((response) => {
+                    let thisTrip = response.data.data;
+                    this.selectedDeadlines = new Array(_.findWhere(response.data.data.deadlines.data, { name: this.newDeadline.name }));
 
                     return this.addDeadlines();
 
@@ -266,8 +266,8 @@
             },
             doUpdate(reservation){
                 // this.$refs.spinner.show();
-                return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.body.data);
+                return this.resource.update(reservation).then((response) => {
+                    this.setReservationData(response.data.data);
                     this.selectedDeadlines = [];
 
                     // close modals
@@ -303,8 +303,8 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setReservationData(response.body.data)
+            this.resource.get().then((response) => {
+                this.setReservationData(response.data.data)
                 // this.$refs.spinner.hide();
             });
 

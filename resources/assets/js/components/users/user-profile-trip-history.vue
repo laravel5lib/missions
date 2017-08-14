@@ -41,7 +41,7 @@
 				<form name="AddTrip" class="for" @submit.prevent="" novalidate>
 					<div class="form-group" :class="">
 						<label class="control-label">Trips</label>
-						<v-select @keydown.enter.prevent="" class="form-control" multiple :value.sync="selectedTrips" :options="availableTrips"
+						<v-select @keydown.enter.prevent="" class="form-control" multiple :value="selectedTrips" :options="availableTrips"
 								  label="name"></v-select>
 						<select hidden v-model="selectedTrips" multiple>
 							<option :value="trip" v-for="trip in availableTrips">{{trip.name}}</option>
@@ -93,7 +93,6 @@
                 selectedTripRemove: { name: null},
                 manageModal: false,
                 deleteModal: false,
-                resource: this.$resource('users{/id}/accolades{/name}')
             }
         },
 	    computed: {
@@ -123,25 +122,25 @@
 				let allCodes = _.union(this.accolades.items, this.selectedTrips);
 
 				// save to API
-				this.resource.save({id: this.id}, {
+				this.$http.post(`users/${this.id}/accolades`, {
 					name: "trip_history",
 					display_name: "Trip History",
 					items: allCodes
-				}).then(function(response) {
+				}).then((response) => {
 				    this.$root.$emit('showSuccess', 'Trips History Updated!');
-                    this.accolades = response.body.data;
+                    this.accolades = response.data.data;
                     this.selectedTrips = [];
                     this.filterAccolades();
-				}, this.$root.handleApiError);
+				}).catch(this.$root.handleApiError);
             },
             getAccolades(){
-                this.resource.get({id: this.id, name: 'trip_history'}).then(function (response) {
-                    this.accolades = response.body.data[0] || { items: [] };
+                this.$http.get(`users/${this.id}/accolades/trip_history`).then((response) => {
+                    this.accolades = response.data.data[0] || { items: [] };
 					if (this.isUser) {
    						this.filterAccolades();
 					}
 					return this.accolades;
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             filterAccolades(){
             	// If isUser filter only trips not already included in accolades
@@ -154,7 +153,7 @@
         },
         mounted(){
 			if (this.isUser) {
-				this.getTrips().then(function () {
+				this.getTrips().then(() => {
                     this.getAccolades();
                 });
 			} else {

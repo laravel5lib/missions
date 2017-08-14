@@ -1,45 +1,48 @@
 <template>
-    <spinner ref="spinner" size="sm" text="Loading"></spinner>
-    <div class="row">
-        <div class="col-sm-12">
-            <form class="form-inline text-right" novalidate>
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
-                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
-                </div>
-                <!--<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
-                    Filters
-                    <span class="caret"></span>
-                </button>-->
-                <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
-            </form>
-        </div>
-    </div>
-
-    <hr class="divider sm">
-    <div class="row">
-        <div class="col-sm-6 col-md-4" v-for="interest in interests">
-            <div class="panel panel-default" :id="interest.id">
-                <div class="panel-heading"><h5>{{ interest.name }}</h5></div>
-                <div class="panel-body">
-                    <label>Email</label>
-                    <p class="small" style="margin-bottom:5px;"><a :href="interest.email ? ('mailto:' + interest.email) : '#'">{{ interest.email || 'None Provided'}}</a></p>
-                    <label>Phone</label>
-                    <p class="small" style="margin-bottom:5px;"><a :href="interest.phone ? ('tel:' + interest.phone) : '#'">{{ interest.phone || 'None Provided'}}</a></p>
-                    <label>Contact Pref.</label>
-                    <p class="small" style="margin-bottom:5px;">{{ interest.communication_preferences}}</p>
-                    <label>Interested since</label>
-                    <p class="small" style="margin-bottom:5px;">{{ interest.created | moment('ll')}}</p>
-                </div>
+    <div>
+        <spinner ref="spinner" size="sm" text="Loading"></spinner>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-inline text-right" novalidate>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                    </div>
+                    <!--<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
+						Filters
+						<span class="caret"></span>
+					</button>-->
+                    <!--<a class="btn btn-primary btn-sm" href="reservations/create">New <i class="fa fa-plus"></i> </a>-->
+                </form>
             </div>
         </div>
-    </div><!-- end row -->
-    <div class="row">
-        <div class="col-xs-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchInterests"></pagination>
-        </div>
-    </div><!-- end row -->
-    <hr class="divider inv xlg">
+
+        <hr class="divider sm">
+        <div class="row">
+            <div class="col-sm-6 col-md-4" v-for="interest in interests">
+                <div class="panel panel-default" :id="interest.id">
+                    <div class="panel-heading"><h5>{{ interest.name }}</h5></div>
+                    <div class="panel-body">
+                        <label>Email</label>
+                        <p class="small" style="margin-bottom:5px;"><a :href="interest.email ? ('mailto:' + interest.email) : '#'">{{ interest.email || 'None Provided'}}</a></p>
+                        <label>Phone</label>
+                        <p class="small" style="margin-bottom:5px;"><a :href="interest.phone ? ('tel:' + interest.phone) : '#'">{{ interest.phone || 'None Provided'}}</a></p>
+                        <label>Contact Pref.</label>
+                        <p class="small" style="margin-bottom:5px;">{{ interest.communication_preferences}}</p>
+                        <label>Interested since</label>
+                        <p class="small" style="margin-bottom:5px;">{{ interest.created | moment('ll')}}</p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end row -->
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <pagination :pagination="pagination" :callback="searchInterests"></pagination>
+            </div>
+        </div><!-- end row -->
+        <hr class="divider inv xlg">
+    </div>
+
 </template>
 <script type="text/javascript">
     export default{
@@ -57,7 +60,7 @@
             }
         },
         watch: {
-            'search': function (val) {
+            'search'(val) {
                 this.pagination.current_page = 1;
                 this.searchInterests();
             }
@@ -72,9 +75,9 @@
                     search: this.search,
                     page: this.pagination.current_page,
                     per_page: this.per_page
-                }}).then(function (response) {
-                    this.interests = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.interests = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             }

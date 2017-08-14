@@ -74,13 +74,13 @@
                          :options="exportOptions"
                          :filters="exportFilters">
                     </export-utility>
-                    <!--<a class="btn btn-primary btn-sm" href="/admin/causes/{{ causeId }}/projects/create">New <i class="fa fa-plus"></i></a>-->
+                    <!--<a class="btn btn-primary btn-sm" :href="'/admin/causes/' +  causeId  + '/projects/create'">New <i class="fa fa-plus"></i></a>-->
                 </form>
             </div>
         </div>
         <hr>
         <div class="row" style="display:flex; flex-wrap: wrap; flex-direction: row;">
-            <div v-for="cause in causes" class="col-sm-6 col-md-4" style="display:flex">
+            <div v-for="(cause, index) in causes" class="col-sm-6 col-md-4" style="display:flex">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="text-center">{{ cause.name }}</h5>
@@ -90,12 +90,12 @@
                         <p class="small">{{ cause.short_desc }}</p>
                         <label>Countries</label>
                         <p class="small"><span v-for="country in cause.countries">
-								{{ country.name }}<span v-show="$index + 1 != cause.countries.length">, </span>
+								{{ country.name }}<span v-show="index + 1 != cause.countries.length">, </span>
 						</span></p>
                         <label>Projects Funded</label>
                         <p>{{ cause.projects_funded }}</p>
                         <!--<h3 class="text-success">{{ trip.starting_cost | currency }}</h3>-->
-                        <a href="/admin/causes/{{ cause.id }}/current-projects" class="btn btn-primary-hollow btn-sm"><i class="fa fa-cog"></i> Manage</a>
+                        <a :href="'/admin/causes/' +  cause.id  + '/current-projects'" class="btn btn-primary-hollow btn-sm"><i class="fa fa-cog"></i> Manage</a>
                     </div>
                 </div>
             </div>
@@ -126,9 +126,9 @@
         },
         methods: {
             fetch() {
-                this.$http.get('causes').then(function (response) {
-                    this.causes = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('causes').then((response) => {
+                    this.causes = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             }
         },

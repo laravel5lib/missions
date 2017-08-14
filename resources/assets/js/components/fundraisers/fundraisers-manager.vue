@@ -36,7 +36,7 @@
                         <hr class="divider inv">
                         <textarea v-show="!newMarkedContentToggle" class="form-control" id="newStoryContent" v-model="description" minlength="1" rows="20"></textarea>
                         <div class="collapse" :class="{ 'in': newMarkedContentToggle }">
-                            <div v-html="description | marked"></div>
+                            <div v-html="marked(description)"></div>
                         </div>
                     </form>
                 <!--</div>-->
@@ -78,13 +78,13 @@
                 </div>
             </modal>
 
-            <alert :show.sync="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert :show="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Good job!</strong>
                 <p>Description updated</p>
             </alert>
 
-            <alert :show.sync="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert :show="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Good job!</strong>
                 <p>Settings updated</p>
@@ -95,7 +95,7 @@
         </template>
 
         <template v-else>
-            <div v-html="fundraiser.description | marked"></div>
+            <div v-html="marked(fundraiser.description)"></div>
         </template>
 
 
@@ -137,10 +137,8 @@
 				}
             }
         },
-        filters: {
-            marked: marked,
-        },
         methods: {
+            marked: marked,
             isUser(){
                 if (this.editable === 1) return true;
                 
@@ -158,9 +156,9 @@
 			},
             validateUrl(){
                 this.checkingUrl = true;
-                this.$http.get('fundraisers', { params: { url: this.fundraiser.url } }).then(function (response) {
-                    if (response.body.data.length) {
-                        this.validUrl = response.body.data[0].id === this.fundraiser.id;
+                this.$http.get('fundraisers', { params: { url: this.fundraiser.url } }).then((response) => {
+                    if (response.data.data.length) {
+                        this.validUrl = response.data.data[0].id === this.fundraiser.id;
                     } else {
                         this.validUrl = true;
                     }
@@ -188,14 +186,14 @@
                     description: this.fundraiser.description,
                     public: this.fundraiser.public,
                     show_donors: this.fundraiser.show_donors
-                }).then(function (response) {
-                    this.fundraiser = response.body.data;
+                }).then((response) => {
+                    this.fundraiser = response.data.data;
                     this.newMarkedContentToggle = true;
                     if (type === 'description') {
                         this.showDescriptionSuccess = true;
                     } else {
                         this.showSettingsSuccess = true;
-                        this.$dispatch('fundraiserSettingsChanged', response.body.data);
+                        this.$dispatch('fundraiserSettingsChanged', response.data.data);
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();
@@ -207,8 +205,8 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get({id: this.id}).then(function (response) {
-                this.fundraiser = response.body.data;
+            this.resource.get({id: this.id}).then((response) => {
+                this.fundraiser = response.data.data;
 				this.$root.$emit('Fundraiser:DisplayDonors', this.fundraiser.show_donors);
                 // this.$refs.spinner.hide();
             });

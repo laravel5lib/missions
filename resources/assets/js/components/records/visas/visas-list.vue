@@ -90,16 +90,17 @@
             </div>
         </div>
         <div class="col-xs-12 text-center">
-            <pagination :pagination.sync="pagination" :callback="searchVisas"></pagination>
+            <pagination :pagination="pagination" :callback="searchVisas"></pagination>
 
         </div>
-        <modal :show.sync="deleteModal" title="Remove Visa" small="true">
+        <modal :show="deleteModal" title="Remove Visa" small="true">
             <div slot="modal-body" class="modal-body">Delete this Visa?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,removeVisa(selectedVisa)'>Delete</button>
             </div>
         </modal>
+    </div>
     </div>
 </template>
 <script type="text/javascript">
@@ -197,9 +198,9 @@
                     params.manager = this.userId;
                 $.extend(params, this.filters);
                 this.exportFilters = params;
-                this.$http.get('visas', { params: params }).then(function (response) {
-                    this.visas = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('visas', { params: params }).then((response) => {
+                    this.visas = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                     // this.$refs.spinner.hide();
                 });
@@ -207,7 +208,7 @@
             removeVisa(visa){
                 if(visa) {
                     // this.$refs.spinner.show();
-                    this.$http.delete('visas/' + visa.id).then(function (response) {
+                    this.$http.delete('visas/' + visa.id).then((response) => {
                         this.visas = _.reject(this.visas, function (item) {
                             return item.id === visa.id;
                         });
@@ -218,8 +219,8 @@
             }
         },
         mounted(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then(function (response) {
-                let user = response.body.data;
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.trips').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

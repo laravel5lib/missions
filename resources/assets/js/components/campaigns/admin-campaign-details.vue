@@ -86,8 +86,8 @@
 		},
 		created(){
 			let resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
-			resource.get({id: this.campaignId}).then(function(response) {
-				this.campaign = response.body.data;
+			resource.get({id: this.campaignId}).then((response) => {
+				this.campaign = response.data.data;
 			});
 		}
 	}

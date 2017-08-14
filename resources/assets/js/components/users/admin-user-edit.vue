@@ -6,7 +6,7 @@
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="User Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="User Name" name="name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                     <div v-error-handler="{ value: email, handle: 'email' }">
                     <label for="name" class="control-label">Email</label>
                     <input type="email" class="form-control" name="email" id="email" v-model="email"
-                           name="email" v-validate="{ required: true, minlength:1, maxlength:100 }">
+                           name="email" v-validate="'required|min:1|max:100'">
                     </div>
                 </div>
                 <div class="col-sm-6" v-error-handler="{ value: alt_email, server: 'alt_email' }">
@@ -276,7 +276,7 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -285,7 +285,7 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value.sync="timezone" :options="timezones"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                             <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                         </select>
@@ -296,11 +296,13 @@
             <div class="row">
                 <div class="col-sm-6">
                         <label for="infoPhone">Phone 1</label>
-                        <input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">
+                        <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
                 </div>
                 <div class="col-sm-6">
                         <label for="infoMobile">Phone 2</label>
-                        <input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">
+                        <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                    <phone-input v-model="phone_two" name="phone" id="infoMobile"></phone-input>
                 </div>
             </div>
 
@@ -436,7 +438,7 @@
                         gender: this.gender,
                         public: this.public,
                         url: this.public ? this.url : undefined,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'User updated.');
                         this.hasChanged = false;
                         let that = this;
@@ -454,17 +456,17 @@
             }
         },
         mounted(){
-            let countriesPromise = this.$http.get('utilities/countries').then(function (response) {
-                this.countries = response.body.countries;
+            let countriesPromise = this.$http.get('utilities/countries').then((response) => {
+                this.countries = response.data.countries;
             });
 
-            let timezonesPromise = this.$http.get('utilities/timezones').then(function (response) {
-                this.timezones = response.body.timezones;
+            let timezonesPromise = this.$http.get('utilities/timezones').then((response) => {
+                this.timezones = response.data.timezones;
             });
 
-            Promise.all([countriesPromise, timezonesPromise]).then(function (values) {
-                this.resource.get({id: this.userId}).then(function (response) {
-                    let user = response.body.data;
+            Promise.all([countriesPromise, timezonesPromise]).then((values) => {
+                this.resource.get({id: this.userId}).then((response) => {
+                    let user = response.data.data;
                     this.name = user.name;
                     this.bio = user.bio;
                     this.type = user.type;

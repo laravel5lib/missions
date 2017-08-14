@@ -198,9 +198,9 @@
                     params = params + '|' + this.id;
                 }
 
-                this.$http.get('notes' + params).then(function (response) {
-                    this.notes = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('notes' + params).then((response) => {
+                    this.notes = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             save() {
@@ -214,7 +214,7 @@
                 event.preventDefault();
                 $.extend(this.selectedNote, {'user_id' : this.userId});
 
-                this.$http.post('notes', this.selectedNote).then(function () {
+                this.$http.post('notes', this.selectedNote).then(() => {
                     this.reset();
                     this.fetch();
                     this.$root.$emit('showSuccess', 'Note created successfully.');
@@ -224,7 +224,7 @@
             },
             edit() {
                 event.preventDefault();
-                this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(function () {
+                this.$http.put('notes/' + this.selectedNote.id, this.selectedNote).then(() => {
                     this.reset();
                     this.fetch();
                     this.$root.$emit('showSuccess', 'Note saved successfully.');
@@ -241,7 +241,7 @@
                 this.editMode = false;
             },
             remove(note) {
-                this.$http.delete('notes/' + note.id).then(function () {
+                this.$http.delete('notes/' + note.id).then(() => {
                     // remove note from collection
                     this.notes.$remove(note.id);
                     // reset selected

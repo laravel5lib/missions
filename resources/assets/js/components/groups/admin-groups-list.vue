@@ -216,7 +216,7 @@
             <tr>
                 <td colspan="7">
                     <div class="col-sm-12 text-center">
-                        <pagination :pagination.sync="pagination" :callback="searchGroups"></pagination>
+                        <pagination :pagination="pagination" :callback="searchGroups"></pagination>
                     </div>
                 </td>
             </tr>
@@ -346,9 +346,9 @@
                     per_page: this.per_page,
                     page: this.pagination.current_page,
                     pending: this.pending ? true : null
-                }}).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.groups = response.body.data;
+                }}).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.groups = response.data.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Something went wrong!')
                 })

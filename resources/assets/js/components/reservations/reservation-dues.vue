@@ -80,8 +80,8 @@
             }
         },
         mounted(){
-            /*this.resource.get().then(function (response) {
-                this.setReservationData(response.body.data)
+            /*this.resource.get().then((response) => {
+                this.setReservationData(response.data.data)
             });*/
 
             //Listen to Event Bus

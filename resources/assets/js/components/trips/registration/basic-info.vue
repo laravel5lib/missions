@@ -7,7 +7,7 @@
 						<div class="col-sm-12">
 							<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
 								<label for="infoManager">Reservation Manager</label>
-								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
 								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
 									<option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
 								</select>
@@ -261,7 +261,7 @@
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': errors.has('country') }">
 									<label for="infoCountry">Country</label>
-									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" :value.sync="countryCodeObj" :options="countries" label="name"></v-select>
+									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" :value="countryCodeObj" :options="countries" label="name"></v-select>
 									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" v-validate="'required'">
 										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 									</select>
@@ -273,14 +273,14 @@
 							<label for="infoPhone">Home Phone</label>
 							<phone-input valication="required|min:10" v-model="phone"></phone-input>
 							<!--<input type="text" class="form-control input-sm" v-model="phone | phone"-->
-								   <!--name="phone="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error' }" id="infoPhone" placeholder" v-validate="123-456-7890">-->
+								   <!--name="phone="'required|min:10'" :classes="{ invalid: 'has-error' }" id="infoPhone" placeholder" v-validate="123-456-7890">-->
 						</div>
 
 						<div class="form-group" :class="{ 'has-error': errors.has('mobile') }">
 							<label for="infoMobile">Cell Phone</label>
 							<phone-input valication="required|min:10" v-model="mobile"></phone-input>
 							<!--<input type="text" class="form-control input-sm" v-model="mobile | phone"-->
-								   <!--name="mobile="{ required: true, minlength:10 }" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">-->
+								   <!--name="mobile="'required|min:10'" :classes="{ invalid: 'has-error'}" id="infoMobile" placeholder" v-validate="123-456-7890">-->
 						</div>
 					</div>
 				</form>
@@ -416,8 +416,8 @@
 		watch: {
 		    // fail safe for poor loading
 		    '$parent.trip'(val){
-                this.$http.get('utilities/team-roles').then(function (response) {
-                    _.each(response.body.roles, function (name, key) {
+                this.$http.get('utilities/team-roles').then((response) => {
+                    _.each(response.data.roles, function (name, key) {
                         if (_.contains(val.team_roles, key))
                             this.roles.push({ value: key, name: name});
                     }.bind(this));
@@ -443,8 +443,8 @@
 			},
 			getUsers(search, loading){
 				loading ? loading(true) : void 0;
-				this.$http.get('users', { params: { search: search} }).then(function (response) {
-					this.usersArr = response.body.data;
+				this.$http.get('users', { params: { search: search} }).then((response) => {
+					this.usersArr = response.data.data;
 					loading ? loading(false) : void 0;
 				})
 			},
@@ -502,13 +502,13 @@
 				this.onBehalf = true;
 			}
 
-			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
+			this.$http.get('utilities/countries').then((response) => {
+				this.countries = response.data.countries;
 				this.toggleUserData();
 			});
 
-			this.$http.get('utilities/team-roles').then(function (response) {
-				_.each(response.body.roles, function (name, key) {
+			this.$http.get('utilities/team-roles').then((response) => {
+				_.each(response.data.roles, function (name, key) {
 				    if (_.contains(this.$parent.trip.team_roles, key))
 						this.roles.push({ value: key, name: name});
 				}.bind(this));

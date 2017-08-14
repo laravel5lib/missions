@@ -10,7 +10,7 @@
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon"><i class="fa fa-users"></i></span>
 								<input type="number" id="spots" v-model="spots" class="form-control"
-									   name="spots" v-validate="{ required: true, min:0 }"/>
+									   name="spots" v-validate="'required|min:0'"/>
 							</div>
 							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 								companions.
@@ -21,7 +21,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('closed') }">
 						<label for="closed_at" class="col-sm-2 control-label">Registration Closes</label>
 						<div class="col-sm-10">
-							<date-picker :input-sm="true" :model.sync="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+							<date-picker :input-sm="true" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							<input type="datetime" class="form-control input-sm hidden" v-model="closed_at" name="closed="'required'" id" v-validate="closed_at">
 						</div>
 					</div>
@@ -29,7 +29,7 @@
 					<div class="form-group">
 						<label for="published_at" class="col-sm-2 control-label">Publish</label>
 						<div class="col-sm-10">
-							<date-picker :input-sm="true" :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+							<date-picker :input-sm="true" :model="published_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 							<input type="datetime" class="form-control input-sm hidden" v-model="published_at" id="published_at">
 						</div>
 					</div>

@@ -38,7 +38,7 @@
 								<div class="form-group" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
-										<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value.sync="userObj" :options="users"
+										<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" name="user" v-validate="'required'">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>
@@ -91,8 +91,8 @@
 			},*/
 			getUsers: function getUsers(search, loading) {
 				loading(true);
-				this.$http.get('users', { params: {search: search} }).then(function (response) {
-					this.users = response.body.data;
+				this.$http.get('users', { params: {search: search} }).then((response) => {
+					this.users = response.data.data;
 					loading(false);
 				});
 			},
@@ -116,8 +116,8 @@
 			updateGroup: function updateGroup() {
 				// Update Group
 				// this.$refs.spinner.show();
-				this.resource.update({id: this.groupId}, this.group).then(function (response) {
-					this.group = response.body.data;
+				this.resource.update({id: this.groupId}, this.group).then((response) => {
+					this.group = response.data.data;
 					this.managers = this.group.managers.data;
 					this.user_id = null;
 					this.userObj = null;
@@ -134,10 +134,10 @@
 		},
 		mounted() {
 			// this.$refs.spinner.show();
-			this.resource.get({id: this.groupId}).then(function (response) {
-				this.group = response.body.data;
+			this.resource.get({id: this.groupId}).then((response) => {
+				this.group = response.data.data;
 				this.managers = this.group.managers.data;
-				//                $.extend(this.$data, response.body.data);
+				//                $.extend(this.$data, response.data.data);
 				// this.$refs.spinner.hide();
 			}, function (response) {
 				console.log('Update Failed! :(');

@@ -6,14 +6,14 @@
                 <label for="name" class="col-sm-2 control-label">Name</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Name" name="name" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                           placeholder="Name" name="name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value.sync="tags" :options="tagOptions"></v-select>
+                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value="tags" :options="tagOptions"></v-select>
                     <select hidden id="tags" name="tags" v-model="tags" multiple v-validate="'required'">
                         <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
                     </select>
@@ -214,7 +214,7 @@
                         y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
                         width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
                         height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         console.log(resp);
 //                    	this.resultImage = resp.data;
                         window.location.href = '/admin/uploads';
@@ -257,8 +257,8 @@
             }
         },
         mounted(){
-            this.resource.get({id:this.uploadId}).then(function (response) {
-                var upload = response.body.data;
+            this.resource.get({id:this.uploadId}).then((response) => {
+                var upload = response.data.data;
                 this.name = upload.name;
                 this.tags = upload.tags;
                 this.type = upload.type;

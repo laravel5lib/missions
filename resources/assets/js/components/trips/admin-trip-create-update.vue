@@ -13,7 +13,7 @@
                     <div class="form-group" :class="{ 'has-error': errors.has('group') }">
                         <div class="col-sm-12">	
                         	<label class="control-label">Group</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
                             <select hidden v-model="group_id" name="group" v-validate="'required'">
                                 <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
                             </select>
@@ -52,7 +52,7 @@
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': errors.has('prospects') }">
 	                        	<label class="control-label">Perfect For</label>
-	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
+	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value="prospectsObj"
 	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 	                            <select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
 	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -63,7 +63,7 @@
 	                    <div class="col-sm-6">
 	                    	<div :class="{ 'has-error': errors.has('teamroles') }">
 	                        	<label class="control-label">Available Roles</label>
-	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="rolesObj"
+	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value="rolesObj"
 	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
 	                            <select hidden multiple v-model="team_roles" name="teamroles" v-validate="'required'">
 	                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
@@ -90,7 +90,7 @@
 		                            <div class="input-group">
 		                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
 		                                <input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-		                                       name="companions" v-validate="{ required: true, min:0 }"/>
+		                                       name="companions" v-validate="'required|min:0'"/>
 		                            </div>
 		                            <div class="help-block">Number of companions a user can have. Leave at 0 to disable
 		                                companions.
@@ -103,7 +103,7 @@
                         	<label for="started_at" class="control-label">Dates</label>
                             <div class="row">
                                 <div class="col-sm-6">
-	                                <date-picker :has-error= "errors.has('start')" :model.sync="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
+	                                <date-picker :has-error= "errors.has('start')" :model="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
 	                                       name="start" v-validate="'required'" required>
 	                                <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
@@ -113,13 +113,13 @@
 									</div>-->
                                 </div>
                                 <div class="col-sm-6">
-	                                <date-picker :has-error= "errors.has('end')" :model.sync="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
+	                                <date-picker :has-error= "errors.has('end')" :model="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
 	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
 	                                       name="end" v-validate="'required'" required>
 	                                <!--<div class="input-group"
                                          :class="{ 'has-error': errors.has('end') }">
                                         <span class="input-group-addon">End</span>
-										<date-picker class="form-control" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')" type="date"></date-picker>
+										<date-picker class="form-control" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')" type="date"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
                                                name="end" v-validate="'required'" required>
                                     </div>-->
@@ -131,7 +131,7 @@
                     <div class="form-group"	>
                         <div class="col-sm-12">
                         	<label class="control-label">Trip Rep.</label>
-                            <v-select @keydown.enter.prevent="" class="form-control" id="rep" :value.sync="repObj" :on-search="getReps" :options="reps"
+                            <v-select @keydown.enter.prevent="" class="form-control" id="rep" :value="repObj" :on-search="getReps" :options="reps"
                                       label="name"></v-select>
                             <!--name="rep" v-validate="{ required: false}"-->
                             <select hidden v-model="rep_id">
@@ -146,7 +146,7 @@
 								<div class="input-group">
 									<span class="input-group-addon"><i class="fa fa-users"></i></span>
 									<input type="number" id="spots" v-model="spots" class="form-control"
-										   name="spots" v-validate="{ required: true, min:0 }"/>
+										   name="spots" v-validate="'required|min:0'"/>
 								</div>
 								<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 									companions.
@@ -156,8 +156,8 @@
 						<div class="col-sm-6">
 							<div :class="{ 'has-error': errors.has('closed') }">
 								<label for="closed_at" class="control-label">Registration Closes</label>
-								<date-picker :has-error= "errors.has('closed')" :model.sync="closed_at|moment('YYYY-MM-DD HH:mm:ss')" ></date-picker>
-								<!--<date-picker class="form-control" :model.sync="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>-->
+								<date-picker :has-error= "errors.has('closed')" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')" ></date-picker>
+								<!--<date-picker class="form-control" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>-->
 								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" name="closed="'required'" id" v-validate="closed_at">
 							</div>
 						</div><!-- end col -->
@@ -168,8 +168,8 @@
 								Publish
 							</label>
 							<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
-							<date-picker :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>
-							<!--<date-picker class="form-control" :model.sync="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>-->
+							<date-picker :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>
+							<!--<date-picker class="form-control" :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>-->
 							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment('LLLL')" id="published_at" :disabled="toggleDraft">
 						</div>
 					</div>
@@ -338,15 +338,15 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', { params: {search: search} }).then(function (response) {
-					this.groups = response.body.data;
+				this.$http.get('groups', { params: {search: search} }).then((response) => {
+					this.groups = response.data.data;
 					loading(false);
 				});
 			},
 			getReps(search, loading){
 				loading(true);
-				this.$http.get('users', { params: {search: search} }).then(function (response) {
-					this.reps = response.body.data;
+				this.$http.get('users', { params: {search: search} }).then((response) => {
+					this.reps = response.data.data;
 					loading(false);
 				});
 			},
@@ -364,9 +364,9 @@
 				if (this.$TripCreateUpdate.valid) {
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {
-						resource.update({id: this.tripId}, this.wizardData).then(function (response) {
-							$.extend(this, response.body.data);
-							this.difficulty = response.body.data.difficulty.toLowerCase().replace(' ', '_');
+						resource.update({id: this.tripId}, this.wizardData).then((response) => {
+							$.extend(this, response.data.data);
+							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
 							this.$root.$emit('showSuccess', 'Trip Updated');
 						}, function (error) {
@@ -374,7 +374,7 @@
 							console.log(error);
 						});
 					} else {
-						resource.save(null, this.wizardData).then(function (resp) {
+						resource.post(null, this.wizardData).then((resp) => {
 							window.location.href = '/admin' + resp.data.data.links[0].uri;
 						}, function (error) {
 							console.log(error);
@@ -385,21 +385,21 @@
 		},
 		mounted(){
             // get some groups
-            let groupsPromise = this.$http.get('groups').then(function (response) {
-                this.groups = response.body.data;
+            let groupsPromise = this.$http.get('groups').then((response) => {
+                this.groups = response.data.data;
             });
 
 			// get team roles list
-			let teamRolesPromise = this.$http.get('utilities/team-roles').then(function (response) {
-			    _.each(response.body.roles, function (name, key) {
+			let teamRolesPromise = this.$http.get('utilities/team-roles').then((response) => {
+			    _.each(response.data.roles, function (name, key) {
 					this.teamRolesList.push({ value: key, name: name});
 				}.bind(this));
 			});
 
-			Promise.all([groupsPromise, teamRolesPromise]).then(function (values) {
+			Promise.all([groupsPromise, teamRolesPromise]).then((values) => {
                 if (this.isUpdate) {
-                    this.$http.get('trips/' + this.tripId, { params: {include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then(function (response) {
-                        let trip = response.body.data;
+                    this.$http.get('trips/' + this.tripId, { params: {include: 'campaign,costs.payments,requirements,notes,deadlines'} }).then((response) => {
+                        let trip = response.data.data;
                         // trim campaign
                         $.extend(this, trip);
                         this.campaign = trip.campaign.data;
@@ -417,20 +417,20 @@
                         });
 
                         this.trip = trip;
-                        this.$http.get('groups/' + this.trip.group_id).then(function (response) {
-                            this.groupObj = response.body.data;
+                        this.$http.get('groups/' + this.trip.group_id).then((response) => {
+                            this.groupObj = response.data.data;
                         });
 						// this.wizardData.campaign_id = this.trip.campaign_id;
                          //this.trip.country_code = trip.country_code[0];
 
-                        this.$http.get('users/' + this.trip.rep_id).then(function (response) {
-                            this.repObj = response.body.data;
+                        this.$http.get('users/' + this.trip.rep_id).then((response) => {
+                            this.repObj = response.data.data;
                         });
 
                     });
                 } else {
-                    this.$http.get('campaigns/' + this.campaignId).then(function (response) {
-                        this.campaign = response.body.data;
+                    this.$http.get('campaigns/' + this.campaignId).then((response) => {
+                        this.campaign = response.data.data;
                     });
                 }
             }.bind(this))

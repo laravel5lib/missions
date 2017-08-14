@@ -6,12 +6,12 @@
 
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
-                              :value.sync="causeObj" :options="causeOptions" label="name"
+                              :value="causeObj" :options="causeOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </mm-aside>
 
@@ -58,14 +58,14 @@
                                 <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
                             </div><!-- end col -->
                             <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ project.amount_raised|currency}}</p>
+                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ '$' + project.amount_raised.toFixed(2) }}</p>
                             <hr class="divider inv sm">
-                            <a class="btn btn-sm btn-primary" href="/dashboard/projects/{{ project.id }}">View Project</a>
+                            <a class="btn btn-sm btn-primary" :href="'/dashboard/projects/' + project.id ">View Project</a>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="getProjects"></pagination>
+                    <pagination :pagination="pagination" :callback="getProjects"></pagination>
                 </div>
             </template>
             </div>
@@ -77,6 +77,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import vSelect from "vue-select";
     export default{
         name: 'user-projects-list',
@@ -155,31 +156,31 @@
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();
-                this.$http.get('projects', { params: params }).then(function (response) {
-                    this.projects = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('projects', { params: params }).then((response) => {
+                    this.projects = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { params: { search: search} }).then(function (response) {
-                    this.groupOptions = response.body.data;
+                this.$http.get('groups', { params: { search: search} }).then((response) => {
+                    this.groupOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCauses(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('causes', { params: { search: search} }).then(function (response) {
-                    this.causeOptions = response.body.data;
+                this.$http.get('causes', { params: { search: search} }).then((response) => {
+                    this.causeOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
 
         },
         mounted(){
-            this.$http.get('users/' + this.userId + '?include=facilitating,managing.projects').then(function (response) {
-                let user = response.body.data;
+            this.$http.get('users/' + this.userId + '?include=facilitating,managing.projects').then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

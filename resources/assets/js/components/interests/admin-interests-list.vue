@@ -5,7 +5,7 @@
             <form class="col-sm-12">
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value.sync="groupObj" :options="groupsOptions" label="name"
+                              :value="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter Group"></v-select>
                 </div>
                 <div class="form-group">
@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group" v-if="!tripId">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value.sync="campaignObj" :options="campaignOptions" label="name"
+                              :value="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
 
@@ -190,7 +190,7 @@
                 </tr>
                 </thead>
                 <tbody v-if="interests.length > 0">
-                <tr v-for="interest in interests|filterBy search|orderBy orderByField direction">
+                <tr v-for="interest in orderByProp(interests, orderByField, direction)">
                     <td v-if="isActive('name')">{{interest.name ? interest.name[0].toUpperCase() + interest.name.slice(1) : ''}}</td>
                     <td v-if="isActive('email')">{{interest.email}}</td>
                     <td v-if="isActive('phone')">{{interest.phone}}</td>
@@ -222,7 +222,7 @@
                 <tr>
                     <td colspan="8">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination"
+                            <pagination :pagination="pagination"
                                         :callback="searchInterests"
                                         size="small">
                             </pagination>
@@ -333,22 +333,22 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('groups', { params: { search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                this.$http.get('groups', { params: { search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('campaigns', { params: { search: search} }).then(function (response) {
-                    this.campaignOptions = response.body.data;
+                this.$http.get('campaigns', { params: { search: search} }).then((response) => {
+                    this.campaignOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
             getTrips(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('trips', { params: { search: search} }).then(function (response) {
-                    this.tripOptions = response.body.data;
+                this.$http.get('trips', { params: { search: search} }).then((response) => {
+                    this.tripOptions = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -363,9 +363,9 @@
                 $.extend(params, this.filters);
 
                 // this.$refs.spinner.show();
-                this.$http.get('interests', { params: params }).then(function (response) {
-                    this.pagination = response.body.meta.pagination;
-                    this.interests = response.body.data;
+                this.$http.get('interests', { params: params }).then((response) => {
+                    this.pagination = response.data.meta.pagination;
+                    this.interests = response.data.data;
                     // this.$refs.spinner.hide();
                 })
             }

@@ -25,7 +25,7 @@
         props: ['transactionId'],
         methods: {
             delete(){
-                this.$http.delete('transactions/' + this.transactionId).then(function (response) {
+                this.$http.delete('transactions/' + this.transactionId).then((response) => {
                     this.$root.$emit('showSuccess', 'Transaction deleted.');
                     window.location.href = '/admin/transactions';
                 }, function (error) {

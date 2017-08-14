@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <h5 v-if="fund">
-                        <a :href="'/admin/funds/' + fund.id" v-if="firstUrlSegment == 'admin'">
+                        <a :href="'/admin/funds/' + fund.id" v-if="firstUrlSegment === 'admin'">
                             {{ fund.name }}
                         </a>
                         <span v-else>
@@ -53,9 +53,9 @@
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <template v-if="activeView === 'donor'">
                 <div class="list-group">
-                    <div class="list-group-item" role="tab" id="heading-{{ donor.id }}" v-for="donor in donors">
+                    <div class="list-group-item" role="tab" :id="'heading-' + donor.id" v-for="donor in donors">
                         <h5>
-                            {{ donor.name }} <span class="small">donated <span class="text-success">{{donor.total_donated|currency}}</span></span>
+                            {{ donor.name }} <span class="small">donated <span class="text-success">{{'$' + donor.total_donated.toFixed(2)}}</span></span>
                         </h5>
                     </div>
                 </div>
@@ -85,10 +85,10 @@
             <template v-if="activeView !== 'donor'">
                 <div class="list-group">
                     <div class="list-group-item text-center" v-if="pagination.total === 0">No transactions found.</div>
-                    <div class="list-group-item" role="tab" id="heading-{{ transaction.id }}" v-for="transaction in transactions">
+                    <div class="list-group-item" role="tab" :id="'heading' + transaction.id" v-for="transaction in transactions">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ transaction.amount|currency }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
+                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ '$' + transaction.amount.toFixed(2) }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
                                 <small v-if="contains(['donation'], transaction.type)" class="small">by
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
                                 <span v-else>an anonymous donor</span>
@@ -192,24 +192,24 @@
             },
             searchDonors(){
                 // this.$refs.spinner.show();
-                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then(function (response) {
-                    this.donors = _.toArray(response.body.data);
-                    this.donorPagination = response.body.meta.pagination;
+                this.$http.get('funds/'+ this.fundId +'/donors', { params: {page: this.donorPagination.current_page} }).then((response) => {
+                    this.donors = _.toArray(response.data.data);
+                    this.donorPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             },
             searchTransactions(type){
                 // this.$refs.spinner.show();
-                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then(function (response) {
-                    this.transactions = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('transactions', { params: {include: 'donor', fund: this.fundId, page: this.pagination.current_page, per_page: this.per_page} }).then((response) => {
+                    this.transactions = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
             }
         },
         mounted(){
-            this.$http.get('funds/' + this.fundId).then(function (response) {
-                this.fund = response.body.data;
+            this.$http.get('funds/' + this.fundId).then((response) => {
+                this.fund = response.data.data;
             });
 
 

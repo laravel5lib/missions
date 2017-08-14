@@ -11,9 +11,9 @@
         </thead>
         <tbody>
 
-        <tr v-for="payment in payments|orderBy 'due_at'">
-            <td>{{ payment.amount_owed|currency }}</td>
-            <td>{{ payment.percent_owed|number }}%</td>
+        <tr v-for="payment in orderByProp(payments, 'due_at')">
+            <td>{{ currency(payment.amount_owed) }}</td>
+            <td>{{ payment.percent_owed.tofixed(2) }}%</td>
             <td v-if="payment.due_at">{{ payment.due_at|moment('lll') }}</td>
             <td v-else>Upfront</td>
             <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
@@ -36,13 +36,13 @@
                             <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('amount') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                 <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(newPayment)" number v-model="newPayment.amount_owed"
-                                       name="amount="{required: true, min: 0}" @change" v-validate="modifyPercentOwed(newPayment)">
+                                       name="amount" @change="modifyPercentOwed(newPayment)" v-validate="'required|min:0'">
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('percent') }">
-                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed|number 2"
-                                       name="percent="{required: true, min: 0}" @change" v-validate="modifyAmountOwed(newPayment)">
+                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed.toFixed(2)"
+                                       name="percent" @change="modifyAmountOwed(newPayment)" v-validate="'required|min:0'">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="dueAt">Due</label><br />
-                                <date-picker :input-sm="true" :model.sync="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                <date-picker :input-sm="true" :model="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                 <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                 <label for="grace_period">Grace Period</label>
                                 <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('grace') }">
                                     <input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
-                                           name="grace" v-validate="{required: true, min:0}">
+                                           name="grace" v-validate="'required|min:0'">
                                     <span class="input-group-addon">Days</span>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="dueAt">Due</label><br />
-                                    <date-picker :input-sm="true" :model.sync="selectedPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                    <date-picker :input-sm="true" :model="selectedPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                     <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>
                                 </div>
                             </div>
@@ -126,7 +126,7 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="selectedPayment.grace_period"
-                                               name="grace" v-validate="{required: true, min:0}">
+                                               name="grace" v-validate="'required|min:0'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -317,7 +317,7 @@
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentAdd.valid) {
                     this.$root.$emit('SpinnerOn');
-                    this.resource.save({}, this.newPayment).then(function (response) {
+                    this.resource.post({}, this.newPayment).then((response) => {
                         this.payments.push(this.newPayment);
                         this.resetPayment();
                         this.showAddModal = false;
@@ -338,7 +338,7 @@
                         this.selectedPayment.due_at = null;
                     }
                     this.$root.$emit('SpinnerOn');
-                    this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then(function (response) {
+                    this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then((response) => {
                         this.resetPayment();
                         this.showEditModal = false;
                         this.attemptedAddPayment = false;
@@ -358,7 +358,7 @@
                 this.deletePaymentModal = true;
             },
             remove(payment){
-                this.resource.delete({payment_id: payment.id}).then(function (response) {
+                this.resource.delete({payment_id: payment.id}).then((response) => {
                     this.payments.$remove(payment);
                     this.selectedPayment = null;
                 });

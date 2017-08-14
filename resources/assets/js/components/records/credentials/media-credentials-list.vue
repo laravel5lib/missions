@@ -57,10 +57,10 @@
 			</div>
 		</div>
 		<div class="col-xs-12 text-center">
-			<pagination :pagination.sync="pagination" :callback="searchMedias"></pagination>
+			<pagination :pagination="pagination" :callback="searchMedias"></pagination>
 
 		</div>
-		<modal :show.sync="deleteModal" title="Remove Media Credential" small="true">
+		<modal :show="deleteModal" title="Remove Media Credential" small="true">
 			<div slot="modal-body" class="modal-body">Delete this Media Credential?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -162,15 +162,15 @@
 //                    params.manager = this.userId;
 //                params.include = '';
                 $.extend(params, this.filters);
-                this.$http.get('credentials/media', {params: params}).then(function (response) {
-                    this.media_credentials = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('credentials/media', {params: params}).then((response) => {
+                    this.media_credentials = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                     this.loaded = true;
                 });
             },
             removeMediaCredential(media_credential){
                 if (media_credential) {
-                    this.$http.delete('credentials/media/' + media_credential.id).then(function (response) {
+                    this.$http.delete('credentials/media/' + media_credential.id).then((response) => {
                         this.media_credentials.$remove(media_credential);
                         this.paginatedMedia_credentials.$remove(media_credential);
                         this.pagination.total_pages = Math.ceil(this.media_credentials.length / this.per_page);
@@ -182,8 +182,8 @@
 	        }
         },
         mounted(){
-            this.$http.get('users/' + this.userId).then(function (response) {
-                let user = response.body.data;
+            this.$http.get('users/' + this.userId).then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {

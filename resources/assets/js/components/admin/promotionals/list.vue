@@ -49,7 +49,7 @@
         <div class="panel-footer">
             <div class="row">
                 <div class="col-xs-12 text-center">
-                    <pagination :pagination.sync="pagination" :callback="fetch"></pagination>
+                    <pagination :pagination="pagination" :callback="fetch"></pagination>
                 </div>
             </div>
         </div>
@@ -96,9 +96,9 @@
                 return 'Active';
             },
             fetch() {
-                this.$http.get('promotionals', this.options).then(function (response) {
-                    this.promos = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('promotionals', this.options).then((response) => {
+                    this.promos = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 });

@@ -1,5 +1,5 @@
 <template xmlns:v-validate="http://www.w3.org/1999/xhtml">
-
+    <div>
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="panel panel-default">
@@ -11,12 +11,12 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    
+
                     <template v-if="forAdmin">
                         <div class="col-sm-12">
                             <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                 <label for="infoManager">Record Manager</label>
-                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value.sync="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
                                 <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
                                     <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
                                 </select>
@@ -28,7 +28,7 @@
                             <div v-error-handler="{ value: name, handle: 'name', messages: { req: 'Please enter the release holder\'s name.'} }">
                                 <label for="name" class="control-label">Name</label>
                                 <input type="text" class="form-control" name="name" id="name" v-model="name"
-                                       placeholder="Name" name="name" v-validate="{ required: true, minlength:1 }"
+                                       placeholder="Name" v-validate="'required|min:1'"
                                        minlength="1" required>
 
                             </div>
@@ -39,7 +39,7 @@
                             <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
                                 <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
-                                       placeholder="Insurance Provider" name="provider" v-validate="{ required: true, minlength:1, maxlength:100 }"
+                                       placeholder="Insurance Provider" v-validate="'required|min:1|max:100'"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                             <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
                                 <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
                                 <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
-                                       placeholder="Insurance Policy Number" name="policy" v-validate="{ required: true, minlength:1 }"
+                                       placeholder="Insurance Policy Number" v-validate="'required|min:1'"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <hr class="divider inv">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" v-model="noInsurance"> I do not have medical insurance 
+                                    <input type="checkbox" v-model="noInsurance"> I do not have medical insurance
                                 </label>
                                 <span class="help-block">
                                     Medical Insurance is not required for travel, but highly recommend.
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="list-group">
-                            <div class="list-group-item" v-for="condition in conditionsList|orderBy 'name'">
+                            <div class="list-group-item" v-for="condition in conditionsListOrdered">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" v-model="condition.selected"> {{condition.name}}
@@ -136,12 +136,12 @@
                             <div class="collapse" id="newCondition">
                                 <div class="list-group-item">
 
-                                        <form name="NewCondition">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" v-model="newCondition.name" required>
-                                            <hr class="divider inv sm">
-                                            <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
-                                        </form>
+                                    <form name="NewCondition">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="newCondition.name" required>
+                                        <hr class="divider inv sm">
+                                        <button class="btn btn-sm btn-success" type="button" @click="addCondition(newCondition)">Add Condition</button>
+                                    </form>
 
                                 </div>
                             </div>
@@ -161,7 +161,7 @@
                             </div>
                         </div>
                         <div class="list-group">
-                            <div class="list-group-item" v-for="allergy in allergiesList|orderBy 'name'">
+                            <div class="list-group-item" v-for="allergy in allergiesListOrdered">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" v-model="allergy.selected"> {{allergy.name}}
@@ -216,12 +216,12 @@
                             <div class="collapse" id="newAllergy">
                                 <div class="list-group-item">
 
-                                        <form name="newAllergy">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" v-model="newAllergy.name">
-                                            <hr class="divider inv sm">
-                                            <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
-                                        </form>
+                                    <form name="newAllergy">
+                                        <label>Name</label>
+                                        <input type="text" class="form-control" v-model="newAllergy.name">
+                                        <hr class="divider inv sm">
+                                        <button class="btn btn-sm btn-success" type="button" @click="addAllergy(newAllergy)">Add Allergy</button>
+                                    </form>
 
                                 </div>
                             </div>
@@ -268,22 +268,22 @@
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.name, handle: 'emergencyname' }">
                                     <label>Name</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           v-model="emergency_contact.name" 
-                                           name="emergencyname" v-validate="{ required: true, minlength:1 }"
-                                           minlength="1" 
+                                    <input type="text"
+                                           class="form-control"
+                                           v-model="emergency_contact.name"
+                                           name="emergencyname" v-validate="'required|min:1'"
+                                           minlength="1"
                                            required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
                                     <label>Email</label>
-                                    <input type="email" 
-                                           class="form-control" 
-                                           v-model="emergency_contact.email" 
-                                           name="emergencyemail" v-validate="{ required: true, minlength:1, email:true }"
-                                           minlength="1" 
+                                    <input type="email"
+                                           class="form-control"
+                                           v-model="emergency_contact.email"
+                                           name="emergencyemail" v-validate="'required|email'"
+                                           minlength="1"
                                            required>
                                 </div>
                             </div>
@@ -292,21 +292,22 @@
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.phone, handle: 'emergencyphone' }">
                                     <label>Phone</label>
-                                    <input type="tel" 
-                                           class="form-control" 
-                                           v-model="emergency_contact.phone|phone" 
-                                           name="emergencyphone" v-validate="{ required: true, minlength:1 }"
-                                           minlength="1" 
-                                           required>
+                                    <phone-input v-model="emergency_contact.phone" name="emergencyphone" validation="'required'"></phone-input>
+                                    <!--<input type="tel"
+                                           class="form-control"
+                                           v-model="emergency_contact.phone|phone"
+                                           name="emergencyphone" v-validate="'required|min:1'"
+                                           minlength="1"
+                                           required>-->
 
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.relationship, handle: 'emergencyrelationship' }">
                                     <label>Relationship</label>
-                                    <select type="tel" 
-                                            class="form-control" 
-                                            v-model="emergency_contact.relationship" 
+                                    <select
+                                            class="form-control"
+                                            v-model="emergency_contact.relationship"
                                             name="emergencyrelationship" v-validate="'required'"
                                             required>
                                         <option value="friend">Friend</option>
@@ -342,10 +343,10 @@
         <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
-
-
+    </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
@@ -420,6 +421,12 @@
             }
         },
         computed: {
+            conditionsListOrdered() {
+                return _.sortBy(this.conditionsList, 'name')
+            },
+            allergiesListOrdered() {
+                return _.sortBy(this.allergiesList, 'name')
+            },
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
@@ -433,8 +440,8 @@
         methods: {
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                this.$http.get('users', { params: { search: search} }).then(function (response) {
-                    this.usersArr = response.body.data;
+                this.$http.get('users', { params: { search: search} }).then((response) => {
+                    this.usersArr = response.data.data;
                     loading ? loading(false) : void 0;
                 })
             },
@@ -489,7 +496,7 @@
                 this.resetErrors();
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
-                    this.resource.save(null, {
+                    this.resource.post(null, {
                         name: this.name,
                         ins_provider: this.ins_provider,
                         ins_policy_no: this.ins_policy_no,
@@ -499,7 +506,7 @@
                         is_risk: this.is_risk,
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Medical Release created.');
                         let that = this;
                         setTimeout(function () {
@@ -530,7 +537,7 @@
                         is_risk: this.is_risk,
                         user_id: this.user_id,
                         upload_ids: _.uniq(this.upload_ids),
-                    }).then(function (resp) {
+                    }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
                         setTimeout(function () {
@@ -563,9 +570,9 @@
         },
         mounted(){
             if (this.isUpdate) {
-                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads,user'} }).then(function (response) {
-                    this.user_id = response.body.data.id;
-                    let medical_release = response.body.data;
+                this.$http.get('medical/releases/' + this.id, { params: { include: 'conditions,allergies,uploads,user'} }).then((response) => {
+                    this.user_id = response.data.data.id;
+                    let medical_release = response.data.data;
                     medical_release.uploads = medical_release.uploads.data;
                     this.upload_ids = _.pluck(medical_release.uploads, 'id');
                     this.uploadCounter = medical_release.uploads.length + 1;
@@ -573,10 +580,10 @@
                     this.usersArr.push(this.userObj);
                     $.extend(this, medical_release);
 
-                    this.$http.get('medical/conditions').then(function (response) {
+                    this.$http.get('medical/conditions').then((response) => {
                         // prepare conditions for UI
                         let med_conditions = medical_release.conditions.data;
-                        _.each(response.body.data, function (condition) {
+                        _.each(response.data.data, function (condition) {
                             let obj = { name: condition, medication: false, diagnosed: false, selected: false };
                             let match = _.find(med_conditions, function (c, i) {
                                 med_conditions[i].selected = true;
@@ -592,10 +599,10 @@
                         }.bind(this));
                         this.additionalConditionsList = med_conditions;
                     });
-                    this.$http.get('medical/allergies').then(function (response) {
+                    this.$http.get('medical/allergies').then((response) => {
                     // prepare conditions for UI
                     let med_allergies = medical_release.allergies.data;
-                    _.each(response.body.data, function (allergy) {
+                    _.each(response.data.data, function (allergy) {
                         let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
                         let match = _.find(med_allergies, function (a, i) {
                             med_allergies[i].selected = true;
@@ -613,13 +620,13 @@
                 });
                 });
             } else {
-                this.$http.get('medical/conditions').then(function (response) {
-                    _.each(response.body.data, function (condition) {
+                this.$http.get('medical/conditions').then((response) => {
+                    _.each(response.data.data, function (condition) {
                         this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
                     }.bind(this));
                 });
-                this.$http.get('medical/allergies').then(function (response) {
-                    _.each(response.body.data, function (allergy) {
+                this.$http.get('medical/allergies').then((response) => {
+                    _.each(response.data.data, function (allergy) {
                         this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
                     }.bind(this));
                 });

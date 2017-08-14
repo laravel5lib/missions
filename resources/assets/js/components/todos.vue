@@ -1,6 +1,6 @@
 <template>
 <div>
-    <alert :show.sync="showSuccess"
+    <alert :show="showSuccess"
            placement="top-right"
            :duration="3000"
            type="success"
@@ -11,7 +11,7 @@
         <p>{{ message }}</p>
     </alert>
 
-    <alert :show.sync="showError"
+    <alert :show="showError"
            placement="top-right"
            :duration="6000"
            type="danger"
@@ -201,7 +201,7 @@
             createTodo() {
                 if (! this.newTodo.task) return;
 
-                this.$http.post('todos', this.newTodo).then(function () {
+                this.$http.post('todos', this.newTodo).then(() => {
                     this.newTodo.task = null;
                     this.message = 'Todo created successfully.';
                     this.showSuccess = true;
@@ -215,7 +215,7 @@
                 if (! this.selectedTodo.task) return;
                 if (! this.editMode && ! this.completeMode) return;
 
-                this.$http.put('todos/' + this.selectedTodo.id, this.selectedTodo).then(function () {
+                this.$http.put('todos/' + this.selectedTodo.id, this.selectedTodo).then(() => {
                     this.editMode = false;
                     this.completeMode = false;
                     this.selectedTodo = {};
@@ -226,7 +226,7 @@
                 });
             },
             remove(todo) {
-                this.$http.delete('todos/' + todo.id).then(function () {
+                this.$http.delete('todos/' + todo.id).then(() => {
                     this.fetch();
                     this.selectedTodo = {};
                     this.message = 'Todo deleted.';
@@ -259,9 +259,9 @@
                     params = params + '|' + this.id;
                 }
 
-                this.$http.get('todos' + params).then(function (response) {
-                    this.todos = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.$http.get('todos' + params).then((response) => {
+                    this.todos = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             }
         },

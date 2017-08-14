@@ -35,7 +35,7 @@
 																<label for="grace_period">Grace Period</label>
 																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
-																		   name="grace" v-validate="{required: true, min:0}">
+																		   name="grace" v-validate="'required|min:0'">
 																	<span class="input-group-addon">Days</span>
 																</div>
 															</div>
@@ -43,7 +43,7 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
-																<date-picker :input-sm="true" :model.sync="newDeadline.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+																<date-picker :input-sm="true" :model="newDeadline.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 																<input type="datetime" id="due_at" class="form-control input-sm hidden"
 																	   v-model="newDeadline.due_at" name="due" v-validate="'required'">
 															</div>
@@ -84,10 +84,10 @@
 								</tr>
 								</thead>
 								<tbody>
-								<tr v-for="deadline in deadlines|orderBy 'due_at'">
+								<tr v-for="deadline in orderByProp(deadlines, 'due_at')">
 									<td>{{deadline.name}}</td>
 									<td>{{deadline.due_at|moment}}</td>
-									<td>{{deadline.grace_period}} {{deadline.grace_period|pluralize 'day'}}</td>
+									<td>{{deadline.grace_period}} {{pluralize(deadline.grace_period, 'day')}}</td>
 									<td>{{deadline.enforced}}</td>
 									<td>
 										<!--<a @click="editPayment(payment, cost)"><i class="fa fa-pencil"></i></a>-->

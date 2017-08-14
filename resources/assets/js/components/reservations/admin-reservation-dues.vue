@@ -46,7 +46,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedDues" :options="availableDues"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="dues" v-validate="'required'" multiple>
                                 <option :value="due.id" v-for="due in dues">{{due.name}}</option>
@@ -67,14 +67,14 @@
                                     <label for="grace_period">Grace Period</label>
                                     <div class="input-group input-group-sm" :class="{'has-error': checkForEditDueError('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDue.grace_period"
-                                               name="grace" v-validate="{required: { rule: true }}">
+                                               name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="due_date">Due Date</label>
                                     <!--<input id="due_date" type="datetime" class="form-control" v-model="editedDue.due_at">-->
-                                    <date-picker :model.sync="editedDue.due_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="editedDue.due_at"></date-picker>
+                                    <date-picker :model="editedDue.due_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="editedDue.due_at"></date-picker>
                                 </div>
                             </div>
                         </div>
@@ -170,7 +170,7 @@
                 this.resource.update({due_id: this.editedDue.id}, {
                     due_at: this.editedDue.due_at,
                     grace_period: this.editedDue.grace_period,
-                }).then(function (response) {
+                }).then((response) => {
                     this.showEditModal = false;
                     this.getDues();
                     this.editedDue = {
@@ -231,8 +231,8 @@
                 delete trip.rep_id;
 
                 // this.$refs.spinner.show();
-                this.$http.put('trips/' + trip.id, trip).then(function (response) {
-                    let thisTrip = response.body.data;
+                this.$http.put('trips/' + trip.id, trip).then((response) => {
+                    let thisTrip = response.data.data;
                     this.selecteddues = new Array(this.newDeadline);
                     // this.$refs.spinner.hide();
                     return this.adddues();
@@ -246,8 +246,8 @@
             },*/
             /*doUpdate(reservation){
                 // this.$refs.spinner.show();
-                return this.resource.update(reservation).then(function (response) {
-                    this.setReservationData(response.body.data);
+                return this.resource.update(reservation).then((response) => {
+                    this.setReservationData(response.data.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
                 });
@@ -274,9 +274,9 @@
 
             }*/
             getDues(){
-                this.resource.get({ page: this.pagination.current_page }).then(function (response) {
-                    this.dues = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                this.resource.get({ page: this.pagination.current_page }).then((response) => {
+                    this.dues = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             }
         },

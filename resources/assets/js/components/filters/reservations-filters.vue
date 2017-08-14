@@ -7,7 +7,7 @@
 					<div class="form-group">
 						<label>Travel Groups</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-						          :value.sync="groupsArr" :options="groupsOptions" label="name"
+						          :value="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
 				</template>
@@ -15,7 +15,7 @@
 					<div class="form-group">
 						<label>Groups</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-						          :value.sync="groupsArr" :options="groupsOptions" label="name"
+						          :value="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
 				</template>
@@ -24,7 +24,7 @@
 			<div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
 				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-				          :value.sync="campaignObj" :options="campaignOptions" label="name"
+				          :value="campaignObj" :options="campaignOptions" label="name"
 				          placeholder="Filter by Campaign"></v-select>
 			</div>
 
@@ -46,14 +46,14 @@
 				<div class="form-group" v-if="propertyExists('role')">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
-					          :value.sync="roleObj" :options="UTILITIES.roles" label="name"
+					          :value="roleObj" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute && (propertyExists('users') || propertyExists('user'))">
 					<label>Managing Users</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-					          :value.sync="usersArr" :options="usersOptions" label="name"
+					          :value="usersArr" :options="usersOptions" label="name"
 					          placeholder="Filter Users"></v-select>
 				</div>
 
@@ -185,7 +185,7 @@
 
 				<div class="form-group" v-if="!teams && !rooms && propertyExists('shirtSize')">
 					<label>Shirt Size</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value.sync="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value="shirtSizeArr" multiple
 					          :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -508,71 +508,71 @@
             },
             getGroups(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('groups', { params: {search: search} }).then(function (response) {
-                    this.groupsOptions = response.body.data;
+                let promise = this.$http.get('groups', { params: {search: search} }).then((response) => {
+                    this.groupsOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             getCampaigns(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('campaigns', { params: {search: search} }).then(function (response) {
-                    this.campaignOptions = response.body.data;
+                let promise = this.$http.get('campaigns', { params: {search: search} }).then((response) => {
+                    this.campaignOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             getUsers(search, loading){
                 loading ? loading(true) : void 0;
-                let promise = this.$http.get('users', { params: {search: search} }).then(function (response) {
-                    this.usersOptions = response.body.data;
+                let promise = this.$http.get('users', { params: {search: search} }).then((response) => {
+                    this.usersOptions = response.data.data;
                     if (loading) {
                         loading(false);
                     } else {
                         return promise;
                     }
-                }, this.$root.handleApiError);
+                }).catch(this.$root.handleApiError);
             },
             getTodos(){
                 return this.$http.get('todos', { params: {
                     'type': 'reservations',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.todoOptions = _.uniq(_.pluck(response.body.data, 'task'));
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.todoOptions = _.uniq(_.pluck(response.data.data, 'task'));
+                }).catch(this.$root.handleApiError);
             },
             getReps(){
                 return this.$http.get('users', { params: {
                     'rep': true,
                     'per_page': 100
-                }}).then(function (response) {
-                    this.repOptions = response.body.data;
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.repOptions = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
             getRequirements(){
                 return this.$http.get('requirements', { params: {
                     'type': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.requirementOptions = _.uniq(_.pluck(response.body.data, 'name'));
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.requirementOptions = _.uniq(_.pluck(response.data.data, 'name'));
+                }).catch(this.$root.handleApiError);
             },
             getCosts(){
                 return this.$http.get('costs', { params: {
                     'assignment': 'trips',
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.dueOptions = _.uniq(_.pluck(response.body.data, 'name'));
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
+                }).catch(this.$root.handleApiError);
             },
             getRegions(){
                 let campaign = this.campaignId || this.filters.campaign;
@@ -580,9 +580,9 @@
                     'campaign': campaign,
                     'per_page': 100,
                     'unique': true
-                }}).then(function (response) {
-                    this.regionOptions = response.body.data;
-                }, this.$root.handleApiError);
+                }}).then((response) => {
+                    this.regionOptions = response.data.data;
+                }).catch(this.$root.handleApiError);
             },
         },
 	    created(){
@@ -634,7 +634,7 @@
             if (this.campaignId || this.filters.campaign)
                 promises.push(this.getRegions());
 
-            Promise.all(promises).then(function () {
+            Promise.all(promises).then(() => {
                 if (!self.starter)
                     self.callback()
             });

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
-			<reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination.sync="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
+			<reservations-filters ref="filters" :filters="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
 		</mm-aside>
 
 		<div class="row">
@@ -143,7 +143,7 @@
                 </form>
             </div>
         </div>
-        <filters-indicator :filters.sync="filters" :requirement="requirement" :due="due"></filters-indicator>
+        <filters-indicator :filters="filters" :requirement="requirement" :due="due"></filters-indicator>
         <hr class="divider sm">
 		<div style="position:relative;">
 			<spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -233,7 +233,7 @@
 				</tr>
 				</thead>
 				<tbody v-if="reservations.length > 0">
-				<tr v-for="reservation in reservations|orderBy orderByField direction">
+				<tr v-for="reservation in orderByProp(reservations, orderByField, direction)">
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
 					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
@@ -241,9 +241,9 @@
 					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name ? reservation.trip.data.campaign.data.name[0].toUpperCase() + reservation.trip.data.campaign.data.name.slice(1) : ''"></td>
 					<td v-if="isActive('teams')">
 						<template v-if="reservation.squads.data.length">
-							<span v-for="squad in reservation.squads.data">
+							<span v-for="(squad, squadIndex) in reservation.squads.data">
 								<span v-if="squad.team_id">
-									<span v-if="$index!=0">, </span>{{squad.team.data.callsign}}
+									<span v-if="squadIndex != 0">, </span>{{squad.team.data.callsign}}
 								</span>
 							</span>
 						</template>
@@ -265,16 +265,16 @@
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
 							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
-								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-success">{{ complete(reservation).length }}</span></a>
+								<a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-success">{{ complete(reservation).length }}</span></a>
 							</popover>
 							<popover effect="fade" trigger="hover" placement="top" title="Needs Attention" :content="attention(reservation).join('<br>')">
-								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-info">{{ attention(reservation).length }}</span></a>
+								<a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-info">{{ attention(reservation).length }}</span></a>
 							</popover>
 							<popover effect="fade" trigger="hover" placement="top" title="Under Review" :content="reviewing(reservation).join('<br>')">
-								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-default">{{ reviewing(reservation).length }}</span></a>
+								<a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-default">{{ reviewing(reservation).length }}</span></a>
 							</popover>
 							<popover effect="fade" trigger="hover" placement="top" title="Incomplete" :content="getIncomplete(reservation).join('<br>')">
-								<a href="/admin/reservations/{{ reservation.id }}/requirements"><span class="label label-danger" v-text="getIncomplete(reservation).length"></span></a>
+								<a :href="'/admin/reservations/' +  reservation.id  + '/requirements'"><span class="label label-danger" v-text="getIncomplete(reservation).length"></span></a>
 							</popover>
 						</div>
 					</td>
@@ -292,7 +292,7 @@
 				<tfoot>
 				<tr>
 					<td colspan="10" class="text-center">
-						<pagination :pagination.sync="pagination"
+						<pagination :pagination="pagination"
 									:callback="searchReservations"
 									size="small">
 						</pagination>
@@ -650,10 +650,10 @@
                         this.lastReservationRequest.abort();
                     }
                     this.lastReservationRequest = xhr;
-                }}).then(function (response) {
-					this.reservations = response.body.data;
-					this.pagination = response.body.meta.pagination;
-				}).then(function () {
+                }}).then((response) => {
+					this.reservations = response.data.data;
+					this.pagination = response.data.meta.pagination;
+				}).then(() => {
 					this.updateConfig();
 				});
 			},
@@ -675,8 +675,8 @@
 					let arr = search.split('=');
 					switch (arr[0]) {
 						case 'campaign':
-							this.$http.get('campaigns/' + arr[1]).then(function (response) {
-								this.campaignObj = response.body.data;
+							this.$http.get('campaigns/' + arr[1]).then((response) => {
+								this.campaignObj = response.data.data;
 							});
 							// this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
 					}

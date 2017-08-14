@@ -137,9 +137,9 @@
                     id: this.id,
                     per_page: this.per_page,
                     page: this.page
-                }}).then(function (response) {
-                    this.donors = _.toArray(response.body.data);
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.donors = _.toArray(response.data.data);
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             searchDonations(){
@@ -148,9 +148,9 @@
                     include: 'donor',
                     per_page: this.per_page,
                     page: this.page
-                }}).then(function (response) {
-                    this.donations = _.toArray(response.body.data);
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.donations = _.toArray(response.data.data);
+                    this.pagination = response.data.meta.pagination;
                 });
             }
         },

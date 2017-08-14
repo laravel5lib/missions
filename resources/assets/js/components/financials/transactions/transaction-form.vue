@@ -12,7 +12,7 @@
                     <div class="col-xs-12">
                         <label>Designated Fund</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
-                                  :value.sync="designatedFund" :options="funds" label="name"
+                                  :value="designatedFund" :options="funds" label="name"
                                   placeholder="Select a fund" v-if="!editing"></v-select>
                         <p v-else>{{ designatedFund.name }}</p>
                     </div>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="col-xs-8">
                         <v-select @keydown.enter.prevent=""  class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
-                                  :value.sync="selectedFund" :options="funds" label="name"
+                                  :value="selectedFund" :options="funds" label="name"
                                   placeholder="Select a fund"></v-select>
                         <span class="help-block small" v-show="selectedFund">
                             <a href="#" @click="fundInfoMode"><i class="fa fa-question-circle"></i> View Fund Details</a>
@@ -66,7 +66,7 @@
                         <div class="col-xs-6">
                             <label>Donor</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="selectedFund" :debounce="250" :on-search="getDonors"
-                                      :value.sync="selectedDonor" :options="donors" label="name"
+                                      :value="selectedDonor" :options="donors" label="name"
                                       placeholder="Select a donor"></v-select>
                             <span class="help-block small">
                                 <a href="#" v-show="selectedDonor" @click="donorInfoMode"><i class="fa fa-info-circle"></i> View Donor Details</a>
@@ -326,19 +326,19 @@
                 $('#fundInfo').modal('toggle')
             },
             getFunds(search) {
-                this.$http.get('funds?per_page=10', { params: {search: search} }).then(function (response) {
-                    this.funds = response.body.data;
+                this.$http.get('funds?per_page=10', { params: {search: search} }).then((response) => {
+                    this.funds = response.data.data;
                 });
             },
             getDonors(search) {
-                this.$http.get('donors?per_page=10', { params: {search: search} }).then(function (response) {
-                    this.donors = response.body.data;
+                this.$http.get('donors?per_page=10', { params: {search: search} }).then((response) => {
+                    this.donors = response.data.data;
                 });
             },
             donorCreated(donor) {
                 $('#newDonor').modal('hide');
-                this.$http.get('donors/' + donor).then(function (response) {
-                    this.selectedDonor = response.body.data;
+                this.$http.get('donors/' + donor).then((response) => {
+                    this.selectedDonor = response.data.data;
                 });
             },
             reset() {
@@ -371,9 +371,9 @@
             fetch() {
                 this.$refs.transactionspinner.show();
 
-                this.$http.get('transactions/' + this.id, { params: {include: 'donor,fund'} }).then(function (response) {
+                this.$http.get('transactions/' + this.id, { params: {include: 'donor,fund'} }).then((response) => {
                     this.$refs.transactionspinner.hide();
-                    this.transaction = response.body.data;
+                    this.transaction = response.data.data;
                     this.designatedFund = this.transaction.fund.data;
 
                     if (this.transaction.type == 'transfer') {
@@ -401,7 +401,7 @@
 
                 var data = this.prepareData();
 
-                this.$http.post('transactions', data).then(function (response) {
+                this.$http.post('transactions', data).then((response) => {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
                     this.$dispatch('transactionCreated');
@@ -416,7 +416,7 @@
 
                 var data = this.prepareData();
 
-                this.$http.put('transactions/' + this.id, data).then(function (response) {
+                this.$http.put('transactions/' + this.id, data).then((response) => {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction updated successfully.');
                     this.reset();

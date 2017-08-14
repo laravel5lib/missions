@@ -36,7 +36,7 @@
 														<label for="cost_description">Description</label>
 														<textarea class="form-control input-sm" id="cost_description"
 																  v-model="newCost.description"
-																  name="costDescription" v-validate="{required: true, minlength:1}"></textarea>
+																  name="costDescription" v-validate="'required|min:1'"></textarea>
 													</div>
 													<div class="form-group"
 														 :class="{'has-error': errors.hasCost('costType')}">
@@ -55,7 +55,7 @@
 															<div class="form-group"
 																 :class="{'has-error': errors.hasCost('costActive')}">
 																<label for="newCost_active_at">Active</label>
-																<date-picker :input-sm="true" :model.sync="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+																<date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 																<input type="datetime" id="newCost_active_at"
 																	   class="form-control input-sm hidden"
 																	   v-model="newCost.active_at"
@@ -119,9 +119,9 @@
 									</tr>
 									</thead>
 									<tbody>
-									<tr v-for="payment in cost.payments|orderBy 'due_at'">
+									<tr v-for="payment in cost.orderByProp(payments, 'due_at')">
 										<td>{{payment.amount_owed|currency}}</td>
-										<td>{{payment.percent_owed|number 2}}%</td>
+										<td>{{payment.percent_owed.toFixed(2)}}%</td>
 										<td>
 											<span v-if="payment.upfront">Upfront</span>
 											<span v-else>
@@ -133,7 +133,7 @@
 										<td>
 											<span v-if="payment.upfront">N/A</span>
 											<span v-else>
-												{{payment.grace_period}} {{payment.amount_owed|pluralize 'day'}}
+												{{payment.grace_period}} {{pluralize(payment.amount_owed, 'day')}}
 											</span>
 										</td>
 										<td>
@@ -176,7 +176,7 @@
 															 :class="{'has-error': errors.hasPayment('percent') }">
 															<input id="percentOwed" class="form-control" type="number"
 																   number :max="calculateMaxPercent(cost)"
-																   v-model="newPayment.percent_owed|number 2"
+																   v-model="newPayment.percent_owed.toFixed(2)"
 																   name="percent" v-validate="{required: true, min: 0.01}"
 																   debounce="100">
 															<span class="input-group-addon"><i
@@ -195,7 +195,7 @@
 													<div class="col-sm-6">
 														<div class="form-group">
 															<label for="dueAt">Due</label>
-															<date-picker :input-sm="true" :model.sync="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+															<date-picker :input-sm="true" :model="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 															<input id="dueAt" class="form-control input-sm hidden" type="datetime"
 																   v-model="newPayment.due_at" required>
 														</div>
@@ -209,7 +209,7 @@
 																<input id="grace_period" type="number"
 																	   class="form-control" number
 																	   v-model="newPayment.grace_period"
-																	   name="grace" v-validate="{required: true, min:0}">
+																	   name="grace" v-validate="'required|min:0'">
 																<span class="input-group-addon">Days</span>
 															</div>
 														</div>

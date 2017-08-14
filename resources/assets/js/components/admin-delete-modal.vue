@@ -54,7 +54,7 @@
         },
         methods: {
             destroy(){
-                this.$http.delete(this.resource + 's/' + this.id).then(function (response) {
+                this.$http.delete(this.resource + 's/' + this.id).then((response) => {
                     if (this.redirect) {
                         window.location.href = this.redirect;
                     } else {

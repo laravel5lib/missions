@@ -64,7 +64,7 @@
                                 {{ cost.description }}
                                 <hr class="divider">
                             </p>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value.sync="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
@@ -83,7 +83,7 @@
             </div>
         </modal>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>{{successMessage}}</p>
@@ -244,8 +244,8 @@
                 let res = {};
                 res.costs = costIds
 
-                return this.resource.update(res).then(function (response) {
-                    this.setReservationData(response.body.data);
+                return this.resource.update(res).then((response) => {
+                    this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];
                     this.successMessage = 'Costs updated Successfully';
@@ -283,15 +283,15 @@
             },
             revert(){
                 this.temporaryCosts = [];
-                this.resource.get().then(function (response) {
-                    this.setReservationData(response.body.data);
+                this.resource.get().then((response) => {
+                    this.setReservationData(response.data.data);
                 });
             },
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then(function (response) {
-                this.setReservationData(response.body.data);
+            this.resource.get().then((response) => {
+                this.setReservationData(response.data.data);
                 // this.$refs.spinner.hide();
             });
         }

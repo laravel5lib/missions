@@ -37,8 +37,8 @@
                 return '/' + fundraiser.sponsor.data.url + '/' + fundraiser.url;
             },
             fetch() {
-                this.$http.get('fundraisers/', { params: { fund: this.fundId, include: 'sponsor' } }).then(function (response) {
-                    this.fundraisers = response.body.data;
+                this.$http.get('fundraisers/', { params: { fund: this.fundId, include: 'sponsor' } }).then((response) => {
+                    this.fundraisers = response.data.data;
                 }, function (error) {
                     this.$root.$emit('showError', 'Unable to retreive fundraisers.');
                 });

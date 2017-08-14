@@ -88,7 +88,7 @@
 						</div><!-- end col -->
 						<div class="col-sm-6">
 							<label>Save Payment Method</label>
-							<p>{{paymentInfo.save ? 'Yes' : 'No'}}</p>
+							<p>{{paymentInfo.post ? 'Yes' : 'No'}}</p>
 						</div><!-- end col -->
 					</div><!-- end row -->
 					</div>

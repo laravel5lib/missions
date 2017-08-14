@@ -110,23 +110,23 @@
                 }
             },
             getAbilities() {
-                this.$http.get('permissions/abilities').then(function (response) {
-                    this.availableAbilities = response.body.data;
+                this.$http.get('permissions/abilities').then((response) => {
+                    this.availableAbilities = response.data.data;
                 });
             },
             fetch() {
-                this.$http.get('permissions/roles').then(function (response) {
-                    this.availableRoles = response.body.data;
+                this.$http.get('permissions/roles').then((response) => {
+                    this.availableRoles = response.data.data;
                 });
-                this.$http.get('users/' + this.user_id + '?include=roles.abilities,abilities').then(function (response) {
-                    this.selectedRoles = response.body.data.roles.data;
-                    this.selectedAbilities = response.body.data.abilities.data;
+                this.$http.get('users/' + this.user_id + '?include=roles.abilities,abilities').then((response) => {
+                    this.selectedRoles = response.data.data.roles.data;
+                    this.selectedAbilities = response.data.data.abilities.data;
                 });
             },
             assign(role) {
                 this.$http.post('users/' + this.user_id + '/roles', {
                     name: role.name
-                }).then(function (response) {
+                }).then((response) => {
                     this.selectedRoles.push(role);
                     this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
@@ -134,7 +134,7 @@
             revoke(role) {
                 this.$http.delete('users/' + this.user_id + '/roles', {
                     name: role.name
-                }).then(function (response) {
+                }).then((response) => {
                     //this.selectedRoles.$remove(role);
                     var index = this.selectedRoles.indexOf(_.findWhere(this.selectedRoles, {id: role.id}));
                     if (index !== -1) {
@@ -147,7 +147,7 @@
                 this.$http.post('users/' + this.user_id + '/abilities', {
                     name: ability.name,
                     entity_type: ability.entity_type
-                }).then(function (response) {
+                }).then((response) => {
                     this.selectedAbilities.push(ability);
                     this.$root.$emit('showSuccess', 'User permissions updated.')
                 });
@@ -156,7 +156,7 @@
                 this.$http.delete('users/' + this.user_id + '/abilities', {
                     name: ability.name,
                     entity_type: ability.entity_type
-                }).then(function (response) {
+                }).then((response) => {
                     //this.selectedAbilities.$remove(ability);
                     var index = this.selectedAbilities.indexOf(_.findWhere(this.selectedAbilities, {id: ability.id}));
                     if (index !== -1) {

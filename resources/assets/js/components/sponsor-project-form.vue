@@ -11,7 +11,7 @@
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('country') }">
 						<label for="country">Select a location</label>
-						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value.sync="countryCodeObj" :options="countries"
+						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
 						<select name="country" id="country" class="form-control" v-model="country_code"
 								v-validate="'required'">
@@ -183,8 +183,8 @@
 			getCauses() {
 				this.causeResource
 						.get(null)
-						.then(function (response) {
-							this.causes = response.body.data;
+						.then((response) => {
+							this.causes = response.data.data;
 						}, function (error) {
 							console.log(error);
 						});
@@ -192,8 +192,8 @@
 			getInitiatives() {
 				this.intiativeResource
 						.get({causeId: this.causeIdentifier, current: true})
-						.then(function (response) {
-							this.initiatives = response.body.data;
+						.then((response) => {
+							this.initiatives = response.data.data;
 						}, function (error) {
 							console.log(error);
 						});
@@ -227,7 +227,7 @@
                     };
 
 					this.$http.post('sponsor-project', data)
-							.then(function (response) {
+							.then((response) => {
 								console.log(response);
 								this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
 								this.reset();
@@ -242,8 +242,8 @@
 		    this.causeIdentifier = this.causeId;
 		    this.initiativeIdentifier = this.initiativeId;
 			// Get Countries
-			this.$http.get('utilities/countries').then(function (response) {
-				this.countries = response.body.countries;
+			this.$http.get('utilities/countries').then((response) => {
+				this.countries = response.data.countries;
 			}, function (error) {
 				console.log(error);
 			});

@@ -19,8 +19,8 @@ export default {
             $.extend(params, this.filters);
             $.extend(params, {search: this.search});
             console.log(report);
-            this.$http.post('reports/' + report + '/rooms', params).then(function (response) {
-                this.$root.$emit('showSuccess', response.body.message);
+            this.$http.post('reports/' + report + '/rooms', params).then((response) => {
+                this.$root.$emit('showSuccess', response.data.message);
                 this.report = '';
             }, function (error) {
                 this.$root.$emit('showError', 'Unable to create the report.');

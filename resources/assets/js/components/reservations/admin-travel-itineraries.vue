@@ -151,23 +151,23 @@
         },
         methods: {
             getItineraries(){
-                this.$http.get('itineraries', {params: {include: '',}}).then(function (response) {
-                    this.itineraries = response.body.data;
+                this.$http.get('itineraries', {params: {include: '',}}).then((response) => {
+                    this.itineraries = response.data.data;
                 });
             },
             deleteItinerary(itinerary){
-                this.$http.delete('itineraries/travel', itinerary).then(function (response) {
-                    //this.itineraries.push(response.body.data);
+                this.$http.delete('itineraries/travel', itinerary).then((response) => {
+                    //this.itineraries.push(response.data.data);
                 });
             },
             saveItinerary(itinerary){
-                this.$http.post('itineraries/travel', itinerary).then(function (response) {
-                    this.itineraries.push(response.body.data);
+                this.$http.post('itineraries/travel', itinerary).then((response) => {
+                    this.itineraries.push(response.data.data);
                 });
             },
             updateItinerary(itinerary){
-                this.$http.put('itineraries/travel/' + itinerary.id, itinerary).then(function (response) {
-                    return itinerary = response.body.data;
+                this.$http.put('itineraries/travel/' + itinerary.id, itinerary).then((response) => {
+                    return itinerary = response.data.data;
                 });
             },
             newItinerary(){
@@ -177,7 +177,7 @@
         mounted(){
 //            this.getItineraries();
 
-//            this.saveItinerary();
+//            this.postItinerary();
         }
     }
 </script>

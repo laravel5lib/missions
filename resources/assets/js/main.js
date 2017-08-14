@@ -17,74 +17,74 @@ import actionTrigger from './components/action-trigger.vue';
 import actionDropdownSelect from './components/action-dropdown-select.vue';
 import actionSelect from './components/action-select.vue';
 import listenText from './components/listen-text.vue';
-import donate from './components/donate.vue';
-import modalDonate from './components/modal-donate.vue';
+// import donate from './components/donate.vue';
+// import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import groups from './components/groups/groups.vue';
-import fundraisers from './components/fundraisers/fundraisers.vue';
-import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
-import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
-import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
-import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
-import campaignGroups from './components/campaigns/campaign-groups.vue';
-import groupTrips from './components/campaigns/group-trips.vue';
-import groupProfileTrips from './components/groups/group-profile-trips.vue';
-import groupProfileStories from './components/groups/group-profile-stories.vue';
-import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
-import groupInterestSignup from './components/groups/group-interest-signup.vue';
-import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
-import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
-import userProjectsList from './components/projects/user-projects-list.vue';
-import reservationsList from './components/reservations/reservations-list.vue';
-import restoreReservation from './components/reservations/restore-reservation.vue';
-import transferReservation from './components/reservations/transfer-reservation.vue';
-import donationsList from './components/reservations/donations-list.vue';
-import recordsList from './components/records/records-list.vue';
-import groupsList from './components/groups/groups-list.vue';
-import visasList from './components/records/visas/visas-list.vue';
-import medicalsList from './components/records/medicals/medicals-list.vue';
-import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
-import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
-import passportsList from './components/records/passports/passports-list.vue';
-import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
-import essaysList from './components/records/essays/essays-list.vue';
-import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
-import referralsList from './components/records/referrals/referrals-list.vue';
-import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
-import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
-import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
-import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
-import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
-import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
-import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
-import reservationAvatar from './components/reservations/reservation-avatar.vue';
-import reservationCosts from './components/reservations/reservation-costs.vue';
-import reservationDues from './components/reservations/reservation-dues.vue';
-import funding from './components/funding.vue';
-// import userSettings from './components/users/user-settings.vue';
+// import fundraisers from './components/fundraisers/fundraisers.vue';
+// import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
+// import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
+// import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
+// import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
+// import campaignGroups from './components/campaigns/campaign-groups.vue';
+// import groupTrips from './components/campaigns/group-trips.vue';
+// import groupProfileTrips from './components/groups/group-profile-trips.vue';
+// import groupProfileStories from './components/groups/group-profile-stories.vue';
+// import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+// import groupInterestSignup from './components/groups/group-interest-signup.vue';
+// import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
+// import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+// import userProjectsList from './components/projects/user-projects-list.vue';
+// import reservationsList from './components/reservations/reservations-list.vue';
+// import restoreReservation from './components/reservations/restore-reservation.vue';
+// import transferReservation from './components/reservations/transfer-reservation.vue';
+// import donationsList from './components/reservations/donations-list.vue';
+// import recordsList from './components/records/records-list.vue';
+// import groupsList from './components/groups/groups-list.vue';
+// import visasList from './components/records/visas/visas-list.vue';
+// import medicalsList from './components/records/medicals/medicals-list.vue';
+// import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
+// import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
+// import passportsList from './components/records/passports/passports-list.vue';
+// import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
+// import essaysList from './components/records/essays/essays-list.vue';
+// import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
+// import referralsList from './components/records/referrals/referrals-list.vue';
+// import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
+// import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
+// import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
+// import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
+// import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
+// import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
+// import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
+// import reservationAvatar from './components/reservations/reservation-avatar.vue';
+// import reservationCosts from './components/reservations/reservation-costs.vue';
+// import reservationDues from './components/reservations/reservation-dues.vue';
+// import funding from './components/funding.vue';
+import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
 import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
 import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
-import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
-import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
-import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
-import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
-import notes from './components/notes.vue';
-import todos from './components/todos.vue';
-import userPermissions from './components/users/user-permissions.vue';
-import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-import reservationRequirements from './components/reservations/reservation-requirements.vue';
-import referralResponse from './components/referrals/referral-response.vue';
-import sendEmail from './components/send-email.vue';
-import reportsList from './components/reports/reports-list.vue';
-import teamManager from './components/teams/team-manager.vue';
-import roomingWizard from './components/rooms/rooming-wizard.vue';
-import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
-import teamTypeManager from './components/teams/team-type-manager.vue';
-import regionsManager from './components/regions/regions-manager.vue';
+// import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+// import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
+// import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
+// import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
+// import notes from './components/notes.vue';
+// import todos from './components/todos.vue';
+// import userPermissions from './components/users/user-permissions.vue';
+// import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+// import reservationRequirements from './components/reservations/reservation-requirements.vue';
+// import referralResponse from './components/referrals/referral-response.vue';
+// import sendEmail from './components/send-email.vue';
+// import reportsList from './components/reports/reports-list.vue';
+// import teamManager from './components/teams/team-manager.vue';
+// import roomingWizard from './components/rooms/rooming-wizard.vue';
+// import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
+// import teamTypeManager from './components/teams/team-type-manager.vue';
+// import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
 // import campaignCreate from './components/campaigns/admin-campaign-create.vue';
@@ -257,7 +257,7 @@ Vue.component('bootstrap-alert-error', {
 // Vue Cookie
 Vue.use(require('vue-cookie'));
 // Vue Resource
-Vue.use(require('vue-resource'));
+// Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vee-validate'));
 // Vue Textarea Autosize
@@ -265,8 +265,13 @@ Vue.use(require('vue-autosize'));
 // Vue Truncate
 Vue.use(require('vue-truncate'));
 
-Vue.http.options.root = '/api';
-Vue.http.interceptors.push(function(request, next) {
+import axios from 'axios';
+axios.defaults.baseURL = '/api';
+Vue.prototype.$http = axios;
+
+// debugger;
+// Vue.http.options.root = '/api';
+/*Vue.http.interceptors.push(function(request, next) {
 
     request.headers.set('X-CSRF-TOKEN', Laravel.csrfToken);
 
@@ -327,19 +332,12 @@ Vue.http.interceptors.push(function(request, next) {
         // }
 
     });
-});
+});*/
 
-Vue.filter('phone', {
-    read: function (phone) {
-        phone = phone || '';
-        return phone.replace(/[^0-9]/g, '')
-            .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-    },
-    write: function (phone, phoneVal) {
-        phone = phone || '';
-        return phone.replace(/[^0-9]/g, '')
-            .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-    }
+Vue.filter('phone', (phone) => {
+    phone = phone || '';
+    return phone.replace(/[^0-9]/g, '')
+        .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
 });
 Vue.component('phone-input', {
     template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder" v-validate="validation"></div>',
@@ -416,6 +414,24 @@ Vue.filter('percentage', {
 // Model/Server -> UTC | Vue Model/Controller -> UTC | View/Template -> Local
 // This filter should convert date assigned property from UTC to local when being displayed -> read()
 // This filter should convert date assigned property from Local to UTC when being changed via input -> writer5
+Vue.filter('moment', (val, format, diff = false, noLocal = false) => {
+    if (!val) return val;
+
+    if (noLocal) {
+        return moment(val).format(format || 'LL'); // do not convert to local
+    }
+
+    // console.log('before: ', val);
+    let date = moment.utc(val, 'YYYY-MM-DD HH:mm:ss').local().format(format || 'LL');
+
+    if (diff) {
+        date = moment.utc(val).local().fromNow();
+    }
+    // console.log('after: ', date);
+
+    return date;
+});
+/*
 Vue.filter('moment', {
     read: function (val, format, diff = false, noLocal = false) {
 
@@ -452,6 +468,7 @@ Vue.filter('moment', {
         return moment(val, 'YYYY-MM-DD HH:mm:ss').local().utc().format(format);
     }
 });
+*/
 
 Vue.filter('mDateToDatetime', {
     read: function (value) {
@@ -462,31 +479,16 @@ Vue.filter('mDateToDatetime', {
     }
 });
 
-Vue.filter('mUTC', {
-    read: function (value) {
-        return moment.utc(value);
-    },
-    write: function (value, oldVal) {
-        return moment.utc(value);
-    }
+Vue.filter('mUTC', (value) => {
+    return moment.utc(value);
 });
 
-Vue.filter('mLocal', {
-    read: function (value) {
-        return moment.isMoment(value) ? value.local() : null;
-    },
-    write: function (value, oldVal) {
-        return moment.isMoment(value) ? value.local() : null;
-    }
+Vue.filter('mLocal', (value) => {
+    return moment.isMoment(value) ? value.local() : null;
 });
 
-Vue.filter('mFormat', {
-    read: function (value, format) {
-        return moment(value).format(format);
-    },
-    write: function (value, oldVal) {
-        return value;
-    }
+Vue.filter('mFormat', (value, format) => {
+    return moment(value).format(format);
 });
 
 Vue.filter('underscoreToSpace', function (value) {
@@ -587,168 +589,55 @@ Vue.directive('error-handler', {
     // The `messages` property allows you to customize the error message the user sees based on validators
     // i.e (`req` - required, `min` - minlength, `max` - maxlength, `email` - custom email validator)
 
-    // When server-side validation errors are returned to the `this.errors` object, this hand;e references the property
+    // When server-side validation errors are returned to the `this.errors` object, this handle references the property
     // for the field
-    deep: true,
-    bind: function () {
-        this.vm.$on('attemptSubmit', function (val) {
+    // deep: true,
+    inserted(el, binding, vnode) {
+        el.dataset.messages = JSON.stringify([]);
+
+        vnode.context.$watch('errors', function (val) {
+            let storedValue = JSON.parse(el.dataset.storage);
             // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
             // the directive we want to watch it using the error-handler mixin
-            this.handleClass(this.storage);
-        }.bind(this));
+            vnode.context.handleValidationClass(el, vnode.context, storedValue);
+            vnode.context.handleValidationMessages(el, vnode.context, storedValue, val);
+        }, { deep: true });
 
-        this.vm.$on('errors', function (val) {
-            // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
-            // the directive we want to watch it using the error-handler mixin
-            this.handleClass(this.storage);
-            this.handleMessages(this.storage, val);
-        }.bind(this));
 
-        this.handleClass = function (value) {
-            // $nextTick is necessary for the component values to update first
-            if (this.vm) {
-                this.vm.$nextTick(function () {
-                    // debugger;
-                    let classTest = this.vm.checkForError(value.client) || this.vm.errors[value.server];
-                    if (classTest) {
-                        $(this.el).addClass(value.class || 'has-error');
-                    } else {
-                        $(this.el).removeClass(value.class || 'has-error');
-                    }
-                }.bind(this));
-            }
-        };
-
-        this.messages = [];
-        this.handleMessages = function (value, errors) {
-            // $nextTick is necessary for the component values to update first
-            if (this.vm && this.vm.attemptSubmit) {
-                this.vm.$nextTick(function () {
-                    //if (errors[value.server] || this.vm['$' + this.vm.validatorHandle][this.storage.client].invalid && this.vm.attemptSubmit) {
-                        // Lets first package errors to simply iterate
-                        let newMessages = [];
-                    if (errors[value.server])
-                        _.each(errors[value.server], function(error, index) {
-                            newMessages.push("<div class='help-block server-validation-error'>" + error + "</div>");
-                        });
-
-                    let genericMessage = this.vm.MESSAGES.DEFAULT;
-                    let validationObject = this.vm['$' + this.vm.validatorHandle][this.storage.client];
-                    if (_.isObject(validationObject)) {
-                        if (validationObject.required) {
-                            // Grab message from storage if it exists or use generic default
-                            // The manually set messages must be an object
-                            let reqMessage;
-                            if (this.storage.messages && this.storage.messages.req) {
-                                reqMessage = this.storage.messages.req;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                reqMessage = _.isObject(genericMessage) ? genericMessage.req : genericMessage;
-                            }
-
-                            newMessages.push("<div class='help-block server-validation-error'>" + reqMessage + "</div>");
-                        }
-
-                        if (validationObject.minlength) {
-                            // Grab message from storage if it exists or use generic default
-                            let minMessage;
-                            if (this.storage.messages && this.storage.messages.min) {
-                                minMessage = this.storage.messages.min;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                minMessage = _.isObject(genericMessage) ? genericMessage.min : genericMessage;
-                            }
-                            if (minMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + minMessage + "</div>");
-                        }
-
-                        if (validationObject.maxlength) {
-                            // Grab message from storage if it exists or use generic default
-                            let maxMessage;
-                            if (this.storage.messages && this.storage.messages.max) {
-                                maxMessage = this.storage.messages.max;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                maxMessage = _.isObject(genericMessage) ? genericMessage.max : genericMessage;
-                            }
-                            if (maxMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + maxMessage + "</div>");
-                        }
-                        // custom email validator
-                        if (validationObject.email) {
-                            // Grab message from storage if it exists or use generic default
-                            let emailMessage;
-                            if (this.storage.messages && this.storage.messages.email) {
-                                emailMessage = this.storage.messages.email;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                emailMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
-                            }
-                            if (emailMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
-                        }
-                        // custom datetime validator
-                        if (validationObject.datetime) {
-                            // Grab message from storage if it exists or use generic default
-                            let datetimeMessage;
-                            if (this.storage.messages && this.storage.messages.datetime) {
-                                datetimeMessage = this.storage.messages.datetime;
-                            } else {
-                                genericMessage = this.vm.MESSAGES[this.storage.client] || genericMessage;
-                                datetimeMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
-                            }
-                            if (datetimeMessage !== genericMessage)
-                                newMessages.push("<div class='help-block server-validation-error'>" + datetimeMessage + "</div>");
-                        }
-                    }
-                    //console.log(newMessages);
-
-                    this.messages = newMessages;
-
-                    // We want to keep track of listed errors and specify their location when displayed
-                    // Search for an '.errors-block' element as child to display messages in
-                    // If it does not exist we will place the error message after the input element
-
-                    let errorsBlock = this.el.getElementsByClassName('errors-block')[0] || false;
-                    if (errorsBlock) {
-                        $(errorsBlock).find('.server-validation-error').remove();
-                        if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
-                            $(errorsBlock).append(this.messages);
-                    } else {
-                        let inputGroup = $(this.el).hasClass('input-group') ? this.el : this.el.getElementsByClassName('input-group')[0];
-                        let inputEl = $(this.el).find('.form-control:not(.v-select *)');
-                        if (inputGroup) {
-                            $(this.el).parent().find('.server-validation-error').remove();
-                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
-                                $(inputGroup).after(this.messages);
-                        } else {
-                            $(this.el).find('.server-validation-error').remove();
-                            if (errors[value.server] || this.storage.client && this.vm.checkForError(this.storage.client))
-                                inputEl.after(this.messages);
-                        }
-                    }
-                    //}
-                }.bind(this));
-            }
-        }
     },
-    update: function (value) {
+    update(el, binding, vnode, oldVnode) {
         // If server value is identical to client, use 'handle' property for simplicity
-        if(value.handle) {
-            value.client = value.server = value.handle;
+        if(binding.value.handle) {
+            binding.value.client = binding.value.handle;
+            binding.value.server = binding.value.handle;
         }
 
         // Store the value within the directive to be used outside the update function
-        this.storage = value;
+        el.dataset.storage = JSON.stringify(binding.value);
 
         // Handle error class and messages on element
-        this.handleClass(value);
-        this.handleMessages(value, this.vm.errors);
+        // vnode.context.handleValidationClass(el, vnode.context, binding.value);
+        // vnode.context.handleValidationMessages(el, vnode.context, binding.value, vnode.context.errors);
     }
 });
 
 Vue.mixin({
     methods: {
+        // Some universal methods to replace vue 1 filters
+        limitBy(arr, number) {
+            return _.first(arr, number);
+        },
+        orderByProp(arr, prop, direction = 1) {
+            let list = _.sortBy(arr, prop);
+            return direction === -1 ? _.reverse(list) : list
+        },
+        currency(number) {
+            if (number) {
+                return '$' + number.tofixed(2);
+            }
+            return number
+        },
+        pluralize: (value, unit, suffix = 's') => `${value} ${unit}${value !== 1 ? suffix : ''}`,
         /*showSpinner(){
          this.$refs.spinner.show();
          },
@@ -757,7 +646,7 @@ Vue.mixin({
          },*/
     },
     computed: {
-        firstUrlSegment: function () {
+        firstUrlSegment() {
             return document.location.pathname.split("/").slice(1, 2).toString();
         },
         isAdminRoute() {
@@ -804,10 +693,10 @@ new Vue({
             return this.$cookie.get('impersonate');
         },
         user: {
-            get() {
+            get () {
                 return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
             },
-            set(newValue) {
+            set (newValue) {
 
             }
         },
@@ -838,10 +727,10 @@ new Vue({
         // fundraisersStories,
         // fundraisersUploads,
         // fundraiserCollection,
-        // actionTrigger,
-        // actionDropdownSelect,
-        // actionSelect,
-        // listenText,
+        actionTrigger,
+        actionDropdownSelect,
+        actionSelect,
+        listenText,
         // donate,
         // modalDonate,
         // notes,
@@ -878,7 +767,7 @@ new Vue({
         // reservationCosts,
         // reservationDues,
         // funding,
-        // userSettings,
+        userSettings,
         userProfileCountries,
         userProfileTripHistory,
         userProfileStories,
@@ -967,6 +856,71 @@ new Vue({
         }
     },
     mounted() {
+        // Add a request interceptor
+        this.$http.interceptors.request.use((config) => {
+            // modify request
+            let token;
+
+            token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
+
+            if (token !== null && token !== 'undefined') {
+                axios.defaults.headers.common['Authorization'] = token
+                //headers.set('Authorization', token);
+            }
+
+
+            // Show Spinners in all components where they exist
+            if (_.contains(['GET', 'POST', 'PUT'], config.method.toUpperCase())) {
+                if (this.$refs.spinner && !config.params.hideLoader) {
+                    switch (config.method.toUpperCase()) {
+                        case 'GET':
+                            // this.$root.$emit('show::spinner', {text: 'Loading'})
+                            this.$refs.spinner.show({text: 'Loading'});
+                            break;
+                        case 'POST':
+                            // this.$root.$emit('show::spinner', {text: 'Saving'})
+                            this.$refs.spinner.show({text: 'Saving'});
+                            break;
+                        case 'PUT':
+                            // this.$root.$emit('show::spinner', {text: 'Updating'})
+                            this.$refs.spinner.show({text: 'Updating'});
+                            break;
+                    }
+                }
+            }
+            return config;
+        }, (error) => {
+            // Do something with request error
+            return Promise.reject(error);
+        });
+
+// Add a response interceptor
+        this.$http.interceptors.response.use((response) => {
+            // Hide Spinners in all components where they exist
+            if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
+                this.$refs.spinner.hide();
+            }
+
+            if (response.status && response.status === 401) {
+                $.removeCookie('api_token');
+                console.log('not logged in');
+                // window.location.replace('/logout');
+            }
+            if (response.status && response.status === 500) {
+                console.log('Oops! Something went wrong with the server.')
+            }
+            if (response.headers && response.headers.has('Authorization')) {
+                $.cookie('api_token', response.headers.get('Authorization'));
+            }
+            if (response.data && response.data.token && response.data.token.length > 10) {
+                $.cookie('api_token', response.data.token);
+            }
+
+            return response;
+        }, (error) => {
+            // Do something with response error
+            return Promise.reject(error);
+        });
         // Track window resizing
         $(window).on('resize', function () {
             this.$emit('Window:resize');
@@ -1004,7 +958,7 @@ new Vue({
             localStorage.removeItem('impersonatedUser');
 
     },
-    created () {
+    created() {
         // if api_token cookie doesn't exist user data will be cleared if they do exist
         if (this.$cookie.get('api_token') === null) {
             if (localStorage.hasOwnProperty('user'))
@@ -1017,7 +971,7 @@ new Vue({
         }
     },
     methods: {
-        setUser: function (user) {
+        setUser(user) {
             // Save user info
             this.user = user;
             this.authenticated = true;
@@ -1029,8 +983,8 @@ new Vue({
                 let that = this;
                 this.$http.get('users/me?include=roles,permissions')
                     .then(function (response) {
-                            that.$root.$emit('userHasLoggedIn', response.body.data);
-                            return response.body.data;
+                            that.$root.$emit('userHasLoggedIn', response.data.data);
+                            return response.data.data;
                         },
                         function (response) {
                             if (this.isAdminRoute || this.isDashboardRoute)
@@ -1038,7 +992,7 @@ new Vue({
                         });
             }
         },
-        getImpersonatedUser: function () {
+        getImpersonatedUser() {
             if (this.impersonatedUser !== null) {
                 console.log('impersonating: ', this.impersonatedUser.name);
                 return this.impersonatedUser
@@ -1056,17 +1010,18 @@ new Vue({
             return this.user ? _.contains(permissions, ability) : false;
         },
 
-        startTour(){
+        startTour() {
             window.tour.start();
         },
 
         // Simple error handlers for API calls
-        handleApiSoftError(response) {
-            console.error(response.body.message ? response.body.message : response.body);
+        handleApiSoftError(error) {
+            console.error(error.response.data.message ? error.response.data.message : error.response.data);
         },
-        handleApiError(response) {
-            console.error(response.body.message ? response.body.message : response.body);
-            this.$root.$emit('showError', response.body.message)
+        handleApiError(error) {
+            console.log(error);
+            console.error(error.response.data.message ? error.response.data.message : error.response.data);
+            this.$root.$emit('showError', error.response.data.message)
         },
         convertSearchToObject() {
             let search = location.search.substring(1);

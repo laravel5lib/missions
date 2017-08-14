@@ -2,8 +2,8 @@
     <section>
         <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
 
-        <div class="form-group" v-for="item in referral.response" :class="{ 'has-error' : $validation.item.invalid}">
-            <label for="item_{{ $index }}">{{ item.q }}</label>
+        <div class="form-group" v-for="(item, index) in referral.response" :class="{ 'has-error' : $validation.item.invalid}">
+            <label :for="'item_' + index">{{ item.q }}</label>
 
             <span v-if="item.type == 'radio'">
                 <p>
@@ -12,7 +12,7 @@
                 </p>
             </span>
             <span v-else>
-                <textarea id="item_{{ $index }}" class="form-control" v-model="item.a" rows="5" initial="off" name="item" v-validate="'required'"></textarea>
+                <textarea :id="'item_' + index" class="form-control" v-model="item.a" rows="5" initial="off" name="item" v-validate="'required'"></textarea>
             </span>
         </div>
 
@@ -38,8 +38,8 @@
         },
         methods: {
             fetch() {
-                this.$http.get('referrals/' + this.id).then(function (response) {
-                    this.referral = response.body.data;
+                this.$http.get('referrals/' + this.id).then((response) => {
+                    this.referral = response.data.data;
                 },function () {
                     this.$root.$emit('showError', 'Unable to retrieve the referral request!')
                 });
@@ -57,7 +57,7 @@
                         self.$root.$emit('showError', 'Could not submit. Please check the form.');
                     } else {
                         self.referral.responded_at = moment().format('YYYY-MM-DD HH:MM:SS');
-                        self.$http.put('referrals/' + self.id, self.referral).then(function (response) {
+                        self.$http.put('referrals/' + self.id, self.referral).then((response) => {
                             self.$root.$emit('showSuccess', 'Thank you for submitting your response.');
                         },function () {
                             self.$root.$emit('showError', 'Unable to retrieve the referral request!');

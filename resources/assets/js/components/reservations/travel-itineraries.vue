@@ -20,7 +20,7 @@
 						</label>
 					</div>
 					<accordion :one-at-atime="true" v-if="itinerary.items">
-						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" ref="items">
+						<panel :is-open.once="isArrival(item)" v-for="item in itinerary.items" :key="item.id" ref="items">
 
                             <strong slot="header">
                                 <i class="fa fa-map-marker"></i> Step : {{ item.activity.name }}
@@ -39,7 +39,7 @@
 								<div class="alert alert-warning" v-show="returningOnOwn"><strong>NOTICE:</strong> By selecting this option, I am acknowledging that I will be arranging my own transportation home from the destination country.</div>
 							</div>
 
-							<travel-transport v-if="item.transport" ref="transport" :edit-mode="editMode" :reservation-id="reservationId" :transport.sync="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
+							<travel-transport v-if="item.transport" ref="transport" :edit-mode="editMode" :reservation-id="reservationId" :transport="item.transport" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-transport>
 
 							<travel-hub v-if="item.hub" ref="hub" :edit-mode="editMode" :hub="item.hub" :transport-type="item.transport ? item.transport.type : null" :activity-types="activityTypes" :activity-type="item.activity.activity_type_id"></travel-hub>
 
@@ -224,15 +224,15 @@
             getItinerary(){
                 let doc_id = this.document ? this.document.id : this.$parent.requirement.document_id;
                 return this.$http.get('itineraries/' + doc_id, { params: { 'include': 'activities.hubs,activities.transports'}})
-	                .then(function (response) {
-	                    return this.setupItinerary(response.body.data);
+	                .then((response) => {
+	                    return this.setupItinerary(response.data.data);
 	                },
                     function (response) {
                         console.log(response);
                     });
             },
             deleteItinerary(itinerary){
-                this.$http.delete('itineraries/travel', itinerary).then(function (response) {
+                this.$http.delete('itineraries/travel', itinerary).then((response) => {
                     this.$emit('showSuccess', 'Itinerary Deleted');
                 });
             },
@@ -257,17 +257,17 @@
                 // if (this.returningOnOwn)
                 //    itinerary.items.pop();
 
-                return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    //this.itinerary = response.body.data;
-                    let it = this.setupItinerary(response.body.data);
+                return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then((response) => {
+                    //this.itinerary = response.data.data;
+                    let it = this.setupItinerary(response.data.data);
                     this.editMode = false;
-                    this.setItinerary(response.body.data);
+                    this.setItinerary(response.data.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it
                 },
                     function (response) {
                         console.log(response);
-//                        return response.body.data;
+//                        return response.data.data;
                     });
             },
             updateItinerary(itinerary){
@@ -288,10 +288,10 @@
                     return;
                 }
 
-                return this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then(function (response) {
-                    let it = this.setupItinerary(response.body.data);
+                return this.$http.put('itineraries/travel/' + itinerary.id, itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then((response) => {
+                    let it = this.setupItinerary(response.data.data);
                     this.editMode = false;
-                    this.setItinerary(response.body.data);
+                    this.setItinerary(response.data.data);
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it;
                 },
@@ -316,7 +316,7 @@
             },
             resetItinerary(){
                 if (this.itinerary.id) {
-                    this.$http.delete('itineraries/travel/' + this.itinerary.id).then(function (response) {
+                    this.$http.delete('itineraries/travel/' + this.itinerary.id).then((response) => {
                         this.unsetItinerary(this.itinerary);
                         console.log('Itinerary deleted');
                     },
@@ -427,8 +427,8 @@
                 this.$dispatch('unset-document', itinerary);
             },
 	        getTypes() {
-	            return this.$http.get('utilities/activities/types').then(function (response) {
-                    return this.activityTypes = response.body;
+	            return this.$http.get('utilities/activities/types').then((response) => {
+                    return this.activityTypes = response.data;
                 },
                     function (response) {
                         console.log(response);
@@ -445,13 +445,13 @@
             promises.push(this.getTypes());
 
             let self = this;
-            Promise.all(promises).then(function (values) {
+            Promise.all(promises).then((values) => {
                 // initiate computed types
                 let arrival = self.arrivalType;
                 let departure = self.departureType;
                 let connection = self.connectionType;
                 return [arrival, departure, connection];
-            }).then(function () {
+            }).then(() => {
                 self.$nextTick(function () {
                     if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
                         self.editMode = false;

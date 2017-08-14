@@ -12,7 +12,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('group') }">
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent=""  class="form-control" id="group" :value.sync="groupObj" :options="groups" :on-search="getGroups"
+							<v-select @keydown.enter.prevent=""  class="form-control" id="group" :value="groupObj" :options="groups" :on-search="getGroups"
 									  label="name"></v-select>
 							<select hidden v-model="group_id" name="group" v-validate="'required'">
 								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
@@ -37,7 +37,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('prospects') }">
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value.sync="prospectsObj"
+							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 							<select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
 								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -65,7 +65,7 @@
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon"><i class="fa fa-users"></i></span>
 								<input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-									   name="companions" v-validate="{ required: true, min:0 }"/>
+									   name="companions" v-validate="'required|min:0'"/>
 							</div>
 							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
 								companions.
@@ -78,7 +78,7 @@
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<date-picker addon="Start" :has-error= "errors.has('start')" :model.sync="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+									<date-picker addon="Start" :has-error= "errors.has('start')" :model="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 									       name="start" v-validate="'required'" required>
 									<!--<div class="input-group input-group-sm"
@@ -87,7 +87,7 @@
 									</div>-->
 								</div>
 								<div class="col-sm-6">
-									<date-picker addon="End" :has-error= "errors.has('end')" :model.sync="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+									<date-picker addon="End" :has-error= "errors.has('end')" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 									       name="end" v-validate="'required'" required>
 									<!--<div class="input-group input-group-sm"
@@ -102,7 +102,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('rep') }">
 						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value.sync="repObj" :options="reps"
+							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="rep" :value="repObj" :options="reps"
 									  label="name"></v-select>
 							<!--name="rep" v-validate="{ required: false}"-->
 							<select hidden v-model="rep_id">
@@ -208,8 +208,8 @@
 			},
 			getGroups(search, loading){
 				loading(true);
-				this.$http.get('groups', { params: { search: search } }).then(function (response) {
-					this.groups = response.body.data;
+				this.$http.get('groups', { params: { search: search } }).then((response) => {
+					this.groups = response.data.data;
 					loading(false);
 				});
 			},
@@ -226,8 +226,8 @@
 			$('html, body').animate({scrollTop: 0}, 300);
 
 			// get some groups
-			this.$http.get('groups').then(function (response) {
-				this.groups = response.body.data;
+			this.$http.get('groups').then((response) => {
+				this.groups = response.data.data;
 			});
 			done();
 		}

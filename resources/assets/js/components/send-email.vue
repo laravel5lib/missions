@@ -1,6 +1,6 @@
 <template>
 <div>
-  <a :class="class" @click="confirm = true">
+  <a :class="classes" @click="confirm = true">
     <i :class="icon" v-if="icon"></i> {{ label }}
   </a>
   <modal :title="label" :value="confirm" @closed="confirm=false" effect="fade" small="true" ok-text="Send" :callback="fire">
@@ -34,7 +34,7 @@
         type: String,
         default: null
       },
-      class: {
+      classes: {
         type: String,
         default: null
       }
@@ -48,7 +48,7 @@
       fire() {
         this.confirm = false;
         this.$http.post('commands', {command: this.command, parameters: this.parameters})
-            .then(function(response) {
+            .then((response) => {
               console.log(response);
               this.$root.$emit('showSuccess', 'Your request was processed successfully.');
             }, function (error) {

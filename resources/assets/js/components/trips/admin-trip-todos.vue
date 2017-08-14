@@ -1,6 +1,6 @@
 <template>
 	<spinner ref="spinner" size="md" text="Loading"></spinner>
-	<alert :show.sync="showError"
+	<alert :show="showError"
 		   placement="top-right"
 		   :duration="6000"
 		   type="danger"
@@ -81,8 +81,8 @@
 				if (! this.newTodo) return;
 				this.todos.push(this.newTodo);
 				// this.$refs.spinner.show();
-				this.resource.save({}, {todos: this.todos}).then(function (response) {
-					this.todos = response.body.data;
+				this.resource.post({}, {todos: this.todos}).then((response) => {
+					this.todos = response.data.data;
 					this.reset();
 					// this.$refs.spinner.hide();
 				},function () {
@@ -94,8 +94,8 @@
 			remove() {
 				this.todos.$remove(this.selectedTodo);
 				// this.$refs.spinner.show();
-				this.resource.save({}, {todos: this.todos}).then(function (response) {
-					this.todos = response.body.data;
+				this.resource.post({}, {todos: this.todos}).then((response) => {
+					this.todos = response.data.data;
 					this.reset();
 					// this.$refs.spinner.hide();
 				},function () {
@@ -106,8 +106,8 @@
 			},
             getTodos(){
 				// this.$refs.spinner.show();
-				this.resource.get().then(function (response) {
-                    this.todos = response.body.data;
+				this.resource.get().then((response) => {
+                    this.todos = response.data.data;
 					// this.$refs.spinner.hide();
 				});
             }

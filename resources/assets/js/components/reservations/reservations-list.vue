@@ -1,7 +1,7 @@
 <template>
     <div>
         <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
-            <reservations-filters ref="filters" :filters.sync="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
+            <reservations-filters ref="filters" :filters="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
         </mm-aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <pagination :pagination.sync="pagination" :callback="getReservations"></pagination>
+                            <pagination :pagination="pagination" :callback="getReservations"></pagination>
                         </div>
                     </div>
                 </template>
@@ -143,6 +143,7 @@
         <p class="text-center"><a class="btn btn-link btn-sm" href="/campaigns">Go On A Trip</a></p>
     </div>
 </div>
+    </div>
 </template>
 <script type="text/javascript">
     import vSelect from "vue-select";
@@ -350,9 +351,9 @@
                         this.lastReservationRequest.abort();
                     }
                     this.lastReservationRequest = xhr;
-                }}).then(function (response) {
-                    this.reservations = response.body.data;
-                    this.pagination = response.body.meta.pagination;
+                }}).then((response) => {
+                    this.reservations = response.data.data;
+                    this.pagination = response.data.meta.pagination;
                 });
             },
             updateConfig(){
@@ -420,8 +421,8 @@
                 this.includeManaging = config.includeManaging;
             }
 
-            let userPromise = this.$http.get('users/' + this.userId, { params: {include: 'facilitating,managing.trips'}}).then(function (response) {
-                let user = response.body.data;
+            let userPromise = this.$http.get('users/' + this.userId, { params: {include: 'facilitating,managing.trips'}}).then((response) => {
+                let user = response.data.data;
                 let managing = [];
 
                 if (user.facilitating.data.length) {
@@ -453,7 +454,7 @@
 
             });
 
-            Promise.all([userPromise]).then(function (values) {
+            Promise.all([userPromise]).then((values) => {
                 this.startUp = false;
                 this.getReservations();
             }.bind(this));

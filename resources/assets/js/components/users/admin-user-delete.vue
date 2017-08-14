@@ -30,7 +30,7 @@
         },
         methods: {
             deleteUser(){
-                this.$http.delete('users/' + this.userId).then(function (response) {
+                this.$http.delete('users/' + this.userId).then((response) => {
                     console.log(response);
                     window.location.href = '/admin/users';
                 }, function (error) {

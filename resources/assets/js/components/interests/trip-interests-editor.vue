@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <alert :show.sync="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Done</strong>
             <p>{{ message }}</p>
@@ -128,8 +128,8 @@
                 // this.$refs.spinner.show();
                 this.$http.get('interests/' + this.id, { params: {
                     include: 'trip.campaign,trip.group'
-                }}).then(function (response) {
-                    let interest = response.body.data;
+                }}).then((response) => {
+                    let interest = response.data.data;
                     interest.trip = interest.trip.data;
                     interest.trip.campaign = interest.trip.campaign.data;
                     interest.trip.group = interest.trip.group.data;
@@ -139,7 +139,7 @@
             },
             save() {
                 // this.$refs.spinner.show();
-                this.$http.put('interests/' + this.id, this.interest).then(function (response) {
+                this.$http.put('interests/' + this.id, this.interest).then((response) => {
                     this.message = 'Trip interest updated';
                     this.showSuccess = true;
                     this.editMode = false;

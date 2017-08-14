@@ -26,12 +26,12 @@
 			<hr>
         </div>
 		<div class="col-sm-12">
-			<div class="media" v-for="donation in donations|filterBy search|orderBy orderByField direction">
+			<div class="media" v-for="donation in donationsOrderedFiltered">
                 <a class="media-left" href="#">
                     <img src="http://placehold.it/64x64" style="width: 64px; height: 64px;">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading">{{ donation.name }} <small>donated</small> {{ donation.amount|currency }} <small class="pull-right">{{ donation.created_at|moment }}</small></h4>
+                    <h4 class="media-heading">{{ donation.name }} <small>donated</small> {{ '$' + donation.amount.toFixed(2)}} <small class="pull-right">{{ donation.created_at|moment }}</small></h4>
                     <p><b>Message</b>: {{ donation.message }}</p>
                 </div>
             </div>
@@ -59,8 +59,17 @@
 				direction: 1,
 			}
 		},
+	    computed: {
+            donationsOrderedFiltered() {
+                let arr = _.filter(this.donations, (donation) => {
+                    return donation.name.includes(this.search)
+                });
+	            arr = _.sortBy(arr, this.orderByField);
+                return this.direction === -1 ? _.reverse(arr) : arr;
+            }
+	    },
 		watch:{
-            'donations': function () {
+            donations() {
 
             }
         },
@@ -69,8 +78,8 @@
 				// this.$refs.spinner.show();
 				this.$http.get('fundraisers.donations', { params: {
 
-                }}).then(function (response) {
-                    this.donations = response.body.data;
+                }}).then((response) => {
+                    this.donations = response.data.data;
 					// this.$refs.spinner.hide();
 				})
             },

@@ -98,7 +98,8 @@
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
-                                <input type="tel" class="form-control input" v-model="cardPhone | phone" name="phone="['oneOrOther']" id" v-validate="infoPhone">
+                                <phone-input v-model="cardPhone" id="infoPhone" name="phone" validation="'required|oneOrOther'"></phone-input>
+                                <!--<input type="tel" class="form-control input" v-model="cardPhone | phone" name="phone="['oneOrOther']" id" v-validate="infoPhone">-->
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -384,12 +385,12 @@
             }
 
             if (parseInt(this.auth)) {
-                this.$http.get('users/me').then(function (response) {
-                    this.donor = response.body.data.name
-                    this.cardHolderName = response.body.data.name
-                    this.cardEmail = response.body.data.email
-                    this.cardPhone = response.body.data.phone_one
-                    this.cardZip = response.body.data.zip
+                this.$http.get('users/me').then((response) => {
+                    this.donor = response.data.data.name
+                    this.cardHolderName = response.data.data.name
+                    this.cardEmail = response.data.data.email
+                    this.cardPhone = response.data.data.phone_one
+                    this.cardZip = response.data.data.zip
                 });
             }
         },

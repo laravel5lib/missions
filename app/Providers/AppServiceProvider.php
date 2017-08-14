@@ -63,6 +63,10 @@ class AppServiceProvider extends ServiceProvider
             'campaign_transports' => \App\CampaignTransport::class
         ]);
 
+        Validator::extend('country', function ($attribute, $value, $params, $validator) {
+            return in_array($value, array_values(\App\Utilities\v1\Country::all()));
+        }, 'Please provide a valid country code.');
+
         Validator::extend('is_csv', function ($attribute, $value, $params, $validator) {
             $file = base64_decode($value);
             $f = finfo_open();
@@ -80,12 +84,12 @@ class AppServiceProvider extends ServiceProvider
                                         ->where('group_id', $reservation->trip->group_id);
                 })->where('id', $value)->first() : false;
             }
-            
+
             return false;
         });
 
         Validator::extend('within_companion_limit', function ($attribute, $value, $params, $validator) {
-            
+
             if (isset($params[0])) {
                 $companion = Reservation::with('companionReservations')->find($value);
                 $reservation = Reservation::with('companionReservations')->find($params[0]);

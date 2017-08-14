@@ -11,6 +11,11 @@ use App\Models\v1\Fundraiser;
 use App\Models\v1\Reservation;
 use App\Models\v1\ProjectCause;
 
+function make_date_string($year, $month, $day)
+{
+    return Carbon::createFromDate($year, $month, $day)->toDateString();
+}
+
 function country($code)
 {
     return implode('', array_keys(App\Utilities\v1\Country::get($code)));

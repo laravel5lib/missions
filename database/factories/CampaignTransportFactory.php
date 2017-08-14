@@ -15,6 +15,7 @@ $factory->define(App\CampaignTransport::class, function (Faker\Generator $faker)
         'capacity' => 100,
         'departure_hub_id' => $faker->uuid,
         'arrival_hub_id' => $faker->uuid,
-        'campaign_id' => $faker->uuid
+        'campaign_id' => $faker->uuid,
+        'designation' => 'outbound'
     ];
 });

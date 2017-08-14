@@ -17,27 +17,22 @@ class CreateUserAccountTest extends BrowserKitTestCase
     /**
      * @test
      */
-    public function create_a_user()
+    public function registers_user()
     {
-        Session::start();
-        $user = [
+        $newUser = [
             'name' => 'John Doe',
-            'email' => 'john@gmail.com',
-            '_token' => csrf_token(),
-            'password' => 'secretfoo',
-            'password_confirmation' => 'secretfoo',
-            'birthday' => '1987-07-28 00:05:00',
-            'gender' => 'Male',
-            'country_code' => 'us',
-            'timezone' => 'America/Detroit'
+            'email' => 'john@email.com',
+            'gender' => 'male',
+            'birthday' => '1987-07-28',
+            'country' => 'us',
+            'timezone' => 'America/Los_Angeles',
+            'password' => 'secret',
+            'password_confirmation' => 'secret'
         ];
 
-        $this->json('POST', '/register', $user)
-             ->seeJsonStructure([
-                    'redirect_to', 'token'
-                ])
-             ->seeJson([
-                    'redirect_to' => '/dashboard'
-                ]);
+        $this->post('/register', $newUser);
+
+        $this->assertResponseStatus(302)
+             ->seeInDatabase('users', ['email' => 'john@email.com']);
     }
 }

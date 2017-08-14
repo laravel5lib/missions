@@ -14,7 +14,6 @@
     <hr class="divider inv lg">
     <div class="container" v-tour-guide="">
         <div class="well well-default">
-            {{-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> --}}
             <div class="row">
                 <div class="col-sm-4">
                     <h6 class="text-uppercase" style="margin-bottom:5px;">Welcome back!</h6>

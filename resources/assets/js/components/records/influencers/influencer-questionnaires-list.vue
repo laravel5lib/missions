@@ -150,11 +150,11 @@
             }
         },
         watch:{
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchInfluencers();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchInfluencers();
             }
@@ -172,7 +172,7 @@
             removeInfluencer(influencer){
                 if(influencer) {
                     this.$http.delete('influencers/' + influencer.id).then((response) => {
-                        this.influencers = _.reject(this.influencers, function (item) {
+                        this.influencers = _.reject(this.influencers, (item) => {
                             return item.id === influencer.id;
                         });
                         this.selectedInfluencer = '';
@@ -204,7 +204,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

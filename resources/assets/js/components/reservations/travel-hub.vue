@@ -111,7 +111,7 @@
 	    props: {
             hub: {
                 type: Object,
-	            default: function () {
+	            default: () =>  {
                     return {
                         name: '',
                         address: '',
@@ -179,9 +179,9 @@
                     this.hub.call_sign = val.iata;
                 }
             },
-            'countryObj':function (val, oldVal) {
+            'countryObj':(val, oldVal) =>  {
                 this.hub.country_code = _.isObject(val) ? val.code : null;
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     this.$validate(true);
                 });
             },
@@ -224,7 +224,7 @@
                 }
 	        },
 	        'hub.name'(val) {
-	            this.$nextTick(function () {
+	            this.$nextTick(() =>  {
 		            this.$validate(true);
                 });
 	        }

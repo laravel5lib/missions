@@ -172,10 +172,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Influencer created.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create influencer questionnaire.')
                     });
@@ -198,10 +198,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/influencers/' + that.id; 
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
@@ -244,7 +244,7 @@
                                 this.uploads.push(resA.data.data);
                                 this.upload_ids = this.content[7].a;
                             });
-                        }.bind(this));
+                        });
 
                     }
                 });

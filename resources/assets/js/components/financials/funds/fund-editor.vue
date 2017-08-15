@@ -120,7 +120,7 @@
             save() {
                 // validate manually
                 let self = this;
-                this.$validate(true, function () {
+                this.$validate(true, () =>  {
                     if (self.$validation.invalid) {
                         console.log('validation errors');
                     } else {
@@ -134,7 +134,7 @@
                             self.$root.$emit('showSuccess', 'Fund updated');
                             self.editMode = false;
                             self.fetch();
-                        },function (response) {
+                        },(response) =>  {
                             self.$refs.spinner.hide();
                             self.$root.$emit('showError', 'There are errors on the form');
                         });

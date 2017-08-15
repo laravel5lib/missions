@@ -61,11 +61,11 @@
             }
         },
         watch:{
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.pagination.current_page = val;
                 this.paginate();
             },
-            'reservations':function (val) {
+            'reservations':(val) =>  {
                 if(val.length) {
                     this.paginate();
                 }
@@ -78,7 +78,7 @@
                 var start = (this.pagination.current_page - 1) * this.per_page;
                 var end   = start + this.per_page;
                 var range = _.range(start, end);
-                _.each(range, function (index) {
+                _.each(range, (index) => {
                     if (this.reservations[index])
                         array.push(this.reservations[index]);
                 }, this);

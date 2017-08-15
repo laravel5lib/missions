@@ -160,17 +160,17 @@
             }
         },
         watch : {
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.fetch();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.fetch();
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.fetch();
             },
-            'filterBy': function (val, oldVal) {
+            'filterBy': (val, oldVal) =>  {
                 this.page = 1;
                 this.fetch();
             }
@@ -206,7 +206,7 @@
                     this.message = 'Todo created successfully.';
                     this.showSuccess = true;
                     this.fetch();
-                },function () {
+                },() =>  {
                     this.message = 'Unable to add the todo.';
                     this.showError = true;
                 });
@@ -220,7 +220,7 @@
                     this.completeMode = false;
                     this.selectedTodo = {};
                     this.fetch();
-                },function () {
+                },() =>  {
                     this.message = 'Unable to update the todo.';
                     this.showError = true;
                 });
@@ -231,7 +231,7 @@
                     this.selectedTodo = {};
                     this.message = 'Todo deleted.';
                     this.showSuccess = true;
-                },function () {
+                },() =>  {
                     this.message = 'Unable to delete todo.';
                     this.showError = true;
                 });

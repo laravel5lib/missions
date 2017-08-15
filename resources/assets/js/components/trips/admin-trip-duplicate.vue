@@ -97,7 +97,7 @@
                         });
                         // trim costs
                         this.trip.costs = this.trip.costs.data;
-                        _.each(this.trip.costs, function (cost) {
+                        _.each(this.trip.costs, (cost) => {
                             // use name as reference to new duplicated costs
                             payments[cost.name] = cost.payments.data;
 
@@ -107,12 +107,12 @@
                         });
                         // trim deadlines
                         this.trip.deadlines = this.trip.deadlines.data;
-                        _.each(this.trip.deadlines, function (deadline) {
+                        _.each(this.trip.deadlines, (deadline) => {
                             delete deadline.links;
                         });
                         // trim requirements
                         this.trip.requirements = this.trip.requirements.data;
-                        _.each(this.trip.requirements, function (requirement) {
+                        _.each(this.trip.requirements, (requirement) => {
                             delete requirement.links;
                         });
                         // trim notes
@@ -126,7 +126,7 @@
 
                         this.$http.post('trips/duplicate', this.trip, { params: { include: 'costs.payments'}}).then((response) => {
                             let costPromises = [];
-                            _.each(this.trip.costs, function (cost) {
+                            _.each(this.trip.costs, (cost) => {
                                 // assign cost to trip
                                 cost.cost_assignable_type = 'trips';
                                 cost.cost_assignable_id = response.data.data.id;
@@ -135,15 +135,15 @@
                                 cost.payments = payments[cost.name];
                                 // duplicate cost
                                 costPromises.push(this.$http.post('costs', cost).then((res) => {
-                                }, function (error) {
+                                }, (error) =>  {
                                     console.log(error);
                                 }));
-                            }.bind(this));
+                            });
 
                             Promise.all(costPromises).then((newCosts) => {
                                 window.location.href = '/admin' + response.data.data.links[0].uri;
-                            }.bind(this));
-                        }, function (error) {
+                            });
+                        }, (error) =>  {
                             console.log(error);
                         });
                     });

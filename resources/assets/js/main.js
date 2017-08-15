@@ -393,7 +393,7 @@ Vue.component('datetime-input', {
 })
 
 Vue.filter('number', {
-    read: function (number, decimals) {
+    read: (number, decimals) => {
         return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
     },
     write: function (number, numberVal, decimals) {
@@ -402,7 +402,7 @@ Vue.filter('number', {
 });
 
 Vue.filter('percentage', {
-    read: function (number, decimals) {
+    read: (number, decimals) => {
         return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
     },
     write: function (number, numberVal, decimals) {
@@ -471,10 +471,10 @@ Vue.filter('moment', {
 */
 
 Vue.filter('mDateToDatetime', {
-    read: function (value) {
+    read: (value) => {
         return moment.utc(value).local().format(format || 'LL');
     },
-    write: function (value, oldVal) {
+    write: (value, oldVal) => {
         return moment(value).utc();
     }
 });
@@ -491,7 +491,7 @@ Vue.filter('mFormat', (value, format) => {
     return moment(value).format(format);
 });
 
-Vue.filter('underscoreToSpace', function (value) {
+Vue.filter('underscoreToSpace', (value) => {
     return value.replace(/_/g, ' ');
 });
 
@@ -548,7 +548,7 @@ Vue.directive('tour-guide', {
             _.each(window.pageSteps, (step) => {
                 // if buttons are present
                 if (step.buttons) {
-                    _.each(step.buttons, function (button) {
+                    _.each(step.buttons, (button) => {
                         // if action is present
                         if (button.action && _.isString(button.action))
                             button['action'] = tour[button.action];
@@ -595,7 +595,7 @@ Vue.directive('error-handler', {
     inserted(el, binding, vnode) {
         el.dataset.messages = JSON.stringify([]);
 
-        vnode.context.$watch('errors', function (val) {
+        vnode.context.$watch('errors', (val) => {
             let storedValue = JSON.parse(el.dataset.storage);
             // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
             // the directive we want to watch it using the error-handler mixin
@@ -924,29 +924,29 @@ new Vue({
         // Track window resizing
         $(window).on('resize', function () {
             this.$emit('Window:resize');
-        }.bind(this));
+        });
 
-        this.$on('userHasLoggedIn', function (user) {
+        this.$on('userHasLoggedIn', (user) => {
             localStorage.setItem('user', JSON.stringify(user));
             this.user = user;
             this.authenticated = true;
         });
 
-        this.$on('showSuccess', function (msg) {
+        this.$on('showSuccess', (msg) => {
             this.message = msg;
             this.showError = false;
             this.showInfo = false;
             this.showSuccess = true;
         });
 
-        this.$on('showInfo', function (msg) {
+        this.$on('showInfo', (msg) => {
             this.message = msg;
             this.showError = false;
             this.showInfo = true;
             this.showSuccess = false;
         });
 
-        this.$on('showError', function (msg) {
+        this.$on('showError', (msg) => {
             this.message = msg;
             this.showInfo = false;
             this.showSuccess = false;
@@ -986,7 +986,7 @@ new Vue({
                             that.$root.$emit('userHasLoggedIn', response.data.data);
                             return response.data.data;
                         },
-                        function (response) {
+                        (response) => {
                             if (this.isAdminRoute || this.isDashboardRoute)
                                 window.location = '/logout';
                         });
@@ -1002,7 +1002,7 @@ new Vue({
                         console.log('impersonating: ', response.data.data.name);
                         localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
                         return this.impersonatedUser = response.data.data;
-                    }.bind(this))
+                    });
             }
         },
         hasAbility(ability) {
@@ -1026,7 +1026,7 @@ new Vue({
         convertSearchToObject() {
             let search = location.search.substring(1);
             return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-                function (key, value) {
+                (key, value) => {
                     return key === "" ? value : decodeURIComponent(value)
                 }) : {};
         }

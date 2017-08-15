@@ -360,7 +360,7 @@
             selectedTransport: {
                 handler(val, oldVal) {
                     if (val && val.name) {
-                        this.$nextTick(function () {
+                        this.$nextTick(() =>  {
                             if (_.isFunction(this.$validate))
                                 this.$validate(true);
                         });
@@ -453,7 +453,7 @@
                 this.TransportsResource.get(params).then((response) => {
                     this.transports = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
@@ -499,7 +499,7 @@
                     });
 
                     this.showTransportsModal = true;
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         if (_.isFunction(this.$validate))
                             this.$validate(true);
                     });

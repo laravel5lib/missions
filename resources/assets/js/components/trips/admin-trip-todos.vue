@@ -85,7 +85,7 @@
 					this.todos = response.data.data;
 					this.reset();
 					// this.$refs.spinner.hide();
-				},function () {
+				},() =>  {
 					this.errorMessage = 'Unable to delete todo.';
 					this.showError = true;
 					// this.$refs.spinner.hide();
@@ -98,7 +98,7 @@
 					this.todos = response.data.data;
 					this.reset();
 					// this.$refs.spinner.hide();
-				},function () {
+				},() =>  {
 					this.errorMessage = 'Unable to delete todo.';
 					this.showError = true;
 					// this.$refs.spinner.hide();
@@ -116,7 +116,7 @@
             this.getTodos();
 
 			var self = this;
-			this.$root.$on('NewTodo', function () {
+			this.$root.$on('NewTodo', () =>  {
 				self.newMode = true;
 			});
 

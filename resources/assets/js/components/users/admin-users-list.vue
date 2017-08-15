@@ -365,18 +365,18 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: function (val) {
+				handler: (val) =>  {
 					// console.log(val);
 					this.pagination.current_page = 1;
 					this.searchUsers();
 				},
 				deep: true
 			},
-			'countriesArr': function (val) {
+			'countriesArr': (val) =>  {
 				this.filters.country = _.pluck(val, 'code')||'';
 				this.searchUsers();
 			},
-        	'activeFields': function (val, oldVal) {
+        	'activeFields': (val, oldVal) =>  {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
         			// default to first visible field
@@ -384,21 +384,21 @@
 				}
 				this.updateConfig();
 			},
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
 				this.updateConfig();
 				this.pagination.current_page = 1;
 				this.page = 1;
                 this.searchUsers();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
 				this.updateConfig();
 				this.searchUsers();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
 				this.updateConfig();
 				this.searchUsers();
             },
-			'groups':function () {
+			'groups':() =>  {
 				this.searchUsers();
 			}
         },
@@ -448,14 +448,14 @@
             },
             totalAmountRaised(user){
                 var total = 0;
-                _.each(user.fundraisers.data, function (fundraiser) {
+                _.each(user.fundraisers.data, (fundraiser) => {
                     total += fundraiser.raised_amount;
                 });
                 return total;
             },
             totalPercentRaised(user){
                 var totalDue = 0;
-                _.each(user.costs.data, function (cost) {
+                _.each(user.costs.data, (cost) => {
                     totalDue += cost.amount;
                 });
                 return this.totalAmountRaised(user) / totalDue * 100;

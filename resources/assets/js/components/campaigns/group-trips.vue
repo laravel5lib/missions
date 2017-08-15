@@ -110,7 +110,7 @@
 					_.each(this.trips, function (trip, index, list) {
 						list[index].lowest = calcLowest(trip.costs.data);
 					});
-				}, function (error) {
+				}, (error) =>  {
 					// this.$refs.spinner.hide();
 				});
 			},

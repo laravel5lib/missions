@@ -144,7 +144,7 @@
             costLocking(cost, status) {
                 cost.locked = status;
                 let costs = [];
-                _.each(this.project.costs.data, function (c) {
+                _.each(this.project.costs.data, (c) => {
                     costs.push({id: c.cost_id, locked: c.locked});
                 });
 
@@ -175,7 +175,7 @@
             updateCost(){
                 // prep current costs
                 let costs = [];
-                _.each(this.project.costs.data, function (cost) {
+                _.each(this.project.costs.data, (cost) => {
                     if (cost.cost_id === this.editedCost.cost_id) {
                         costs.push({
                             id: this.editedCost.cost_id,
@@ -187,7 +187,7 @@
                     } else {
                         costs.push({id: cost.cost_id, locked: cost.locked});
                     }
-                }.bind(this));
+                });
 
                 let project = this.preppedProject;
                 project.costs = costs;
@@ -201,7 +201,7 @@
             remove(cost){
                 let project = this.preppedProject;
                 project.costs = [];
-                _.each(this.project.costs.data, function (cs) {
+                _.each(this.project.costs.data, (cs) => {
                     if (cs.cost_id !== cost.cost_id) {
                         project.costs.push({ id: cs.cost_id, locked: cs.locked})
                     }
@@ -213,13 +213,13 @@
             addCosts(){
                 // prep current costs
                 let currentCostIds = [];
-                _.each(this.project.costs.data, function (cost) {
+                _.each(this.project.costs.data, (cost) => {
                     currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
                 });
 
                 // prep added costs
                 let selectedCostIds = [];
-                _.each(this.selectedCosts, function (cost) {
+                _.each(this.selectedCosts, (cost) => {
                     selectedCostIds.push({ id: cost.id })
                 });
 
@@ -239,7 +239,7 @@
 
                 // get only ids of current costs so we don't change anything
                 initiative.costs = [];
-                _.each(this.project.initiative.data.costs.data, function (dl) {
+                _.each(this.project.initiative.data.costs.data, (dl) => {
                     initiative.costs.push({id: dl.id});
                 });
                 initiative.costs.push(this.newDeadline);
@@ -285,7 +285,7 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(project.initiative.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(project.initiative.data.costs.data, (cost) => {
                     return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
             }

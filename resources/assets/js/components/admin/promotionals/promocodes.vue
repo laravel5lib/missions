@@ -101,7 +101,7 @@
             }
         },
         watch: {
-            'options.params.search': function (val, oldVal) {
+            'options.params.search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.fetch();
             }
@@ -123,7 +123,7 @@
                     this.codes = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     this.loading = false;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                     this.loading = false;
                 });
@@ -137,7 +137,7 @@
                 this.$http.put('promocodes/' + codeId + '/restore').then((response) => {
                     this.$root.$emit('showSuccess', 'Promo code activated.');
                     this.fetch();
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Could not activate promo code.');
                 });
             },
@@ -145,7 +145,7 @@
                 this.$http.delete('promocodes/' + codeId).then((response) => {
                     this.$root.$emit('showSuccess', 'Promo code deactivated.');
                     this.fetch();
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Could not deactivate promo code.');
                 });
             }

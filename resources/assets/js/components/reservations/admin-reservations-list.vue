@@ -432,20 +432,20 @@
 			}
 		},
 		computed: {
-			'todo': function () {
+			'todo': () =>  {
 				if (this.filters.todoStatus) {
 					return this.filters.todoName + '|' + this.filters.todoStatus;
 				} else {
 					return this.filters.todoName;
 				}
 			},
-			'requirement': function () {
+			'requirement': () =>  {
 				if (this.filters.requirementName && this.filters.requirementStatus)
 					return this.filters.requirementName + '|' + this.filters.requirementStatus;
 
 				return this.filters.requirementName;
 			},
-			'due': function () {
+			'due': () =>  {
 				if (this.filters.dueStatus)
 					return this.filters.dueName + '|' + this.filters.dueStatus;
 
@@ -461,15 +461,15 @@
 		},
 		watch: {
 			// watch filters obj
-			/*'tagsString': function (val) {
+			/*'tagsString': (val) =>  {
 				let tags = val.split(/[\s,]+/);
 				this.filters.tags = tags[0] !== '' ? tags : '';
 				this.searchReservations();
 			},*/
-			'direction': function (val) {
+			'direction': (val) =>  {
 				this.searchReservations();
 			},
-			'activeFields': function (val, oldVal) {
+			'activeFields': (val, oldVal) =>  {
 				// if the orderBy field is removed from view
 				if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
 					// default to first visible field
@@ -477,12 +477,12 @@
 				}
 				this.updateConfig();
 			},
-			'search': function (val, oldVal) {
+			'search': (val, oldVal) =>  {
 //                this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchReservations();
 			},
-			'per_page': function (val, oldVal) {
+			'per_page': (val, oldVal) =>  {
                 this.updateConfig();
                 this.searchReservations();
 			}
@@ -680,7 +680,7 @@
 							});
 							// this.campaignObj = _.findWhere(this.campaignOptions, {id: arr[1]})
 					}
-				}.bind(this));
+				});
 			}
 
             if (!this.$refs.filters)

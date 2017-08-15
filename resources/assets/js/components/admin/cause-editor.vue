@@ -114,7 +114,7 @@
                     this.editMode = false;
                     this.message = 'Your changes were saved successfully.';
                     this.showSuccess = true;
-                },function () {
+                },() =>  {
                     this.message = 'Your changes could not be saved.';
                     this.showError = true;
                 });
@@ -123,7 +123,7 @@
                 this.$http.post('causes', this.cause).then((response) => {
                     this.cause = {};
                     window.location.reload();
-                },function () {
+                },() =>  {
                     this.message = 'The cause could not be created.';
                     this.showError = true;
                 });

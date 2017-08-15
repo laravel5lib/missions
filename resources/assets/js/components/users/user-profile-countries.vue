@@ -158,7 +158,7 @@
                 // If isUser filter only countries not already included in accolades
                 let accolades = _.pluck(this.accolades.items, 'code');
 
-                this.availableCountries = _.filter(this.UTILITIES.countries, function (country) {
+                this.availableCountries = _.filter(this.UTILITIES.countries, (country) => {
                     return !_.contains(accolades, country.code.toUpperCase());
                 });
             }

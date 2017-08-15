@@ -237,7 +237,7 @@
         mounted(){
             this.searchDeadlines();
             var self = this;
-            this.$root.$on('NewDeadline', function () {
+            this.$root.$on('NewDeadline', () =>  {
                 self.showAddModal = true;
             })
         }

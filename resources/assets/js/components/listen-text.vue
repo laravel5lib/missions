@@ -18,9 +18,9 @@
             return{}
         },
         mounted(){
-            this.$root.$on(this.event, function (val) {
+            this.$root.$on(this.event, (val) =>  {
                 this.text = val;
-            }.bind(this));
+            });
 
         }
     }

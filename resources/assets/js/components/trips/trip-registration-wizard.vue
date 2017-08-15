@@ -146,7 +146,7 @@
                 this.currentStep = step;
                 if (step.view === 'step6') {
                     this.detailsConfirmed = false;
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         this.currentStep.complete = false;
                         this.$emit('payment-complete', false);
                     });
@@ -191,7 +191,7 @@
 	                                .done(function (success) {
 	                                    this.$refs.validationspinner.hide();
 	                                    this.nextStepCallback();
-	                                }.bind(this));
+	                                });
                         } else {
                             this.nextStepCallback();
                         }
@@ -277,7 +277,7 @@
 
 					window.location.href = '/dashboard/reservations/' + response.data.data.id;
 					this.$refs.reservationspinner.hide();
-				}, function (response) {
+				}, (response) =>  {
                     this.$refs.reservationspinner.hide();
                     console.log(response);
 					this.$root.$emit('showError', response.data.message);
@@ -290,7 +290,7 @@
 			prepareFinalCosts(){
 			    let finalCosts = [];
 			    let unionCosts = _.union(this.tripCosts.incremental, [this.selectedOptions], this.tripCosts.static);
-			    _.each(unionCosts, function (cost) {
+			    _.each(unionCosts, (cost) => {
 				    if (_.isObject(cost))
                         finalCosts.push(cost);
                 });
@@ -366,7 +366,7 @@
 			});
 
 			let self = this;
-			this.$root.$on('userHasLoggedIn', function (val) {
+			this.$root.$on('userHasLoggedIn', (val) =>  {
 				// expecting userData object
 				self.userData = val;
 				self.currentStep.complete = !!val;

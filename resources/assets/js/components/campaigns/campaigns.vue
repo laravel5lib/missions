@@ -535,7 +535,7 @@
 			this.resource.query().then((campaigns) => {
 				this.campaigns = campaigns.data.data;
 				// this.$refs.spinner.hide();
-			}, function (error) {
+			}, (error) =>  {
 				// this.$refs.spinner.hide();
 				//TODO error alert message
 			}).then(() => {

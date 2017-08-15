@@ -47,7 +47,7 @@
             fundraiserId: String,
             donations: {
                 default: [],
-                coerce: function (val) {
+                coerce: (val) =>  {
                     return JSON.parse(val);
                 }
             }

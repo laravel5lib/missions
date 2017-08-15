@@ -40,7 +40,7 @@
             fetch() {
                 this.$http.get('referrals/' + this.id).then((response) => {
                     this.referral = response.data.data;
-                },function () {
+                },() =>  {
                     this.$root.$emit('showError', 'Unable to retrieve the referral request!')
                 });
             },
@@ -51,7 +51,7 @@
             save() {
                 // validate manually
                 let self = this;
-                this.$validate(true, function () {
+                this.$validate(true, () =>  {
                     if (self.$validation.invalid) {
                         console.log('validation errors');
                         self.$root.$emit('showError', 'Could not submit. Please check the form.');
@@ -59,7 +59,7 @@
                         self.referral.responded_at = moment().format('YYYY-MM-DD HH:MM:SS');
                         self.$http.put('referrals/' + self.id, self.referral).then((response) => {
                             self.$root.$emit('showSuccess', 'Thank you for submitting your response.');
-                        },function () {
+                        },() =>  {
                             self.$root.$emit('showError', 'Unable to retrieve the referral request!');
                         });
                     }

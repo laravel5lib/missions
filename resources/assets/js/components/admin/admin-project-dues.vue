@@ -169,13 +169,13 @@
                 console.log(this.editedDue.due_at);
                 // prep current dues
                 let dues = [];
-                _.each(this.project.dues.data, function (due) {
+                _.each(this.project.dues.data, (due) => {
                     if (due.cost_id === this.editedDue.cost_id) {
                         dues.push({ id: this.editedDue.cost_id, grace_period: this.editedDue.grace_period, due_at: this.editedDue.due_at });
                     } else {
                         dues.push({id: due.cost_id, grace_period: due.grace_period});
                     }
-                }.bind(this));
+                });
 
                 let project = this.preppedProject;
                 project.dues = dues;
@@ -185,7 +185,7 @@
             remove(due){
                 let project = this.preppedProject;
                 project.dues = [];
-                _.each(this.project.dues.data, function (cs) {
+                _.each(this.project.dues.data, (cs) => {
                     if (cs.due_id !== due.due_id) {
                         project.dues.push({ id: cs.due_id/*, locked: cs.locked*/})
                     }
@@ -197,13 +197,13 @@
             addDues(){
                 // prep current dues
                 let currentDueIds = [];
-                _.each(this.project.dues.data, function (due) {
+                _.each(this.project.dues.data, (due) => {
                     currentDueIds.push({ id: due.id || due.due_id, locked: due.locked })
                 });
 
                 // prep added dues
                 let selectedDueIds = [];
-                _.each(this.selectedDues, function (due) {
+                _.each(this.selectedDues, (due) => {
                     selectedDueIds.push({ id: due.id })
                 });
 
@@ -223,7 +223,7 @@
 
                 // get only ids of current dues so we don't change anything
                 initiative.dues = [];
-                _.each(this.project.initiative.data.dues.data, function (dl) {
+                _.each(this.project.initiative.data.dues.data, (dl) => {
                     initiative.dues.push({id: dl.id});
                 });
                 initiative.dues.push(this.newDeadline);
@@ -265,7 +265,7 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(project.initiative.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(project.initiative.data.costs.data, (cost) => {
                     return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
 
@@ -283,7 +283,7 @@
             //Listen to Event Bus
             this.$root.$on('AdminProject:CostsUpdated', function (data) {
                 this.setProjectData(data)
-            }.bind(this));
+            });
 
         }
     }

@@ -119,7 +119,7 @@
                     // this.showImportModal = false;
                     this.file = null;
                     this.importFile = null;
-                }, function (error) {
+                }, (error) =>  {
                     if (error.data.errors) {
                         this.$root.$emit('showError', _.first(_.toArray(error.data.errors)));
                     } else {

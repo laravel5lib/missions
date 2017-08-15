@@ -387,36 +387,36 @@
                         return false;
                     }
 
-                    this.$http.post('/login', this.user)
-                        .then((response) => {
-                                // set cookie - name, token
-                                this.$cookie.set('api_token', response.data.token);
-                                // reload to set cookie
-                                /*if (this.isChildComponent) {
-								 window.location.reload();
-								 }*/
-                                if (response.data.redirect_to)
-                                    this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
-                            },
-                            function (response) {
-                                this.messages = [];
-                                if (response.status && response.status === 401) {
-                                    this.messages.push({
-                                        type: 'danger',
-                                        message: 'An account with this email and password could not be found.'
-                                    });
-                                    this.$root.$emit('showError', 'Please check the form.');
-                                }
+                    let loginHttp = this.$http.create({baseURL: '/'});
+                    loginHttp.post('/login', this.user).then((response) => {
+                        // set cookie - name, token
+                        this.$cookie.set('api_token', response.data.token);
+                        // reload to set cookie
+                        /*if (this.isChildComponent) {
+						 window.location.reload();
+						 }*/
+                        if (response.data.redirect_to)
+                            this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
+                    })
+                    .catch((response) => {
+                        debugger;
+                        this.messages = [];
+                        if (response.status && response.status === 401) {
+                            this.messages.push({
+                                type: 'danger',
+                                message: 'An account with this email and password could not be found.'
+                            });
+                            this.$root.$emit('showError', 'Please check the form.');
+                        }
 
-                                if (response.status && response.status === 422) {
-                                    this.messages = [{
-                                        type: 'danger',
-                                        message: 'Please enter a valid email and password.'
-                                    }];
-                                    this.$root.$emit('showError', 'Please check the form.');
-                                }
-                            })
-
+                        if (response.status && response.status === 422) {
+                            this.messages = [{
+                                type: 'danger',
+                                message: 'Please enter a valid email and password.'
+                            }];
+                            this.$root.$emit('showError', 'Please check the form.');
+                        }
+                    })
                 });
             },
 
@@ -435,7 +435,7 @@
                             }
 
                         },
-                        function (response) {
+                        (response) => {
                             console.log(response);
                             return response.data.data;
                         });
@@ -454,7 +454,8 @@
                         return false;
                     }
 
-                    this.$http.post('/register', this.newUser).then((response) => {
+                    let loginHttp = this.$http.create({baseURL: '/'});
+                    loginHttp.post('/register', this.newUser).then((response) => {
                             // console.log(response.data.token);
                             // set cookie - name, token
                             this.$cookie.set('api_token', response.data.token);
@@ -463,12 +464,11 @@
 								 window.location.reload();
 								 }*/
                             this.getUserData(response.data.redirect_to);
-                        },
-                        function (response) {
+                        }, (response) => {
                             // console.log(response);
                             let messages = [];
                             this.registerErrors = response.data;
-                            _.each(this.registerErrors, function (error) {
+                            _.each(this.registerErrors, (error) =>  {
                                     messages.push({
                                         type: 'danger',
                                         message: _.values(error)[0]
@@ -506,14 +506,14 @@
             this.$http.get('utilities/countries').then((response) => {
                 this.countries = response.data.countries;
             },
-                function (response) {
+                (response) =>  {
                     console.log(response);
                 });
 
             this.$http.get('utilities/timezones').then((response) => {
                 this.timezones = response.data.timezones;
             },
-                function (response) {
+                (response) =>  {
                     console.log(response);
                 });
 

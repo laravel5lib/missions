@@ -601,7 +601,7 @@
                         //TODO use universal alert
                         this.resetForm();
                         // this.$refs.spinner.hide();
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         // this.$refs.spinner.hide();
                     });

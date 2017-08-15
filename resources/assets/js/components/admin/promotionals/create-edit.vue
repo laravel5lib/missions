@@ -125,7 +125,7 @@
             fetch() {
                 this.$http.get('promotionals/' + this.id).then((response) => {
                     this.promo = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 })
             },
@@ -136,7 +136,7 @@
                     this.$http.post('promotionals', this.promo).then((response) => {
                         this.$root.$emit('showSuccess', 'Promotional created.');
                         this.$dispatch('load-view', {view: 'details', id: response.data.data.id});
-                    }, function (error) {
+                    }, (error) =>  {
                         this.$root.$emit('showError', 'Could not create promotional.');
                     })
                 }
@@ -151,7 +151,7 @@
                     this.$http.put('promotionals/' + this.id, this.promo).then((response) => {
                         this.$root.$emit('showSuccess', 'Promotional updated.');
                         this.$dispatch('load-view', {view: 'details', id: response.data.data.id});
-                    }, function (error) {
+                    }, (error) =>  {
                         this.$root.$emit('showError', 'Could not update promotional.');
                     })
                 }

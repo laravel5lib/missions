@@ -196,14 +196,14 @@
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.searchProjects();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.searchProjects();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchProjects();
             }
         },

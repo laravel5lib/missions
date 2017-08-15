@@ -263,14 +263,14 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     console.log(val);
                     this.pagination.current_page = 1;
                     this.searchFunds();
                 },
                 deep: true
             },
-            'archived': function (val) {
+            'archived': (val) =>  {
                 if (val) {
                     this.filters.archived = true;
                     this.searchFunds();
@@ -279,15 +279,15 @@
                     this.searchFunds();
                 }
             },
-            'direction': function (val) {
+            'direction': (val) =>  {
                 this.searchFunds();
             },
-            'tagsString': function (val) {
+            'tagsString': (val) =>  {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchFunds();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields': (val, oldVal) =>  {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -295,12 +295,12 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchFunds();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchFunds();
             },
 
@@ -375,7 +375,7 @@
                     this.funds = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(() => {

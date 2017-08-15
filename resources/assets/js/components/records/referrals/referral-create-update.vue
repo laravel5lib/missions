@@ -181,10 +181,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Referral created and sent.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment + '/records/referrals/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create referral.');
                     });
@@ -207,10 +207,10 @@
                         user_id: this.user_id,
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ this.firstUrlSegment +'/records/referrals/' + this.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });

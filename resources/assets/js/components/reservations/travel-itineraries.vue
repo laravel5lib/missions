@@ -131,29 +131,29 @@
                     return _.findWhere(this.activityTypes, { name: 'departure'});
             },
             connectionPresent() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
 					return item.activity.activity_type_id === this.connectionType.id;
-                }.bind(this));
+                });
 			},
 			departurePresent() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
                     return item.activity.activity_type_id === this.departureType.id;
-                }.bind(this));
+                });
 
             },
 			domesticArrivalPresent() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
                     return item.activity.activity_type_id === this.arrivalType.id && !!item.transport.domestic;
-                }.bind(this));
+                });
 
             },
             returningOnOwn() {
-                return this.itinerary.items && _.some(this.itinerary.items, function (item) {
+                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
                     if (item.activity.activity_type_id === this.departureType.id) {
                        return !item.transport && !item.hub;
                     }
                     return false;
-                }.bind(this));
+                });
             },
 			'isLocked': function() {
 				if (this.isAdminRoute)
@@ -173,7 +173,7 @@
                 let itinerary = _.extend(itineraryObj, {
                     items: [],
                 });
-                _.each(itineraryObj.activities.data, function (activity) {
+                _.each(itineraryObj.activities.data, (activity) => {
                     // create item
                     let item = {
                         activity: {
@@ -227,7 +227,7 @@
 	                .then((response) => {
 	                    return this.setupItinerary(response.data.data);
 	                },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             },
@@ -246,8 +246,8 @@
                         let vState = child.$TravelTransport || child.$TravelHub || child.$TravelActivity;
                         console.log(child.validatorHandle + ' invalid: ' + vState.invalid);
                         return vState.invalid;
-                    }.bind(this));
-                }.bind(this));
+                    });
+                });
 
                 if (isInvalid) {
                     this.$root.$emit('showError', 'Please check your itinerary form.');
@@ -265,7 +265,7 @@
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
 //                        return response.data.data;
                     });
@@ -280,8 +280,8 @@
                         let vState = child.$TravelTransport || child.$TravelHub || child.$TravelActivity;
                         console.log(child.validatorHandle + ' invalid: ' + vState.invalid);
                         return vState.invalid;
-                    }.bind(this));
-                }.bind(this));
+                    });
+                });
 
                 if (isInvalid) {
                     this.$root.$emit('showError', 'Please check your itinerary form.');
@@ -295,7 +295,7 @@
                     this.$emit('showSuccess', 'Itinerary Saved');
                     return it;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             },
@@ -320,7 +320,7 @@
                         this.unsetItinerary(this.itinerary);
                         console.log('Itinerary deleted');
                     },
-                        function (response) {
+                        (response) =>  {
                             console.log(response);
                         });
                 }
@@ -412,10 +412,10 @@
 	        },
 	        toggleEditMode() {
 	            this.editMode = true;
-	            this.$nextTick(function () {
+	            this.$nextTick(() =>  {
                     if ( _.isFunction(this.$validate) )
                         this.$validate(true);
-                }.bind(this));
+                });
 	        },
             toggleResetModal(){
 	            this.showResetModal = !this.showResetModal;
@@ -430,7 +430,7 @@
 	            return this.$http.get('utilities/activities/types').then((response) => {
                     return this.activityTypes = response.data;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
 	        },
@@ -452,7 +452,7 @@
                 let connection = self.connectionType;
                 return [arrival, departure, connection];
             }).then(() => {
-                self.$nextTick(function () {
+                self.$nextTick(() =>  {
                     if (self.document || (self.$parent && self.$parent.requirement && self.$parent.requirement.document_id)) {
                         self.editMode = false;
                         self.getItinerary();

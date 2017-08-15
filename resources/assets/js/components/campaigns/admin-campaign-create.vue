@@ -194,7 +194,7 @@
 			},
 		},
 		watch: {
-			'name': function (val) {
+			'name': (val) =>  {
 				if (typeof val === 'string') {
 					// pre-populate slug
 					this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } })
@@ -227,7 +227,7 @@
 
 					}).then((resp) => {
 						window.location.href = '/admin' + resp.data.data.links[0].uri;
-					}, function (error) {
+					}, (error) =>  {
 						this.errors = error.data.errors;
 						this.showError = true;
 						// TODO use global alert
@@ -259,7 +259,7 @@
 			this.$http.get('utilities/countries').then((response) => {
 				this.countries = response.data.countries;
 				// this.$refs.spinner.hide();
-			}, function (response) {
+			}, (response) =>  {
                 console.log(response);
             });
 		}

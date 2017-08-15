@@ -72,12 +72,12 @@
 			}
 		},
 		watch: {
-			'searchText': function (val, oldVal) {
+			'searchText': (val, oldVal) =>  {
 				this.pagination.current_page = 1;
 				this.page = 1;
 				this.searchGroups();
 			},
-			'page': function (val, oldVal) {
+			'page': (val, oldVal) =>  {
 				this.searchGroups();
 			}
 		},
@@ -109,7 +109,7 @@
 					this.groups = _.filter(arr, function(group) {
 						return group['public'] == true;
 					});
-				}, function (error) {
+				}, (error) =>  {
 					//TODO error alert message
 				});
 			},

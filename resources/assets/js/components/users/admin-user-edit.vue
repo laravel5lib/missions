@@ -442,10 +442,10 @@
                         this.$root.$emit('showSuccess', 'User updated.');
                         this.hasChanged = false;
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/users/' + that.userId;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.$root.$emit('showError', 'There are errors on the form.');
                         console.log(error);
                         this.errors = error.data.errors;
@@ -489,11 +489,11 @@
                     this.dobDay = moment(user.birthday).format('DD');
                     this.dobMonth = moment(user.birthday).format('MM');
                     this.dobYear = moment(user.birthday).format('YYYY');
-                }, function (response) {
+                }, (response) =>  {
                     console.log('Loading Failed! :(');
                     console.log(response);
                 });
-            }.bind(this))
+            })
         }
     }
 </script> 

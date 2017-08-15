@@ -258,7 +258,7 @@
 					this.groupObj = response.data.data;
 				});
 				var arr = [];
-				_.forEach(this.prospectsList, function (prospect) {
+				_.forEach(this.prospectsList, (prospect) => {
 					if ( _.contains(val.prospects, prospect.value))
 						arr.push(prospect);
 				});

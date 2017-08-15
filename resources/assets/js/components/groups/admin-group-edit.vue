@@ -309,7 +309,7 @@
                         this.banner = group.banner;
                         this.$root.$emit('showSuccess', 'Group updated!');
                         this.hasChanged = false;
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'There are errors on the form.');
                     });
@@ -353,13 +353,13 @@
                     this.url = group.url;
                     this.email = group.email;
                     // this.$refs.spinner.hide();
-                }, function (response) {
+                }, (response) =>  {
                     console.log('Update Failed! :(');
                     console.log(response);
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
-            //}.bind(this));
+            //});
         }
     }
 </script> 

@@ -134,11 +134,11 @@
             }
         },
         watch:{
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchEssays();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchEssays();
             }
@@ -153,7 +153,7 @@
             removeEssay(essay){
                 if(essay) {
                     this.$http.delete('essays/' + essay.id).then((response) => {
-                        this.essays = _.reject(this.essays, function (item) {
+                        this.essays = _.reject(this.essays, (item) => {
                             return item.id === essay.id;
                         });
                         this.selectedEssay = '';
@@ -185,7 +185,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

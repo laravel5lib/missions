@@ -217,11 +217,11 @@
             // set the date to the current value of the model
             this.control.date(this.model);
             var me = this;
-            $(this.$el).on("dp.change", function () {
+            $(this.$el).on("dp.change", () =>  {
                 if (! me.isChanging) {
                     me.isChanging = true;
                     me.model = me.control.date();
-                    me.$nextTick(function () {
+                    me.$nextTick(() =>  {
                         me.isChanging = false;
                         if (me.onChange) {
                             me.onChange(me.model);

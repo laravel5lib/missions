@@ -60,7 +60,7 @@
                     } else {
                         window.location.href = '/admin/' + this.resource + 's/' + this.id;
                     }
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to ' + this.action);
                 })
             }

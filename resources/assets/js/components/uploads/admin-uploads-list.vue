@@ -154,32 +154,32 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: function (val) {
+				handler: (val) =>  {
 					// console.log(val);
                     this.pagination.current_page = 1;
                     this.searchUploads();
 				},
 				deep: true
 			},
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchUploads();
             },
-            'orderByField': function (val, oldVal) {
+            'orderByField': (val, oldVal) =>  {
 				this.searchUploads();
             },
-            'direction': function (val, oldVal) {
+            'direction': (val, oldVal) =>  {
 				this.searchUploads();
             },
-            'tagsString': function (val) {
+            'tagsString': (val) =>  {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchUploads();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
 				this.searchUploads();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
 				this.searchUploads();
             },
         },

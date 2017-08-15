@@ -89,11 +89,11 @@
             //Listen to Event Bus
             // this.$root.$on('Project:CostsUpdated', function (data) {
             //     this.setProjectData(data)
-            // }.bind(this));
+            // });
 
             // this.$root.$on('Project:CostsReverted', function (data) {
             //     this.setProjectData(data)
-            // }.bind(this));
+            // });
 
         }
     }

@@ -280,7 +280,7 @@
         mounted(){
             this.searchRequirements();
             var self = this;
-            this.$root.$on('NewRequirement', function () {
+            this.$root.$on('NewRequirement', () =>  {
                 self.showAddModal = true;
             })
         }

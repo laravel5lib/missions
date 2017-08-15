@@ -87,11 +87,11 @@
             //Listen to Event Bus
             this.$root.$on('Reservation:CostsUpdated', function (data) {
                 this.setReservationData(data)
-            }.bind(this));
+            });
 
             this.$root.$on('Reservation:CostsReverted', function (data) {
                 this.setReservationData(data)
-            }.bind(this));
+            });
 
         }
     }

@@ -256,38 +256,38 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: function (val) {
+				handler: (val) =>  {
 					// console.log(val);
 					this.searchReservations();
 				},
 				deep: true
 			},
-        	'campaignObj': function (val) {
+        	'campaignObj': (val) =>  {
 				this.filters.campaign = val ? val.id : '';
 			},
-			'shirtSizeArr': function (val) {
+			'shirtSizeArr': (val) =>  {
 				this.filters.shirtSize = _.pluck(val, 'id')||'';
 			},
-			'groupsArr': function (val) {
+			'groupsArr': (val) =>  {
 				this.filters.groups = _.pluck(val, 'id')||'';
 				this.searchReservations();
 			},
-			'usersArr': function (val) {
+			'usersArr': (val) =>  {
 				this.filters.user = _.pluck(val, 'id')||'';
 				this.searchReservations();
 			},
-			'tagsString': function (val) {
+			'tagsString': (val) =>  {
 				let tags = val.split(/[\s,]+/);
 				this.filters.tags = tags[0] !== '' ? tags : '';
 				this.searchReservations();
 			},
-			'ageMin': function (val) {
+			'ageMin': (val) =>  {
 				this.searchReservations();
 			},
-			'ageMax': function (val) {
+			'ageMax': (val) =>  {
 				this.searchReservations();
 			},
-        	'activeFields': function (val, oldVal) {
+        	'activeFields': (val, oldVal) =>  {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
         			// default to first visible field
@@ -295,20 +295,20 @@
 				}
 				this.updateConfig();
 			},
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
 				this.updateConfig();
 				this.page = 1;
                 this.searchReservations();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
 				this.updateConfig();
 				this.searchReservations();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
 				this.updateConfig();
 				this.searchReservations();
             },
-			'groups':function () {
+			'groups':() =>  {
 				this.searchReservations();
 			}
         },
@@ -377,14 +377,14 @@
             },
             totalAmountRaised(reservation){
                 let total = 0;
-                _.each(reservation.fundraisers.data, function (fundraiser) {
+                _.each(reservation.fundraisers.data, (fundraiser) => {
                     total += fundraiser.raised_amount;
                 });
                 return total;
             },
             totalPercentRaised(reservation){
                 let totalDue = 0;
-                _.each(reservation.costs.data, function (cost) {
+                _.each(reservation.costs.data, (cost) => {
                     totalDue += cost.amount;
                 });
                 return this.totalAmountRaised(reservation) / totalDue * 100;
@@ -409,14 +409,14 @@
 				// this.$refs.spinner.show();
 				this.$http.get('reservations', { params: params }).then((response) => {
                     let self = this;
-                    _.each(response.data.data, function (reservation) {
+                    _.each(response.data.data, (reservation) => {
                         reservation.amount_raised = this.totalAmountRaised(reservation);
                         reservation.percent_raised = this.totalPercentRaised(reservation);
                     }, this);
                     this.reservations = response.data.data;
                     this.pagination = response.data.meta.pagination;
 					// this.$refs.spinner.hide();
-				}, function (error) {
+				}, (error) =>  {
 					// this.$refs.spinner.hide();
 					//TODO add error alert
 				});

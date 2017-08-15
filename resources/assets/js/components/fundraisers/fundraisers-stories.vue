@@ -171,7 +171,7 @@
             removeStory(story){
                 if(story) {
                     this.$http.delete('stories/' + story.id).then((response) => {
-                        this.stories = _.reject(this.stories, function (item) {
+                        this.stories = _.reject(this.stories, (item) => {
                             return item.id === story.id;
                         });
                         this.resetData();
@@ -216,7 +216,7 @@
                         this.resetData();
                         this.searchStories();
                         // this.$refs.spinner.hide();
-                    }, function (error) {
+                    }, (error) =>  {
                         // this.$refs.spinner.hide();
                         //TODO add error alert
                     });
@@ -232,7 +232,7 @@
                     this.stories = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });

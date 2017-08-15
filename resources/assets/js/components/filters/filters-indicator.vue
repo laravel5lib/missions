@@ -137,7 +137,7 @@
             }
         },
 	    watch:{
-            'requirement': function () {
+            'requirement': () =>  {
                 if (this.filters.requirementName) {
                     if (this.filters.requirementName && this.filters.requirementStatus)
                         return this.filters.requirementName + '|' + this.filters.requirementStatus;
@@ -147,7 +147,7 @@
 
                 return ''
             },
-            'due': function () {
+            'due': () =>  {
                 if (this.filters.dueName) {
                     if (this.filters.dueStatus)
                     return this.filters.dueName + '|' + this.filters.dueStatus;

@@ -172,17 +172,17 @@
         },
         watch:{
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.pagination.current_page = 1;
                     this.searchVisas();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchVisas();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchVisas();
             }
@@ -209,7 +209,7 @@
                 if(visa) {
                     // this.$refs.spinner.show();
                     this.$http.delete('visas/' + visa.id).then((response) => {
-                        this.visas = _.reject(this.visas, function (item) {
+                        this.visas = _.reject(this.visas, (item) => {
                             return item.id === visa.id;
                         });
                         this.pagination.total_pages = Math.ceil(this.visas.length / this.per_page);
@@ -230,7 +230,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

@@ -127,7 +127,7 @@
                         console.log(response);
                         this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
                         this.reset();
-                    }, function (error) {
+                    }, (error) =>  {
                         console.log(error);
                         this.$root.$emit('showError', 'Something went wrong...');
                     });

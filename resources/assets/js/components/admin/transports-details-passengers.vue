@@ -395,15 +395,15 @@
 	            // Available Space
 
 	            let promises = [];
-	            _.each(notPresentIds, function (id) {
+	            _.each(notPresentIds, (id) => {
 		            promises.push(this.addPassenger({ id: id }));
-                }.bind(this));
+                });
 
 	            Promise.all(promises).then((values) => {
 		            this.$root.$emit('showSuccess', 'Companions Added');
                 }.then((error) => {
                     this.$root.$emit('showError', error.message);
-				}).bind(this));
+				}));
 
             }
         },

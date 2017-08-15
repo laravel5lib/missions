@@ -148,13 +148,13 @@
             }
         },
         watch: {
-            'type': function (val, oldVal) {
+            'type': (val, oldVal) =>  {
                 this.typeObj = _.findWhere(this.typePaths, {type: val});
                 this.path = this.typeObj.path;
                 if (this.file)
                     this.adjustSelectByType();
             },
-            'tags': function (val) {
+            'tags': (val) =>  {
                 this.$validate('tags', true);
             }
         },
@@ -219,7 +219,7 @@
 //                    	this.resultImage = resp.data;
                         window.location.href = '/admin/uploads';
 //                        window.location.href = '/admin' + resp.data.data.links[0].uri;
-                    }, function (error) {
+                    }, (error) =>  {
                         console.log(error);
                     });
                 }

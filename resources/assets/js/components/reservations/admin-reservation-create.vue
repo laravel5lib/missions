@@ -213,7 +213,7 @@
                         upfrontTotal: 0,
                         fundraisingGoal: 0
                     })*/
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response);
                     this.$refs.reservationspinner.hide();
                 });

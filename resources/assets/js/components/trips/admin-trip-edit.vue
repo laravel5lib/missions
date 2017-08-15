@@ -127,7 +127,7 @@
 				var resource = this.$resource('trips{/id}');
 				resource.update({ id: this.tripId}, this.wizardData).then((resp) => {
 
-				}, function (error) {
+				}, (error) =>  {
 					console.log(error);
 				});
 			},
@@ -145,7 +145,7 @@
 					group_id: this.group_id
 				});
 				// trim costs
-				_.each(trip.costs.data, function (cost) {
+				_.each(trip.costs.data, (cost) => {
 					cost.payments = cost.payments.data;
 				});
 				trip.costs = trip.costs.data;

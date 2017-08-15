@@ -173,7 +173,7 @@
                 this.transport.domestic = false;
             },
             'transport.name'(val) {
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     if (_.isFunction(this.$validate))
                         this.$validate(true);
                 });
@@ -202,7 +202,7 @@
                 return this.$http.get('utilities/airlines/' + reference).then((response) => {
                     return response.data.data;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             },
@@ -210,7 +210,7 @@
                 this.$http.put('transports/' + this.transport.id, this.transport).then((response) => {
                     this.$emit('showSuccess', 'Itinerary Travel Details Updated');
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                     });
             }
@@ -234,7 +234,7 @@
                     }
 	                //console.log(self.selectedAirlineObj);
                 }
-                self.$nextTick(function () {
+                self.$nextTick(() =>  {
                     if (_.isFunction(self.$validate))
                         self.$validate(true);
                 });

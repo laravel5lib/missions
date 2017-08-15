@@ -157,7 +157,7 @@
             marked: marked,
         },
         computed:{
-            action: function () {
+            action: () =>  {
                 switch (this.type) {
                     case 'donation':
                     default:
@@ -172,10 +172,10 @@
             }
         },
         watch: {
-            'donorPagination.current_page': function (val, oldVal) {
+            'donorPagination.current_page': (val, oldVal) =>  {
                 this.searchDonors();
             },
-            'pagination.current_page': function (val, oldVal) {
+            'pagination.current_page': (val, oldVal) =>  {
                 this.searchTransactions(this.type);
             },
         },

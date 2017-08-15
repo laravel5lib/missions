@@ -119,10 +119,10 @@
         }
     },
 		watch: {
-			'per_page': function (val, oldVal) {
+			'per_page': (val, oldVal) =>  {
 				this.searchCampaigns();
 			},
-			'search': function (val, oldVal) {
+			'search': (val, oldVal) =>  {
 				this.pagination.current_page = 1;
 				this.searchCampaigns();
 			},

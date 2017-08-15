@@ -171,14 +171,14 @@
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.searchInitiatives();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.searchInitiatives();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchInitiatives();
             }
         },

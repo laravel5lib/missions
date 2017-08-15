@@ -47,7 +47,7 @@
                     this.trips = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(() => {

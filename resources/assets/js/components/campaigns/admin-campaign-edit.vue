@@ -235,7 +235,7 @@
 			}
 		},
 		watch:{
-			'name': function (val) {
+			'name': (val) =>  {
 				if(typeof val === 'string') {
 					this.page_url = this.convertToSlug(val);
 				}
@@ -289,7 +289,7 @@
 						this.showSuccess = true;
 						this.hasChanged = false;
 						// this.$refs.spinner.hide();
-					}, function (error) {
+					}, (error) =>  {
 						this.errors = error.data.errors;
 						this.showError = true;
                         console.log(response);
@@ -304,7 +304,7 @@
 				// this.$refs.spinner.show();
 				this.resource.delete({id: this.campaignId}).then((response) => {
 					window.location.href = '/admin/campaigns/'
-				}, function (response) {
+				}, (response) =>  {
                     console.log(response);
                     return response
                 });
@@ -330,7 +330,7 @@
 			// this.$refs.spinner.show();
 			this.$http.get('utilities/countries').then((response) => {
 				this.countries = response.data.countries;
-			}, function (response) {
+			}, (response) =>  {
                 console.log(response);
                 return response
             });
@@ -352,7 +352,7 @@
 				this.selectedAvatar.source = campaign.avatar;
 				this.selectedBanner.source = campaign.banner;
 				// this.$refs.spinner.hide();
-			}, function (response) {
+			}, (response) =>  {
                 console.log(response);
                 return response
             });

@@ -152,11 +152,11 @@
             }
         },
         watch:{
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchReferrals();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchReferrals();
             }
@@ -168,7 +168,7 @@
             removeReferral(referral){
                 if(referral) {
                     this.$http.delete('referrals/' + referral.id).then((response) => {
-                        this.referrals = _.reject(this.referrals, function (item) {
+                        this.referrals = _.reject(this.referrals, (item) => {
                             return item.id === referral.id;
                         });
                         this.selectedReferral = '';
@@ -199,7 +199,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

@@ -190,7 +190,7 @@
 
                 if (this.selectedUpload.type === 'video') {
                     // load preview player
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         if (this.selectedUploadPlayer === null) {
                             vjsOptions = {
                                 controls: true,
@@ -212,7 +212,7 @@
                                     break;
                             }
 
-                            this.selectedUploadPlayer = videojs('preview', vjsOptions, function () {
+                            this.selectedUploadPlayer = videojs('preview', vjsOptions, () =>  {
                                 // Player (this) is initialized and ready.
                             });
                         } else {
@@ -244,9 +244,9 @@
             doDelete(){
                 this.$http.delete('uploads/' + this.selectedUpload.id).then((response) => {
                     console.log(response);
-                    this.fundraiser.uploads.data = _.reject(this.fundraiser.uploads.data, function (upload) {
+                    this.fundraiser.uploads.data = _.reject(this.fundraiser.uploads.data, (upload) => {
                         return upload.id === this.selectedUpload.id;
-                    }.bind(this));
+                    });
                     this.showDelete = false;
                     this.selectedUpload = null;
 
@@ -265,14 +265,14 @@
                 // Handling Videos
                 // We must use $nexTick to allow the DOM to fully load first
                 // else videojs won't find the element
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     // We need to filter the `upload.type: 'video'` objs
-                    let videos = _.filter(this.fundraiser.uploads.data, function (upload) {
+                    let videos = _.filter(this.fundraiser.uploads.data, (upload) => {
                         return upload.type === 'video';
                     });
 
                     // Initiate videojs players for each video
-                    _.each(videos, function (video) {
+                    _.each(videos, (video) => {
                         var vjsId = video.id;
                         var vjsOptions = {
                             controls: true,

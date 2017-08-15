@@ -28,7 +28,7 @@
                 this.$http.delete('transactions/' + this.transactionId).then((response) => {
                     this.$root.$emit('showSuccess', 'Transaction deleted.');
                     window.location.href = '/admin/transactions';
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                 });
             }

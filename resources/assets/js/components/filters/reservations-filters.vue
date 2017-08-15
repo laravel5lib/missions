@@ -590,7 +590,7 @@
         },
         mounted(){
             let self = this;
-            this.$root.$on('reservations-filters:reset', function () {
+            this.$root.$on('reservations-filters:reset', () =>  {
                 // the reset callback handles reset of the filters object
 	            // variables that influence the filters object need to be reset here
                 self.groupsArr = [];
@@ -602,7 +602,7 @@
 				self.filters = _.extend(self.filters, val);
             });
 
-            this.$root.$on('reservations-filters:update-storage', function () {
+            this.$root.$on('reservations-filters:update-storage', () =>  {
                 if (self.storage) {
                     let config = window.localStorage[self.storage] ? JSON.parse(window.localStorage[self.storage]) : {};
                     config = _.extend(config, {

@@ -150,7 +150,7 @@ export default {
                 }
             }).value();
             loading(false);
-        }, function (response) {
+        }, (response) =>  {
             this.$root.$emit('showError', 'Could not retreive reservations.');
         });
     },
@@ -159,14 +159,14 @@ export default {
             this.limit = response.data.data.companion_limit;
             this.campaignId = response.data.data.trip.data.campaign_id;
             this.groupId = response.data.data.trip.data.group_id;
-        }, function (response) {
+        }, (response) =>  {
             this.$root.$emit('showError', 'Could not retreive reservation.');
         });
     },
     fetch() {
         this.resource.get({reservation: this.reservationId}).then((response) => {
             this.companions = response.data.data;
-        }, function (response) {
+        }, (response) =>  {
             this.$root.$emit('showError', 'Could not retreive companions.');
         });
     },
@@ -180,7 +180,7 @@ export default {
             this.reservationObj = null;
             this.reservations = [];
             this.fetch();
-        }, function (response) {
+        }, (response) =>  {
             console.log(_.first(_.toArray(response.data.errors)));
             this.$root.$emit('showError', _.first(_.toArray(response.data.errors)));
         });
@@ -190,7 +190,7 @@ export default {
             this.$root.$emit('showSuccess', 'Successfully left companions.');
             $('#LeaveCompanionsModal').modal('hide');
             this.fetch();
-        }, function (response) {
+        }, (response) =>  {
             this.$root.$emit('showError', 'Could not leave companions.');
         });
     },
@@ -199,7 +199,7 @@ export default {
             .then((response) => {
                 this.$root.$emit('showSuccess', 'Successfully updated companion limit.');
                 this.editMode = false;
-            }, function (response) {
+            }, (response) =>  {
                 this.$root.$emit('showError', 'Could not update companion limit.');
             });
     }

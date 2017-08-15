@@ -296,7 +296,7 @@
 	                .then((response) => {
                         return this.roomTypes = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -362,7 +362,7 @@
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present
-                _.each(this.roomTypes, function (type) {
+                _.each(this.roomTypes, (type) => {
                     // the settings will be traced by the type ids
 	                // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
 	                let assignment = plan.room_types.hasOwnProperty(type.name) ? plan.room_types[type.name] : 0;
@@ -402,14 +402,14 @@
                         }
                         if (promise) {
                             // we only need to catch errors here
-                            promise.catch(function (response) {
+                            promise.catch((response) =>  {
                                 console.log(response.data.message);
                             });
                             promises.push(promise);
                         }
                     }
 
-                }.bind(this));
+                });
 	        },
             updatePlanSettings() {
                 let promises = [];
@@ -430,7 +430,7 @@
                         this.selectedPlan = null;
                         this.selectedPlanSettings = null;
                     });
-                }.bind(this));
+                });
 
             },
             deletePlan() {
@@ -438,7 +438,7 @@
                 this.PlansResource.delete({ plan: plan.id}).then((response) => {
                     this.showPlanDeleteModal = false;
                     this.$root.$emit('showInfo', plan.name + ' Deleted!');
-                    this.plans = _.reject(this.plans, function (obj) {
+                    this.plans = _.reject(this.plans, (obj) => {
                         return plan.id === obj.id;
                     });
                 });
@@ -457,13 +457,13 @@
                 };
 
                 // We need to loop through each room type to create an object to reference the plan types present
-                _.each(this.roomTypes, function (type) {
+                _.each(this.roomTypes, (type) => {
                     // the settings will be traced by the type ids
                     // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
                     obj.room_types_settings[type.id] = 0;
                     // we are using method to track which room types need to be updated or posted
                     obj.room_types_settings[type.id + '_method'] = 'POST';
-                }.bind(this));
+                });
                 this.selectedNewPlan = obj;
             },
             newPlan() {
@@ -487,8 +487,8 @@
                             this.getRoomingPlans();
                             this.$root.$emit('showSuccess', data.name + ' created successfully');
                             this.showPlanModal = false;
-                        }.bind(this));
-                    }, function (response) {
+                        });
+                    }, (response) =>  {
                         console.log(response);
                         this.$root.$emit('showError', response.data.message);
                         return response.data.data;
@@ -520,13 +520,13 @@
             });
 			this.getRoomTypes();
 
-            this.$root.$on('campaign-scope', function (val) {
+            this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
                 if (val && val.id) {
                     this.getRoomingPlans();
                     this.getRoomTypes();
                 }
-            }.bind(this));
+            });
         }
     }
 </script>

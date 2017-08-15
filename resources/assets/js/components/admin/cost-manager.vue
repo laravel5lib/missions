@@ -287,26 +287,26 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     // console.log(val);
                     this.searchCosts();
                 },
                 deep: true
             },
 
-            'search': function (val) {
+            'search': (val) =>  {
                 this.searchCosts();
             },
 
-            'showEditModal': function (val, oldVal) {
-                this.$nextTick(function () {
+            'showEditModal': (val, oldVal) =>  {
+                this.$nextTick(() =>  {
                     if (val !== oldVal && val === false) {
                         this.selectedCost = null;
                     }
                 })
             },
-            'showDeleteModal': function (val, oldVal) {
-                this.$nextTick(function () {
+            'showDeleteModal': (val, oldVal) =>  {
+                this.$nextTick(() =>  {
                     // overide modal close issue
                     if (val !== oldVal && val === false) {
                         $('body').css({'overflow-y': 'auto'});
@@ -379,7 +379,7 @@
                         this.showAddModal = false;
                         this.attemptedAddCost = false;
                         this.searchCosts();
-                    }, function (error) {
+                    }, (error) =>  {
                         console.log(error.data.errors);
                         // this.$refs.spinner.hide();
                     });
@@ -396,7 +396,7 @@
                         this.attemptedAddCost = false;
                         this.showEditModal = false;
                         this.searchCosts();
-                    }, function (error) {
+                    }, (error) =>  {
                         console.log(error.data.errors);
                         // this.$refs.spinner.hide();
                     });
@@ -429,15 +429,15 @@
             },
             checkPaymentsSync(){
                 let arr = [];
-                _.each(this.costs, function (cost) {
+                _.each(this.costs, (cost) => {
                     let t = 0;
-                    _.each(cost.payments.data, function (payment) {
+                    _.each(cost.payments.data, (payment) => {
                         t += parseFloat(payment.amount_owed);
                     });
                     if (parseFloat(cost.amount) !== parseFloat(t)) {
                         this.unSyncedCosts.push(cost.id);
                     }
-                }.bind(this));
+                });
                 this.unSyncedCosts = _.uniq(this.unSyncedCosts);
             },
             isOutOfSync(cost){
@@ -448,13 +448,13 @@
             this.searchCosts();
 
             let self = this;
-            this.$root.$on('CheckPaymentsSync', function () {
+            this.$root.$on('CheckPaymentsSync', () =>  {
                 self.checkPaymentsSync();
             });
-            this.$root.$on('SpinnerOn', function () {
+            this.$root.$on('SpinnerOn', () =>  {
                 self.$refs.spinner.show();
             });
-            this.$root.$on('SpinnerOff', function () {
+            this.$root.$on('SpinnerOff', () =>  {
                 self.$refs.spinner.hide();
             });
         }

@@ -275,13 +275,13 @@
             }
         },
         watch: {
-            'orderByField': function (val) {
+            'orderByField': (val) =>  {
                 this.searchTrips();
             },
-            'direction': function (val) {
+            'direction': (val) =>  {
                 this.searchTrips();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields': (val, oldVal) =>  {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -290,17 +290,17 @@
                 // this.updateConfig();
             },
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     // console.log(val);
                     this.searchTrips();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.searchTrips();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchTrips();
             }
         },
@@ -339,7 +339,7 @@
                 this.$http.get('trips', { params: params }).then((response) => {
                     this.pagination = response.data.meta.pagination;
                     this.trips = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                 })
             }
 

@@ -387,8 +387,13 @@
                         return false;
                     }
 
-                    let loginHttp = this.$http.create({baseURL: '/'});
-                    loginHttp.post('/login', this.user).then((response) => {
+//                    let loginHttp = this.$http.create({ baseURL: '', headers: {} });
+                    this.$http.post('/login', this.user, {
+                        baseURL: '',
+                        validateStatus: function (status) {
+                            return status < 500; // Reject only if the status code is greater than or equal to 500
+                        }
+                    }).then((response) => {
                         // set cookie - name, token
                         this.$cookie.set('api_token', response.data.token);
                         // reload to set cookie
@@ -399,46 +404,53 @@
                             this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
                     })
                     .catch((response) => {
-                        debugger;
                         this.messages = [];
-                        if (response.status && response.status === 401) {
-                            this.messages.push({
-                                type: 'danger',
-                                message: 'An account with this email and password could not be found.'
-                            });
-                            this.$root.$emit('showError', 'Please check the form.');
-                        }
-
-                        if (response.status && response.status === 422) {
-                            this.messages = [{
-                                type: 'danger',
-                                message: 'Please enter a valid email and password.'
-                            }];
-                            this.$root.$emit('showError', 'Please check the form.');
+                        if (response.status) {
+                            switch (response.status) {
+	                            case 401:
+                                    this.messages.push({
+                                        type: 'danger',
+                                        message: 'An account with this email and password could not be found.'
+                                    });
+                                    this.$root.$emit('showError', 'Please check the form.');
+                                    break;
+	                            case 422:
+                                    this.messages = [{
+                                        type: 'danger',
+                                        message: 'Please enter a valid email and password.'
+                                    }];
+                                    this.$root.$emit('showError', 'Please check the form.');
+                                    break;
+	                            default:
+                                    console.log(response);
+                                    this.$root.$emit('showError', 'Oops! Something went wrong!');
+	                                break;
+                            }
+                        } else {
+                            console.log(response);
+                            this.$root.$emit('showError', 'Oops! Something went wrong!');
                         }
                     })
                 });
             },
 
             getUserData(redirectTo, ignoreRedirect) {
-                let that = this;
-                return that.$http.get('users/me?include=roles,abilities')
+                return this.$http.get('users/me?include=roles,abilities', { baseURL: '' })
                     .then((response) => {
-                            that.$root.$emit('userHasLoggedIn', response.data.data);
-                            // that.$dispatch('userHasLoggedIn', response.data.data);
+                            this.$root.$emit('userHasLoggedIn', response.data.data);
 
-                            if (that.isChildComponent || ignoreRedirect) {
-                                that.userData = response.data.data;
+                            if (this.isChildComponent || ignoreRedirect) {
+                                this.userData = response.data.data;
                                 return response.data.data;
                             } else {
                                 location.href = redirectTo;
                             }
 
-                        },
-                        (response) => {
-                            console.log(response);
-                            return response.data.data;
-                        });
+                        })
+	                .catch((response) => {
+	                    console.log(response);
+	                    return response.data.message;
+	                });
             },
 
             registerUser(e) {
@@ -454,8 +466,7 @@
                         return false;
                     }
 
-                    let loginHttp = this.$http.create({baseURL: '/'});
-                    loginHttp.post('/register', this.newUser).then((response) => {
+                    this.$http.post('/register', this.newUser).then((response) => {
                             // console.log(response.data.token);
                             // set cookie - name, token
                             this.$cookie.set('api_token', response.data.token);

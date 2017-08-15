@@ -429,7 +429,7 @@
                 // check proficiencies
                 let roles = _.findWhere(this.content, { id: 'role'});
                 let selectedRoles = _.findWhere(roles.options, { value: true});
-                _.each(selectedRoles, function (role) {
+                _.each(selectedRoles, (role) => {
                     if (role.proficiency === null || role.proficiency === '') {
                         self.$root.$emit('showError', 'Please select a proficiency level for ' + role.name);
                         pass = false;
@@ -440,7 +440,7 @@
                 // check brands/models
                 let equipment = _.findWhere(this.content, { id: 'equipment'});
                 let selectedEquipment = _.findWhere(equipment.options, { value: true});
-                _.each(selectedEquipment, function (item) {
+                _.each(selectedEquipment, (item) => {
                     if (item.brand === null || item.brand === '') {
                         self.$root.$emit('showError', 'Please type a brand/model name for your ' + item.name);
                         pass = false;
@@ -453,7 +453,7 @@
         },
         watch:{
             content: {
-                handler: function (val, oldVal) {
+                handler: (val, oldVal) =>  {
                     let roleObj = _.findWhere(val, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
                     if (_.isObject(this.selectedRoleObj) && this.selectedRoleObj.value !== roleObj.a) {
                         roleObj.a = this.selectedRoleObj.value;
@@ -501,10 +501,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Media Credential created.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create media credential.');
                     });
@@ -528,10 +528,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/media-credentials/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
@@ -552,7 +552,7 @@
             },
             syncCheckboxes() {
                 let self = this;
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     _.each($('input[type=checkbox]'), function (checkbox) {
 //	                    if (checkbox.hasAttribute('checked'))
                         checkbox.checked = checkbox.hasAttribute('checked');

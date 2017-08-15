@@ -184,7 +184,7 @@
             /*remove(due){
                 let reservation = this.preppedReservation;
                 reservation.dues = [];
-                _.each(this.reservation.dues.data, function (cs) {
+                _.each(this.reservation.dues.data, (cs) => {
                     if (cs.due_id !== due.due_id) {
                         reservation.dues.push({ id: cs.due_id/!*, locked: cs.locked*!/})
                     }
@@ -196,13 +196,13 @@
             /*addDues(){
                 // prep current dues
                 let currentDueIds = [];
-                _.each(this.reservation.dues.data, function (due) {
+                _.each(this.reservation.dues.data, (due) => {
                     currentDueIds.push({ id: due.id || due.due_id, locked: due.locked })
                 });
 
                 // prep added dues
                 let selectedDueIds = [];
-                _.each(this.selectedDues, function (due) {
+                _.each(this.selectedDues, (due) => {
                     selectedDueIds.push({ id: due.id })
                 });
 
@@ -222,7 +222,7 @@
 
                 // get only ids of current dues so we don't change anything
                 trip.dues = [];
-                _.each(this.reservation.trip.data.dues.data, function (dl) {
+                _.each(this.reservation.trip.data.dues.data, (dl) => {
                     trip.dues.push({id: dl.id});
                 });
                 trip.dues.push(this.newDeadline);
@@ -266,7 +266,7 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(reservation.trip.data.costs.data, (cost) => {
                     return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
 
@@ -287,7 +287,7 @@
             //Listen to Event Bus
             this.$root.$on('AdminReservation:CostsUpdated', function (data) {
                 this.getDues();
-            }.bind(this));
+            });
         }
     }
 </script>

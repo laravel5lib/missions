@@ -176,7 +176,7 @@
                     return this.roomTypeResource.update({ id: updatingObject.id }, updatingObject).then((response) => {
                         _.extend(_.findWhere(this.roomTypes, { id: updatingObject.id}), response.data.data);
                         this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully updated');
-                    }, function (response) {
+                    }, (response) =>  {
                         this.$root.$emit('showError', response.data.message);
                     });
                 }
@@ -189,7 +189,7 @@
                     return this.roomTypeResource.post(this.currentType).then((response) => {
                         this.roomTypes.push(response.data.data);
                         this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully created');
-                    }, function (response) {
+                    }, (response) =>  {
                         this.$root.$emit('showError', response.data.message);
 
                     });
@@ -203,15 +203,15 @@
                 this.roomTypeResource
 	                .delete({ id: this.selectedType.id})
 	                .then((response) => {
-	                    this.roomTypes = _.reject(this.roomTypes, function (type) {
+	                    this.roomTypes = _.reject(this.roomTypes, (type) => {
 		                    return type.id === this.selectedType.id
-                        }.bind(this));
+                        });
                         this.showTypeDeleteModal = true;
                         this.$root.$emit('showInfo', 'Room Type: ' + this.selectedType.name + ', successfully deleted');
-                        this.$nextTick(function () {
+                        this.$nextTick(() =>  {
                             this.selectedType = null;
                         });
-                    }, function (response) {
+                    }, (response) =>  {
                         this.$root.$emit('showError', response.data.message);
                     });
             },
@@ -219,7 +219,7 @@
                 return this.roomTypeResource.get({campaign: this.campaignId, page: this.roomTypesPagination.current_page }).then((response) => {
                     this.roomTypesPagination = response.data.meta.pagination;
                     return this.roomTypes = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                     return error;
                 });

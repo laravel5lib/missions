@@ -137,7 +137,7 @@
 			},
 			filteredCountries(){
 			    let cause = this.cause;
-			    return _.filter(this.availableCountries, function (country) {
+			    return _.filter(this.availableCountries, (country) => {
 				    return _.contains(cause.countries, country.code.toLocaleLowerCase());
                 });
 			}
@@ -149,21 +149,21 @@
 				let allCodes = _.findWhere(this.causes, { id: val }).countries;
 				// filter selectable countries
 				this.availableCountries = [];
-				_.each(allCodes, function (country) {
+				_.each(allCodes, (country) => {
 					let test = _.findWhere(this.countries, { code: country.code.toLowerCase()});
 					if (test) this.availableCountries.push(test);
-				}.bind(this));
+				});
 				this.getInitiatives();
 			},
 			'country_code'(val) {
 				// Update Initiative/Project List based on Country selected
                 // this.availableInitiatives = _.where(this.initiatives, { country: { code: val } });
-                this.availableInitiatives = _.filter(this.initiatives, function (ini) {
+                this.availableInitiatives = _.filter(this.initiatives, (ini) => {
 					return ini.country.code === val;
 				});
 			},
 			'initiativeIdentifier'(val) {
-				this.$nextTick(function () {
+				this.$nextTick(() =>  {
 					// this.complete_at = this.initiative.ended_at;
 					// this.calculateTotal();
 				})
@@ -185,7 +185,7 @@
 						.get(null)
 						.then((response) => {
 							this.causes = response.data.data;
-						}, function (error) {
+						}, (error) =>  {
 							console.log(error);
 						});
 			},
@@ -194,13 +194,13 @@
 						.get({causeId: this.causeIdentifier, current: true})
 						.then((response) => {
 							this.initiatives = response.data.data;
-						}, function (error) {
+						}, (error) =>  {
 							console.log(error);
 						});
 			},
 			calculateTotal(){
 				let total = 0;
-				_.each(this.initiative.costs.data, function (cost) {
+				_.each(this.initiative.costs.data, (cost) => {
 					if (cost.type === 'static') {
 						total += parseFloat(cost.amount);
 					}
@@ -231,7 +231,7 @@
 								console.log(response);
 								this.$root.$emit('showSuccess', 'Message Sent. Thank you for contacting us!');
 								this.reset();
-							}, function (error) {
+							}, (error) =>  {
 								console.log(error);
 								this.$root.$emit('showError', 'Something went wrong...');
 							});
@@ -244,7 +244,7 @@
 			// Get Countries
 			this.$http.get('utilities/countries').then((response) => {
 				this.countries = response.data.countries;
-			}, function (error) {
+			}, (error) =>  {
 				console.log(error);
 			});
 

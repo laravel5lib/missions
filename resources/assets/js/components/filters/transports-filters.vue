@@ -97,7 +97,7 @@
         },
 	    watch: {
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
 //                    if (this.starter)
 //                        return;
 //                    // console.log(val);

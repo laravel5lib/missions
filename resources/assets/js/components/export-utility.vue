@@ -99,7 +99,7 @@
                     this.showExportModal = false;
                     this.exportSettings.fields = [];
                     this.exportSettings.filename = '';
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'The server is unable to create the export.');
                 })
             }

@@ -151,7 +151,7 @@
 					this.userObj = null;
 					this.attemptSubmit = false;
 					$('#AddFacilitatorModal').modal('hide');
-				}, function (error) {
+				}, (error) =>  {
                     this.errors = error.data.errors;
                     console.log(error);
 				});
@@ -162,7 +162,7 @@
 				this.trip = response.data.data;
 				this.facilitators = this.trip.facilitators.data;
 				//                $.extend(this.$data, response.data.data);
-			}, function (response) {
+			}, (response) =>  {
 				console.log('Update Failed! :(');
 				console.log(response);
 			});

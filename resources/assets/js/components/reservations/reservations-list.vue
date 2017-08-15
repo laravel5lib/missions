@@ -260,31 +260,31 @@
             }
         },
         watch: {
-            'layout': function (val, oldVal) {
+            'layout': (val, oldVal) =>  {
                 if (val !== oldVal && !this.startUp)
                     this.updateConfig();
             },
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     if (this.startUp)
                         return;
                     this.updateConfig();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.getReservations();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 if (val !== oldVal && !this.startUp) {
                     this.updateConfig();
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 if (this.startUp)
                     return;
                 this.updateConfig();
@@ -432,7 +432,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);
@@ -457,7 +457,7 @@
             Promise.all([userPromise]).then((values) => {
                 this.startUp = false;
                 this.getReservations();
-            }.bind(this));
+            });
 
         }
     }

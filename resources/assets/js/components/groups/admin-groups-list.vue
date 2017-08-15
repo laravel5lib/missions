@@ -287,13 +287,13 @@
             }
         },
         watch: {
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchGroups();
             },
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     // console.log(val);
                     this.exportFilters = val;
                     this.pagination.current_page = 1;
@@ -301,20 +301,20 @@
                 },
                 deep: true
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields': (val, oldVal) =>  {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
                     this.orderByField = val[0];
                 }
                 // this.updateConfig();
-            },'orderByField': function (val, oldVal) {
+            },'orderByField': (val, oldVal) =>  {
                 this.searchGroups();
             },
-            'direction': function (val) {
+            'direction': (val) =>  {
                 this.searchGroups();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchGroups();
             }
         },
@@ -349,7 +349,7 @@
                 }}).then((response) => {
                     this.pagination = response.data.meta.pagination;
                     this.groups = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Something went wrong!')
                 })
             }

@@ -22,7 +22,7 @@ export default {
             this.$http.post('reports/' + report + '/rooms', params).then((response) => {
                 this.$root.$emit('showSuccess', response.data.message);
                 this.report = '';
-            }, function (error) {
+            }, (error) =>  {
                 this.$root.$emit('showError', 'Unable to create the report.');
             })
         }

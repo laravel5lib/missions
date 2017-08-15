@@ -200,11 +200,11 @@
             update(){
                 // prep current deadlines
                 let currentDeadlineIds = [];
-                _.some(this.reservation.deadlines.data, function (dl) {
+                _.some(this.reservation.deadlines.data, (dl) => {
                     if (dl.id === this.editedDeadline.id) {
                         return dl = this.editedDeadline;
                     }
-                }.bind(this));
+                });
 
                 let reservation = this.preppedReservation;
                 reservation.deadlines = this.reservation.deadlines.data;
@@ -213,7 +213,7 @@
             },
             remove(deadline){
                 let reservation = this.preppedReservation;
-                reservation.deadlines = _.reject(this.reservation.deadlines.data, function (dl) {
+                reservation.deadlines = _.reject(this.reservation.deadlines.data, (dl) => {
                     return dl.id === deadline.id
                 });
 
@@ -222,12 +222,12 @@
             addDeadlines(){
                 // prep current deadlines
                 let currentDeadlineIds = [];
-                _.each(this.reservation.deadlines.data, function (dl) {
+                _.each(this.reservation.deadlines.data, (dl) => {
                     currentDeadlineIds.push({ id: dl.id, grace_period: dl.grace_period })
                 });
                 // prep added deadlines
                 let selectedDeadlineIds = [];
-                _.each(this.selectedDeadlines, function (dl) {
+                _.each(this.selectedDeadlines, (dl) => {
                     selectedDeadlineIds.push({ id: dl.id, grace_period: dl.grace_period })
                 });
 
@@ -247,7 +247,7 @@
 
                 // get only ids of current deadlines so we don't change anything
                 trip.deadlines = [];
-                _.each(this.reservation.trip.data.deadlines.data, function (dl) {
+                _.each(this.reservation.trip.data.deadlines.data, (dl) => {
                     trip.deadlines.push({id: dl.id});
                 });
                 trip.deadlines.push(this.newDeadline);
@@ -295,7 +295,7 @@
                 };
 
                 // get available deadlines intersect with current
-                this.availableDeadlines = _.filter(reservation.trip.data.deadlines.data, function (dl) {
+                this.availableDeadlines = _.filter(reservation.trip.data.deadlines.data, (dl) => {
                     return !_.findWhere(reservation.deadlines.data, {id: dl.id})
 
                 });

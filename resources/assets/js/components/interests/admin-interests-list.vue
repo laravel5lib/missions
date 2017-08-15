@@ -283,34 +283,34 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchInterests();
                 },
                 deep: true
             },
-            'groupObj': function (val) {
+            'groupObj': (val) =>  {
                 this.filters.group = val ? val.id : '';
             },
-            'tripObj': function (val) {
+            'tripObj': (val) =>  {
                 this.filters.trip = val ? val.id : '';
             },
-            'campaignObj': function (val) {
+            'campaignObj': (val) =>  {
                 this.filters.campaign = val ? val.id : '';
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchInterests();
             },
-            'direction': function (val) {
+            'direction': (val) =>  {
                 this.searchInterests();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.searchInterests();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchInterests();
             }
         },

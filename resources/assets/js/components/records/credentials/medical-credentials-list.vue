@@ -170,17 +170,17 @@
         },
         watch: {
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.pagination.current_page = 1;
                     this.searchMedicals();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchMedicals();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchMedicals();
             }
@@ -237,7 +237,7 @@
                 }
 
                 if (user.managing) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

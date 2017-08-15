@@ -102,7 +102,7 @@
                     this.featuredFundraisers = _.first(this.fundraisers, 5);
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });

@@ -75,7 +75,7 @@
                 this.description = response.data.data.description;
             });
             var self = this;
-            this.$root.$on('toggleMode', function () {
+            this.$root.$on('toggleMode', () =>  {
                 self.editMode = !self.editMode;
             });
         }

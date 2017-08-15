@@ -335,54 +335,54 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     console.log(val);
                     this.pagination.current_page = 1;
                     this.searchDonors();
                 },
                 deep: true
             },
-            'campaignObj': function (val) {
+            'campaignObj': (val) =>  {
                 this.filters.campaign = val ? val.id : '';
                 this.searchDonors();
             },
-            'causeObj': function (val) {
+            'causeObj': (val) =>  {
                 this.filters.cause = val ? val.id : '';
                 this.searchDonors();
             },
-            'tripObj': function (val) {
+            'tripObj': (val) =>  {
                 this.filters.trip = val ? val.id : '';
                 this.searchDonors();
             },
-            'projectObj': function (val) {
+            'projectObj': (val) =>  {
                 this.filters.project = val ? val.id : '';
                 this.searchDonors();
             },
-            'userObj': function (val) {
+            'userObj': (val) =>  {
                 this.filters.userAccount = val ? val.id : '';
                 this.searchDonors();
             },
-            'groupObj': function (val) {
+            'groupObj': (val) =>  {
                 this.filters.group = val ? val.id : '';
                 this.searchDonors();
             },
-            'groupAccountObj': function (val) {
+            'groupAccountObj': (val) =>  {
                 this.filters.groupAccount = val ? val.id : '';
                 this.searchDonors();
             },
-            'reservationObj': function (val) {
+            'reservationObj': (val) =>  {
                 this.filters.reservation = val ? val.id : '';
                 this.searchDonors();
             },
-            'direction': function (val) {
+            'direction': (val) =>  {
                 this.searchDonors();
             },
-            'tagsString': function (val) {
+            'tagsString': (val) =>  {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchDonors();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields': (val, oldVal) =>  {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -390,12 +390,12 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchDonors();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchDonors();
             },
 
@@ -515,7 +515,7 @@
                 loading ? loading(true) : void 0;
                 this.$http.get('trips', { params: { search: search, include: 'group'} }).then((response) => {
                     this.tripsOptions = response.data.data;
-                    _.each(this.tripsOptions, function (trip) {
+                    _.each(this.tripsOptions, (trip) => {
                         trip.name = trip.type + ' | ' + trip.country_name + ' | ' + trip.group.data.name;
                     });
                     loading ? loading(false) : void 0;
@@ -525,7 +525,7 @@
                 loading ? loading(true) : void 0;
                 this.$http.get('projects', { params: { search: search} }).then((response) => {
                     this.projectsOptions = response.data.data;
-                    _.each(this.projectsOptions, function (project) {
+                    _.each(this.projectsOptions, (project) => {
                         project.name = project.plaque.prefix + ' ' + project.plaque.message;
                     });
                     loading ? loading(false) : void 0;

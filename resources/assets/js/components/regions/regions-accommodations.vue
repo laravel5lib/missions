@@ -469,7 +469,7 @@
         },
         watch: {
             showAccommodationManageModal(val) {
-                this.$nextTick(function () {
+                this.$nextTick(() =>  {
                     if ($.fn.collapse)
                         $('#AccommodationModal').collapse(val ? 'show' : 'hide');
                 });
@@ -519,7 +519,7 @@
 	        loadAccommodationRoomTypes(accommodation) {
                 accommodation.room_types_settings = accommodation.room_types_settings || {};
                 // We need to loop through each room type to create an object to reference the plan types present
-                _.each(this.roomTypes, function (type) {
+                _.each(this.roomTypes, (type) => {
                     // the settings will be traced by the type ids
                     // then we will attempt to find the assignment in the current plan's settings (expecting a number) or set to 0
                     let assignment = accommodation.room_types && accommodation.room_types.hasOwnProperty(type.name) ? accommodation.room_types[type.name] : 0;
@@ -559,7 +559,7 @@
                     this.currentRegion.accommodations.data.push(newAccommodation);
                     this.accommodations.push(newAccommodation);
                     this.showAccommodationManageModal = false;
-                }, function (response) {
+                }, (response) =>  {
                     return response;
                 });
 	        },
@@ -578,7 +578,7 @@
                     this.currentAccommodation = null;
                     this.showAccommodationManageModal = false;
                     this.editMode = false;
-                }, function (response) {
+                }, (response) =>  {
                     return response;
                 });
 	        },
@@ -587,7 +587,7 @@
                     this.currentAccommodation = null;
                     this.showAccommodationDeleteModal = false;
                     return this.getAccommodations();
-                }, function (response) {
+                }, (response) =>  {
                     return response;
                 });
 	        },
@@ -617,21 +617,21 @@
                         }
                         if (promise) {
                             // we only need to catch errors here
-                            promise.catch(function (response) {});
+                            promise.catch((response) =>  {});
                             promises.push(promise);
                         }
                     }
 
-                }.bind(this));
+                });
 
                 Promise.all(promises).then(() => {
                     this.$root.$emit('showSuccess', accommodation.name + ' settings updated successfully.');
                     this.getAccommodations();
-                    this.$nextTick(function () {
+                    this.$nextTick(() =>  {
                         this.currentAccommodation = null;
                     });
 
-                }.bind(this));
+                });
 	        },
             getAccommodations(){
                 let params = {
@@ -640,11 +640,11 @@
 
                 return this.AccommodationsResource.get(params).then((response) => {
                     this.accommodationsPagination = response.data.meta.pagination;
-                    let accommodations = _.each(response.data.data, function (acc) {
+                    let accommodations = _.each(response.data.data, (acc) => {
 	                    acc = _.extend(acc, this.loadAccommodationRoomTypes(acc));
-                    }.bind(this));
+                    });
 					return this.accommodations = accommodations;
-                }, function (response) {
+                }, (response) =>  {
                     return response.data.message;
                 });
             },
@@ -660,7 +660,7 @@
                 return this.RegionsResource.get(params).then((response) => {
                     this.regionsPagination = response.data.meta.pagination;
                     return this.regions = response.data.data;
-                }, function (response) {
+                }, (response) =>  {
                     return response.data.message;
                 });
             },
@@ -669,7 +669,7 @@
                     .then((response) => {
                             return this.roomTypes = response.data.data;
                         },
-                        function (response) {
+                        (response) =>  {
                             return response.data.data;
                         });
             },

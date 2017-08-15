@@ -39,7 +39,7 @@
             fetch() {
                 this.$http.get('fundraisers/', { params: { fund: this.fundId, include: 'sponsor' } }).then((response) => {
                     this.fundraisers = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to retreive fundraisers.');
                 });
             }

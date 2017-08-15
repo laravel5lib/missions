@@ -290,7 +290,7 @@
                         this.$root.$emit('showSuccess', 'Reservation updated!');
 						this.hasChanged = false;
                         this.desired_role = response.data.data.desired_role.code;
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'There are errors on the form.');
                     });
@@ -329,7 +329,7 @@
             this.$http.get('utilities/team-roles').then((response) => {
                 _.each(response.data.roles, function (name, key) {
                     this.roles.push({ value: key, name: name});
-                }.bind(this));
+                });
             });
 
             this.resource.get().then((response) => {

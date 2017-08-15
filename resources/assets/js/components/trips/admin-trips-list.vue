@@ -177,22 +177,22 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTrips();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchTrips();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.searchTrips();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchTrips();
             }
         },

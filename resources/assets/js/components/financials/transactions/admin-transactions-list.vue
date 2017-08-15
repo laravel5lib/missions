@@ -400,26 +400,26 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
 //                    console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
                 deep: true
             },
-            'donorObj': function (val) {
+            'donorObj': (val) =>  {
                 this.filters.donor = val ? val.id : '';
                 this.searchTransactions();
             },
-            'direction': function (val) {
+            'direction': (val) =>  {
                 this.searchTransactions();
             },
-            'tagsString': function (val) {
+            'tagsString': (val) =>  {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchTransactions();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields': (val, oldVal) =>  {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -427,15 +427,15 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchTransactions();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.searchTransactions();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.searchTransactions();
             },
 
@@ -523,7 +523,7 @@
                     this.transactions = response.data.data;
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     // TODO add error alert
                 }).then(() => {

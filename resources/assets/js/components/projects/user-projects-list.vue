@@ -106,24 +106,24 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.getProjects();
                 },
                 deep: true
             },
-            'groupsArr': function (val) {
+            'groupsArr': (val) =>  {
                 this.filters.groups = _.pluck(val, 'id')||'';
             },
-            'causeObj': function (val) {
+            'causeObj': (val) =>  {
                 this.filters.cause = val ? val.id : '';
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.getProjects();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.getProjects();
             }
@@ -190,7 +190,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

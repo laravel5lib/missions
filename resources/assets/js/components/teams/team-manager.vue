@@ -902,40 +902,40 @@
 	    watch: {
             // watch filters obj
             'teamFilters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.teamsPagination.current_page = 1;
                     this.getTeams();
                 },
                 deep: true
             },
             'reservationFilters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.reservationsPagination.current_page = 1;
                     this.searchReservations();
                 },
                 deep: true
             },
-            'groupsArr': function (val) {
+            'groupsArr': (val) =>  {
                 this.reservationFilters.groups = _.pluck(val, 'id') || '';
 //				this.searchReservations();
             },
-            'groupObj': function (val) {
+            'groupObj': (val) =>  {
                 this.teamFilters.group = val ? val.id : '';
 //				this.searchReservations();
             },
-            'teamsSearch': function (val, oldVal) {
+            'teamsSearch': (val, oldVal) =>  {
                 this.teamsPagination.current_page = 1;
                 this.getTeams();
             },
-            'reservationsSearch': function (val, oldVal) {
+            'reservationsSearch': (val, oldVal) =>  {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
             },
-		    'excludeReservationIds': function (val) {
+		    'excludeReservationIds': (val) =>  {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
             },
-		    'currentTeam': function (val) {
+		    'currentTeam': (val) =>  {
                 if (val && val.id) {
                     this.getSquads();
                     this.updateConfig();
@@ -971,7 +971,7 @@
             excludeReservationIds() {
                 let IDs = [];
                 if (this.currentTeam)
-	                _.each(this.currentSquadGroups, function (squad) {
+	                _.each(this.currentSquadGroups, (squad) => {
 		                IDs = _.union(IDs, _.pluck(squad.members, 'id'));
 	                });
                 return _.uniq(IDs);
@@ -981,7 +981,7 @@
 		    },
 		    groupLeaders() {
                 let leaders = [];
-                _.each(this.currentSquadGroups, function (group) {
+                _.each(this.currentSquadGroups, (group) => {
                     let leader = _.findWhere(group.members, { leader: true });
                     if (leader)
 	                    leaders.push(leader);
@@ -990,7 +990,7 @@
 		    },
             totalMembers() {
                 let members = 0;
-                _.each(this.currentSquadGroups, function (squad) {
+                _.each(this.currentSquadGroups, (squad) => {
 	                members += squad.members.length;
                 });
                 return members;
@@ -1067,7 +1067,7 @@
                         this.$root.$emit('showSuccess', member.given_names + ' ' + member.surname + ' role updated!');
                         member.desired_role = response.data.data.desired_role;
                         return member = response.data.data;
-                    }, function (response) {
+                    }, (response) =>  {
                         console.log(response);
                         this.$root.$emit('showError', response.data.message);
                     });
@@ -1134,7 +1134,7 @@
             },
             canAssignToSquadLeader(squad){
                 if (this.currentTeam)
-                    return !_.some(squad.members, function (member) {
+                    return !_.some(squad.members, (member) => {
 		                return member.leader;
 	                });
                 return false;
@@ -1161,7 +1161,7 @@
                 if (squad.callsign === 'Squad Leaders') {
                     if (squad.members.length) {
                         //let test = false;
-						/*test = _.some(squad.members, function (member) {
+						/*test = _.some(squad.members, (member) => {
 							return member.gender === reservation.gender;
                         });
 	                    if (test){
@@ -1218,7 +1218,7 @@
                 if (newSquad.callsign === 'Squad Leaders') {
                     if (newSquad.members.length) {
                         let test = false;
-						test = _.some(newSquad.members, function (member) {
+						test = _.some(newSquad.members, (member) => {
 							return member.gender === reservation.gender;
                         });
 	                    if (test){
@@ -1232,14 +1232,14 @@
 	                .then((response) => {
                         console.log(response);
 		                // update old squad
-                        oldSquad.members = _.reject(oldSquad.members, function (member) {
+                        oldSquad.members = _.reject(oldSquad.members, (member) => {
                             return member.id === reservation.id;
                         });
                         oldSquad.members_count = oldSquad.members.length;
 		                // update new Squad
                         newSquad.members.push(response.data.data);
                         newSquad.members_count = newSquad.members.length;
-                    }, function (response) {
+                    }, (response) =>  {
                         console.log(response);
 	                    return response;
 	                });
@@ -1271,7 +1271,7 @@
                 };
 
                 this.TeamSquadResource.update(params , data).then((response) => {
-                    let groups =_.reject(this.currentSquadGroups, function (sq) {
+                    let groups =_.reject(this.currentSquadGroups, (sq) => {
                         return sq.id === squad.id;
                     });
 
@@ -1291,7 +1291,7 @@
 
                 return this.$http.delete('squads/' + squad.id + '/members/' + memberObj.id)
 	                .then((response) => {
-	                    squad.members = _.reject(squad.members, function (member) {
+	                    squad.members = _.reject(squad.members, (member) => {
 		                    return member.id === memberObj.id;
                         });
                         squad.members_count = squad.members.length;
@@ -1333,7 +1333,7 @@
                     this.reservations = response.data.data;
                     this.reservationsPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
@@ -1357,7 +1357,7 @@
 	                this.teamsPagination = response.data.meta.pagination;
                     return this.teams = response.data.data;
                 },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -1365,7 +1365,7 @@
 	        getTeamTypes() {
                 return this.$http.get('teams/types?campaign='+this.campaignId).then((response) => {
 	                return this.teamTypes = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                     return error;
                 });
@@ -1379,7 +1379,7 @@
                 };
 
                 return this.TeamResource.get(params).then((response) => {
-                    _.each(response.data.data, function (squad) {
+                    _.each(response.data.data, (squad) => {
 	                    squad.members = squad.members && squad.members.data ? squad.members.data : [];
                     });
                     return this.currentSquadGroups = response.data.data;
@@ -1390,7 +1390,7 @@
                     let associations = [];
                     if (this.isAdminRoute) {
                         if (this.newTeamCampaigns.length)
-	                        _.each(this.newTeamCampaigns, function (campaign) {
+	                        _.each(this.newTeamCampaigns, (campaign) => {
 	                            associations.push({
 	                                type: 'campaigns',
 	                                id: campaign.id
@@ -1404,7 +1404,7 @@
                             });
                     } else {
                         if (this.newTeamCampaigns.length)
-                            _.each(this.newTeamCampaigns, function (campaign) {
+                            _.each(this.newTeamCampaigns, (campaign) => {
                                 associations.push({
                                     type: 'campaigns',
                                     id: campaign.id
@@ -1539,7 +1539,7 @@
 
                 this.TeamSquadResource.delete({team: squadCopy.team_id, squad:squadCopy.id}).then((response) => {
                     this.$root.$emit('showInfo', squadCopy.callsign + ' Deleted!');
-                    this.currentSquadGroups = _.reject(this.currentSquadGroups, function (squad) {
+                    this.currentSquadGroups = _.reject(this.currentSquadGroups, (squad) => {
 	                    return squad.id === squadCopy.id;
                     });
                     this.selectedSquadObj = null;
@@ -1575,7 +1575,7 @@
                     this.updateTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now associated with ' + object.name);
                     });
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response.data);
                     this.$root.$emit('showError', response.data.message);
                 });
@@ -1600,7 +1600,7 @@
                         this.removeAssociationData.object = null;
                         this.removeAssociationData.show = false;
                     });
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response.data);
                     this.$root.$emit('showError', response.data.message);
                 });
@@ -1651,7 +1651,7 @@
 	            let memberIds = _.filter(_.pluck(squad.members, 'id'), function (id) { return id !== member.id; });
 	            let companionIds = _.pluck(member.companions.data, 'id');
 				let presentIds = [];
-				_.each(memberIds, function (id) {
+				_.each(memberIds, (id) => {
 					if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
@@ -1659,13 +1659,13 @@
             },
             companionsPresentTeam(member) {
 	            let memberIds = [];
-                _.each(this.currentSquadGroups, function (squad) {
+                _.each(this.currentSquadGroups, (squad) => {
                     memberIds = _.union(memberIds, (_.pluck(squad.members, 'id')));
                 });
-                memberIds = _.filter(memberIds, function (id) { return id !== member.id; });
+                memberIds = _.filter(memberIds, (id) => { return id !== member.id; });
                 let companionIds = _.pluck(member.companions.data, 'id');
                 let presentIds = [];
-                _.each(memberIds, function (id) {
+                _.each(memberIds, (id) => {
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
@@ -1675,7 +1675,7 @@
                 let memberIds = _.filter(_.pluck(squad.members, 'id'), function (id) { return id !== member.id; });
                 let companionIds = _.pluck(member.companions.data, 'id');
                 let presentIds = [];
-                _.each(memberIds, function (id) {
+                _.each(memberIds, (id) => {
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
@@ -1691,7 +1691,7 @@
 
 	            // Leadership Position
 	            if (squad.callsign === 'Squad Leaders') {
-	                let testLeadership = _.some(member.companions.data, function (companion) {
+	                let testLeadership = _.some(member.companions.data, (companion) => {
 		                return !_.contains(this.leadershipRoles, companion.desired_role.code)
                     });
 
@@ -1703,23 +1703,23 @@
 
 	            // Detect companions in other groups and remove them
 	            if (member.present_companions_team) {
-                    _.each(this.currentSquadGroups, function (group) {
+                    _.each(this.currentSquadGroups, (group) => {
                         let companionObj;
-                        _.each(notPresentIds, function (companionId) {
+                        _.each(notPresentIds, (companionId) => {
 	                        companionObj = _.findWhere(group.members, {id: companionId});
 	                        if (companionObj) {
 	                            this.removeFromSquad(companionObj, group);
 	                        }
-                        }.bind(this));
+                        });
 
-                    }.bind(this));
+                    });
 	            }
 
 	            // package for mass assignment
 	            let compArray = [];
-                _.each(companionIds, function (compId) {
+                _.each(companionIds, (compId) => {
                     compArray.push({ id: compId, leader: false});
-                }.bind(this));
+                });
                 this.assignMassToSquad(compArray, squad)
 
             },
@@ -1745,7 +1745,7 @@
                         this.reservationsTrips = _.union(this.reservationsTrips, facilitating);
                     }
                     if (user.managing.data.length) {
-                        _.each(user.managing.data, function (group) {
+                        _.each(user.managing.data, (group) => {
                             managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                         });
                         this.reservationsTrips = _.union(this.reservationsTrips, managing);
@@ -1762,7 +1762,7 @@
 		            roles.push(code);
                 });
 	            this.leadershipRoles = roles;
-            }, function (error) {
+            }, (error) =>  {
                 console.log(error);
                 return error;
             }));
@@ -1789,9 +1789,9 @@
                         }
                     }
                 }
-            }.bind(this));
+            });
 
-            this.$root.$on('campaign-scope', function (val) {
+            this.$root.$on('campaign-scope', (val) =>  {
                 if(val) {
 	                this.campaignId = val ? val.id : '';
                     this.newTeamCampaigns = [{id: val.id}];
@@ -1801,13 +1801,13 @@
                     $('.nav-tabs a[href="#teams"]').tab('show');
                 }
                 this.searchReservations();
-            }.bind(this));
+            });
 
             $('#collapseHints')
-	            .on('show.bs.collapse', function () {
+	            .on('show.bs.collapse', () =>  {
 	                self.toggleHintsCollapse = true;
 	            })
-	            .on('hide.bs.collapse', function () {
+	            .on('hide.bs.collapse', () =>  {
                     self.toggleHintsCollapse = false;
                 });
         }

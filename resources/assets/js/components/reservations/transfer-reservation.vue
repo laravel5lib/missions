@@ -96,7 +96,7 @@
                     _.each(response.data.roles, function (name, key) {
                         if (_.contains(val.team_roles, key))
                             this.roles.push({ value: key, name: name});
-                    }.bind(this));
+                    });
                 });
             }
         },
@@ -105,7 +105,7 @@
                 this.$http.get('campaigns/'+this.campaignId+'?include=groups')
                 .then((response) => {
                     this.groups = response.data.data.groups.data;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to find groups');
                 });
             },
@@ -113,7 +113,7 @@
                 this.$http.get('trips?status=active&campaign='+this.campaignId+'&groups[]='+this.selectedGroupId)
                 .then((response) => {
                     this.trips = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to find trips');
                 });
             },
@@ -130,7 +130,7 @@
                     $('#transferModal').modal('hide');
                     this.$root.$emit('showSuccess', 'Reservation transferred and registrant notified');
                     setTimeout(location.reload.bind(location), 300);
-                }, function (error) {
+                }, (error) =>  {
                     this.button = 'Transfer';
                     this.$root.$emit('showError', 'Unable to transfer');
                 });

@@ -99,7 +99,7 @@
                 this.$http.get('promotionals', this.options).then((response) => {
                     this.promos = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },

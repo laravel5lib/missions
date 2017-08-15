@@ -50,7 +50,7 @@
             this.resource.query().then((trips) =>{
                 this.trips = trips.data.data
                 // this.$refs.spinner.hide();
-            }, function (error) {
+            }, (error) =>  {
                 // this.$refs.spinner.hide();
                 //TODO add error alert
             }).then(() => {

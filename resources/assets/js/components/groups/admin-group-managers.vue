@@ -124,7 +124,7 @@
 					this.attemptSubmit = false;
 					$('#AddManagerModal').modal('hide');
 					// this.$refs.spinner.hide();
-				}, function (response) {
+				}, (response) =>  {
                     this.errors = error.data.errors;
                     console.log(response);
 					// this.$refs.spinner.hide();
@@ -139,7 +139,7 @@
 				this.managers = this.group.managers.data;
 				//                $.extend(this.$data, response.data.data);
 				// this.$refs.spinner.hide();
-			}, function (response) {
+			}, (response) =>  {
 				console.log('Update Failed! :(');
 				console.log(response);
 				// this.$refs.spinner.hide();

@@ -130,7 +130,7 @@
 				var resource = this.$resource('trips');
 				resource.post(null, this.wizardData).then((resp) => {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
-				}, function (error) {
+				}, (error) =>  {
 					console.log(error);
 				});
 			}

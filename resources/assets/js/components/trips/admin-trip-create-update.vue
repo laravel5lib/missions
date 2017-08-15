@@ -369,14 +369,14 @@
 							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;
 							this.$root.$emit('showSuccess', 'Trip Updated');
-						}, function (error) {
+						}, (error) =>  {
 							this.$root.$emit('showError', 'Please check the form.');
 							console.log(error);
 						});
 					} else {
 						resource.post(null, this.wizardData).then((resp) => {
 							window.location.href = '/admin' + resp.data.data.links[0].uri;
-						}, function (error) {
+						}, (error) =>  {
 							console.log(error);
 						});
 					}
@@ -393,7 +393,7 @@
 			let teamRolesPromise = this.$http.get('utilities/team-roles').then((response) => {
 			    _.each(response.data.roles, function (name, key) {
 					this.teamRolesList.push({ value: key, name: name});
-				}.bind(this));
+				});
 			});
 
 			Promise.all([groupsPromise, teamRolesPromise]).then((values) => {
@@ -405,12 +405,12 @@
                         this.campaign = trip.campaign.data;
                         this.difficulty = trip.difficulty.toLowerCase().replace(' ', '_');
                         // this.prospects = trip.prospects;
-                        this.prospectsObj = _.filter(this.prospectsList, function (p) {
-                            return _.some(trip.prospects, function (prospect) {
+                        this.prospectsObj = _.filter(this.prospectsList, (p) => {
+                            return _.some(trip.prospects, (prospect) => {
 	                            return prospect.toLowerCase() === p.value.toLowerCase();
                             });
                         });
-                        this.rolesObj = _.filter(this.teamRolesList, function (p) {
+                        this.rolesObj = _.filter(this.teamRolesList, (p) => {
                             return _.some(trip.team_roles, function (prospect) {
                                 return prospect.toLowerCase() === p.value.toLowerCase();
                             });
@@ -433,7 +433,7 @@
                         this.campaign = response.data.data;
                     });
                 }
-            }.bind(this))
+            })
 		}
 	}
 </script>

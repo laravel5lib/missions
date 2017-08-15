@@ -270,13 +270,13 @@
             }
 		},
 		events: {
-			'VueStripe::create-card-token': function () {
+			'VueStripe::create-card-token': () =>  {
 				return this.createToken();
 			},
-			'VueStripe::reset-form': function () {
+			'VueStripe::reset-form': () =>  {
 				return this.resetCaching();
 			},
-            'payment-complete': function (val) {
+            'payment-complete': (val) =>  {
 			    if (this.$parent.paymentErrors.length > 0) {
                     this.$parent.detailsConfirmed = val;
 //                this.$dispatch('payment-complete', val)
@@ -393,7 +393,7 @@
 				var num, today, years, yyyy;
 				today = new Date;
 				yyyy = today.getFullYear();
-				years = (function () {
+				years = (() =>  {
 					var i, ref, ref1, results;
 					results = [];
 					for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
@@ -474,7 +474,7 @@
 
 					this.$http.post('donations/authorize', this.cardParams)
 							.then(this.createTokenCallback,
-									function (error) {
+									(error) =>  {
 										this.$root.$emit('showError', error.data.message);
 										this.$parent.$refs.validationspinner.hide();
 									});

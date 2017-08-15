@@ -462,7 +462,7 @@
 
                     return this.resource.post(null, params).then((resp) => {
                             return this.handleSuccess(resp);
-                        }, function (error) {
+                        }, (error) =>  {
                             this.SERVER_ERRORS = error.data.errors;
                             console.log(error);
                         });
@@ -492,7 +492,7 @@
 
                     return this.resource.update({id:this.uploadId}, params).then((resp) => {
 						return this.handleSuccess(resp)
-					}, function (error) {
+					}, (error) =>  {
                         this.SERVER_ERRORS = error.data.errors;
                         console.log(error);
 					});
@@ -576,7 +576,7 @@
 	        loadCropper() {
                 let self = this;
                 if (_.contains(['avatar', 'other', 'passport'], this.type) || (this.type === 'banner' && this.uiSelector !== 1)) {
-                    setTimeout(function () {
+                    setTimeout(() =>  {
                         self.slimAPI = new Slim.parse(self.$el);
                         if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                             self.adjustSelectByType();
@@ -612,7 +612,7 @@
                     this.src = upload.source;
 
                     this.loadCropper();
-				}, function (response) {
+				}, (response) =>  {
                     console.log(response);
                     return response
                 });
@@ -631,13 +631,13 @@
 
 			this.searchUploads();
 
-            this.$root.$on(self.submitEvent, function () {
+            this.$root.$on(self.submitEvent, () =>  {
                 if (self.isUpdate) {
                     self.update();
                 } else {
                     self.submit();
                 }
-            }.bind(this));
+            });
 
             let slimEvents = [
                 'didInit',                  // Initialized

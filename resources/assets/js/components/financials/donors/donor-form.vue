@@ -150,13 +150,13 @@
             }
         },
         watch: {
-            'countryCodeObj': function (val) {
+            'countryCodeObj': (val) =>  {
                  _.isObject(val) ? this.donor.country_code = val.code : this.donor.country_code  = null;
             },
-            'userObj': function (val) {
+            'userObj': (val) =>  {
                  _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id  = null;
             },
-            'groupObj': function (val) {
+            'groupObj': (val) =>  {
                  _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id  = null;
             }
         },
@@ -193,7 +193,7 @@
                 this.$refs.donorspinner.show();
                 // validate manually
                 var self = this
-                this.$validate(true, function () {
+                this.$validate(true, () =>  {
                     if (self.$validation.invalid) {
                     }
                 })
@@ -202,7 +202,7 @@
                     this.reset();
                     this.$root.$emit('showSuccess', 'Donor created successfully.');
                     this.$dispatch('donor-created', response.data.data.id);
-                },function (response) {
+                },(response) =>  {
                     this.$refs.donorspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form');
                 });
@@ -213,7 +213,7 @@
                 this.$http.put('donors/' + this.donorId, this.donor).then((response) => {
                     this.$root.$emit('showSuccess', 'Donor updated successfully.');
                     // this.$refs.spinner.hide();
-                },function (response) {
+                },(response) =>  {
                     if(_.contains(_.keys(response.errors), 'account_id')) {
                         this.accountError = true;
                     }

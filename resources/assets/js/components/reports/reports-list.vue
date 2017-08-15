@@ -151,7 +151,7 @@
                 this.$http.get('users/'+this.user+'/reports?search='+this.search).then((response) => {
                     this.reports = response.data.data;
                     this.pagination = response.data.meta.pagination;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get reports from server.');
                 });
             },

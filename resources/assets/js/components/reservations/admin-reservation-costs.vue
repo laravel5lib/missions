@@ -146,7 +146,7 @@
             costLocking(cost, status) {
                 cost.locked = status;
                    let costs = [];
-                _.each(this.reservation.costs.data, function (c) {
+                _.each(this.reservation.costs.data, (c) => {
                     costs.push({id: c.cost_id, locked: c.locked});
                 });
 
@@ -177,7 +177,7 @@
             updateCost(){
                 // prep current costs
                 let costs = [];
-                _.each(this.reservation.costs.data, function (cost) {
+                _.each(this.reservation.costs.data, (cost) => {
                     if (cost.cost_id === this.editedCost.cost_id) {
                         costs.push({
                             id: this.editedCost.cost_id,
@@ -189,7 +189,7 @@
                     } else {
                         costs.push({id: cost.cost_id, locked: cost.locked});
                     }
-                }.bind(this));
+                });
 
                 let reservation = this.preppedReservation;
                 reservation.costs = costs;
@@ -203,7 +203,7 @@
             remove(cost){
                 let reservation = this.preppedReservation;
                 reservation.costs = [];
-                _.each(this.reservation.costs.data, function (cs) {
+                _.each(this.reservation.costs.data, (cs) => {
                     if (cs.cost_id !== cost.cost_id) {
                         reservation.costs.push({ id: cs.cost_id, locked: cs.locked})
                     }
@@ -215,13 +215,13 @@
             addCosts(){
                 // prep current costs
                 let currentCostIds = [];
-                _.each(this.reservation.costs.data, function (cost) {
+                _.each(this.reservation.costs.data, (cost) => {
                     currentCostIds.push({ id: cost.id || cost.cost_id, locked: cost.locked })
                 });
 
                 // prep added costs
                 let selectedCostIds = [];
-                _.each(this.selectedCosts, function (cost) {
+                _.each(this.selectedCosts, (cost) => {
                     selectedCostIds.push({ id: cost.id })
                 });
 
@@ -241,7 +241,7 @@
 
                 // get only ids of current costs so we don't change anything
                 trip.costs = [];
-                _.each(this.reservation.trip.data.costs.data, function (dl) {
+                _.each(this.reservation.trip.data.costs.data, (dl) => {
                     trip.costs.push({id: dl.id});
                 });
                 trip.costs.push(this.newDeadline);
@@ -289,7 +289,7 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(reservation.trip.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(reservation.trip.data.costs.data, (cost) => {
                     return !_.findWhere(reservation.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
                 });
             }

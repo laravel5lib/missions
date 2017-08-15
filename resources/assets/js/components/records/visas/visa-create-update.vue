@@ -209,10 +209,10 @@
                         user_id: this.user_id,
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Visa created.');
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create visa.');
                     });
@@ -238,10 +238,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/visas/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });

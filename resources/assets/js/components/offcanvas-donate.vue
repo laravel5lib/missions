@@ -252,7 +252,7 @@
                 var num, today, years, yyyy;
                 today = new Date;
                 yyyy = today.getFullYear();
-                years = (function () {
+                years = (() =>  {
                     var i, ref, ref1, results;
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
@@ -368,10 +368,10 @@
             }
         },
         events: {
-            'VueStripe::create-card-token': function () {
+            'VueStripe::create-card-token': () =>  {
                 return this.createToken();
             },
-            'VueStripe::reset-form': function () {
+            'VueStripe::reset-form': () =>  {
                 return this.resetCaching();
             }
         },

@@ -401,14 +401,14 @@
                 this.getSquads();
             },
             regionsFilters: {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.regionsPagination.current_page = 1;
                     this.getRegions();
                 },
                 deep: true
             },
             squadsFilters: {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.squadsPagination.current_page = 1;
                     this.getSquads();
                 },
@@ -455,7 +455,7 @@
                 return this.RegionsResource.get(params).then((response) => {
                     this.regionsPagination = response.data.meta.pagination;
                     return this.regions = response.data.data;
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response);
                     return response.data.data;
                 });
@@ -473,7 +473,7 @@
             removeFromRegion(squad, region) {
                 region = region || this.currentRegion;
                 this.$http.delete('regions/' + region.id + '/teams/' + squad.id).then((response) => {
-                    region.teams.data = _.reject(region.teams.data, function (obj) {
+                    region.teams.data = _.reject(region.teams.data, (obj) => {
 	                    return obj.id === squad.id;
                     });
                     this.getSquads();
@@ -482,7 +482,7 @@
             getTeamTypes() {
                 return this.$http.get('teams/types', { params: { campaign: this.campaignId } }).then((response) => {
                     return this.squadTypes = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                     return error;
                 });
@@ -507,7 +507,7 @@
                         this.squadsPagination = response.data.meta.pagination;
                         return this.squads = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -555,7 +555,7 @@
                     this.showRegionModal = false;
                     this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
                     return this.currentRegion = region;
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response);
                     this.$root.$emit('showError', response.data.message);
                     return response.data.data;
@@ -580,7 +580,7 @@
                     this.editRegionModal = false;
                     this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
                     return region;
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response);
                     this.$root.$emit('showError', response.data.message);
                     return response.data.data;
@@ -591,11 +591,11 @@
                 this.RegionsResource.delete({ campaign: this.campaignId, region: this.selectedRegion.id}).then((response) => {
                     this.showRegionDeleteModal = false;
                     this.$root.$emit('showInfo', region.name + ' Deleted!');
-                    this.regions = _.reject(this.regions, function (obj) {
+                    this.regions = _.reject(this.regions, (obj) => {
                         return region.id === obj.id;
                     });
                     this.currentRegion = this.region.length ? this.region[0] : null;
-                }, function (response) {
+                }, (response) =>  {
                     this.$root.$emit('showError', response.data.message);
                 }).then(() => {
                     this.selectedRegion = null;
@@ -624,7 +624,7 @@
                     this.currentRegions.push(room);
                     //_.some()
                     return this.currentRegion = room;
-                }, function (response) {
+                }, (response) =>  {
                     console.log(response);
                     return response.data.data;
                 });
@@ -639,7 +639,7 @@
             promises.push(this.getGroups());
             Promise.all(promises).then((values) => {
                 this.startUp = false;
-            }.bind(this));
+            });
         }
     }
 </script>

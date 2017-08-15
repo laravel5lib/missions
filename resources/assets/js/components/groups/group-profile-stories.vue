@@ -161,7 +161,7 @@
             removeStory(story){
                 if(story) {
                     this.$http.delete('stories/' + story.id).then((response) => {
-                        this.stories = _.reject(this.stories, function (item) {
+                        this.stories = _.reject(this.stories, (item) => {
                             return item.id === story.id;
                         });
                         this.resetData();

@@ -525,7 +525,7 @@
                 });
 
                 return this.PlansResource.get(params).then((response) => {
-                    _.each(response.data.data, function (plan) {
+                    _.each(response.data.data, (plan) => {
                         plan.rooms_count_remaining = _.countBy(plan.rooms.data, 'type');
                     });
                     this.plansPagination = response.data.meta.pagination;

@@ -331,7 +331,7 @@
                 var num, today, years, yyyy;
                 today = new Date;
                 yyyy = today.getFullYear();
-                years = (function () {
+                years = (() =>  {
                     var i, ref, ref1, results;
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
@@ -403,7 +403,7 @@
                     this.$refs.validationspinner.show();
                     this.$http.post('donations/authorize', this.cardParams)
                             .then(this.createTokenCallback,
-                                    function (error) {
+                                    (error) =>  {
                                         this.cardError = error.data.message;
                                         this.$refs.validationspinner.hide();
 
@@ -487,7 +487,7 @@
                             this.$refs.donationspinner.hide();
                             this.donationState = 'confirmation';
                         },
-                        function (error) {
+                        (error) =>  {
                             this.$refs.donationspinner.hide();
                             this.cardError = error.data.message;
                             this.toState('form', 2);
@@ -584,7 +584,7 @@
             }
         },
         events: {
-            'VueStripe::reset-form': function () {
+            'VueStripe::reset-form': () =>  {
                 return this.resetCaching();
             }
         },
@@ -609,17 +609,17 @@
             }
 
             //Listen to Event Bus
-            this.$root.$on('DonateForm:nextState', function () {
+            this.$root.$on('DonateForm:nextState', () =>  {
                 this.nextState();
-            }.bind(this));
+            });
 
-            this.$root.$on('DonateForm:prevState', function () {
+            this.$root.$on('DonateForm:prevState', () =>  {
                 this.prevState();
-            }.bind(this));
+            });
 
-            this.$root.$on('DonateForm:resetState', function () {
+            this.$root.$on('DonateForm:resetState', () =>  {
                 this.toState('form', 1);
-            }.bind(this));
+            });
 
             this.$root.$on('DonateForm:reviewDonation', function (identifier) {
                 if (identifier !== this.identifier) {
@@ -628,8 +628,8 @@
 
                 $.when(this.createToken()).then((response) => {
                     this.goToState('review');
-                }.bind(this));
-            }.bind(this));
+                });
+            });
 
             this.$root.$on('DonateForm:donate', function (identifier) {
                 if (identifier !== this.identifier) {
@@ -637,7 +637,7 @@
                 }
 
                 this.submit();
-            }.bind(this));
+            });
 
         },
     }

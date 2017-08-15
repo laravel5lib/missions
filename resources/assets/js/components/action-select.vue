@@ -97,7 +97,7 @@
                         }
                     });
                 } else {
-                    let newOptions = _.filter(this.options, function (option) {
+                    let newOptions = _.filter(this.options, (option) => {
                         return option.name.indexOf(search) !== -1;
                     });
                     loading(false);

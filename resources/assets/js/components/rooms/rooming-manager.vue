@@ -580,7 +580,7 @@
                 this.searchReservations();
             },
             /*reservationFilters: {
-                handler: function (val) {
+                handler: (val) =>  {
                     // using the handler instead of a separate watcher
                     val.due = this.reservationFilters.dueStatus ? (this.reservationFilters.dueName + '|' + this.reservationFilters.dueStatus) : this.reservationFilters.dueName;
 
@@ -621,7 +621,7 @@
             planOccupants() {
                 let excludedIDs = [];
                 if (_.isObject(this.currentPlan) && this.currentRooms.length) {
-                    _.each(this.currentRooms, function (room) {
+                    _.each(this.currentRooms, (room) => {
                         let arr = room.occupants.hasOwnProperty('data') ? room.occupants.data : room.occupants;
                         excludedIDs = _.union(excludedIDs, _.pluck(arr, 'id'));
                     });
@@ -633,8 +633,8 @@
                 let members = [];
                 let self = this;
                 if (_.isObject(this.currentTeam))
-	                _.each(this.currentTeam.squads.data, function (squad) {
-						_.each(squad.members.data, function (member) {
+	                _.each(this.currentTeam.squads.data, (squad) => {
+						_.each(squad.members.data, (member) => {
 						    if (!_.contains(self.planOccupants, member.id))
 								members.push(member);
 	                    });
@@ -720,7 +720,7 @@
                 this.currentRoom = room;
             },
             roomHasLeader(room) {
-                return _.some(room.occupants, function (occupant) {
+                return _.some(room.occupants, (occupant) => {
 	                return !!occupant.room_leader;
                 });
             },
@@ -728,7 +728,7 @@
                 let memberIds = _.filter(_.pluck(room.occupants, 'id'), function (id) { return id !== member.id; });
                 let companionIds = _.pluck(member.companions.data, 'id');
                 let presentIds = [];
-                _.each(memberIds, function (id) {
+                _.each(memberIds, (id) => {
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
@@ -743,7 +743,7 @@
                 let memberIds = _.filter(_.pluck(room.occupants, 'id'), function (id) { return id !== member.id; });
                 let companionIds = _.pluck(member.companions.data, 'id');
                 let presentIds = [];
-                _.each(memberIds, function (id) {
+                _.each(memberIds, (id) => {
                     if (_.contains(companionIds, id))
                         presentIds.push(id);
                 });
@@ -759,22 +759,22 @@
 
                 // Detect companions in other groups and remove them
                 if (member.present_companions_team) {
-                    _.each(this.currentRooms, function (roomA) {
+                    _.each(this.currentRooms, (roomA) => {
                         let companionObj;
-                        _.each(notPresentIds, function (companionId) {
+                        _.each(notPresentIds, (companionId) => {
                             companionObj = _.findWhere(roomA.occupants, {id: companionId});
                             if (companionObj) {
                                 this.removeFromRoom(companionObj, roomA);
                             }
-                        }.bind(this));
+                        });
 
-                    }.bind(this));
+                    });
                 }
 
                 // package for mass assignment
-                _.each(companionIds, function (compId) {
+                _.each(companionIds, (compId) => {
                     this.addToRoom({ id: compId }, false, room)
-                }.bind(this));
+                });
             },
             removeFromRoom(occupant, room) {
                 if (this.isLocked) {
@@ -783,7 +783,7 @@
                 }
 
                 return this.$http.delete('rooming/rooms/' + room.id + '/occupants/' + occupant.id).then((response) => {
-                    room.occupants = _.reject(room.occupants, function (member) {
+                    room.occupants = _.reject(room.occupants, (member) => {
                         return member.id === occupant.id;
                     });
                     room.occupants_count--;
@@ -819,7 +819,7 @@
 	                room.occupants = occupants;
                     room.occupants_count = occupants.length;
                     this.currentPlan.occupants_count++;
-                }, function (response) {
+                }, (response) =>  {
 	                this.$root.$emit('showError', response.data.message)
                 });
             },
@@ -856,7 +856,7 @@
                     this.reservations = response.data.data;
                     this.reservationsPagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });
@@ -865,7 +865,7 @@
                 return this.$http.get('rooming/types?campaign='+this.campaignId).then((response) => {
                         return this.roomTypes = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -878,7 +878,7 @@
                         this.plansPagination = response.data.meta.pagination;
                         return this.plans = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -905,7 +905,7 @@
 //                        this.plansPagination = response.data.meta.pagination;
 //                        return this.plans = response.data.data;
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -926,7 +926,7 @@
                             return this.currentRooms = response.data.data;
                         }
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -940,7 +940,7 @@
                 return this.$http.get('rooming/rooms/' + this.currentRoom.id + '/occupants', { params: params }).then((response) => {
                         this.currentRoom.occupants = response.data.data
                     },
-                    function (response) {
+                    (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -1004,7 +1004,7 @@
                             this.currentTeam = _.findWhere(this.teams, { id: currentSelection.id});
                         }
                         return this.teams;
-                    }, function (response) {
+                    }, (response) =>  {
                         console.log(response);
                         return response.data.data;
                     });
@@ -1030,7 +1030,7 @@
                         this.showPlanModal = false;
                         this.$root.$emit('select-options:update', plan.id, 'id');
                         return this.currentPlan = plan;
-                    }, function (response) {
+                    }, (response) =>  {
                         console.log(response);
                         this.$root.$emit('showError', response.data.message);
                         return response.data.data;
@@ -1081,7 +1081,7 @@
                                 if (room)
                                     return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
                             });
-                        }, function (response) {
+                        }, (response) =>  {
                             console.log(response);
                             this.$root.$emit('showError', response.data.message);
                             return response.data.data;
@@ -1103,7 +1103,7 @@
                 this.$http.delete('rooming/plans/' + plan.id).then((response) => {
                     this.showPlanDeleteModal = false;
                     this.$root.$emit('showInfo', plan.name + ' Deleted!');
-                    this.plans = _.reject(this.plans, function (obj) {
+                    this.plans = _.reject(this.plans, (obj) => {
 	                    return plan.id === obj.id;
                     });
                     this.currentplan = this.plans.length ? this.plans[0] : null;
@@ -1160,20 +1160,20 @@
                         }
                     }
                 }
-            }.bind(this));
+            });
 
-            this.$root.$on('campaign-scope', function (val) {
+            this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
                 this.$dispatch('rooming-wizard:plan-selection');
-            }.bind(this));
+            });
 
-            this.$root.$on('plan-scope', function (val) {
+            this.$root.$on('plan-scope', (val) =>  {
                 this.currentPlan = val || null;
-            }.bind(this));
+            });
 
-            this.$root.$on('create-plan', function (val) {
+            this.$root.$on('create-plan', (val) =>  {
                 this.openNewPlanModal();
-            }.bind(this));
+            });
 
         }
     }

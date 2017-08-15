@@ -156,17 +156,17 @@
             }
         },
         watch:{
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.fetch();
             },
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.fetch();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.fetch();
             },
-            'requirement.document_type': function (val, oldVal) {
+            'requirement.document_type': (val, oldVal) =>  {
                 switch(val) {
                     case 'passports':
                         this.label = 'Passport';

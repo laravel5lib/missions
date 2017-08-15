@@ -121,7 +121,7 @@
             }
         },
         watch: {
-            'temporaryCosts': function (val) {
+            'temporaryCosts': (val) =>  {
                 //debugger;
             }
         },
@@ -154,26 +154,26 @@
 
                 // remove cost from temporary array
                 if (this.selectedCost.unsaved) {
-                    this.temporaryCosts = _.reject(this.temporaryCosts, function (tempCost) {
+                    this.temporaryCosts = _.reject(this.temporaryCosts, (tempCost) => {
                         if (tempCost === this.selectedCost) {
                             return true;
                         } else {
                             // generate due based on added costs' payments
                             temporaryDues = _.union(temporaryDues, this.generatePaymentsFromCost(this.selectedCost));
                         }
-                    }.bind(this));
+                    });
 
                     temporaryDues = _.uniq(temporaryDues);
                     this.temporaryCosts = _.uniq(this.temporaryCosts);
                 } else {
-                    this.reservation.costs.data = _.reject(this.reservation.costs.data, function (tempCost) {
+                    this.reservation.costs.data = _.reject(this.reservation.costs.data, (tempCost) => {
                         if (tempCost === this.selectedCost) {
-                            res.dues.data = _.reject(res.dues.data, function (due) {
+                            res.dues.data = _.reject(res.dues.data, (due) => {
                                 return due.cost === tempCost.name;
                             });
                             return true;
                         }
-                    }.bind(this));
+                    });
 
                     temporaryDues = _.uniq(temporaryDues);
                     this.temporaryCosts = _.uniq(this.temporaryCosts);
@@ -196,12 +196,12 @@
                 let res = jQuery.extend(true, {}, this.reservation);
 
                 // Add selected costs to temporary list
-                _.each(this.selectedCosts, function (cost) {
+                _.each(this.selectedCosts, (cost) => {
                     cost.unsaved = true;
                     this.temporaryCosts.push(cost);
                     // generate due based on added costs' payments
                     temporaryDues = _.union(temporaryDues, this.generatePaymentsFromCost(cost));
-                }.bind(this));
+                });
                 temporaryDues = _.uniq(temporaryDues);
                 this.temporaryCosts = _.uniq(this.temporaryCosts);
 
@@ -219,7 +219,7 @@
             generatePaymentsFromCost(cost){
                 let temporaryDues = [];
                 // generate due based on added costs' payments
-                _.each(cost.payments.data, function (payment) {
+                _.each(cost.payments.data, (payment) => {
                     temporaryDues.push({
                         amount: payment.amount_owed,
                         balance: payment.balance_due,
@@ -236,7 +236,7 @@
             doUpdate(){
                 let costIds = [];
 
-                _.each(this.listedCosts, function (cost) {
+                _.each(this.listedCosts, (cost) => {
                     costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
 
@@ -274,12 +274,12 @@
                 this.selectedCosts = [];
 
                 // get available optional costs intersect with current
-                this.availableCosts = _.filter(this.reservation.trip.data.costs.data, function (cost) {
+                this.availableCosts = _.filter(this.reservation.trip.data.costs.data, (cost) => {
                     if (!_.findWhere(this.reservation.costs.data, {cost_id: cost.id}) && !_.findWhere(this.temporaryCosts, {id: cost.id}) && cost.type === 'optional') {
                         cost.removal = false;
                         return true;
                     };
-                }.bind(this));
+                });
             },
             revert(){
                 this.temporaryCosts = [];

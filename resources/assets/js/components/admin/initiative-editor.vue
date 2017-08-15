@@ -112,7 +112,7 @@
                     this.initiative = response.data.data;
                     this.editMode = false;
                     this.$root.$emit('showSuccess', 'Your changes were saved successfully.');
-                },function () {
+                },() =>  {
                     this.$root.$emit('showError', 'Your changes could not be saved.');
                 });
             },
@@ -122,7 +122,7 @@
                 this.$http.post('initiatives', this.initiative).then((response) => {
                     this.initiative = {};
                     window.location = '/admin/initiatives/' + response.data.data.id;
-                },function () {
+                },() =>  {
                     this.$root.$emit('showError', 'The initiative could not be created.');
                 });
             },

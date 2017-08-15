@@ -124,7 +124,7 @@
             }
         },
         watch: {
-            'fundraiser': function (val, oldVal) {
+            'fundraiser': (val, oldVal) =>  {
                 this.description = val.hasOwnProperty('description') ? val.description : '';
                 // watch url value for checking
                 if (val.hasOwnProperty('url') && oldVal.hasOwnProperty('url') && val.url !== oldVal.url) {
@@ -168,7 +168,7 @@
                         this.validUrl = true;
                     }
                     this.checkingUrl = false;
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                 });
             },
@@ -197,7 +197,7 @@
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();
-                }, function (error) {
+                }, (error) =>  {
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 });

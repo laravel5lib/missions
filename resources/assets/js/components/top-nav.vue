@@ -95,7 +95,7 @@
 			'managing': {
 				type: Boolean,
 				default: false,
-				coerce: function (val) {
+				coerce: (val) =>  {
 					return parseInt(val) > 0;
 				}
 			},

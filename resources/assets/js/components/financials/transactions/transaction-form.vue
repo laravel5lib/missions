@@ -304,7 +304,7 @@
                 var num, today, years, yyyy;
                 today = new Date;
                 yyyy = today.getFullYear();
-                years = (function () {
+                years = (() =>  {
                     var i, ref, ref1, results;
                     results = [];
                     for (num = i = ref = yyyy, ref1 = yyyy + 10; ref <= ref1 ? i <= ref1 : i >= ref1; num = ref <= ref1 ? ++i : --i) {
@@ -391,7 +391,7 @@
                         }
                     }
 
-                },function (response) {
+                },(response) =>  {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'Unable to retrieve transaction.');
                 });
@@ -406,7 +406,7 @@
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
                     this.$dispatch('transactionCreated');
                     this.reset();
-                },function (response) {
+                },(response) =>  {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });
@@ -420,7 +420,7 @@
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction updated successfully.');
                     this.reset();
-                },function (response) {
+                },(response) =>  {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });

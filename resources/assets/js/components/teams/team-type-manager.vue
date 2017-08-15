@@ -193,7 +193,7 @@
                     return this.teamTypeResource.update({ id: updatingObject.id }, updatingObject).then((response) => {
                         _.extend(_.findWhere(this.teamTypes, { id: updatingObject.id}), response.data.data);
                         this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully updated');
-                    }, function (response) {
+                    }, (response) =>  {
                         this.$root.$emit('showError', response.data.message);
                     });
                 }
@@ -206,7 +206,7 @@
                     return this.teamTypeResource.post(this.currentType).then((response) => {
                         this.teamTypes.push(response.data.data);
                         this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully created');
-                    }, function (response) {
+                    }, (response) =>  {
                         this.$root.$emit('showError', response.data.message);
 
                     });
@@ -220,22 +220,22 @@
                 this.teamTypeResource
 	                .delete({ id: this.selectedType.id})
 	                .then((response) => {
-	                    this.teamTypes = _.reject(this.teamTypes, function (type) {
+	                    this.teamTypes = _.reject(this.teamTypes, (type) => {
 		                    return type.id === this.selectedType.id
-                        }.bind(this));
+                        });
                         this.showTypeDeleteModal = true;
                         this.$root.$emit('showInfo', 'Team Type: ' + this.selectedType.name + ', successfully deleted');
-                        this.$nextTick(function () {
+                        this.$nextTick(() =>  {
                             this.selectedType = null;
                         });
-                    }, function (response) {
+                    }, (response) =>  {
                         this.$root.$emit('showError', response.data.message);
                     });
             },
             getTeamTypes() {
                 return this.teamTypeResource.get({campaign: this.campaignId}).then((response) => {
                     return this.teamTypes = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     console.log(error);
                     return error;
                 });

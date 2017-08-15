@@ -131,7 +131,7 @@
             fetch() {
                 this.$http.get('promotionals/' + this.id).then((response) => {
                     this.promo = response.data.data;
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 });
             },
@@ -150,7 +150,7 @@
                     this.showStopModal = false;
                     this.fetch();
                     this.$broadcast('promotionalStatusChanged');
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to deactivate on server.');
                 });
             },
@@ -160,7 +160,7 @@
                     this.$root.$emit('showSuccess', 'Deleted promotional.');
                     this.showDeleteModal = false;
                     this.callView({view: 'list'});
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to delete on server.');
                 });
             },
@@ -171,7 +171,7 @@
                     this.showStartModal = false;
                     this.fetch();
                     this.$broadcast('promotionalStatusChanged');
-                }, function (error) {
+                }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to activate on server.');
                 });
             },

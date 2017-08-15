@@ -51,7 +51,7 @@
             .then((response) => {
               console.log(response);
               this.$root.$emit('showSuccess', 'Your request was processed successfully.');
-            }, function (error) {
+            }, (error) =>  {
               console.log(error);
               this.$root.$emit('showError', 'Unable to process your request.');
             });

@@ -193,17 +193,17 @@
         },
         watch:{
             'filters': {
-                handler: function (val) {
+                handler: (val) =>  {
                     this.pagination.current_page = 1;
                     this.searchPassports();
                 },
                 deep: true
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchPassports();
             },
-            'includeManaging': function (val, oldVal) {
+            'includeManaging': (val, oldVal) =>  {
                 this.pagination.current_page = 1;
                 this.searchPassports();
             }
@@ -217,7 +217,7 @@
             removePassport(passport){
                 if(passport) {
                     this.$http.delete('passports/' + passport.id).then((response) => {
-                        this.passports = _.reject(this.passports, function (item) {
+                        this.passports = _.reject(this.passports, (item) => {
                             return item.id === passport.id;
                         });
                     });
@@ -249,7 +249,7 @@
                 }
 
                 if (user.managing.data.length) {
-                    _.each(user.managing.data, function (group) {
+                    _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });
                     this.trips = _.union(this.trips, managing);

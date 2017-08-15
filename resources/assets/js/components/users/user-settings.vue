@@ -528,7 +528,7 @@
                                 menuProfileButton.attributes.href.value = '/' + response.data.data.url;
                         }
 
-                    }, function (error) {
+                    }, (error) =>  {
                         console.log(error);
                         this.SERVER_ERRORS = error.data.errors;
                         this.$root.$emit('showError', 'Please check the form.');
@@ -593,9 +593,9 @@
                 }).catch(this.$root.handleApiError);
             });
 
-            this.$root.$on('save-settings', function () {
+            this.$root.$on('save-settings', () =>  {
                 this.submit();
-            }.bind(this));
+            });
         }
     }
 </script> 

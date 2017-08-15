@@ -420,7 +420,7 @@
                     _.each(response.data.roles, function (name, key) {
                         if (_.contains(val.team_roles, key))
                             this.roles.push({ value: key, name: name});
-                    }.bind(this));
+                    });
                 });
 		    },
 			'userObj'(val){
@@ -511,7 +511,7 @@
 				_.each(response.data.roles, function (name, key) {
 				    if (_.contains(this.$parent.trip.team_roles, key))
 						this.roles.push({ value: key, name: name});
-				}.bind(this));
+				});
 			});
 
 			this.$dispatch('basic-info', true);

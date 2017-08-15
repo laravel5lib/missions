@@ -55,7 +55,7 @@ export default {
                             this.UTILITIES.roles.push({ value: key, name: name});
                     } else
                         arr.push({ value: key, name: name});
-                }.bind(this));
+                });
                 this.UTILITIES.roles = arr;
                 if (loading) {
                     loading(false);
@@ -75,7 +75,7 @@ export default {
                 let arr = [];
                 _.each(response.data.roles, function (name, key) {
                     arr.push({ value: key, name: name});
-                }.bind(this));
+                });
                 this.UTILITIES.roleTypes[type] = arr;
                 if (loading) {
                     loading(false);
@@ -88,7 +88,7 @@ export default {
             loading ? loading(true) : void 0;
             return this.$http.get('utilities/airports', { params: {search: search, sort: 'name'} }).then((response) => {
                 let airports = response.data.data;
-                _.each(airports, function (airport) {
+                _.each(airports, (airport) => {
                     if (airport.iata) {
                         airport.extended_name = airport.name + ' (' + airport.iata + ')';
                     } else if (airport.icao) {
@@ -121,7 +121,7 @@ export default {
             loading ? loading(true) : void 0;
             return this.$http.get('utilities/airlines', { params: {search: search, sort: 'name'} }).then((response) => {
                 let airlines = response.data.data;
-                _.each(airlines, function (airline) {
+                _.each(airlines, (airline) => {
                     airline.extended_name = airline.iata ? airline.name + ' (' + airline.iata + ')' : airline.name;
                 });
                     this.UTILITIES.airlines = airlines;

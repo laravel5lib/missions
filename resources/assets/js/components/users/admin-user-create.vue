@@ -392,7 +392,7 @@
             }
         },
         watch: {
-            'name': function (val) {
+            'name': (val) =>  {
                 if (typeof val === 'string') {
                     // pre-populate slug
                     this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then((response) => {
@@ -444,7 +444,7 @@
                         url: this.public ? this.url : undefined,
                     }).then((resp) => {
                         window.location.href = '/admin' + resp.data.data.links[0].uri;
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors
                         this.showError = true;
                         console.log(error);

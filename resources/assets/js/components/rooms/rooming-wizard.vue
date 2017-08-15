@@ -113,16 +113,16 @@
         },
 	    mounted() {
             let self = this;
-            this.$root.$on('campaign-scope', function (val) {
+            this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
                 this.$root.$emit('update-title', val ? val.name : '');
-            }.bind(this));
+            });
 
             $('#collapseHints')
-                .on('show.bs.collapse', function () {
+                .on('show.bs.collapse', () =>  {
                     self.toggleHintsCollapse = true;
                 })
-                .on('hide.bs.collapse', function () {
+                .on('hide.bs.collapse', () =>  {
                     self.toggleHintsCollapse = false;
                 });
         }

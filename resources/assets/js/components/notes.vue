@@ -148,17 +148,17 @@
             }
         },
         watch : {
-            'page': function (val, oldVal) {
+            'page': (val, oldVal) =>  {
                 this.fetch();
             },
-            'per_page': function (val, oldVal) {
+            'per_page': (val, oldVal) =>  {
                 this.fetch();
             },
-            'search': function (val, oldVal) {
+            'search': (val, oldVal) =>  {
                 this.page = 1;
                 this.fetch();
             },
-            'id': function (val, oldVal) {
+            'id': (val, oldVal) =>  {
                 this.selectedNote.noteable_id = val;
                 this.fetch();
             }
@@ -218,7 +218,7 @@
                     this.reset();
                     this.fetch();
                     this.$root.$emit('showSuccess', 'Note created successfully.');
-                }, function () {
+                }, () =>  {
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
@@ -228,7 +228,7 @@
                     this.reset();
                     this.fetch();
                     this.$root.$emit('showSuccess', 'Note saved successfully.');
-                }, function () {
+                }, () =>  {
                     this.$root.$emit('showError', 'There are errors on the form.');
                 });
             },
@@ -249,7 +249,7 @@
                     // re-fetch list
                     this.fetch();
                     this.$root.$emit('showSuccess', 'Note deleted.');
-                }, function () {
+                }, () =>  {
                     this.$root.$emit('showError', 'Unable to delete note.');
                 });
             }

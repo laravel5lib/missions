@@ -509,10 +509,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Medical Release created.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create medical release.');
                     });
@@ -540,10 +540,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/medical-releases/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
@@ -583,7 +583,7 @@
                     this.$http.get('medical/conditions').then((response) => {
                         // prepare conditions for UI
                         let med_conditions = medical_release.conditions.data;
-                        _.each(response.data.data, function (condition) {
+                        _.each(response.data.data, (condition) => {
                             let obj = { name: condition, medication: false, diagnosed: false, selected: false };
                             let match = _.find(med_conditions, function (c, i) {
                                 med_conditions[i].selected = true;
@@ -596,13 +596,13 @@
                                 _.extend(obj, match, { selected: true });
                             }
                             this.conditionsList.push(obj);
-                        }.bind(this));
+                        });
                         this.additionalConditionsList = med_conditions;
                     });
                     this.$http.get('medical/allergies').then((response) => {
                     // prepare conditions for UI
                     let med_allergies = medical_release.allergies.data;
-                    _.each(response.data.data, function (allergy) {
+                    _.each(response.data.data, (allergy) => {
                         let obj = { name: allergy, medication: false, diagnosed: false, selected: false };
                         let match = _.find(med_allergies, function (a, i) {
                             med_allergies[i].selected = true;
@@ -615,20 +615,20 @@
                             _.extend(obj, match, { selected: true });
                         }
                         this.allergiesList.push(obj);
-                    }.bind(this));
+                    });
                     this.additionalAllergiesList = med_allergies;
                 });
                 });
             } else {
                 this.$http.get('medical/conditions').then((response) => {
-                    _.each(response.data.data, function (condition) {
+                    _.each(response.data.data, (condition) => {
                         this.conditionsList.push({ name: condition, medication: false, diagnosed: false, selected: false });
-                    }.bind(this));
+                    });
                 });
                 this.$http.get('medical/allergies').then((response) => {
-                    _.each(response.data.data, function (allergy) {
+                    _.each(response.data.data, (allergy) => {
                         this.allergiesList.push({ name: allergy, medication: false, diagnosed: false, selected: false });
-                    }.bind(this));
+                    });
                 });
             }
         }

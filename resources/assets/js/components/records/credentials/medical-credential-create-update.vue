@@ -569,7 +569,7 @@
         },
         watch:{
 			content: {
-                handler: function (val, oldVal) {
+                handler: (val, oldVal) =>  {
                     let roleObj = _.findWhere(val, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
                     if (_.isObject(this.selectedRoleObj) && this.selectedRoleObj.value !== roleObj.a) {
                         roleObj.a = this.selectedRoleObj.value;
@@ -629,10 +629,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Medical Credential created.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/medical-credentials/' + resp.data.data.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create medical release.');
                     });
@@ -658,10 +658,10 @@
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Changes saved.');
                         let that = this;
-                        setTimeout(function () {
+                        setTimeout(() =>  {
                             window.location.href = '/'+ that.firstUrlSegment +'/records/medical-credentials/' + that.id;
                         }, 1000);
-                    }, function (error) {
+                    }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
@@ -711,7 +711,7 @@
 	        },
             syncCheckboxes() {
 	            let self = this;
-				this.$nextTick(function () {
+				this.$nextTick(() =>  {
                     _.each($('input[type=checkbox]'), function (checkbox) {
 //	                    if (checkbox.hasAttribute('checked'))
 	                        checkbox.checked = checkbox.hasAttribute('checked');
@@ -791,7 +791,7 @@
             /*let teamRolesPromise = this.$http.get('utilities/team-roles/medical').then((response) => {
                 _.each(response.data.roles, function (name, key) {
                     this.roles.push({ value: key, name: name});
-                }.bind(this));
+                });
             });*/
 
             // this.$refs.spinner.show();
@@ -818,17 +818,17 @@
                         // let ids = [];
                         let filesArr = _.findWhere(credential.content, { id: 'files'}).a;
                         _.each(filesArr, function (list, index) {
-	                        _.each(list, function (obj) {
+	                        _.each(list, (obj) => {
 	                            obj.type = index;
 		                        this.uploads.push(obj);
 		                        this.upload_ids.push(obj.id);
-                            }.bind(this))
-                        }.bind(this));
+                            })
+                        });
                     });
                 } else {
                     this.$activateValidator();
                 }
-            //}.bind(this));
+            //});
         }
     }
 </script>

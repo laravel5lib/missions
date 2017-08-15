@@ -289,7 +289,7 @@
 		 costs
 		 },*/
 		watch: {
-			'newPayment.amount_owed': function (val, oldVal) {
+			'newPayment.amount_owed': (val, oldVal) =>  {
 				var max = this.calculateMaxAmount(this.selectedCost);
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
@@ -297,7 +297,7 @@
 				if (_.isFunction(this.$validate))
 					this.$validate('percent', true);
 			},
-			'newPayment.percent_owed': function (val, oldVal) {
+			'newPayment.percent_owed': (val, oldVal) =>  {
 				var max = this.calculateMaxPercent(this.selectedCost);
 				if (val > max)
 					this.newPayment.percent_owed = max;
@@ -305,7 +305,7 @@
 				if (_.isFunction(this.$validate))
 					this.$validate('amount', true);
 			},
-			'costs': function (val, oldVal) {
+			'costs': (val, oldVal) =>  {
 				this.checkCostsErrors();
 			}
 		},
@@ -463,7 +463,7 @@
 			$('html, body').animate({scrollTop: 0}, 300);
 			this.$set('costs', this.$parent.trip.costs);
 			// add toggle data
-			_.each(this.costs, function (cost) {
+			_.each(this.costs, (cost) => {
 				cost.toggleNewPayment = false;
 			});
 			this.$dispatch('pricing', true);

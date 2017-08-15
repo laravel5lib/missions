@@ -48,7 +48,7 @@
 								<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 							</div>
 							<div class="col-sm-6">
-								<date-picker :model.sync="ended_at" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ednded_at' }"></date-picker>
+								<date-picker :model.sync="ended_at" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }"></date-picker>
 								<input type="datetime" class="form-control hidden" v-model="ended_at|moment 'MM-DD-YYYY HH:mm:ss'" id="ended_at"
 								       :min="started_at"
 								       v-validate:end="{ required: true }" required>

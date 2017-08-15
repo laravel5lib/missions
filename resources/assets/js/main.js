@@ -269,68 +269,6 @@ import axios from 'axios';
 axios.defaults.baseURL = '/api';
 Vue.prototype.$http = axios;
 
-// debugger;
-// Vue.http.options.root = '/api';
-/*Vue.http.interceptors.push(function(request, next) {
-
-    // modify request
-    let token, headers;
-
-    token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
-
-    headers = request.headers || (request.headers = {});
-
-    if (token !== null && token !== 'undefined') {
-        headers.set('Authorization', token);
-    }
-
-
-    // Show Spinners in all components where they exist
-    if (_.contains(['GET', 'POST', 'PUT'], request.method.toUpperCase())) {
-        if (this.$refs.spinner && !request.params.hideLoader) {
-            switch (request.method.toUpperCase()) {
-                case 'GET':
-                    // this.$root.$emit('show::spinner', {text: 'Loading'})
-                    this.$refs.spinner.show({text: 'Loading'});
-                    break;
-                case 'POST':
-                    // this.$root.$emit('show::spinner', {text: 'Saving'})
-                    this.$refs.spinner.show({text: 'Saving'});
-                    break;
-                case 'PUT':
-                    // this.$root.$emit('show::spinner', {text: 'Updating'})
-                    this.$refs.spinner.show({text: 'Updating'});
-                    break;
-            }
-        }
-    }
-
-    // continue to next interceptor
-    next(function(response) {
-
-        // Hide Spinners in all components where they exist
-        if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
-            this.$refs.spinner.hide();
-        }
-
-        if (response.status && response.status === 401) {
-            $.removeCookie('api_token');
-            console.log('not logged in');
-            // window.location.replace('/logout');
-        }
-        if (response.status && response.status === 500) {
-            console.log('Oops! Something went wrong with the server.')
-        }
-        if (response.headers && response.headers.has('Authorization')) {
-            $.cookie('api_token', response.headers.get('Authorization'));
-        }
-        if (response.data && response.data.token && response.data.token.length > 10) {
-            $.cookie('api_token', response.data.token);
-        }
-
-    });
-});*/
-
 Vue.filter('phone', (phone) => {
     phone = phone || '';
     return phone.replace(/[^0-9]/g, '')
@@ -666,7 +604,7 @@ Vue.mixin({
     }
 });
 
-new Vue({
+App = new Vue({
     el: '#app',
     data: {
         datePickerSettings: {
@@ -852,7 +790,7 @@ new Vue({
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     },
-    mounted() {
+    created() {
         // Add a request interceptor
         this.$http.interceptors.request.use((config) => {
             // modify request
@@ -888,36 +826,54 @@ new Vue({
             return config;
         }, (error) => {
             // Do something with request error
+            // debugger;
             return Promise.reject(error);
         });
 
-// Add a response interceptor
+        // Add a response interceptor
         this.$http.interceptors.response.use((response) => {
             // Hide Spinners in all components where they exist
             if (this.$refs.spinner && !_.isUndefined(this.$refs.spinner._started)) {
                 this.$refs.spinner.hide();
             }
 
-            if (response.status && response.status === 401) {
-                $.removeCookie('api_token');
-                console.log('not logged in');
-                // window.location.replace('/logout');
-            }
-            if (response.status && response.status === 500) {
-                console.log('Oops! Something went wrong with the server.')
-            }
-            if (response.headers && response.headers.has('Authorization')) {
-                $.cookie('api_token', response.headers.get('Authorization'));
-            }
-            if (response.data && response.data.token && response.data.token.length > 10) {
-                $.cookie('api_token', response.data.token);
+            if (response.status) {
+                if (response.status === 401) {
+                    $.removeCookie('api_token');
+                    console.log('not logged in');
+                    // window.location.replace('/logout');
+                }
+                if (response.status === 500) {
+                    console.log('Oops! Something went wrong with the server.')
+                }
+                if (response.headers['Authorization']) {
+                    $.cookie('api_token', response.headers['Authorization']);
+                }
+                if (response.data.token && response.data.token.length > 10) {
+                    $.cookie('api_token', response.data.token);
+                }
             }
 
             return response;
         }, (error) => {
             // Do something with response error
+            // debugger;
             return Promise.reject(error);
         });
+
+
+        // if api_token cookie doesn't exist user data will be cleared if they do exist
+        if (this.$cookie.get('api_token') === null) {
+            if (localStorage.hasOwnProperty('user'))
+                localStorage.removeItem('user');
+            if (localStorage.hasOwnProperty('impersonatedUser'))
+                localStorage.removeItem('impersonatedUser');
+        } else {
+            // because user is computed, this must be called to initiate impersonation or normal user before anything else
+            this.user;
+        }
+    },
+    mounted() {
         // Track window resizing
         $(window).on('resize', function () {
             this.$emit('Window:resize');
@@ -954,18 +910,6 @@ new Vue({
         if (this.$cookie.get('impersonate') === null)
             localStorage.removeItem('impersonatedUser');
 
-    },
-    created() {
-        // if api_token cookie doesn't exist user data will be cleared if they do exist
-        if (this.$cookie.get('api_token') === null) {
-            if (localStorage.hasOwnProperty('user'))
-                localStorage.removeItem('user');
-            if (localStorage.hasOwnProperty('impersonatedUser'))
-                localStorage.removeItem('impersonatedUser');
-        } else {
-            // because user is computed, this must be called to initiate impersonation or normal user before anything else
-            this.user;
-        }
     },
     methods: {
         setUser(user) {

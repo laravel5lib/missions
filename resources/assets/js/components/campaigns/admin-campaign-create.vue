@@ -64,7 +64,7 @@
 				<div class="form-group">
 					<div class="col-sm-12">
 						<label for="published_at">Published</label>
-						<date-picker :model.sync="published_at|moment 'MM-DD-YYYY HH:mm:ss'"></date-picker>
+						<date-picker :model.sync="published_at"></date-picker>
 						<!--<div class="input-group">
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>

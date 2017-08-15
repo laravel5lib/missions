@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model.sync="filters.minDate|moment"></date-picker>
+                    <date-picker :model.sync="filters.minDate"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model.sync="filters.maxDate|moment"></date-picker>
+                    <date-picker :model.sync="filters.maxDate"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -181,11 +181,11 @@
                 Payment Method
                 <i class="fa fa-close"></i>
             </span>
-            <span style="margin-right:2px;" class="label label-default" v-show="filters.minDate" @click="filters.minDate = ''" >
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.minDate" @click="filters.minDate = null" >
                 From Date
                 <i class="fa fa-close"></i>
             </span>
-            <span style="margin-right:2px;" class="label label-default" v-show="filters.maxDate" @click="filters.maxDate = ''" >
+            <span style="margin-right:2px;" class="label label-default" v-show="filters.maxDate" @click="filters.maxDate = null" >
                 To Date
                 <i class="fa fa-close"></i>
             </span>
@@ -295,7 +295,7 @@
                     <td v-if="isActive('donor_email')" v-text="transaction.donor.data.email"></td>
                     <td v-if="isActive('fund_name')" v-text="transaction.fund.data.name"></td>
                     <td v-if="isActive('created_at')" v-text="transaction.created_at|moment 'lll'"></td>
-                    <td><a href="/admin/transactions/{{ transaction.id }}"><i class="fa fa-cog"></i></a></td>
+                    <td><a :href="'/admin/transactions/' + transaction.id"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>
                 <tfoot>
@@ -356,7 +356,6 @@
                 activeFields: ['description', 'type', 'amount', 'donor', 'created_at'],
                 maxActiveFields: 6,
                 maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
-
                 // filter vars
                 donorsOptions: [],
                 donorObj: null,
@@ -400,26 +399,26 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: function (val) {
+                handler (val) {
 //                    console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
                 deep: true
             },
-            'donorObj': function (val) {
+            'donorObj' (val) {
                 this.filters.donor = val ? val.id : '';
                 this.searchTransactions();
             },
-            'direction': function (val) {
+            'direction' (val) {
                 this.searchTransactions();
             },
-            'tagsString': function (val) {
+            'tagsString' (val) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchTransactions();
             },
-            'activeFields': function (val, oldVal) {
+            'activeFields' (val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -427,15 +426,15 @@
                 }
                 this.updateConfig();
             },
-            'search': function (val, oldVal) {
+            'search' (val, oldVal) {
                 this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchTransactions();
             },
-            'page': function (val, oldVal) {
+            'page' (val, oldVal) {
                 this.searchTransactions();
             },
-            'per_page': function (val, oldVal) {
+            'per_page' (val, oldVal) {
                 this.searchTransactions();
             },
 
@@ -504,7 +503,8 @@
                 };
 
                 $.extend(params, this.filters);
-
+                params.minDate = moment(params.minDate).format('YYYY-MM-DD HH:mm:ss');
+                params.maxDate = moment(params.maxDate).format('YYYY-MM-DD HH:mm:ss');
                 this.exportFilters = params;
 
                 return params;
@@ -532,7 +532,7 @@
             }
         },
         events: {
-            'refreshTransactions': function() {
+            'refreshTransactions'() {
                 this.searchTransactions();
             }
         },

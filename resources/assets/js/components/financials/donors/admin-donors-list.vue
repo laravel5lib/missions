@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12">
-                            <date-picker addon="Start" :input-sm="true" :model.sync="filters.starts|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <date-picker addon="Start" :input-sm="true" :model.sync="filters.starts|moment 'YYYY-MM-DD HH:mm:ss'" v-if="filters"></date-picker>
                             <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">Start</span>
                                 &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.starts"/>&ndash;&gt;
@@ -66,7 +66,7 @@
                             <br>
                         </div>
                         <div class="col-xs-12">
-                            <date-picker addon="End" :input-sm="true" :model.sync="filters.ends|moment 'MM-DD-YYYY HH:mm:ss'" v-if="filters"></date-picker>
+                            <date-picker addon="End" :input-sm="true" :model.sync="filters.ends|moment 'YYYY-MM-DD HH:mm:ss'" v-if="filters"></date-picker>
                             <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">End</span>
                                 &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.ends"/>&ndash;&gt;

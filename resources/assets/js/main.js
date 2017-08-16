@@ -1033,9 +1033,9 @@ new Vue({
                             this.$emit('userHasLoggedIn', response.data.data);
                             return response.data.data;
                         },
-                        (response) => {
-                            if (this.isAdminRoute || this.isDashboardRoute)
-                                window.location = '/logout';
+                        function (response) {
+                            // if (this.isAdminRoute || this.isDashboardRoute)
+                            //     window.location = '/logout';
                         });
             }
         },

@@ -125,7 +125,7 @@
 				}
 
 				var resource = this.$resource('trips{/id}');
-				resource.update({ id: this.tripId}, this.wizardData).then((resp) => {
+				resource.put({ id: this.tripId}, this.wizardData).then((resp) => {
 
 				}, (error) =>  {
 					console.log(error);

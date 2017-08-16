@@ -388,12 +388,7 @@
                     }
 
 //                    let loginHttp = this.$http.create({ baseURL: '', headers: {} });
-                    this.$http.post('/login', this.user, {
-                        baseURL: '',
-                        validateStatus: function (status) {
-                            return status < 500; // Reject only if the status code is greater than or equal to 500
-                        }
-                    }).then((response) => {
+                    this.$http.post('/login', this.user, { baseURL: '' }).then((response) => {
                         // set cookie - name, token
                         this.$cookie.set('api_token', response.data.token);
                         // reload to set cookie
@@ -435,7 +430,7 @@
             },
 
             getUserData(redirectTo, ignoreRedirect) {
-                return this.$http.get('users/me?include=roles,abilities', { baseURL: '' })
+                return this.$http.get('users/me?include=roles,abilities')
                     .then((response) => {
                             this.$root.$emit('userHasLoggedIn', response.data.data);
 
@@ -449,7 +444,7 @@
                         })
 	                .catch((response) => {
 	                    console.log(response);
-	                    return response.data.message;
+	                    return response.message;
 	                });
             },
 
@@ -466,7 +461,7 @@
                         return false;
                     }
 
-                    this.$http.post('/register', this.newUser).then((response) => {
+                    this.$http.post('/register', this.newUser, { baseURL: '' }).then((response) => {
                             // console.log(response.data.token);
                             // set cookie - name, token
                             this.$cookie.set('api_token', response.data.token);

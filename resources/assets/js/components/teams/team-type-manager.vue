@@ -190,7 +190,7 @@
                     if (originalType.name === this.currentType.name)
 	                    delete updatingObject.name;
 
-                    return this.teamTypeResource.update({ id: updatingObject.id }, updatingObject).then((response) => {
+                    return this.teamTypeResource.put({ id: updatingObject.id }, updatingObject).then((response) => {
                         _.extend(_.findWhere(this.teamTypes, { id: updatingObject.id}), response.data.data);
                         this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully updated');
                     }, (response) =>  {

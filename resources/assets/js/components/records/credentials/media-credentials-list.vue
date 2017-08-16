@@ -43,7 +43,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{media_credential.updated_at|moment('lll')}}</p>
+                            <p class="small">{{media_credential.putd_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -60,7 +60,7 @@
 			<pagination :pagination="pagination" :callback="searchMedias"></pagination>
 
 		</div>
-		<modal :show="deleteModal" title="Remove Media Credential" small="true">
+		<modal :value="deleteModal" title="Remove Media Credential" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Media Credential?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

@@ -676,7 +676,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                this.updateConfig();
+                this.putConfig();
             },
             'search': (val, oldVal) =>  {
                 this.page = 1;
@@ -841,7 +841,7 @@
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }).then(() => {
-                    this.updateConfig();
+                    this.putConfig();
                     // this.$refs.spinner.hide();
                 })
             },

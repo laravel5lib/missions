@@ -91,7 +91,7 @@
             setEssay(essay){
                 if(essay) {
                     this.essay = essay;
-                    this.reservationResource.update({id: this.reservationId}, {
+                    this.reservationResource.put({id: this.reservationId}, {
                         testimony_id: essay.id
                     }).then((response) => {
                         this.toggleChangeState();

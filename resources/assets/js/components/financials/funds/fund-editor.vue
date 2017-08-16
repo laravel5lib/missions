@@ -69,7 +69,7 @@
             <label>Type</label>
             <p>{{ fund.type ? fund.type[0].toUpperCase() + fund.type.slice(1) : '' }}</p>
             <label>Last Updated</label>
-            <p>{{ fund.updated_at | moment('lll') }}</p>
+            <p>{{ fund.putd_at | moment('lll') }}</p>
 
         </div>
         <div class="panel-footer text-right">

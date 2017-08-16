@@ -122,7 +122,7 @@
                 this.editMode = false;
             }
 
-            this.updateInfo();
+            this.putInfo();
         }
     }
 </script>

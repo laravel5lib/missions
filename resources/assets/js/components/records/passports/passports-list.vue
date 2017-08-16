@@ -94,7 +94,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{passport.updated_at|moment('lll')}}</p>
+                            <p class="small">{{passport.putd_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end panel-body -->
@@ -113,7 +113,7 @@
             <pagination :pagination="pagination" :callback="searchPassports"></pagination>
 
         </div>
-        <modal :show="deleteModal" title="Remove Passport" small="true">
+        <modal :value="deleteModal" title="Remove Passport" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Passport?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

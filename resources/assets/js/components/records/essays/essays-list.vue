@@ -52,7 +52,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{essay.updated_at|moment('lll')}}</p>
+                            <p class="small">{{essay.putd_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
@@ -72,7 +72,7 @@
         <div class="col-xs-12 text-center">
             <pagination :pagination="pagination" :callback="searchEssays"></pagination>
         </div>
-        <modal :show="deleteModal" title="Remove Essay" small="true">
+        <modal :value="deleteModal" title="Remove Essay" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Essay?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

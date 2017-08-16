@@ -10,7 +10,7 @@
                     </label>
                 </div>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <input type="text" class="form-control" v-model="search" placeholder="Search" @keyup="debouncedSearch">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
                 <template v-if="canExport">
@@ -75,7 +75,7 @@
                             </div><!-- end col -->
                              <div class="col-sm-6">
                                 <label>UPDATED ON</label>
-                                <p class="small">{{visa.updated_at|moment('lll')}}</p>
+                                <p class="small">{{visa.putd_at|moment('lll')}}</p>
                             </div><!-- end col -->
                         </div><!-- end row -->
                     </div><!-- end panel-body -->
@@ -93,7 +93,7 @@
             <pagination :pagination="pagination" :callback="searchVisas"></pagination>
 
         </div>
-        <modal :show="deleteModal" title="Remove Visa" small="true">
+        <modal :value="deleteModal" title="Remove Visa" :small="true">
             <div slot="modal-body" class="modal-body">Delete this Visa?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -104,6 +104,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default{
@@ -178,11 +179,13 @@
                 },
                 deep: true
             },
-            'search': (val, oldVal) =>  {
+            'search' (val, oldVal)  {
                 this.pagination.current_page = 1;
-                this.searchVisas();
+                //let self = this;
+//                _.debounce(self.searchVisas(), 2500);
+                 //this.debouncedSearch();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging' (val, oldVal)  {
                 this.pagination.current_page = 1;
                 this.searchVisas();
             }
@@ -192,12 +195,22 @@
                 this.$dispatch('set-document', visa);
             },
             // emulate pagination
+	        debouncedSearch: _.debounce(() => { this.default.methods.searchVisas() }, 250),
             searchVisas(){
-                let params = {user: this.userId, sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
+                let params = {
+                    user: this.userId,
+	                sort: 'author_name',
+	                search: this.search,
+	                per_page: this.per_page,
+	                page: this.pagination.current_page
+                };
+
                 if (this.includeManaging)
                     params.manager = this.userId;
+
                 $.extend(params, this.filters);
                 this.exportFilters = params;
+
                 this.$http.get('visas', { params: params }).then((response) => {
                     this.visas = response.data.data;
                     this.pagination = response.data.meta.pagination;

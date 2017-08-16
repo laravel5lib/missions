@@ -555,7 +555,7 @@
         },
 	    watch: {
             currentPlan(val) {
-                this.updateConfig();
+                this.putConfig();
                 this.currentRoom = null;
                 this.getRooms(val);
                 this.searchReservations();
@@ -567,7 +567,7 @@
                         this.getOccupants();
                     this.searchReservations();
                     this.getTeams();
-                    this.updateConfig();
+                    this.putConfig();
                 },
 	            deep: true
             },
@@ -1061,7 +1061,7 @@
 	        newRoom() {
                 if (this.$RoomCreate.valid) {
                     if (this.roomModalEditMode) {
-                        return this.RoomingPlansResource.update({
+                        return this.RoomingPlansResource.put({
 	                        plan: this.currentPlan.id,
 	                        path: 'rooms',
 	                        pathId: this.selectedRoom.id,

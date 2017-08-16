@@ -256,7 +256,6 @@
 					{type: 'file', path: 'resources/documents'},
 				],
 				typeObj: null,
-				resource: this.$resource('uploads{/id}'),
 				uploads: [],
 				page: 1,
 				search: '',
@@ -377,7 +376,7 @@
 				});
 
 				if (this.isUpdate) {
-					this.resource.get({id: this.uploadId}).then((response) => {
+					this.$http.get(`uploads/${this.uploadId}`).then((response) => {
 						let upload = response.data.data;
 						this.currentName = upload.name;
 						this.tags = upload.tags;
@@ -460,7 +459,7 @@
                         params.type = 'other';
                     }
 
-                    return this.resource.post(null, params).then((resp) => {
+                    return this.$http.post(`uploads`, null, { params: params }).then((resp) => {
                             return this.handleSuccess(resp);
                         }, (error) =>  {
                             this.SERVER_ERRORS = error.data.errors;
@@ -490,7 +489,7 @@
                         params.type = 'other';
                     }
 
-                    return this.resource.update({id:this.uploadId}, params).then((resp) => {
+                    return this.$http.put(`uploads/${this.uploadId}`, params).then((resp) => {
 						return this.handleSuccess(resp)
 					}, (error) =>  {
                         this.SERVER_ERRORS = error.data.errors;
@@ -594,7 +593,7 @@
 
             let self = this;
 			if (this.isUpdate) {
-				this.resource.get({id: this.uploadId}).then((response) => {
+				this.$http.get(`uploads/${this.uploadId}`).then((response) => {
 					let upload = response.data.data;
 					this.currentName = upload.name;
 					// strictly verify tags
@@ -633,7 +632,7 @@
 
             this.$root.$on(self.submitEvent, () =>  {
                 if (self.isUpdate) {
-                    self.update();
+                    self.put();
                 } else {
                     self.submit();
                 }

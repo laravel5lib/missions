@@ -293,19 +293,19 @@
         			// default to first visible field
 					this.orderByField = val[0];
 				}
-				this.updateConfig();
+				this.putConfig();
 			},
             'search': (val, oldVal) =>  {
-				this.updateConfig();
+				this.putConfig();
 				this.page = 1;
                 this.searchReservations();
             },
             'page': (val, oldVal) =>  {
-				this.updateConfig();
+				this.putConfig();
 				this.searchReservations();
             },
             'per_page': (val, oldVal) =>  {
-				this.updateConfig();
+				this.putConfig();
 				this.searchReservations();
             },
 			'groups':() =>  {

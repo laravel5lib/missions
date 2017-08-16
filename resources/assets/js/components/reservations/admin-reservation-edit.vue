@@ -266,7 +266,7 @@
 
                 this.resetErrors();
                 if (this.$UpdateReservation.valid) {
-                    this.resource.update({id: this.id}, {
+                    this.resource.put({id: this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         gender: this.gender,

@@ -153,7 +153,7 @@
             setMedicalRelease(medicalRelease){
                 if(medicalRelease) {
                     this.medicalRelease = medicalRelease;
-                    this.reservationResource.update({id: this.reservationId}, {
+                    this.reservationResource.put({id: this.reservationId}, {
                         medical_release_id: medicalRelease.id
                     }).then((response) => {
                         this.toggleChangeState();

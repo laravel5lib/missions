@@ -62,7 +62,7 @@
        
                     <hr class="divider">
                     <label>Updated At</label>
-                    <p>{{ campaign.updated_at | moment('lll') }}</p>
+                    <p>{{ campaign.putd_at | moment('lll') }}</p>
           			
           			<div v-if="campaign.published_at">
                     	<hr class="divider">

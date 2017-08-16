@@ -63,7 +63,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{referral.updated_at|moment('lll')}}</p>
+                            <p class="small">{{referral.putd_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div>
@@ -79,7 +79,7 @@
         <div class="col-xs-12 text-center">
             <pagination :pagination="pagination" :callback="searchReferrals"></pagination>
         </div>
-        <modal :show="deleteModal" title="Remove Referral" small="true">
+        <modal :value="deleteModal" title="Remove Referral" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete this Referral?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

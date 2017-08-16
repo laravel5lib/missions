@@ -142,7 +142,7 @@
         </div>
 
     </modal>
-    <modal class="text-center" :value="deletePaymentModal" @closed="deletePaymentModal=false" title="Delete Payment" small="true">
+    <modal class="text-center" :value="deletePaymentModal" @closed="deletePaymentModal=false" title="Delete Payment" :small="true">
         <div slot="modal-body" class="modal-body text-center" v-if="selectedPayment">Delete {{ selectedPayment.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='deletePaymentModal = false'>Keep</button>
@@ -169,7 +169,6 @@
                     upfront: false,
                     grace_period: 0,
                 },
-                resource: this.$resource('costs/' + this.id + '/payments{/payment_id}')
             }
         },
         watch: {
@@ -229,12 +228,6 @@
 
         },
         methods: {
-            errors.hasPaymentAdd(field){
-                return this.$TripPricingCostPaymentAdd && this.$TripPricingCostPaymentAdd[field.toLowerCase()].invalid && this.attemptedAddPayment;
-            },
-            errors.hasPaymentEdit(field){
-                return this.$TripPricingCostPaymentEdit && this.$TripPricingCostPaymentEdit[field.toLowerCase()].invalid && this.attemptedAddPayment;
-            },
             resetPayment(){
                 this.newPayment = {
                     amount_owed: 0,
@@ -317,7 +310,7 @@
                 this.attemptedAddPayment = true;
                 if (this.$TripPricingCostPaymentAdd.valid) {
                     this.$root.$emit('SpinnerOn');
-                    this.resource.post({}, this.newPayment).then((response) => {
+                    this.$http.post(`costs/${this.id}/payments`, this.newPayment).then((response) => {
                         this.payments.push(this.newPayment);
                         this.resetPayment();
                         this.showAddModal = false;
@@ -338,7 +331,7 @@
                         this.selectedPayment.due_at = null;
                     }
                     this.$root.$emit('SpinnerOn');
-                    this.resource.update({payment_id: this.selectedPayment.id}, this.selectedPayment).then((response) => {
+                    this.$http.put(`costs/${this.id}/payments/${this.selectedPayment.id}`, this.selectedPayment).then((response) => {
                         this.resetPayment();
                         this.showEditModal = false;
                         this.attemptedAddPayment = false;
@@ -358,7 +351,7 @@
                 this.deletePaymentModal = true;
             },
             remove(payment){
-                this.resource.delete({payment_id: payment.id}).then((response) => {
+                this.$http.delete(`costs/${this.id}/payments/${payment.id}`).then((response) => {
                     this.payments.$remove(payment);
                     this.selectedPayment = null;
                 });

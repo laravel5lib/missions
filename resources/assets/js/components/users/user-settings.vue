@@ -391,7 +391,6 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-                resource: this.$resource('users/' + this.$root.user.id + '?include=links'),
                 // errors: {},
                 showError: false,
                 showSuccess: false,
@@ -463,7 +462,7 @@
                         return false;
                     }
 
-                    this.resource.update({
+                    this.$http.put(`users/${this.$root.user.id}?include=links`, {
                         name: this.name,
                         email: this.email,
                         alt_email: this.alt_email,
@@ -587,7 +586,7 @@
             promises.push(this.getTimezones());
 
             this.$http.all(promises).then((values) => {
-                this.resource.get().then((response) => {
+                this.$http.get(`users/${this.$root.user.id}?include=links`).then((response) => {
                     this.setUserData(response.data.data);
                     this.startUp = false;
                 }).catch(this.$root.handleApiError);

@@ -41,7 +41,7 @@
                     <td>{{ promo.expires | moment('ll') }}</td>
                     <td>{{ promo.promocodes_count }}</td>
                     <td>{{ promo.created_at | moment('ll') }}</td>
-                    <td>{{ promo.updated_at | moment('ll') }}</td>
+                    <td>{{ promo.putd_at | moment('ll') }}</td>
                     <th><a @click="callView({view: 'details', id: promo.id})"><i class="fa fa-cog"></i></a></th>
                 </tr>
             </tbody>

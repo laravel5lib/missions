@@ -150,12 +150,12 @@
 			</div>
 		</form>
 
-		<alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+		<alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
 			<strong>Well Done!</strong>
 			<p>Profile updated</p>
 		</alert>
-		<alert :show="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
+		<alert v-model="showError" placement="top-right" :duration="6000" type="danger" width="400px" dismissable>
 			<span class="icon-ok-circled alert-icon-float-left"></span>
 			<strong>Oh No!</strong>
 			<p>There are errors on the form.</p>
@@ -270,7 +270,7 @@
 				this.resetErrors();
 				if (this.$UpdateCampaign.valid) {
 					// this.$refs.spinner.show();
-					this.resource.update({id: this.campaignId}, {
+					this.resource.put({id: this.campaignId}, {
 						name: this.name,
 						country_code: this.country_code,
 						short_desc: this.short_desc,

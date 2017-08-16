@@ -197,7 +197,7 @@
                         return false;
                     }
 
-                    this.resource.update({id: this.id}, {
+                    this.resource.put({id: this.id}, {
                         attention_to: this.attention_to,
                         applicant_name: this.applicant_name,
                         recipient_email: this.recipient_email,

@@ -122,7 +122,7 @@
                         //delete this.trip.rep_id;
                         delete this.trip.links;
                         delete this.trip.created_at;
-                        delete this.trip.updated_at;
+                        delete this.trip.putd_at;
 
                         this.$http.post('trips/duplicate', this.trip, { params: { include: 'costs.payments'}}).then((response) => {
                             let costPromises = [];

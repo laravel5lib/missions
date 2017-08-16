@@ -173,7 +173,7 @@
                     if (originalType.name === this.currentType.name)
 	                    delete updatingObject.name;
 
-                    return this.roomTypeResource.update({ id: updatingObject.id }, updatingObject).then((response) => {
+                    return this.roomTypeResource.put({ id: updatingObject.id }, updatingObject).then((response) => {
                         _.extend(_.findWhere(this.roomTypes, { id: updatingObject.id}), response.data.data);
                         this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully updated');
                     }, (response) =>  {

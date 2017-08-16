@@ -536,7 +536,7 @@
 	        manageAccommodation() {
                 this.resetErrors();
                 if (this.$AccommodationForm.valid) {
-                    return this.editMode ? this.updateAccommodation() : this.postAccommodation();
+                    return this.editMode ? this.putAccommodation() : this.postAccommodation();
                 } else {
                     this.$root.$emit('showError', 'Please check the form.');
                     return false;
@@ -573,7 +573,7 @@
                 if (data.room_types_settings)
                     delete data.room_types_settings;
 
-                return this.AccommodationsResource.update({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }, data).then((response) => {
+                return this.AccommodationsResource.put({ region: this.currentRegion.id, accommodation: this.currentAccommodation.id }, data).then((response) => {
                     this.handleAccommodationRoomTypes(_.extend(this.currentAccommodation, response.data.data));
                     this.currentAccommodation = null;
                     this.showAccommodationManageModal = false;
@@ -598,7 +598,7 @@
                     if (property.indexOf('_method') === -1 && !_.contains(['total'], property)) {
                         if (accommodation.room_types_settings[property + '_method'] === 'PUT') {
                             if (val > 0) {
-                                promise = this.AccommodationTypesResource.update({
+                                promise = this.AccommodationTypesResource.put({
                                     accommodation: accommodation.id, type: property
                                 }, { available_rooms: val });
                             } else {

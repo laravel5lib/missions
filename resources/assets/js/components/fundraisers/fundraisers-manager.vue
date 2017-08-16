@@ -78,13 +78,13 @@
                 </div>
             </modal>
 
-            <alert :show="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert v-model="showDescriptionSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Good job!</strong>
                 <p>Description updated</p>
             </alert>
 
-            <alert :show="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+            <alert v-model="showSettingsSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
                 <span class="icon-ok-circled alert-icon-float-left"></span>
                 <strong>Good job!</strong>
                 <p>Settings updated</p>
@@ -180,7 +180,7 @@
             },
             doUpdate(type){
                 // this.$refs.spinner.show();
-                this.resource.update({id: this.id}, {
+                this.resource.put({id: this.id}, {
                     name: this.fundraiser.name,
                     url: this.fundraiser.url,
                     description: this.fundraiser.description,

@@ -47,7 +47,7 @@
             <p v-else>{{ cause.short_desc }}</p>
         </div>
 
-        <alert :show="showSuccess"
+        <alert v-model="showSuccess"
                placement="top-right"
                :duration="3000"
                type="success"
@@ -58,7 +58,7 @@
             <p>{{ message }}</p>
         </alert>
 
-        <alert :show="showError"
+        <alert v-model="showError"
                placement="top-right"
                :duration="6000"
                type="danger"

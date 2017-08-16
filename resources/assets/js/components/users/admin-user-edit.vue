@@ -417,7 +417,7 @@
             submit(){
                 this.resetErrors();
                 if (this.$EditUser.valid) {
-                    this.resource.update({id: this.userId}, {
+                    this.resource.put({id: this.userId}, {
                         name: this.name,
                         email: this.email,
                         alt_email: this.alt_email,

@@ -149,7 +149,7 @@
             setVisa(visa){
                 if(visa) {
                     this.visa = visa;
-                    this.reservationResource.update({id: this.reservationId}, {
+                    this.reservationResource.put({id: this.reservationId}, {
                         visa_id: visa.id
                     }).then((response) => {
                         this.toggleChangeState();

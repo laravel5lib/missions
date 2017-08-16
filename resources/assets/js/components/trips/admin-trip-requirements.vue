@@ -155,7 +155,7 @@
             <button type="button" class="btn btn-primary btn-sm" @click='updateRequirement'>Update</button>
         </div>
     </modal>
-    <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Requirement" small="true">
+    <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Requirement" :small="true">
         <div slot="modal-body" class="modal-body text-center" v-if="selectedRequirement">Delete {{ selectedRequirement.name }}?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Keep</button>
@@ -240,7 +240,7 @@
                 this.attemptedEditRequirement = true;
                 if(this.$TripRequirementsEdit.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.update({ id: this.selectedRequirement.id}, this.selectedRequirement).then((response) => {
+                    this.resource.put({ id: this.selectedRequirement.id}, this.selectedRequirement).then((response) => {
                         this.attemptedEditRequirement = false;
                         this.showEditModal = false;
                         this.searchRequirements();

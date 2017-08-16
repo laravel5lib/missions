@@ -129,7 +129,7 @@
 					facilitatorsArr.push({trip_id: this.tripId, id: this.user_id});
 					this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
 					//this.trip.facilitators = this.facilitators;
-					this.updateTrip();
+					this.putTrip();
 				}
 			},
 			removeFacilitator: function removeFacilitator(facilitator) {
@@ -137,13 +137,13 @@
 				this.facilitators.$remove(facilitator);
 				var facilitatorsArr = this.facilitators;
 				this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
-				this.updateTrip();
+				this.putTrip();
 			},
 			updateTrip: function updateTrip() {
 				delete this.trip.rep_id;
 				this.trip.difficulty = this.trip.difficulty.split(' ').join('_');
 				// Update Trip
-				this.resource.update({id: this.tripId}, this.trip).then((response) => {
+				this.resource.put({id: this.tripId}, this.trip).then((response) => {
 					this.trip = response.data.data;
 					this.facilitators = this.trip.facilitators.data;
 

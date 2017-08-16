@@ -518,7 +518,7 @@
                     let promise;
                     if (this.transportsModalEdit) {
                         promise = this.TransportsResource
-                            .update({ transport: this.selectedTransport.id}, this.selectedTransport)
+                            .put({ transport: this.selectedTransport.id}, this.selectedTransport)
                             .then((response) => {
                                 this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport updated successfully');
                             });

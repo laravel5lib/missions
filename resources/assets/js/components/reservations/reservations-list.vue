@@ -262,14 +262,14 @@
         watch: {
             'layout': (val, oldVal) =>  {
                 if (val !== oldVal && !this.startUp)
-                    this.updateConfig();
+                    this.putConfig();
             },
             // watch filters obj
             'filters': {
                 handler: (val) =>  {
                     if (this.startUp)
                         return;
-                    this.updateConfig();
+                    this.putConfig();
                 },
                 deep: true
             },
@@ -279,7 +279,7 @@
             },
             'includeManaging': (val, oldVal) =>  {
                 if (val !== oldVal && !this.startUp) {
-                    this.updateConfig();
+                    this.putConfig();
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
@@ -287,7 +287,7 @@
             'per_page': (val, oldVal) =>  {
                 if (this.startUp)
                     return;
-                this.updateConfig();
+                this.putConfig();
                 this.getReservations();
             }
         },

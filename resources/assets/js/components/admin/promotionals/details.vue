@@ -43,7 +43,7 @@
                     <label>Created</label>
                 </div>
                 <div class="col-sm-4">
-                    {{ promo.updated_at | moment('lll') }}<br>
+                    {{ promo.putd_at | moment('lll') }}<br>
                     <label>Updated</label>
                 </div>
                 <div class="col-sm-4">

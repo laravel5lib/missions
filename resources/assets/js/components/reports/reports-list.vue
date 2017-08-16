@@ -97,7 +97,7 @@
                             redirect="/admin/reports">
         </admin-delete-modal>
 
-        <modal :show="showDisclaimer" ok-text="Download" cancel-text="Cancel">
+        <modal :value="showDisclaimer" ok-text="Download" cancel-text="Cancel">
           <div slot="modal-header" class="modal-header">
             <h4 class="modal-title">Privacy Notice</h4>
           </div>

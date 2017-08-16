@@ -266,7 +266,7 @@
             },
             doUpdate(reservation){
                 // this.$refs.spinner.show();
-                return this.resource.update(reservation).then((response) => {
+                return this.resource.put(reservation).then((response) => {
                     this.setReservationData(response.data.data);
                     this.selectedDeadlines = [];
 

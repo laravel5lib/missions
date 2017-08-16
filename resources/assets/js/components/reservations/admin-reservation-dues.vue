@@ -167,7 +167,7 @@
                 this.showEditModal = true;
             },
             updateDue(){
-                this.resource.update({due_id: this.editedDue.id}, {
+                this.resource.put({due_id: this.editedDue.id}, {
                     due_at: this.editedDue.due_at,
                     grace_period: this.editedDue.grace_period,
                 }).then((response) => {
@@ -246,7 +246,7 @@
             },*/
             /*doUpdate(reservation){
                 // this.$refs.spinner.show();
-                return this.resource.update(reservation).then((response) => {
+                return this.resource.put(reservation).then((response) => {
                     this.setReservationData(response.data.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();

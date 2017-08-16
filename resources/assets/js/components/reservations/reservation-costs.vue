@@ -75,7 +75,7 @@
             </div>
         </modal>
 
-        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -83,7 +83,7 @@
             </div>
         </modal>
 
-        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>{{successMessage}}</p>
@@ -244,7 +244,7 @@
                 let res = {};
                 res.costs = costIds
 
-                return this.resource.update(res).then((response) => {
+                return this.resource.put(res).then((response) => {
                     this.setReservationData(response.data.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];

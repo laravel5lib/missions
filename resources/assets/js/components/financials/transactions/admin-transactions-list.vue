@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model.sync="filters.minDate"></date-picker>
+                    <date-picker :model.sync="filters.minDate|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model.sync="filters.maxDate"></date-picker>
+                    <date-picker :model.sync="filters.maxDate|moment 'YYYY-MM-DD HH:mm:ss'"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -503,8 +503,8 @@
                 };
 
                 $.extend(params, this.filters);
-                params.minDate = moment(params.minDate).format('YYYY-MM-DD HH:mm:ss');
-                params.maxDate = moment(params.maxDate).format('YYYY-MM-DD HH:mm:ss');
+//                params.minDate = moment(params.minDate).format('YYYY-MM-DD HH:mm:ss');
+//                params.maxDate = moment(params.maxDate).format('YYYY-MM-DD HH:mm:ss');
                 this.exportFilters = params;
 
                 return params;

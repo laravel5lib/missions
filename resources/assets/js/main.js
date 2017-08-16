@@ -962,8 +962,8 @@ new Vue({
                             return response.body.data;
                         },
                         function (response) {
-                            if (this.isAdminRoute || this.isDashboardRoute)
-                                window.location = '/logout';
+                            // if (this.isAdminRoute || this.isDashboardRoute)
+                            //     window.location = '/logout';
                         });
             }
         },

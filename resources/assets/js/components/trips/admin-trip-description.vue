@@ -29,7 +29,7 @@
             <div v-html="marked(description || 'No Description'))"></div>
         </template>
 
-        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Good job!</strong>
             <p>Trip Description Updated!</p>
@@ -59,7 +59,7 @@
             },
             update(){
                 // this.$refs.spinner.show();
-                this.resource.update({ id: this.id }, {
+                this.resource.put({ id: this.id }, {
                     description: this.description
                 }).then((response) => {
                     this.trip = response.data.data;

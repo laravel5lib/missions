@@ -516,6 +516,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import $ from 'jquery';
 	export default{
 		name: 'campaigns',
 		data(){

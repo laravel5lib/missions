@@ -239,7 +239,7 @@
 
                 this.resetErrors();
                 if (this.$CreateUpdatePassport.valid) {
-                    this.passportResource.update({id:this.id}, {
+                    this.passportResource.put({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,

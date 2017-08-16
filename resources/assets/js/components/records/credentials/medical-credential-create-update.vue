@@ -379,7 +379,7 @@
 				</div>
 			</form>
 
-			<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
+			<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
 				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
 				<div slot="modal-footer" class="modal-footer">
 					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -648,7 +648,7 @@
                 this.resetErrors();
 //                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
                 if (this.$CreateUpdateMedicalCredential.valid) {
-                    this.resource.update({id:this.id, include: 'uploads'}, {
+                    this.resource.put({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
                         holder_type: 'users',

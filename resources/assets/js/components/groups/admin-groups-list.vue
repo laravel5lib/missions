@@ -307,7 +307,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                // this.updateConfig();
+                // this.putConfig();
             },'orderByField': (val, oldVal) =>  {
                 this.searchGroups();
             },

@@ -59,12 +59,12 @@
         <modal title="Edit Due" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="updateDue">
             <div slot="modal-body" class="modal-body">
 
-                    <form class="form" novalidate>
+                    <form class="form" novalidate data-vv-scope="EditDue">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditDueError('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditDueError('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDue.grace_period"
                                                name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
@@ -108,7 +108,6 @@
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative' }),
                 showAddModal: false,
                 showNewModal: false,
                 showEditModal: false,
@@ -124,18 +123,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            errors.has(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddDue[field].invalid && this.attemptSubmit;
-            },
-            checkForEditDueError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditDue[field].invalid && this.attemptSubmit;
-            },
-            checkForNewDueError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$NewDue[field].invalid && this.attemptSubmit;
             },
             resetDue(){
                 this.newDue = {
@@ -247,7 +234,7 @@
             },
             doUpdate(project){
                 // this.$refs.spinner.show();
-                return this.resource.update(project).then((response) => {
+                return this.$http.put(`projects/${this.id}`, project, { params: { include: 'dues,costs.payments,initiative' } }).then((response) => {
                     this.setProjectData(response.data.data);
                     this.selectedDues = [];
                     // this.$refs.spinner.hide();
@@ -274,10 +261,8 @@
             }
         },
         mounted(){
-            // this.$refs.spinner.show();
-            this.resource.get().then((response) => {
+            this.$http.get(`projects/${this.id}`, { params: { include: 'dues,costs.payments,initiative' } }).then((response) => {
                 this.setProjectData(response.data.data)
-                // this.$refs.spinner.hide();
             });
 
             //Listen to Event Bus

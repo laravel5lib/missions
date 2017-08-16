@@ -144,7 +144,7 @@
                 this.resetErrors();
                 if (this.$CreateUpdateEssay.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.update({id: this.id}, {
+                    this.resource.put({id: this.id}, {
                         author_name: this.author_name,
                         subject: this.subject,
                         content: this.content,

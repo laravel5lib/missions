@@ -64,7 +64,7 @@
                 <div class="panel-body" v-if="editMode !== story.id">
                 <div class="row">
                     <div class="col-sm-8">
-                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.updated_at|moment('ll') }}.</small></h5>
+                        <h5 class="media-heading" style="margin:4px 0 10px;"><a href="#">{{ story.author }}</a> <small>published a story {{ story.putd_at|moment('ll') }}.</small></h5>
                     </div>
                     <div class="col-sm-4 text-right hidden-xs">
                         <div style="padding: 0;" v-if="isUser">
@@ -119,7 +119,7 @@
             <pagination :pagination="pagination" :callback="searchStories"></pagination>
         </div>
 
-        <modal v-if="isUser" :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" small="true">
+        <modal v-if="isUser" :value="deleteModal" @closed="deleteModal=false" title="Remove Passport" :small="true">
             <div slot="modal-body" class="modal-body">Delete this Story?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

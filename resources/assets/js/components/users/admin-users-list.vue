@@ -382,20 +382,20 @@
         			// default to first visible field
 					this.orderByField = val[0];
 				}
-				this.updateConfig();
+				this.putConfig();
 			},
             'search': (val, oldVal) =>  {
-				this.updateConfig();
+				this.putConfig();
 				this.pagination.current_page = 1;
 				this.page = 1;
                 this.searchUsers();
             },
             'page': (val, oldVal) =>  {
-				this.updateConfig();
+				this.putConfig();
 				this.searchUsers();
             },
             'per_page': (val, oldVal) =>  {
-				this.updateConfig();
+				this.putConfig();
 				this.searchUsers();
             },
 			'groups':() =>  {

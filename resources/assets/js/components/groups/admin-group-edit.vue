@@ -284,7 +284,7 @@
                 if (this.$UpdateGroup.valid) {
                     let formData = this.data;
                     // this.$refs.spinner.show();
-                    this.resource.update({id: this.groupId}, {
+                    this.resource.put({id: this.groupId}, {
                         name: this.name,
                         description: this.description,
                         type: this.type,

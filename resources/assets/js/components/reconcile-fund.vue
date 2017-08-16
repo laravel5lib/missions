@@ -1,7 +1,7 @@
 <template>
     <div>
         <btn class="btn btn-sm btn-default" @click="reconcile"><i class="fa fa-calculator"></i> Reconcile</btn>
-        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Done</strong>
             <p>Fund reconciled</p>

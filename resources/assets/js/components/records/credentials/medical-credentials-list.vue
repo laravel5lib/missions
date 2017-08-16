@@ -43,7 +43,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{medical_credential.updated_at|moment('lll')}}</p>
+                            <p class="small">{{medical_credential.putd_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -59,7 +59,7 @@
 		<div class="col-xs-12 text-center">
 			<pagination :pagination="pagination" :callback="searchMedicals"></pagination>
 		</div>
-		<modal :show="deleteModal" title="Remove Medical Credential" small="true">
+		<modal :value="deleteModal" title="Remove Medical Credential" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Credential?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

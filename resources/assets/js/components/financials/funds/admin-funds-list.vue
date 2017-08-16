@@ -293,7 +293,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                this.updateConfig();
+                this.putConfig();
             },
             'search': (val, oldVal) =>  {
                 this.page = 1;
@@ -379,7 +379,7 @@
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(() => {
-                    this.updateConfig();
+                    this.putConfig();
                 });
             }
         },

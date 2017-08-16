@@ -364,7 +364,7 @@
 				if (this.$TripCreateUpdate.valid) {
 					let resource = this.$resource('trips{/id}');
 					if (this.isUpdate) {
-						resource.update({id: this.tripId}, this.wizardData).then((response) => {
+						resource.put({id: this.tripId}, this.wizardData).then((response) => {
 							$.extend(this, response.data.data);
 							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
 							this.attemptedContinue = false;

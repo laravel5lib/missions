@@ -69,7 +69,7 @@
             </div>
         </modal>
 
-        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedCost">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -234,7 +234,7 @@
                 let res = jQuery.extend(true, {}, this.project);
                 res.costs = costIds
 
-                return this.resource.update(res).then((response) => {
+                return this.resource.put(res).then((response) => {
                     this.setProjectData(response.data.data);
                     this.selectedCosts = [];
                     this.temporaryCosts = [];

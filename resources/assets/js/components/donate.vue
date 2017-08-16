@@ -1,209 +1,207 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div>
-
-            <form class="" name="DonationForm" novalidate v-show="donationState === 'form'">
-                <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
-                <template v-if="isState('form', 1)">
-                    <div class="row">
-                        <div class="col-sm-12 text-center">
-                            <label>Your Donation will go to:</label>
-                            <h4 class="text-primary" style="margin-top:0px;">{{ recipient }}</h4>
+        <form class="" name="DonationForm" novalidate v-show="donationState === 'form'">
+            <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
+            <template v-if="isState('form', 1)">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <label>Your Donation will go to:</label>
+                        <h4 class="text-primary" style="margin-top:0px;" v-text="recipient"></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" :class="{ 'has-error': errors.has('amount', 'form-1')}">
+                        <label>Enter Donation Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input style="font-size:22px;color:#05ce7b;" type="text" class="form-control" v-model="amount" min="1" name="amount" data-vv-scope="form-1" v-validate="'required|min:1'">
+                            <span class="input-group-addon">USD</span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12" :class="{ 'has-error': errors.has('amount')}">
-                            <label>Enter Donation Amount</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">$</span>
-                                <input style="font-size:22px;color:#05ce7b;" type="text" class="form-control" v-model="amount" min="1" name="amount" v-validate="{required: true, min: 1}">
-                                <span class="input-group-addon">USD</span>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
+                        <label>Donor Name</label>
+                        <input type="text" class="form-control" v-model="donor" name="donor" data-vv-scope="form-1" v-validate="'required|alpha_spaces|min:1'">
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12" :class="{ 'has-error': errors.has('donor')}">
-                            <label>Donor Name</label>
-                            <input type="text" class="form-control" v-model="donor" name="donor" v-validate="'required'">
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" :class="{ 'has-error': errors.has('donor', 'form-1')}">
+                        <label>Company Name</label>
+                        <input type="text" class="form-control" v-model="company_name">
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12" :class="{ 'has-error': errors.has('donor')}">
-                            <label>Company Name</label>
-                            <input type="text" class="form-control" v-model="company_name">
-                        </div>
+                </div>
+                <hr class="divider sm inv">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label><input type="checkbox" v-model="anonymous"> Give Anonymously</label>
                     </div>
-                    <hr class="divider sm inv">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <label><input type="checkbox" v-model="anonymous"> Give Anonymously</label>
-                        </div>
-                    </div>
-                    <hr class="divider inv sm">
-                    <div class="row" v-if="!child">
-                        <div class="col-sm-12 text-center">
-                            <div class="form-group" style="margin-bottom:0;">
-                                <div class="">
-                                    <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                    <a @click="nextState()" class="btn btn-primary">Next <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-if="isState('form', 2)">
-                    <div class="alert alert-danger" role="alert" v-if="cardError" v-text="cardError"></div>
-                    <!-- Credit Card -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardholdername') }">
-                                <label for="cardHolderName">Card Holder's Name</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
-                                    <input type="text" class="form-control input input-sm" id="cardHolderName" placeholder="Name on card"
-                                               v-model="cardHolderName" name="cardHolderName" v-validate="'required'" autofocus/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardnumber') || validationErrors.cardNumber }">
-                                <label for="cardNumber">Card Number</label>
-                                <div class="input-group">
-                                    <span class="input-group-addon input input-sm"><span class="fa fa-lock"></span></span>
-                                    <input type="text" class="form-control input input-sm" id="cardNumber" placeholder="Valid Card Number"
-                                           v-model="cardNumber" name="cardNumber" v-validate="{ required: true, maxlength: 19 }"
-                                           @keyup="formatCard($event)" maxlength="19"/>
-                                </div>
-                                <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label style="display:block;margin-left: 10px;margin-top:6px;" for="expiryMonth">Exp Date</label>
-                        <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': errors.has('month') || validationErrors.cardMonth }">
-                                <select v-model="cardMonth" class="form-control input input-sm" id="expiryMonth" name="month" v-validate="'required'">
-                                    <option v-for="month in monthList" :value="month">{{month}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': errors.has('year') || validationErrors.cardYear }">
-                                <select v-model="cardYear" class="form-control input input-sm" id="expiryYear" name="year" v-validate="'required'">
-                                    <option v-for="year in yearList" :value="year">{{year}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6 col-md-6">
-                            <div :class="{ 'has-error': errors.has('code') || validationErrors.cardCVC }">
-                                <label for="cvCode">
-                                    CV CODE</label>
-                                <input type="text" class="form-control input input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
-                                       placeholder="CV" name="code" v-validate="{ required: true, minlength: 3, maxlength: 4 }"/>
-                                <span class="help-block" v-if= "errors.has('code') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div :class="{ 'has-error': errors.has('email') }">
-                                <label for="infoEmailAddress">Billing Email</label>
-                                <input type="text" class="form-control input input-sm" v-model="cardEmail" name="email=" id="infoEmailAddress" v-validate="'email'">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div :class="{ 'has-error': errors.has('phone') }">
-                                <label for="infoPhone">Billing Phone</label>
-                                <phone-input v-model="cardPhone" name="phone" id="infoPhone"></phone-input>
-                                <!--<input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone=" id="infoPhone">-->
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div :class="{ 'has-error': errors.has('zip') }">
-                                <label for="infoZip">ZIP</label>
-                                <input type="text" class="form-control input input-sm" v-model="cardZip" name="zip=" id="infoZip" placeholder="12345" v-validate="'required'">
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="divider inv">
-                    <div class="col-sm-12 text-center" v-if="!child">
+                </div>
+                <hr class="divider inv sm">
+                <div class="row" v-if="!child">
+                    <div class="col-sm-12 text-center">
                         <div class="form-group" style="margin-bottom:0;">
                             <div class="">
                                 <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
-                                <a @click="createToken" class="btn btn-primary">Review Donation <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
+                                <a @click="nextState()" class="btn btn-primary">Next <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
                             </div>
                         </div>
                     </div>
-                </template>
-            </form>
-            <div v-show="donationState === 'review'">
-                <spinner ref="donationSpinner" size="xl" :fixed="false" text="Processing Donation"></spinner>
+                </div>
+            </template>
+            <template v-if="isState('form', 2)">
+                <div class="alert alert-danger" role="alert" v-if="cardError" v-text="cardError"></div>
+                <!-- Credit Card -->
                 <div class="row">
-                    <div class="col-sm-12 text-center">
-                        <label>Donation Amount</label>
-                        <h3 class="text-success" style="margin-top:0px;">{{'$' + amount.toFixed(2)}}</h3>
-                        <label>Donation will go to</label>
-                        <p>{{recipient}}</p>
-                        <label>Who can see this?</label>
-                        <p style="margin-bottom:0;">{{anonymous ? 'This donation is anonymous.' : 'This donation is public.'}}</p>
-                    </div>
                     <div class="col-sm-12">
-                        <hr class="divider inv">
-                        <div class="panel panel-default" style="border-color:#05ce7b;">
-                            <div class="panel-heading" style="background-color:#05ce7b;border-color:#05ce7b;">
-                                <h6 style="font-size:.6em;color:#3c763d;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;"><i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i> Secure Information</h6>
-                            </div><!-- end panel-heading -->
-                            <div class="panel-body" style="padding:10px;background:#f7f7f7;border-radius:0 0 4px 4px;">
-                                <label>Card Holder Name</label>
-                                <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardHolderName}}</p>
-                                <label>Card Number</label>
-                                <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardNumber}}</p>
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <label>Card Exp</label>
-                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardMonth}}/{{cardYear}}</p>
-                                    </div>
-                                    <div class="col-xs-8">
-                                        <label>Billing Email</label>
-                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardEmail}}</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-xs-4">
-                                        <label>Billing Zip</label>
-                                        <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardZip}}</p>
-                                    </div>
-                                </div>
-                            </div><!-- end panel-body -->
-                        </div><!-- end panel -->
-                        <p style="color:#808080;font-size:9px;" class="list-group-item-text">
-                            <b>Disclaimer:</b>
-                            All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
-                        </p>
-                        <hr class="divider inv sm">
+                        <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardHolderName', 'form-2') }">
+                            <label for="cardHolderName">Card Holder's Name</label>
+                            <div class="input-group">
+                                <span class="input-group-addon input input-sm"><span class="fa fa-user"></span></span>
+                                <input type="text" class="form-control input input-sm" id="cardHolderName" placeholder="Name on card"
+                                           v-model="cardHolderName" name="cardHolderName" data-vv-scope="form-2" v-validate="'required'" autofocus/>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="text-center" v-if="!child">
-                    <a @click="submit" class="btn btn-primary">Donate</a>
-                    <a @click="goToState('form')"><h6 class="text-uppercase" style="color:#808080;"><i class="fa fa-refresh icon-left"></i> Reset</h6></a>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div style="margin-bottom:0;" class="form-group" :class="{ 'has-error': errors.has('cardNumber', 'form-2') || validationErrors.cardNumber }">
+                            <label for="cardNumber">Card Number</label>
+                            <div class="input-group">
+                                <span class="input-group-addon input input-sm"><span class="fa fa-lock"></span></span>
+                                <input type="text" class="form-control input input-sm" id="cardNumber" placeholder="Valid Card Number"
+                                       v-model="cardNumber" name="cardNumber" data-vv-scope="form-2" v-validate="'required|max:19'"
+                                       @keyup="formatCard($event)" maxlength="19"/>
+                            </div>
+                            <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <label style="display:block;margin-left: 10px;margin-top:6px;" for="expiryMonth">Exp Date</label>
+                    <div class="col-xs-6 col-md-6">
+                        <div :class="{ 'has-error': errors.has('month', 'form-2') || validationErrors.cardMonth }">
+                            <select v-model="cardMonth" class="form-control input input-sm" id="expiryMonth" name="month" data-vv-scope="form-2" v-validate="'required'">
+                                <option v-for="month in monthList" :value="month">{{month}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <div :class="{ 'has-error': errors.has('year', 'form-2') || validationErrors.cardYear }">
+                            <select v-model="cardYear" class="form-control input input-sm" id="expiryYear" name="year" data-vv-scope="form-2" v-validate="'required'">
+                                <option v-for="year in yearList" :value="year">{{year}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <div :class="{ 'has-error': errors.has('code', 'form-2') || validationErrors.cardCVC }">
+                            <label for="cvCode">
+                                CV CODE</label>
+                            <input type="text" class="form-control input input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
+                                   placeholder="CV" name="code" data-vv-scope="form-2" v-validate="'required|min:3|max:4'"/>
+                            <span class="help-block" v-if= "errors.has('code', 'form-2') || validationErrors.cardCVC">{{stripeError ? stripeError.message : 'Invalid CVC number'}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div :class="{ 'has-error': errors.has('email', 'form-2') }">
+                            <label for="infoEmailAddress">Billing Email</label>
+                            <input type="text" class="form-control input input-sm" v-model="cardEmail" name="email=" id="infoEmailAddress" data-vv-scope="form-2" v-validate="cardPhone !== ''?'email':'required|email'">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div :class="{ 'has-error': errors.has('phone', 'form-2') }">
+                            <label for="infoPhone">Billing Phone</label>
+                            <phone-input v-model="cardPhone" name="phone" id="infoPhone" data-vv-scope="form-2" :validation="cardEmail !== ''?'':'required'"></phone-input>
+                            <!--<input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone=" id="infoPhone">-->
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div :class="{ 'has-error': errors.has('zip', 'form-2') }">
+                            <label for="infoZip">ZIP</label>
+                            <input type="text" class="form-control input input-sm" v-model="cardZip" name="zip" id="infoZip" placeholder="12345" data-vv-scope="form-2" v-validate="'required'">
+                        </div>
+                    </div>
+                </div>
+                <hr class="divider inv">
+                <div class="col-sm-12 text-center" v-if="!child">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <div class="">
+                            <!--<a @click="goToState('form')" class="btn btn-default">Reset</a>-->
+                            <a @click="createToken" class="btn btn-primary">Review Donation <i style="margin-left:3px;font-size:.8em;vertical-align:middle;" class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </form>
+        <div v-show="donationState === 'review'">
+            <spinner ref="donationSpinner" size="xl" :fixed="false" text="Processing Donation"></spinner>
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <label>Donation Amount</label>
+                    <h3 class="text-success" style="margin-top:0px;">{{currency(amount)}}</h3>
+                    <label>Donation will go to</label>
+                    <p>{{recipient}}</p>
+                    <label>Who can see this?</label>
+                    <p style="margin-bottom:0;">{{anonymous ? 'This donation is anonymous.' : 'This donation is public.'}}</p>
+                </div>
+                <div class="col-sm-12">
+                    <hr class="divider inv">
+                    <div class="panel panel-default" style="border-color:#05ce7b;">
+                        <div class="panel-heading" style="background-color:#05ce7b;border-color:#05ce7b;">
+                            <h6 style="font-size:.6em;color:#3c763d;text-transform:uppercase;letter-spacing:1px;margin-top:0;margin-bottom:0;"><i class="fa fa-lock icon-left" style="font-size:1.3em;vertical-align:middle;"></i> Secure Information</h6>
+                        </div><!-- end panel-heading -->
+                        <div class="panel-body" style="padding:10px;background:#f7f7f7;border-radius:0 0 4px 4px;">
+                            <label>Card Holder Name</label>
+                            <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardHolderName}}</p>
+                            <label>Card Number</label>
+                            <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardNumber}}</p>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <label>Card Exp</label>
+                                    <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardMonth}}/{{cardYear}}</p>
+                                </div>
+                                <div class="col-xs-8">
+                                    <label>Billing Email</label>
+                                    <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardEmail}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <label>Billing Zip</label>
+                                    <p class="small" style="margin-top:0px;margin-bottom:0;">{{cardZip}}</p>
+                                </div>
+                            </div>
+                        </div><!-- end panel-body -->
+                    </div><!-- end panel -->
+                    <p style="color:#808080;font-size:9px;" class="list-group-item-text">
+                        <b>Disclaimer:</b>
+                        All Missions.Me donations and support are considered 501(c)3 tax-deductible donations (not payments for goods or services) and are 100% non-refundable and non-transferable.
+                    </p>
+                    <hr class="divider inv sm">
                 </div>
             </div>
-            <div class="" v-show="donationState === 'confirmation'">
-                <div class="text-center">
-                    <img class="img-md" src="/images/donate/donation-check.png" alt="Donation Confirmed">
-                    <h3 style="color:#808080;margin-bottom:0;">Donation Sent</h3>
-                    <h5 style="color:#808080;margin-bottom:25px;">Thank you for your generosity!</h5>
-                </div>
-                <!--<div class="panel-footer" v-if="!child">
-                    <a @click="done" class="btn btn-success">Close</a>
-                </div>-->
+            <div class="text-center" v-if="!child">
+                <a @click="submit" class="btn btn-primary">Donate</a>
+                <a @click="goToState('form')"><h6 class="text-uppercase" style="color:#808080;"><i class="fa fa-refresh icon-left"></i> Reset</h6></a>
             </div>
-
+        </div>
+        <div class="" v-show="donationState === 'confirmation'">
+            <div class="text-center">
+                <img class="img-md" src="/images/donate/donation-check.png" alt="Donation Confirmed">
+                <h3 style="color:#808080;margin-bottom:0;">Donation Sent</h3>
+                <h5 style="color:#808080;margin-bottom:25px;">Thank you for your generosity!</h5>
+            </div>
+            <!--<div class="panel-footer" v-if="!child">
+                <a @click="done" class="btn btn-success">Close</a>
+            </div>-->
+        </div>
     </div>
 </template>
 <script type="text/javascript">
@@ -236,22 +234,22 @@
                 type:String,
                 default: '0'
             },
-            attemptSubmit: {
+            /*attemptSubmit: {
                 type: Boolean,
                 default: false
-            },
+            },*/
             child: {
                 type: Boolean,
                 default: false
             },
-            donationState: {
+            /*donationState: {
                 type: String,
                 default: 'form'
-            },
-            subState: {
+            },*/
+            /*subState: {
                 type: Number,
                 default: 1
-            },
+            },*/
             title: {
                 type: String,
                 default: ''
@@ -304,6 +302,9 @@
                 showLabels: true,
                 devMode: true,
                 stripeDeferred: {},
+                attemptSubmit: false,
+                donationState: 'form',
+                subState: 1,
                 attemptedCreateToken: false,
             }
         },
@@ -317,7 +318,7 @@
         },*/
         watch: {
             'paymentComplete'(val, oldVal) {
-                this.$dispatch('payment-complete', val)
+                this.$emit('payment-complete', val)
             },
             'donationState'(val) {
 //                console.log(val);
@@ -328,7 +329,7 @@
         },
         computed:{
             yearList() {
-                var num, today, years, yyyy;
+                let num, today, years, yyyy;
                 today = new Date;
                 yyyy = today.getFullYear();
                 years = (() =>  {
@@ -369,7 +370,7 @@
                 return this.card = null;
             },
             formatCard(event) {
-                var output;
+                let output;
                 output = this.cardNumber.split('-').join('');
                 if (output.length > 0) {
                     output = output.replace(/[^\d]+/g, '');
@@ -383,42 +384,44 @@
             },
             createToken() {
                 this.stripeDeferred = $.Deferred();
-                if (this.$Donation.invalid) {
-                    this.attemptSubmit = !0;
-                    this.attemptedCreateToken = !0;
-                    this.stripeDeferred.reject(false);
-                } else {
-                    // reset errors
-                    this.cardError = null;
-                    this.validationErrors = {
-                        cardNumber: '',
-                        cardCVC: '',
-                        cardYear: '',
-                        cardMonth: '',
-                        cardZip: ''
-                    };
+                this.$validator.validateAll('form-2').then(result => {
+                    if (!result) {
+                        this.attemptSubmit = !0;
+                        this.attemptedCreateToken = !0;
+                        this.stripeDeferred.reject(false);
+                    } else {
+                        // reset errors
+                        this.cardError = null;
+                        this.validationErrors = {
+                            cardNumber: '',
+                            cardCVC: '',
+                            cardYear: '',
+                            cardMonth: '',
+                            cardZip: ''
+                        };
 
-                    // authorize card data
-                    console.log(this.cardParams);
-                    this.$refs.validationspinner.show();
-                    this.$http.post('donations/authorize', this.cardParams)
+                        // authorize card data
+                        console.log(this.cardParams);
+                        this.$refs.validationSpinner.show();
+                        this.$http.post('donations/authorize', this.cardParams)
                             .then(this.createTokenCallback,
-                                    (error) =>  {
-                                        this.cardError = error.data.message;
-                                        this.$refs.validationspinner.hide();
+                                (error) => {
+                                    this.cardError = error.data.message;
+                                    this.$refs.validationSpinner.hide();
 
 
-                                        switch (error.data.message) {
-                                            case 'Your card number is incorrect.':
-                                                this.stripeError = error.data;
-                                                this.validationErrors.cardNumber = 'error';
-                                                break;
-                                        }
+                                    switch (error.data.message) {
+                                        case 'Your card number is incorrect.':
+                                            this.stripeError = error.data;
+                                            this.validationErrors.cardNumber = 'error';
+                                            break;
+                                    }
 
-                                        this.stripeDeferred.reject(error.data.code);
-                                    });
-                }
-                return this.stripeDeferred.promise();
+                                    this.stripeDeferred.reject(error.data.code);
+                                });
+                    }
+                    return this.stripeDeferred.promise();
+                });
             },
             createTokenCallback(resp) {
                 console.log(resp);
@@ -439,7 +442,7 @@
                     this.stripeDeferred.reject(false);
                 }*/
                 if (resp.status === 200) {
-                    this.$refs.validationspinner.hide();
+                    this.$refs.validationSpinner.hide();
                     this.token = resp.data;
                     this.stripeDeferred.resolve(resp.data);
                 }
@@ -449,8 +452,8 @@
                 }
             },
             submit(){
-                this.$refs.donationspinner.show();
-                var data = {
+                this.$refs.donationSpinner.show();
+                let data = {
                     amount: this.amount,
                     anonymous: this.anonymous,
                     currency: 'USD', // determined from card token
@@ -484,11 +487,11 @@
                 this.$http.post('donations', data)
                         .then((response) => {
                             this.stripeDeferred.resolve(true);
-                            this.$refs.donationspinner.hide();
+                            this.$refs.donationSpinner.hide();
                             this.donationState = 'confirmation';
                         },
                         (error) =>  {
-                            this.$refs.donationspinner.hide();
+                            this.$refs.donationSpinner.hide();
                             this.cardError = error.data.message;
                             this.toState('form', 2);
                         });
@@ -508,9 +511,9 @@
                         break;
                     case 'review':
                         this.attemptSubmit = true;
-                        if (this.$Donation.valid) {
-                            this.donationState = state;
-                        }
+                        this.$validator.validateAll('form-2').then(result => {
+                            if (result) this.donationState = state;
+                        });
                         break;
                 }
             },
@@ -520,21 +523,23 @@
                     case 'form':
                         switch (this.subState) {
                             case 1:
-                                if (this.$Donation.invalid) {
-                                    break;
-                                }
-
-                                this.subState = 2;
-                                this.attemptSubmit = !1;
+                                this.$validator.validateAll('form-1').then(result => {
+                                    if (result) {
+                                        this.subState = 2;
+                                        this.attemptSubmit = !1;
+                                    }
+                                });
                                 break;
                             case 2:
                                 this.attemptedCreateToken = !0;
-                                if (this.$Donation.invalid) {
-                                    break;
-                                }
-                                this.donationState = 'review';
-                                this.subState = 1;
-                                this.attemptSubmit = !1;
+                                this.$validator.validateAll('form-2').then(result => {
+                                    if (result) {
+                                        this.donationState = 'review';
+                                        this.subState = 1;
+                                        this.attemptSubmit = !1;
+                                    }
+
+                                });
                                 break
                         }
                         break;
@@ -589,7 +594,7 @@
             }
         },
         mounted() {
-            this.$dispatch('payment-complete', true);
+            this.$emit('payment-complete', true);
             if (this.devMode) {
                 this.cardNumber = '';
                 this.cardCVC = '';

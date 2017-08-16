@@ -54,7 +54,7 @@
                         </document-manager>
                     </div>
                     <div class="panel-footer">
-                        <label>Last Updated: {{ requirement.updated_at | moment('lll') }}</label>
+                        <label>Last Updated: {{ requirement.putd_at | moment('lll') }}</label>
                     </div>
                 </div>
             </div>
@@ -235,7 +235,7 @@
                 var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
                 if (index !== -1) {
                   this.requirements[index].status = requirement.status;
-                  this.requirements[index].updated_at = requirement.updated_at;
+                  this.requirements[index].putd_at = requirement.putd_at;
                 }
             }
         },

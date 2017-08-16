@@ -57,7 +57,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{medical_release.updated_at|moment('lll')}}</p>
+                            <p class="small">{{medical_release.putd_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -74,7 +74,7 @@
 			<pagination :pagination="pagination" :callback="searchMedicals"></pagination>
 
 		</div>
-		<modal :show="deleteModal" title="Remove Medical Release" small="true">
+		<modal :value="deleteModal" title="Remove Medical Release" :small="true">
 			<div slot="modal-body" class="modal-body">Delete this Medical Release?</div>
 			<div slot="modal-footer" class="modal-footer">
 				<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

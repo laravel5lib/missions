@@ -103,7 +103,7 @@
 					let managersArr = this.managers;
 					managersArr.push({id: this.user_id});
 					this.group.managers = _.pluck(managersArr, 'id');
-					this.updateGroup();
+					this.putGroup();
 				}
 			},
 			removeManager: function removeManager(manager) {
@@ -111,12 +111,12 @@
 				this.managers.$remove(manager);
 				let managersArr = this.managers;
 				this.group.managers = _.pluck(managersArr, 'id');
-				this.updateGroup();
+				this.putGroup();
 			},
 			updateGroup: function updateGroup() {
 				// Update Group
 				// this.$refs.spinner.show();
-				this.resource.update({id: this.groupId}, this.group).then((response) => {
+				this.resource.put({id: this.groupId}, this.group).then((response) => {
 					this.group = response.data.data;
 					this.managers = this.group.managers.data;
 					this.user_id = null;

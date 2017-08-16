@@ -94,12 +94,12 @@
                 </div>
                 <div class="col-sm-6">
                     <label>Last Updated at</label>
-                    <p>{{ interest.updated_at | moment('lll') }}</p>
+                    <p>{{ interest.putd_at | moment('lll') }}</p>
                 </div>
             </div>
         </div>
 
-        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Done</strong>
             <p>{{ message }}</p>

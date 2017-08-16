@@ -197,7 +197,7 @@
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
                         <td v-if="isActive('difficulty')" v-text="trip.difficulty ? trip.difficulty[0].toUpperCase() + trip.difficulty.slice(1) : ''"></td>
                         <td v-if="isActive('created_at')" v-text="trip.created_at|moment('ll')"></td>
-                        <td v-if="isActive('updated_at')" v-text="trip.updated_at|moment('ll')"></td>
+                        <td v-if="isActive('updated_at')" v-text="trip.putd_at|moment('ll')"></td>
 
                         <td v-if="isActive('public')"><i class="fa fa-check" v-if="trip.public"></i></td>
                         <td v-if="isActive('reservations')">{{trip.reservations}}</td>
@@ -287,7 +287,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                // this.updateConfig();
+                // this.putConfig();
             },
             'filters': {
                 handler: (val) =>  {

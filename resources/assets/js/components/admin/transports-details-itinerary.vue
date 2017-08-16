@@ -214,8 +214,6 @@
                 hubModal: false,
                 editMode: false,
 
-	            ActivityResource: this.$resource('activities{/activity}'),
-	            HubResource: this.$resource('hubs{/hub}')
             }
         },
 	    watch: {
@@ -261,7 +259,7 @@
                     include: 'hubs'
                 }, this.activityFilters);
 
-                return this.ActivityResource.get(params).then((response) => {
+                return this.$http.get(`activities`, {params: params}).then((response) => {
                     this.activitiesPagination = response.data.meta.pagination;
                     return this.activities = response.data.data;
                 }, this.handleApiError);
@@ -303,7 +301,7 @@
                 this.$broadcast('validate-itinerary');
 
 	            if (data.id) {
-	                promise = this.HubResource.update({ hub: data.id}, data).then((response) => {
+	                promise = this.$http.put({ hub: data.id}, data).then((response) => {
                         this.editMode = false;
                         this.getActivities();
                     }, this.handleApiError);
@@ -331,13 +329,13 @@
                 this.$broadcast('validate-itinerary');
 
                 if (data.id) {
-                    promise = this.ActivityResource.update({ activity: data.id}, data).then((response) => {
+                    promise = this.$http.put(`activities/${data.id}`, data).then((response) => {
                         this.editMode = false;
                         this.getActivities();
                     }, this.handleApiError);
                 } else {
                     data.campaign_id = null;
-                    promise = this.ActivityResource.post(data).then((response) => {
+                    promise = this.$http.post(`activities`, data).then((response) => {
                         this.getActivities();
 
                     }, this.handleApiError);
@@ -355,7 +353,7 @@
                 }, this.handleApiError);
 	        },
 	        deleteActivity(){
-	            this.ActivityResource.delete({ activity: this.selectedActivity.id }).then(() => {
+	            this.$http.delete(`activities/${this.selectedActivity.id}`).then(() => {
 	                this.getActivities();
                     this.showActivityDeleteModal = false;
                 }, this.handleApiError);

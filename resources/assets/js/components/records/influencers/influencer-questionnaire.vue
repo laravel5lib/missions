@@ -10,7 +10,7 @@
         <p class="small">
             <b>QUESTIONS:</b> {{essay.content.length}}
             <br>
-            <b>LAST UPDATED:</b> {{essay.updated_at|moment('ll')}}
+            <b>LAST UPDATED:</b> {{essay.putd_at|moment('ll')}}
         </p>
     </div>
 </template>

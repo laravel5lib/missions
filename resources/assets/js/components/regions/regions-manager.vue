@@ -540,7 +540,7 @@
             },
             createRegion() {
                 if (this.editRegionModal)
-                    return this.updateRegion();
+                    return this.putRegion();
 
                 this.selectedRegion.country_code = this.selectedRegion.country.code;
                 delete this.selectedRegion.country;
@@ -574,7 +574,7 @@
                     callsign: this.selectedRegion.callsign,
                 };
 
-                this.RegionsResource.update({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups, teams.type', }, data).then((response) => {
+                this.RegionsResource.put({ campaign: this.campaignId, region: this.selectedRegion.id, include: 'teams.groups, teams.type', }, data).then((response) => {
                     let region = response.data.data;
                     this.showRegionModal = false;
                     this.editRegionModal = false;

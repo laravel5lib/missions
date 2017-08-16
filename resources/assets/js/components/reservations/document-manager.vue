@@ -243,7 +243,7 @@
             setDocument(document){
                 if(document) {
                     this.document = document;
-                    this.requirementResource.update({
+                    this.requirementResource.put({
                         reservationId: this.reservationId,
                         requirementId: this.requirementId},
                     {
@@ -257,7 +257,7 @@
             },
             removeDocument(document){
                 if(document) {
-                    this.requirementResource.update({
+                    this.requirementResource.put({
                         reservationId: this.reservationId,
                         requirementId: this.requirementId},
                     {

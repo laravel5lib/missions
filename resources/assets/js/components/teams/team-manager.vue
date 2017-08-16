@@ -938,7 +938,7 @@
 		    'currentTeam': (val) =>  {
                 if (val && val.id) {
                     this.getSquads();
-                    this.updateConfig();
+                    this.putConfig();
                 } else {
                     window.localStorage.removeItem(this.storageName);
                 }
@@ -1270,7 +1270,7 @@
                     include: 'companions,trip.group'
                 };
 
-                this.TeamSquadResource.update(params , data).then((response) => {
+                this.TeamSquadResource.put(params , data).then((response) => {
                     let groups =_.reject(this.currentSquadGroups, (sq) => {
                         return sq.id === squad.id;
                     });
@@ -1474,12 +1474,12 @@
                 }
 	        },
 	        updateTeam(team){
-	            this.TeamResource.update({team: team.id, include: 'type,groups'}, team).then((response) => {
+	            this.TeamResource.put({team: team.id, include: 'type,groups'}, team).then((response) => {
 					this.$root.$emit('showSuccess', team.callsign + ' Updated!');
                 });
 	        },
 	        updateTeamSettings(ignoreMessage){
-	            return this.TeamResource.update({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign, locked: this.currentTeam.locked }).then((response) => {
+	            return this.TeamResource.put({ team: this.currentTeam.id, include: 'type,groups' }, { callsign: this.currentTeam.callsign, locked: this.currentTeam.locked }).then((response) => {
                     this.currentTeam = response.data.data;
                     if (!ignoreMessage)
 						this.$root.$emit('showSuccess', this.currentTeam.callsign + ' Updated!');
@@ -1504,7 +1504,7 @@
                     include: 'companions,trip.group'
                 };
 
-	            this.TeamSquadResource.update(params, data).then((response) => {
+	            this.TeamSquadResource.put(params, data).then((response) => {
 	                let squad = _.findWhere(this.currentSquadGroups, { id: this.selectedSquadObj.id});
 	                squad.callsign = response.data.data.callsign;
                     this.$root.$emit('showSuccess', response.data.data.callsign + ' Updated!');
@@ -1572,7 +1572,7 @@
 	        addAssociation(type, object) {
                 return this.$http.post(type + '/' + object.id + '/teams', { ids: [this.currentTeam.id] }).then((response) => {
                     this.additionalAssociatedGroup = null;
-                    this.updateTeamSettings(true).then(() => {
+                    this.putTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now associated with ' + object.name);
                     });
                 }, (response) =>  {
@@ -1594,7 +1594,7 @@
 		        }
 
 	            return this.$http.delete(this.removeAssociationData.type + '/' + this.removeAssociationData.object.id + '/teams/' + this.currentTeam.id).then((response) => {
-                    this.updateTeamSettings(true).then(() => {
+                    this.putTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now unassociated with ' + this.removeAssociationData.object.name);
                         this.removeAssociationData.type = null;
                         this.removeAssociationData.object = null;

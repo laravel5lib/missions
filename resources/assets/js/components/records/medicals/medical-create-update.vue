@@ -333,7 +333,7 @@
             </div>
         </form>
 
-        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -527,7 +527,7 @@
                 this.resetErrors();
                 if (this.$CreateUpdateMedicalRelease.valid) {
                     this.prepArrays();
-                    this.resource.update({id:this.id, include: 'uploads'}, {
+                    this.resource.put({id:this.id, include: 'uploads'}, {
                         name: this.name,
                         ins_provider: this.ins_provider,
                         ins_policy_no: this.ins_policy_no,

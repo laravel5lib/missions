@@ -1,6 +1,6 @@
 <template>
 <div>
-    <alert :show="showSuccess"
+    <alert v-model="showSuccess"
            placement="top-right"
            :duration="3000"
            type="success"
@@ -11,7 +11,7 @@
         <p>{{ message }}</p>
     </alert>
 
-    <alert :show="showError"
+    <alert v-model="showError"
            placement="top-right"
            :duration="6000"
            type="danger"
@@ -106,7 +106,7 @@
     </div>
     <p class="text-center"><small class="text-muted">Double-click to edit a todo.</small></p>
 
-    <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" small="true">
+    <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" :small="true">
         <div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>
         <div slot="modal-footer" class="modal-footer">
             <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -193,7 +193,7 @@
                     this.selectedTodo = todo;
                 }
 
-                this.updateTodo();
+                this.putTodo();
             },
             changeFilter(status) {
                 this.filterBy = status;

@@ -1,6 +1,6 @@
 <template>
 	<spinner ref="spinner" size="md" text="Loading"></spinner>
-	<alert :show="showError"
+	<alert v-model="showError"
 		   placement="top-right"
 		   :duration="6000"
 		   type="danger"
@@ -45,7 +45,7 @@
 			</div>
 		</div>
     </div>
-	<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" small="true">
+	<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Todo" :small="true">
 		<div slot="modal-body" class="modal-body text-center">Delete this Todo?</div>
 		<div slot="modal-footer" class="modal-footer">
 			<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>

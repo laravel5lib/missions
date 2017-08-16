@@ -57,7 +57,7 @@
             </div>
         </modal>
 
-        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" small="true">
+        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center">Delete {{ selectedCost.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
@@ -65,7 +65,7 @@
             </div>
         </modal>
 
-        <alert :show="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
+        <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
             <span class="icon-ok-circled alert-icon-float-left"></span>
             <strong>Done</strong>
             <p>{{successMessage}}</p>
@@ -99,7 +99,6 @@
                     enforced: false,
                 },
                 selectedCost: null,
-                resource: this.$resource('projects/' + this.id, { include: 'dues,costs.payments,initiative.costs.payments' }),
                 showAddModal: false,
                 deleteModal: false,
                 showNewModal: false,
@@ -118,10 +117,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            errors.has(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddCost[field].invalid && this.attemptSubmit;
             },
             checkForEditCostError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
@@ -264,7 +259,7 @@
             doUpdate(project, success){
 
                 // this.$refs.spinner.show();
-                return this.resource.update(project).then((response) => {
+                return this.$http.put(`projects/${this.id}?include=dues,costs.payments,initiative.costs.payments`, project).then((response) => {
                     this.setProjectData(response.data.data);
                     this.selectedCosts = [];
                     this.$root.$emit('AdminProject:CostsUpdated', response.data.data);
@@ -292,7 +287,7 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.resource.get().then((response) => {
+            this.$http.get(`projects/${this.id}?include=dues,costs.payments,initiative.costs.payments`).then((response) => {
                 this.setProjectData(response.data.data);
                 // this.$refs.spinner.hide();
             });

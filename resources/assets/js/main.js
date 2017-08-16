@@ -17,39 +17,39 @@ import actionTrigger from './components/action-trigger.vue';
 import actionDropdownSelect from './components/action-dropdown-select.vue';
 import actionSelect from './components/action-select.vue';
 import listenText from './components/listen-text.vue';
-// import donate from './components/donate.vue';
+import donate from './components/donate.vue';
 // import modalDonate from './components/modal-donate.vue';
 import campaigns from './components/campaigns/campaigns.vue';
 import groups from './components/groups/groups.vue';
-// import fundraisers from './components/fundraisers/fundraisers.vue';
-// import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
-// import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
-// import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
-// import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
-// import campaignGroups from './components/campaigns/campaign-groups.vue';
-// import groupTrips from './components/campaigns/group-trips.vue';
-// import groupProfileTrips from './components/groups/group-profile-trips.vue';
-// import groupProfileStories from './components/groups/group-profile-stories.vue';
-// import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
-// import groupInterestSignup from './components/groups/group-interest-signup.vue';
-// import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
-// import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
-// import userProjectsList from './components/projects/user-projects-list.vue';
-// import reservationsList from './components/reservations/reservations-list.vue';
-// import restoreReservation from './components/reservations/restore-reservation.vue';
-// import transferReservation from './components/reservations/transfer-reservation.vue';
-// import donationsList from './components/reservations/donations-list.vue';
-// import recordsList from './components/records/records-list.vue';
-// import groupsList from './components/groups/groups-list.vue';
-// import visasList from './components/records/visas/visas-list.vue';
-// import medicalsList from './components/records/medicals/medicals-list.vue';
-// import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
-// import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
-// import passportsList from './components/records/passports/passports-list.vue';
+import fundraisers from './components/fundraisers/fundraisers.vue';
+import fundraisersManager from './components/fundraisers/fundraisers-manager.vue';
+import fundraisersStories from './components/fundraisers/fundraisers-stories.vue';
+import fundraisersUploads from './components/fundraisers/fundraisers-uploads.vue';
+import fundraiserCollection from './components/fundraisers/fundraiser-collection.vue';
+import campaignGroups from './components/campaigns/campaign-groups.vue';
+import groupTrips from './components/campaigns/group-trips.vue';
+import groupProfileTrips from './components/groups/group-profile-trips.vue';
+import groupProfileStories from './components/groups/group-profile-stories.vue';
+import groupTripWrapper from './components/campaigns/groups-trips-selection-wrapper.vue';
+import groupInterestSignup from './components/groups/group-interest-signup.vue';
+import tripDetailsMissionaries from './components/trips/trip-details-missionaries.vue';
+import tripRegistrationWizard from './components/trips/trip-registration-wizard.vue';
+import userProjectsList from './components/projects/user-projects-list.vue';
+import reservationsList from './components/reservations/reservations-list.vue';
+import restoreReservation from './components/reservations/restore-reservation.vue';
+import transferReservation from './components/reservations/transfer-reservation.vue';
+import donationsList from './components/reservations/donations-list.vue';
+import recordsList from './components/records/records-list.vue';
+import groupsList from './components/groups/groups-list.vue';
+import visasList from './components/records/visas/visas-list.vue';
+import medicalsList from './components/records/medicals/medicals-list.vue';
+import medicalCredentialsList from './components/records/credentials/medical-credentials-list.vue';
+import mediaCredentialsList from './components/records/credentials/media-credentials-list.vue';
+import passportsList from './components/records/passports/passports-list.vue';
+import essaysList from './components/records/essays/essays-list.vue';
+import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
+import referralsList from './components/records/referrals/referrals-list.vue';
 // import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
-// import essaysList from './components/records/essays/essays-list.vue';
-// import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
-// import referralsList from './components/records/referrals/referrals-list.vue';
 // import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
 // import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
 // import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
@@ -268,9 +268,107 @@ Vue.use(require('vue-truncate'));
 import axios from 'axios';
 axios.defaults.baseURL = '/api';
 Vue.prototype.$http = axios;
+// Resource duplicate of vue-resource for axios
+// https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
+function Resource (url, params, actions, options) {
+    let resource = {};
+    actions = Object.assign({},
+        Resource.actions,
+        actions
+    );
+
+    _.each(actions, (action, name) => {
+
+        action = merge({url, params: Object.assign({}, params)}, options, action);
+
+        resource[name] = () => {
+            return (Vue.prototype.$http)(opts(action, arguments));
+        };
+    });
+
+    return resource;
+}
+Resource.actions = {
+
+    get: {method: 'GET'},
+    post: {method: 'POST'},
+    save: {method: 'POST'},
+    query: {method: 'GET'},
+    update: {method: 'PUT'},
+    put: {method: 'PUT'},
+    remove: {method: 'DELETE'},
+    delete: {method: 'DELETE'}
+
+};
+function merge(target) {
+    let ref = [], slice = ref.slice;
+    let args = slice.call(arguments, 1);
+
+    args.forEach(source => {
+        merger(target, source, true);
+    });
+
+    return target;
+}
+function merger(target, source, deep) {
+    let key;
+    for (key in source) {
+        if (deep && (_.isObject(source[key]) || _.isArray(source[key]))) {
+            if (_.isObject(source[key]) && !_.isObject(target[key])) {
+                target[key] = {};
+            }
+            if (_.isArray(source[key]) && !_.isArray(target[key])) {
+                target[key] = [];
+            }
+            merger(target[key], source[key], deep);
+        } else if (source[key] !== undefined) {
+            target[key] = source[key];
+        }
+    }
+}
+function opts(action, args) {
+
+    let options = Object.assign({}, action), params = {}, body;
+
+    switch (args.length) {
+
+        case 2:
+
+            params = args[0];
+            body = args[1];
+
+            break;
+
+        case 1:
+
+            if (/^(POST|PUT|PATCH)$/i.test(options.method)) {
+                body = args[0];
+            } else {
+                params = args[0];
+            }
+
+            break;
+
+        case 0:
+
+            break;
+
+        default:
+
+            throw 'Expected up to 2 arguments [params, body], got ' + args.length + ' arguments';
+    }
+
+    options.body = body;
+    options.params = Object.assign({}, options.params, params);
+
+    return options;
+}
+// Resource END
+Vue.prototype.$resource = Resource;
 
 Vue.filter('phone', (phone) => {
     phone = phone || '';
+    if (phone === '') return phone;
     return phone.replace(/[^0-9]/g, '')
         .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
 });
@@ -285,10 +383,18 @@ Vue.component('phone-input', {
     },
     methods: {
         updateValue(value) {
-            this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            if (value === '') {
+                this.$refs.input.value = value;
+            } else {
+                this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
         },
         formatValue() {
-            this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            if (this.value === '') {
+                this.$refs.input.value = this.value;
+            } else {
+                this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
         },
         selectAll(event) {
             // Workaround for Safari bug
@@ -567,8 +673,8 @@ Vue.mixin({
             return direction === -1 ? _.reverse(list) : list
         },
         currency(number) {
-            if (number) {
-                return '$' + number.tofixed(2);
+            if (!isNaN(number)) {
+                return '$' + (Number(number).toFixed(2));
             }
             return number
         },
@@ -604,7 +710,7 @@ Vue.mixin({
     }
 });
 
-App = new Vue({
+new Vue({
     el: '#app',
     data: {
         datePickerSettings: {
@@ -641,11 +747,15 @@ App = new Vue({
         topNav,
         markdownExampleModal,
         contactForm,
-        // speakerForm,
+        speakerForm,
         sponsorProjectForm,
-        // fundraisers,
-        // campaigns,
-        // groups,
+        campaigns,
+        groups,
+        fundraisers,
+        fundraisersManager,
+        fundraisersStories,
+        fundraisersUploads,
+        fundraiserCollection,
         // campaignGroups,
         // groupTrips,
         // groupProfileTrips,
@@ -658,15 +768,11 @@ App = new Vue({
         // reservationsList,
         // userProjectsList,
         // donationsList,
-        // fundraisersManager,
-        // fundraisersStories,
-        // fundraisersUploads,
-        // fundraiserCollection,
         actionTrigger,
         actionDropdownSelect,
         actionSelect,
         listenText,
-        // donate,
+        donate,
         // modalDonate,
         // notes,
         // todos,
@@ -689,7 +795,7 @@ App = new Vue({
         // influencerQuestionnaireCreateUpdate,
         // referralCreateUpdate,
         // passportCreateUpdate,
-        // visasList,
+        visasList,
         // visaCreateUpdate,
         // medicalsList,
         // medicalCredentialsList,
@@ -799,7 +905,8 @@ App = new Vue({
             token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
             if (token !== null && token !== 'undefined') {
-                axios.defaults.headers.common['Authorization'] = token
+                // this.$http.defaults.headers.common['Authorization'] = token;
+                config.headers.common['Authorization'] = token
                 //headers.set('Authorization', token);
             }
 
@@ -875,7 +982,7 @@ App = new Vue({
     },
     mounted() {
         // Track window resizing
-        $(window).on('resize', function () {
+        $(window).on('resize', () => {
             this.$emit('Window:resize');
         });
 
@@ -921,10 +1028,9 @@ App = new Vue({
             if (localStorage.hasOwnProperty('user')) {
                 return JSON.parse(localStorage.getItem('user'))
             } else {
-                let that = this;
                 this.$http.get('users/me?include=roles,permissions')
-                    .then(function (response) {
-                            that.$root.$emit('userHasLoggedIn', response.data.data);
+                    .then((response) => {
+                            this.$emit('userHasLoggedIn', response.data.data);
                             return response.data.data;
                         },
                         (response) => {
@@ -962,7 +1068,7 @@ App = new Vue({
         handleApiError(error) {
             console.log(error);
             console.error(error.response.data.message ? error.response.data.message : error.response.data);
-            this.$root.$emit('showError', error.response.data.message)
+            this.$emit('showError', error.response.data.message)
         },
         convertSearchToObject() {
             let search = location.search.substring(1);

@@ -112,7 +112,6 @@
 				total: 0,
 
 				// logic variables
-				attemptSubmit: false,
 				availableCountries: [],
 				countries: [],
 				causes: [],
@@ -121,8 +120,6 @@
 				countryCodeObj: null,
 				causeIdentifier: '',
                 initiativeIdentifier: '',
-				causeResource: this.$resource('causes{/causeId}'),
-				intiativeResource: this.$resource('causes{/causeId}/initiatives{/initiativeId}'),
 			}
 		},
 		computed: {
@@ -178,11 +175,10 @@
 					phone_one: '',
 					complete_at: '',
 				});
-				this.attemptSubmit = false;
 			},
 			getCauses() {
-				this.causeResource
-						.get(null)
+				this.$http
+						.get(`causes`)
 						.then((response) => {
 							this.causes = response.data.data;
 						}, (error) =>  {
@@ -190,8 +186,8 @@
 						});
 			},
 			getInitiatives() {
-				this.intiativeResource
-						.get({causeId: this.causeIdentifier, current: true})
+				this.$http
+						.get(`causes/${this.causeIdentifier}/initiatives`, { params: { current: true } })
 						.then((response) => {
 							this.initiatives = response.data.data;
 						}, (error) =>  {

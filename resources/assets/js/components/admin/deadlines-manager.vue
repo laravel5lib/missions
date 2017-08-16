@@ -27,7 +27,7 @@
         <modal class="text-center" :value="showAddModal" @closed="showAddModal=false" title="Add Deadline">
             <div slot="modal-body" class="modal-body">
 
-                    <form class="form" novalidate>
+                    <form name="AddDeadline" data-vv-scope="AddDeadline" class="form" novalidate @submit.prevent="addDeadline">
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group" :class="{'has-error': checkForAddError('name')}">
@@ -72,7 +72,7 @@
             </div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetDeadline()'>Cancel</button>
-                <button type="button" class="btn btn-primary btn-sm" @click='addDeadline'>Add</button>
+                <button type="submit" class="btn btn-primary btn-sm" form="AddDeadline">Add</button>
             </div>
         </modal>
         <modal class="text-center" :value="showEditModal" @closed="showEditModal=false" title="Edit Deadline">
@@ -126,7 +126,7 @@
                 <button type="button" class="btn btn-primary btn-sm" @click='updateDeadline'>Update</button>
             </div>
         </modal>
-        <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Deadline" small="true">
+        <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Deadline" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedDeadline">Delete {{ selectedDeadline.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Keep</button>
@@ -157,7 +157,6 @@
                     grace_period: 0,
                     enforced: false,
                 },
-                resource: this.$resource('deadlines{/id}'),
                 sort: 'date',
                 direction: 'asc'
             }
@@ -184,7 +183,7 @@
                 this.attemptedAddDeadline = true;
                 if(this.$TripDeadlinesCreate.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.post({}, this.newDeadline).then((response) => {
+                    this.$http.post(`deadlines`, this.newDeadline).then((response) => {
                         this.deadlines.push(response.data.data);
                         this.resetDeadline();
                         this.attemptedAddDeadline = false;
@@ -197,7 +196,7 @@
                 this.attemptedEditDeadline = true;
                 if(this.$TripDeadlinesEdit.valid) {
                     // this.$refs.spinner.show();
-                    this.resource.update({ id: this.selectedDeadline.id}, this.selectedDeadline).then((response) => {
+                    this.$http.put(`deadlines/${this.selectedDeadline.id}`, this.selectedDeadline).then((response) => {
                         this.attemptedEditDeadline = false;
                         this.showEditModal = false;
                         this.searchDeadlines();
@@ -215,7 +214,7 @@
             },
             remove(deadline){
                 // this.$refs.spinner.show();
-                this.resource.delete({ id: deadline.id }).then((response) => {
+                this.$http.delete(`deadlines/${deadline.id}`).then((response) => {
                     this.deadlines.$remove(deadline);
                     this.selectedDeadline = null;
                     this.searchDeadlines();
@@ -223,7 +222,7 @@
             },
             searchDeadlines(){
                 // this.$refs.spinner.show();
-                this.resource.get({
+                this.$http.get(`deadlines`, {
                     assignment: this.assignment + '|' + this.id,
                     search: this.search,
                     sort: this.sort + '|' + this.direction,

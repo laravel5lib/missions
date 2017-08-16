@@ -209,7 +209,7 @@
             </div>
 
         </modal>
-        <modal title="Delete Cost" :value="showDeleteModal" @closed="showDeleteModal=false" effect="fade" small="true">
+        <modal title="Delete Cost" :value="showDeleteModal" @closed="showDeleteModal=false" effect="fade" :small="true">
             <div slot="modal-body" class="modal-body">
                 <p v-if="selectedCost" class="text-center">Delete {{ selectedCost.name }}?</p>
             </div>
@@ -275,7 +275,6 @@
                 },
                 search: '',
                 sort: 'active_at',
-                resource: this.$resource('costs{/id}'),
                 importRequiredFields: [
                     'name', 'amount', 'type', 'active_at'
                 ],
@@ -315,9 +314,6 @@
             }
         },
         methods: {
-            errors.hasCost(field){
-                return this.$validateCost && this.$validateCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-            },
             checkCostsErrors(){
                 var errors = [];
                 this.costs.forEach(function (cost, index) {
@@ -364,7 +360,7 @@
                 this.showDeleteModal = true;
             },
             doRemove(cost){
-                this.resource.delete({ id: cost.id }).then((response) => {
+                this.$http.delete(`costs/${cost.id}`).then((response) => {
                     this.selectedCost = null;
                     this.showDeleteModal = false;
                     this.costs.$remove(cost);
@@ -373,7 +369,7 @@
             addCost(){
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
-                    this.resource.post(this.newCost, { include: 'payments'}).then((response) => {
+                    this.$http.post(`costs`, this.newCost, { include: 'payments'}).then((response) => {
                         this.costs.push(response.data.data);
                         this.resetCost();
                         this.showAddModal = false;
@@ -389,7 +385,7 @@
             updateCost(){
                 this.attemptedAddCost = true;
                 if (this.$validateCost.valid) {
-                    this.resource.update({id: this.selectedCost.id, include: 'payments'}, this.selectedCost).then((response) => {
+                    this.$http.put(`costs/${this.selectedCost.id}?include=payments`, this.selectedCost).then((response) => {
                         this.showReminder = response.data.data.id;
                         $.extend(this.costs, this.selectedCost);
                         this.selectedCost = null;
@@ -412,7 +408,7 @@
             },
             searchCosts(){
                 // this.$refs.spinner.show();
-                this.resource.get({
+                this.$http.get(`costs`, {
                     include: 'payments',
                     assignment: this.assignment + '|' + this.id,
                     search: this.search,

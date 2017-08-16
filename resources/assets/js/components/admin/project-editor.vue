@@ -111,7 +111,7 @@
                     <hr class="divider">
                     <div class="col-md-6">
                         <label>Last Updated</label>
-                        <p>{{ project.updated_at | moment('ll') true }}</p>
+                        <p>{{ project.putd_at | moment('ll') true }}</p>
                     </div>
                 </div>
             </div>

@@ -503,8 +503,6 @@
                 };
 
                 $.extend(params, this.filters);
-//                params.minDate = moment(params.minDate).format('YYYY-MM-DD HH:mm:ss');
-//                params.maxDate = moment(params.maxDate).format('YYYY-MM-DD HH:mm:ss');
                 this.exportFilters = params;
 
                 return params;

@@ -9,7 +9,7 @@
 					</label>
 				</div>
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+					<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
 			</form>
@@ -43,7 +43,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{media_credential.putd_at|moment('lll')}}</p>
+                            <p class="small">{{media_credential.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
 				</div><!-- end panel-body -->
@@ -72,6 +72,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default {
@@ -130,17 +131,17 @@
         },
         watch: {
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchMedias();
                 },
                 deep: true
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchMedias();
+                //this.searchMedias();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchMedias();
             }
@@ -148,8 +149,11 @@
         },
         methods: {
             setMedia(media) {
-                this.$dispatch('set-document', media);
+                this.$emit('set-document', media);
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchMedias()
+            }, 250),
             searchMedias(){
                 let params = {
                     user: this.userId,

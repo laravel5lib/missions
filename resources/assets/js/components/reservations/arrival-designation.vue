@@ -108,7 +108,7 @@
                 });
             },
             setDesignation(designation) {
-              this.$dispatch('set-document', designation);
+              this.$emit('set-document', designation);
             },
             cancel() {
                 this.editMode = false;

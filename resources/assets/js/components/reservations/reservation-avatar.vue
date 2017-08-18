@@ -49,7 +49,7 @@
                     case 'avatar':
                         this.avatar = data;
                         this.avatar_upload_id = data.id;
-                        jQuery('#avatarCollapse').collapse('hide');
+                        $('#avatarCollapse').collapse('hide');
                         break;
                 }
                 this.submit();

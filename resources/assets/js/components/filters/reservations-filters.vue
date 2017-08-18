@@ -6,7 +6,7 @@
 				<template v-if="isAdminRoute">
 					<div class="form-group">
 						<label>Travel Groups</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="debounced(getGroups)"
 						          :value="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
@@ -14,7 +14,7 @@
 				<template v-else>
 					<div class="form-group">
 						<label>Groups</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="debounced(getGroups)"
 						          :value="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
@@ -23,7 +23,7 @@
 
 			<div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
-				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
+				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="debounced(getCampaigns)"
 				          :value="campaignObj" :options="campaignOptions" label="name"
 				          placeholder="Filter by Campaign"></v-select>
 			</div>
@@ -45,14 +45,14 @@
 
 				<div class="form-group" v-if="propertyExists('role')">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
-					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
+					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="debounced(getRolesSearch)"
 					          :value="roleObj" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute && (propertyExists('users') || propertyExists('user'))">
 					<label>Managing Users</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="debounced(getUsers)"
 					          :value="usersArr" :options="usersOptions" label="name"
 					          placeholder="Filter Users"></v-select>
 				</div>
@@ -81,7 +81,7 @@
 						<label>Applied Cost</label>
 						<select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
 							<option value="">Any Cost</option>
-							<option v-for="option in dueOptions" v-bind:value="option">
+							<option v-for="option in dueOptions" :value="option">
 								{{ option }}
 							</option>
 						</select>
@@ -127,7 +127,7 @@
 						<label>Requirements</label>
 						<select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
 							<option value="">Any Requirement</option>
-							<option v-for="option in requirementOptions" v-bind:value="option">
+							<option v-for="option in requirementOptions" :value="option">
 								{{ option }}
 							</option>
 						</select>
@@ -151,7 +151,7 @@
 						<label>Todos</label>
 						<select class="form-control input-sm" v-model="filters.todoName" style="width:100%;">
 							<option value="">Any Todo</option>
-							<option v-for="option in todoOptions" v-bind:value="option">
+							<option v-for="option in todoOptions" :value="option">
 								{{ option }}
 							</option>
 						</select>
@@ -176,8 +176,8 @@
 					<label>Trip Rep</label>
 					<select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
 						<option value="">Any Rep</option>
-						<option v-for="option in repOptions" v-bind:value="option.id">
-							{{ option.name ? option.name[0].toUpperCase() + option.name.slice(1) : '' }}
+						<option v-for="option in repOptions" :value="option.id">
+							{{ option.name|capitalize }}
 						</option>
 					</select>
 				</div>
@@ -500,6 +500,13 @@
 
 	    },
         methods: {
+            // TODO Use actual debounce
+            debounced(func) {
+                let self = this;
+                setTimeout(function() {
+                    self[func]();
+                }, 250)
+            },
             propertyExists(property) {
                 // Instead of concerning the filters component about where it is
 	            // It is may be best to behave based on the filter object passed in

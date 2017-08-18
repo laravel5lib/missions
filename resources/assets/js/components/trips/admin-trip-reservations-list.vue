@@ -114,7 +114,7 @@
                     <select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
                         <option value="">Any Rep</option>
                         <option v-for="(key, option) in repOptions" v-bind:value="key">
-                            {{ option.name ? option.name[0].toUpperCase() + option.name.slice(1) : '' }}
+                            {{ option.name|capitalize }}
                         </option>
                     </select>
                 </div>
@@ -415,16 +415,16 @@
                     <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
                     <td v-if="isActive('surname')" v-text="reservation.surname"></td>
                     <td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
-                    <td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name ? reservation.trip.data.group.data.name[0].toUpperCase() + reservation.trip.data.group.data.name.slice(1) : ''"></td>
-                    <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name ? reservation.trip.data.campaign.data.name[0].toUpperCase() + reservation.trip.data.campaign.data.name.slice(1) : ''"></td>
-                    <td v-if="isActive('type')" v-text="reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : ''"></td>
+                    <td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
+                    <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
+                    <td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
                     <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
-                    <td v-if="isActive('percent_raised')">{{reservation.percent_raised.toFixed(2) '2'}}%</td>
+                    <td v-if="isActive('percent_raised')">{{reservation.percent_raised.toFixed(2)}}%</td>
                     <td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
-                    <td v-if="isActive('gender')" v-text="reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''"></td>
-                    <td v-if="isActive('status')" v-text="reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''"></td>
+                    <td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
+                    <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
                     <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-                    <td v-if="isActive('email')" v-text="reservation.user.data.email ? reservation.user.data.email[0].toUpperCase() + reservation.user.data.email.slice(1) : ''"></td>
+                    <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
                     <td v-if="isActive('requirements')">
                         <div style="position:relative;">
                             <popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
@@ -441,7 +441,7 @@
                             </popover>
                         </div>
                     </td>
-                    <td v-if="isActive('rep')" v-text="reservation.rep.data.name ? reservation.rep.data.name[0].toUpperCase() + reservation.rep.data.name.slice(1) : ''"></td>
+                    <td v-if="isActive('rep')" v-text="reservation.rep.data.name|capitalize"></td>
                     <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>
@@ -623,17 +623,17 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchReservations();
                 },
                 deep: true
             },
-            'campaignObj': (val) =>  {
+            'campaignObj'(val, oldVal) {
                 this.filters.campaign = val ? val.id : '';
             },
-            'reservations': (val) =>  {
+            'reservations'(val, oldVal) {
                 if (val.length) {
                     // use object/dictionary instead of array
                     let arr = {};
@@ -645,32 +645,32 @@
                     this.repOptions = arr;
                 }
             },
-            'shirtSizeArr': (val) =>  {
+            'shirtSizeArr'(val, oldVal) {
                 this.filters.shirtSize = _.pluck(val, 'id') || '';
             },
-            'groupsArr': (val) =>  {
+            'groupsArr'(val, oldVal) {
                 this.filters.groups = _.pluck(val, 'id') || '';
 //				this.searchReservations();
             },
-            'usersArr': (val) =>  {
+            'usersArr'(val, oldVal) {
                 this.filters.user = _.pluck(val, 'id') || '';
 //				this.searchReservations();
             },
-            'tagsString': (val) =>  {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchReservations();
             },
-            'ageMin': (val) =>  {
+            'ageMin'(val, oldVal) {
                 this.searchReservations();
             },
-            'ageMax': (val) =>  {
+            'ageMax'(val, oldVal) {
                 this.searchReservations();
             },
-            'direction': (val) =>  {
+            'direction'(val, oldVal) {
                 this.searchReservations();
             },
-            'activeFields': (val, oldVal) =>  {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -678,15 +678,15 @@
                 }
                 this.putConfig();
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchReservations();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.searchReservations();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchReservations();
             },
             /*'groups':() =>  {

@@ -111,7 +111,7 @@
                     <hr class="divider">
                     <div class="col-md-6">
                         <label>Last Updated</label>
-                        <p>{{ project.putd_at | moment('ll') true }}</p>
+                        <p>{{ project.updated_at | moment('ll') true }}</p>
                     </div>
                 </div>
             </div>
@@ -205,7 +205,7 @@
         },
         methods: {
             getInitiatives() {
-                this.$http.get('causes/' + this.cause.id + '/initiatives', { params: {
+                this.$http.get(`causes/${this.cause.id}/initiatives`, { params: {
                     country: this.initiative.country.code
                 }}).then((response) => {
                     this.availableInitiatives = response.data.data;
@@ -220,7 +220,7 @@
             },
             getCause() {
                 this.$refs.loader.show();
-                this.$http.get('causes/' + this.causeId).then((response) => {
+                this.$http.get(`causes/${this.causeId}`).then((response) => {
                     this.cause  = response.data.data;
                     this.initiative.country = _.first(this.cause.countries);
                     this.$refs.loader.hide();
@@ -263,7 +263,7 @@
                     this.editMode = false;
                     this.fetch();
                 } else {
-                     window.location = '/admin/causes/' + this.causeId + '/current-projects';
+                     window.location = `/admin/causes/${this.causeId}/current-projects`;
                 }
             }
         },

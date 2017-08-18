@@ -10,7 +10,7 @@
 								<select class="form-control" id="travel_method"
 								        name="transporttype=" v-validate="'required'" v-model="transport.type">
 									<option value="">-- Select--</option>
-									<option :value="option" v-for="option in travelTypeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+									<option :value="option" v-for="option in travelTypeOptions">{{ option|capitalize }}</option>
 								</select>
 							</template>
 
@@ -27,7 +27,7 @@
 									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
 									        v-model="transport.name">
 										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
-											{{airline.extended_name ? airline.extended_name[0].toUpperCase() + airline.extended_name.slice(1) : ''}}
+											{{ airline.extended_name|capitalize }}
 										</option>
 									</select>
 									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
@@ -72,7 +72,7 @@
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
 									        v-model="transport.name" v-validate="'required'">
-										<option :value="option" v-for="option in trainOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+										<option :value="option" v-for="option in trainOptions">{{ option|capitalize }}</option>
 									</select>
 								</template>
 								<p v-else>{{ transport.name.toUpperCase() }}</p>
@@ -90,7 +90,7 @@
 								<template v-if="editMode">
 									<select class="form-control" name="travel_methodB" id="train"
 									        v-validate="'required'" v-model="transport.name">
-										<option :value="option" v-for="option in vehicleOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}
+										<option :value="option" v-for="option in vehicleOptions">{{ option|capitalize }}
 										</option>
 									</select>
 								</template>

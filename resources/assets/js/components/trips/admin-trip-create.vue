@@ -18,10 +18,10 @@
 			</div>
 			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-				<a class="btn btn-link" @click="back()">Cancel</a>
-				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep()">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep()">Continue</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
+				<a class="btn btn-link" @click="back">Cancel</a>
+				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep">Back</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep">Continue</a>
+				<a class="btn btn-primary" v-if="wizardComplete" @click="finish">Finish</a>
 			</div>
 		</div>
 		<hr>

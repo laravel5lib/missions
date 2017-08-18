@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div style="position:relative;">
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
 
@@ -24,7 +24,7 @@
             <template v-for="cost in project.costs.data">
                 <tr>
                     <!--<td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>-->
                     <td class="text-muted">
 
@@ -32,7 +32,7 @@
                         <i class="fa fa-unlock" v-else @click="costLocking(cost, true)"></i>
                     </td>
                     <td>{{ cost.name || cost.cost }}</td>
-                    <td>{{ cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : ''}}</td>
+                    <td>{{ cost.type|capitalize }}</td>
                     <td>{{ cost.amount| currency }}</td>
                     <td>
                         <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>

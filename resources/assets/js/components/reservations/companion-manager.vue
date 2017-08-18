@@ -37,12 +37,12 @@
         </div>
         <div class="panel-body">
             <p class="text-center text-muted" v-show="companions.length < 1">No companions found.</p>
-            <div class="col-xs-12 panel panel-default" v-for="companion in companions" track-by="id">
+            <div class="col-xs-12 panel panel-default" v-for="companion in companions" :key="companion.id">
                 <h5>
                     <a href="/admin/reservations/{{ companion.id }}">
                         <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" companion.given_names ">
                         {{ companion.given_names }} {{ companion.surname }}
-                        <small> &middot; <em>{{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }}</em></small>
+                        <small> &middot; <em>{{ companion.relationship|capitalize }}</em></small>
                     </a>
                 </h5>
             </div>

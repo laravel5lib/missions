@@ -71,18 +71,18 @@
             <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country', messages: { req: 'Please select country of nationality (where you were born).'} }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value="birthCountryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" :value="birthCountryObj" :options="UTILITIES.countries" label="name"></v-select>
                     <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate="'required'">
-                        <option :value="country.code" v-for="country in countries">{{country.name}}</option>
+                        <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                     </select>
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship', messages: { req: 'Please select country of citizenship.'} }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="citizenshipObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="citizenshipObj" :options="UTILITIES.countries" label="name"></v-select>
                     <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate="'required'">
-                        <option :value="country.code" v-for="country in countries">{{country.name}}</option>
+                        <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                     </select>
                 </div>
             </div>
@@ -126,13 +126,15 @@
 
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
+    import utilities from '../../utilities.mixin';
     export default{
         name: 'passport-create-update',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         props: {
             isUpdate: {
                 type:Boolean,
@@ -149,9 +151,6 @@
         },
         data(){
             return{
-                // mixin settings
-                validatorHandle: 'CreateUpdatePassport',
-
                 given_names: '',
                 surname: '',
                 number: '',
@@ -163,7 +162,6 @@
                 userObj: null,
 
                 // logic vars
-                countries: [],
                 birthCountryObj: null,
                 citizenshipObj: null,
                 selectedAvatar: null,
@@ -202,14 +200,17 @@
                     this.showSaveAlert = true;
                     return false;
                 }
-                window.location.href = '/' + this.firstUrlSegment + '/records/passports/' + this.id;
+                window.location.href = `/${this.firstUrlSegment}/records/passports/${this.id}`;
             },
             forceBack(){
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdatePassport.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
                     this.passportResource.post(null, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -229,16 +230,14 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create passport.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
 
-                this.resetErrors();
-                if (this.$CreateUpdatePassport.valid) {
                     this.passportResource.put({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -259,7 +258,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
 
         },
@@ -276,21 +275,21 @@
             }
         },
         mounted(){
-            this.$http.get('utilities/countries').then((response) => {
-                this.countries = response.data.countries;
+            this.getCountries().then(() => {
+                if (this.isUpdate) {
+                    this.passportResource.get({ id: this.id }).then((response) => {
+                        let passport = response.data.data;
+                        $.extend(this, passport);
+
+                        this.birthCountryObj = _.findWhere(this.UTILITIES.countries, {code: passport.birth_country});
+                        this.citizenshipObj = _.findWhere(this.UTILITIES.countries, {code: passport.citizenship});
+                        this.userObj = passport.user.data;
+                        this.usersArr.push(this.userObj);
+                    });
+                }
             });
 
-            if (this.isUpdate) {
-                this.passportResource.get({ id: this.id }).then((response) => {
-                    let passport = response.data.data;
-                    $.extend(this, passport);
 
-                    this.birthCountryObj = _.findWhere(this.countries, {code: passport.birth_country});
-                    this.citizenshipObj = _.findWhere(this.countries, {code: passport.citizenship});
-                    this.userObj = passport.user.data;
-                    this.usersArr.push(this.userObj);
-                });
-            }
         }
 
     }

@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div class="panel panel-default">
         <div class="panel-heading">
             <h5>Payments Due</h5>
@@ -19,7 +19,7 @@
                     <div class="col-md-3">
                         <label>{{ due.due_at | moment('ll') }}</label>
                         <p>
-                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</span>
+                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{ due.status|capitalize }}</span>
                         </p>
                         <hr class="divider inv hidden-lg">
                     </div>

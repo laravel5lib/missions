@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
 
         <form id="UpdateGroupForm" class="form-horizontal" novalidate style="position:relative;">
@@ -98,7 +98,7 @@
                     <label for="country">Type</label>
                     <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'" required>
                         <option value="">-- please select --</option>
-                        <option :value="option" v-for="option in typeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+                        <option :value="option" v-for="option in typeOptions">{{ option|capitalize }}</option>
                     </select>
                 </div>
                 <div v-error-handler="{ value: timezone, handle: 'timezone' }">
@@ -160,7 +160,7 @@
                         <label for="url" class="control-label">Url Slug</label>
                         <div class="input-group">
                             <span class="input-group-addon">www.missions.me/</span>
-                            <input type="text" id="url" v-model="url" class="form-control" name="url" v-validate="{ required: !!public }"/>
+                            <input type="text" id="url" v-model="url" class="form-control" name="url" v-validate="!!public ? 'required' : ''"/>
                         </div>
                         <!--<span class="help-block" v-if="errors.url" v-text="errors.url"></span>-->
                     </div>

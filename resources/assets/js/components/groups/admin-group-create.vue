@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <form id="CreateGroupForm" class="form-horizontal" novalidate>
@@ -60,7 +60,7 @@
                     <label for="type">Type</label>
                     <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'" required>
                         <option value="">-- please select --</option>
-                        <option :value="option" v-for="option in typeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+                        <option :value="option" v-for="option in typeOptions">{{ option|capitalize }}</option>
                     </select>
                 </div>
             </div>
@@ -109,7 +109,7 @@
                 <div class="col-sm-10" v-error-handler="{ value: url, handle: 'url' }">
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/groups/</span>
-                        <input type="text" id="url" v-model="url" class="form-control" required name="" v-validate="{ required: !!public }"/>
+                        <input type="text" id="url" v-model="url" class="form-control" required name="" v-validate="!!public ? 'required' : ''"/>
                     </div>
                 </div>
             </div>
@@ -166,7 +166,7 @@
             }
         },
         watch: {
-            'name': (val) =>  {
+            'name'(val, oldVal) {
                 if (typeof val === 'string') {
                     // pre-populate slug
                     this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then((response) => {

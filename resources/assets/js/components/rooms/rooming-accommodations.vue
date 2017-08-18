@@ -58,7 +58,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h5>
-								{{ currentAccommodation.name ? currentAccommodation.name[0].toUpperCase() + currentAccommodation.name.slice(1) : '' }} <span> &middot; Rooms</span>
+								{{ currentAccommodation.name|capitalize }} <span> &middot; Rooms</span>
                                 <span v-if="currentAccommodation.room_types.total === currentAccommodation.rooms_count.total" class="badge text-uppercase pull-right" style="padding:3px 10px;font-size:10px;line-height:1.4;">Full</span>
 							</h5>
 						</div>
@@ -127,9 +127,9 @@
                             </span>
                             <h5>{{region.name}}</h5>
                             <span v-if="region.callsign">
-                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign ? region.callsign[0].toUpperCase() + region.callsign.slice(1) : ''"></span>
+                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
                             </span>
-                            <span class="small">{{ region.country.name ? region.country.name[0].toUpperCase() + region.country.name.slice(1) : '' }}</span>
+                            <span class="small">{{ region.country.name|capitalize }}</span>
                             <button class="btn btn-xs btn-primary pull-right" type="button" @click="selectRegion(region)">
                                 Select
                             </button>
@@ -190,13 +190,13 @@
 										<label>Rooms</label>
 										<div class="small">
 											<span v-for="(val, key, index) in accommodation.rooms_count">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 										<label>Rooms Allowed</label>
 										<div class="small">
 										<span v-for="(val, key, index) in accommodation.room_types">
-				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
+				                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
 				                        </span>
 										</div>
 									</div><!-- end col -->
@@ -265,13 +265,13 @@
 													<div class="col-xs-12">
 														<label>Groups</label><br />
 														<span v-for="(group, groupIndex) in plan.groups.data">
-								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="groupIndex != 0"> &middot; </span>{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</p>
+								                            <p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="groupIndex != 0"> &middot; </span>{{ group.name|capitalize }}</p>
 								                        </span>
 													</div>
 													<!--<div class="col-xs-12">-->
 														<!--<label>Rooms</label><br />-->
 														<!--<span v-for="(key, val) in plan.rooms_count">-->
-								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
+								                            <!--<p class="small" style="line-height:1;margin-bottom:2px;display:inline-block;"><span v-if="$index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong> <span v-if="plan.rooms_count_remaining[key] && plan.rooms_count_remaining[key] !== val">({{plan.rooms_count_remaining[key]}} left)</span></p>-->
 								                        <!--</span>-->
 													<!--</div>-->
 												</div>

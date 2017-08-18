@@ -62,8 +62,8 @@
                                                             </a>
                                                             <br />
                                                             <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
-                                                                {{ transport.type ? transport.type[0].toUpperCase() + transport.type.slice(1) : '' }}
-                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation ? transport.designation[0].toUpperCase() + transport.designation.slice(1) : ''"></span>
+                                                                {{ transport.type|capitalize }}
+                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation|capitalize"></span>
                                                             </small>
                                                         </h5>
                                                     </div>
@@ -134,7 +134,7 @@
                             <select class="form-control" id="transportType"
                                     name="type="['required']" v-model" v-validate="selectedTransport.type">
                                 <option value="">-- Select--</option>
-                                <option :value="option" v-for="option in travelTypeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+                                <option :value="option" v-for="option in travelTypeOptions">{{ option|capitalize }}</option>
                             </select>
                         </div>
 
@@ -153,7 +153,7 @@
                                 <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
                                         v-model="selectedTransport.name">
                                     <option :value="airline.name" v-for="airline in UTILITIES.airlines">
-                                        {{airline.extended_name ? airline.extended_name[0].toUpperCase() + airline.extended_name.slice(1) : ''}}
+                                        {{ airline.extended_name|capitalize }}
                                     </option>
                                 </select>
 	                            <label><input type="checkbox" v-model="manualAirlineData"> This is a chartered flight</label>
@@ -197,7 +197,7 @@
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
                                             name="train="['required']" v-model" v-validate="selectedTransport.name">
-                                        <option :value="option" v-for="option in trainOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+                                        <option :value="option" v-for="option in trainOptions">{{ option|capitalize }}</option>
                                     </select>
                             </div>
 
@@ -217,7 +217,7 @@
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
                                             name="train="['required']" v-model" v-validate="selectedTransport.name">
-                                        <option :value="option" v-for="option in vehicleOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}
+                                        <option :value="option" v-for="option in vehicleOptions">{{ option|capitalize }}
                                         </option>
                                     </select>
                             </div>

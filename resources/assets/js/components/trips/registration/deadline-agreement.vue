@@ -20,7 +20,7 @@
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 					{{cost.name}}
-					<span class="pull-right">{{'$' + cost.amount.toFixed(2)}}</span>
+					<span class="pull-right">{{currency(cost.amount)}}</span>
 				</div>
 				<div class="panel-body">
 					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
@@ -30,7 +30,7 @@
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
-								The amount of <b>{{'$' + payment.amount_owed.toFixed(2)}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
+								The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount, is due.
 							</p>
 						</div>
 					</div>
@@ -40,7 +40,7 @@
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 					{{cost.name}}
-					<span class="pull-right">{{'$' + cost.amount.toFixed(2)}}</span>
+					<span class="pull-right">{{currency(cost.amount)}}</span>
 				</div>
 				<div class="panel-body">
 					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
@@ -50,7 +50,7 @@
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
-								The amount of <b>{{'$' + payment.amount_owed.toFixed(2)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
+								The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
 								If this amount is not received by the deadline, additional costs may be applied.
 							</p>
 						</div>
@@ -61,7 +61,7 @@
 				<!-- Default panel contents -->
 				<div class="panel-heading">
 					{{cost.name}}
-					<span class="pull-right">{{'$' + cost.amount.toFixed(2)}}</span>
+					<span class="pull-right">{{currency(cost.amount)}}</span>
 				</div>
 				<div class="panel-body">
 					<p>This cost is applied to registrants after {{ toDate(cost.active_at) }}</p>
@@ -71,7 +71,7 @@
 								Deadline: {{ payment.upfront ? 'Immediately' : toDate(payment.due_at) }}
 							</h4>
 							<p class="list-group-item-text">
-								The amount of <b>{{'$' + payment.amount_owed.toFixed(2)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
+								The amount of <b>{{currency(payment.amount_owed)}}</b>, {{payment.percent_owed}}&percnt; of the total amount is due.
 							</p>
 						</div>
 					</div>

@@ -44,7 +44,7 @@
 											<div class="media-body" style="vertical-align:middle;">
 												<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 													<i :class="getGenderStatusIcon(passenger.reservation.data)"></i>
-													<a :href="'/admin/reservations/' + passenger.reservation.data.id" target="_blank">{{ passenger.reservation.data.surname ? passenger.reservation.data.surname[0].toUpperCase() + passenger.reservation.data.surname.slice(1) : '' }}, {{ passenger.reservation.data.given_names ? passenger.reservation.data.given_names[0].toUpperCase() + passenger.reservation.data.given_names.slice(1) : '' }}</a></h6>
+													<a :href="'/admin/reservations/' + passenger.reservation.data.id" target="_blank">{{ passenger.reservation.data.surname|capitalize }}, {{ passenger.reservation.data.given_names|capitalize }}</a></h6>
 												<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ passenger.reservation.data.desired_role.name }} <span class="text-muted">&middot; {{ passenger.reservation.data.trip.data.group.data.name}}</span></p>
 											</div><!-- end media-body -->
 										</div><!-- end media -->
@@ -65,9 +65,9 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<label>Gender</label>
-										<p class="small">{{passenger.reservation.data.gender ? passenger.reservation.data.gender[0].toUpperCase() + passenger.reservation.data.gender.slice(1) : ''}}</p>
+										<p class="small">{{ passenger.reservation.data.gender|capitalize }}</p>
 										<label>Marital Status</label>
-										<p class="small">{{passenger.reservation.data.status ? passenger.reservation.data.status[0].toUpperCase() + passenger.reservation.data.status.slice(1) : ''}}</p>
+										<p class="small">{{ passenger.reservation.data.status|capitalize }}</p>
 									</div><!-- end col -->
 									<div class="col-sm-6">
 										<label>Age</label>
@@ -82,15 +82,15 @@
 										<ul class="list-unstyled" v-if="passenger.reservation.data.companions.data.length">
 											<li v-for="companion in passenger.reservation.data.companions.data">
 												<i :class="getGenderStatusIcon(companion)"></i>
-												{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }}
-												<span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
+												{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
+												<span class="text-muted">({{ companion.relationship|capitalize }})</span>
 											</li>
 										</ul>
 										<p class="small" v-else>None</p>
 									</div>
 									<div class="col-sm-6">
 										<label>Trip Type</label>
-										<p class="small">{{passenger.reservation.data.trip.data.type ? passenger.reservation.data.trip.data.type[0].toUpperCase() + passenger.reservation.data.trip.data.type.slice(1) : ''}}</p>
+										<p class="small">{{ passenger.reservation.data.trip.data.type|capitalize }}</p>
 									</div>
 									<div class="col-sm-6">
 										<label>Designation</label>
@@ -148,7 +148,7 @@
 														<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 															<i :class="getGenderStatusIcon(reservation)"></i>
 															<a :href="'/admin/reservations/' + reservation.id" target="_blank">
-																{{ reservation.surname ? reservation.surname[0].toUpperCase() + reservation.surname.slice(1) : '' }}, {{ reservation.given_names ? reservation.given_names[0].toUpperCase() + reservation.given_names.slice(1) : '' }}</a></h6>
+																{{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}</a></h6>
 														<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 													</div><!-- end media-body -->
 												</div><!-- end media -->
@@ -170,9 +170,9 @@
 										<div class="row">
 											<div class="col-sm-6">
 												<label>Gender</label>
-												<p class="small">{{reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''}}</p>
+												<p class="small">{{ reservation.gender|capitalize }}</p>
 												<label>Marital Status</label>
-												<p class="small">{{reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''}}</p>
+												<p class="small">{{ reservation.status|capitalize }}</p>
 											</div><!-- end col -->
 											<div class="col-sm-6">
 												<label>Age</label>
@@ -185,18 +185,18 @@
 												<ul class="list-unstyled" v-if="reservation.companions.data.length">
 													<li v-for="companion in reservation.companions.data">
 														<i :class="getGenderStatusIcon(companion)"></i>
-														{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }} <span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
+														{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }} <span class="text-muted">({{ companion.relationship|capitalize }})</span>
 													</li>
 												</ul>
 												<p class="small" v-else>None</p>
 											</div>
 											<div class="col-sm-6">
 												<label>Trip Type</label>
-												<p class="small">{{reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : ''}}</p>
+												<p class="small">{{ reservation.trip.data.type|capitalize }}</p>
 											</div>
 											<div class="col-sm-6">
 												<label>Designation</label>
-												<p class="small">{{reservation.arrival_designation ? reservation.arrival_designation[0].toUpperCase() + reservation.arrival_designation.slice(1) : ''}}</p>
+												<p class="small">{{ reservation.arrival_designation|capitalize }}</p>
 											</div>
 										</div><!-- end row -->
 									</div>

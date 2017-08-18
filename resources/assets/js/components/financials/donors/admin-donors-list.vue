@@ -335,54 +335,54 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     console.log(val);
                     this.pagination.current_page = 1;
                     this.searchDonors();
                 },
                 deep: true
             },
-            'campaignObj': (val) =>  {
+            'campaignObj'(val, oldVal) {
                 this.filters.campaign = val ? val.id : '';
                 this.searchDonors();
             },
-            'causeObj': (val) =>  {
+            'causeObj'(val, oldVal) {
                 this.filters.cause = val ? val.id : '';
                 this.searchDonors();
             },
-            'tripObj': (val) =>  {
+            'tripObj'(val, oldVal) {
                 this.filters.trip = val ? val.id : '';
                 this.searchDonors();
             },
-            'projectObj': (val) =>  {
+            'projectObj'(val, oldVal) {
                 this.filters.project = val ? val.id : '';
                 this.searchDonors();
             },
-            'userObj': (val) =>  {
+            'userObj'(val, oldVal) {
                 this.filters.userAccount = val ? val.id : '';
                 this.searchDonors();
             },
-            'groupObj': (val) =>  {
+            'groupObj'(val, oldVal) {
                 this.filters.group = val ? val.id : '';
                 this.searchDonors();
             },
-            'groupAccountObj': (val) =>  {
+            'groupAccountObj'(val, oldVal) {
                 this.filters.groupAccount = val ? val.id : '';
                 this.searchDonors();
             },
-            'reservationObj': (val) =>  {
+            'reservationObj'(val, oldVal) {
                 this.filters.reservation = val ? val.id : '';
                 this.searchDonors();
             },
-            'direction': (val) =>  {
+            'direction'(val, oldVal) {
                 this.searchDonors();
             },
-            'tagsString': (val) =>  {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchDonors();
             },
-            'activeFields': (val, oldVal) =>  {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -390,12 +390,12 @@
                 }
                 this.putConfig();
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchDonors();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchDonors();
             },
 

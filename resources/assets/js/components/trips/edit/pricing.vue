@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
 
@@ -73,7 +73,7 @@
 																	<input type="number" number id="newCost_amount"
 																		   class="form-control"
 																		   v-model="newCost.amount"
-																		   name="costAmount" v-validate="{required: true, min: 1}">
+																		   name="costAmount" v-validate="'required|min:1'">
 																</div>
 															</div>
 														</div>
@@ -101,7 +101,7 @@
 										</div>
 										<div class="col-sm-6">
 											<ul class="list-unstyled">
-												<li>{{cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : ''}}</li>
+												<li>{{ cost.type|capitalize }}</li>
 												<li>{{cost.active_at|moment}}</li>
 												<li>{{cost.amount|currency}}</li>
 											</ul>
@@ -167,7 +167,7 @@
 															<input id="amountOwed" class="form-control" type="number"
 																   :max="calculateMaxAmount(cost)" number
 																   v-model="newPayment.amount_owed"
-																   name="amount" v-validate="{required: true, min: 0.01}"
+																   name="amount" v-validate="'required|min_value:0.0.1'"
 																   debounce="100">
 														</div>
 													</div>
@@ -177,7 +177,7 @@
 															<input id="percentOwed" class="form-control" type="number"
 																   number :max="calculateMaxPercent(cost)"
 																   v-model="newPayment.percent_owed.toFixed(2)"
-																   name="percent" v-validate="{required: true, min: 0.01}"
+																   name="percent" v-validate="'required|min_value:0.0.1'"
 																   debounce="100">
 															<span class="input-group-addon"><i
 																	class="fa fa-percent"></i></span>
@@ -289,7 +289,7 @@
 		 costs
 		 },*/
 		watch: {
-			'newPayment.amount_owed': (val, oldVal) =>  {
+			'newPayment.amount_owed'(val, oldVal) {
 				var max = this.calculateMaxAmount(this.selectedCost);
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
@@ -297,7 +297,7 @@
 				if (_.isFunction(this.$validate))
 					this.$validate('percent', true);
 			},
-			'newPayment.percent_owed': (val, oldVal) =>  {
+			'newPayment.percent_owed'(val, oldVal) {
 				var max = this.calculateMaxPercent(this.selectedCost);
 				if (val > max)
 					this.newPayment.percent_owed = max;
@@ -305,7 +305,7 @@
 				if (_.isFunction(this.$validate))
 					this.$validate('amount', true);
 			},
-			'costs': (val, oldVal) =>  {
+			'costs'(val, oldVal) {
 				this.checkCostsErrors();
 			}
 		},

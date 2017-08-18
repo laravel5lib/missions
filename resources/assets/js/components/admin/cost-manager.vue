@@ -35,7 +35,7 @@
             <div class="panel-body" :class="{ 'panel-warning': costsErrors[index] != false, 'panel-success': costsErrors[index] === false }">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h4>{{ cost.name ? cost.name[0].toUpperCase() + cost.name.slice(1) : '' }}</h4>
+                        <h4>{{ cost.name|capitalize }}</h4>
                     </div>
                     <div class="col-sm-6 text-right hidden-xs">
                         <div style="padding: 0;">
@@ -65,7 +65,7 @@
                 <div class="row">
                     <div class="col-sm-4 text-center">
                         <label>Cost Type</label>
-                        <p>{{ cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : '' }}</p>
+                        <p>{{ cost.type|capitalize }}</p>
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Active Date</label>
@@ -286,25 +286,25 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.searchCosts();
                 },
                 deep: true
             },
 
-            'search': (val) =>  {
+            'search'(val, oldVal) {
                 this.searchCosts();
             },
 
-            'showEditModal': (val, oldVal) =>  {
+            'showEditModal'(val, oldVal) {
                 this.$nextTick(() =>  {
                     if (val !== oldVal && val === false) {
                         this.selectedCost = null;
                     }
                 })
             },
-            'showDeleteModal': (val, oldVal) =>  {
+            'showDeleteModal'(val, oldVal) {
                 this.$nextTick(() =>  {
                     // overide modal close issue
                     if (val !== oldVal && val === false) {

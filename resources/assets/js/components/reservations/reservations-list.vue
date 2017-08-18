@@ -94,18 +94,18 @@
                                 <a :href="'/dashboard/reservations/' + reservation.id" class="list-group-item" v-for="reservation in reservations">
                                     <div class="row">
                                         <div class="col-sm-3">
-                                            {{ reservation.surname ? reservation.surname[0].toUpperCase() + reservation.surname.slice(1) : '' }}, {{ reservation.given_names ? reservation.given_names[0].toUpperCase() + reservation.given_names.slice(1) : '' }}<br>
+                                            {{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}<br>
                                             <label>{{ reservation.desired_role.name }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            {{ reservation.trip.data.campaign.data.name ? reservation.trip.data.campaign.data.name[0].toUpperCase() + reservation.trip.data.campaign.data.name.slice(1) : '' }}<br>
-                                            <label>{{ reservation.trip.data.country_name ? reservation.trip.data.country_name[0].toUpperCase() + reservation.trip.data.country_name.slice(1) : '' }}</label>
+                                            {{ reservation.trip.data.campaign.data.name|capitalize }}<br>
+                                            <label>{{ reservation.trip.data.country_name|capitalize }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
-                                            {{ reservation.trip.data.group.data.name ? reservation.trip.data.group.data.name[0].toUpperCase() + reservation.trip.data.group.data.name.slice(1) : '' }}<br>
-                                            <label>{{ reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : '' }}</label>
+                                            {{ reservation.trip.data.group.data.name|capitalize }}<br>
+                                            <label>{{ reservation.trip.data.type|capitalize }}</label>
                                             <hr class="divider inv sm visible-xs">
                                         </div><!-- end col -->
                                         <div class="col-sm-3">
@@ -260,31 +260,31 @@
             }
         },
         watch: {
-            'layout': (val, oldVal) =>  {
+            'layout'(val, oldVal) {
                 if (val !== oldVal && !this.startUp)
                     this.putConfig();
             },
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     if (this.startUp)
                         return;
                     this.putConfig();
                 },
                 deep: true
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getReservations();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging'(val, oldVal) {
                 if (val !== oldVal && !this.startUp) {
                     this.putConfig();
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 if (this.startUp)
                     return;
                 this.putConfig();

@@ -55,7 +55,7 @@
                 <div class="list-group">
                     <div class="list-group-item" role="tab" :id="'heading-' + donor.id" v-for="donor in donors">
                         <h5>
-                            {{ donor.name }} <span class="small">donated <span class="text-success">{{'$' + donor.total_donated.toFixed(2)}}</span></span>
+                            {{ donor.name }} <span class="small">donated <span class="text-success">{{currency(donor.total_donated)}}</span></span>
                         </h5>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                         <nav>
                             <ul class="pagination pagination-sm">
                                 <li>
-                                    <a>{{ donorPagination.total }} {{ activeView ? activeView[0].toUpperCase() + activeView.slice(1) : '' }}s</a>
+                                    <a>{{ donorPagination.total }} {{ activeView|capitalize }}s</a>
                                 </li>
                                 <li :class="{ 'disabled': donorPagination.current_page == 1 }">
                                     <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">
@@ -88,7 +88,7 @@
                     <div class="list-group-item" role="tab" :id="'heading' + transaction.id" v-for="transaction in transactions">
                         <div class="row">
                             <div class="col-sm-6">
-                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ '$' + transaction.amount.toFixed(2) }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
+                                <h5><span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{ currency(transaction.amount) }}</span><span class="small"> &middot; {{ transaction.type.toUpperCase() }}</span>
                                 <small v-if="contains(['donation'], transaction.type)" class="small">by
                                 <span v-if="!transaction.anonymous">{{ transaction.donor.data.name }}</span>
                                 <span v-else>an anonymous donor</span>
@@ -172,10 +172,10 @@
             }
         },
         watch: {
-            'donorPagination.current_page': (val, oldVal) =>  {
+            'donorPagination.current_page'(val, oldVal) {
                 this.searchDonors();
             },
-            'pagination.current_page': (val, oldVal) =>  {
+            'pagination.current_page'(val, oldVal) {
                 this.searchTransactions(this.type);
             },
         },

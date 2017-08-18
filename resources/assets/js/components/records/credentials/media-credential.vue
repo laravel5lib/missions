@@ -8,7 +8,7 @@
         </a>
         <hr class="divider lg">
         <p class="small">
-            <b>LAST UPDATED:</b> {{credential.putd_at|moment('lll')}}
+            <b>LAST UPDATED:</b> {{credential.updated_at|moment('lll')}}
         </p>
     </div>
 </template>

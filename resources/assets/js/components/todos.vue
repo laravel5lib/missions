@@ -160,17 +160,17 @@
             }
         },
         watch : {
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.fetch();
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             },
-            'filterBy': (val, oldVal) =>  {
+            'filterBy'(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             }

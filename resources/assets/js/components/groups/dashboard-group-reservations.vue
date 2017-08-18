@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
 					<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
@@ -186,6 +186,7 @@
 </style>
 <script type="text/javascript">
 	import _ from 'underscore';
+	import $ from 'jquery';
 	import vSelect from "vue-select";
 	export default {
         name: 'dashboard-group-reservations',
@@ -256,38 +257,38 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: (val) =>  {
+				handler(val, oldVal) {
 					// console.log(val);
 					this.searchReservations();
 				},
 				deep: true
 			},
-        	'campaignObj': (val) =>  {
+        	'campaignObj'(val, oldVal) {
 				this.filters.campaign = val ? val.id : '';
 			},
-			'shirtSizeArr': (val) =>  {
+			'shirtSizeArr'(val, oldVal) {
 				this.filters.shirtSize = _.pluck(val, 'id')||'';
 			},
-			'groupsArr': (val) =>  {
+			'groupsArr'(val, oldVal) {
 				this.filters.groups = _.pluck(val, 'id')||'';
 				this.searchReservations();
 			},
-			'usersArr': (val) =>  {
+			'usersArr'(val, oldVal) {
 				this.filters.user = _.pluck(val, 'id')||'';
 				this.searchReservations();
 			},
-			'tagsString': (val) =>  {
+			'tagsString'(val, oldVal) {
 				let tags = val.split(/[\s,]+/);
 				this.filters.tags = tags[0] !== '' ? tags : '';
 				this.searchReservations();
 			},
-			'ageMin': (val) =>  {
+			'ageMin'(val, oldVal) {
 				this.searchReservations();
 			},
-			'ageMax': (val) =>  {
+			'ageMax'(val, oldVal) {
 				this.searchReservations();
 			},
-        	'activeFields': (val, oldVal) =>  {
+        	'activeFields'(val, oldVal) {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
         			// default to first visible field
@@ -295,16 +296,16 @@
 				}
 				this.putConfig();
 			},
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
 				this.putConfig();
 				this.page = 1;
-                this.searchReservations();
+
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
 				this.putConfig();
 				this.searchReservations();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
 				this.putConfig();
 				this.searchReservations();
             },
@@ -313,6 +314,9 @@
 			}
         },
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.searchReservations();
+            }, 250),
 			consoleCallback (val) {
 				console.dir(JSON.stringify(val))
 			},

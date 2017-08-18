@@ -79,12 +79,12 @@
                     <div class="col-sm-6">
                         <label>Rooms</label><br />
                         <span v-for="(val, key, index) in plan.rooms_count">
-                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
                         </span>
                         <br />
                         <label>Rooms Allowed</label><br />
                         <span v-for="(val, key, index) in plan.room_types">
-                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: <strong>{{val}}</strong></p>
+                            <p style="line-height:1;font-size:11px;margin-bottom:2px;display:inline-block;"><span v-if="index != 0"> &middot; </span>{{ key|capitalize }}: <strong>{{val}}</strong></p>
                         </span>
                         <p>
                             <hr class="divider sm">
@@ -132,7 +132,7 @@
 							          :value="selectedNewPlan.groups" :options="groupsOptions" label="name"
 							          placeholder="Assign Travel Groups"></v-select>
 							<select class="hidden" v-model="selectedNewPlan.groups" multiple name="teamgroup" v-validate="'required'">
-								<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
+								<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
 							</select>
 						</div>
 
@@ -168,7 +168,7 @@
 							          :value="selectedPlanSettings.groups" :options="groupsOptions" label="name"
 							          placeholder="Assign Travel Groups"></v-select>
 							<select class="hidden" v-model="selectedPlanSettings.groups" multiple name="teamgroup" v-validate="'required'">
-								<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
+								<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
 							</select>
 						</div>
 

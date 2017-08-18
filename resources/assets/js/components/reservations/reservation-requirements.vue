@@ -6,7 +6,7 @@
             </div>
             <div class="col-xs-6 tour-step-search">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for requirements">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for requirements">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                                     </a> {{ requirement.name }}
                                     <span class="label" :class="statusLabel(requirement.status)">
                                         <i class="fa" :class="statusIcon(requirement.status)"></i>
-                                        <span class="hidden-xs"> {{ requirement.status ? requirement.status[0].toUpperCase() + requirement.status.slice(1) : '' }}</span>
+                                        <span class="hidden-xs"> {{ requirement.status|capitalize }}</span>
                                     </span>
                                 </h5>
                             </div>
@@ -50,11 +50,12 @@
                                           :requirement-id="requirement.id"
                                           :requirement="requirement"
                                           :user-id="userId"
+                                          @set-status="handleStatus"
                                           :locked="isLocked">
                         </document-manager>
                     </div>
                     <div class="panel-footer">
-                        <label>Last Updated: {{ requirement.putd_at | moment('lll') }}</label>
+                        <label>Last Updated: {{ requirement.updated_at | moment('lll') }}</label>
                     </div>
                 </div>
             </div>
@@ -101,6 +102,7 @@
     </section>
 </template>
 <script>
+    import _ from 'underscore';
     import documentManager from './document-manager.vue';
     export default{
         components: {
@@ -141,14 +143,13 @@
             }
         },
         watch: {
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
+            },
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'page': (val, oldVal) =>  {
-                this.fetch();
-            },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.fetch();
             }
         },
@@ -167,6 +168,9 @@
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.fetch();
+            }, 250),
             checkForEditRequirementError(field) {
                 // if user clicked submit button while the field is invalid trigger error styles
                 return this.$EditRequirement[field].invalid && this.attemptSubmit;
@@ -228,17 +232,24 @@
                     this.$root.$emit('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });
+            },
+            handleStatus(requirement) {
+                var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
+                if (index !== -1) {
+                    this.requirements[index].status = requirement.status;
+                    this.requirements[index].updated_at = requirement.updated_at;
+                }
             }
         },
-        events: {
+        /*events: {
             'set-status': function(requirement) {
                 var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
                 if (index !== -1) {
                   this.requirements[index].status = requirement.status;
-                  this.requirements[index].putd_at = requirement.putd_at;
+                  this.requirements[index].updated_at = requirement.updated_at;
                 }
             }
-        },
+        },*/
         mounted() {
             this.fetch();
         }

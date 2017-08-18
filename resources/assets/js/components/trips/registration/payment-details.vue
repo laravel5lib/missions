@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
 			<h4>Payment Details</h4>
@@ -133,7 +133,7 @@
 											<div class="input-group">
 												<span class="input-group-addon input-sm"><span class="fa fa-lock"></span></span>
 												<input type="text" class="form-control input-sm" id="cardNumber" placeholder="Valid Card Number"
-													   v-model="cardNumber" name="cardNumber" v-validate="{ required: true, maxlength: 19 }"
+													   v-model="cardNumber" name="cardNumber" v-validate="'required|max:19'"
 													   @keyup="formatCard($event)" maxlength="19"/>
 											</div>
 											<span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
@@ -165,7 +165,7 @@
 											<label for="cvCode">
 												CV CODE</label>
 											<input type="text" class="form-control input-sm" id="cvCode" maxlength="4" v-model="cardCVC"
-												   placeholder="CV" name="code" v-validate="{ required: true, minlength: 3, maxlength: 4 }"/>
+												   placeholder="CV" name="code" v-validate="'required|min:3|max:4'"/>
 										</div>
 									</div>
 								</div>
@@ -276,7 +276,7 @@
 			'VueStripe::reset-form': () =>  {
 				return this.resetCaching();
 			},
-            'payment-complete': (val) =>  {
+            'payment-complete'(val, oldVal) {
 			    if (this.$parent.paymentErrors.length > 0) {
                     this.$parent.detailsConfirmed = val;
 //                this.$dispatch('payment-complete', val)

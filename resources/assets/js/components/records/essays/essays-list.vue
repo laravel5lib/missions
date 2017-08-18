@@ -9,7 +9,7 @@
                     </label>
                 </div>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
                 <template v-if="canExport()">
@@ -52,7 +52,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{essay.putd_at|moment('lll')}}</p>
+                            <p class="small">{{essay.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
@@ -82,6 +82,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default{
@@ -134,11 +135,11 @@
             }
         },
         watch:{
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchEssays();
+//                this.searchEssays();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchEssays();
             }
@@ -148,7 +149,7 @@
                 return this.firstUrlSegment == 'admin';
             },
             setEssay(essay) {
-                this.$dispatch('set-document', essay);
+                this.$emit('set-document', essay);
             },
             removeEssay(essay){
                 if(essay) {
@@ -160,6 +161,9 @@
                     });
                 }
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchEssays()
+            }, 250),
             searchEssays(){
                 let params = {user: this.userId, subject: 'Testimony', sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)

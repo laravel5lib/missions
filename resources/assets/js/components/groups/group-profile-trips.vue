@@ -8,17 +8,17 @@
         <div class="col-md-4 col-md-offset-0 col-sm-6 col-sm-offset-0 col-xs-12" v-for="trip in trips" style="min-height: 500px;">
             <div class="panel panel-default">
                 <div class="panel-heading" :class="'panel-' + trip.type">
-                    <h5 class="text-uppercase text-center">{{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }}</h5>
+                    <h5 class="text-uppercase text-center">{{ trip.type|capitalize }}</h5>
                 </div>
                 <div class="panel-body text-center">
-                    <p class="badge">{{ trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : '' }}</p><br>
+                    <p class="badge">{{ trip.status|capitalize }}</p><br>
                     <h4>{{ trip.campaign.data.name }}</h4>
                     <p class="small">{{ trip.country_name }}</p>
                     <label>Travel Dates</label>
                     <p class="small">{{ trip.started_at|moment('MMMM DD', false, true) }} - {{ trip.ended_at|moment('LL', false, true) }}</p>
                     <label>Perfect For</label>
                     <p class="small"><span v-for="(prospect, index) in limitedProspects(trip.prospects, 3)">
-                                {{ prospect ? prospect[0].toUpperCase() + prospect.slice(1) : '' }}<span v-show="index + 1 != trip.prospects.length">, </span>
+                                {{ prospect|capitalize }}<span v-show="index + 1 != trip.prospects.length">, </span>
                     </span><span v-show="trip.prospects.length > 3">...</span></p>
                     <label>Spots Available</label>
                     <p>{{ trip.spots }}</p>
@@ -31,6 +31,7 @@
 </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     export default{
         name: 'group-profile-trips',
         props: ['id'],
@@ -46,14 +47,9 @@
             }
         },
         mounted(){
-            // this.$refs.spinner.show();
             this.resource.query().then((trips) =>{
                 this.trips = trips.data.data
-                // this.$refs.spinner.hide();
-            }, (error) =>  {
-                // this.$refs.spinner.hide();
-                //TODO add error alert
-            }).then(() => {
+            }, this.$root.handleApiError).then(() => {
                 $('[data-toggle="tooltip"]').tooltip();
             });
         }

@@ -50,11 +50,11 @@
             <div class="col-md-4 col-sm-12 panel panel-default text-center">
                 <div class="panel-body">
                     <label>Start Date</label>
-                    <p>{{ campaign.started_at | moment('ll') false true }}</p>
+                    <p>{{ campaign.started_at | moment('ll', false, true) }}</p>
 
                     <hr class="divider">
                     <label>End Date</label>
-                    <p>{{ campaign.ended_at | moment('ll') false true }}</p>
+                    <p>{{ campaign.ended_at | moment('ll', false, true) }}</p>
   
                     <hr class="divider">
                     <label>Created At</label>
@@ -62,7 +62,7 @@
        
                     <hr class="divider">
                     <label>Updated At</label>
-                    <p>{{ campaign.putd_at | moment('lll') }}</p>
+                    <p>{{ campaign.updated_at | moment('lll') }}</p>
           			
           			<div v-if="campaign.published_at">
                     	<hr class="divider">
@@ -81,12 +81,12 @@
 		props: ['campaignId'],
 		data(){
 			return {
-				campaign: {}
+				campaign: {},
+                resource: this.$resource('campaigns{/id}', {'include': 'trips.group'})
 			}
 		},
 		created(){
-			let resource = this.$resource('campaigns{/id}', {'include': 'trips.group'});
-			resource.get({id: this.campaignId}).then((response) => {
+			this.resource.get({id: this.campaignId}).then((response) => {
 				this.campaign = response.data.data;
 			});
 		}

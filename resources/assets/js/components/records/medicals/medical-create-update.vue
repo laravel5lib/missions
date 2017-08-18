@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template>
     <div>
         <form id="CreateUpdateMedicalRelease" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -346,6 +346,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     import _ from 'underscore';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
@@ -475,7 +476,7 @@
                             diagnosed: false,
                             selected: true
                         };
-                        jQuery('#newCondition').collapse();
+                        $('#newCondition').collapse();
                         break;
                     case 'allergy':
                         this.newAllergy = {
@@ -484,7 +485,7 @@
                             diagnosed: false,
                             selected: true
                         };
-                        jQuery('#newAllergy').collapse();
+                        $('#newAllergy').collapse();
                         break;
                 }
             },
@@ -493,8 +494,12 @@
                 this.allergies = _.where(_.union(this.allergiesList, this.additionalAllergiesList), { selected: true });
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateMedicalRelease.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
+
                     this.prepArrays();
                     this.resource.post(null, {
                         name: this.name,
@@ -516,16 +521,14 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create medical release.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-                
-                this.resetErrors();
-                if (this.$CreateUpdateMedicalRelease.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
+
                     this.prepArrays();
                     this.resource.put({id:this.id, include: 'uploads'}, {
                         name: this.name,
@@ -547,7 +550,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
             confirmUploadRemoval(upload){
                 this.uploads.$remove(upload);

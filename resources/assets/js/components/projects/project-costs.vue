@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <div class="row">
@@ -108,7 +108,7 @@
             }
         },
         watch: {
-            'temporaryCosts': (val) =>  {
+            'temporaryCosts'(val, oldVal) {
                 //debugger;
             }
         },

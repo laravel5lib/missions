@@ -49,18 +49,18 @@ import passportsList from './components/records/passports/passports-list.vue';
 import essaysList from './components/records/essays/essays-list.vue';
 import influencerQuestionnairesList from './components/records/influencers/influencer-questionnaires-list.vue';
 import referralsList from './components/records/referrals/referrals-list.vue';
-// import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
-// import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
-// import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
-// import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
-// import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
-// import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
-// import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
-// import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
-// import reservationAvatar from './components/reservations/reservation-avatar.vue';
-// import reservationCosts from './components/reservations/reservation-costs.vue';
-// import reservationDues from './components/reservations/reservation-dues.vue';
-// import funding from './components/funding.vue';
+import passportCreateUpdate from './components/records/passports/passport-create-update.vue';
+import visaCreateUpdate from './components/records/visas/visa-create-update.vue';
+import medicalCreateUpdate from './components/records/medicals/medical-create-update.vue';
+import medicalCredentialCreateUpdate from './components/records/credentials/medical-credential-create-update.vue';
+import mediaCredentialCreateUpdate from './components/records/credentials/media-credential-create-update.vue';
+import essayCreateUpdate from './components/records/essays/essay-create-update.vue';
+import influencerQuestionnaireCreateUpdate from './components/records/influencers/influencer-questionnaire-create-update.vue';
+import referralCreateUpdate from './components/records/referrals/referral-create-update.vue';
+import reservationAvatar from './components/reservations/reservation-avatar.vue';
+import reservationCosts from './components/reservations/reservation-costs.vue';
+import reservationDues from './components/reservations/reservation-dues.vue';
+import funding from './components/funding.vue';
 import userSettings from './components/users/user-settings.vue';
 import userProfileCountries from './components/users/user-profile-countries.vue';
 import userProfileTripHistory from './components/users/user-profile-trip-history.vue';
@@ -68,33 +68,33 @@ import userProfileStories from './components/users/user-profile-stories.vue';
 import userProfileFundraisers from './components/users/user-profile-fundraisers.vue';
 import userProfileFundraisersDonors from './components/users/user-profile-fundraisers-donors.vue';
 import userProfileFundraisersProgress from './components/users/user-profile-fundraisers-progress.vue';
-// import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
-// import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
-// import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
-// import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
-// import notes from './components/notes.vue';
-// import todos from './components/todos.vue';
-// import userPermissions from './components/users/user-permissions.vue';
-// import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
-// import reservationRequirements from './components/reservations/reservation-requirements.vue';
-// import referralResponse from './components/referrals/referral-response.vue';
-// import sendEmail from './components/send-email.vue';
-// import reportsList from './components/reports/reports-list.vue';
-// import teamManager from './components/teams/team-manager.vue';
-// import roomingWizard from './components/rooms/rooming-wizard.vue';
-// import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
-// import teamTypeManager from './components/teams/team-type-manager.vue';
-// import regionsManager from './components/regions/regions-manager.vue';
+import groupProfileFundraisers from './components/groups/group-profile-fundraisers.vue';
+import dashboardGroupTrips from './components/groups/dashboard-group-trips.vue';
+import dashboardGroupReservations from './components/groups/dashboard-group-reservations.vue';
+import dashboardInterestsList from './components/interests/dashboard-interests-list.vue';
+import notes from './components/notes.vue';
+import todos from './components/todos.vue';
+import userPermissions from './components/users/user-permissions.vue';
+import uploadCreateUpdate from './components/uploads/admin-upload-create-update.vue';
+import reservationRequirements from './components/reservations/reservation-requirements.vue';
+import referralResponse from './components/referrals/referral-response.vue';
+import sendEmail from './components/send-email.vue';
+import reportsList from './components/reports/reports-list.vue';
+import teamManager from './components/teams/team-manager.vue';
+import roomingWizard from './components/rooms/rooming-wizard.vue';
+import roomingTypeManager from './components/rooms/rooming-type-manager.vue';
+import teamTypeManager from './components/teams/team-type-manager.vue';
+import regionsManager from './components/regions/regions-manager.vue';
 
 // admin components
-// import campaignCreate from './components/campaigns/admin-campaign-create.vue';
-// import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
-// import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
-// import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
-// import visibilityControls from './components/campaigns/visibility-controls.vue';
+import campaignCreate from './components/campaigns/admin-campaign-create.vue';
+import campaignEdit from './components/campaigns/admin-campaign-edit.vue';
+import adminCampaignsList from './components/campaigns/admin-campaigns-list.vue';
+import adminCampaignDetails from './components/campaigns/admin-campaign-details.vue';
+import visibilityControls from './components/campaigns/visibility-controls.vue';
 // import campaignTripCreateWizard from './components/trips/admin-trip-create.vue';
 // import campaignTripEditWizard from './components/trips/admin-trip-edit.vue';
-// import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
+import adminCampaignTrips from './components/campaigns/admin-campaign-trips.vue';
 // import adminGroupTrips from './components/groups/admin-group-trips-list.vue';
 // import adminTripReservations from './components/trips/admin-trip-reservations-list.vue';
 // import adminTripFacilitators from './components/trips/admin-trip-facilitators.vue';
@@ -149,10 +149,10 @@ import userProfileFundraisersProgress from './components/users/user-profile-fund
 // import transportsDetails from './components/admin/transports-details.vue';
 // import roomingAccommodations from './components/rooms/rooming-accommodations.vue';
 // import regionsAccommodations from './components/regions/regions-accommodations.vue';
-// import restoreFund from './components/financials/funds/restore-fund.vue';
+import restoreFund from './components/financials/funds/restore-fund.vue';
 
 // filter components
-// import reservationsFilters from './components/filters/reservations-filters.vue';
+import reservationsFilters from './components/filters/reservations-filters.vue';
 
 // jQuery
 window.$ = window.jQuery = require('jquery');
@@ -266,10 +266,12 @@ Vue.use(require('vue-autosize'));
 Vue.use(require('vue-truncate'));
 
 import axios from 'axios';
+let URI = require('urijs');
+let URITemplate = require('urijs/src/URITemplate');
 axios.defaults.baseURL = '/api';
 Vue.prototype.$http = axios;
 // Resource duplicate of vue-resource for axios
-// https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
+// Inspired from https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
 function Resource (url, params, actions, options) {
     let resource = {};
     actions = Object.assign({},
@@ -278,28 +280,18 @@ function Resource (url, params, actions, options) {
     );
 
     _.each(actions, (action, name) => {
-
         action = merge({url, params: Object.assign({}, params)}, options, action);
 
-        resource[name] = () => {
-            return (Vue.prototype.$http)(opts(action, arguments));
+        resource[name] = function () {
+            if (options)
+                debugger;
+            let args = opts(action, arguments);
+            return (Vue.prototype.$http)(args);
         };
     });
 
     return resource;
 }
-Resource.actions = {
-
-    get: {method: 'GET'},
-    post: {method: 'POST'},
-    save: {method: 'POST'},
-    query: {method: 'GET'},
-    update: {method: 'PUT'},
-    put: {method: 'PUT'},
-    remove: {method: 'DELETE'},
-    delete: {method: 'DELETE'}
-
-};
 function merge(target) {
     let ref = [], slice = ref.slice;
     let args = slice.call(arguments, 1);
@@ -327,22 +319,22 @@ function merger(target, source, deep) {
     }
 }
 function opts(action, args) {
-
     let options = Object.assign({}, action), params = {}, body;
-
+    // Use URI Template
+    let template = new URITemplate(options.url);
+    options.url = template.expand(args[0]);
     switch (args.length) {
 
         case 2:
-
             params = args[0];
             body = args[1];
-
             break;
 
         case 1:
-
-            if (/^(POST|PUT|PATCH)$/i.test(options.method)) {
+            if (/^(POST)$/i.test(options.method)) {
                 body = args[0];
+            } else if (/^(PUT|PATCH)$/i.test(options.method)) {
+                params = args[1];
             } else {
                 params = args[0];
             }
@@ -358,11 +350,28 @@ function opts(action, args) {
             throw 'Expected up to 2 arguments [params, body], got ' + args.length + ' arguments';
     }
 
-    options.body = body;
+    options.data = body;
     options.params = Object.assign({}, options.params, params);
+
+    // clean variables from params if used in url template
+    let usedParams = _.pluck(template.parts[1].variables, 'name');
+    _.each(usedParams, function (param) {
+        delete options.params[param]
+    });
 
     return options;
 }
+Resource.actions = {
+    get: {method: 'GET'},
+    post: {method: 'POST'},
+    save: {method: 'POST'},
+    query: {method: 'GET'},
+    update: {method: 'PUT'},
+    put: {method: 'PUT'},
+    remove: {method: 'DELETE'},
+    delete: {method: 'DELETE'}
+
+};
 // Resource END
 Vue.prototype.$resource = Resource;
 
@@ -431,15 +440,10 @@ Vue.component('datetime-input', {
             }, 0)
         }
     }
-})
+});
 
-Vue.filter('number', {
-    read: (number, decimals) => {
-        return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
-    },
-    write: function (number, numberVal, decimals) {
-        return number;
-    }
+Vue.filter('number', (number, decimals) => {
+    return isNaN(number) || number === 0 ? number : number.toFixed(decimals);
 });
 
 Vue.filter('percentage', {
@@ -536,6 +540,10 @@ Vue.filter('underscoreToSpace', (value) => {
     return value.replace(/_/g, ' ');
 });
 
+Vue.filter('capitalize', (string) => {
+    return string ? string[0].toUpperCase() + string.slice(1) : '';
+});
+
 Vue.directive('tour-guide', {
     inserted(el, binding, vnode) {
 
@@ -624,6 +632,7 @@ Vue.directive('error-handler', {
     // The `value` property expects the actual field value to stay reactive.
     // The `client` property expects the handle that the validator plugin uses for validation.
     // The `server` property expects the handle that the server request rules use for validation.
+    // The `scope` property expects a string if provided, this is used to scope field validation.
     // If the `handle` property is present, client and server properties will be set to this.
     // OPTIONAL PROPERTIES
     // The `class` property allows you to set the error class to be set during validation.
@@ -756,58 +765,58 @@ new Vue({
         fundraisersStories,
         fundraisersUploads,
         fundraiserCollection,
-        // campaignGroups,
-        // groupTrips,
-        // groupProfileTrips,
-        // groupProfileStories,
-        // groupProfileFundraisers,
-        // groupTripWrapper,
-        // groupInterestSignup,
-        // tripDetailsMissionaries,
-        // tripRegistrationWizard,
-        // reservationsList,
-        // userProjectsList,
-        // donationsList,
+        campaignGroups,
+        groupTrips,
+        groupProfileTrips,
+        groupProfileStories,
+        groupProfileFundraisers,
+        groupTripWrapper,
+        groupInterestSignup,
+        tripDetailsMissionaries,
+        tripRegistrationWizard,
+        reservationsList,
+        userProjectsList,
+        donationsList,
         actionTrigger,
         actionDropdownSelect,
         actionSelect,
         listenText,
         donate,
         // modalDonate,
-        // notes,
-        // todos,
-        // userPermissions,
-        // uploadCreateUpdate,
-        // reservationRequirements,
-        // referralResponse,
-        // sendEmail,
-        // restoreReservation,
-        // transferReservation,
-        // restoreFund,
+        notes,
+        todos,
+        userPermissions,
+        uploadCreateUpdate,
+        reservationRequirements,
+        referralResponse,
+        sendEmail,
+        restoreReservation,
+        transferReservation,
+        restoreFund,
 
         // dashboard components
-        // recordsList,
-        // passportsList,
-        // essaysList,
-        // influencerQuestionnairesList,
-        // referralsList,
-        // essayCreateUpdate,
-        // influencerQuestionnaireCreateUpdate,
-        // referralCreateUpdate,
-        // passportCreateUpdate,
+        recordsList,
+        passportsList,
+        essaysList,
+        influencerQuestionnairesList,
+        referralsList,
+        essayCreateUpdate,
+        influencerQuestionnaireCreateUpdate,
+        referralCreateUpdate,
+        passportCreateUpdate,
         visasList,
-        // visaCreateUpdate,
-        // medicalsList,
-        // medicalCredentialsList,
-        // mediaCredentialsList,
-        // medicalCreateUpdate,
-        // medicalCredentialCreateUpdate,
-        // mediaCredentialCreateUpdate,
-        // groupsList,
-        // reservationAvatar,
-        // reservationCosts,
-        // reservationDues,
-        // funding,
+        visaCreateUpdate,
+        medicalsList,
+        medicalCredentialsList,
+        mediaCredentialsList,
+        medicalCreateUpdate,
+        medicalCredentialCreateUpdate,
+        mediaCredentialCreateUpdate,
+        groupsList,
+        reservationAvatar,
+        reservationCosts,
+        reservationDues,
+        funding,
         userSettings,
         userProfileCountries,
         userProfileTripHistory,
@@ -815,26 +824,26 @@ new Vue({
         userProfileFundraisers,
         userProfileFundraisersDonors,
         userProfileFundraisersProgress,
-        // dashboardGroupTrips,
-        // dashboardGroupReservations,
-        // dashboardInterestsList,
-        // teamManager,
-        // teamTypeManager,
-        // regionsManager,
+        dashboardGroupTrips,
+        dashboardGroupReservations,
+        dashboardInterestsList,
+        teamManager,
+        teamTypeManager,
+        regionsManager,
         // regionsAccommodations,
-        // reportsList,
-        // roomingWizard,
-        // roomingTypeManager,
+        reportsList,
+        roomingWizard,
+        roomingTypeManager,
 
         // admin components
-        // campaignCreate,
-        // campaignEdit,
-        // adminCampaignsList,
-        // adminCampaignDetails,
-        // visibilityControls,
+        campaignCreate,
+        campaignEdit,
+        adminCampaignsList,
+        adminCampaignDetails,
+        visibilityControls,
         // campaignTripCreateWizard,
         // campaignTripEditWizard,
-        // adminCampaignTrips,
+        adminCampaignTrips,
         // adminGroupTrips,
         // adminTripCreateUpdate,
         // adminTripReservations,

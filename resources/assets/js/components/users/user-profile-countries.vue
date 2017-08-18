@@ -65,7 +65,7 @@
 		</modal>
 
         <modal class="text-center" v-if="isUser" :value="deleteModal" @closed="deleteModal=false" title="Remove Country Visited" :small="true">
-            <div slot="modal-body" class="modal-body text-center">Remove {{ selectedCountryRemove.name ? selectedCountryRemove.name[0].toUpperCase() + selectedCountryRemove.name.slice(1) : '' }} from your list?</div>
+            <div slot="modal-body" class="modal-body text-center">Remove {{ selectedCountryRemove.name|capitalize }} from your list?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,doRemove(selectedCountryRemove)'>Delete</button>

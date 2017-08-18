@@ -32,7 +32,7 @@
                     </label>
                 </div>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
                 <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
@@ -94,7 +94,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{passport.putd_at|moment('lll')}}</p>
+                            <p class="small">{{passport.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                 </div><!-- end panel-body -->
@@ -123,6 +123,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     export default{
@@ -193,17 +194,17 @@
         },
         watch:{
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchPassports();
                 },
                 deep: true
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchPassports();
+//                this.searchPassports();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchPassports();
             }
@@ -211,7 +212,7 @@
         },
         methods:{
             setPassport(passport) {
-              this.$dispatch('set-document', passport);
+              this.$emit('set-document', passport);
             },
             // emulate pagination
             removePassport(passport){
@@ -223,6 +224,9 @@
                     });
                 }
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchPassports()
+            }, 250),
             searchPassports(){
                 let params = {user: this.userId, sort: 'surname', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)

@@ -82,7 +82,7 @@
                                         <label for="type">Type</label>
                                         <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'" required>
                                             <option value="">-- please select --</option>
-                                            <option :value="option" v-for="option in typeOptions">{{option ? option[0].toUpperCase() + option.slice(1) : ''}}</option>
+                                            <option :value="option" v-for="option in typeOptions">{{ option|capitalize }}</option>
                                         </select>
                                     </div>
                                 </div>

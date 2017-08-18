@@ -58,7 +58,7 @@
                                 <p class="text-capitalize small" style="margin-top:2px;">{{ project.initiative.data.country.name }}</p>
                             </div><!-- end col -->
                             <label style="margin-bottom:2px;">Raised</label>
-                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ '$' + project.amount_raised.toFixed(2) }}</p>
+                            <p class="text-capitalize text-success" style="margin-top:2px;">{{ currency(project.amount_raised) }}</p>
                             <hr class="divider inv sm">
                             <a class="btn btn-sm btn-primary" :href="'/dashboard/projects/' + project.id ">View Project</a>
                         </div>
@@ -106,24 +106,24 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.getProjects();
                 },
                 deep: true
             },
-            'groupsArr': (val) =>  {
+            'groupsArr'(val, oldVal) {
                 this.filters.groups = _.pluck(val, 'id')||'';
             },
-            'causeObj': (val) =>  {
+            'causeObj'(val, oldVal) {
                 this.filters.cause = val ? val.id : '';
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getProjects();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.getProjects();
             }

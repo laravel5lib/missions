@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 
         <form id="EditUserForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -223,7 +223,7 @@
                     <div v-error-handler="{ value: gender, handle: 'gender' }">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate="{required: {rule: true}}"> Male
+                            <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate="'required'"> Male
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
@@ -234,7 +234,7 @@
                     <div v-error-handler="{ value: gender, handle: 'status' }">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="status" id="status" value="single" v-model="status" v-validate="{required: {rule: true}}"> Single
+                            <input type="radio" name="status" id="status" value="single" v-model="status" v-validate="'required'"> Single
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="status2" id="status2" value="married" v-model="status" v-validate:status> Married
@@ -322,7 +322,7 @@
                     <label for="url" class="control-label">Url Slug</label>
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/</span>
-                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="{ required: !!public }"/>
+                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="!!public ? 'required' : ''"/>
                     </div>
                 </div>
             </div>

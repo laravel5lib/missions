@@ -19,7 +19,7 @@
                     <label>Trip Type</label>
                     <select name="campaign" v-model="interest.trip_id" class="form-control" v-validate="'required'">
                         <option v-for="trip in trips" :value="trip.id">
-                            {{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }} Trip
+                            {{ trip.type|capitalize }} Trip
                         </option>
                     </select>
                 </div>

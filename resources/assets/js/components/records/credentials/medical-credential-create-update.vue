@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div style="position:relative;">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 
@@ -59,7 +59,7 @@
 								</div>
 								<div class="panel-body">
 									<label class="radio-inline" v-for="(choice, choiceIndex) in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA  " v-validate="choiceIndex === 0 ?['required'] : void 0"> {{ choice.name }}
+										<input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA  " v-validate="choiceIndex === 0 ?['required'] : void 0"> {{ choice.name }}
 									</label>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">
@@ -136,7 +136,7 @@
 								</div>
 								<div class="panel-body">
 									<span class="help-block">Please Explain:</span>
-									<textarea class="form-control" v-model="QA.a" :field="'textarea' + indexQA" v-validate="'required'"></textarea>
+									<textarea class="form-control" v-model="QA.a" :name="'textarea' + indexQA" v-validate="'required'"></textarea>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('textarea' + indexQA)">
 									<div class="errors-block"></div>
@@ -152,7 +152,7 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<select class="form-control" v-model="QA.a" :field="'select' + indexQA" v-validate="">
+									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="">
 										<option value="">-- Select Role --</option>
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>
@@ -195,7 +195,7 @@
 								</div>
 								<div class="panel-body">
 									<date-picker :model="QA.a|moment('YYYY-MM-DD')" type="date" :data-vv-name="'date' + indexQA"></date-picker>
-									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + $index" v-validate="">-->
+									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + $index" v-validate="">-->
 								</div>
 								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
 									<div class="errors-block"></div>
@@ -418,9 +418,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'CreateUpdateMedicalCredential',
-
                 applicant_name: '',
                 usersArr: [],
                 userObj: null,
@@ -569,7 +566,7 @@
         },
         watch:{
 			content: {
-                handler: (val, oldVal) =>  {
+                handler(val, oldVal) {
                     let roleObj = _.findWhere(val, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
                     if (_.isObject(this.selectedRoleObj) && this.selectedRoleObj.value !== roleObj.a) {
                         roleObj.a = this.selectedRoleObj.value;
@@ -618,7 +615,13 @@
             submit(){
                 this.resetErrors();
 //                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
-                if (this.$CreateUpdateMedicalCredential.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return;
+                    }
+
                     this.resource.post(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -636,18 +639,15 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create medical release.');
                     });
-                } else {
-                    this.showError = true;
-                    this.$root.$emit('showError', 'Please check the form.');
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return;
+                    }
 
-                this.resetErrors();
-//                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
-                if (this.$CreateUpdateMedicalCredential.valid) {
                     this.resource.put({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -665,9 +665,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                } else {
-                    this.$root.$emit('showError', 'Please check the form.');
-                }
+                });
             },
             confirmUploadRemoval(upload){
                 this.uploads.$remove(upload);
@@ -716,8 +714,8 @@
 //	                    if (checkbox.hasAttribute('checked'))
 	                        checkbox.checked = checkbox.hasAttribute('checked');
                     });
-                    self.$validate('certifications', true);
-                    self.$validate('participations', true);
+//                    self.$validate('certifications', true);
+//                    self.$validate('participations', true);
 //					debugger;
 //                  let certifications = _.findWhere(this.content, { id: 'files'})
                 });
@@ -812,12 +810,12 @@
                         //console.log(_.findWhere(credential.content, { id: 'role'}));
                         this.selectedRoleObj = _.findWhere(this.roles, { value: _.findWhere(credential.content, { id: 'role'}).a});
 
-                        this.$activateValidator();
+                        // this.$activateValidator();
                         // until uploads relationship is added...
                         // gather all uploads ids
                         // let ids = [];
                         let filesArr = _.findWhere(credential.content, { id: 'files'}).a;
-                        _.each(filesArr, function (list, index) {
+                        _.each(filesArr, (list, index) => {
 	                        _.each(list, (obj) => {
 	                            obj.type = index;
 		                        this.uploads.push(obj);
@@ -826,7 +824,7 @@
                         });
                     });
                 } else {
-                    this.$activateValidator();
+                    // this.$activateValidator();
                 }
             //});
         }

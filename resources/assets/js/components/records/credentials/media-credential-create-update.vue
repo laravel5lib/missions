@@ -32,7 +32,7 @@
 					</div>
 				</div>
 
-				<div v-for="(indexQA, QA) in content" v-show="checkConditions(QA)">
+				<div v-for="(QA, indexQA) in content" v-show="checkConditions(QA)">
 
 					<!-- start has type designation -->
 					<template v-if="QA.type">
@@ -45,7 +45,7 @@
 								</div>
 								<div class="panel-body">
 									<label class="radio-inline" v-for="choice in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="'required'"> {{ choice.name }}
+										<input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA" v-validate="'required'"> {{ choice.name }}
                                     </label>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">
@@ -79,13 +79,13 @@
 																</div>
 																<div class="col-md-10">
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyEven' + choiceIndex" v-validate="!!choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate="!!choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyEven' + choiceIndex" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyEven' + choiceIndex" v-validate value="expert" v-model="choice.proficiency"> Expert
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate value="expert" v-model="choice.proficiency"> Expert
 																	</label>
 																	<div class="errors-block"></div>
 																</div>
@@ -110,13 +110,13 @@
 																</div>
 																<div class="col-md-10">
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyOdd' + choiceIndex" v-validate="choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
+																		<input type="radio" :name="'proficiencyOdd' + choiceIndex" v-validate="choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyOdd' + choiceIndex" value="intermediate" v-model="choice.proficiency"> Intermediate
+																		<input type="radio" :name="'proficiencyOdd' + choiceIndex" value="intermediate" v-model="choice.proficiency"> Intermediate
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :field="'proficiencyOdd' + choiceIndex" value="expert" v-model="choice.proficiency"> Expert
+																		<input type="radio" :name="'proficiencyOdd' + choiceIndex" value="expert" v-model="choice.proficiency"> Expert
 																	</label>
 																	<div class="errors-block"></div>
 																</div>
@@ -153,7 +153,7 @@
 														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandEven' + choiceIndex), messages: { req: 'Please enter a brand or model name.'} }">
 															<div class="input-group">
 																<span class="input-group-addon input-sm">Brand/Model</span>
-																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandEven' + choiceIndex" v-validate="'required'">
+																<input class="form-control input-sm" type="text" v-model="choice.brand" :name="'brandEven' + choiceIndex" v-validate="'required'">
 															</div>
 															<hr class="divider md">
 														</div>
@@ -170,7 +170,7 @@
 														<div v-if="choice.value" v-error-handler="{ value: choice.brand, client: ('brandOdd' + choiceIndex), messages: { req: 'Please enter a brand or model name.'} }">
 															<div class="input-group">
 																<span class="input-group-addon input-sm">Brand/Model</span>
-																<input class="form-control input-sm" type="text" v-model="choice.brand" :field="'brandOdd' + choiceIndex" v-validate="'required'">
+																<input class="form-control input-sm" type="text" v-model="choice.brand" :name="'brandOdd' + choiceIndex" v-validate="'required'">
 															</div>
 															<hr class="divider md">
 														</div>
@@ -195,7 +195,7 @@
 								</div>
 								<div class="panel-body">
 									<span class="help-block">Please Explain:</span>
-									<textarea class="form-control" v-model="QA.a" :field="'textarea' + indexQA" v-validate=""></textarea>
+									<textarea class="form-control" v-model="QA.a" :name="'textarea' + indexQA" v-validate=""></textarea>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('textarea' + indexQA)">
 									<div class="errors-block"></div>
@@ -229,7 +229,7 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<select class="form-control" v-model="QA.a" :field="'select' + indexQA" v-validate="">
+									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="">
 										<option value="">-- Select Role --</option>
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>
@@ -272,7 +272,7 @@
 								</div>
 								<div class="panel-body">
 									<date-picker :model="QA.a|moment('YYYY-MM-DD')" type="date" v-validate="'required'" :data-vv-name="'date' + indexQA" data-vv-value-path="model"></date-picker>
-									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :field="'date' + indexQA" v-validate="''">-->
+									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + indexQA" v-validate="''">-->
 								</div>
 								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
 									<div class="errors-block"></div>
@@ -362,9 +362,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'CreateUpdateMediaCredential',
-
                 applicant_name: '',
                 usersArr: [],
                 userObj: null,
@@ -453,7 +450,7 @@
         },
         watch:{
             content: {
-                handler: (val, oldVal) =>  {
+                handler(val, oldVal) {
                     let roleObj = _.findWhere(val, {id: 'role'}); // seems unnecessary but we should not assume the order of the data
                     if (_.isObject(this.selectedRoleObj) && this.selectedRoleObj.value !== roleObj.a) {
                         roleObj.a = this.selectedRoleObj.value;
@@ -489,8 +486,11 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateMediaCredential.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
                     this.resource.post(null, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -508,16 +508,13 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create media credential.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-
-                this.resetErrors();
-                if (this.$CreateUpdateMediaCredential.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
                     this.resource.put({id:this.id, include: 'uploads'}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
@@ -535,7 +532,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
             checkConditions(question){
                 // skip files and role question
@@ -557,8 +554,8 @@
 //	                    if (checkbox.hasAttribute('checked'))
                         checkbox.checked = checkbox.hasAttribute('checked');
                     });
-                    self.$validate('certifications', true);
-                    self.$validate('participations', true);
+//                    self.$validate('certifications', true);
+//                    self.$validate('participations', true);
 //					debugger;
 //                  let certifications = _.findWhere(this.content, { id: 'files'})
                 });

@@ -98,8 +98,8 @@
             </thead>
             <tbody v-if="initiatives.length > 0">
             <tr v-for="initiative in orderByProp(initiatives, orderByField, direction)">
-                <td v-if="isActive('type')">{{initiative.type ? initiative.type[0].toUpperCase() + initiative.type.slice(1) : ''}}</td>
-                <td v-if="isActive('country')">{{initiative.country.name ? initiative.country.name[0].toUpperCase() + initiative.country.name.slice(1) : ''}}</td>
+                <td v-if="isActive('type')">{{ initiative.type|capitalize }}</td>
+                <td v-if="isActive('country')">{{ initiative.country.name|capitalize }}</td>
                 <td v-if="isActive('started_at')">{{initiative.started_at|moment('ll')}}</td>
                 <td v-if="isActive('ended_at')">{{initiative.ended_at|moment('ll')}}</td>
                 <td v-if="isActive('projects')">{{initiative.projects_count}}</td>
@@ -171,14 +171,14 @@
             }
         },
         watch: {
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.searchInitiatives();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.searchInitiatives();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchInitiatives();
             }
         },

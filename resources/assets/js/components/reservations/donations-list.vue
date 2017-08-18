@@ -4,7 +4,7 @@
 		<div class="col-sm-12">
 			<form class="form-inline text-right" novalidate>
 				<div class="input-group input-group-sm">
-					<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search (name, amount)">
+					<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search (name, amount)">
 					<span class="input-group-addon"><i class="fa fa-search"></i></span>
 				</div>
 				<div class="input-group input-group-sm">
@@ -31,7 +31,7 @@
                     <img src="http://placehold.it/64x64" style="width: 64px; height: 64px;">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading">{{ donation.name }} <small>donated</small> {{ '$' + donation.amount.toFixed(2)}} <small class="pull-right">{{ donation.created_at|moment }}</small></h4>
+                    <h4 class="media-heading">{{ donation.name }} <small>donated</small> {{ currency(donation.amount)}} <small class="pull-right">{{ donation.created_at|moment }}</small></h4>
                     <p><b>Message</b>: {{ donation.message }}</p>
                 </div>
             </div>
@@ -41,13 +41,14 @@
 </template>
 
 <script type="text/javascript">
+    import _ from 'underscore';
     export default{
         name: 'donations-list',
         props: {
             fundraiserId: String,
             donations: {
                 default: [],
-                coerce: (val) =>  {
+                coerce(val, oldVal) {
                     return JSON.parse(val);
                 }
             }
@@ -74,10 +75,13 @@
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function() {
+                this.getDonations();
+            },250),
             getDonations(){
 				// this.$refs.spinner.show();
 				this.$http.get('fundraisers.donations', { params: {
-
+					search: this.search
                 }}).then((response) => {
                     this.donations = response.data.data;
 					// this.$refs.spinner.hide();

@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
 
@@ -58,7 +58,7 @@
 																<div class="input-group input-group-sm">
 																	<span class="input-group-addon"><i class="fa fa-usd"></i></span>
 																	<input type="number" number id="newCost_amount" class="form-control"
-																		   v-model="newCost.amount" name="costAmount" v-validate="{required: true, min: 1}">
+																		   v-model="newCost.amount" name="costAmount" v-validate="'required|min:1'">
 																</div>
 															</div>
 														</div>
@@ -84,9 +84,9 @@
 										</div>
 										<div class="col-sm-6">
 											<ul class="list-unstyled">
-												<li>{{cost.type ? cost.type[0].toUpperCase() + cost.type.slice(1) : ''}}</li>
+												<li>{{ cost.type|capitalize }}</li>
 												<li>{{cost.active_at|moment()}}</li>
-												<li>{{'$' + cost.amount.toFixed(2) }}</li>
+												<li>{{currency(cost.amount) }}</li>
 											</ul>
 										</div>
 									</div>
@@ -248,7 +248,7 @@
 			costs
 		},*/
 		watch:{
-			'newPayment.amount_owed': (val, oldVal) =>  {
+			'newPayment.amount_owed'(val, oldVal) {
 				var max = this.calculateMaxAmount(this.selectedCost);
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
@@ -256,7 +256,7 @@
 				if ( _.isFunction(this.$validate) )
 					this.$validate('percent', true);
 			},
-			'newPayment.percent_owed': (val, oldVal) =>  {
+			'newPayment.percent_owed'(val, oldVal) {
 				var max = this.calculateMaxPercent(this.selectedCost);
 				if (val > max)
 					this.newPayment.percent_owed = max;
@@ -264,7 +264,7 @@
 				if ( _.isFunction(this.$validate) )
 					this.$validate('amount', true);
 			},
-			'costs': (val, oldVal) =>  {
+			'costs'(val, oldVal) {
 				this.checkCostsErrors();
 			}
 		},

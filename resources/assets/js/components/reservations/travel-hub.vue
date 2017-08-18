@@ -13,7 +13,7 @@
 								<select class="form-control hidden" name="airport" id="airport" v-validate="'required'"
 								        v-model="hub.name">
 									<option :value="airport.name" v-for="airport in UTILITIES.airports">
-										{{airport.extended_name ? airport.extended_name[0].toUpperCase() + airport.extended_name.slice(1) : ''}}
+										{{ airport.extended_name|capitalize }}
 									</option>
 									<option value="other">Other</option>
 								</select>
@@ -78,7 +78,7 @@
 								<select class="form-control hidden" name="country" id="country" v-validate="'required'"
 								        v-model="hub.country_code">
 									<option :value="country.code" v-for="country in UTILITIES.countries">
-										{{country.name ? country.name[0].toUpperCase() + country.name.slice(1) : ''}}
+										{{ country.name|capitalize }}
 									</option>
 								</select>
 								<div class="errors-block"></div>

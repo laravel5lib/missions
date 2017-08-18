@@ -5,7 +5,7 @@
             <div class="col-sm-12">
                 <form class="form-inline text-right" novalidate>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <!--<button class="btn btn-default btn-sm " type="button" @click="showFilters=!showFilters">
@@ -45,6 +45,7 @@
 
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     export default{
         name: 'dashboard-interests-list',
         props: ['groupId', 'tripId'],
@@ -62,10 +63,13 @@
         watch: {
             'search'(val) {
                 this.pagination.current_page = 1;
-                this.searchInterests();
+
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.searchInterests();
+            }, 250),
             searchInterests() {
                 // this.$refs.spinner.show();
                 this.$http.get('interests', { params: {

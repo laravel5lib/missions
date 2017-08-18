@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="panel-footer text-center">
-            <button class="btn btn-primary" @click="save()">Save</button>
+            <button class="btn btn-primary" @click="save">Save</button>
         </div>
     </div>
 </template>

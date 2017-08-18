@@ -279,7 +279,7 @@
                 <tbody>
                 <tr v-for="transaction in orderByProp(transactions, orderByField, direction)">
                     <td v-if="isActive('type')">
-                        <span class="label label-default" v-text="transaction.type ? transaction.type[0].toUpperCase() + transaction.type.slice(1) : ''"></span>
+                        <span class="label label-default" v-text="transaction.type|capitalize"></span>
                     </td>
                     <td v-if="isActive('description')" v-text="transaction.description"></td>
                     <td v-if="isActive('amount')">
@@ -399,26 +399,26 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
 //                    console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTransactions();
                 },
                 deep: true
             },
-            'donorObj': (val) =>  {
+            'donorObj'(val, oldVal) {
                 this.filters.donor = val ? val.id : '';
                 this.searchTransactions();
             },
-            'direction': (val) =>  {
+            'direction'(val, oldVal) {
                 this.searchTransactions();
             },
-            'tagsString': (val) =>  {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchTransactions();
             },
-            'activeFields': (val, oldVal) =>  {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -426,15 +426,15 @@
                 }
                 this.putConfig();
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchTransactions();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.searchTransactions();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchTransactions();
             },
 

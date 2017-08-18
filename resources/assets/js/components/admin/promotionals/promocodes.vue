@@ -31,7 +31,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="code in codes" track-by="id" transition="stagger" stagger="50">
+            <tr v-for="code in codes" :="code.id" transition="stagger" stagger="50">
                 <td><code>{{ code.code }}</code></td>
                 <td v-html="affiliate(code.rewardable)"></td>
                 <td>{{ code.use_count}} {{ pluralize(code.use_count , 'time')}}</td>
@@ -101,7 +101,7 @@
             }
         },
         watch: {
-            'options.params.search': (val, oldVal) =>  {
+            'options.params.search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.fetch();
             }

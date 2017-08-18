@@ -42,7 +42,7 @@
                     <input type="text"
                            class="form-control"
                            v-model="search"
-                           debounce="250"
+                           @keyup="debouncedSearch"
                            placeholder="Search notes by subject, author or content...">
 
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
@@ -54,11 +54,11 @@
                         <h5 class="list-group-item-heading">{{ note.subject }}
                             <br> <small>
                                 By {{ note.user.data.name }} &middot; {{ note.created_at | moment('llll') }}
-                                <span v-if="note.created_at != note.putd_at">(modified)</span>
+                                <span v-if="note.created_at != note.updated_at">(modified)</span>
                             </small>
                         </h5>
                     </div>
-                    <div class="col-xs-4 text-right" v-if="note.user.data.id == user_id">
+                    <div class="col-xs-4 text-right" v-if="note.user.data.id === user_id">
                         <button class="btn btn-xs btn-link" @click="prepareEdit(note)">
                             <i class="fa fa-pencil"></i>
                         </button>
@@ -77,7 +77,7 @@
             <div class="list-group-item text-center" v-if="pagination.per_page < pagination.total">
                 <nav>
                     <ul class="pager">
-                        <li :class="{ 'disabled': pagination.current_page == 1 }" class="previous">
+                        <li :class="{ 'disabled': pagination.current_page === 1 }" class="previous">
                             <a aria-label="Previous" @click="page=pagination.current_page-1">
                                 <span aria-hidden="true">&laquo; Newer</span>
                             </a>
@@ -105,6 +105,7 @@
 </template>
 <script>
     import $ from 'jquery';
+    import _ from 'underscore'
     export default{
         name: 'notes',
         props: {
@@ -148,17 +149,16 @@
             }
         },
         watch : {
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.fetch();
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
-                this.fetch();
             },
-            'id': (val, oldVal) =>  {
+            'id'(val, oldVal) {
                 this.selectedNote.noteable_id = val;
                 this.fetch();
             }
@@ -169,6 +169,9 @@
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.fetch();
+            }, 250),
             prepareNew() {
                 this.newMode = ! this.newMode;
                 this.editMode = false;

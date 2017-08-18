@@ -12,7 +12,7 @@
 						</div>
 					</div>
 					<div class="input-group input-group-sm">
-						<input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+						<input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
 						<span class="input-group-addon"><i class="fa fa-search"></i></span>
 					</div>
 					<export-utility url="campaigns/export"
@@ -50,7 +50,7 @@
 					<td>
 						<i class="fa" :class="{ 'fa-calendar':campaign.status === 'Scheduled', 'fa-check':campaign.pencil === 'Draft', 'fa-check':campaign.status === 'Published' }"></i> {{ campaign.status }}
 					</td>
-					<td class="text-center"><a href="/admin/campaigns/{{ campaign.id }}"><i class="fa fa-gear"></i></a>
+					<td class="text-center"><a :href="'/admin/campaigns/' + campaign.id"><i class="fa fa-gear"></i></a>
 					</td>
 				</tr>
 				</tbody>
@@ -66,6 +66,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
     import vSelect from "vue-select";
     import exportUtility from '../export-utility.vue';
   	import importUtility from '../import-utility.vue';
@@ -119,16 +120,19 @@
         }
     },
 		watch: {
-			'per_page': (val, oldVal) =>  {
+			'per_page'(val, oldVal) {
 				this.searchCampaigns();
 			},
-			'search': (val, oldVal) =>  {
+			'search'(val, oldVal) {
 				this.pagination.current_page = 1;
-				this.searchCampaigns();
+
 			},
 
 		},
         methods: {
+            debouncedSearch: _.debounce(function () {
+                this.searchCampaigns();
+            }, 250),
 			searchCampaigns(){
 				let params = {
 				    include: 'groups',

@@ -10,7 +10,7 @@
 						<label style="display:block" :for="'option' + $index">
 							<input type="radio" :id="'option' + $index" v-model="selectedOptions" :value="option" name="additional" v-validate="$index === 0 ? 'required' : ''">
 							{{option.name}}
-							<span class="pull-right">{{'$' + option.amount.toFixed(2)}}</span>
+							<span class="pull-right">{{currency(option.amount)}}</span>
 						</label>
 						<span class="help-block">{{option.description}}</span>
 						<hr class="divider lg">

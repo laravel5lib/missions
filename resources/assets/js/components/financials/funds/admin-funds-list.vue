@@ -175,7 +175,7 @@
             <tr v-for="fund in orderByProp(funds, orderByField, direction)">
                 <td v-if="isActive('name')" v-text="fund.name"></td>
                 <td v-if="isActive('type')">
-                    <span class="label label-default" v-text="fund.type ? fund.type[0].toUpperCase() + fund.type.slice(1) : ''"></span>
+                    <span class="label label-default" v-text="fund.type|capitalize"></span>
                 </td>
                 <td v-if="isActive('item')">
                     <code>{{ fund.item }}</code>
@@ -263,14 +263,14 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     console.log(val);
                     this.pagination.current_page = 1;
                     this.searchFunds();
                 },
                 deep: true
             },
-            'archived': (val) =>  {
+            'archived'(val, oldVal) {
                 if (val) {
                     this.filters.archived = true;
                     this.searchFunds();
@@ -279,15 +279,15 @@
                     this.searchFunds();
                 }
             },
-            'direction': (val) =>  {
+            'direction'(val, oldVal) {
                 this.searchFunds();
             },
-            'tagsString': (val) =>  {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchFunds();
             },
-            'activeFields': (val, oldVal) =>  {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -295,12 +295,12 @@
                 }
                 this.putConfig();
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchFunds();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchFunds();
             },
 

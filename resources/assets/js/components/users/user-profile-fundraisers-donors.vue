@@ -98,7 +98,7 @@
             marked: marked,
         },
         watch: {
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 
                 if (this.activeView == 'donors') {
                     this.searchDonors();
@@ -155,7 +155,7 @@
             }
         },
         mounted(){
-            this.$root.$on('Fundraiser:DisplayDonors', function (display) {
+            this.$root.$on('Fundraiser:DisplayDonors', (display) => {
                 this.display = display;
 
                 if (this.display) {

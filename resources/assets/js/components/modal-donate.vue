@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
         <div class="text-center">
         <a class="btn btn-success" data-toggle="collapse" href="#collapseDonate" aria-expanded="false" aria-controls="collapseDonate">Donate<span class="hidden-sm"> To The Cause</span></a>

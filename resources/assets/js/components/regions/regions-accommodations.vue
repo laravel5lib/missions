@@ -298,16 +298,16 @@
 											<label>Rooms</label>
 											<div class="small">
 												<ul class="list-unstyled">
-													<li v-for="(key, value) in accommodation.rooms_count">
-														{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: {{value}}
+													<li v-for="(value, key) in accommodation.rooms_count">
+														{{ key|capitalize }}: {{value}}
 													</li>
 												</ul>
 											</div>
 											<label>Rooms Allowed</label>
 											<div class="small">
 												<ul class="list-unstyled">
-													<li v-for="(key, value) in accommodation.room_types">
-														{{key ? key[0].toUpperCase() + key.slice(1) : ''}}: {{value}}
+													<li v-for="(value, key) in accommodation.room_types">
+														{{ key|capitalize }}: {{value}}
 													</li>
 												</ul>
 											</div>
@@ -384,17 +384,17 @@
                                :class="{ 'active': currentRegion && currentRegion.id === region.id}"
                                v-for="region in regions">
 								<h4 class="list-group-item-heading">
-									{{ region.name ? region.name[0].toUpperCase() + region.name.slice(1) : '' }}
+									{{ region.name|capitalize }}
 									<span class="badge pull-right" v-text="region.accommodations.data.length"></span>
 								</h4>
                                 <p>
                                     <span v-if="region.callsign">
                                         <span class="label label-default"
                                               :style="'color: #FFF !important; background-color: ' + region.callsign"
-                                              v-text="region.callsign ? region.callsign[0].toUpperCase() + region.callsign.slice(1) : ''">
+                                              v-text="region.callsign|capitalize">
                                         </span>
                                     </span>
-                                    <span class="small">{{ region.country.name ? region.country.name[0].toUpperCase() + region.country.name.slice(1) : '' }}</span>
+                                    <span class="small">{{ region.country.name|capitalize }}</span>
                                 </p>
 							</a>
 						</div>

@@ -118,7 +118,7 @@
 					<form id="PlanCreateForm">
 						<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
 							<label for="createPlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" name="planname="['required']" v-model" v-validate="selectedNewPlan.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="createPlanCallsign" placeholder="" name="planname" v-validate="'required'" v-model="selectedNewPlan.name">
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanCreate.plandesc.invalid}">
@@ -154,7 +154,7 @@
 					<form id="PlanCreateForm" class="form-horizontal">
 						<div class="form-group" :class="{'has-error': $PlanSettings.planname.invalid}">
 							<label for="updatePlanCallsign" class="control-label">Plan Name</label>
-							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" name="planname="['required']" v-model" v-validate="selectedPlanSettings.name">
+							<input @keydown.enter.prevent="" type="text" class="form-control" id="updatePlanCallsign" placeholder="" name="planname" v-validate="'required'" v-model="selectedPlanSettings.name">
 						</div>
 
 						<div class="form-group" :class="{'has-error': $PlanSettings.plandesc.invalid}">

@@ -524,7 +524,7 @@
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
 											</div>
 											<p class="list-group-item-text small" v-if="team.groups.data.length">
-												<span v-for="group in team.groups.data">{{group.name}}<span v-if="!$last && team.groups.data.length > 1">, </span></span>
+												<span v-for="group in team.groups.data">{{group.name}}<span v-if="!team.groups.data[team.groups.data.length-1] && team.groups.data.length > 1">, </span></span>
 											</p>
 										</a>
 									</ul>
@@ -707,25 +707,25 @@
 			<modal title="Create a new Squad" small ok-text="Create" :callback="newTeam" :value="showTeamCreateModal" @closed="showTeamCreateModal=false">
 				<div slot="modal-body" class="modal-body">
 
-						<form id="TeamCreateForm">
-							<div class="form-group" :class="{'has-error': $TeamCreate.teamcallsign.invalid}">
+						<form id="TeamCreateForm" data-vv-scope="team-create">
+							<div class="form-group" :class="{'has-error': errors.has('teamcallsign', 'team-create')}">
 								<label for="createTeamCallsign" class="control-label">Squad Name</label>
-								<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" name="teamcallsign="['required']" v-model" v-validate="newTeamCallSign">
+								<input @keydown.enter.prevent="newTeam" type="text" class="form-control" id="createTeamCallsign" placeholder="" name="teamcallsign" v-model="newTeamCallSign" v-validate="'required'">
 							</div>
-							<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
+							<div class="form-group" :class="{'has-error': errors.has('teamtype', 'team-create')}">
 								<label for="" class="control-label">Type</label>
 								<select class="form-control" v-model="newTeamType" name="teamtype" v-validate="'required'">
 									<option :value="type.id" v-for="type in teamTypes">{{ type.name|capitalize }}</option>
 								</select>
 							</div>
-							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
+							<div class="form-group" :class="{'has-error': errors.has('teamgroup', 'team-create')}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-										  :value="newTeamGroup" :options="groupsOptions" label="name"
+										  :value="newTeamGroup" :options="groupsOptions" label="name" name="teamgroup" v-validate="'required'"
 										  placeholder="Assign Travel Group"></v-select>
-								<select class="hidden" v-model="newTeamGroup" name="teamgroup" v-validate="'required'">
+								<!--<select class="hidden" v-model="newTeamGroup">
 									<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
-								</select>
+								</select>-->
 							</div>
 						</form>
 
@@ -755,10 +755,10 @@
 			<modal title="Create a new Group" small ok-text="Create" :callback="newSquad" :value="showSquadCreateModal" @closed="showSquadCreateModal=false">
 				<div slot="modal-body" class="modal-body">
 
-						<form id="SquadCreateForm">
-							<div class="form-group" :class="{'has-error': $SquadCreate.squadcallsign.invalid}">
+						<form id="SquadCreateForm" data-vv-scope="group-create">
+							<div class="form-group" :class="{'has-error': errors.has('squadcallsign', 'group-create')}">
 								<label for="createSquadCallsign" class="control-label">Group Name</label>
-								<input @keydown.enter.prevent="newSquad" type="text" class="form-control" id="createSquadCallsign" placeholder="" name="squadcallsign="['required']" v-model" v-validate="newSquadCallsign">
+								<input @keydown.enter.prevent="newSquad" type="text" class="form-control" id="createSquadCallsign" placeholder="" name="squadcallsign" v-model="newSquadCallsign" v-validate="'required'">
 							</div>
 						</form>
 
@@ -767,10 +767,10 @@
 			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :value="showSquadUpdateModal" @closed="showSquadUpdateModal=false">
 				<div slot="modal-body" class="modal-body">
 
-						<form id="SquadEditForm">
-							<div class="form-group" :class="{'has-error': $SquadEdit.editsquadcallsign.invalid}">
+						<form id="SquadEditForm" data-vv-scope="group-edit">
+							<div class="form-group" :class="{'has-error': errors.has('editsquadcallsign', 'group-edit')}">
 								<label for="createSquadCallsign" class="control-label">Group Name</label>
-								<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" name="editsquadcallsign="['required']" v-model" v-validate="editSquadCallsign">
+								<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" name="editsquadcallsign" v-model="editSquadCallsign" v-validate="'required'">
 							</div>
 						</form>
 
@@ -959,7 +959,7 @@
                 return _.sortBy(this.currentSquadGroups, 'callsign');
             },
 
-            currentSquadGroupsOrderedFiltred() {
+            currentSquadGroupsOrderedFiltered() {
                 return _(this.currentSquadGroups).chain().sortBy('callsign').filter((group) => {
                     return _.filter(group.members, (member) => {
                         let search = this.membersSearch;

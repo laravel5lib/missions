@@ -132,7 +132,7 @@
                         <div class="form-group" v-error-handler="{ value: selectedTransport.type, client: 'type' }">
                             <label for="transportType" class="control-label">Type</label>
                             <select class="form-control" id="transportType"
-                                    name="type="['required']" v-model" v-validate="selectedTransport.type">
+                                    name="type" v-model="selectedTransport.type" v-validate="'required'">
                                 <option value="">-- Select--</option>
                                 <option :value="option" v-for="option in travelTypeOptions">{{ option|capitalize }}</option>
                             </select>
@@ -196,7 +196,7 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            name="train="['required']" v-model" v-validate="selectedTransport.name">
+                                            name="train" v-model="selectedTransport.name" v-validate="'required'">
                                         <option :value="option" v-for="option in trainOptions">{{ option|capitalize }}</option>
                                     </select>
                             </div>
@@ -216,7 +216,7 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            name="train="['required']" v-model" v-validate="selectedTransport.name">
+                                            name="train" v-model="selectedTransport.name" v-validate="'required'">
                                         <option :value="option" v-for="option in vehicleOptions">{{ option|capitalize }}
                                         </option>
                                     </select>

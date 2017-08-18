@@ -411,7 +411,7 @@
 						<form id="PlanCreateForm">
 							<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
 								<label for="createPlanCallsign" class="control-label">Plan Name</label>
-								<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="Miami Rooming, etc." name="planname="['required']" v-model" v-validate="selectedPlan.name">
+								<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="Miami Rooming, etc." name="planname" v-model="selectedPlan.name" v-validate="'required'">
 							</div>
 						</form>
 
@@ -423,7 +423,7 @@
 						<form id="RoomCreateForm">
 							<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}" v-if="!roomModalEditMode">
 								<label for="" class="control-label">Type</label>
-								<select class="form-control" v-model="selectedRoom.type" name="roomtype="['required']" @change" v-validate="selectedRoom.room_type_id = selectedRoom.type.id">
+								<select class="form-control" v-model="selectedRoom.type" name="roomtype" v-validate="'required'" @change="selectedRoom.room_type_id = selectedRoom.type.id">
 									<option :value="type" v-for="type in roomTypes">{{ type.name|capitalize }}</option>
 								</select>
 								<hr class="divider sm">

@@ -88,7 +88,7 @@
 						<div v-if="isAdminRoute" class="form-group" v-error-handler="{ value: hub.call_sign, client: 'callsign' }">
 							<label for="">CallSign</label>
 							<template v-if="editMode">
-								<input type="text" class="form-control" v-model="hub.call_sign" name="callsign="['required']" v-if" v-validate="editMode">
+								<input type="text" class="form-control" v-model="hub.call_sign" name="callsign" v-if="editMode" v-validate="'required'">
 							</template>
 							<p v-else>{{ hub.call_sign.toUpperCase() }}</p>
 						</div>

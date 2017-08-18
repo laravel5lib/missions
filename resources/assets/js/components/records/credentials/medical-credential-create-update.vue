@@ -59,7 +59,7 @@
 								</div>
 								<div class="panel-body">
 									<label class="radio-inline" v-for="(choice, choiceIndex) in QA.options">
-										<input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA  " v-validate="choiceIndex === 0 ?['required'] : void 0"> {{ choice.name }}
+										<input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA  " v-validate="choiceIndex === 0 ?'required' : ''"> {{ choice.name }}
 									</label>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('radio' + indexQA)">

@@ -27,7 +27,7 @@
             <div class="row" v-for="(QA, indexQA) in content" v-error-handler="{ value: QA.a, client: 'question' + indexQA, messages: { req: 'Please provide an answer.'} }">
                 <div class="col-sm-12">
                     <label class="control-label" v-text="QA.q"></label>
-                    <textarea class="form-control" v-model="QA.a" rows="10" :field="'question' + indexQA" v-validate="'required'"></textarea>
+                    <textarea class="form-control" v-model="QA.a" rows="10" :name="'question' + indexQA" v-validate="'required'"></textarea>
                     <div class="errors-block"></div>
                 </div>
             </div>
@@ -69,9 +69,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'CreateUpdateEssay',
-
                 author_name: '',
                 subject: 'Testimony',
                 content: [
@@ -115,9 +112,12 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateEssay.valid) {
-                    // this.$refs.spinner.show();
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
+
                     this.resource.post({
                         author_name: this.author_name,
                         subject: this.subject,
@@ -133,17 +133,14 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create essay.')
                     });
-                } else {
-                    this.showError = true;
-                }
+                })
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
 
-                this.resetErrors();
-                if (this.$CreateUpdateEssay.valid) {
-                    // this.$refs.spinner.show();
                     this.resource.put({id: this.id}, {
                         author_name: this.author_name,
                         subject: this.subject,
@@ -159,7 +156,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
         },
         mounted(){

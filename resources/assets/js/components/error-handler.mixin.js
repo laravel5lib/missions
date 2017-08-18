@@ -46,7 +46,7 @@ export default {
             //this.attemptSubmit = true;
         },
         handleValidationClass(el, context, value) {
-            let classTest = this.errors.has(value.client) || this.SERVER_ERRORS[value.server];
+            let classTest = this.errors.has(value.client, value.scope || null) || this.SERVER_ERRORS[value.server];
             if (classTest) {
                 $(el).addClass(value.class || 'has-error');
             } else {
@@ -143,18 +143,18 @@ export default {
             let errorsBlock = el.getElementsByClassName('errors-block')[0] || false;
             if (errorsBlock) {
                 $(errorsBlock).find('.server-validation-error').remove();
-                if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client))
+                if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, value.scope || null))
                     $(errorsBlock).append(newMessages);
             } else {
                 let inputGroup = $(el).hasClass('input-group') ? el : el.getElementsByClassName('input-group')[0];
                 let inputEl = $(el).find('.form-control:not(.v-select *)');
                 if (inputGroup) {
                     $(el).parent().find('.server-validation-error').remove();
-                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client))
+                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, value.scope || null))
                         $(inputGroup).after(newMessages);
                 } else {
                     $(el).find('.server-validation-error').remove();
-                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client))
+                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, value.scope || null))
                         inputEl.after(newMessages);
                 }
             }

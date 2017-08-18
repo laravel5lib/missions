@@ -7,7 +7,7 @@
                     <div class="form-group">
                         <div class="col-sm-12 text-center">
                         	<label class="control-label">Campaign</label>
-                            <h3>{{campaign.name ? campaign.name[0].toUpperCase() + campaign.name.slice(1) : ''}}</h3>
+                            <h3>{{ campaign.name|capitalize }}</h3>
                         </div>
                     </div>
                     <div class="form-group" :class="{ 'has-error': errors.has('group') }">

@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml" xmlns:v-crop="http://www.w3.org/1999/xhtml">
+<template  xmlns:v-crop="http://www.w3.org/1999/xhtml">
 
         <form id="CreateUploadForm" class="form-horizontal" novalidate @submit="prevent" style="position:relative">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -23,7 +23,7 @@
                 <label for="type" class="col-sm-2 control-label">Type</label>
                 <div class="col-sm-10">
                     <select class="form-control" id="type" v-model="type" name="type" v-validate="'required'" disabled>
-                        <option :value="">-- select type --</option>
+                        <option value="">-- select type --</option>
                         <option value="avatar">Image (Avatar) - 1280 x 1280</option>
                         <option value="banner">Image (Banner) - 1300 x 500</option>
                         <option value="other">Image (other) - no set dimensions</option>
@@ -148,13 +148,13 @@
             }
         },
         watch: {
-            'type': (val, oldVal) =>  {
+            'type'(val, oldVal) {
                 this.typeObj = _.findWhere(this.typePaths, {type: val});
                 this.path = this.typeObj.path;
                 if (this.file)
                     this.adjustSelectByType();
             },
-            'tags': (val) =>  {
+            'tags'(val, oldVal) {
                 this.$validate('tags', true);
             }
         },

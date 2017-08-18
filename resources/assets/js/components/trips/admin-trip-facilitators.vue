@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="row">
@@ -14,7 +14,7 @@
 		</div><!-- end panel-heading -->
 		<div class="panel-body" style="position:relative">
 			<spinner ref="spinner" size="sm" text="Loading"></spinner>
-			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" track-by="id">
+			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" :keyy="facilitator.id">
 					<h5>
 					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" facilitator.name ">
 					{{ facilitator.name }}

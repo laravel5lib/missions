@@ -196,8 +196,8 @@
             <tbody>
             <tr v-for="group in groups">
                 <td v-if="isActive('name')">{{group.name}}</td>
-                <td v-if="isActive('type')">{{group.type ? group.type[0].toUpperCase() + group.type.slice(1) : ''}}</td>
-                <td v-if="isActive('location')">{{group.state ? group.state[0].toUpperCase() + group.state.slice(1) : ''}}, {{group.country_name ? group.country_name[0].toUpperCase() + group.country_name.slice(1) : ''}}</td>
+                <td v-if="isActive('type')">{{ group.type|capitalize }}</td>
+                <td v-if="isActive('location')">{{ group.state|capitalize }}, {{ group.country_name|capitalize }}</td>
                 <template v-if="pending">
                     <td v-if="isActive('phone_one')">{{group.phone_one}}</td>
                     <td v-if="isActive('email')">{{group.email}}</td>
@@ -287,13 +287,13 @@
             }
         },
         watch: {
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchGroups();
             },
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.exportFilters = val;
                     this.pagination.current_page = 1;
@@ -301,20 +301,20 @@
                 },
                 deep: true
             },
-            'activeFields': (val, oldVal) =>  {
+            'activeFields'(val, oldVal) {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
                     this.orderByField = val[0];
                 }
                 // this.putConfig();
-            },'orderByField': (val, oldVal) =>  {
+            },'orderByField'(val, oldVal) {
                 this.searchGroups();
             },
-            'direction': (val) =>  {
+            'direction'(val, oldVal) {
                 this.searchGroups();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchGroups();
             }
         },

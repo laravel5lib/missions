@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="panel panel-default">
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
 		<div class="panel-heading">
@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div class="panel-body">
-			<div class="col-xs-12 panel panel-default" v-for="manager in managers" track-by="id">
+			<div class="col-xs-12 panel panel-default" v-for="manager in managers" :key="manager.id">
 				<h5>
 					<img :src="manager.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" manager.name ">
 					{{ manager.name }}

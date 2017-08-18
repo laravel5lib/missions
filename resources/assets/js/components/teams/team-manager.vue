@@ -131,7 +131,7 @@
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname ? member.surname[0].toUpperCase() + member.surname.slice(1) : '' }}, {{ member.given_names ? member.given_names[0].toUpperCase() + member.given_names.slice(1) : '' }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname|capitalize }}, {{ member.given_names|capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
@@ -167,9 +167,9 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																			<label>Gender</label>
-																			<p class="small">{{member.gender ? member.gender[0].toUpperCase() + member.gender.slice(1) : ''}}</p>
+																			<p class="small">{{ member.gender|capitalize }}</p>
 																			<label>Marital Status</label>
-																			<p class="small">{{member.status ? member.status[0].toUpperCase() + member.status.slice(1) : ''}}</p>
+																			<p class="small">{{ member.status|capitalize }}</p>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -183,15 +183,15 @@
 																		<ul class="list-unstyled" v-if="member.companions.data.length">
 																			<li v-for="companion in member.companions.data">
 																				<i :class="getGenderStatusIcon(companion)"></i>
-																				{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }}
-																				<span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
+																				{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
+																				<span class="text-muted">({{ companion.relationship|capitalize }})</span>
 																			</li>
 																		</ul>
 																		<p class="small" v-else>None</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Trip Type</label>
-																		<p class="small">{{member.trip.data.type ? member.trip.data.type[0].toUpperCase() + member.trip.data.type.slice(1) : ''}}</p>
+																		<p class="small">{{ member.trip.data.type|capitalize }}</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Designation</label>
@@ -260,7 +260,7 @@
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname ? member.surname[0].toUpperCase() + member.surname.slice(1) : '' }}, {{ member.given_names ? member.given_names[0].toUpperCase() + member.given_names.slice(1) : '' }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname|capitalize }}, {{ member.given_names|capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
@@ -308,9 +308,9 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																			<label>Gender</label>
-																			<p class="small">{{member.gender ? member.gender[0].toUpperCase() + member.gender.slice(1) : ''}}</p>
+																			<p class="small">{{ member.gender|capitalize }}</p>
 																			<label>Marital Status</label>
-																			<p class="small">{{member.status ? member.status[0].toUpperCase() + member.status.slice(1) : ''}}</p>
+																			<p class="small">{{ member.status|capitalize }}</p>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -323,15 +323,15 @@
 																			<ul class="list-unstyled" v-if="member.companions.data.length">
 																				<li v-for="companion in member.companions.data">
 																					<i :class="getGenderStatusIcon(companion)"></i>
-																					{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }}
-																					<span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
+																					{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
+																					<span class="text-muted">({{ companion.relationship|capitalize }})</span>
 																				</li>
 																			</ul>
 																			<p class="small" v-else>None</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Trip Type</label>
-																			<p class="small">{{member.trip.data.type ? member.trip.data.type[0].toUpperCase() + member.trip.data.type.slice(1) : ''}}</p>
+																			<p class="small">{{ member.trip.data.type|capitalize }}</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Designation</label>
@@ -372,9 +372,9 @@
 								<div class="col-sm-4">
 									<label for="" class="control-label">Type</label>
 									<!--<select v-if="isAdminRoute && editTeamMode" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
-										<option :value="type.id" v-for="type in teamTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
+										<option :value="type.id" v-for="type in teamTypes">{{ type.name|capitalize }}</option>
 									</select>-->
-									<p v-text="currentTeam.type.data.name ? currentTeam.type.data.name[0].toUpperCase() + currentTeam.type.data.name.slice(1) : ''"></p>
+									<p v-text="currentTeam.type.data.name|capitalize"></p>
 								</div>
 								<div class="col-sm-2">
 									<label for="" class="control-label">Locked</label>
@@ -437,7 +437,7 @@
 									<label class="control-label">Assignment Rules</label>
 									<hr class="divider sm inv">
 									<ul class="list-group" v-if="currentSquadGroups.length">
-										<li class="list-group-item" v-for="(key, value) in currentTeam.type.data.rules">
+										<li class="list-group-item" v-for="(value, key) in currentTeam.type.data.rules">
 											<span class="badge" v-text="value"></span>
 											{{ getRuleLabel(key) }}
 										</li>
@@ -517,8 +517,8 @@
 										<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													{{ team.callsign ? team.callsign[0].toUpperCase() + team.callsign.slice(1) : '' }}
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name ? team.type.data.name[0].toUpperCase() + team.type.data.name.slice(1) : ''"></span>
+													{{ team.callsign|capitalize }}
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name|capitalize"></span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
@@ -615,7 +615,7 @@
 																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																<i :class="getGenderStatusIcon(reservation)"></i>
 																<a :href="getReservationLink(reservation)" target="_blank">
-																{{ reservation.surname ? reservation.surname[0].toUpperCase() + reservation.surname.slice(1) : '' }}, {{ reservation.given_names ? reservation.given_names[0].toUpperCase() + reservation.given_names.slice(1) : '' }}</a></h6>
+																{{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}</a></h6>
 																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 															</div><!-- end media-body -->
 														</div><!-- end media -->
@@ -658,9 +658,9 @@
 												<div class="row">
 													<div class="col-sm-6">
 														<label>Gender</label>
-														<p class="small">{{reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''}}</p>
+														<p class="small">{{ reservation.gender|capitalize }}</p>
 														<label>Marital Status</label>
-														<p class="small">{{reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''}}</p>
+														<p class="small">{{ reservation.status|capitalize }}</p>
 													</div><!-- end col -->
 													<div class="col-sm-6">
 														<label>Age</label>
@@ -673,18 +673,18 @@
 														<ul class="list-unstyled" v-if="reservation.companions.data.length">
 															<li v-for="companion in reservation.companions.data">
 																<i :class="getGenderStatusIcon(companion)"></i>
-																{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }} <span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
+																{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }} <span class="text-muted">({{ companion.relationship|capitalize }})</span>
 															</li>
 														</ul>
 														<p class="small" v-else>None</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Trip Type</label>
-														<p class="small">{{reservation.trip.data.type ? reservation.trip.data.type[0].toUpperCase() + reservation.trip.data.type.slice(1) : ''}}</p>
+														<p class="small">{{ reservation.trip.data.type|capitalize }}</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Designation</label>
-														<p class="small">{{reservation.arrival_designation ? reservation.arrival_designation[0].toUpperCase() + reservation.arrival_designation.slice(1) : ''}}</p>
+														<p class="small">{{ reservation.arrival_designation|capitalize }}</p>
 													</div>
 												</div><!-- end row -->
 											</div>
@@ -715,7 +715,7 @@
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamtype.invalid}">
 								<label for="" class="control-label">Type</label>
 								<select class="form-control" v-model="newTeamType" name="teamtype" v-validate="'required'">
-									<option :value="type.id" v-for="type in teamTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
+									<option :value="type.id" v-for="type in teamTypes">{{ type.name|capitalize }}</option>
 								</select>
 							</div>
 							<div class="form-group" :class="{'has-error': $TeamCreate.teamgroup.invalid}" v-if="isAdminRoute">
@@ -724,7 +724,7 @@
 										  :value="newTeamGroup" :options="groupsOptions" label="name"
 										  placeholder="Assign Travel Group"></v-select>
 								<select class="hidden" v-model="newTeamGroup" name="teamgroup" v-validate="'required'">
-									<option :value="group" v-for="group in groupsOptions">{{group.name ? group.name[0].toUpperCase() + group.name.slice(1) : ''}}</option>
+									<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
 								</select>
 							</div>
 						</form>
@@ -902,40 +902,40 @@
 	    watch: {
             // watch filters obj
             'teamFilters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     this.teamsPagination.current_page = 1;
                     this.getTeams();
                 },
                 deep: true
             },
             'reservationFilters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     this.reservationsPagination.current_page = 1;
                     this.searchReservations();
                 },
                 deep: true
             },
-            'groupsArr': (val) =>  {
+            'groupsArr'(val, oldVal) {
                 this.reservationFilters.groups = _.pluck(val, 'id') || '';
 //				this.searchReservations();
             },
-            'groupObj': (val) =>  {
+            'groupObj'(val, oldVal) {
                 this.teamFilters.group = val ? val.id : '';
 //				this.searchReservations();
             },
-            'teamsSearch': (val, oldVal) =>  {
+            'teamsSearch'(val, oldVal) {
                 this.teamsPagination.current_page = 1;
                 this.getTeams();
             },
-            'reservationsSearch': (val, oldVal) =>  {
+            'reservationsSearch'(val, oldVal) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
             },
-		    'excludeReservationIds': (val) =>  {
+		    'excludeReservationIds'(val, oldVal) {
                 this.reservationsPagination.current_page = 1;
                 this.searchReservations();
             },
-		    'currentTeam': (val) =>  {
+		    'currentTeam'(val, oldVal) {
                 if (val && val.id) {
                     this.getSquads();
                     this.putConfig();

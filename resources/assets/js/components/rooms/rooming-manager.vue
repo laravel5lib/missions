@@ -25,12 +25,12 @@
 									<div class="col-xs-10">
 										<h5>
 											<template v-if="currentRoom.label">
-												{{currentRoom.label ? currentRoom.label[0].toUpperCase() + currentRoom.label.slice(1) : ''}} &middot; {{currentRoom.type.data.name ? currentRoom.type.data.name[0].toUpperCase() + currentRoom.type.data.name.slice(1) : ''}}
+												{{ currentRoom.label|capitalize }} &middot; {{ currentRoom.type.data.name|capitalize }}
 											</template>
 											<template v-else>
-												{{currentRoom.type.data.name ? currentRoom.type.data.name[0].toUpperCase() + currentRoom.type.data.name.slice(1) : ''}}
+												{{ currentRoom.type.data.name|capitalize }}
 											</template>
-											<span v-if="currentRoomHasLeader"> ({{ currentRoomHasLeader.surname }}, {{ currentRoomHasLeader.given_names ? currentRoomHasLeader.given_names[0].toUpperCase() + currentRoomHasLeader.given_names.slice(1) : '' }}) </span>
+											<span v-if="currentRoomHasLeader"> ({{ currentRoomHasLeader.surname }}, {{ currentRoomHasLeader.given_names|capitalize }}) </span>
 											<span class="small">&middot; Details</span>
 
 										</h5>
@@ -81,7 +81,7 @@
 																			<div class="media-body" style="vertical-align:middle;">
 																				<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																				<i :class="getGenderStatusIcon(member)"></i>
-																				<a :href="getReservationLink(member)" target="_blank">{{ member.surname ? member.surname[0].toUpperCase() + member.surname.slice(1) : '' }}, {{ member.given_names ? member.given_names[0].toUpperCase() + member.given_names.slice(1) : '' }}</a></h6>
+																				<a :href="getReservationLink(member)" target="_blank">{{ member.surname|capitalize }}, {{ member.given_names|capitalize }}</a></h6>
 																				<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																			</div><!-- end media-body -->
 																		</div><!-- end media -->
@@ -114,11 +114,11 @@
 																	</div><!-- end col -->
 																	<div class="col-sm-3">
 																		<label>Gender</label>
-																		<p class="small">{{member.gender ? member.gender[0].toUpperCase() + member.gender.slice(1) : ''}}</p>
+																		<p class="small">{{ member.gender|capitalize }}</p>
 																	</div><!-- end col -->
 																	<div class="col-sm-6">
 																		<label>Marital Status</label>
-																		<p class="small">{{member.status ? member.status[0].toUpperCase() + member.status.slice(1) : ''}}</p>
+																		<p class="small">{{ member.status|capitalize }}</p>
 																	</div>
 																</div><!-- end row -->
 																<div class="row">
@@ -128,7 +128,7 @@
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Designation</label>
-																		<p class="small">{{member.arrival_designation ? member.arrival_designation[0].toUpperCase() + member.arrival_designation.slice(1) : ''}}</p>
+																		<p class="small">{{ member.arrival_designation|capitalize }}</p>
 																	</div>
 																</div>
 																<div class="row">
@@ -137,7 +137,7 @@
 																		<ul class="list-unstyled small" v-if="member.companions.data.length">
 																			<li v-for="companion in member.companions.data">
 																				<i :class="getGenderStatusIcon(companion)"></i>
-																				{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }}
+																				{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
 																				<span class="text-muted">({{ companion.relationship }})</span>
 																			</li>
 																		</ul>
@@ -311,7 +311,7 @@
 													<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 														<i :class="getGenderStatusIcon(reservation)"></i>
 														<a :href="getReservationLink(reservation)" target="_blank">
-															{{ reservation.surname ? reservation.surname[0].toUpperCase() + reservation.surname.slice(1) : '' }}, {{ reservation.given_names ? reservation.given_names[0].toUpperCase() + reservation.given_names.slice(1) : '' }}</a></h6>
+															{{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}</a></h6>
 													<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 												</div><!-- end media-body -->
 											</div><!-- end media -->
@@ -341,11 +341,11 @@
 									<div class="row">
 										<div class="col-sm-4">
 											<label>Gender</label>
-											<p class="small">{{reservation.gender ? reservation.gender[0].toUpperCase() + reservation.gender.slice(1) : ''}}</p>
+											<p class="small">{{ reservation.gender|capitalize }}</p>
 										</div>
 										<div class="col-sm-4">
 											<label>Marital Status</label>
-											<p class="small">{{reservation.status ? reservation.status[0].toUpperCase() + reservation.status.slice(1) : ''}}</p>
+											<p class="small">{{ reservation.status|capitalize }}</p>
 										</div>
 										<div class="col-sm-4">
 											<label>Age</label>
@@ -358,7 +358,7 @@
 										<div class="col-sm-6">
 											<label>Designation</label>
 											<p class="small">
-												{{ reservation.arrival_designation ? reservation.arrival_designation[0].toUpperCase() + reservation.arrival_designation.slice(1) : '' }}
+												{{ reservation.arrival_designation|capitalize }}
 											</p>
 										</div>
 										<div class="col-sm-12">
@@ -373,7 +373,7 @@
 											<ul class="list-unstyled" v-if="reservation.companions.data.length">
 												<li v-for="companion in reservation.companions.data">
 													<i :class="getGenderStatusIcon(companion)"></i>
-													{{ companion.surname ? companion.surname[0].toUpperCase() + companion.surname.slice(1) : '' }}, {{ companion.given_names ? companion.given_names[0].toUpperCase() + companion.given_names.slice(1) : '' }} <span class="text-muted">({{ companion.relationship ? companion.relationship[0].toUpperCase() + companion.relationship.slice(1) : '' }})</span>
+													{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }} <span class="text-muted">({{ companion.relationship|capitalize }})</span>
 												</li>
 											</ul>
 											<p class="small" v-else>None</p>
@@ -424,13 +424,13 @@
 							<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}" v-if="!roomModalEditMode">
 								<label for="" class="control-label">Type</label>
 								<select class="form-control" v-model="selectedRoom.type" name="roomtype="['required']" @change" v-validate="selectedRoom.room_type_id = selectedRoom.type.id">
-									<option :value="type" v-for="type in roomTypes">{{type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''}}</option>
+									<option :value="type" v-for="type in roomTypes">{{ type.name|capitalize }}</option>
 								</select>
 								<hr class="divider sm">
 								<div v-if="selectedRoom.type" class="">
-									<template  v-for="(key, value) in selectedRoom.type.rules">
+									<template  v-for="(value, key) in selectedRoom.type.rules">
 										<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
-										<p class="small" v-text="value ? value[0].toUpperCase() + value.slice(1) : ''"></p>
+										<p class="small" v-text="value|capitalize"></p>
 									</template>
 								</div>
 							</div>
@@ -580,7 +580,7 @@
                 this.searchReservations();
             },
             /*reservationFilters: {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // using the handler instead of a separate watcher
                     val.due = this.reservationFilters.dueStatus ? (this.reservationFilters.dueName + '|' + this.reservationFilters.dueStatus) : this.reservationFilters.dueName;
 

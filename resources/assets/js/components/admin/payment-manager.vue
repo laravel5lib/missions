@@ -173,7 +173,7 @@
         },
         watch: {
             /*'selectedPayment': {
-                handler: (val, oldVal) =>  {
+                handler(val, oldVal) {
                     console.log(val);
                     if(val && val.amount_owed) {
                         let max = this.calculateMaxAmount(val);
@@ -196,7 +196,7 @@
                 deep: true
             },
             'newPayment': {
-                handler: (val, oldVal) =>  {
+                handler(val, oldVal) {
                     console.log(val);
                     if(val && val.percent_owed) {
                         let max = this.calculateMaxPercent(val);
@@ -209,7 +209,7 @@
                 },
                 deep: true
             },*/
-            'showEditModal': (val, oldVal) =>  {
+            'showEditModal'(val, oldVal) {
                 this.$nextTick(() =>  {
                     // if edit modal closes, reset data
                     if (val !== oldVal && val === false) {
@@ -217,7 +217,7 @@
                     }
                 })
             },
-            'showAddModal': (val, oldVal) =>  {
+            'showAddModal'(val, oldVal) {
                 this.$nextTick(() =>  {
                     // if add modal closes, reset data
                     if (val !== oldVal && val === false) {

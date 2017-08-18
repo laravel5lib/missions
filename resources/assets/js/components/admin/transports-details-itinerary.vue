@@ -7,7 +7,7 @@
 					<label>Activity Type</label>
 					<select class="form-control" v-model="activityFilters.type">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
 					</select>
 				</div>
 			</form>
@@ -54,8 +54,8 @@
 
 								<div class="timeline-label">
 									<h2>
-										<a href="#">{{ activity.name ? activity.name[0].toUpperCase() + activity.name.slice(1) : '' }}</a>
-										<span class="label label-default" v-text="activity.type.name ? activity.type.name[0].toUpperCase() + activity.type.name.slice(1) : ''"></span>
+										<a href="#">{{ activity.name|capitalize }}</a>
+										<span class="label label-default" v-text="activity.type.name|capitalize"></span>
 										<br />
 										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment('dddd, MMMM D, YYYY zz') }}</small>
 									</h2>
@@ -96,7 +96,7 @@
 											<div class="list-group">
 												<div class="list-group-item" v-for="hub in activity.hubs.data">
 													<h5 class="list-group-item-heading">
-														{{hub.name ? hub.name[0].toUpperCase() + hub.name.slice(1) : ''}} <span v-if="hub.call_sign">({{hub.call_sign}})</span>
+														{{ hub.name|capitalize }} <span v-if="hub.call_sign">({{hub.call_sign}})</span>
 
 														<a @click="confirmDeleteHub(hub)" class="btn btn-xs btn-default-hollow pull-right">
 															<i class="fa fa-trash"></i> Delete
@@ -154,7 +154,7 @@
 					<label>Activity Type</label>
 					<select class="form-control" v-model="selectedActivity.activity_type_id">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name ? type.name[0].toUpperCase() + type.name.slice(1) : ''"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
 					</select>
 				</div>
 				<travel-activity ref="activity" :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>

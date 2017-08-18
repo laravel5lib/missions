@@ -27,21 +27,21 @@
 
                 <template class="form-group" v-for="(QA, indexQA) in content">
                     <template v-if="QA.type">
-                        <div class="form-group"  v-if="QA.type === 'radio'" v-error-handler="{ value: QA.a, client: 'radio' + indexQA, messages: { req: 'Please select an option.'} }">
+                        <div class="form-group" v-if="QA.type === 'radio'" v-error-handler="{ value: QA.a, client: 'radio' + indexQA, messages: { req: 'Please select an option.'} }">
                             <label class="control-labal">{{QA.q}}</label><br>
                             <label class="radio-inline" v-for="(choiceIndex, choice) in QA.options">
-                                <input type="radio" :value="choice.value" v-model="QA.a" :field="'radio' + indexQA" v-validate="choiceIndex === 0 ? 'required' : ''"> {{ choice.name }}
+                                <input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA" v-validate="choiceIndex === 0 ? 'required' : ''"> {{ choice.name }}
                             </label>
                         </div>
-                        <div class="form-group"  v-if="QA.type === 'checkbox'" v-error-handler="{ value: QA.a, client: 'chex' + indexQA }">
+                        <div class="form-group" v-if="QA.type === 'checkbox'" v-error-handler="{ value: QA.a, client: 'chex' + indexQA }">
                             <label class="control-labal">{{QA.q}}</label><br>
                             <label class="radio-inline" v-for="choice in QA.options">
-                                <input type="checkbox" :value="choice.value" v-model="QA.a" :field="'chex' + indexQA" v-validate=""> {{ choice.name }}
+                                <input type="checkbox" :value="choice.value" v-model="QA.a" :name="'chex' + indexQA" v-validate=""> {{ choice.name }}
                             </label>
                         </div>
-                        <div class="form-group"  v-if="QA.type === 'textarea'" v-error-handler="{ value: QA.a, client: 'textarea' + indexQA, messages: { req: 'Please provide an answer.'} }">
+                        <div class="form-group" v-if="QA.type === 'textarea'" v-error-handler="{ value: QA.a, client: 'textarea' + indexQA, messages: { req: 'Please provide an answer.'} }">
                             <label class="control-label" v-text="QA.q"></label>
-                            <textarea class="form-control" v-model="QA.a" rows="10" :field="'textarea' + indexQA" v-validate="'required'"></textarea>
+                            <textarea class="form-control" v-model="QA.a" rows="10" :name="'textarea' + indexQA" v-validate="'required'"></textarea>
                         </div>
                         <template v-if="QA.type === 'file'">
                             <div class="form-group" >

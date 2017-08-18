@@ -26,7 +26,7 @@
 						<select class="form-control" v-model="initiativeIdentifier" v-validate="'required'" name="initiative">
 							<option value="">Select a type</option>
 							<option :value="initiative.id" v-for="initiative in availableInitiatives"
-									v-text="initiative.type ? initiative.type[0].toUpperCase() + initiative.type.slice(1) : ''"></option>
+									v-text="initiative.type|capitalize"></option>
 						</select>
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('end') }">

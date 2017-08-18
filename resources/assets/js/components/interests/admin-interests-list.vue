@@ -190,7 +190,7 @@
                 </thead>
                 <tbody v-if="interests.length > 0">
                 <tr v-for="interest in orderByProp(interests, orderByField, direction)">
-                    <td v-if="isActive('name')">{{interest.name ? interest.name[0].toUpperCase() + interest.name.slice(1) : ''}}</td>
+                    <td v-if="isActive('name')">{{ interest.name|capitalize }}</td>
                     <td v-if="isActive('email')">{{interest.email}}</td>
                     <td v-if="isActive('phone')">{{interest.phone}}</td>
                     <td v-if="isActive('status')">
@@ -283,34 +283,34 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchInterests();
                 },
                 deep: true
             },
-            'groupObj': (val) =>  {
+            'groupObj'(val, oldVal) {
                 this.filters.group = val ? val.id : '';
             },
-            'tripObj': (val) =>  {
+            'tripObj'(val, oldVal) {
                 this.filters.trip = val ? val.id : '';
             },
-            'campaignObj': (val) =>  {
+            'campaignObj'(val, oldVal) {
                 this.filters.campaign = val ? val.id : '';
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.page = 1;
                 this.searchInterests();
             },
-            'direction': (val) =>  {
+            'direction'(val, oldVal) {
                 this.searchInterests();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.searchInterests();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchInterests();
             }
         },

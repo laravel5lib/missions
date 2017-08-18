@@ -34,14 +34,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="promo in promos" track-by="id">
+                <tr v-for="promo in promos" :key="promo.id">
                     <td><span class="label label-default">{{ status(promo) }}</span></td>
-                    <td>{{ promo.name ? promo.name[0].toUpperCase() + promo.name.slice(1) : '' }}</td>
+                    <td>{{ promo.name|capitalize }}</td>
                     <td>{{ promo.reward | currency }}</td>
                     <td>{{ promo.expires | moment('ll') }}</td>
                     <td>{{ promo.promocodes_count }}</td>
                     <td>{{ promo.created_at | moment('ll') }}</td>
-                    <td>{{ promo.putd_at | moment('ll') }}</td>
+                    <td>{{ promo.updated_at | moment('ll') }}</td>
                     <th><a @click="callView({view: 'details', id: promo.id})"><i class="fa fa-cog"></i></a></th>
                 </tr>
             </tbody>

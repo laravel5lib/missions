@@ -75,7 +75,7 @@
                             </div><!-- end col -->
                              <div class="col-sm-6">
                                 <label>UPDATED ON</label>
-                                <p class="small">{{visa.putd_at|moment('lll')}}</p>
+                                <p class="small">{{visa.updated_at|moment('lll')}}</p>
                             </div><!-- end col -->
                         </div><!-- end row -->
                     </div><!-- end panel-body -->
@@ -173,7 +173,7 @@
         },
         watch:{
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     this.pagination.current_page = 1;
                     this.searchVisas();
                 },
@@ -181,9 +181,6 @@
             },
             'search' (val, oldVal)  {
                 this.pagination.current_page = 1;
-                //let self = this;
-//                _.debounce(self.searchVisas(), 2500);
-                 //this.debouncedSearch();
             },
             'includeManaging' (val, oldVal)  {
                 this.pagination.current_page = 1;
@@ -192,10 +189,12 @@
         },
         methods:{
             setVisa(visa) {
-                this.$dispatch('set-document', visa);
+                this.$emit('set-document', visa);
             },
             // emulate pagination
-	        debouncedSearch: _.debounce(() => { this.default.methods.searchVisas() }, 250),
+	        debouncedSearch: _.debounce(function() {
+	            this.searchVisas()
+	        }, 250),
             searchVisas(){
                 let params = {
                     user: this.userId,

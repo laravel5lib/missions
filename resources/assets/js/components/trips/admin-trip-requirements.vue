@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-xs-8">
-                <h5>{{ requirement.name ? requirement.name[0].toUpperCase() + requirement.name.slice(1) : '' }}</h5>
+                <h5>{{ requirement.name|capitalize }}</h5>
                 <h6><small>Type: {{ requirement.document_type }}</small></h6>
                 <p>{{ requirement.short_desc }}</p>
             </div>

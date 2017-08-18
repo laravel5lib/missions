@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div class="row">
 		<div class="col-sm-12">
 
@@ -6,7 +6,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Campaign</label>
 						<div class="col-sm-10">
-							<p>{{$parent.campaign.name ? $parent.campaign.name[0].toUpperCase() + $parent.campaign.name.slice(1) : ''}}</p>
+							<p>{{$parent.campaign.name | capitalize}}</p>
 						</div>
 					</div>
 					<div class="form-group" :class="{ 'has-error': errors.has('group') }">

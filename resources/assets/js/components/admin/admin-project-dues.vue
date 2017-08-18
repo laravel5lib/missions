@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <!--<button class="btn btn-primary btn-xs" @click="add"><span
@@ -24,7 +24,7 @@
             <template v-for="due in project.dues.data">
                 <tr>
                     <td class="text-center">
-                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</small>
+                        <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>
                     <td>{{ due.cost }}</td>
                     <td>{{ due.balance | currency }}</td>

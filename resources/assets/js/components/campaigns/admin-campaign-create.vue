@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 	<div>
 
 			<spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -7,18 +7,18 @@
 					<div class="col-sm-12">
 						<label for="name">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
-						       placeholder="Campaign Name" name="name" v-validate="'required|min:1|max:100'"
+						       placeholder="Campaign Name" v-validate="'required|min:1|max:100'"
 						       maxlength="100" minlength="1" required>
 					</div>
 				</div>
 				<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 					<div class="col-sm-12">
 						<label for="country">Country</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries"
+						<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="UTILITIES.countries"
 						          label="name"></v-select>
 						<select hidden name="country" id="country" class="hidden" v-model="country_code"
-						        name="country" v-validate="'required'">
-							<option :value="country.code" v-for="country in countries">{{country.name}}</option>
+						        v-validate="'required'">
+							<option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
 						</select>
 
 					</div>
@@ -26,8 +26,8 @@
 				<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
 					<div class="col-sm-12">
 						<label for="description">Description</label>
-						<textarea name="short_desc" id="description" rows="2" v-model="short_desc" class="form-control"
-						          name="description="'required|min:1|max:120'" maxlength" v-validate="120"
+						<textarea id="description" rows="2" v-model="short_desc" class="form-control"
+						          name="description" v-validate="'required|min:1|max:120'" maxlength="120"
 						          minlength="1"></textarea>
 						<div v-if="short_desc" class="help-block">{{short_desc.length}}/255 characters remaining</div>
 					</div>
@@ -38,9 +38,9 @@
 						<label for="started_at">Dates</label>
 						<div class="row">
 							<div class="col-sm-6">
-								<date-picker addon="Start" :model="started_at|moment('MM-DD-YYYY HH:mm:ss')" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="started_at|moment('MM-DD-YYYY HH:mm:ss')" id="started_at"
-								       name="start" v-validate="'required'" required>
+								<date-picker addon="Start" :model="started_at|moment('MM-DD-YYYY HH:mm:ss')" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" name="start" v-validate="'required'"></date-picker>
+								<!--<input type="datetime" class="form-control hidden" v-model="started_at|moment('MM-DD-YYYY HH:mm:ss')" id="started_at"
+								       name="start" v-validate="'required'" required>-->
 								<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
 									<span class="input-group-addon">Start</span>
 									<date-picker class="form-control" :model="started_at|moment('MM-DD-YYYY HH:mm:ss')"></date-picker>
@@ -48,10 +48,10 @@
 								<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 							</div>
 							<div class="col-sm-6">
-								<date-picker :model="ended_at|moment('MM-DD-YYYY HH:mm:ss')" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ednded_at' }"></date-picker>
-								<input type="datetime" class="form-control hidden" v-model="ended_at|moment('MM-DD-YYYY HH:mm:ss')" id="ended_at"
+								<date-picker :model="ended_at|moment('MM-DD-YYYY HH:mm:ss')" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" name="end" v-validate="'required'"></date-picker>
+								<!--<input type="datetime" class="form-control hidden" v-model="ended_at|moment('MM-DD-YYYY HH:mm:ss')" id="ended_at"
 								       :min="started_at"
-								       name="end" v-validate="'required'" required>
+								       name="end" v-validate="'required'" required>-->
 								<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ednded_at' }">
 															<span class="input-group-addon">End</span>
 								</div>-->
@@ -70,7 +70,7 @@
 								<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
 							</span>
 						</div>-->
-						<input type="datetime" class="form-control hidden" v-model="published_at|moment('MM-DD-YYYY HH:mm:ss')" id="published_at">
+						<!--<input type="datetime" class="form-control hidden" v-model="published_at|moment('MM-DD-YYYY HH:mm:ss')" id="published_at">-->
 					</div>
 				</div>
 
@@ -81,7 +81,7 @@
 							<div class="input-group">
 								<span class="input-group-addon">www.missions.me/campaigns/</span>
 								<input type="text" id="page_url" v-model="page_url" class="form-control"
-								       name="url" v-validate="{ required: false }"/>
+								       name="url" v-validate=""/>
 							</div>
 							<!--<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>-->
 						</div>
@@ -93,7 +93,7 @@
 							<div class="input-group">
 								<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 								<input type="text" id="page_src" v-model="page_src" class="form-control"
-								       name="src" v-validate="{ required: false,  }"/>
+								       name="src" v-validate=""/>
 								<span class="input-group-addon">.blade.php</span>
 							</div>
 						</div>
@@ -125,13 +125,13 @@
 					<div class="col-xs-12">
 						<div class="collapse" id="avatarCollapse">
 							<div class="well">
-								<upload-create-update type="avatar" :lock-type="true" :is-child="true"
+								<upload-create-update type="avatar" lock-type is-child
 								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 						<div class="collapse" id="bannerCollapse">
 							<div class="well">
-								<upload-create-update type="banner" :lock-type="true" :is-child="true"
+								<upload-create-update type="banner" lock-type is-child
 								                      :tags="['Campaign']"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
@@ -141,7 +141,7 @@
 				<div class="form-group">
 					<div class="text-center">
 						<a href="/admin/campaigns" class="btn btn-default">Cancel</a>
-						<a @click="submit()" class="btn btn-primary">Create</a>
+						<a @click="submit" class="btn btn-primary">Create</a>
 					</div>
 				</div>
 			</form>
@@ -156,19 +156,19 @@
 
 </template>
 <script type="text/javascript">
-	import jQuery from 'jquery';
+	import $ from 'jquery';
     import _ from 'underscore';
 	import vSelect from "vue-select";
 	import adminUploadCreateUpdate from '../../components/uploads/admin-upload-create-update.vue';
+    import utilities from'../utilities.mixin';
     import errorHandler from'../error-handler.mixin';
 
 	export default{
 		name: 'campaign-create',
 		components: {vSelect, 'upload-create-update': adminUploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         data(){
 			return {
-				countries: [],
 				countryCodeObj: null,
 				name: null,
 				country: null,
@@ -184,8 +184,7 @@
 				selectedBanner: null,
 				banner_upload_id: null,
 				showError: false,
-                // mixin settings
-                validatorHandle: 'CreateCampaign',
+                resource: this.$resource('campaigns')
             }
 		},
 		computed: {
@@ -194,7 +193,7 @@
 			},
 		},
 		watch: {
-			'name': (val) =>  {
+			'name'(val, oldVal) {
 				if (typeof val === 'string') {
 					// pre-populate slug
 					this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } })
@@ -209,33 +208,33 @@
 				return text.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
 			},
 			submit(){
-				this.resetErrors();
-				if (this.$CreateCampaign.valid) {
-					// this.$refs.spinner.show();
-					var resource = this.$resource('campaigns');
-					resource.post(null, {
-						name: this.name,
-						country_code: this.country_code,
-						short_desc: this.short_desc,
-						started_at: this.started_at,
-						ended_at: this.ended_at,
-						published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
-						page_url: this.page_url,
-						page_src: this.page_src,
-						avatar_upload_id: this.avatar_upload_id,
-						banner_upload_id: this.banner_upload_id,
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        // this.$refs.spinner.show();
+                        this.resource.post(null, {
+                            name: this.name,
+                            country_code: this.country_code,
+                            short_desc: this.short_desc,
+                            started_at: this.started_at,
+                            ended_at: this.ended_at,
+                            published_at: moment(this.published_at).format('YYYY-MM-DD HH:mm:ss'),
+                            page_url: this.page_url,
+                            page_src: this.page_src,
+                            avatar_upload_id: this.avatar_upload_id,
+                            banner_upload_id: this.banner_upload_id,
 
-					}).then((resp) => {
-						window.location.href = '/admin' + resp.data.data.links[0].uri;
-					}, (error) =>  {
-						this.errors = error.data.errors;
-						this.showError = true;
-						// TODO use global alert
-						// this.$refs.spinner.hide();
-					});
-				} else {
-					this.showError = true;
-				}
+                        }).then((resp) => {
+                            window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        }, (error) => {
+                            this.errors = error.data.errors;
+                            this.showError = true;
+                            // TODO use global alert
+                            // this.$refs.spinner.hide();
+                        });
+                    } else {
+                        this.showError = true;
+                    }
+                });
 			}
 		},
 		events: {
@@ -244,24 +243,19 @@
 					case 'avatar':
 						this.selectedAvatar = data;
 						this.avatar_upload_id = data.id;
-						jQuery('#avatarCollapse').collapse('hide');
+						$('#avatarCollapse').collapse('hide');
 						break;
 					case 'banner':
 						this.selectedBanner = data;
 						this.banner_upload_id = data.id;
-						jQuery('#bannerCollapse').collapse('hide');
+						$('#bannerCollapse').collapse('hide');
 						break;
 				}
 			}
 		},
 		mounted(){
 			// this.$refs.spinner.show();
-			this.$http.get('utilities/countries').then((response) => {
-				this.countries = response.data.countries;
-				// this.$refs.spinner.hide();
-			}, (response) =>  {
-                console.log(response);
-            });
+			this.getCountries();
 		}
 	}
 </script> 

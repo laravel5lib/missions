@@ -28,7 +28,7 @@
 							<div class="row">
 								<div class="col-xs-9">
 									<a role="button" data-toggle="collapse" data-parent="#roomTypesAccordion" :href="'#roomTypeItem' + typeIndex" aria-expanded="true" aria-controls="collapseOne">
-										<h4>{{ roomType.name ? roomType.name[0].toUpperCase() + roomType.name.slice(1) : '' }}</h4>
+										<h4>{{ roomType.name|capitalize }}</h4>
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
@@ -53,7 +53,7 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-sm-6" v-for="(value, key) in roomType.rules">
-									<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace(): ''"></label>
+									<label v-text="key ? key | capitalize | underscoreToSpace: ''"></label>
 									<p class="small" v-text="value"></p>
 								</div>
 							</div><!-- end row -->
@@ -70,21 +70,21 @@
 		<div class="col-md-7 col-md-pull-5">
 			<template v-if="currentType">
 
-					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm">
+					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType : createType" id="TypeForm">
 						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', messages: { req: 'Please name this type'} }">
 							<label class="control-label col-sm-4">Name</label>
 							<input type="text" class="form-control" name="name=" v-model="currentType.name" v-validate="'required'">
 						</div>
 						<div class="row">
-							<template v-for="(key, value) in currentType.rules">
+							<template v-for="(value, key) in currentType.rules">
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
 									<div class="form-group" v-if="key === 'occupancy_limit'">
-										<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace(): ''"></label>
-										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="'required'" :value="value" min="0">
+										<label v-text="key ? key | capitalize | underscoreToSpace: ''"></label>
+										<input type="number" class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="'required'" :value="value" min="0">
 									</div>
 									<div class="form-group" v-else>
-										<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace(): ''"></label>
-										<select class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="[]">
+										<label v-text="key ? key | capitalize | underscoreToSpace: ''"></label>
+										<select class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="">
 											<option :value="true">Yes</option>
 											<option :value="false">No</option>
 										</select>

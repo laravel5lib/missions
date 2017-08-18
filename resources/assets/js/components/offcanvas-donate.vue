@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
         <mm-aside :show="showRight" @open="showRight=true" @close="showRight=false" placement="right" header="Donate" :width="275">
 
@@ -15,7 +15,7 @@
                         <label>Amount</label>
                         <div class="input-group">
                             <span class="input-group-addon">$</span>
-                            <input type="number" class="form-control" v-model="amount" min="1" name="amount" v-validate="{required: true, min: 1}">
+                            <input type="number" class="form-control" v-model="amount" min="1" name="amount" v-validate="'required|min:1'">
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon input"><span class="fa fa-lock"></span></span>
                                     <input type="text" class="form-control input" id="cardNumber" placeholder="Valid Card Number"
-                                           v-model="cardNumber" name="cardNumber" v-validate="{ required: true, maxlength: 19 }"
+                                           v-model="cardNumber" name="cardNumber" v-validate="'required|max:19'"
                                            @keyup="formatCard($event)" maxlength="19"/>
                                 </div>
                                 <span class="help-block" v-if="validationErrors.cardNumber=='error'">{{stripeError.message}}</span>
@@ -80,7 +80,7 @@
                                 <label for="cvCode">
                                     CV CODE</label>
                                 <input type="text" class="form-control input" id="cvCode" maxlength="3" v-model="cardCVC"
-                                       placeholder="CV" name="code" v-validate="{ required: true, minlength: 3, maxlength: 3 }"/>
+                                       placeholder="CV" name="code" v-validate="'required|min:3|max:4'"/>
                             </div>
                         </div>
                     </div>

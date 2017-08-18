@@ -24,6 +24,8 @@
                 <div class="panel-body">
                     <component :is="docPreview"
                                :document="document"
+                               @set-decument="setDocument"
+                               @unset-decument="removeDocument"
                                :locked="isLocked"
                                keep-alive>
                     </component>
@@ -35,6 +37,8 @@
                                :document="document"
                                :reservation-id="requirement.reservation_id"
                                :locked="isLocked"
+                               @set-decument="setDocument"
+                               @unset-decument="removeDocument"
                                keep-alive>
                     </component>
                 </div>
@@ -49,7 +53,9 @@
                 <div class="col-sm-12">
                     <component :is="list"
                                :user-id="managingUserId"
-                                selector keep-alive>
+                               @set-decument="setDocument"
+                               @unset-decument="removeDocument"
+                               selector keep-alive>
                     </component>
                 </div>
             </div>
@@ -156,17 +162,17 @@
             }
         },
         watch:{
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.fetch();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.fetch();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.fetch();
             },
-            'requirement.document_type': (val, oldVal) =>  {
+            'requirement.document_type'(val, oldVal) {
                 switch(val) {
                     case 'passports':
                         this.label = 'Passport';
@@ -251,7 +257,7 @@
                         status: 'reviewing'
                     }).then((response) => {
                         this.toggleChangeState();
-                        this.$dispatch('set-status', response.data.data);
+                        this.$emit('set-status', response.data.data);
                     });
                 }
             },
@@ -265,7 +271,7 @@
                         status: 'incomplete'
                     }).then((response) => {
                         this.document = null;
-                        this.$dispatch('set-status', response.data.data);
+                        this.$emit('set-status', response.data.data);
                     });
                 }
             },
@@ -291,16 +297,16 @@
                     this.document = response.data.data.document ? response.data.data.document.data : null;
                     this.loaded = true;
                 });
-            }
+            },
         },
-        events: {
+        /*events: {
             'set-document': function(document) {
                 this.setDocument(document);
             },
             'unset-document': function(document) {
                 this.removeDocument(document);
             }
-        },
+        },*/
         mounted(){
             this.fetch();
         }

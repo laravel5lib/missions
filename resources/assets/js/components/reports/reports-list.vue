@@ -52,14 +52,10 @@
                                         </a>
                                     </div>
                                     <div class="col-xs-11 hidden-xs">
-                                        <p>
-                                            {{ report.name }}
-                                        </p>
+                                        <p v-text="report.name"></p>
                                     </div>
                                     <div class="col-xs-12 visible-xs">
-                                        <h5 class="text-center">
-                                            {{ report.name }}
-                                        </h5>
+                                        <h5 class="text-center" v-text="report.name"></h5>
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +144,7 @@
         },
         methods: {
             fetch() {
-                this.$http.get('users/'+this.user+'/reports?search='+this.search).then((response) => {
+                this.$http.get(`users/${this.user}/reports?search=${this.search}`).then((response) => {
                     this.reports = response.data.data;
                     this.pagination = response.data.meta.pagination;
                 }, (error) =>  {

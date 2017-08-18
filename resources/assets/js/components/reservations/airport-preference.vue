@@ -145,7 +145,7 @@
                 });
             },
             setPreference(preference) {
-              this.$dispatch('set-document', preference);
+              this.$emit('set-document', preference);
             },
             cancel() {
                 this.editMode = false;

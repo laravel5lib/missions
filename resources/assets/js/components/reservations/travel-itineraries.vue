@@ -421,10 +421,10 @@
 	            this.showResetModal = !this.showResetModal;
             },
             setItinerary(itinerary) {
-                this.$dispatch('set-document', itinerary);
+                this.$emit('set-document', itinerary);
             },
             unsetItinerary(itinerary) {
-                this.$dispatch('unset-document', itinerary);
+                this.$emit('unset-document', itinerary);
             },
 	        getTypes() {
 	            return this.$http.get('utilities/activities/types').then((response) => {

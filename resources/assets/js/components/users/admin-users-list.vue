@@ -259,11 +259,11 @@
             </thead>
             <tbody>
             <tr v-for="user in orderByProp(users, orderByField, direction)">
-                <td v-if="isActive('name')" v-text="user.name ? user.name[0].toUpperCase() + user.name.slice(1) : ''"></td>
+                <td v-if="isActive('name')" v-text="user.name|capitalize"></td>
                 <td v-if="isActive('email')" v-text="user.email"></td>
                 <td v-if="isActive('alt_email')" v-text="user.alt_email"></td>
-                <td v-if="isActive('gender')" v-text="user.gender ? user.gender[0].toUpperCase() + user.gender.slice(1) : ''"></td>
-				<td v-if="isActive('status')" v-text="user.status ? user.status[0].toUpperCase() + user.status.slice(1) : ''"></td>
+                <td v-if="isActive('gender')" v-text="user.gender|capitalize"></td>
+				<td v-if="isActive('status')" v-text="user.status|capitalize"></td>
 				<td v-if="isActive('birthday')" v-text="user.birthday|moment('ll')"></td>
                 <td v-if="isActive('phone_one')" v-text="user.phone_one"></td>
                 <td v-if="isActive('phone_two')" v-text="user.phone_two"></td>
@@ -365,18 +365,18 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: (val) =>  {
+				handler(val, oldVal) {
 					// console.log(val);
 					this.pagination.current_page = 1;
 					this.searchUsers();
 				},
 				deep: true
 			},
-			'countriesArr': (val) =>  {
+			'countriesArr'(val, oldVal) {
 				this.filters.country = _.pluck(val, 'code')||'';
 				this.searchUsers();
 			},
-        	'activeFields': (val, oldVal) =>  {
+        	'activeFields'(val, oldVal) {
         		// if the orderBy field is removed from view
         		if(!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
         			// default to first visible field
@@ -384,17 +384,17 @@
 				}
 				this.putConfig();
 			},
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
 				this.putConfig();
 				this.pagination.current_page = 1;
 				this.page = 1;
                 this.searchUsers();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
 				this.putConfig();
 				this.searchUsers();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
 				this.putConfig();
 				this.searchUsers();
             },

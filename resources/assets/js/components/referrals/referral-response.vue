@@ -2,17 +2,17 @@
     <section>
         <spinner ref="spinner" size="xl" :fixed="false" text="Loading..."></spinner>
 
-        <div class="form-group" v-for="(item, index) in referral.response" :class="{ 'has-error' : $validation.item.invalid}">
+        <div class="form-group" v-for="(item, index) in referral.response" :class="{ 'has-error' : errors.has('item')}">
             <label :for="'item_' + index">{{ item.q }}</label>
 
             <span v-if="item.type == 'radio'">
                 <p>
-                    <input type="radio" value="yes" v-model="item.a"> Yes
-                    <input type="radio" value="no" v-model="item.a"> No
+                    <input type="radio" name="item" value="yes" v-model="item.a"> Yes
+                    <input type="radio" name="item" value="no" v-model="item.a"> No
                 </p>
             </span>
             <span v-else>
-                <textarea :id="'item_' + index" class="form-control" v-model="item.a" rows="5" initial="off" name="item" v-validate="'required'"></textarea>
+                <textarea :id="'item_' + index" class="form-control" v-model="item.a" rows="5"  name="item" v-validate="'required'"></textarea>
             </span>
         </div>
 
@@ -51,8 +51,8 @@
             save() {
                 // validate manually
                 let self = this;
-                this.$validate(true, () =>  {
-                    if (self.$validation.invalid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         console.log('validation errors');
                         self.$root.$emit('showError', 'Could not submit. Please check the form.');
                     } else {

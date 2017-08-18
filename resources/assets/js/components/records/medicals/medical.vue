@@ -12,7 +12,7 @@
             <br>
             <b>HAS ALLERGY(S):</b> {{medical.has_allergies ? 'Yes' : 'No' }}
             <br>
-            <b>LAST UPDATED:</b> {{medical.putd_at|moment('ll')}}
+            <b>LAST UPDATED:</b> {{medical.updated_at|moment('ll')}}
         </p>
     </div>
 </template>

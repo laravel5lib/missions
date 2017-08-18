@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 
         <form id="UpdateReservation" novalidate class="form-horizontal">
             <div class="row">
@@ -44,7 +44,7 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">
                         <label for="infoShirtSize">Shirt Sizes</label>
-                        <select class="form-control" v-model="shirt_size" name="size="'required'" :classes" v-validate="{ invalid: 'has-error' }"
+                        <select class="form-control" v-model="shirt_size" name="size" :classes="{ invalid: 'has-error' }" v-validate="'required'"
                                 id="infoShirtSize">
                             <option value="XS">XS (Extra Small)</option>
                             <option value="S">S (Small)</option>
@@ -63,7 +63,7 @@
                     <label>Gender</label>
                     <div class="radios" v-error-handler="{ value: gender, handle: 'gender' }">
                         <label>
-                            <input type="radio" v-model="gender" name="gender" v-validate="{ required: { rule: true} }"
+                            <input type="radio" v-model="gender" name="gender" v-validate="'required'"
                                    value="male"> Male
                         </label>
                     </div>
@@ -145,7 +145,7 @@
                         <label for="manager">Managing User</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" :value="userObj" :options="users" :debounce="250"
                                     :on-search="searchUsers" label="name"></v-select>
-                        <select id="manager" hidden class="form-control hidden" v-model="user_id" name="user" v-validate="{require:true}">
+                        <select id="manager" hidden class="form-control hidden" v-model="user_id" name="user" v-validate="'required'">
                             <option v-for="user in users" :value="user.id">{{ user.name }}</option>
                         </select>
                     </div>

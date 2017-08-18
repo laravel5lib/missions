@@ -24,7 +24,7 @@
                     </select>
                 </div>
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </mm-aside>
         <div class="panel panel-default">
@@ -34,7 +34,7 @@
                         <h5>Trips</h5>
                     </div>
                     <div class="col-sm-4 text-right">
-                        <a class="btn btn-primary btn-sm" href="{{campaignId}}/trips/create"><i class="fa fa-plus icon-left"></i> New</a>
+                        <a class="btn btn-primary btn-sm" :href="campaignId+'/trips/create'"><i class="fa fa-plus icon-left"></i> New</a>
                     </div>
                 </div>
             </div><!-- end panel-heading -->
@@ -187,22 +187,22 @@
                     <tbody>
                     <tr v-for="trip in orderByProp(trips, orderByField, direction)">
                         <td v-if="isActive('name')">{{trip.group.data.name}}</td>
-                        <td v-if="isActive('type')">{{trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : ''}}</td>
-                        <td v-if="isActive('status')">{{trip.status ? trip.status[0].toUpperCase() + trip.status.slice(1) : ''}}</td>
+                        <td v-if="isActive('type')">{{ trip.type|capitalize }}</td>
+                        <td v-if="isActive('status')">{{ trip.status|capitalize }}</td>
                         <td v-if="isActive('dates')">{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
                         <td v-if="isActive('starting_cost')" v-text="trip.starting_cost | currency"></td>
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
-                        <td v-if="isActive('difficulty')" v-text="trip.difficulty ? trip.difficulty[0].toUpperCase() + trip.difficulty.slice(1) : ''"></td>
+                        <td v-if="isActive('difficulty')" v-text="trip.difficulty|capitalize"></td>
                         <td v-if="isActive('created_at')" v-text="trip.created_at|moment('ll')"></td>
-                        <td v-if="isActive('updated_at')" v-text="trip.putd_at|moment('ll')"></td>
+                        <td v-if="isActive('updated_at')" v-text="trip.updated_at|moment('ll')"></td>
 
                         <td v-if="isActive('public')"><i class="fa fa-check" v-if="trip.public"></i></td>
                         <td v-if="isActive('reservations')">{{trip.reservations}}</td>
                         <td class="text-center">
-                            <a href="/admin/trips/{{ trip.id }}"><i class="fa fa-gear"></i></a>
+                            <a :href="'/admin/trips/'+ trip.id"><i class="fa fa-gear"></i></a>
                         </td>
                     </tr>
                     </tbody>
@@ -221,6 +221,8 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
+    import $ from 'jquery';
     import exportUtility from '../export-utility.vue';
     export default{
         name: 'admin-campaign-trips',
@@ -275,13 +277,13 @@
             }
         },
         watch: {
-            'orderByField': (val) =>  {
+            'orderByField' (val)  {
                 this.searchTrips();
             },
-            'direction': (val) =>  {
+            'direction' (val)  {
                 this.searchTrips();
             },
-            'activeFields': (val, oldVal) =>  {
+            'activeFields' (val, oldVal) {
                 // if the orderBy field is removed from view
                 if (!_.contains(val, this.orderByField) && _.contains(oldVal, this.orderByField)) {
                     // default to first visible field
@@ -290,23 +292,25 @@
                 // this.putConfig();
             },
             'filters': {
-                handler: (val) =>  {
+                handler(val) {
                     // console.log(val);
                     this.searchTrips();
                 },
                 deep: true
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
-                this.searchTrips();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchTrips();
             }
         },
         computed:{
         },
         methods:{
+            debouncedSearch: _.debounce(function () {
+                this.searchTrips();
+            }, 250),
             isActive(field){
                 return _.contains(this.activeFields, field);
             },

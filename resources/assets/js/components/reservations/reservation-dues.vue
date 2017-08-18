@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>
-                        <p>{{ '$' + due.balance.toFixed(2)}}</p>
+                        <p>{{ currency(due.balance)}}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
@@ -20,7 +20,7 @@
                         <label v-if="due.type === 'static'">Immediately</label>
                         <label v-else>Due {{ due.due_at | moment('ll', true) }}</label>
                         <p>
-                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{due.status ? due.status[0].toUpperCase() + due.status.slice(1) : ''}}</span>
+                            <span class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending' }">{{ due.status|capitalize }}</span>
                         </p>
                         <hr class="divider inv hidden-lg">
                     </div>
@@ -54,8 +54,8 @@
         },
         methods: {
             dateIsBetween(a, b){
-                    var start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
-                var stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
+                let start = b === 0 ? moment().startOf('month') : moment().add(1, 'month').startOf('month');
+                let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
             },
@@ -85,11 +85,11 @@
             });*/
 
             //Listen to Event Bus
-            this.$root.$on('Reservation:CostsUpdated', function (data) {
+            this.$root.$on('Reservation:CostsUpdated', (data) => {
                 this.setReservationData(data)
             });
 
-            this.$root.$on('Reservation:CostsReverted', function (data) {
+            this.$root.$on('Reservation:CostsReverted', (data) => {
                 this.setReservationData(data)
             });
 

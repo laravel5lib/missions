@@ -127,7 +127,7 @@
             }
         },
         watch:{
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.pagination.current_page = val;
                 this.paginate();
             },

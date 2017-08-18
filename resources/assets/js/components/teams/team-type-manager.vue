@@ -6,7 +6,7 @@
 			<form class="form-inline row">
 				<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 					<div class="input-group input-group-sm col-xs-12">
-						<input type="text" class="form-control" v-model="teamTypesSearch" debounce="300" placeholder="Search">
+						<input type="text" class="form-control" v-model="teamTypesSearch" @keyup="debouncedTeamTypeSearch" placeholder="Search">
 						<span class="input-group-addon"><i class="fa fa-search"></i></span>
 					</div>
 				</div><!-- end col -->
@@ -28,7 +28,7 @@
 							<div class="row">
 								<div class="col-xs-9">
 									<a role="button" data-toggle="collapse" data-parent="#teamTypesAccordion" :href="'#teamTypeItem' + typeIndex" aria-expanded="true" aria-controls="collapseOne">
-										<h4>{{ teamType.name ? teamType.name[0].toUpperCase() + teamType.name.slice(1) : '' }}</h4>
+										<h4>{{ teamType.name|capitalize }}</h4>
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
@@ -52,7 +52,7 @@
 					<div :id="'teamTypeItem' + typeIndex" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 						<div class="panel-body">
 							<div class="row">
-								<div class="col-sm-6" v-for="(key, value) in teamType.rules">
+								<div class="col-sm-6" v-for="(value, key) in teamType.rules">
 									<label v-text="getRuleLabel(key)"></label>
 									<p class="small" v-text="value"></p>
 								</div>
@@ -66,17 +66,17 @@
 		<div class="col-md-7 col-md-pull-5">
 			<template v-if="currentType">
 
-					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm">
-						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', messages: { req: 'Please name this type'} }">
+					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm" data-vv-scope="type-modal">
+						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', scope: 'type-modal', messages: { req: 'Please name this type'} }">
 							<label class="control-label col-sm-4">Name</label>
 							<input type="text" class="form-control" name="name=" v-model="currentType.name" v-validate="'required'">
 						</div>
 						<div class="row">
-							<template v-for="(key, value) in currentType.rules">
-								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
+							<template v-for="(value, key) in currentType.rules">
+								<div class="col-sm-6"  v-error-handler="{ value: value, client: key, scope: 'type-modal' }">
 									<div class="form-group">
 										<label v-text="getRuleLabel(key)"></label>
-										<input type="number" class="form-control" v-model="currentType.rules[key]" :field="key" v-validate="'required'" :value="value" min="0">
+										<input type="number" class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="'required'" :value="value" min="0">
 									</div>
 								</div>
 							</template>
@@ -109,9 +109,6 @@
         props: ['campaignId'],
         data(){
             return {
-                // mixin settings
-//                validatorHandle: 'TypeForm',
-
                 currentType: null,
                 selectedType: null,
                 editTypeMode: false,
@@ -180,37 +177,37 @@
                 this.currentType = this.newTypeModel();
             },
 	        updateType() {
+                this.$validator.validateAll('type-modal').then(result => {
+                    if (result) {
+                        let updatingObject = _.extend({}, this.currentType);
+                        let originalType = _.findWhere(this.teamTypes, {id: this.currentType.id});
 
-                this.resetErrors();
-                if (this.$TypeForm.valid) {
-                    let updatingObject = _.extend({}, this.currentType);
-	                let originalType = _.findWhere(this.teamTypes, { id: this.currentType.id});
+                        // check if name changed
+                        if (originalType.name === this.currentType.name)
+                            delete updatingObject.name;
 
-                    // check if name changed
-                    if (originalType.name === this.currentType.name)
-	                    delete updatingObject.name;
-
-                    return this.teamTypeResource.put({ id: updatingObject.id }, updatingObject).then((response) => {
-                        _.extend(_.findWhere(this.teamTypes, { id: updatingObject.id}), response.data.data);
-                        this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully updated');
-                    }, (response) =>  {
-                        this.$root.$emit('showError', response.data.message);
-                    });
-                }
+                        return this.teamTypeResource.put({id: updatingObject.id}, updatingObject).then((response) => {
+                            _.extend(_.findWhere(this.teamTypes, {id: updatingObject.id}), response.data.data);
+                            this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully updated');
+                        }, (response) => {
+                            this.$root.$emit('showError', response.data.message);
+                        });
+                    }
+                });
 
 	        },
 	        createType() {
+                this.$validator.validateAll('type-modal').then(result => {
+                    if (result) {
+                        return this.teamTypeResource.post(this.currentType).then((response) => {
+                            this.teamTypes.push(response.data.data);
+                            this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully created');
+                        }, (response) => {
+                            this.$root.$emit('showError', response.data.message);
 
-                this.resetErrors();
-                if (this.$TypeForm.valid) {
-                    return this.teamTypeResource.post(this.currentType).then((response) => {
-                        this.teamTypes.push(response.data.data);
-                        this.$root.$emit('showSuccess', 'Team Type: ' + response.data.data.name + ', successfully created');
-                    }, (response) =>  {
-                        this.$root.$emit('showError', response.data.message);
-
-                    });
-                }
+                        });
+                    }
+                })
 	        },
             confirmDelete(type) {
                 this.selectedType = type;
@@ -232,8 +229,9 @@
                         this.$root.$emit('showError', response.data.message);
                     });
             },
+            debouncedTeamTypeSearch: _.debounce(function() { this.getTeamTypes(); }, 300),
             getTeamTypes() {
-                return this.teamTypeResource.get({campaign: this.campaignId}).then((response) => {
+                return this.teamTypeResource.get({campaign: this.campaignId, search: this.teamTypesSearch}).then((response) => {
                     return this.teamTypes = response.data.data;
                 }, (error) =>  {
                     console.log(error);

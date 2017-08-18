@@ -14,7 +14,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-8">
-                    <h5><a href="#">{{ deadline.name ? deadline.name[0].toUpperCase() + deadline.name.slice(1) : '' }}</a></h5>
+                    <h5><a href="#">{{ deadline.name|capitalize }}</a></h5>
                     <h6><small>Enforced: {{ deadline.enforced ? 'Yes' : 'No' }}</small></h6>
                 </div>
                 <div class="col-xs-4 text-right">

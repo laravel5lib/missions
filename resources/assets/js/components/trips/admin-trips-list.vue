@@ -99,8 +99,8 @@
                 <tbody>
                 <tr v-for="trip in orderByProp(trips, orderByField, direction)">
                     <td>{{trip.group.data.name}}</td>
-                    <td>{{trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : ''}}</td>
-                    <td>{{trip.campaign.data.name ? trip.campaign.data.name[0].toUpperCase() + trip.campaign.data.name.slice(1) : ''}}</td>
+                    <td>{{ trip.type|capitalize }}</td>
+                    <td>{{ trip.campaign.data.name|capitalize }}</td>
                     <td>{{trip.status}}</td>
                     <td>{{trip.started_at|moment('ll') false true}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
                     <td>{{trip.reservations}}</td>
@@ -177,22 +177,22 @@
         watch: {
             // watch filters obj
             'filters': {
-                handler: (val) =>  {
+                handler(val, oldVal) {
                     // console.log(val);
                     this.pagination.current_page = 1;
                     this.searchTrips();
                 },
                 deep: true
             },
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
                 this.searchTrips();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
                 this.searchTrips();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
                 this.searchTrips();
             }
         },

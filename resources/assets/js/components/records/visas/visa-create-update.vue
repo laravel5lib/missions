@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
         <form id="CreateUpdateVisa" class="form-horizontal" novalidate>
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -64,9 +64,9 @@
             <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value="countryObj" :options="countries" label="name"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" :value="countryObj" :options="UTILITIES.countries" label="name"></v-select>
                     <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'">
-                        <option :value="country.code" v-for="country in countries">{{country.name}}</option>
+                        <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                     </select>
 
                 </div>
@@ -118,13 +118,15 @@
 
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../../uploads/admin-upload-create-update.vue';
     import errorHandler from'../../error-handler.mixin';
+    import utilities from'../../utilities.mixin';
     export default{
         name: 'visa-create-update',
         components: {vSelect, 'upload-create-update': uploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         props: {
             isUpdate: {
                 type:Boolean,
@@ -141,9 +143,6 @@
         },
         data(){
             return{
-                // mixin settings
-                validatorHandle: 'CreateUpdateVisa',
-
                 given_names: '',
                 surname: '',
                 number: '',
@@ -155,7 +154,6 @@
                 userObj: null,
 
                 // logic vars
-                countries: [],
                 countryObj: null,
                 showSuccess: false,
                 showError: false,
@@ -195,9 +193,13 @@
             forceBack(){
                 return this.back(true);
             },
-            submit(){
-                this.resetErrors();
-                if (this.$CreateUpdateVisa.valid) {
+            submit() {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.showError = true;
+                        return;
+                    }
+
                     this.visasResource.post(null, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -209,23 +211,21 @@
                         user_id: this.user_id,
                     }).then((resp) => {
                         this.$root.$emit('showSuccess', 'Visa created.');
-                        setTimeout(() =>  {
+                        setTimeout(() => {
                             window.location.href = '/' + this.firstUrlSegment + '/records/visas/' + resp.data.data.id;
                         }, 1000);
-                    }, (error) =>  {
+                    }, (error) => {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to create visa.');
                     });
-                } else {
-                    this.showError = true;
-                }
+                });
             },
             update(){
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-                
-                this.resetErrors();
-                if (this.$CreateUpdateVisa.valid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        return;
+                    }
+
                     this.visasResource.put({id:this.id}, {
                         given_names: this.given_names,
                         surname: this.surname,
@@ -245,7 +245,7 @@
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
-                }
+                });
             },
 
         },
@@ -262,19 +262,19 @@
             }
         },
         mounted(){
-            this.$http.get('utilities/countries').then((response) => {
-                this.countries = response.data.countries;
+            this.getCountries().then(() => {
+                if (this.isUpdate) {
+                    this.visasResource.get({ id: this.id }).then((response) => {
+                        let visa = response.data.data;
+                        $.extend(this, visa);
+                        this.countryObj = _.findWhere(this.UTILITIES.countries, {code: visa.country_code});
+                        this.userObj = visa.user.data;
+                        this.usersArr.push(this.userObj);
+                    });
+                }
             });
 
-            if (this.isUpdate) {
-                this.visasResource.get({ id: this.id }).then((response) => {
-                    let visa = response.data.data;
-                    $.extend(this, visa);
-                    this.countryObj = _.findWhere(this.countries, {code: visa.country_code});
-                    this.userObj = visa.user.data;
-                    this.usersArr.push(this.userObj);
-                });
-            }
+
         }
 
     }

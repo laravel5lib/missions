@@ -8,7 +8,7 @@
 						<hr class="divider inv">
 						<h3 class="text-center">First, find a group to travel with.</h3>
 						<p class="small">If you don't have a group, choose Missions.Me and we'll help place you on a team.</p>
-						<input type="text" class="form-control" v-model="searchText" debounce="500"
+						<input type="text" class="form-control" v-model="searchText" @keyup="debouncedSearchGroups"
 							   placeholder="Search anything (i.e. medical, teens, church name)">
 						<hr class="divider inv sm">
 						<p class="small text-center">Next, you'll pick your trip type.</p>
@@ -60,6 +60,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
 	export default {
 		name: 'campaign-groups',
 		props: ['id'],
@@ -72,16 +73,19 @@
 			}
 		},
 		watch: {
-			'searchText': (val, oldVal) =>  {
+			'searchText'(val, oldVal) {
 				this.pagination.current_page = 1;
 				this.page = 1;
-				this.searchGroups();
+//				this.searchGroups();
 			},
-			'page': (val, oldVal) =>  {
+			'page'(val, oldVal) {
 				this.searchGroups();
 			}
 		},
 		methods: {
+		    debouncedSearchGroups: _.debounce(function () {
+                this.searchGroups();
+            }, 500),
 			searchGroups() {
 				// search public groups with public published trips belongs to the given campaign id
 				// search by trip type, trip prospects, group type, and group name

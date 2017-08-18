@@ -98,11 +98,11 @@
                 <tbody>
                 <tr v-for="upload in uploads">
                     <td><img v-if="upload.type !== 'file'" :src="checkSource(upload.source)" width="100px"/></td>
-                    <td v-text="upload.name ? upload.name[0].toUpperCase() + upload.name.slice(1) : ''"></td>
-                    <td v-text="upload.type ? upload.type[0].toUpperCase() + upload.type.slice(1) : ''"></td>
-                    <td v-text="upload.tags ? upload.tags[0].toUpperCase() + upload.tags.slice(1) : ''"></td>
+                    <td v-text="upload.name|capitalize"></td>
+                    <td v-text="upload.type|capitalize"></td>
+                    <td v-text="upload.tags|capitalize"></td>
                     <td v-text="upload.created_at|moment('ll')"></td>
-                    <td v-text="upload.putd_at|moment('ll')"></td>
+                    <td v-text="upload.updated_at|moment('ll')"></td>
                     <td class="text-center"><a :href="'/admin' + upload.links[0].uri + '/edit'"><i class="fa fa-gear"></i></a></td>
                 </tr>
                 </tbody>
@@ -154,32 +154,32 @@
         watch: {
 			// watch filters obj
 			'filters': {
-				handler: (val) =>  {
+				handler(val, oldVal) {
 					// console.log(val);
                     this.pagination.current_page = 1;
                     this.searchUploads();
 				},
 				deep: true
 			},
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchUploads();
             },
-            'orderByField': (val, oldVal) =>  {
+            'orderByField'(val, oldVal) {
 				this.searchUploads();
             },
-            'direction': (val, oldVal) =>  {
+            'direction'(val, oldVal) {
 				this.searchUploads();
             },
-            'tagsString': (val) =>  {
+            'tagsString'(val, oldVal) {
                 let tags = val.split(/[\s,]+/);
                 this.filters.tags = tags[0] !== '' ? tags : '';
                 this.searchUploads();
             },
-            'page': (val, oldVal) =>  {
+            'page'(val, oldVal) {
 				this.searchUploads();
             },
-            'per_page': (val, oldVal) =>  {
+            'per_page'(val, oldVal) {
 				this.searchUploads();
             },
         },

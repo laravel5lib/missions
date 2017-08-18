@@ -17,7 +17,7 @@
                             <label>Transfer to Group:</label>
                             <select class="form-control" v-model="selectedGroupId">
                                 <option v-for="group in groups" v-bind:value="group.id">
-                                        {{ group.name ? group.name[0].toUpperCase() + group.name.slice(1) : '' }}
+                                        {{ group.name|capitalize }}
                                 </option>
                             </select>
                             <span class="help-block">Only group's with active trips participating in the same campaign are available.</span>
@@ -26,7 +26,7 @@
                                 <label>Register for Trip Type:</label>
                                 <select class="form-control" v-model="selectedTrip">
                                     <option v-for="trip in trips" v-bind:value="trip">
-                                        {{ trip.type ? trip.type[0].toUpperCase() + trip.type.slice(1) : '' }}
+                                        {{ trip.type|capitalize }}
                                     </option>
                                 </select>
                                 <span class="help-block">Available trips may have changed. Please select a new trip.</span>

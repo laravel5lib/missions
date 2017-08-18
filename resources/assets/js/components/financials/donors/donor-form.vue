@@ -13,7 +13,7 @@
                         <input type="text"
                                class="form-control"
                                v-model="donor.name"
-                               initial="off"
+
                                name="name" v-validate="'required'">
                     </div>
                     <div class="col-md-6">
@@ -32,8 +32,7 @@
                         <input type="text"
                                class="form-control"
                                v-model="donor.email"
-                               initial="off"
-                               name="email" v-validate="{email: true}">
+                               name="email" v-validate="'email'">
                     </div>
                     <div class="col-md-6">
                         <label>Phone</label>
@@ -59,14 +58,14 @@
                 <div class="row">
                     <div class="col-md-6" v-validate-class>
                         <label>Zip/Postal Code</label>
-                        <input type="text" class="form-control" v-model="donor.zip" initial="off"
+                        <input type="text" class="form-control" v-model="donor.zip"
                                name="zip" v-validate="'required'">
                     </div>
                     <div class="col-md-6" v-validate-class>
                         <label>Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
                                   :value="countryCodeObj" :options="countries" label="name"
-                                  placeholder="Select a country" initial="off"
+                                  placeholder="Select a country"
                                   name="country_code" v-validate="'required'"></v-select>
                     </div>
                 </div>
@@ -78,7 +77,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>Account Type</label>
-                        <select class="form-control" v-model="donor.account_type" @change="donor.account_id = null" initial="off">
+                        <select class="form-control" v-model="donor.account_type" @change="donor.account_id = null" >
                             <option :value="null">Guest</option>
                             <option value="users">Member</option>
                             <option value="groups">Group</option>
@@ -150,13 +149,13 @@
             }
         },
         watch: {
-            'countryCodeObj': (val) =>  {
+            'countryCodeObj'(val, oldVal) {
                  _.isObject(val) ? this.donor.country_code = val.code : this.donor.country_code  = null;
             },
-            'userObj': (val) =>  {
+            'userObj'(val, oldVal) {
                  _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id  = null;
             },
-            'groupObj': (val) =>  {
+            'groupObj'(val, oldVal) {
                  _.isObject(val) ? this.donor.account_id = val.id : this.donor.account_id  = null;
             }
         },

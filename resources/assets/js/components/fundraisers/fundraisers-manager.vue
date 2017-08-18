@@ -1,7 +1,7 @@
 <template>
     <div style="position:relative">
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
-        <template v-if="isUser()">
+        <template v-if="isUser">
             <!--<div class="panel panel-default">-->
                 <!--<div class="panel-body">-->
                     <form>
@@ -58,7 +58,7 @@
                                     <i class="fa fa-check" v-if="checkingUrl === false && validUrl === true"></i>
                                     <i class="fa fa-times" v-if="checkingUrl === false && validUrl === false"></i>
                                 </span>
-                                    <input type="text" class="form-control" id="url" v-model="fundraiser.url" debounce="500" @change="validateUrl">
+                                    <input type="text" class="form-control" id="url" v-model="fundraiser.url" @change="debouncedValidateUrl">
                                 </div>
                             </div>
 
@@ -102,6 +102,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore'
     var marked = require('marked');
     export default{
         name: 'fundraisers-manager',
@@ -123,8 +124,15 @@
                 validUrl: true,
             }
         },
+        computed: {
+            isUser(){
+                if (this.editable === 1) return true;
+
+                return this.$root.user && this.sponsorId === this.$root.user.id;
+            },
+        },
         watch: {
-            'fundraiser': (val, oldVal) =>  {
+            'fundraiser'(val, oldVal) {
                 this.description = val.hasOwnProperty('description') ? val.description : '';
                 // watch url value for checking
                 if (val.hasOwnProperty('url') && oldVal.hasOwnProperty('url') && val.url !== oldVal.url) {
@@ -139,11 +147,7 @@
         },
         methods: {
             marked: marked,
-            isUser(){
-                if (this.editable === 1) return true;
-                
-                return this.$root.user && this.sponsorId === this.$root.user.id;
-            },
+
             reset(){
                 this.description = this.fundraiser.description;
             },
@@ -154,6 +158,9 @@
 			toggleDisplayDonors(val) {
 				this.$root.$emit('Fundraiser:DisplayDonors', val);
 			},
+            debouncedValidateUrl: _.debounce(function () {
+                this.validateUrl()
+            }, 500),
             validateUrl(){
                 this.checkingUrl = true;
                 this.$http.get('fundraisers', { params: { url: this.fundraiser.url } }).then((response) => {
@@ -197,10 +204,7 @@
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();
-                }, (error) =>  {
-                    // this.$refs.spinner.hide();
-                    //TODO add error alert
-                });
+                }, this.$root.handleApiError);
             }
         },
         mounted(){

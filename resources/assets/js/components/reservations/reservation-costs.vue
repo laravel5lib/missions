@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
     <div>
         <spinner ref="spinner" size="sm" text="Loading"></spinner>
         <!-- <div class="row">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-md-3">
                         <label>Amount</label>
-                        <p>{{ '$' + cost.amount.toFixed(2) }}</p>
+                        <p>{{ currency(cost.amount) }}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">
@@ -59,7 +59,7 @@
                         <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                             <label class="control-label">Available Addons or Requests</label>
                             <p class="help-block" v-for="cost in selectedCosts">
-                                <strong>{{ cost.name }} - {{ '$' + cost.amount.toFixed(2) }}</strong>
+                                <strong>{{ cost.name }} - {{ currency(cost.amount) }}</strong>
                                 <br />
                                 {{ cost.description }}
                                 <hr class="divider">
@@ -92,6 +92,7 @@
 </template>
 
 <script type="text/javascript">
+    import $ from 'jquery';
     import vSelect from 'vue-select';
     export default{
         name: 'reservation-costs',
@@ -121,7 +122,7 @@
             }
         },
         watch: {
-            'temporaryCosts': (val) =>  {
+            'temporaryCosts'(val, oldVal) {
                 //debugger;
             }
         },
@@ -150,7 +151,7 @@
             },
             remove(){
                 let temporaryDues = [];
-                let res = jQuery.extend(true, {}, this.reservation);
+                let res = $.extend(true, {}, this.reservation);
 
                 // remove cost from temporary array
                 if (this.selectedCost.unsaved) {
@@ -193,7 +194,7 @@
             },
             addCosts(){
                 let temporaryDues = [];
-                let res = jQuery.extend(true, {}, this.reservation);
+                let res = $.extend(true, {}, this.reservation);
 
                 // Add selected costs to temporary list
                 _.each(this.selectedCosts, (cost) => {
@@ -240,9 +241,9 @@
                     costIds.push({id: cost.id || cost.cost_id, locked: cost.locked})
                 });
 
-                // let res = jQuery.extend(true, {}, this.reservation);
+                // let res = $.extend(true, {}, this.reservation);
                 let res = {};
-                res.costs = costIds
+                res.costs = costIds;
 
                 return this.resource.put(res).then((response) => {
                     this.setReservationData(response.data.data);
@@ -268,7 +269,7 @@
 
                 this.getAvailableCosts();
                 this.listedCosts = reservation.costs.data;
-                this.originalCosts = jQuery.extend(true, {}, this.listedCosts);
+                this.originalCosts = $.extend(true, {}, this.listedCosts);
             },
             getAvailableCosts(){
                 this.selectedCosts = [];
@@ -278,7 +279,7 @@
                     if (!_.findWhere(this.reservation.costs.data, {cost_id: cost.id}) && !_.findWhere(this.temporaryCosts, {id: cost.id}) && cost.type === 'optional') {
                         cost.removal = false;
                         return true;
-                    };
+                    }
                 });
             },
             revert(){

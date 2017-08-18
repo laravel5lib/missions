@@ -9,7 +9,7 @@
                     </label>
                 </div>
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search">
+                    <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search">
                     <span class="input-group-addon"><i class="fa fa-search"></i></span>
                 </div>
                 <!-- <export-utility v-if="canExport" url="influencers/export"
@@ -55,7 +55,7 @@
                         </div><!-- end col -->
                          <div class="col-sm-6">
                             <label>UPDATED ON</label>
-                            <p class="small">{{influencer.putd_at|moment('lll')}}</p>
+                            <p class="small">{{influencer.updated_at|moment('lll')}}</p>
                         </div><!-- end col -->
                     </div><!-- end row -->
                     <div v-if="firstUrlSegment !== 'admin'" style="position:absolute;right:20px;top:5px;">
@@ -85,6 +85,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../../export-utility.vue';
     import importUtility from '../../import-utility.vue';
     let API = {
@@ -150,11 +151,11 @@
             }
         },
         watch:{
-            'search': (val, oldVal) =>  {
+            'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchInfluencers();
+//                this.searchInfluencers();
             },
-            'includeManaging': (val, oldVal) =>  {
+            'includeManaging'(val, oldVal) {
                 this.pagination.current_page = 1;
                 this.searchInfluencers();
             }
@@ -167,7 +168,7 @@
                 // return this.$root.hasAbility('') ||  this.$root.hasAbility('') ||  this.$root.hasAbility('');
             },
             setInfluencer(influencer) {
-                this.$dispatch('set-document', influencer);
+                this.$emit('set-document', influencer);
             },
             removeInfluencer(influencer){
                 if(influencer) {
@@ -179,6 +180,9 @@
                     });
                 }
             },
+            debouncedSearch: _.debounce(function() {
+                this.searchInfluencers()
+            }, 250),
             searchInfluencers(){
                 let params = {user: this.userId, subject: 'Influencer', sort: 'author_name', search: this.search, per_page: this.per_page, page: this.pagination.current_page};
                 if (this.includeManaging)

@@ -1,4 +1,4 @@
-<template xmlns:v-validate="http://www.w3.org/1999/xhtml">
+<template >
 
         <form id="CreateUserForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
@@ -216,7 +216,7 @@
                     <div class="col-sm-6">
                         <label for="gender" class="control-label">Gender</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate="{required: {rule: true}}"> Male
+                            <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate="'required'"> Male
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
@@ -227,7 +227,7 @@
                     <div class="col-sm-6">
                         <label for="status" class="control-label">Status</label><br>
                         <label class="radio-inline">
-                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate="{required: {rule: true}}"> Single
+                            <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate="'required'"> Single
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
@@ -325,7 +325,7 @@
                     <label for="url" class="control-label">Url Slug</label>
                     <div class="input-group">
                         <span class="input-group-addon">www.missions.me/</span>
-                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="{ required: !!public }"/>
+                        <input type="text" id="url" v-model="url" class="form-control" required name="url" v-validate="!!public ? 'required' : ''"/>
                     </div>
                 </div>
             </div>
@@ -392,7 +392,7 @@
             }
         },
         watch: {
-            'name': (val) =>  {
+            'name'(val, oldVal) {
                 if (typeof val === 'string') {
                     // pre-populate slug
                     this.$http.get('utilities/make-slug/' + val, { params: { hideLoader: true } }).then((response) => {

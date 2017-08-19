@@ -150,10 +150,8 @@
 												<span class="badge badge-danger" style="background-color: #F6323E;">
 													{{region.teams && region.teams.data.length ? region.teams.data.length : 0}}
 												</span>
-												<dropdown type="default">
-													<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-														<span class="fa fa-ellipsis-h"></span>
-													</button>
+												<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+													<span slot="button" class="fa fa-ellipsis-h"></span>
 													<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 														<li><a @click="openRegionEditModal(region)"><i class="fa fa-pencil"></i> Edit</a></li>
 														<li role="separator" class="divider"></li>

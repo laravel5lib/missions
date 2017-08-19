@@ -32,10 +32,8 @@
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
-									<dropdown type="default">
-										<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-											<span class="fa fa-ellipsis-h"></span>
-										</button>
+									<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+										<span slot="button" class="fa fa-ellipsis-h"></span>
 										<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 											<li><a @click="editType(roomType)">Edit</a></li>
 											<li><a @click="confirmDelete(roomType)">Delete</a></li>

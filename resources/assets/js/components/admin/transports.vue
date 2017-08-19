@@ -80,10 +80,8 @@
                                     </div>
                                     <div class="col-xs-3 text-right action-buttons">
                                         <a :href="'transports/' + transport.id" class="btn btn-xs btn-primary">View</a>
-                                        <dropdown type="default">
-                                            <button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-                                                <span class="fa fa-ellipsis-h"></span>
-                                            </button>
+                                        <dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+                                            <span slot="button" class="fa fa-ellipsis-h"></span>
                                             <ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
                                                 <li><a @click="openTransportModal(transport)"><i class="fa fa-cog"></i> Edit</a></li>
                                                 <li><a @click="openTransportDeleteModal(transport)"><i class="fa fa-trash"></i> Delete</a></li>

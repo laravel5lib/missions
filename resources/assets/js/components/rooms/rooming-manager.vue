@@ -36,10 +36,8 @@
 										</h5>
 									</div>
 									<div class="col-xs-2 text-right">
-										<dropdown type="default">
-											<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-												<span class="fa fa-ellipsis-h"></span>
-											</button>
+										<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+											<span slot="button" class="fa fa-ellipsis-h"></span>
 											<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 												<li :class="{'disabled': isLocked}"><a @click="editRoom(currentRoom)">Edit Room</a></li>
 												<li :class="{'disabled': isLocked}"><a @click="openDeleteRoomModal(currentRoom)">Delete Room</a></li>
@@ -87,10 +85,8 @@
 																		</div><!-- end media -->
 																	</div>
 																	<div class="col-xs-4 text-right action-buttons">
-																		<dropdown type="default">
-																			<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																				<span class="fa fa-ellipsis-h"></span>
-																			</button>
+																		<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+																			<span slot="button" class="fa fa-ellipsis-h"></span>
 																			<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																				<li v-if="member.room_leader" :class="{'disabled': isLocked}"><a @click="demoteToOccupant(member)">Demote to Occupant</a></li>
 																				<li v-if="!member.room_leader && !currentRoomHasLeader" :class="{'disabled': isLocked}"><a @click="promoteToLeader(member)">Promote to Room Leader</a></li>
@@ -317,10 +313,8 @@
 											</div><!-- end media -->
 										</div>
 										<div class="col-xs-3 text-right action-buttons">
-											<dropdown type="default">
-												<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-													<span class="fa fa-ellipsis-h"></span>
-												</button>
+											<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+												<span slot="button" class="fa fa-ellipsis-h"></span>
 												<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 													<li class="dropdown-header">Assign To Room</li>
 													<li role="separator" class="divider"></li>

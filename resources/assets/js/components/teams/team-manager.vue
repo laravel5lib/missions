@@ -57,7 +57,7 @@
 				<form class="col-sm-12">
 
 					<hr class="divider inv sm">
-					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+					<button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
 				</form>
 			</mm-aside>
 
@@ -131,16 +131,14 @@
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname|capitalize }}, {{ member.given_names|capitalize }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group}}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
 																		</div>
 																		<div class="col-xs-3 text-right action-buttons">
-																			<dropdown type="default">
-																				<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																					<span class="fa fa-ellipsis-h"></span>
-																				</button>
+																			<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+																				<span slot="button" class="fa fa-ellipsis-h"></span>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																					<template v-for="subSquad in currentSquadGroupsOrdered">
 																						<template v-if="subSquad.callsign !== 'Squad Leaders'">
@@ -167,9 +165,9 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																			<label>Gender</label>
-																			<p class="small">{{ member.gender|capitalize }}</p>
+																			<p class="small">{{ member.gender | capitalize }}</p>
 																			<label>Marital Status</label>
-																			<p class="small">{{ member.status|capitalize }}</p>
+																			<p class="small">{{ member.status | capitalize }}</p>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -183,15 +181,15 @@
 																		<ul class="list-unstyled" v-if="member.companions.data.length">
 																			<li v-for="companion in member.companions.data">
 																				<i :class="getGenderStatusIcon(companion)"></i>
-																				{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
-																				<span class="text-muted">({{ companion.relationship|capitalize }})</span>
+																				{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																				<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																			</li>
 																		</ul>
 																		<p class="small" v-else>None</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Trip Type</label>
-																		<p class="small">{{ member.trip.data.type|capitalize }}</p>
+																		<p class="small">{{ member.trip.data.type | capitalize }}</p>
 																	</div>
 																	<div class="col-sm-6">
 																		<label>Designation</label>
@@ -221,10 +219,8 @@
 													<div class="row">
 														<h5 class="col-xs-8" v-text="squad.callsign"></h5>
 														<div class="col-xs-4 text-right">
-															<dropdown type="default">
-																<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																	<span class="fa fa-ellipsis-h"></span>
-																</button>
+															<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+																<span slot="button" class="fa fa-ellipsis-h"></span>
 																<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																	<li :class="{'disabled': isLocked}"><a @click="showSquadUpdateModal = true,selectedSquadObj = squad">Edit</a></li>
 																	<template v-for="subTeam in teams">
@@ -260,16 +256,14 @@
 																				<div class="media-body" style="vertical-align:middle;">
 																					<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																					<i :class="getGenderStatusIcon(member)"></i>
-																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname|capitalize }}, {{ member.given_names|capitalize }}</a></h6>
+																					<a :href="getReservationLink(member)" target="_blank">{{ member.surname | capitalize }}, {{ member.given_names | capitalize }}</a></h6>
 																					<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ member.desired_role.name }} <span class="text-muted">&middot; {{ member.travel_group }}</span></p>
 																				</div><!-- end media-body -->
 																			</div><!-- end media -->
 																		</div>
 																		<div class="col-xs-3 text-right action-buttons">
-																			<dropdown type="default">
-																				<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																					<span class="fa fa-ellipsis-h"></span>
-																				</button>
+																			<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+																				<span slot="button" class="fa fa-ellipsis-h"></span>
 																				<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																					<template v-for="subSquad in currentSquadGroupsOrdered">
 																						<template v-if="subSquad.callsign === 'Squad Leaders'">
@@ -308,9 +302,9 @@
 																	<div class="row">
 																		<div class="col-sm-6">
 																			<label>Gender</label>
-																			<p class="small">{{ member.gender|capitalize }}</p>
+																			<p class="small">{{ member.gender | capitalize }}</p>
 																			<label>Marital Status</label>
-																			<p class="small">{{ member.status|capitalize }}</p>
+																			<p class="small">{{ member.status | capitalize }}</p>
 																		</div><!-- end col -->
 																		<div class="col-sm-6">
 																			<label>Age</label>
@@ -323,15 +317,15 @@
 																			<ul class="list-unstyled" v-if="member.companions.data.length">
 																				<li v-for="companion in member.companions.data">
 																					<i :class="getGenderStatusIcon(companion)"></i>
-																					{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }}
-																					<span class="text-muted">({{ companion.relationship|capitalize }})</span>
+																					{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }}
+																					<span class="text-muted">({{ companion.relationship | capitalize }})</span>
 																				</li>
 																			</ul>
 																			<p class="small" v-else>None</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Trip Type</label>
-																			<p class="small">{{ member.trip.data.type|capitalize }}</p>
+																			<p class="small">{{ member.trip.data.type | capitalize }}</p>
 																		</div>
 																		<div class="col-sm-6">
 																			<label>Designation</label>
@@ -372,9 +366,9 @@
 								<div class="col-sm-4">
 									<label for="" class="control-label">Type</label>
 									<!--<select v-if="isAdminRoute && editTeamMode" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
-										<option :value="type.id" v-for="type in teamTypes">{{ type.name|capitalize }}</option>
+										<option :value="type.id" v-for="type in teamTypes">{{ type.name | capitalize }}</option>
 									</select>-->
-									<p v-text="currentTeam.type.data.name|capitalize"></p>
+									<p v-text="currentTeam.type.data.name | capitalize"></p>
 								</div>
 								<div class="col-sm-2">
 									<label for="" class="control-label">Locked</label>
@@ -492,7 +486,7 @@
 							<template v-if="isAdminRoute">
 								<div class="col-xs-6">
 									<div class="input-group input-group-sm col-xs-12">
-										<input type="text" class="form-control" v-model="teamsSearch" debounce="300" placeholder="Search">
+										<input type="text" class="form-control" v-model="teamsSearch" @keyup="debouncedTeamsSearch" placeholder="Search">
 										<span class="input-group-addon"><i class="fa fa-search"></i></span>
 									</div>
 								</div>
@@ -517,8 +511,8 @@
 										<a class="list-group-item" :class="{'active': currentTeam === team}" v-for="team in teams" @click="makeTeamCurrent(team)">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													{{ team.callsign|capitalize }}
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name|capitalize"></span>
+													{{ team.callsign | capitalize }}
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>
@@ -547,7 +541,7 @@
 						<form class="form-inline row">
 							<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 								<div class="input-group input-group-sm col-xs-12">
-									<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
+									<input type="text" class="form-control" v-model="reservationsSearch" @keyup="debouncedSearchReservations" placeholder="Search">
 									<span class="input-group-addon"><i class="fa fa-search"></i></span>
 								</div>
 							</div><!-- end col -->
@@ -615,16 +609,14 @@
 																<h6 class="media-heading text-capitalize" style="margin-bottom:3px;">
 																<i :class="getGenderStatusIcon(reservation)"></i>
 																<a :href="getReservationLink(reservation)" target="_blank">
-																{{ reservation.surname|capitalize }}, {{ reservation.given_names|capitalize }}</a></h6>
+																{{ reservation.surname | capitalize }}, {{ reservation.given_names | capitalize }}</a></h6>
 																<p style="line-height:1;font-size:10px;margin-bottom:2px;">{{ reservation.desired_role.name }} <span class="text-muted">&middot; {{ reservation.trip.data.group.data.name }}</span></p>
 															</div><!-- end media-body -->
 														</div><!-- end media -->
 													</div>
 													<div class="col-xs-3 text-right action-buttons">
-														<dropdown type="default">
-															<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-																<span class="fa fa-ellipsis-h"></span>
-															</button>
+														<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+															<span slot="button" class="fa fa-ellipsis-h"></span>
 															<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 																<li class="dropdown-header">Assign To Squad</li>
 																<li role="separator" class="divider"></li>
@@ -658,9 +650,9 @@
 												<div class="row">
 													<div class="col-sm-6">
 														<label>Gender</label>
-														<p class="small">{{ reservation.gender|capitalize }}</p>
+														<p class="small">{{ reservation.gender | capitalize }}</p>
 														<label>Marital Status</label>
-														<p class="small">{{ reservation.status|capitalize }}</p>
+														<p class="small">{{ reservation.status | capitalize }}</p>
 													</div><!-- end col -->
 													<div class="col-sm-6">
 														<label>Age</label>
@@ -673,18 +665,18 @@
 														<ul class="list-unstyled" v-if="reservation.companions.data.length">
 															<li v-for="companion in reservation.companions.data">
 																<i :class="getGenderStatusIcon(companion)"></i>
-																{{ companion.surname|capitalize }}, {{ companion.given_names|capitalize }} <span class="text-muted">({{ companion.relationship|capitalize }})</span>
+																{{ companion.surname | capitalize }}, {{ companion.given_names | capitalize }} <span class="text-muted">({{ companion.relationship | capitalize }})</span>
 															</li>
 														</ul>
 														<p class="small" v-else>None</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Trip Type</label>
-														<p class="small">{{ reservation.trip.data.type|capitalize }}</p>
+														<p class="small">{{ reservation.trip.data.type | capitalize }}</p>
 													</div>
 													<div class="col-sm-6">
 														<label>Designation</label>
-														<p class="small">{{ reservation.arrival_designation|capitalize }}</p>
+														<p class="small">{{ reservation.arrival_designation | capitalize }}</p>
 													</div>
 												</div><!-- end row -->
 											</div>
@@ -715,7 +707,7 @@
 							<div class="form-group" :class="{'has-error': errors.has('teamtype', 'team-create')}">
 								<label for="" class="control-label">Type</label>
 								<select class="form-control" v-model="newTeamType" name="teamtype" v-validate="'required'">
-									<option :value="type.id" v-for="type in teamTypes">{{ type.name|capitalize }}</option>
+									<option :value="type.id" v-for="type in teamTypes" :key="type.id">{{ type.name | capitalize }}</option>
 								</select>
 							</div>
 							<div class="form-group" :class="{'has-error': errors.has('teamgroup', 'team-create')}" v-if="isAdminRoute">
@@ -724,7 +716,7 @@
 										  :value="newTeamGroup" :options="groupsOptions" label="name" name="teamgroup" v-validate="'required'"
 										  placeholder="Assign Travel Group"></v-select>
 								<!--<select class="hidden" v-model="newTeamGroup">
-									<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
+									<option :value="group" v-for="group in groupsOptions">{{ group.name||capitalize() }}</option>
 								</select>-->
 							</div>
 						</form>
@@ -767,7 +759,7 @@
 			<modal title="Edit Group" small ok-text="Update" :callback="updateSquad" :value="showSquadUpdateModal" @closed="showSquadUpdateModal=false">
 				<div slot="modal-body" class="modal-body">
 
-						<form id="SquadEditForm" data-vv-scope="group-edit">
+						<form id="SquadEditForm" data-vv-scope="group-edit" v-if="selectedSquadObj">
 							<div class="form-group" :class="{'has-error': errors.has('editsquadcallsign', 'group-edit')}">
 								<label for="createSquadCallsign" class="control-label">Group Name</label>
 								<input @keydown.enter.prevent="updateSquad" type="text" class="form-control" id="createSquadCallsign" :value.once="selectedSquadObj.callsign" placeholder="" name="editsquadcallsign" v-model="editSquadCallsign" v-validate="'required'">
@@ -925,11 +917,11 @@
             },
             'teamsSearch'(val, oldVal) {
                 this.teamsPagination.current_page = 1;
-                this.getTeams();
+//                this.getTeams();
             },
             'reservationsSearch'(val, oldVal) {
                 this.reservationsPagination.current_page = 1;
-                this.searchReservations();
+//                this.searchReservations();
             },
 		    'excludeReservationIds'(val, oldVal) {
                 this.reservationsPagination.current_page = 1;
@@ -938,7 +930,7 @@
 		    'currentTeam'(val, oldVal) {
                 if (val && val.id) {
                     this.getSquads();
-                    this.putConfig();
+                    this.updateConfig();
                 } else {
                     window.localStorage.removeItem(this.storageName);
                 }
@@ -1004,7 +996,7 @@
 	    },
         methods: {
             sortByLeader(members) {
-                return _.sortBy(members, 'leader');
+                return members ? _.sortBy(members, 'leader') : [];
             },
 
             getRuleLabel(key){
@@ -1298,6 +1290,9 @@
                         this.currentTeam.members_count--;
                     });
             },
+	        debouncedSearchReservations: _.debounce(function () {
+		        this.searchReservations();
+            }, 250),
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,user,companions',
@@ -1338,6 +1333,7 @@
                     //TODO add error alert
                 });
             },
+            debouncedTeamsSearch: _.debounce(function() { this.getTeams(); }, 300),
             getTeams(){
                 let params = {
                     include: 'type,groups',
@@ -1386,71 +1382,73 @@
                 });
             },
 	        newTeam(){
-                if (this.$TeamCreate.valid) {
-                    let associations = [];
-                    if (this.isAdminRoute) {
-                        if (this.newTeamCampaigns.length)
-	                        _.each(this.newTeamCampaigns, (campaign) => {
-	                            associations.push({
-	                                type: 'campaigns',
-	                                id: campaign.id
-	                            });
-                            });
+                this.$validator.validateAll('team-create').then(result => {
+                    if (result) {
+                        let associations = [];
+                        if (this.isAdminRoute) {
+                            if (this.newTeamCampaigns.length)
+                                _.each(this.newTeamCampaigns, (campaign) => {
+                                    associations.push({
+                                        type: 'campaigns',
+                                        id: campaign.id
+                                    });
+                                });
 
-                        if (this.newTeamGroup && this.newTeamGroup.id)
-                            associations.push({
-                                type: 'groups',
-                                id: this.newTeamGroup.id
-                            });
-                    } else {
-                        if (this.newTeamCampaigns.length)
-                            _.each(this.newTeamCampaigns, (campaign) => {
+                            if (this.newTeamGroup && this.newTeamGroup.id)
+                                associations.push({
+                                    type: 'groups',
+                                    id: this.newTeamGroup.id
+                                });
+                        } else {
+                            if (this.newTeamCampaigns.length)
+                                _.each(this.newTeamCampaigns, (campaign) => {
+                                    associations.push({
+                                        type: 'campaigns',
+                                        id: campaign.id
+                                    });
+                                });
+                            else
                                 associations.push({
                                     type: 'campaigns',
-                                    id: campaign.id
+                                    id: this.campaignId
                                 });
-                            });
-                        else
-                            associations.push({
-                                type: 'campaigns',
-                                id: this.campaignId
-                            });
-                        if (this.groupId) {
-                            associations.push({
-                                type: 'groups',
-                                id: this.groupId
-                            });
+                            if (this.groupId) {
+                                associations.push({
+                                    type: 'groups',
+                                    id: this.groupId
+                                });
+                            }
                         }
-                    }
-                    let data = {
-                        type_id: this.newTeamType,
-                        callsign: this.newTeamCallSign,
-                        associations: associations
-                    };
-                    let params = {
-                        include: 'type,groups',
-                    };
-                    this.TeamResource.post(data, params).then((response) => {
-                        let team = response.data.data;
+                        let data = {
+                            type_id: this.newTeamType,
+                            callsign: this.newTeamCallSign,
+                            associations: associations
+                        };
+                        let params = {
+                            include: 'type,groups',
+                        };
+                        this.TeamResource.post(data, params).then((response) => {
+                            let team = response.data.data;
 
-                        this.teams.push(team);
-                        this.getTeams().then(() => {
+                            this.teams.push(team);
+                            this.getTeams().then(() => {
 
+                            });
+                            this.currentSquadGroups = [];
+                            this.currentTeam = team;
+                            // Create default squads for current team
+                            this.newSquad('Group #1');
+
+                            if (team.type.data.rules.max_groups > 1)
+                                this.newSquad('Squad Leaders');
+
+                            this.showTeamCreateModal = false;
+                            $('.nav-tabs a[href="#reservations"]').tab('show');
                         });
-                        this.currentSquadGroups = [];
-                        this.currentTeam = team;
-                        // Create default squads for current team
-                        this.newSquad('Group #1');
-
-                        if (team.type.data.rules.max_groups > 1)
-                            this.newSquad('Squad Leaders');
-
-                        this.showTeamCreateModal = false;
-                        $('.nav-tabs a[href="#reservations"]').tab('show');
-                    });
-                } else {
+                    } else {
 //                    this.$root.$emit('showError', '');
-                }
+                    }
+                });
 	        },
 	        newSquad(callsign){
 	            if (this.currentSquadGroups.length >= this.currentTeam.type.data.rules.max_groups) {
@@ -1458,20 +1456,22 @@
 	                return;
 	            }
 
-                if (this.$SquadCreate.valid || _.isString(callsign)) {
-                    return this.TeamSquadResource.post({team: this.currentTeam.id}, {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
-                        .then((response) => {
-							let squad = _.extend(response.data.data, {
-							    members: [],
-                                members_count: 0
-                            });
+                this.$validator.validateAll('group-create').then(result => {
+                    if (result || _.isString(callsign)) {
+                        return this.TeamSquadResource.post({team: this.currentTeam.id}, {callsign: _.isString(callsign) ? callsign : this.newSquadCallsign})
+                            .then((response) => {
+                                let squad = _.extend(response.data.data, {
+                                    members: [],
+                                    members_count: 0
+                                });
 
-	                        this.currentSquadGroups.push(squad);
-                            this.currentTeam.squads_count++;
-                            this.showSquadCreateModal = false;
-                            return squad;
-                        });
-                }
+                                this.currentSquadGroups.push(squad);
+                                this.currentTeam.squads_count++;
+                                this.showSquadCreateModal = false;
+                                return squad;
+                            });
+                    }
+                });
 	        },
 	        updateTeam(team){
 	            this.TeamResource.put({team: team.id, include: 'type,groups'}, team).then((response) => {

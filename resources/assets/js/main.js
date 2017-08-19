@@ -237,7 +237,7 @@ Vue.component('panel', VueStrap.panel);
 Vue.component('radio', VueStrap.radio);
 Vue.component('checkbox', VueStrap.checkbox);
 Vue.component('progressbar', VueStrap.progressbar);
-Vue.component('dropdown', VueStrap.dropdown);
+Vue.component('dropdown', require('./components/dropdown.vue'));
 Vue.component('strap-select', VueStrap.select);
 Vue.component('spinner', VueStrap.spinner);
 Vue.component('popover', VueStrap.popover);
@@ -678,6 +678,7 @@ Vue.mixin({
             return _.first(arr, number);
         },
         orderByProp(arr, prop, direction = 1) {
+            if (!_.isArray(arr) || !arr.length) return [];
             let list = _.sortBy(arr, prop);
             return direction === -1 ? _.reverse(list) : list
         },

@@ -368,7 +368,7 @@
 									<!--<select v-if="isAdminRoute && editTeamMode" class="form-control" v-model="currentTeam.type_id" @change="updateCurrentTeamType">
 										<option :value="type.id" v-for="type in teamTypes">{{ type.name | capitalize }}</option>
 									</select>-->
-									<p v-text="currentTeam.type.data.name | capitalize"></p>
+									<p>{{currentTeam.type.data.name | capitalize}}</p>
 								</div>
 								<div class="col-sm-2">
 									<label for="" class="control-label">Locked</label>
@@ -512,7 +512,7 @@
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
 													{{ team.callsign | capitalize }}
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name | capitalize}}</span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right"><i class="fa fa-users"></i> {{ team.members_count || 0 }}</div>

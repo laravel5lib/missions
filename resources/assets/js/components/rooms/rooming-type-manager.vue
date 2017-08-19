@@ -32,8 +32,10 @@
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
-									<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
-										<span slot="button" class="fa fa-ellipsis-h"></span>
+									<dropdown type="default">
+										<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
+											<span class="fa fa-ellipsis-h"></span>
+										</button>
 										<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 											<li><a @click="editType(roomType)">Edit</a></li>
 											<li><a @click="confirmDelete(roomType)">Delete</a></li>
@@ -51,7 +53,7 @@
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-sm-6" v-for="(value, key) in roomType.rules">
-									<label v-text="key ? key | capitalize | underscoreToSpace: ''"></label>
+									<label>{{key | underscoreToSpace | capitalize}}</label>
 									<p class="small" v-text="value"></p>
 								</div>
 							</div><!-- end row -->
@@ -77,11 +79,11 @@
 							<template v-for="(value, key) in currentType.rules">
 								<div class="col-sm-6"  v-error-handler="{ value: value, client: key }">
 									<div class="form-group" v-if="key === 'occupancy_limit'">
-										<label v-text="key ? key | capitalize | underscoreToSpace: ''"></label>
+										<label>{{key | underscoreToSpace | capitalize}}</label>
 										<input type="number" class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="'required'" :value="value" min="0">
 									</div>
 									<div class="form-group" v-else>
-										<label v-text="key ? key | capitalize | underscoreToSpace: ''"></label>
+										<label>{{key | underscoreToSpace | capitalize}}</label>
 										<select class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="">
 											<option :value="true">Yes</option>
 											<option :value="false">No</option>

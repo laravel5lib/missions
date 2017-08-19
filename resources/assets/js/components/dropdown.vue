@@ -4,7 +4,7 @@
 	>
 		<slot name="before"></slot>
 		<template v-if="isLi">
-			<a role="button" :class="['dropdown-toggle',buttonSize,{disabled:disabled}]"
+			<a role="button" class="dropdown-toggle" :class="[buttonSize,{disabled:disabled}]"
 			   @keyup.esc="show = false"
 			   @click.prevent="toggle"
 			>

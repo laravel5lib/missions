@@ -541,7 +541,9 @@ Vue.filter('underscoreToSpace', (value) => {
 });
 
 Vue.filter('capitalize', (string) => {
-    return string ? string[0].toUpperCase() + string.slice(1) : '';
+    return string.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
 });
 
 Vue.directive('tour-guide', {

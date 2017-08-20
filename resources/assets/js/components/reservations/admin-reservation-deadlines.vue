@@ -22,7 +22,7 @@
             <tbody v-if="reservation">
             <tr v-for="deadline in reservation.deadlines.data">
                 <td>
-                    <i class="fa {{ isPast(deadline.date) ? 'fa-times text-danger' : 'fa-exclamation text-warning' }}"></i>&nbsp;
+                    <i class="fa" :class="[isPast(deadline.date) ? 'fa-times text-danger' : 'fa-exclamation text-warning']"></i>&nbsp;
                     {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
                 </td>
                 <td>{{ deadline.date | moment('lll') }}</td>
@@ -38,15 +38,16 @@
         <modal title="Add Deadlines" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800" :callback="addDeadlines">
             <div slot="modal-body" class="modal-body">
 
-                    <form class="form-horizontal" novalidate>
-                        <div class="form-group" :class="{ 'has-error': errors.has('deadlines') }"><label
+                    <form class="form-horizontal" novalidate data-vv-scope="deadline-add">
+                        <div class="form-group" :class="{ 'has-error': errors.has('deadlines', 'deadline-add') }"><label
                                 class="col-sm-2 control-label">Available Deadlines</label>
                             <div class="col-sm-10">
-                                <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedDeadlines" :options="availableDeadlines"
-                                          label="name"></v-select>
-                                <select hidden="" v-model="user_id" name="deadlines" v-validate="'required'" multiple>
+                                <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedDeadlines" :options="availableDeadlines"
+                                          label="name" name="deadlines" v-validate="'required'"></v-select>
+                                <!--<select hidden="" v-model="user_id" multiple>
                                     <option :value="deadline.id" v-for="deadline in deadlines">{{deadline.name}}</option>
-                                </select></div>
+                                </select>-->
+                            </div>
                         </div>
                     </form>
 
@@ -59,9 +60,9 @@
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditDeadlineError('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditDeadlineError('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDeadline.grace_period"
                                                name="grace" v-validate="'required|min:0'">
                                         <span class="input-group-addon">Days</span>
@@ -80,16 +81,16 @@
                     <form class="form" novalidate>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForNewDeadlineError('name')}">
+                                <div class="form-group" :class="{'has-error': errors.has('name')}">
                                     <label for="name">Name</label>
                                     <input type="text" id="name" v-model="newDeadline.name" name="name="{require:true}" class" v-validate="form-control input-sm">
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewDeadlineError('grace') }">
+                                        <div class="form-group" :class="{'has-error': errors.has('grace') }">
                                             <label for="grace_period">Grace Period</label>
-                                            <div class="input-group input-group-sm" :class="{'has-error': checkForNewDeadlineError('grace') }">
+                                            <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace') }">
                                                 <input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
                                                        name="grace" v-validate="'required|min:0'">
                                                 <span class="input-group-addon">Days</span>
@@ -97,7 +98,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForNewDeadlineError('due')}">
+                                        <div class="form-group" :class="{'has-error': errors.has('due')}">
                                             <label for="due_at">Due</label>
                                             <date-picker :input-sm="true" :model="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
                                             <input type="datetime" id="due_at" class="form-control input-sm hidden"
@@ -159,18 +160,6 @@
         },
         computed:{},
         methods: {
-            errors.has(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddDeadline[field].invalid && this.attemptSubmit;
-            },
-            checkForEditDeadlineError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditDeadline[field].invalid && this.attemptSubmit;
-            },
-            checkForNewDeadlineError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$NewDeadline[field].invalid && this.attemptSubmit;
-            },
             resetDeadline(){
                 this.newDeadline = {
                     item: '',

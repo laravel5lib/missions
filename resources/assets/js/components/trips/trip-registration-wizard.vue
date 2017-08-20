@@ -59,9 +59,9 @@
 		<div class="panel-footer text-right">
 			<div class="btn-group btn-group" role="group" aria-label="...">
 				<!--<a class="btn btn-link" data-dismiss="modal">Cancel</a>-->
-				<a class="btn btn-default" @click="backStep()" :class="{'disabled': currentStep.view === 'step1' }">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep()">Continue</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="finish()">Finish</a>
+				<a class="btn btn-default" @click="backStep" :class="{'disabled': currentStep.view === 'step1' }">Back</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" :class="{'disabled': !canContinue }" @click="nextStep">Continue</a>
+				<a class="btn btn-primary" v-else @click="finish">Finish</a>
 			</div>
 		</div>
 	</div>

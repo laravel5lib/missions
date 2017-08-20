@@ -28,12 +28,12 @@
                 <div class="col-sm-12">
                     <div class="collapse" id="avatarCollapse">
                         <div class="well">
-                            <upload-create-update type="avatar" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Group']"></upload-create-update>
+                            <upload-create-update type="avatar" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Group']" @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
                     <div class="collapse" id="bannerCollapse">
                         <div class="well">
-                            <upload-create-update type="banner" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['Group']"></upload-create-update>
+                            <upload-create-update type="banner" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['Group']" @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
                     <hr class="divider inv" />
@@ -44,7 +44,7 @@
                 <div class="col-sm-12">
                     <label for="name">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="Group Name" name="name" v-validate="'required|min:1|max:100'"
+                           placeholder="Group Name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -85,9 +85,9 @@
                 <div class="col-sm-8">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="" v-model="country_code" v-validate="'required'" >
-                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
+                            <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -104,9 +104,9 @@
                 <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                     <div class="col-sm-6">
                         <label for="country">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="timezones"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate="'required'">
-                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                            <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                         </select>
 
                     </div>
@@ -182,13 +182,16 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
+    import utilities from'../utilities.mixin';
     export default{
         name: 'group-edit',
         components: { vSelect, 'upload-create-update': uploadCreateUpdate},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         props: ['groupId', 'managing'],
         data(){
             return {
@@ -215,9 +218,7 @@
                 typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
 //                attemptSubmit: false,
                 resource: this.$resource('groups{/id}'),
-                countries: [],
                 countryCodeObj: null,
-                timezones: [],
                 //timezoneObj: null,
                 showSuccess: false,
                 showError: false,
@@ -228,9 +229,6 @@
                 avatar_upload_id: null,
                 selectedBanner: null,
                 banner_upload_id: null,
-//                errors: [],
-                // mixin settings
-                validatorHandle: 'UpdateGroup',
             }
         },
         computed: {
@@ -243,28 +241,23 @@
                 return _.contains(_.pluck(this.$root.user.abilities.data, 'slug'), 'edit-groups');
             },
         },
-        events:{
-            'uploads-complete'(data){
+        
+        methods: {
+            uploadsComplete(data){
                 switch(data.type){
                     case 'avatar':
                         this.selectedAvatar = data;
                         this.avatar_upload_id = data.id;
-                        jQuery('#avatarCollapse').collapse('hide');
+                        $('#avatarCollapse').collapse('hide');
                         break;
                     case 'banner':
                         this.selectedBanner = data;
                         this.banner_upload_id = data.id;
-                        jQuery('#bannerCollapse').collapse('hide');
+                        $('#bannerCollapse').collapse('hide');
                         break;
                 }
                 this.submit();
-            }
-        },
-        methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$UpdateGroup[field].invalid && this.attemptSubmit;
-            },*/
+            },
             onTouched(){
                 this.hasChanged = true;
             },
@@ -281,52 +274,49 @@
             submit(){
                 this.errors = [];
                 this.resetErrors();
-                if (this.$UpdateGroup.valid) {
-                    let formData = this.data;
-                    // this.$refs.spinner.show();
-                    this.resource.put({id: this.groupId}, {
-                        name: this.name,
-                        description: this.description,
-                        type: this.type,
-                        country_code: this.country_code,
-                        timezone: this.timezone,
-                        phone_one: this.phone_one,
-                        phone_two: this.phone_two,
-                        address_one: this.address_one,
-                        address_two: this.address_two,
-                        city: this.city,
-                        state: this.state,
-                        zip: this.zip,
-                        public: this.public,
-                        status: this.status,
-                        url: this.url,
-                        email: this.email,
-                        avatar_upload_id: this.avatar_upload_id,
-                        banner_upload_id: this.banner_upload_id,
-                    }).then((resp) => {
-                        let group = resp.data.data;
-                        this.avatar = group.avatar;
-                        this.banner = group.banner;
-                        this.$root.$emit('showSuccess', 'Group updated!');
-                        this.hasChanged = false;
-                    }, (error) =>  {
-                        this.errors = error.data.errors;
-                        this.$root.$emit('showError', 'There are errors on the form.');
-                    });
-                } else {
-                    this.showError = true;
-                }
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        let formData = this.data;
+                        // this.$refs.spinner.show();
+                        this.resource.put({id: this.groupId}, {
+                            name: this.name,
+                            description: this.description,
+                            type: this.type,
+                            country_code: this.country_code,
+                            timezone: this.timezone,
+                            phone_one: this.phone_one,
+                            phone_two: this.phone_two,
+                            address_one: this.address_one,
+                            address_two: this.address_two,
+                            city: this.city,
+                            state: this.state,
+                            zip: this.zip,
+                            public: this.public,
+                            status: this.status,
+                            url: this.url,
+                            email: this.email,
+                            avatar_upload_id: this.avatar_upload_id,
+                            banner_upload_id: this.banner_upload_id,
+                        }).then((resp) => {
+                            let group = resp.data.data;
+                            this.avatar = group.avatar;
+                            this.banner = group.banner;
+                            this.$root.$emit('showSuccess', 'Group updated!');
+                            this.hasChanged = false;
+                        }, (error) =>  {
+                            this.errors = error.data.errors;
+                            this.$root.$emit('showError', 'There are errors on the form.');
+                        });
+                    } else {
+                        this.showError = true;
+                    }
+                });
+
             }
         },
         mounted() {
-            // this.$refs.spinner.show();
-            let countriesPromise = this.$http.get('utilities/countries').then((response) => {
-                this.countries = response.data.countries;
-            });
-
-            let timezonesPromise = this.$http.get('utilities/timezones').then((response) => {
-                this.timezones = response.data.timezones;
-            });
+            this.getCountries();
+            this.getTimezones();
 
             //Promise.all([countriesPromise, timezonesPromise]).then((values) => {
                 this.resource.get({id: this.groupId}).then((response) => {
@@ -338,7 +328,7 @@
                     this.banner_upload_id = group.banner_upload_id;
                     this.description = group.description;
                     this.type = group.type;
-                    this.countryCodeObj = _.findWhere(this.countries, {code: group.country_code});
+                    this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: group.country_code});
                     this.country_code = group.country_code;
                     this.timezone = group.timezone;
                     this.phone_one = group.phone_one;

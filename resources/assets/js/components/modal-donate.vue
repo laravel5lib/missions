@@ -74,7 +74,7 @@
         },
         watch: {
             'paymentComplete'(val, oldVal) {
-                this.$dispatch('payment-complete', val)
+                this.$emit('payment-complete', val)
             },
         },
         methods: {

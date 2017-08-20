@@ -9,7 +9,7 @@
 					<small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
 					{{ transport.type|capitalize }}
 					<span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span>
-					<span class="label label-primary" v-text="transport.designation|capitalize"></span>
+					<span class="label label-primary">{{transport.designation|capitalize}}</span>
 					</small>
 				</h3>
 				<p>
@@ -85,7 +85,7 @@
                         <hr class="divider inv">
                         <h4 class="text-left">
                             Total Passengers: <span class="text-primary">{{ transport.passengers.total }}</span>
-                            <button class="pull-right btn btn-xs btn-primary" @click="getTransport()">
+                            <button class="pull-right btn btn-xs btn-primary" @click="getTransport">
                                 Refresh Passenger Count <i class="fa fa-refresh"></i>
                             </button>
                         </h4>
@@ -163,7 +163,7 @@
             }
         },
 		computed: {
-            'seatsLeft': function() {
+            'seatsLeft'() {
 				return this.transport.capacity - this.passengersCount;
 			}
 		},
@@ -182,7 +182,7 @@
 			this.getTransport();
         },
         events: {
-            'updatePassengersCount': function (passengers) {
+            'updatePassengersCount' (passengers) {
                 this.passengersCount = passengers;
             }
         }

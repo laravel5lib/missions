@@ -237,8 +237,8 @@
 					<td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
 					<td v-if="isActive('surname')" v-text="reservation.surname"></td>
 					<td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
-					<td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
-					<td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
+					<td v-if="isActive('group')">{{reservation.trip.data.group.data.name|capitalize}}</td>
+					<td v-if="isActive('campaign')">{{reservation.trip.data.campaign.data.name|capitalize}}</td>
 					<td v-if="isActive('teams')">
 						<template v-if="reservation.squads.data.length">
 							<span v-for="(squad, squadIndex) in reservation.squads.data">
@@ -252,16 +252,16 @@
 						</template>
 					</td>
 					<td v-if="isActive('fund')"><a :href="'/admin/funds/'+reservation.fund.data.id" target="_blank">{{ reservation.fund.data.name|capitalize }}</a></td>
-					<td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
-					<td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
+					<td v-if="isActive('type')">{{reservation.trip.data.type|capitalize}}</td>
+					<td v-if="isActive('total_raised')">{{reservation.total_raised|currency}}</td>
 					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
-					<td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
-					<td v-if="isActive('dropped')" v-text="reservation.deleted_at|moment('ll')"></td>
-					<td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
-					<td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
+					<td v-if="isActive('registered')">{{reservation.created_at|moment('ll')}}</td>
+					<td v-if="isActive('dropped')">{{reservation.deleted_at|moment('ll')}}</td>
+					<td v-if="isActive('gender')">{{reservation.gender|capitalize}}</td>
+					<td v-if="isActive('status')">{{reservation.status|capitalize}}</td>
 					<td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-					<td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
-					<td v-if="isActive('designation')" v-text="reservation.arrival_designation|capitalize"></td>
+					<td v-if="isActive('email')">{{reservation.user.data.email|capitalize}}</td>
+					<td v-if="isActive('designation')">{{reservation.arrival_designation|capitalize}}</td>
 					<td v-if="isActive('requirements')">
 						<div style="position:relative;">
 							<popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
@@ -278,8 +278,8 @@
 							</popover>
 						</div>
 					</td>
-					<td v-if="isActive('rep')" v-text="reservation.rep.data.name|capitalize"></td>
-					<td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
+					<td v-if="isActive('rep')">{{reservation.rep.data.name|capitalize}}</td>
+					<td><a :href="`/admin/reservations/${reservation.id}`"><i class="fa fa-cog"></i></a></td>
 				</tr>
 				</tbody>
 				<tbody v-else>

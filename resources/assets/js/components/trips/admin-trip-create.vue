@@ -8,7 +8,7 @@
 					</a>
 			</ul>
 		</div>
-		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
+		<div class="col-sm-8 col-md-9" :class="currentStep.view">
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
@@ -27,17 +27,6 @@
 		<hr>
 	</div>
 </template>
-<style>
-	.fade-transition {
-		transition: opacity .3s ease;
-	}
-
-	.fade-enter, .fade-leave {
-		opacity: 0;
-	}
-
-	.step1 {}
-</style>
 <script type="text/javascript">
 	import details from './create/details.vue';
 	import settings from './create/settings.vue';
@@ -161,3 +150,4 @@
 		}
 	}
 </script> 
+<style></style>

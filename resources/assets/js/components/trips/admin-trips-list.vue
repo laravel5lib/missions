@@ -27,7 +27,7 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </mm-aside>
 
@@ -102,10 +102,10 @@
                     <td>{{ trip.type|capitalize }}</td>
                     <td>{{ trip.campaign.data.name|capitalize }}</td>
                     <td>{{trip.status}}</td>
-                    <td>{{trip.started_at|moment('ll') false true}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
+                    <td>{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
                     <td>{{trip.reservations}}</td>
                     <td>
-                        <a href="/admin{{trip.links[0].uri}}"><i class="fa fa-eye"></i></a>
+                        <a :href="`/admin${trip.links[0].uri}`"><i class="fa fa-eye"></i></a>
                         <a :href="'/admin' + campaignId + trip.links[0].uri + '/edit'"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>

@@ -63,7 +63,7 @@
                                                             <br />
                                                             <small><i class="fa" :class="{ 'fa-bus': transport.type === 'bus', 'fa-plane': transport.type === 'flight', 'fa-car': transport.type === 'vehicle', 'fa-train': transport.type === 'train'}"></i>
                                                                 {{ transport.type|capitalize }}
-                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary" v-text="transport.designation|capitalize"></span>
+                                                                <span class="label label-info" v-text="transport.domestic ? 'Domestic' : 'International'"></span> <span class="label label-primary">{{transport.designation|capitalize}}</span>
                                                             </small>
                                                         </h5>
                                                     </div>
@@ -146,7 +146,7 @@
                             <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline' }">
                                 <label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
                                 <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-                                          :value="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+                                          v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
                                           placeholder="Select Airline"></v-select>
                                 <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
                                         v-model="selectedTransport.name">
@@ -194,7 +194,7 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            name="train" v-model="selectedTransport.name" v-validate="'required'">
+                                            v-model="selectedTransport.name" v-validate="'required'">
                                         <option :value="option" v-for="option in trainOptions">{{ option|capitalize }}</option>
                                     </select>
                             </div>
@@ -214,7 +214,7 @@
                             <div class="form-group">
                                 <label for="travel_methodB">Company</label>
                                     <select class="form-control" name="travel_methodB" id="train"
-                                            name="train" v-model="selectedTransport.name" v-validate="'required'">
+                                            v-model="selectedTransport.name" v-validate="'required'">
                                         <option :value="option" v-for="option in vehicleOptions">{{ option|capitalize }}
                                         </option>
                                     </select>
@@ -238,9 +238,9 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>
-                            <date-picker :model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
-                                   id="depart_at" name="occurred" v-validate="['required', 'datetime']">
+                            <date-picker :model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)" name="depart_at" v-validate="'required'"></date-picker>
+                            <!--<input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
+                                   id="depart_at" name="occurred" v-validate="['required', 'datetime']">-->
                         </div>
                         <h4>Arrival</h4>
                         <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
@@ -248,9 +248,9 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
-                            <date-picker :model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"></date-picker>
-                            <input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
-                                   id="arrive_at" name="occurred" v-validate="['required', 'datetime']">
+                            <date-picker :model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)" name="arrive_at" v-validate="'required'"></date-picker>
+                            <!--<input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
+                                   id="arrive_at" name="occurred" v-validate="['required', 'datetime']">-->
                         </div>
                     </form>
 

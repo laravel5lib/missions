@@ -27,7 +27,7 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </mm-aside>
 
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch"  placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <button class="btn btn-default btn-sm" type="button" @click="showFilters=!showFilters">
@@ -105,7 +105,7 @@
                     <td>{{trip.started_at|moment('ll', false, true)}} - <br>{{trip.ended_at|moment('ll', false, true)}}</td>
                     <td>{{trip.reservations}}</td>
                     <td>
-                        <a href="/admin/trips/{{ trip.id }}"><i class="fa fa-eye"></i></a>
+                        <a :href="`/admin/trips/${ trip.id }`"><i class="fa fa-eye"></i></a>
                     </td>
                 </tr>
                 </tbody>
@@ -123,6 +123,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../export-utility.vue';
     import importUtility from '../import-utility.vue';
     export default{
@@ -187,7 +188,6 @@
             'search'(val, oldVal) {
                 this.page = 1;
                 this.pagination.current_page = 1;
-                this.searchTrips();
             },
             'page'(val, oldVal) {
                 this.searchTrips();
@@ -210,6 +210,7 @@
                     status: ''
                 }
             },
+            debouncedSearch: _.debounce(function() { this.searchTrips(); }, 250),
             searchTrips(){
                 let params = {
                     include:'campaign,group',

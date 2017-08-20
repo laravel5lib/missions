@@ -37,6 +37,18 @@ $fa-font-path: "~font-awesome/fonts/";*/
 }
 
 /**
+ * Vue Transitions
+ */
+.fade-transition {
+  transition: opacity .3s ease;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
+
+/**
  * Elements
  */
 

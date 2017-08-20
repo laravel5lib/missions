@@ -8,7 +8,7 @@
         </template>
         <template v-else>
             <v-select @keydown.enter.prevent="" :multiple="multiple" class="form-control" :debounce="debounce" :on-search="getOptions"
-                      :value="selectedOptions" :options="options" :label="label" :on-change="execute"
+                      v-model="selectedOptions" :options="options" :label="label" :on-change="execute"
                       :placeholder="text"></v-select>
         </template>
     </div>

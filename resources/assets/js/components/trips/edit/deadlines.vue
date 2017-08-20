@@ -33,7 +33,7 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('grace') }">
 																<label for="grace_period">Grace Period</label>
-																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
+																<div class="input-group input-group-sm" :class="{'has-error': errors.has('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
 																		   name="grace" v-validate="'required|min:0'">
 																	<span class="input-group-addon">Days</span>
@@ -43,9 +43,9 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
-																<date-picker :input-sm="true" :model="newDeadline.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-																<input type="datetime" id="due_at" class="form-control input-sm hidden"
-																	   v-model="newDeadline.due_at" name="due" v-validate="'required'">
+																<date-picker :input-sm="true" :model="newDeadline.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+																<!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
+																	   v-model="newDeadline.due_at">-->
 															</div>
 
 														</div>
@@ -67,7 +67,7 @@
 									<a class="btn btn-xs btn-default" @click="toggleNewDeadline=false">
 										<i class="fa fa-times"></i> Cancel
 									</a>
-									<button type="button" class="btn btn-xs btn-success" @click="addDeadline()">
+									<button type="button" class="btn btn-xs btn-success" @click="addDeadline">
 										<i class="fa fa-plus"></i> Add Deadline
 									</button>
 								</div>
@@ -104,6 +104,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import $ from 'jquery'
 	export default{
 		name: 'trip-deadlines',
 		data(){
@@ -135,10 +136,7 @@
 			},
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('deadlines', true);
-			},
-			checkForError(field){
-				return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+				this.$emit('deadlines', true);
 			},
 			resetDeadline(){
 				this.newDeadline = {
@@ -151,12 +149,14 @@
 			},
 			addDeadline(){
 				this.attemptedAddDeadline = true;
-				if(this.$TripDeadlinesCreate.valid) {
-					this.deadlines.push(this.newDeadline);
-					this.resetDeadline();
-					this.toggleNewDeadline = false;
-					this.attemptedAddDeadline = false;
-				}
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.deadlines.push(this.newDeadline);
+                        this.resetDeadline();
+                        this.toggleNewDeadline = false;
+                        this.attemptedAddDeadline = false;
+                    }
+                });
 			}
 		},
 		activate(done){
@@ -165,7 +165,7 @@
 				todos: this.$parent.trip.todos,
 				deadlines: this.$parent.trip.deadlines
 			});
-			this.$dispatch('deadlines', true);
+			this.$emit('deadlines', true);
 			done();
 		}
 	}

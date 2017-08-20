@@ -164,7 +164,7 @@
 
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('reqs', true);
+				this.$emit('reqs', true);
 				//this.$parent.details = this.details;
 			},
 			checkForError(field){
@@ -194,7 +194,7 @@
 			$.extend(this, {
 				requirements: this.$parent.trip.requirements,
 			});
-			this.$dispatch('reqs', true);
+			this.$emit('reqs', true);
 			done();
 		}
 	}

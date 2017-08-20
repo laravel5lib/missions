@@ -141,7 +141,7 @@
 		},
 		watch:{
 			'deadlineAgree'(val, oldVal) {
-				this.$dispatch('deadline-agree', val)
+				this.$emit('deadline-agree', val)
 			}
 		},
 		activate(done){

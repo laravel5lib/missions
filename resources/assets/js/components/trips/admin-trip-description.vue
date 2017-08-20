@@ -17,7 +17,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <textarea rows="5" v-autosize="description" v-model="description" class="form-control"
-                                          name="description="'required'" placeholder="Please add a description" v-html" v-validate="description"></textarea>
+                                          name="description" placeholder="Please add a description" v-validate="'required'" v-html="description"></textarea>
                             </div>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
 
         </template>
         <template v-else>
-            <div v-html="marked(description || 'No Description'))"></div>
+            <div v-html="marked(description || 'No Description')"></div>
         </template>
 
         <alert v-model="showSuccess" placement="top-right" :duration="3000" type="success" width="400px" dismissable>
@@ -37,7 +37,7 @@
     </div>
 </template>
 <script type="text/javascript">
-    var marked = require('marked');
+    let marked = require('marked');
     export default{
     	name: 'admin-trip-description',
         props: ['id'],
@@ -53,10 +53,6 @@
             marked: marked,
         },
         methods: {
-            errors.has(field){
-                // if user clicked continue button while the field is invalid trigger error styles
-                return this.$TripDescription[field.toLowerCase()].invalid && this.attemptedContinue
-            },
             update(){
                 // this.$refs.spinner.show();
                 this.resource.put({ id: this.id }, {

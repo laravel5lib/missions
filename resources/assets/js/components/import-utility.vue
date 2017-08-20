@@ -115,7 +115,7 @@
                     this.totalRows = response.data.total_rows;
                     this.totalImported = response.data.total_imported;
                     this.$root.$emit('showSuccess', response.data.message);
-                    this.$dispatch('importComplete', true);
+                    this.$emit('importComplete', true);
                     // this.showImportModal = false;
                     this.file = null;
                     this.importFile = null;

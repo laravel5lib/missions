@@ -27,10 +27,10 @@
         <modal class="text-center" :value="showAddModal" @closed="showAddModal=false" title="Add Deadline">
             <div slot="modal-body" class="modal-body">
 
-                    <form name="AddDeadline" data-vv-scope="AddDeadline" class="form" novalidate @submit.prevent="addDeadline">
+                    <form name="AddDeadline" data-vv-scope="deadline-add" class="form" novalidate @submit.prevent="addDeadline">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForAddError('name')}">
+                                <div class="form-group" :class="{'has-error': errors.has('name', 'deadline-add')}">
                                     <label for="name">Name</label>
                                     <input type="text" id="name" v-model="newDeadline.name" class="form-control input-sm"
                                            name="name" v-validate="'required'">
@@ -38,9 +38,9 @@
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForAddError('grace') }">
+                                        <div class="form-group" :class="{'has-error': errors.has('grace', 'deadline-add') }">
                                             <label for="grace_period">Grace Period</label>
-                                            <div class="input-group input-group-sm" :class="{'has-error': checkForAddError('grace') }">
+                                            <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'deadline-add') }">
                                                 <input id="grace_period" type="number" class="form-control" number v-model="newDeadline.grace_period"
                                                        name="grace" v-validate="'required|min:0'">
                                                 <span class="input-group-addon">Days</span>
@@ -48,11 +48,11 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForAddError('due')}">
+                                        <div class="form-group" :class="{'has-error': errors.has('due', 'deadline-add')}">
                                             <label for="date">Due</label>
-                                            <date-picker :input-sm="true" :model="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                            <input type="datetime" id="date" class="form-control input-sm hidden"
-                                                   v-model="newDeadline.date" name="due" v-validate="'required'">
+                                            <date-picker :input-sm="true" :model="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+                                            <!--<input type="datetime" id="date" class="form-control input-sm hidden"
+                                                   v-model="newDeadline.date">-->
                                         </div>
 
                                     </div>
@@ -78,10 +78,10 @@
         <modal class="text-center" :value="showEditModal" @closed="showEditModal=false" title="Edit Deadline">
             <div slot="modal-body" class="modal-body">
 
-                    <form class="form" novalidate v-if="selectedDeadline">
+                    <form class="form" novalidate v-if="selectedDeadline" data-vv-scope="deadline-edit">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditError('name')}">
+                                <div class="form-group" :class="{'has-error': errors.has('name', 'deadline-edit')}">
                                     <label for="name">Name</label>
                                     <input type="text" id="name" v-model="selectedDeadline.name" class="form-control input-sm"
                                            name="name" v-validate="'required'">
@@ -89,9 +89,9 @@
 
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForEditError('grace') }">
+                                        <div class="form-group" :class="{'has-error': errors.has('grace', 'deadline-edit') }">
                                             <label for="grace_period">Grace Period</label>
-                                            <div class="input-group input-group-sm" :class="{'has-error': checkForEditError('grace') }">
+                                            <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'deadline-edit') }">
                                                 <input id="grace_period" type="number" class="form-control" number v-model="selectedDeadline.grace_period"
                                                        name="grace" v-validate="'required|min:0'">
                                                 <span class="input-group-addon">Days</span>
@@ -99,11 +99,11 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div class="form-group" :class="{'has-error': checkForEditError('due')}">
+                                        <div class="form-group" :class="{'has-error': errors.has('due', 'deadline-edit')}">
                                             <label for="date">Due</label>
-                                            <date-picker :input-sm="true" :model="selectedDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                            <input type="datetime" id="date" class="form-control input-sm hidden"
-                                                   v-model="selectedDeadline.date" name="due" v-validate="'required'">
+                                            <date-picker :input-sm="true" :model="selectedDeadline.date|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+                                            <!--<input type="datetime" id="date" class="form-control input-sm hidden"
+                                                   v-model="selectedDeadline.date">-->
                                         </div>
 
                                     </div>
@@ -136,6 +136,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore'
     export default{
     	name: 'deadlines-manager',
         props: ['id', 'assignment'],
@@ -148,6 +149,7 @@
                 showDeleteModal: false,
                 attemptedAddDeadline: false,
                 attemptedEditDeadline: false,
+                search: '',
                 newDeadline: {
                     deadline_assignable_id: this.id,
                     deadline_assignable_type: this.assignment,
@@ -162,12 +164,6 @@
             }
         },
         methods:{
-            checkForAddError(field){
-                return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
-            },
-            checkForEditError(field){
-                return this.$TripDeadlinesEdit[field.toLowerCase()].invalid && this.attemptedEditDeadline;
-            },
             resetDeadline(){
                 this.newDeadline = {
                     deadline_assignable_id: this.id,
@@ -181,27 +177,32 @@
             },
             addDeadline(){
                 this.attemptedAddDeadline = true;
-                if(this.$TripDeadlinesCreate.valid) {
-                    // this.$refs.spinner.show();
-                    this.$http.post(`deadlines`, this.newDeadline).then((response) => {
-                        this.deadlines.push(response.data.data);
-                        this.resetDeadline();
-                        this.attemptedAddDeadline = false;
-                        this.showAddModal = false;
-                        this.searchDeadlines();
-                    });
-                }
+                this.$validator.validateAll('deadline-add').then(result => {
+                    if (result) {
+                        // this.$refs.spinner.show();
+                        this.$http.post(`deadlines`, this.newDeadline).then((response) => {
+                            this.deadlines.push(response.data.data);
+                            this.resetDeadline();
+                            this.attemptedAddDeadline = false;
+                            this.showAddModal = false;
+                            this.searchDeadlines();
+                        });
+                    }
+                })
             },
             updateDeadline(){
                 this.attemptedEditDeadline = true;
-                if(this.$TripDeadlinesEdit.valid) {
-                    // this.$refs.spinner.show();
-                    this.$http.put(`deadlines/${this.selectedDeadline.id}`, this.selectedDeadline).then((response) => {
-                        this.attemptedEditDeadline = false;
-                        this.showEditModal = false;
-                        this.searchDeadlines();
-                    })
-                }
+                this.$validator.validateAll('deadline-edit').then(result => {
+                    if(result) {
+                        // this.$refs.spinner.show();
+                        this.$http.put(`deadlines/${this.selectedDeadline.id}`, this.selectedDeadline).then((response) => {
+                            this.attemptedEditDeadline = false;
+                            this.showEditModal = false;
+                            this.searchDeadlines();
+                        })
+                    }
+                })
+
             },
             editDeadline(deadline){
                 this.selectedDeadline = deadline;
@@ -220,6 +221,7 @@
                     this.searchDeadlines();
                 });
             },
+            debouncedSearch: _.debounce(function() { this.searchDeadlines() }, 250),
             searchDeadlines(){
                 // this.$refs.spinner.show();
                 this.$http.get(`deadlines`, {

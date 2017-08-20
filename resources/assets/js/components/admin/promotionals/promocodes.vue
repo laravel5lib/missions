@@ -10,17 +10,17 @@
                     <input type="text" 
                            class="form-control" 
                            v-model="options.params.search" 
-                           debounce="250" 
+                           @keyup="debouncedSearch"
                            placeholder="Search by codes or referral names">
                     <span class="input-group-addon">
-                        <i class="fa fa-circle-o-notch fa-spin" v-show="loading"></i>
+                        <i class="fa fa-circle-o-notch fa-spin" v-if="loading"></i>
                         <i class="fa fa-search" v-else></i>
                     </span>
                 </div>
             </div>
         </div>
     </div>
-    <table class="table table-striped" v-show="codes.length">
+    <table class="table table-striped" v-if="codes.length">
         <thead>
             <tr>
                 <th>Code</th>
@@ -38,7 +38,7 @@
                 <td>{{ code.created_at | moment('lll') }}</td>
                 <td>
                     <button class="btn btn-xs btn-primary" 
-                            v-show="code.deleted_at" 
+                            v-if="code.deleted_at"
                             @click="activate(code.id)">
                         Activate
                     </button>
@@ -76,6 +76,7 @@
     }
 </style>
 <script type="text/javascript">
+    import _ from 'underscore';
     export default {
         name: 'promocodes',
         props: {
@@ -103,7 +104,7 @@
         watch: {
             'options.params.search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.fetch();
+//                this.fetch();
             }
         },
         events: {
@@ -112,6 +113,7 @@
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function() { this.fetch() }, 250),
             fetch() {
                 this.loading = true;
 

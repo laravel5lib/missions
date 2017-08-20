@@ -1,193 +1,186 @@
 <template>
     <div class="row">
         <div class="col-sm-12">
-
-
-                <form id="TripDetailsForm" class="form-horizontal" novalidate>
-                    <div class="form-group">
-                        <div class="col-sm-12 text-center">
-                        	<label class="control-label">Campaign</label>
-                            <h3>{{ campaign.name|capitalize }}</h3>
-                        </div>
+            <form id="TripDetailsForm" class="form-horizontal" novalidate>
+                <div class="form-group">
+                    <div class="col-sm-12 text-center">
+                        <label class="control-label">Campaign</label>
+                        <h3>{{ campaign.name|capitalize }}</h3>
                     </div>
-                    <div class="form-group" :class="{ 'has-error': errors.has('group') }">
-                        <div class="col-sm-12">	
-                        	<label class="control-label">Group</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="group" :value="groupObj" :options="groups" :on-search="getGroups" label="name"></v-select>
-                            <select hidden v-model="group_id" name="group" v-validate="'required'">
-                                <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
+                </div>
+                <div class="form-group" :class="{ 'has-error': errors.has('group') }">
+                    <div class="col-sm-12">
+                        <label class="control-label">Group</label>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="group" v-model="groupObj" :options="groups" :on-search="getGroups" label="name" name="group" v-validate="'required'"></v-select>
+                        <!--<select hidden v-model="group_id" name="group" v-validate="'required'">
+                            <option :value="group.id" v-for="group in groups">{{ group.name }}</option>
+                        </select>-->
+                    </div>
+                </div>
+				<div class="row">
+					<div class="col-sm-6">
+						<label>Visibility</label>
+						<div class="radios">
+							<label>
+								<input type="radio" v-model="public" :value="false"> Private
+							</label>
+							<label>
+								<input type="radio" v-model="public" :value="true"> Public
+							</label>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div :class="{ 'has-error': errors.has('type') }">
+							<label for="type" class="control-label">Type</label>
+							<select id="type" class="form-control" v-model="type"
+									name="type" v-validate="'required'" required>
+								<option value="">-- select --</option>
+								<option value="ministry">Ministry</option>
+								<option value="family">Family</option>
+								<option value="international">International</option>
+								<option value="media">Media</option>
+								<option value="medical">Medical</option>
+								<option value="leader">Leader</option>
+							</select>
+						</div>
+					</div><!-- end col -->
+
+				</div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div :class="{ 'has-error': errors.has('prospects') }">
+                            <label class="control-label">Perfect For</label>
+                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" v-model="prospectsObj"
+                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
+                            <select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
+                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
+                                </option>
                             </select>
                         </div>
-                    </div>
-					<div class="row">
-						<div class="col-sm-6">
-							<label>Visibility</label>
-							<div class="radios">
-								<label>
-									<input type="radio" v-model="public" :value="false"> Private
-								</label>
-								<label>
-									<input type="radio" v-model="public" :value="true"> Public
-								</label>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div :class="{ 'has-error': errors.has('type') }">
-								<label for="type" class="control-label">Type</label>
-								<select id="type" class="form-control" v-model="type"
-										name="type" v-validate="'required'" required>
-									<option value="">-- select --</option>
-									<option value="ministry">Ministry</option>
-									<option value="family">Family</option>
-									<option value="international">International</option>
-									<option value="media">Media</option>
-									<option value="medical">Medical</option>
-									<option value="leader">Leader</option>
-								</select>
-							</div>
-						</div><!-- end col -->
-
-					</div>
-                    <div class="row">
-	                    <div class="col-sm-6">
-	                    	<div :class="{ 'has-error': errors.has('prospects') }">
-	                        	<label class="control-label">Perfect For</label>
-	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value="prospectsObj"
-	                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-	                            <select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
-	                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
-	                                </option>
+                    </div><!-- end col -->
+                    <div class="col-sm-6">
+                        <div :class="{ 'has-error': errors.has('teamroles') }">
+                            <label class="control-label">Available Roles</label>
+                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" v-model="rolesObj"
+                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
+                            <select hidden multiple v-model="team_roles" name="teamroles" v-validate="'required'">
+                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
+                            </select>
+                        </div>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+                <div class="row">
+                    <div class="col-sm-6">
+                            <div :class="{ 'has-error': errors.has('difficulty') }">
+	                            <label for="difficulty" class="control-label">Difficulty</label>
+	                            <select id="difficulty" class="form-control" v-model="difficulty"
+	                                    name="difficulty" v-validate="'required'" required>
+	                                <option value="">-- select --</option>
+	                                <option value="level_1">Level 1</option>
+	                                <option value="level_2">Level 2</option>
+	                                <option value="level_3">Level 3</option>
 	                            </select>
 	                        </div>
-	                    </div><!-- end col -->
-	                    <div class="col-sm-6">
-	                    	<div :class="{ 'has-error': errors.has('teamroles') }">
-	                        	<label class="control-label">Available Roles</label>
-	                            <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" :value="rolesObj"
-	                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
-	                            <select hidden multiple v-model="team_roles" name="teamroles" v-validate="'required'">
-	                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
-	                            </select>
-	                        </div>
-	                    </div><!-- end col -->
-                    </div><!-- end row -->
-                    <div class="row">
-	                    <div class="col-sm-6">
-	                    		<div :class="{ 'has-error': errors.has('difficulty') }">
-		                        	<label for="difficulty" class="control-label">Difficulty</label>
-		                            <select id="difficulty" class="form-control" v-model="difficulty"
-		                                    name="difficulty" v-validate="'required'" required>
-		                                <option value="">-- select --</option>
-		                                <option value="level_1">Level 1</option>
-		                                <option value="level_2">Level 2</option>
-		                                <option value="level_3">Level 3</option>
-		                            </select>
-		                        </div>
-	                    </div><!-- end col -->
-	                    <div class="col-sm-6">
-		                    <div :class="{ 'has-error': errors.has('companions') }">
-		                        	<label for="companion_limit" class="control-label">Companion Limit</label>
-		                            <div class="input-group">
-		                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
-		                                <input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
-		                                       name="companions" v-validate="'required|min:0'"/>
-		                            </div>
-		                            <div class="help-block">Number of companions a user can have. Leave at 0 to disable
-		                                companions.
-		                            </div>
-		                    </div>
-	                    </div><!-- end col -->
-                    </div><!-- end row -->
-                    <div class="form-group" :class="{ 'has-error': (errors.has('start') || errors.has('end')) }">
-                        <div class="col-sm-12">
-                        	<label for="started_at" class="control-label">Dates</label>
-                            <div class="row">
-                                <div class="col-sm-6">
-	                                <date-picker :has-error= "errors.has('start')" :model="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
-	                                <input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
-	                                       name="start" v-validate="'required'" required>
-	                                <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
-										<span class="input-group-addon">Start</span>
-										<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
-											   name="start" v-validate="'required'" required>
-									</div>-->
-                                </div>
-                                <div class="col-sm-6">
-	                                <date-picker :has-error= "errors.has('end')" :model="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
-	                                <input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
-	                                       name="end" v-validate="'required'" required>
-	                                <!--<div class="input-group"
-                                         :class="{ 'has-error': errors.has('end') }">
-                                        <span class="input-group-addon">End</span>
-										<date-picker class="form-control" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')" type="date"></date-picker>
-										<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
-                                               name="end" v-validate="'required'" required>
-                                    </div>-->
-                                </div>
+                    </div><!-- end col -->
+                    <div class="col-sm-6">
+	                    <div :class="{ 'has-error': errors.has('companions') }">
+	                            <label for="companion_limit" class="control-label">Companion Limit</label>
+	                            <div class="input-group">
+	                                <span class="input-group-addon"><i class="fa fa-users"></i></span>
+	                                <input type="number" id="companion_limit" v-model="companion_limit" class="form-control"
+	                                       name="companions" v-validate="'required|min:0'"/>
+	                            </div>
+	                            <div class="help-block">Number of companions a user can have. Leave at 0 to disable
+	                                companions.
+	                            </div>
+	                    </div>
+                    </div><!-- end col -->
+                </div><!-- end row -->
+                <div class="form-group" :class="{ 'has-error': (errors.has('start') || errors.has('end')) }">
+                    <div class="col-sm-12">
+                        <label for="started_at" class="control-label">Dates</label>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <date-picker :has-error= "errors.has('start')" :model="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
+                                <!--<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
+                                       name="start" v-validate="'required'" required>-->
+                                <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
+									<span class="input-group-addon">Start</span>
+									<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
+										   name="start" v-validate="'required'" required>
+								</div>-->
+                            </div>
+                            <div class="col-sm-6">
+                                <date-picker :has-error= "errors.has('end')" :model="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
+                                <!--<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
+                                       name="end" v-validate="'required'" required>-->
+                                <!--<div class="input-group"
+                                     :class="{ 'has-error': errors.has('end') }">
+                                    <span class="input-group-addon">End</span>
+									<date-picker class="form-control" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')" type="date"></date-picker>
+									<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
+                                           name="end" v-validate="'required'" required>
+                                </div>-->
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group"	>
-                        <div class="col-sm-12">
-                        	<label class="control-label">Trip Rep.</label>
-                            <v-select @keydown.enter.prevent="" class="form-control" id="rep" :value="repObj" :on-search="getReps" :options="reps"
-                                      label="name"></v-select>
-                            <!--name="rep" v-validate="{ required: false}"-->
-                            <select hidden v-model="rep_id">
-                                <option v-for="rep in reps" :value="rep">{{rep}}</option>
-                            </select>
-                        </div>
+                <div class="form-group"	>
+                    <div class="col-sm-12">
+                        <label class="control-label">Trip Rep.</label>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="rep" v-model="repObj" :on-search="getReps" :options="reps"
+                                  label="name"></v-select>
+                        <!--name="rep" v-validate="{ required: false}"-->
+                        <!--<select hidden v-model="rep_id">
+                            <option v-for="rep in reps" :value="rep">{{rep}}</option>
+                        </select>-->
                     </div>
-                    <div class="row">
-	                    <div class="col-sm-6">
-							<div :class="{ 'has-error': errors.has('spots') }">
-								<label for="spots" class="control-label">Spots Available</label>
-								<div class="input-group">
-									<span class="input-group-addon"><i class="fa fa-users"></i></span>
-									<input type="number" id="spots" v-model="spots" class="form-control"
-										   name="spots" v-validate="'required|min:0'"/>
-								</div>
-								<div class="help-block">Number of companions a user can have. Leave at 0 to disable
-									companions.
-								</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+						<div :class="{ 'has-error': errors.has('spots') }">
+							<label for="spots" class="control-label">Spots Available</label>
+							<div class="input-group">
+								<span class="input-group-addon"><i class="fa fa-users"></i></span>
+								<input type="number" id="spots" v-model="spots" class="form-control"
+									   name="spots" v-validate="'required|min:0'"/>
 							</div>
-						</div><!-- end col -->
-						<div class="col-sm-6">
-							<div :class="{ 'has-error': errors.has('closed') }">
-								<label for="closed_at" class="control-label">Registration Closes</label>
-								<date-picker :has-error= "errors.has('closed')" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')" ></date-picker>
-								<!--<date-picker class="form-control" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>-->
-								<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" name="closed="'required'" id" v-validate="closed_at">
+							<div class="help-block">Number of companions a user can have. Leave at 0 to disable
+								companions.
 							</div>
-						</div><!-- end col -->
-					</div><!-- end row -->
-					<div class="form-group">
-						<div class="col-sm-12">
-							<label for="published_at" class="control-label">
-								Publish
-							</label>
-							<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
-							<date-picker :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>
-							<!--<date-picker class="form-control" :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>-->
-							<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment('LLLL')" id="published_at" :disabled="toggleDraft">
 						</div>
-					</div>
-
-					<div class="col-sm-12 text-center">
-						<div class="form-group">
-							<a class="btn btn-default" @click="back()">Done</a>
-							<a class="btn btn-success" v-if="isUpdate" @click="finish()">Update</a>
-							<a class="btn btn-success" v-if="!isUpdate" @click="finish()">Create</a>
+					</div><!-- end col -->
+					<div class="col-sm-6">
+						<div :class="{ 'has-error': errors.has('closed') }">
+							<label for="closed_at" class="control-label">Registration Closes</label>
+							<date-picker :has-error= "errors.has('closed')" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')" ></date-picker>
+							<!--<date-picker class="form-control" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>-->
+							<!--<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" name="closed="'required'" id" v-validate="closed_at">-->
 						</div>
+					</div><!-- end col -->
+				</div><!-- end row -->
+				<div class="form-group">
+					<div class="col-sm-12">
+						<label for="published_at" class="control-label">
+							Publish
+						</label>
+						<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
+						<date-picker :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>
+						<!--<date-picker class="form-control" :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>-->
+						<!--<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment('LLLL')" id="published_at" :disabled="toggleDraft">-->
 					</div>
-
-				</form>
-
-
-			
 				</div>
-			</div>
+
+				<div class="col-sm-12 text-center">
+					<div class="form-group">
+						<a class="btn btn-default" @click="back">Done</a>
+						<a class="btn btn-success" v-if="isUpdate" @click="finish">Update</a>
+						<a class="btn btn-success" v-if="!isUpdate" @click="finish">Create</a>
+					</div>
+				</div>
+
+			</form>
 		</div>
     </div>
 </template>
@@ -353,34 +346,32 @@
 			onValid(){
 				this.populateWizardData(true);
 			},
-			checkForError(field){
-				// if user clicked continue button while the field is invalid trigger error styles
-				return this.$TripCreateUpdate[field.toLowerCase()].invalid && this.attemptedContinue
-			},
 			finish(){
 				// if details form is incomplete
 				this.attemptedContinue = true;
 				this.populateWizardData(false);
-				if (this.$TripCreateUpdate.valid) {
-					let resource = this.$resource('trips{/id}');
-					if (this.isUpdate) {
-						resource.put({id: this.tripId}, this.wizardData).then((response) => {
-							$.extend(this, response.data.data);
-							this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
-							this.attemptedContinue = false;
-							this.$root.$emit('showSuccess', 'Trip Updated');
-						}, (error) =>  {
-							this.$root.$emit('showError', 'Please check the form.');
-							console.log(error);
-						});
-					} else {
-						resource.post(null, this.wizardData).then((resp) => {
-							window.location.href = '/admin' + resp.data.data.links[0].uri;
-						}, (error) =>  {
-							console.log(error);
-						});
-					}
-				}
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        let resource = this.$resource('trips{/id}');
+                        if (this.isUpdate) {
+                            resource.put({id: this.tripId}, this.wizardData).then((response) => {
+                                $.extend(this, response.data.data);
+                                this.difficulty = response.data.data.difficulty.toLowerCase().replace(' ', '_');
+                                this.attemptedContinue = false;
+                                this.$root.$emit('showSuccess', 'Trip Updated');
+                            }, (error) => {
+                                this.$root.$emit('showError', 'Please check the form.');
+                                console.log(error);
+                            });
+                        } else {
+                            resource.post(null, this.wizardData).then((resp) => {
+                                window.location.href = '/admin' + resp.data.data.links[0].uri;
+                            }, (error) => {
+                                console.log(error);
+                            });
+                        }
+                    }
+                });
 			}
 		},
 		mounted(){

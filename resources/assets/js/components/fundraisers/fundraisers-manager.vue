@@ -200,7 +200,7 @@
                         this.showDescriptionSuccess = true;
                     } else {
                         this.showSettingsSuccess = true;
-                        this.$dispatch('fundraiserSettingsChanged', response.data.data);
+                        this.$emit('fundraiserSettingsChanged', response.data.data);
                         // page refresh might be necessary for updated url
                     }
                     // this.$refs.spinner.hide();

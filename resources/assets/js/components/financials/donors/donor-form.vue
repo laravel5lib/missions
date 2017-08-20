@@ -10,11 +10,7 @@
                 <div class="row">
                     <div class="col-md-6" v-validate-class>
                         <label>Name</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="donor.name"
-
-                               name="name" v-validate="'required'">
+                        <input type="text" class="form-control" v-model="donor.name" name="name" v-validate="'required'">
                     </div>
                     <div class="col-md-6">
                         <label>Company</label>
@@ -29,10 +25,7 @@
                 <div class="row">
                     <div class="col-md-6" v-validate-class>
                         <label>Email</label>
-                        <input type="text"
-                               class="form-control"
-                               v-model="donor.email"
-                               name="email" v-validate="'email'">
+                        <input type="text" class="form-control" v-model="donor.email" name="email" v-validate="'email'">
                     </div>
                     <div class="col-md-6">
                         <label>Phone</label>
@@ -64,7 +57,7 @@
                     <div class="col-md-6" v-validate-class>
                         <label>Country</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="country" :debounce="250"
-                                  :value="countryCodeObj" :options="countries" label="name"
+                                  v-model="countryCodeObj" :options="countries" label="name"
                                   placeholder="Select a country"
                                   name="country_code" v-validate="'required'"></v-select>
                     </div>
@@ -86,10 +79,10 @@
                     <div class="col-md-6" v-if="donor.account_type" :class="{'has-error' : accountError}">
                         <label>Account Holder</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="accountHolder" :debounce="250" :on-search="getUsers"
-                                  :value="userObj" :options="users" label="name"
+                                  v-model="userObj" :options="users" label="name"
                                   placeholder="Select a user" v-if="donor.account_type == 'users'"></v-select>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="accountHolder" :debounce="250" :on-search="getGroups"
-                                  :value="groupObj" :options="groups" label="name"
+                                  v-model="groupObj" :options="groups" label="name"
                                   placeholder="Select a group" v-if="donor.account_type == 'groups'"></v-select>
                         <span v-if="accountError" class="text-danger">Account already in use.</span>
                     </div>
@@ -160,10 +153,6 @@
             }
         },
         methods: {
-            errors.has(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Donor[field].invalid;
-            },
             fetch() {
                 this.$http.get('donors/' + this.donorId).then((response) => {
                     this.donor.name = response.data.data.name;
@@ -191,20 +180,19 @@
             create() {
                 this.$refs.donorspinner.show();
                 // validate manually
-                var self = this
-                this.$validate(true, () =>  {
-                    if (self.$validation.invalid) {
+                this.$validator.validateAll().then(result =>  {
+                    if (result) {
+                        this.$http.post('donors', this.donor).then((response) => {
+                            this.$refs.donorspinner.hide();
+                            this.reset();
+                            this.$root.$emit('showSuccess', 'Donor created successfully.');
+                            this.$emit('donor-created', response.data.data.id);
+                        },(response) =>  {
+                            this.$refs.donorspinner.hide();
+                            this.$root.$emit('showError', 'There are errors on the form');
+                        });
                     }
                 })
-                this.$http.post('donors', this.donor).then((response) => {
-                    this.$refs.donorspinner.hide();
-                    this.reset();
-                    this.$root.$emit('showSuccess', 'Donor created successfully.');
-                    this.$dispatch('donor-created', response.data.data.id);
-                },(response) =>  {
-                    this.$refs.donorspinner.hide();
-                    this.$root.$emit('showError', 'There are errors on the form');
-                });
             },
             update() {
                 this.accountError = false;
@@ -223,7 +211,7 @@
             cancel() {
                 this.reset();
                 if (this.$parent != this.$root) {
-				    this.$dispatch('cancel');
+				    this.$emit('cancel');
 			    } else {
 			        if( this.isUpdate) {
 			            return window.location.href = '/admin/donors/' + this.donorId;

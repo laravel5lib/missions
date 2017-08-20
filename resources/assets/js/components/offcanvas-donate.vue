@@ -244,7 +244,7 @@
         },
         watch: {
             'paymentComplete'(val, oldVal) {
-                this.$dispatch('payment-complete', val)
+                this.$emit('payment-complete', val)
             }
         },
         computed:{
@@ -274,10 +274,6 @@
             }
         },
         methods: {
-            errors.has(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$Donation[field].invalid && this.attemptSubmit;
-            },
             resetCaching() {
                 console.log('resetting');
                 this.cardMonth = '';
@@ -376,7 +372,7 @@
             }
         },
         mounted() {
-            this.$dispatch('payment-complete', true);
+            this.$emit('payment-complete', true);
             if (this.devMode) {
                 this.cardNumber = '4242424242424242';
                 this.cardCVC = '123';

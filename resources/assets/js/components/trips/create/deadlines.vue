@@ -135,10 +135,7 @@
 			},
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('deadlines', true);
-			},
-			checkForError(field){
-				return this.$TripDeadlinesCreate[field.toLowerCase()].invalid && this.attemptedAddDeadline;
+				this.$emit('deadlines', true);
 			},
 			resetDeadline(){
 				this.newDeadline = {
@@ -151,17 +148,19 @@
 			},
 			addDeadline(){
 				this.attemptedAddDeadline = true;
-				if(this.$TripDeadlinesCreate.valid) {
-					this.deadlines.push(this.newDeadline);
-					this.resetDeadline();
-					this.toggleNewDeadline = false;
-					this.attemptedAddDeadline = false;
-				}
-			}
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.deadlines.push(this.newDeadline);
+                        this.resetDeadline();
+                        this.toggleNewDeadline = false;
+                        this.attemptedAddDeadline = false;
+                    }
+                });
+			},
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
-			this.$dispatch('deadlines', true);
+			this.$emit('deadlines', true);
 			done();
 		}
 	}

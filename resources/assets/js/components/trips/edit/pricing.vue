@@ -318,7 +318,7 @@
 			},
 			onValid(){
 
-				this.$dispatch('pricing', true);
+				this.$emit('pricing', true);
 				//this.$parent.details = this.details;
 			},
 			checkForError(field){
@@ -417,42 +417,50 @@
 			},
 			addCost(){
 				this.attemptedAddCost = true;
-				if (this.$TripPricingCost.valid) {
-					this.costs.push(this.newCost);
-					this.resetCost();
-					this.toggleNewCost = false;
-					this.attemptedAddCost = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost').then(result => {
+                    if (result) {
+                        this.costs.push(this.newCost);
+                        this.resetCost();
+                        this.toggleNewCost = false;
+                        this.attemptedAddCost = false;
+                    }
+                })
 				this.checkCostsErrors();
 			},
 			updateCost(){
 				this.attemptedAddCost = true;
-				if (this.$TripPricingCost.valid) {
-					this.resetCost();
-					this.toggleNewCost = false;
-					this.attemptedAddCost = false;
-					this.editCostMode = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost').then(result => {
+                    if (result) {
+                        this.resetCost();
+                        this.toggleNewCost = false;
+                        this.attemptedAddCost = false;
+                        this.editCostMode = false;
+                    }
+                })
 				this.checkCostsErrors();
 			},
 			addPayment(cost){
 				this.attemptedAddPayment = true;
-				if (this.$TripPricingCostPayment.valid) {
-					cost.payments.push(this.newPayment);
-					this.resetPayment();
-					this.selectedCost.toggleNewPayment = false;
-					this.attemptedAddPayment = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost-payment').then(result => {
+                    if (result) {
+                        cost.payments.push(this.newPayment);
+                        this.resetPayment();
+                        this.selectedCost.toggleNewPayment = false;
+                        this.attemptedAddPayment = false;
+                    }
+                })
 				this.checkCostsErrors();
 			},
 			updatePayment(cost){
 				this.attemptedAddPayment = true;
-				if (this.$TripPricingCostPayment.valid) {
-					this.resetPayment();
-					this.selectedCost.toggleNewPayment = false;
-					this.attemptedAddPayment = false;
-					this.editPaymentMode = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost-payment').then(result => {
+                    if (result) {
+                        this.resetPayment();
+                        this.selectedCost.toggleNewPayment = false;
+                        this.attemptedAddPayment = false;
+                        this.editPaymentMode = false;
+                    }
+                })
 				this.checkCostsErrors();
 			},
 			generateUUID() {
@@ -466,7 +474,7 @@
 			_.each(this.costs, (cost) => {
 				cost.toggleNewPayment = false;
 			});
-			this.$dispatch('pricing', true);
+			this.$emit('pricing', true);
 		}
 	}
 </script>

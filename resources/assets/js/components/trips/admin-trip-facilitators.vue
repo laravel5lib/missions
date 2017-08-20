@@ -1,47 +1,48 @@
 <template >
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<div class="row">
-			<div class="col-xs-6">
-				<h5>Facilitators</h5>
-			</div>
-			<div class="col-xs-6 text-right">
-				<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal">
-					<i class="fa fa-plus icon-left"></i> Add
-				</button>
-			</div>
-			</div>
-		</div><!-- end panel-heading -->
-		<div class="panel-body" style="position:relative">
-			<spinner ref="spinner" size="sm" text="Loading"></spinner>
-			<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" :keyy="facilitator.id">
-					<h5>
-					<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" facilitator.name ">
-					{{ facilitator.name }}
-					</h5>
-					<div style="position:absolute;right:25px;top:22px;">
-					<a @click="removeFacilitator(facilitator)">
-							<i class="fa fa-times"></i>
-						</a>
-					</div>
+	<div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+				<div class="col-xs-6">
+					<h5>Facilitators</h5>
 				</div>
-				<hr class="divider inv" />
-			</div>
+				<div class="col-xs-6 text-right">
+					<button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#AddFacilitatorModal">
+						<i class="fa fa-plus icon-left"></i> Add
+					</button>
+				</div>
+				</div>
+			</div><!-- end panel-heading -->
+			<div class="panel-body" style="position:relative">
+				<spinner ref="spinner" size="sm" text="Loading"></spinner>
+				<div class="col-sm-6 col-xs-12 panel panel-default" v-for="facilitator in facilitators" :keyy="facilitator.id">
+						<h5>
+						<img :src="facilitator.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" facilitator.name ">
+						{{ facilitator.name }}
+						</h5>
+						<div style="position:absolute;right:25px;top:22px;">
+						<a @click="removeFacilitator(facilitator)">
+								<i class="fa fa-times"></i>
+							</a>
+						</div>
+					</div>
+					<hr class="divider inv" />
+				</div>
 
-			<!--<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">-->
-				<!--<div class="panel panel-default">-->
-					<!--<img class="img-responsive" :src="facilitator.avatar" :alt=" facilitator.name ">-->
-					<!--<div class="panel-body">-->
-						<!--<h5 class="text-center" v-text="facilitator.name"></h5>-->
-						<!--<p class="text-center">-->
-							<!--<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">-->
-								<!--<i class="fa fa-times"></i> Remove-->
-							<!--</a>-->
-						<!--</p>-->
-					<!--</div>&lt;!&ndash; end panel-body &ndash;&gt;-->
-				<!--</div>&lt;!&ndash; end panel &ndash;&gt;-->
-			<!--</div>-->
-		</div><!-- end panel-body -->
+				<!--<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" v-for="facilitator in facilitators" track-by="id">-->
+					<!--<div class="panel panel-default">-->
+						<!--<img class="img-responsive" :src="facilitator.avatar" :alt=" facilitator.name ">-->
+						<!--<div class="panel-body">-->
+							<!--<h5 class="text-center" v-text="facilitator.name"></h5>-->
+							<!--<p class="text-center">-->
+								<!--<a class="btn btn-xs btn-default-hollow" @click="removeFacilitator(facilitator)">-->
+									<!--<i class="fa fa-times"></i> Remove-->
+								<!--</a>-->
+							<!--</p>-->
+						<!--</div>&lt;!&ndash; end panel-body &ndash;&gt;-->
+					<!--</div>&lt;!&ndash; end panel &ndash;&gt;-->
+				<!--</div>-->
+			</div><!-- end panel-body -->
 		<div class="modal fade" id="AddFacilitatorModal">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -56,7 +57,7 @@
 										<div class="form-trip" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
 												class="col-sm-2 control-label">User</label>
 											<div class="col-sm-10">
-												<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value="userObj" :options="users"
+												<v-select @keydown.enter.prevent=""  class="form-control" id="user" v-model="userObj" :options="users"
 														  :on-search="getUsers" label="name"></v-select>
 												<select hidden="" v-model="user_id" name="user" v-validate="'required'">
 													<option :value="user.id" v-for="user in users">{{user.name}}</option>
@@ -71,7 +72,7 @@
 						<hr class="divider inv">
 							<div class="col-sm-12 text-center">
 								<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary btn-sm" @click="addFacilitator()">Save</button>
+								<button type="button" class="btn btn-primary btn-sm" @click="addFacilitator">Save</button>
 							</div>
 						</div>
 					</div>
@@ -123,21 +124,22 @@
 			},
 			addFacilitator: function addFacilitator() {
 				// Add Facilitator
-				this.resetErrors();
-				if (this.$AddFacilitator.valid) {
-					var facilitatorsArr = this.facilitators;
-					facilitatorsArr.push({trip_id: this.tripId, id: this.user_id});
-					this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
-					//this.trip.facilitators = this.facilitators;
-					this.putTrip();
-				}
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        var facilitatorsArr = this.facilitators;
+                        facilitatorsArr.push({trip_id: this.tripId, id: this.user_id});
+                        this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
+                        //this.trip.facilitators = this.facilitators;
+                        this.updateTrip();
+                    }
+                });
 			},
 			removeFacilitator: function removeFacilitator(facilitator) {
 				// Remove Facilitator
 				this.facilitators.$remove(facilitator);
 				var facilitatorsArr = this.facilitators;
 				this.trip.facilitators = _.pluck(facilitatorsArr, 'id');
-				this.putTrip();
+				this.updateTrip();
 			},
 			updateTrip: function updateTrip() {
 				delete this.trip.rep_id;

@@ -13,7 +13,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFields" class="form-toggle-menu dropdown" style="display: inline-block;">
@@ -131,7 +131,7 @@
                             </li>
                         </ul>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters</button>
+                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter">Reset Filters</button>
                     <export-utility url="groups/export"
                                     :options="exportOptions"
                                     :filters="exportFilters">
@@ -208,7 +208,7 @@
                     <td v-if="isActive('reservations_count')">{{ group.reservations_count }}</td>
                 </template>
                 <td>
-                    <a data-toggle="tooltip" data-placement="top" title="Manage" href="/admin/groups/{{ group.id }}"><i class="fa fa-gear"></i></a>
+                    <a data-toggle="tooltip" data-placement="top" title="Manage" :href="`/admin/groups/${ group.id }`"><i class="fa fa-gear"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -225,6 +225,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import exportUtility from '../export-utility.vue';
     import importUtility from '../import-utility.vue';
     export default{
@@ -336,6 +337,7 @@
                 this.status = '';
                 this.type = '';
             },
+            debouncedSearch: _.debounce(function() { this.searchgroups() }, 250),
             searchGroups(){
                 this.$http.get('groups', { params: {
                     include: 'trips:status(active),notes',

@@ -10,7 +10,7 @@
                     <p>Delete this transaction?</p>
                     <div class="row">
                         <div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">No</a></div>
-                        <div class="col-xs-6"><a @click="delete()" class="btn btn-sm btn-block btn-primary">Yes</a></div>
+                        <div class="col-xs-6"><a @click="remove" class="btn btn-sm btn-block btn-primary">Yes</a></div>
                     </div>
                 </div>
 
@@ -24,7 +24,7 @@
         name: 'transaction-delete',
         props: ['transactionId'],
         methods: {
-            delete(){
+            remove(){
                 this.$http.delete('transactions/' + this.transactionId).then((response) => {
                     this.$root.$emit('showSuccess', 'Transaction deleted.');
                     window.location.href = '/admin/transactions';

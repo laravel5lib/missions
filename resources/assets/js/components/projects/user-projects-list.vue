@@ -6,7 +6,7 @@
 
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="causeFilter" :debounce="250" :on-search="getCauses"
-                              :value="causeObj" :options="causeOptions" label="name"
+                              v-model="causeObj" :options="causeOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
 

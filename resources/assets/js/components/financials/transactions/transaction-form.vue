@@ -2,7 +2,7 @@
     <div>
         <div class="alert alert-info" v-if="editingCreditCard">
             <h5>Edits to credit card transactions are limited.</h5>
-            <p>You should refund the transaction and start over.<p>
+            <p>You should refund the transaction and start over.</p>
         </div>
 
         <div class="panel panel-default">
@@ -11,10 +11,14 @@
                 <div class="row" v-if="editing">
                     <div class="col-xs-12">
                         <label>Designated Fund</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
-                                  :value="designatedFund" :options="funds" label="name"
-                                  placeholder="Select a fund" v-if="!editing"></v-select>
-                        <p v-else>{{ designatedFund.name }}</p>
+                        <template v-if="!editing">
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="designatedFund" :debounce="250" :on-search="getFunds"
+                                      v-model="designatedFund" :options="funds" label="name"
+                                      placeholder="Select a fund"></v-select>
+                        </template>
+                        <template v-else>
+                            <p>{{ designatedFund.name }}</p>
+                        </template>
                     </div>
                 </div>
                 <div class="row">
@@ -54,7 +58,7 @@
                     </div>
                     <div class="col-xs-8">
                         <v-select @keydown.enter.prevent=""  class="form-control" id="selectedFund" :debounce="250" :on-search="getFunds"
-                                  :value="selectedFund" :options="funds" label="name"
+                                  v-model="selectedFund" :options="funds" label="name"
                                   placeholder="Select a fund"></v-select>
                         <span class="help-block small" v-show="selectedFund">
                             <a href="#" @click="fundInfoMode"><i class="fa fa-question-circle"></i> View Fund Details</a>
@@ -66,7 +70,7 @@
                         <div class="col-xs-6">
                             <label>Donor</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="selectedFund" :debounce="250" :on-search="getDonors"
-                                      :value="selectedDonor" :options="donors" label="name"
+                                      v-model="selectedDonor" :options="donors" label="name"
                                       placeholder="Select a donor"></v-select>
                             <span class="help-block small">
                                 <a href="#" v-show="selectedDonor" @click="donorInfoMode"><i class="fa fa-info-circle"></i> View Donor Details</a>
@@ -239,6 +243,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import donorForm from '../donors/donor-form.vue';
     export default{
@@ -404,7 +409,7 @@
                 this.$http.post('transactions', data).then((response) => {
                     this.$refs.transactionspinner.hide();
                     this.$root.$emit('showSuccess', 'Transaction successfully created.');
-                    this.$dispatch('transactionCreated');
+                    this.$emit('transactionCreated');
                     this.reset();
                 },(response) =>  {
                     this.$refs.transactionspinner.hide();

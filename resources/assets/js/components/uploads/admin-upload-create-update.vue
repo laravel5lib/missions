@@ -50,7 +50,7 @@
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
 					<label for="tags" class="control-label">Tags</label>
-						<v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value="tags" :options="tagOptions"></v-select>
+						<v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
 						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate="'required'">
 							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
 						</select>
@@ -500,7 +500,7 @@
 			handleSuccess(response){
 				if(this.isChild) {
 					// send data to parent componant
-					this.$dispatch('uploads-complete', response.data.data);
+					this.$emit('uploads-complete', response.data.data);
 
 				} else {
 					window.location.href = '/admin/uploads';
@@ -559,11 +559,11 @@
 			},
 			selectExisting(upload){
 				// Assumes this is a child component
-				this.$dispatch('uploads-complete', upload);
+				this.$emit('uploads-complete', upload);
 			},
 			selectExistingPreview(){
 				// Assumes this is a child component
-				this.$dispatch('uploads-complete', this.previewUpload);
+				this.$emit('uploads-complete', this.previewUpload);
 			},
 			preview(upload){
 			    this.previewModal = true;

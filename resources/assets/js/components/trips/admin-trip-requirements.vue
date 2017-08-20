@@ -1,38 +1,39 @@
 <template>
-    <spinner ref="spinner" size="md" text="Loading"></spinner>
-    <div class="panel-body" v-for="requirement in requirements">
-        <div class="row">
-            <div class="col-xs-12 text-right hidden-xs">
-                <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
-                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(requirement)"><i class="fa fa-trash"></i> Delete</a>
+    <div>
+        <spinner ref="spinner" size="md" text="Loading"></spinner>
+        <div class="panel-body" v-for="requirement in requirements">
+            <div class="row">
+                <div class="col-xs-12 text-right hidden-xs">
+                    <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(requirement)"><i class="fa fa-trash"></i> Delete</a>
+                </div>
+                <div class="col-xs-12 text-center visible-xs">
+                    <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(requirement)"><i class="fa fa-trash"></i> Delete</a>
+                </div>
             </div>
-            <div class="col-xs-12 text-center visible-xs">
-                <a class="btn btn-xs btn-default-hollow small" @click="editRequirement(requirement)"><i class="fa fa-pencil"></i> Edit</a>
-                <a class="btn btn-xs btn-default-hollow small" @click="confirmRemove(requirement)"><i class="fa fa-trash"></i> Delete</a>
-            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <h5>{{ requirement.name|capitalize }}</h5>
+                    <h6><small>Type: {{ requirement.document_type }}</small></h6>
+                    <p>{{ requirement.short_desc }}</p>
+                </div>
+                <div class="col-xs-4 text-right">
+                    <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment('lll') }} </h5>
+                    <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
+                </div>
+            </div><!-- end row -->
+            <hr class="divider">
         </div>
-        <div class="row">
-            <div class="col-xs-8">
-                <h5>{{ requirement.name|capitalize }}</h5>
-                <h6><small>Type: {{ requirement.document_type }}</small></h6>
-                <p>{{ requirement.short_desc }}</p>
-            </div>
-            <div class="col-xs-4 text-right">
-                <h5><i class="fa fa-calendar"></i> {{ requirement.due_at|moment('lll') }} </h5>
-                <h6><small>Grace Period: {{ requirement.grace_period }} {{ requirement.grace_period > 1 ? 'days' : 'day' }}</small></h6>
-            </div>
-        </div><!-- end row -->
-        <hr class="divider">
-    </div>
-    <modal class="text-center" :value="showAddModal" @closed="showAddModal=false" title="Add Requirement">
-        <div slot="modal-body" class="modal-body">
+        <modal class="text-center" :value="showAddModal" @closed="showAddModal=false" title="Add Requirement">
+            <div slot="modal-body" class="modal-body">
 
-                <form class="form" novalidate>
+                <form class="form" novalidate data-vv-scope="requirement-add">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForAddError('name')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('name', 'requirement-add')}">
                                         <label for="name">Name</label>
                                         <input type="text" id="name" class="form-control input-sm" v-model="newRequirement.name" name="name" v-validate="'required'">
                                     </div>
@@ -50,9 +51,9 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForAddError('grace') }">
+                                    <div class="form-group" :class="{'has-error': errors.has('grace', 'requirement-add') }">
                                         <label for="grace_period">Grace Period</label>
-                                        <div class="input-group input-group-sm" :class="{'has-error': checkForAddError('grace') }">
+                                        <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'requirement-add') }">
                                             <input id="grace_period" type="number" class="form-control" number v-model="newRequirement.grace_period"
                                                    name="grace" v-validate="'required|min:0'">
                                             <span class="input-group-addon">Days</span>
@@ -60,16 +61,16 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForAddError('due')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('due', 'requirement-add')}">
                                         <label for="due_at">Due</label>
-                                        <date-picker :input-sm="true" :model="newRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                        <input type="datetime" id="due_at" class="form-control input-sm hidden"
-                                               v-model="newRequirement.due_at" name="due" v-validate="'required'">
+                                        <date-picker :input-sm="true" :model="newRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+                                        <!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
+                                               v-model="newRequirement.due_at">-->
                                     </div>
 
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -83,21 +84,21 @@
                     </div>
                 </form>
 
-        </div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetRequirement()'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='addRequirement'>Add</button>
-        </div>
-    </modal>
-    <modal class="text-center" :value="showEditModal" @closed="showEditModal=false" title="Edit Requirement">
-        <div slot="modal-body" class="modal-body">
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetRequirement()'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='addRequirement'>Add</button>
+            </div>
+        </modal>
+        <modal class="text-center" :value="showEditModal" @closed="showEditModal=false" title="Edit Requirement">
+            <div slot="modal-body" class="modal-body">
 
-                <form class="form" novalidate v-if="selectedRequirement">
+                <form class="form" novalidate v-if="selectedRequirement" data-vv-scope="requirement-edit">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForEditError('name')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('name', 'requirement-edit')}">
                                         <label for="name">Name</label>
                                         <input type="text" class="form-control input-sm" v-model="selectedRequirement.name" name="name" v-validate="'required'">
                                     </div>
@@ -115,9 +116,9 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForEditError('grace') }">
+                                    <div class="form-group" :class="{'has-error': errors.has('grace', 'requirement-edit') }">
                                         <label for="grace_period">Grace Period</label>
-                                        <div class="input-group input-group-sm" :class="{'has-error': checkForEditError('grace') }">
+                                        <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'requirement-edit') }">
                                             <input id="grace_period" type="number" class="form-control" number v-model="selectedRequirement.grace_period"
                                                    name="grace" v-validate="'required|min:0'">
                                             <span class="input-group-addon">Days</span>
@@ -125,16 +126,16 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="form-group" :class="{'has-error': checkForEditError('due')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('due', 'requirement-edit')}">
                                         <label for="due_at">Due</label>
-                                        <date-picker :input-sm="true" :model="selectedRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                        <input type="datetime" id="due_at" class="form-control input-sm hidden"
-                                               v-model="selectedRequirement.due_at" name="due" v-validate="'required'">
+                                        <date-picker :input-sm="true" :model="selectedRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+                                        <!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
+                                               v-model="selectedRequirement.due_at">-->
                                     </div>
 
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -149,19 +150,21 @@
                 </form>
 
 
-        </div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, resetRequirement()'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='updateRequirement'>Update</button>
-        </div>
-    </modal>
-    <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Requirement" :small="true">
-        <div slot="modal-body" class="modal-body text-center" v-if="selectedRequirement">Delete {{ selectedRequirement.name }}?</div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Keep</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedRequirement)'>Delete</button>
-        </div>
-    </modal>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, resetRequirement()'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='updateRequirement'>Update</button>
+            </div>
+        </modal>
+        <modal class="text-center" :value="showDeleteModal" @closed="showDeleteModal=false" title="Delete Requirement" :small="true">
+            <div slot="modal-body" class="modal-body text-center" v-if="selectedRequirement">Delete {{ selectedRequirement.name }}?</div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showDeleteModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='showDeleteModal = false,remove(selectedRequirement)'>Delete</button>
+            </div>
+        </modal>
+    </div>
+
 
 </template>
 <script type="text/javascript">
@@ -206,12 +209,6 @@
             }
         },
         methods:{
-            checkForAddError(field){
-                return this.$TripRequirementsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
-            },
-            checkForEditError(field){
-                return this.$TripRequirementsEdit[field.toLowerCase()].invalid && this.attemptedEditRequirement;
-            },
             resetRequirement(){
                 this.newRequirement = {
                     requester_id: this.id,
@@ -225,27 +222,32 @@
             },
             addRequirement(){
                 this.attemptedAddRequirement = true;
-                if(this.$TripRequirementsCreate.valid) {
-                    // this.$refs.spinner.show();
-                    this.resource.post({}, this.newRequirement).then((response) => {
-                        this.requirements.push(response.data.data);
-                        this.resetRequirement();
-                        this.attemptedAddRequirement = false;
-                        this.showAddModal = false;
-                        this.searchRequirements();
-                    })
-                }
+                this.$validator.validateAll('requirement-add').then(result => {
+                    if (result) {
+                        // this.$refs.spinner.show();
+                        this.resource.post({}, this.newRequirement).then((response) => {
+                            this.requirements.push(response.data.data);
+                            this.resetRequirement();
+                            this.attemptedAddRequirement = false;
+                            this.showAddModal = false;
+                            this.searchRequirements();
+                        })
+                    }
+                });
             },
             updateRequirement(){
                 this.attemptedEditRequirement = true;
-                if(this.$TripRequirementsEdit.valid) {
-                    // this.$refs.spinner.show();
-                    this.resource.put({ id: this.selectedRequirement.id}, this.selectedRequirement).then((response) => {
-                        this.attemptedEditRequirement = false;
-                        this.showEditModal = false;
-                        this.searchRequirements();
-                    })
-                }
+                this.$validator.validateAll('requirement-edit').then(result => {
+                    if(result) {
+                        // this.$refs.spinner.show();
+                        this.resource.put({ id: this.selectedRequirement.id}, this.selectedRequirement).then((response) => {
+                            this.attemptedEditRequirement = false;
+                            this.showEditModal = false;
+                            this.searchRequirements();
+                        })
+                    }
+                })
+
             },
             editRequirement(requirement){
                 this.selectedRequirement = requirement;

@@ -72,7 +72,7 @@
                                     <div class="col-sm-6">
                                         <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                             <label for="country">Country</label>
-                                            <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
+                                            <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                                             <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                                                 <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                                             </select>
@@ -90,7 +90,7 @@
                                 <div class="form-group">
                                     <div class="col-sm-4" v-error-handler="{ value: timezone, handle: 'timezone' }">
                                         <label for="timezone">Timezone</label>
-                                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="UTILITIES.timezones"></v-select>
+                                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                                             <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                                         </select>

@@ -22,7 +22,7 @@
 								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
 								<template v-if="editMode">
 									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-									          :value="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+									          v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
 									          placeholder="Select Airline"></v-select>
 									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
 									        v-model="transport.name">

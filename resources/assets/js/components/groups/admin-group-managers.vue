@@ -34,11 +34,11 @@
 						<h4 class="modal-title">Add Manager</h4></div>
 					<div class="modal-body">
 
-							<form class="form-horizontal" novalidate>
-								<div class="form-group" v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }"><label
+							<form class="form-horizontal" novalidate data-vv-scope="manager-add">
+								<div class="form-group" v-error-handler="{ value: user_id, client: 'user', server: 'user_id', scope: 'manager-add' }"><label
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
-										<v-select @keydown.enter.prevent=""  class="form-control" id="user" :value="userObj" :options="users"
+										<v-select @keydown.enter.prevent=""  class="form-control" id="user" v-model="userObj" :options="users"
 												  :on-search="getUsers" label="name"></v-select>
 										<select hidden="" v-model="user_id" name="user" v-validate="'required'">
 											<option :value="user.id" v-for="user in users">{{user.name}}</option>
@@ -49,7 +49,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary btn-sm" @click="addManager()">Save</button>
+						<button type="button" class="btn btn-primary btn-sm" @click="addManager">Save</button>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
@@ -64,7 +64,7 @@
 		components: {vSelect},
         mixins: [errorHandler],
         props: ['groupId'],
-		data: function data() {
+		data() {
 			return {
 				user_id: null,
 				managers: [],
@@ -72,48 +72,41 @@
 				group: null,
 				userObj: null,
 				resource: this.$resource('groups{/id}', {include: 'managers'}),
-//				attemptSubmit: false,
-                // mixin settings
-                validatorHandle: 'AddManager',
-            };
+			}
 		},
-
 		computed: {
-			user_id: function user_id() {
+			user_id() {
 				return _.isObject(this.userObj) ? this.userObj.id : null;
 			}
 		},
 		methods: {
-			/*checkForError: function errors.has(field) {
-				// if user clicked submit button while the field is invalid trigger error styles
-
-				return this.$AddManager[field].invalid && this.attemptSubmit;
-			},*/
-			getUsers: function getUsers(search, loading) {
+			getUsers(search, loading) {
 				loading(true);
 				this.$http.get('users', { params: {search: search} }).then((response) => {
 					this.users = response.data.data;
 					loading(false);
 				});
 			},
-			addManager: function addManager() {
+			addManager() {
 				// Add Manager
-				this.resetErrors();
-				if (this.$AddManager.valid) {
-					let managersArr = this.managers;
-					managersArr.push({id: this.user_id});
-					this.group.managers = _.pluck(managersArr, 'id');
-					this.putGroup();
-				}
+				this.$validator.validateAll('manager-add').then(result => {
+                    if (result) {
+                        let managersArr = this.managers;
+                        managersArr.push({id: this.user_id});
+                        this.group.managers = _.pluck(managersArr, 'id');
+                        this.updateGroup();
+                    }
+				})
+
 			},
-			removeManager: function removeManager(manager) {
+			removeManager(manager) {
 				// Remove Manager
 				this.managers.$remove(manager);
 				let managersArr = this.managers;
 				this.group.managers = _.pluck(managersArr, 'id');
-				this.putGroup();
+				this.updateGroup();
 			},
-			updateGroup: function updateGroup() {
+			updateGroup() {
 				// Update Group
 				// this.$refs.spinner.show();
 				this.resource.put({id: this.groupId}, this.group).then((response) => {
@@ -125,7 +118,7 @@
 					$('#AddManagerModal').modal('hide');
 					// this.$refs.spinner.hide();
 				}, (response) =>  {
-                    this.errors = error.data.errors;
+                    this.SERVER_ERRORS = response.data.errors;
                     console.log(response);
 					// this.$refs.spinner.hide();
 					//TODO add error alert

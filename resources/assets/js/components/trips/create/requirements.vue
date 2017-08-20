@@ -48,7 +48,7 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('grace') }">
 																<label for="grace_period">Grace Period</label>
-																<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
+																<div class="input-group input-group-sm" :class="{'has-error': errors.has('grace') }">
 																	<input id="grace_period" type="number" class="form-control" number v-model="newReq.grace_period"
 																		   name="grace" v-validate="'required|min:0'">
 																	<span class="input-group-addon">Days</span>
@@ -58,9 +58,9 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
-																<date-picker :input-sm="true" :model="newReq.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-																<input type="datetime" id="due_at" class="form-control input-sm hidden"
-																	   v-model="newReq.due_at" name="due" v-validate="'required'">
+																<date-picker :input-sm="true" :model="newReq.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+																<!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
+																	   v-model="newReq.due_at">-->
 															</div>
 
 														</div>
@@ -80,7 +80,7 @@
 								</div>
 								<div class="panel-footer text-right">
 									<a class="btn btn-xs btn-default" @click="toggleNewRequirement=false"><i class="fa fa-times"></i> Cancel</a>
-									<button type="button" class="btn btn-xs btn-success" @click="addRequirement()">
+									<button type="button" class="btn btn-xs btn-success" @click="addRequirement">
 										<i class="fa fa-plus"></i> Add Requirement
 									</button>
 								</div>
@@ -123,6 +123,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import $ from 'jquery'
 	export default{
 		name: 'trip-requirement',
 		data(){
@@ -165,11 +166,8 @@
 
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('reqs', true);
+				this.$emit('reqs', true);
 				//this.$parent.details = this.details;
-			},
-			checkForError(field){
-				return this.$TripReqsCreate[field.toLowerCase()].invalid && this.attemptedAddRequirement;
 			},
 			resetRequirement(){
 				this.newReq = {
@@ -182,17 +180,20 @@
 			},
 			addRequirement(){
 				this.attemptedAddRequirement = true;
-				if(this.$TripReqsCreate.valid) {
-					this.requirements.push(this.newReq);
-					this.resetRequirement();
-					this.toggleNewRequirement = false;
-					this.attemptedAddRequirement = false;
-				}
+				this.$validator.validateAll().then(result => {
+                    if(result) {
+                        this.requirements.push(this.newReq);
+                        this.resetRequirement();
+                        this.toggleNewRequirement = false;
+                        this.attemptedAddRequirement = false;
+                    }
+				})
+				
 			}
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
-			this.$dispatch('reqs', true);
+			this.$emit('reqs', true);
 			done();
 		}
 	}

@@ -66,7 +66,7 @@
 			},
 			onValid(){
 				this.populateWizardData();
-				this.$dispatch('settings', true);
+				this.$emit('settings', true);
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles

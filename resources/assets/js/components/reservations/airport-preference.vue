@@ -13,7 +13,7 @@
                     <div class="col-sm-4">
                         <label>1st Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-                                  :value="choiceOneObj" :options="airportsOptions" label="name"
+                                  v-model="choiceOneObj" :options="airportsOptions" label="name"
                                   placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_one"
                                class="form-control hidden" maxlength="3"
@@ -23,7 +23,7 @@
                     <div class="col-sm-4">
                         <label>2nd Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-                                  :value="choiceTwoObj" :options="airportsOptions" label="name"
+                                  v-model="choiceTwoObj" :options="airportsOptions" label="name"
                                   placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_two"
                                class="form-control hidden" maxlength="3"
@@ -33,7 +33,7 @@
                     <div class="col-sm-4">
                         <label>3rd Choice</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-                                  :value="choiceThreeObj" :options="airportsOptions" label="name"
+                                  v-model="choiceThreeObj" :options="airportsOptions" label="name"
                                   placeholder="Search Airports" v-if="editMode"></v-select>
                         <input type="text" v-model="choice_three"
                                class="form-control hidden" maxlength="3"

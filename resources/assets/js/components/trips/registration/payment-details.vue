@@ -258,11 +258,11 @@
 		},
 		watch: {
 			'paymentComplete'(val, oldVal) {
-				this.$dispatch('payment-complete', val)
+				this.$emit('payment-complete', val)
 			},
 			'$parent.detailsConfirmed'(val, oldVal) {
 			    if (val !== oldVal && this.$parent.paymentErrors.length > 0) {
-                    this.$dispatch('payment-complete', val);
+                    this.$emit('payment-complete', val);
 			    }
 			},
 			'promo' (val, oldVal) {
@@ -279,7 +279,7 @@
             'payment-complete'(val, oldVal) {
 			    if (this.$parent.paymentErrors.length > 0) {
                     this.$parent.detailsConfirmed = val;
-//                this.$dispatch('payment-complete', val)
+//                this.$emit('payment-complete', val)
                 }
 
             },
@@ -290,7 +290,7 @@
             }
 		},
 		mounted() {
-			this.$dispatch('payment-complete', true);
+			this.$emit('payment-complete', true);
 			if (this.devMode) {
 				this.cardNumber = '';
 				this.cardCVC = '';
@@ -416,11 +416,11 @@
 		},
 		methods: {
 			onValid(){
-				//this.$dispatch('payment-complete', true)
+				//this.$emit('payment-complete', true)
 			},
 			onInvalid(){
 				// for now allow to continue
-				//this.$dispatch('payment-complete', true)
+				//this.$emit('payment-complete', true)
 			},
 			toDate(date){
 				if(date) {
@@ -450,9 +450,6 @@
 					}
 				}
 			},
-			checkForError(field){
-				return this.$PaymentDetails[field.toLowerCase()].invalid && this.attemptedCreateToken
-			},
 			checkPromo(){
                 this.$http.post('trips/'+ this.$parent.tripId +'/promo', {promocode: this.promo} ).then((response) => {
                     this.promoValid = parseInt(response.data.replace(/,+/, ''));
@@ -463,22 +460,24 @@
 			},
 			createToken() {
 				this.stripeDeferred = $.Deferred();
-
-				if (this.$PaymentDetails.invalid) {
-					this.attemptedCreateToken = true;
-					this.stripeDeferred.reject(false);
-				} else {
+				this.$validator.validateAll().then(result => {
+                    if (!result) {
+                        this.attemptedCreateToken = true;
+                        this.stripeDeferred.reject(false);
+                    } else {
 //					Stripe.setPublishableKey(this.stripeKey);
 //					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
-					this.$parent.$refs.validationspinner.show();
+                        this.$parent.$refs.validationspinner.show();
 
-					this.$http.post('donations/authorize', this.cardParams)
-							.then(this.createTokenCallback,
-									(error) =>  {
-										this.$root.$emit('showError', error.data.message);
-										this.$parent.$refs.validationspinner.hide();
-									});
-				}
+                        this.$http.post('donations/authorize', this.cardParams)
+                            .then(this.createTokenCallback,
+                                (error) =>  {
+                                    this.$root.$emit('showError', error.data.message);
+                                    this.$parent.$refs.validationspinner.hide();
+                                });
+                    }
+				})
+
 				return this.stripeDeferred.promise();
 			},
 			createTokenCallback(resp) {

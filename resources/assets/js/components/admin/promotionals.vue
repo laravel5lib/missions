@@ -3,6 +3,8 @@
         <component :is="currentView" 
                    :promoter-type="promoterType" 
                    :promoter-id="promoterId"
+                   @load-view="toView"
+                   @promotionalStatusChanged=""
                    :id="id"
                    transition="fade" 
                    transition-mode="out-in">
@@ -43,7 +45,7 @@
             }
         },
         events: {
-            'load-view': function (msg) {
+            'load-view'(msg) {
                 this.toView(msg);
             }
         },

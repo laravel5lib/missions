@@ -121,7 +121,7 @@
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="min-width:300px; max-height: 575px; padding: 10px 20px; overflow: scroll;">
 							<li>
 								<v-select @keydown.enter.prevent=""  class="form-control" id="countryFilter" multiple :debounce="250" :on-search="getCountries()"
-										  :value="countriesArr" :options="countriesOptions" label="name"
+										  v-model="countriesArr" :options="countriesOptions" label="name"
 										  placeholder="Filter Countries"></v-select>
 							</li>
 							<li>
@@ -259,12 +259,12 @@
             </thead>
             <tbody>
             <tr v-for="user in orderByProp(users, orderByField, direction)">
-                <td v-if="isActive('name')" v-text="user.name|capitalize"></td>
+                <td v-if="isActive('name')">{{user.name|capitalize}}</td>
                 <td v-if="isActive('email')" v-text="user.email"></td>
                 <td v-if="isActive('alt_email')" v-text="user.alt_email"></td>
-                <td v-if="isActive('gender')" v-text="user.gender|capitalize"></td>
-				<td v-if="isActive('status')" v-text="user.status|capitalize"></td>
-				<td v-if="isActive('birthday')" v-text="user.birthday|moment('ll')"></td>
+                <td v-if="isActive('gender')">{{user.gender|capitalize}}</td>
+				<td v-if="isActive('status')">{{user.status|capitalize}}</td>
+				<td v-if="isActive('birthday')">{{user.birthday|moment('ll')}}</td>
                 <td v-if="isActive('phone_one')" v-text="user.phone_one"></td>
                 <td v-if="isActive('phone_two')" v-text="user.phone_two"></td>
                 <td v-if="isActive('street')" v-text="user.street"></td>

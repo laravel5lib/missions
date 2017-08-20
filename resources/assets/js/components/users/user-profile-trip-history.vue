@@ -41,7 +41,7 @@
 				<form name="AddTrip" class="for" @submit.prevent="" novalidate>
 					<div class="form-group" :class="">
 						<label class="control-label">Trips</label>
-						<v-select @keydown.enter.prevent="" class="form-control" multiple :value="selectedTrips" :options="availableTrips"
+						<v-select @keydown.enter.prevent="" class="form-control" multiple v-model="selectedTrips" :options="availableTrips"
 								  label="name"></v-select>
 						<select hidden v-model="selectedTrips" multiple>
 							<option :value="trip" v-for="trip in availableTrips">{{trip.name}}</option>

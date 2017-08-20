@@ -10,7 +10,7 @@
 				</div>
 				<div class="form-group">
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-							  :value="usersArr" :options="usersOptions" label="name"
+							  v-model="usersArr" :options="usersOptions" label="name"
 							  placeholder="Filter Users"></v-select>
 				</div>
 				<div class="form-group">
@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="form-group">
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" v-model="shirtSizeArr" multiple
 							  :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 
@@ -161,11 +161,11 @@
 						<label style="margin-bottom:2px;">Registered On</label>
 						<h5 style="margin-top:5px;" class="text-center">{{ reservation.created_at | moment('ll') }}</h5>
 						<!--<div class="btn-group btn-group-justified">
-							<a class="btn btn-sm btn-primary" href="/dashboard/groups{{reservation.links[0].uri}}"><i class="fa fa-pencil"></i> Manage</a>
+							<a class="btn btn-sm btn-primary" :href="`/dashboard/groups${reservation.links[0].uri}`"><i class="fa fa-pencil"></i> Manage</a>
 						</div>-->
 					</div>
 					<div class="panel-footer text-center">
-						<h5 class="text-capitalize"><span class="text-success">{{ reservation.percent_raised | number '2' }}%</span> <small>Raised</small></h5>
+						<h5 class="text-capitalize"><span class="text-success">{{ reservation.percent_raised.toFixed(2) }}%</span> <small>Raised</small></h5>
 					</div>
 				</div><!-- end panel -->
 			</div><!-- end col -->

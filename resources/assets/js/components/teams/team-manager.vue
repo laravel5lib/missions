@@ -41,7 +41,7 @@
 					<div class="form-group" v-if="isAdminRoute">
 						<label>Travel Group</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-						          :value="groupObj" :options="groupsOptions" label="name"
+						          v-model="groupObj" :options="groupsOptions" label="name"
 						          placeholder="Filter Group"></v-select>
 					</div>
 
@@ -401,7 +401,7 @@
 											<div class="form-group">
 												<div class="col-sm-8">
 													<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-													          :value="addAssociationData.object" :options="unassociatedGroups" label="name"
+													          v-model="addAssociationData.object" :options="unassociatedGroups" label="name"
 													          placeholder="Add a Travel Group"></v-select>
 												</div>
 												<div class="col-sm-4">
@@ -713,7 +713,7 @@
 							<div class="form-group" :class="{'has-error': errors.has('teamgroup', 'team-create')}" v-if="isAdminRoute">
 								<label>Travel Group</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-										  :value="newTeamGroup" :options="groupsOptions" label="name" name="teamgroup" v-validate="'required'"
+										  v-model="newTeamGroup" :options="groupsOptions" label="name" name="teamgroup" v-validate="'required'"
 										  placeholder="Assign Travel Group"></v-select>
 								<!--<select class="hidden" v-model="newTeamGroup">
 									<option :value="group" v-for="group in groupsOptions">{{ group.name||capitalize() }}</option>

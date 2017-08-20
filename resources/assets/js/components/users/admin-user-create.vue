@@ -6,7 +6,7 @@
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name" debounce="250"
-                           placeholder="User Name" name="name" v-validate="'required|min:1|max:100'"
+                           placeholder="User Name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
@@ -14,8 +14,7 @@
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: email, handle: 'email' }">
                         <label for="name" class="control-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" v-model="email"
-                           name="email" v-validate="'required|min:1|max:100'">
+                        <input type="email" class="form-control" name="email" id="email" v-model="email" v-validate="'required|min:1|max:100'">
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -30,8 +29,11 @@
                     <div class="row" v-error-handler="{ value: password, handle: 'password' }">
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': errors.has('password') }">
-                                <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password"
-                                       name="password" placeholder="Enter password" v-va
+                                <input v-if="showPassword" type="text" class="form-control" v-model="password"
+                                       name="password" placeholder="Enter password" v-validate="'min:8'"
+                                       group="passwordGroup">
+                                <input v-else type="password" class="form-control" v-model="password"
+                                       name="password" placeholder="Enter password" v-validate="'min:8'"
                                        group="passwordGroup">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button" @click="showPassword=!showPassword">
@@ -43,7 +45,10 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="input-group" :class="{ 'has-error': errors.has('passwordconfirmation') }">
-                                <input :type="showPassword ? 'text' : 'password'" class="form-control" v-model="password_confirmation"
+                                <input v-if="showPassword" type="text" class="form-control" v-model="password_confirmation"
+                                       name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'"
+                                       group="passwordGroup">
+                                <input v-else type="password" class="form-control" v-model="password_confirmation"
                                        name="passwordconfirmation" placeholder="Enter password again" v-validate="'required|min:8'"
                                        group="passwordGroup">
                                 <span class="input-group-btn">
@@ -275,7 +280,7 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>
@@ -284,7 +289,7 @@
                 <div class="col-sm-4">
                     <div  v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="timezones"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                             <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                         </select>
@@ -386,9 +391,6 @@
                 dobMonth: null,
                 dobDay: null,
                 dobYear: null,
-
-                // mixin settings
-                validatorHandle: 'CreateUser',
             }
         },
         watch: {
@@ -412,46 +414,43 @@
             }
         },
         methods: {
-            errors.has(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUser[field].invalid && this.attemptSubmit;
-            },
             submit(){
-                this.resetErrors();
-                if (this.$CreateUser.valid) {
-                    let resource = this.$resource('users');
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        let resource = this.$resource('users');
 
-                    resource.post(null, {
-                        name: this.name,
-                        email: this.email,
-                        alt_email: this.alt_email,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
-                        bio: this.bio,
-                        birthday: this.birthday,
-                        type: this.type,
-                        country_code: this.country_code,
-                        timezone: this.timezone,
-                        phone_one: this.phone_one,
-                        phone_two: this.phone_two,
-                        address: this.address,
-                        city: this.city,
-                        state: this.state,
-                        zip: this.zip,
-                        status: this.status,
-                        gender: this.gender,
-                        public: this.public,
-                        url: this.public ? this.url : undefined,
-                    }).then((resp) => {
-                        window.location.href = '/admin' + resp.data.data.links[0].uri;
-                    }, (error) =>  {
-                        this.errors = error.data.errors
+                        resource.post(null, {
+                            name: this.name,
+                            email: this.email,
+                            alt_email: this.alt_email,
+                            password: this.password,
+                            password_confirmation: this.password_confirmation,
+                            bio: this.bio,
+                            birthday: this.birthday,
+                            type: this.type,
+                            country_code: this.country_code,
+                            timezone: this.timezone,
+                            phone_one: this.phone_one,
+                            phone_two: this.phone_two,
+                            address: this.address,
+                            city: this.city,
+                            state: this.state,
+                            zip: this.zip,
+                            status: this.status,
+                            gender: this.gender,
+                            public: this.public,
+                            url: this.public ? this.url : undefined,
+                        }).then((resp) => {
+                            window.location.href = '/admin' + resp.data.data.links[0].uri;
+                        }, (error) =>  {
+                            this.errors = error.data.errors
+                            this.showError = true;
+                            console.log(error);
+                        });
+                    } else {
                         this.showError = true;
-                        console.log(error);
-                    });
-                } else {
-                    this.showError = true;
-                }
+                    }
+                });
             }
         },
         mounted(){

@@ -311,7 +311,7 @@
 			},
 			populateWizardData(onValid){
 				if (!onValid)
-					this.$validate(true);
+
 				$.extend(this.wizardData, {
 					group_id: this.group_id,
 					description: this.description,

@@ -183,8 +183,8 @@
                         if (val.amount_owed > max)
                             val.amount_owed = this.cost.amount;
                         val.percent_owed = (val.amount_owed / this.cost.amount) * 100;
-                        if (_.isFunction(this.$validate))
-                            this.$validate('percent', true);
+
+
                     }
 
                     if(val && val.percent_owed) {
@@ -192,8 +192,8 @@
                         if (val.percent_owed > max)
                             val.percent_owed = max;
                         val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
-                        if (_.isFunction(this.$validate))
-                            this.$validate('amount', true);
+
+
                     }
                 },
                 deep: true
@@ -206,8 +206,8 @@
                         if (val.percent_owed > max)
                             val.percent_owed = max;
                         val.amount_owed = (val.percent_owed / 100) * this.cost.amount;
-                        if (_.isFunction(this.$validate))
-                            this.$validate('amount', true);
+
+
                     }
                 },
                 deep: true

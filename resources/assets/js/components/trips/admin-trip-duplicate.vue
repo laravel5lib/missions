@@ -81,7 +81,7 @@
                 });
             },
             duplicateTrip(){
-                this.$validate('group', true);
+
                 this.attemptedContinue = true;
                 this.$validator.validateAll().then(result => {
                     if (result) {

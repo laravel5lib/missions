@@ -155,7 +155,7 @@
                     this.adjustSelectByType();
             },
             'tags'(val, oldVal) {
-                this.$validate('tags', true);
+
             }
         },
         events:{

@@ -131,7 +131,7 @@
                 </td>
                 <td v-if="isActive('created_at')">{{project.created_at|moment('ll')}}</td>
                 <td>
-                    <a href="/admin/projects/{{project.id}}"><i class="fa fa-cog"></i></a>
+                    <a :href="`/admin/projects/${project.id}`"><i class="fa fa-cog"></i></a>
                 </td>
             </tr>
             </tbody>

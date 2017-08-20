@@ -41,7 +41,7 @@
 				<form name="AddCountry" class="for" @submit.prevent="" novalidate>
 					<div class="form-group" :class="">
 						<label class="control-label">Countries</label>
-						<v-select @keydown.enter.prevent="" class="form-control" multiple :value="selectedCountries" :options="availableCountries"
+						<v-select @keydown.enter.prevent="" class="form-control" multiple v-model="selectedCountries" :options="availableCountries"
 								  label="name"></v-select>
 						<select hidden v-model="selectedCodes" multiple>
 							<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>

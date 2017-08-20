@@ -13,7 +13,7 @@
             <div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple :value="tags" :options="tagOptions"></v-select>
+                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
                     <select hidden id="tags" name="tags" v-model="tags" multiple v-validate="'required'">
                         <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
                     </select>
@@ -90,7 +90,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <a href="/admin/uploads" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a @click="submit" class="btn btn-primary">Update</a>
                 </div>
             </div>
         </form>
@@ -197,32 +197,29 @@
             prevent(e){
                 e.preventDefault();
             },
-            /*checkForError(field){
-                // if upload clicked submit button while the field is invalid trigger error styles 
-                return this.$CreateUpload[field].invalid && this.attemptSubmit;
-            },*/
             submit(){
-                this.resetErrors();
-                if (this.$CreateUpload.valid) {
-                    this.resource.put({id:this.uploadId}, {
-                        name: this.name,
-                        tags: this.tags,
-                        type: this.type,
-                        path: this.path,
-                        file: this.file||undefined,
-                        x_axis: parseInt(this.x_axis / this.imageAspectRatio)||undefined,
-                        y_axis: parseInt(this.y_axis / this.imageAspectRatio)||undefined,
-                        width: parseInt(this.coords.w / this.imageAspectRatio)||undefined,
-                        height: parseInt(this.coords.h / this.imageAspectRatio)||undefined,
-                    }).then((resp) => {
-                        console.log(resp);
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.resource.put({id: this.uploadId}, {
+                            name: this.name,
+                            tags: this.tags,
+                            type: this.type,
+                            path: this.path,
+                            file: this.file || undefined,
+                            x_axis: parseInt(this.x_axis / this.imageAspectRatio) || undefined,
+                            y_axis: parseInt(this.y_axis / this.imageAspectRatio) || undefined,
+                            width: parseInt(this.coords.w / this.imageAspectRatio) || undefined,
+                            height: parseInt(this.coords.h / this.imageAspectRatio) || undefined,
+                        }).then((resp) => {
+                            console.log(resp);
 //                    	this.resultImage = resp.data;
-                        window.location.href = '/admin/uploads';
+                            window.location.href = '/admin/uploads';
 //                        window.location.href = '/admin' + resp.data.data.links[0].uri;
-                    }, (error) =>  {
-                        console.log(error);
-                    });
-                }
+                        }, (error) => {
+                            console.log(error);
+                        });
+                    }
+                })
             },
             handleImage(e){
                 var self = this;

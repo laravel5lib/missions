@@ -15,8 +15,6 @@
             </div>
         </div>
         <div class="panel-body">
-
-
             <form id="ModifyPromotional" novalidate>
             <div class="row">
                 <div class="form-group col-sm-6" 
@@ -130,38 +128,36 @@
                 })
             },
             create() {
-                this.resetErrors();
-                if (this.$ModifyPromotional.valid) {
-                    $.extend(this.promo, {promoteable_id: this.promoterId, promoteable_type: this.promoterType});
-                    this.$http.post('promotionals', this.promo).then((response) => {
-                        this.$root.$emit('showSuccess', 'Promotional created.');
-                        this.$dispatch('load-view', {view: 'details', id: response.data.data.id});
-                    }, (error) =>  {
-                        this.$root.$emit('showError', 'Could not create promotional.');
-                    })
-                }
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        $.extend(this.promo, {promoteable_id: this.promoterId, promoteable_type: this.promoterType});
+                        this.$http.post('promotionals', this.promo).then((response) => {
+                            this.$root.$emit('showSuccess', 'Promotional created.');
+                            this.$emit('load-view', {view: 'details', id: response.data.data.id});
+                        }, (error) => {
+                            this.$root.$emit('showError', 'Could not create promotional.');
+                        })
+                    }
+                })
             },
             update() {
-                // Touch fields for proper validation
-                if ( _.isFunction(this.$validate) )
-                    this.$validate(true);
-
-                this.resetErrors();
-                if (this.$ModifyPromotional.valid) {
-                    this.$http.put('promotionals/' + this.id, this.promo).then((response) => {
-                        this.$root.$emit('showSuccess', 'Promotional updated.');
-                        this.$dispatch('load-view', {view: 'details', id: response.data.data.id});
-                    }, (error) =>  {
-                        this.$root.$emit('showError', 'Could not update promotional.');
-                    })
-                }
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.$http.put('promotionals/' + this.id, this.promo).then((response) => {
+                            this.$root.$emit('showSuccess', 'Promotional updated.');
+                            this.$emit('load-view', {view: 'details', id: response.data.data.id});
+                        }, (error) => {
+                            this.$root.$emit('showError', 'Could not update promotional.');
+                        })
+                    }
+                });
             },
             callView(data) {
-                this.$dispatch('load-view', data);
+                this.$emit('load-view', data);
             },
             cancel()
             {
-                this.$dispatch('load-view', this.url);
+                this.$emit('load-view', this.url);
             }
         },
         mounted() {

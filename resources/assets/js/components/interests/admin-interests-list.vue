@@ -5,7 +5,7 @@
             <form class="col-sm-12">
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value="groupObj" :options="groupsOptions" label="name"
+                              v-model="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter Group"></v-select>
                 </div>
                 <div class="form-group">
@@ -27,12 +27,12 @@
                 </div>
                 <div class="form-group" v-if="!tripId">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value="campaignObj" :options="campaignOptions" label="name"
+                              v-model="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </mm-aside>
 
@@ -206,7 +206,7 @@
                     <td v-if="isActive('group')">{{interest.trip.data.group.data.name}}</td>
                     <td v-if="isActive('created_at')">{{interest.created_at | moment('lll')}}</td>
                     <td>
-                        <a href="/admin/interests/{{ interest.id }}"><i class="fa fa-cog"></i></a>
+                        <a :href="`/admin/interests/${ interest.id }`"><i class="fa fa-cog"></i></a>
                     </td>
                 </tr>
                 </tbody>

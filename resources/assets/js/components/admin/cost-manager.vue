@@ -14,12 +14,12 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters It!</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters It!</button>
             </form>
         </mm-aside>
         <form class="panel-body form-inline text-right" novalidate>
             <div class="input-group input-group-sm">
-                <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
             </div>
             <button class="btn btn-default btn-sm" type="button" @click="showFilters=true">Filters</button>
@@ -90,21 +90,21 @@
             <div slot="modal-body" class="modal-body">
                 <template v-if="!selectedCost">
 
-                        <form class="form" novalidate>
+                        <form class="form" novalidate data-vv-scope="cost-create">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('costName', 'cost-create')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
                                                v-model="newCost.name" name="costName" v-validate="'required'"
                                                placeholder="Name" autofocus>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-create')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
                                                   v-model="newCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('costType', 'cost-create')}">
                                         <label for="cost_type">Type</label>
                                         <select id="cost_type" class="form-control" v-model="newCost.type" name="costType" v-validate="'required'">
                                             <option value="">-- select --</option>
@@ -115,17 +115,17 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
+                                            <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-create')}">
                                                 <label for="newCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                                <input type="datetime" id="newCost_active_at" class="form-control hidden"
-                                                       v-model="newCost.active_at" name="costActive" v-validate="'required'">
+                                                <date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')" name="costActive" v-validate="'required'"></date-picker>
+                                                <!--<input type="datetime" id="newCost_active_at" class="form-control hidden"
+                                                       v-model="newCost.active_at" name="costActive" v-validate="'required'">-->
                                             </div>
 
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.hasCost('costAmount')}">
+                                            <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-create')}">
                                                 <label for="newCost_amount">Amount</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
@@ -151,21 +151,21 @@
             <div slot="modal-body" class="modal-body">
                 <template v-if="selectedCost">
 
-                        <form class="form" novalidate>
+                        <form class="form" novalidate data-vv-scope="cost-edit">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('costName', 'cost-edit')}">
                                         <label for="cost_name">Name</label>
                                         <input type="text" class="form-control" id="cost_name"
                                                v-model="selectedCost.name" name="costName" v-validate="'required'"
                                                placeholder="Name" autofocus>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('costDescription', 'cost-edit')}">
                                         <label for="cost_description">Description</label>
                                         <textarea class="form-control" id="cost_description"
                                                   v-model="selectedCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
                                     </div>
-                                    <div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
+                                    <div class="form-group" :class="{'has-error': errors.has('costType', 'cost-edit')}">
                                         <label for="cost_type">Type</label>
                                         <select id="cost_type" class="form-control" v-model="selectedCost.type" name="costType" v-validate="'required'">
                                             <option value="">-- select --</option>
@@ -176,17 +176,17 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
+                                            <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-edit')}">
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker :input-sm="true" :model="selectedCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                                <input type="datetime" id="selectedCost_active_at" class="form-control hidden"
-                                                       v-model="selectedCost.active_at" name="costActive" v-validate="'required'">
+                                                <date-picker :input-sm="true" :model="selectedCost.active_at|moment('YYYY-MM-DD HH:mm:ss')" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
+                                                <!--<input type="datetime" id="selectedCost_active_at" class="form-control hidden"
+                                                       v-model="selectedCost.active_at" name="costActive" v-validate="'required'">-->
                                             </div>
 
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group" :class="{'has-error': errors.hasCost('costAmount')}">
+                                            <div class="form-group" :class="{'has-error': errors.has('costAmount', 'cost-edit')}">
                                                 <label for="selectedCost_amount">Amount</label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
@@ -240,6 +240,7 @@
     </section>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import paymentManager from './payment-manager.vue'
     import importUtility from '../import-utility.vue'
     export default{
@@ -294,7 +295,7 @@
             },
 
             'search'(val, oldVal) {
-                this.searchCosts();
+                // this.searchCosts();
             },
 
             'showEditModal'(val, oldVal) {
@@ -368,35 +369,40 @@
             },
             addCost(){
                 this.attemptedAddCost = true;
-                if (this.$validateCost.valid) {
-                    this.$http.post(`costs`, this.newCost, { include: 'payments'}).then((response) => {
-                        this.costs.push(response.data.data);
-                        this.resetCost();
-                        this.showAddModal = false;
-                        this.attemptedAddCost = false;
-                        this.searchCosts();
-                    }, (error) =>  {
-                        console.log(error.data.errors);
-                        // this.$refs.spinner.hide();
-                    });
-                }
+                this.$validator.validateAll('cost-create').then(result => {
+                    if (result) {
+                        this.$http.post(`costs`, this.newCost, { include: 'payments'}).then((response) => {
+                            this.costs.push(response.data.data);
+                            this.resetCost();
+                            this.showAddModal = false;
+                            this.attemptedAddCost = false;
+                            this.searchCosts();
+                        }, (error) =>  {
+                            console.log(error.data.errors);
+                            // this.$refs.spinner.hide();
+                        });
+                    }
+                });
+
                 this.checkCostsErrors();
             },
             updateCost(){
                 this.attemptedAddCost = true;
-                if (this.$validateCost.valid) {
-                    this.$http.put(`costs/${this.selectedCost.id}?include=payments`, this.selectedCost).then((response) => {
-                        this.showReminder = response.data.data.id;
-                        $.extend(this.costs, this.selectedCost);
-                        this.selectedCost = null;
-                        this.attemptedAddCost = false;
-                        this.showEditModal = false;
-                        this.searchCosts();
-                    }, (error) =>  {
-                        console.log(error.data.errors);
-                        // this.$refs.spinner.hide();
-                    });
-                }
+                this.$validator.validateAll('cost-edit').then(result => {
+                    if (result) {
+                        this.$http.put(`costs/${this.selectedCost.id}?include=payments`, this.selectedCost).then((response) => {
+                            this.showReminder = response.data.data.id;
+                            $.extend(this.costs, this.selectedCost);
+                            this.selectedCost = null;
+                            this.attemptedAddCost = false;
+                            this.showEditModal = false;
+                            this.searchCosts();
+                        }, (error) => {
+                            console.log(error.data.errors);
+                            // this.$refs.spinner.hide();
+                        });
+                    }
+                })
                 this.checkCostsErrors();
             },
             resetFilter(){
@@ -406,6 +412,7 @@
                     type: ''
                 }
             },
+            debouncedSearch: _.debounce(function () { this.searchCosts() }, 250),
             searchCosts(){
                 // this.$refs.spinner.show();
                 this.$http.get(`costs`, {

@@ -8,7 +8,7 @@
 							<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
 							<template v-if="editMode">
 								<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-								          :value="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
+								          v-model="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
 								          placeholder="Select Airport"></v-select>
 								<select class="form-control hidden" name="airport" id="airport" v-validate="'required'"
 								        v-model="hub.name">
@@ -73,7 +73,7 @@
 							<label for="">Country</label>
 							<template v-if="editMode">
 								<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
-								          :value="countryObj" :options="UTILITIES.countries" label="name"
+								          v-model="countryObj" :options="UTILITIES.countries" label="name"
 								          placeholder="Select Country"></v-select>
 								<select class="form-control hidden" name="country" id="country" v-validate="'required'"
 								        v-model="hub.country_code">

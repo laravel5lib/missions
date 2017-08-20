@@ -45,7 +45,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedDues" :options="availableDues"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="dues" v-validate="'required'" multiple>
                                 <option :value="due.id" v-for="due in dues">{{due.name}}</option>

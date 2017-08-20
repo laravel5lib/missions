@@ -175,7 +175,7 @@
             <tr v-for="fund in orderByProp(funds, orderByField, direction)">
                 <td v-if="isActive('name')" v-text="fund.name"></td>
                 <td v-if="isActive('type')">
-                    <span class="label label-default" v-text="fund.type|capitalize"></span>
+                    <span class="label label-default">{{fund.type|capitalize}}</span>
                 </td>
                 <td v-if="isActive('item')">
                     <code>{{ fund.item }}</code>
@@ -184,9 +184,9 @@
                     <code>{{ fund.class }}</code>
                 </td>
                 <td v-if="isActive('balance')">
-                    <span v-text="fund.balance|currency" :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}"></span>
+                    <span :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}">{{fund.balance|currency}}</span>
                 </td>
-                <td><a href="/admin/funds/{{ fund.id }}"><i class="fa fa-cog"></i></a></td>
+                <td><a :href="`/admin/funds/${ fund.id }`"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
             <tfoot>

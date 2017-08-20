@@ -47,7 +47,7 @@
                 <form name="AddCost" class="for" novalidate>
                     <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                         <label class="control-label">Available Costs</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedCosts" :options="availableCosts"
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
                                   label="name"></v-select>
                         <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
                             <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>

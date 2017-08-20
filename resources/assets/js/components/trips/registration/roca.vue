@@ -49,7 +49,7 @@
 		},
 		watch:{
 			'$parent.rocaAgree'(val, oldVal) {
-				this.$dispatch('roca-agree', val)
+				this.$emit('roca-agree', val)
 			}
 		},
 		activate(done){

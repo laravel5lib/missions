@@ -164,36 +164,38 @@
             },
 	        updateType() {
 
-                this.resetErrors();
-                if (this.$TypeForm.valid) {
-                    let updatingObject = _.extend({}, this.currentType);
-	                let originalType = _.findWhere(this.roomTypes, { id: this.currentType.id});
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        let updatingObject = _.extend({}, this.currentType);
+                        let originalType = _.findWhere(this.roomTypes, {id: this.currentType.id});
 
-                    // check if name changed
-                    if (originalType.name === this.currentType.name)
-	                    delete updatingObject.name;
+                        // check if name changed
+                        if (originalType.name === this.currentType.name)
+                            delete updatingObject.name;
 
-                    return this.roomTypeResource.put({ id: updatingObject.id }, updatingObject).then((response) => {
-                        _.extend(_.findWhere(this.roomTypes, { id: updatingObject.id}), response.data.data);
-                        this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully updated');
-                    }, (response) =>  {
-                        this.$root.$emit('showError', response.data.message);
-                    });
-                }
+                        return this.roomTypeResource.put({id: updatingObject.id}, updatingObject).then((response) => {
+                            _.extend(_.findWhere(this.roomTypes, {id: updatingObject.id}), response.data.data);
+                            this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully updated');
+                        }, (response) => {
+                            this.$root.$emit('showError', response.data.message);
+                        });
+                    }
+                });
 
 	        },
 	        createType() {
 
-                this.resetErrors();
-                if (this.$TypeForm.valid) {
-                    return this.roomTypeResource.post(this.currentType).then((response) => {
-                        this.roomTypes.push(response.data.data);
-                        this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully created');
-                    }, (response) =>  {
-                        this.$root.$emit('showError', response.data.message);
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        return this.roomTypeResource.post(this.currentType).then((response) => {
+                            this.roomTypes.push(response.data.data);
+                            this.$root.$emit('showSuccess', 'Room Type: ' + response.data.data.name + ', successfully created');
+                        }, (response) => {
+                            this.$root.$emit('showError', response.data.message);
 
-                    });
-                }
+                        });
+                    }
+                });
 	        },
             confirmDelete(type) {
                 this.selectedType = type;

@@ -8,7 +8,7 @@
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Country</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250" :on-search="getCountries"
-					          :value="regionsFilters.country" :options="UTILITIES.countries" label="name"
+					          v-model="regionsFilters.country" :options="UTILITIES.countries" label="name"
 					          placeholder="Filter Countries"></v-select>
 				</div>
 
@@ -31,13 +31,13 @@
 				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-					          :value="squadsFilters.group" :options="groupsOptions" label="name"
+					          v-model="squadsFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>
 				<div class="form-group">
 					<label>Region</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250"
-					          :value="squadsFilters.region" :options="regions" label="name"
+					          v-model="squadsFilters.region" :options="regions" label="name"
 					          placeholder="Filter by Region"></v-select>
 				</div>
 
@@ -73,7 +73,7 @@
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
 													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign|capitalize }}</a>
-													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name|capitalize"></span>
+													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name|capitalize}}</span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
 												<div class="col-xs-6 text-right">
@@ -140,7 +140,7 @@
 													<h4>{{ region.name|capitalize }}</h4>
 													<p>
 					                                    <span v-if="region.callsign">
-					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+					                                        <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign">{{region.callsign|capitalize}}</span>
 					                                    </span>
 														<span class="small">{{ region.country.name|capitalize }}</span>
 													</p>
@@ -223,7 +223,7 @@
 								<div class="row list-group-item-heading">
 									<div class="col-xs-6">
 										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign|capitalize }}</a>
-										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name|capitalize"></span>
+										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;">{{team.type.data.name|capitalize}}</span>
 										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>
 									<div class="col-xs-6 text-right">
@@ -264,7 +264,7 @@
 						<div class="form-group">
 							<label for="createPlanCallsign" class="control-label">Region Country</label>
 							<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
-							          :value="selectedRegion.country" :options="UTILITIES.countries" label="name"
+							          v-model="selectedRegion.country" :options="UTILITIES.countries" label="name"
 							          placeholder="Select a Country"></v-select>
 						</div>
 						<div class="form-group">
@@ -295,7 +295,7 @@
 							<div v-if="selectedRoom.type" class="">
 								<template  v-for="(value, key) in selectedRoom.type.rules">
 									<!--<label v-text="key ? (key[0].toUpperCase() + key.slice(1)) | underscoreToSpace : ''"></label>-->
-									<p class="small" v-text="value|capitalize"></p>
+									<p class="small">{{value|capitalize}}</p>
 								</template>
 							</div>
 						</div>

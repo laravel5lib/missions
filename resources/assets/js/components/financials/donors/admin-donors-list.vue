@@ -12,44 +12,44 @@
                 <h6 style="font-size: .7em;letter-spacing: 2px;text-transform: uppercase;text-align: center;color: #808080;background: #242424;padding-top: 4px;padding-bottom: 4px;">By Designation</h6>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value="groupObj" :options="groupsOptions" label="name"
+                              v-model="groupObj" :options="groupsOptions" label="name"
                               placeholder="Filter by Group"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="reservationFilter" :debounce="250" :on-search="getReservations"
-                              :value="reservationObj" :options="reservationsOptions" label="given_names"
+                              v-model="reservationObj" :options="reservationsOptions" label="given_names"
                               placeholder="Filter by Reservation"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value="campaignObj" :options="campaignsOptions" label="name"
+                              v-model="campaignObj" :options="campaignsOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="causesFilter" :debounce="250" :on-search="getCauses"
-                              :value="causeObj" :options="causesOptions" label="name"
+                              v-model="causeObj" :options="causesOptions" label="name"
                               placeholder="Filter by Cause"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="tripsFilter" :debounce="250" :on-search="getTrips"
-                              :value="tripObj" :options="tripsOptions" label="name"
+                              v-model="tripObj" :options="tripsOptions" label="name"
                               placeholder="Filter by Trip"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="projectsFilter" :debounce="250" :on-search="getProjects"
-                              :value="projectObj" :options="projectsOptions" label="name"
+                              v-model="projectObj" :options="projectsOptions" label="name"
                               placeholder="Filter by Project"></v-select>
                 </div>
 
                 <h6 style="font-size: .7em;letter-spacing: 2px;text-transform: uppercase;text-align: center;color: #808080;background: #242424;padding-top: 4px;padding-bottom: 4px;">By Account Holder</h6>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="groupFilter" :debounce="250" :on-search="getGroups"
-                              :value="groupAccountObj" :options="groupsOptions" label="name"
+                              v-model="groupAccountObj" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control input-sm" id="userFilter" :debounce="250" :on-search="getUsers"
-                              :value="userObj" :options="usersOptions" label="name"
+                              v-model="userObj" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>
 
@@ -232,7 +232,7 @@
                 <td v-if="isActive('phone')" v-text="donor.phone|phone"></td>
                 <td v-if="isActive('zip')" v-text="donor.zip"></td>
                 <td v-if="isActive('total_donated')" v-text="donor.total_donated|currency"></td>
-                <td><a href="/admin/donors/{{ donor.id }}"><i class="fa fa-cog"></i></a></td>
+                <td><a :href="`/admin/donors/${ donor.id }`"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
             <tfoot>

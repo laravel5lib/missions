@@ -39,7 +39,7 @@
             <p class="text-center text-muted" v-show="companions.length < 1">No companions found.</p>
             <div class="col-xs-12 panel panel-default" v-for="companion in companions" :key="companion.id">
                 <h5>
-                    <a href="/admin/reservations/{{ companion.id }}">
+                    <a :href="`/admin/reservations/${ companion.id }`">
                         <img :src="companion.avatar + '?w=50&h=50'" class="img-circle av-left" width="50" height="50" :alt=" companion.given_names ">
                         {{ companion.given_names }} {{ companion.surname }}
                         <small> &middot; <em>{{ companion.relationship|capitalize }}</em></small>
@@ -69,7 +69,7 @@
                                 <div class="form-group" :class="{ 'has-error': errors.has('reservation') }">
                                     <label class="control-label">Reservation</label>
                                     <span class="help-block" v-show="reservations.length < 1"><i class="fa fa-warning"></i> If your search yields no options it could mean (1) the reservation does not exist or (2) the reservation belongs to another group or campaign.</span>
-                                    <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" :value="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
+                                    <v-select @keydown.enter.prevent=""  class="form-control" id="Reservation" v-model="reservationObj" :options="reservations" :on-search="getReservations" label="label"></v-select>
                                     <!-- <select hidden="" v-model="newCompanion.companion_reservation_id" name="reservation" v-validate="'required'">
                                         <option :value="reservation.id" v-for="reservation in reservations">{{reservation.name}}</option>
                                     </select> -->
@@ -79,7 +79,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click="join()">Join</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click="join">Join</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -96,7 +96,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary btn-sm" @click="leave()">Leave</button>
+                        <button type="button" class="btn btn-primary btn-sm" @click="leave">Leave</button>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -133,10 +133,6 @@ export default {
         }
     },
   methods: {
-    errors.has: function errors.has(field) {
-        // if user clicked submit button while the field is invalid trigger error styles
-        return this.$AddCompanion[field].invalid && this.attemptSubmit;
-    },
     getReservations(search, loading) {
         loading(true);
         var that = this;

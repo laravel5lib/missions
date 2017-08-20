@@ -21,8 +21,8 @@
             </tr>
             </thead>
             <tbody>
-            <template v-for="due in dues" :key="due.id">
-                <tr>
+            <template>
+                <tr v-for="due in dues" :key="due.id">
                     <td class="text-center">
                         <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>
@@ -46,7 +46,7 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple :value="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedDues" :options="availableDues"
                                       label="name"></v-select>
                             <select hidden="" v-model="user_id" name="dues" v-validate="'required'" multiple>
                                 <option :value="due.id" v-for="due in dues">{{due.name}}</option>
@@ -60,12 +60,12 @@
         <modal title="Edit Due" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="updateDue">
             <div slot="modal-body" class="modal-body">
 
-                    <form class="form" novalidate>
+                    <form class="form" novalidate data-vv-scope="due-edit">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditDueError('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace', 'due-edit') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditDueError('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'due-edit') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedDue.grace_period"
                                                name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
@@ -126,18 +126,6 @@
                 let stop = b === 0 ? moment().endOf('month') : moment().add(1, 'month').endOf('month');
                 console.log(moment(a).isBetween(start, stop));
                 return moment(a).isBetween(start, stop);
-            },
-            errors.has(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$AddDue[field].invalid && this.attemptSubmit;
-            },
-            checkForEditDueError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditDue[field].invalid && this.attemptSubmit;
-            },
-            checkForNewDueError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$NewDue[field].invalid && this.attemptSubmit;
             },
             resetDue(){
                 this.newDue = {

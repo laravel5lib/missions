@@ -7,7 +7,7 @@
 					<label>Activity Type</label>
 					<select class="form-control" v-model="activityFilters.type">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes">{{type.name|capitalize}}</option>
 					</select>
 				</div>
 			</form>
@@ -55,7 +55,7 @@
 								<div class="timeline-label">
 									<h2>
 										<a href="#">{{ activity.name|capitalize }}</a>
-										<span class="label label-default" v-text="activity.type.name|capitalize"></span>
+										<span class="label label-default">{{activity.type.name|capitalize}}</span>
 										<br />
 										<small><i class="fa fa-clock-o"></i> {{ activity.occurred_at|moment('dddd, MMMM D, YYYY zz') }}</small>
 									</h2>
@@ -154,7 +154,7 @@
 					<label>Activity Type</label>
 					<select class="form-control" v-model="selectedActivity.activity_type_id">
 						<option value="">Any Type</option>
-						<option :value="type.id" v-for="type in UTILITIES.activityTypes" v-text="type.name|capitalize"></option>
+						<option :value="type.id" v-for="type in UTILITIES.activityTypes">{{type.name|capitalize}}</option>
 					</select>
 				</div>
 				<travel-activity ref="activity" :activity="selectedActivity" :activity-types="UTILITIES.activityTypes" :activity-type="selectedActivity.activity_type_id" transport-domestic></travel-activity>
@@ -298,7 +298,7 @@
                 let promise;
 
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
 
 	            if (data.id) {
 	                promise = this.$http.put({ hub: data.id}, data).then((response) => {
@@ -326,7 +326,7 @@
                 let promise;
 
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
 
                 if (data.id) {
                     promise = this.$http.put(`activities/${data.id}`, data).then((response) => {

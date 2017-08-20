@@ -136,7 +136,7 @@
                 });
             },
             callView(data) {
-                this.$dispatch('load-view', data);
+                this.$emit('load-view', data);
             },
             showModal() {
                 if (this.promo.deleted_at) return this.showStartModal = true;
@@ -149,7 +149,7 @@
                     this.$root.$emit('showSuccess', 'Deactivated successfully.');
                     this.showStopModal = false;
                     this.fetch();
-                    this.$broadcast('promotionalStatusChanged');
+                    this.$emit('promotionalStatusChanged');
                 }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to deactivate on server.');
                 });
@@ -170,13 +170,13 @@
                     this.$root.$emit('showSuccess', 'Activated successfully.');
                     this.showStartModal = false;
                     this.fetch();
-                    this.$broadcast('promotionalStatusChanged');
+                    this.$emit('promotionalStatusChanged');
                 }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to activate on server.');
                 });
             },
             callView(data) {
-                this.$dispatch('load-view', data);
+                this.$emit('load-view', data);
             }
         },
         mounted() {

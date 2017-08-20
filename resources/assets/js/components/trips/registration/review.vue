@@ -136,7 +136,7 @@
 		},
 		watch:{
 			'review'(val, oldVal) {
-				this.$dispatch('review', val)
+				this.$emit('review', val)
 			},
 			'$parent.paymentErrors'(val) {
                 if (val.length > 0) {

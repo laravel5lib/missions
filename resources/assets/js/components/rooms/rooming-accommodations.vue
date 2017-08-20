@@ -8,7 +8,7 @@
 				<div class="form-group" v-if="isAdminRoute">
 					<label>Country</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" :debounce="250" :on-search="getCountries"
-					          :value="regionsFilters.country" :options="UTILITIES.countries" label="name"
+					          v-model="regionsFilters.country" :options="UTILITIES.countries" label="name"
 					          placeholder="Filter Countries"></v-select>
 				</div>
 
@@ -22,7 +22,7 @@
 				<div class="form-group">
 					<label>Travel Group</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" :debounce="250" :on-search="getGroups"
-					          :value="plansFilters.group" :options="groupsOptions" label="name"
+					          v-model="plansFilters.group" :options="groupsOptions" label="name"
 					          placeholder="Filter by Group"></v-select>
 				</div>
 
@@ -36,13 +36,13 @@
 				<div class="form-group">
 					<label>Rooming Plans</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="plansFilter" multiple :debounce="250" :on-search="getRoomingPlansFilter"
-					          :value="roomsFilters.plans" :options="plansOptions" label="name"
+					          v-model="roomsFilters.plans" :options="plansOptions" label="name"
 					          placeholder="Filter by Plans"></v-select>
 				</div>
 				<div class="form-group">
 					<label>Room Type</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="typeFilter" :debounce="250" :on-search="getRoomTypes"
-					          :value="roomsFilters.type" :options="roomTypes" label="name"
+					          v-model="roomsFilters.type" :options="roomTypes" label="name"
 					          placeholder="Filter by Type"></v-select>
 				</div>
 
@@ -66,7 +66,7 @@
 							<form class="form-inline row">
 								<div class="form-group col-xs-8">
 									<div class="input-group input-group-sm col-xs-12">
-										<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search rooms">
+										<input type="text" class="form-control" v-model="roomsSearch" @keyup="debouncedRoomsSearch" placeholder="Search rooms">
 										<span class="input-group-addon"><i class="fa fa-search"></i></span>
 									</div>
 									<hr class="divider sm inv">
@@ -118,7 +118,7 @@
 					<div class="panel panel-default">
 						<div class="panel-heading text-center"><h5>Choose a Region</h5></div>
                         <ul class="list-group">
-                          <li class="list-group-item" v-for="region in regions | orderBy 'name'">
+                          <li class="list-group-item" v-for="region in orderByProp(regions, 'name')">
                             <span class="badge" style="background-color: white; border: 1px solid black; color: black">
                                 {{region.teams_count}} Squads
                             </span>
@@ -127,7 +127,7 @@
                             </span>
                             <h5>{{region.name}}</h5>
                             <span v-if="region.callsign">
-                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign" v-text="region.callsign|capitalize"></span>
+                                <span class="label label-default" :style="'color: #FFF !important; background-color: ' + region.callsign">{{region.callsign|capitalize}}</span>
                             </span>
                             <span class="small">{{ region.country.name|capitalize }}</span>
                             <button class="btn btn-xs btn-primary pull-right" type="button" @click="selectRegion(region)">
@@ -152,7 +152,7 @@
 					</div>
 					<template v-if="accommodations.length">
 						<accordion :one-at-atime="true">
-							<panel :type="currentAccommodation && currentAccommodation.id === accommodation.id ? 'danger' : ''" v-for="accommodation in accommodations">
+							<panel :type="currentAccommodation && currentAccommodation.id === accommodation.id ? 'danger' : ''" v-for="accommodation in accommodations" :key="accommodation.id">
 								<div slot="header" class="row">
 									<div class="col-xs-6">
                                         <strong>{{accommodation.name}}</strong>
@@ -227,7 +227,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-xs-8">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="plansSearch" debounce="300" placeholder="Search">
+								<input type="text" class="form-control" v-model="plansSearch" @keyup="debouncedPlansSearch" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 							<hr class="divider sm inv">
@@ -422,11 +422,9 @@
             },
             plansSearch(val) {
                 this.plansPagination.current_page = 1;
-                this.getRoomingPlans();
             },
             roomsSearch(val) {
                 this.currentAccommodationRoomsPagination.current_page = 1;
-                this.getCurrentAccommodationRooms();
             },
         },
         methods: {
@@ -510,6 +508,7 @@
                     return this.regions = response.data.data;
                 }).catch(this.$root.handleApiError);
             },
+            debouncedPlansSearch: _.debounce(function () { this.getRoomingPlans() }, 250),
             getRoomingPlans(){
                 let regionId = this.currentRegion ? this.currentRegion.id : '';
                 let params = {
@@ -563,7 +562,7 @@
                     }
                 }).catch(this.$root.handleApiError);
             },
-	        getAccommodationRooms(accommodation) {
+            getAccommodationRooms(accommodation) {
                 let params = {
                     accommodations: [accommodation.id],
 	                page: accommodation.roomsPagination.current_page,
@@ -576,6 +575,7 @@
                     }
                 }).catch(this.$root.handleApiError);
 	        },
+            debouncedRoomsSearch: _.debounce(function () { this.getCurrentAccommodationRooms() }, 250),
             getCurrentAccommodationRooms() {
                 let params = {
                     accommodations: [this.currentAccommodation.id],

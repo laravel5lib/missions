@@ -5,7 +5,7 @@
 			<div class="form-group" v-if="propertyExists('groups')">
 				<label>Travel Group</label>
 				<v-select @keydown.enter.prevent="" multiple class="form-control" id="groupFilter"  :debounce="250" :on-search="getGroups"
-				          :value="groupsArr" :options="groupsOptions" label="name"
+				          v-model="groupsArr" :options="groupsOptions" label="name"
 				          placeholder="Filter Groups"></v-select>
 			</div>
 

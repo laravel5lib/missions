@@ -49,7 +49,7 @@
 		},
 		watch:{
 			'tosAgree'(val, oldVal) {
-				this.$dispatch('tos-agree', val)
+				this.$emit('tos-agree', val)
 			}
 		},
 		activate(done){

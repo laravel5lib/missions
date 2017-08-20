@@ -7,7 +7,7 @@
 					<div class="form-group">
 						<label>Travel Groups</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="debounced(getGroups)"
-						          :value="groupsArr" :options="groupsOptions" label="name"
+						          v-model="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
 				</template>
@@ -15,7 +15,7 @@
 					<div class="form-group">
 						<label>Groups</label>
 						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="debounced(getGroups)"
-						          :value="groupsArr" :options="groupsOptions" label="name"
+						          v-model="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
 				</template>
@@ -24,7 +24,7 @@
 			<div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
 				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="debounced(getCampaigns)"
-				          :value="campaignObj" :options="campaignOptions" label="name"
+				          v-model="campaignObj" :options="campaignOptions" label="name"
 				          placeholder="Filter by Campaign"></v-select>
 			</div>
 
@@ -46,14 +46,14 @@
 				<div class="form-group" v-if="propertyExists('role')">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
 					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="debounced(getRolesSearch)"
-					          :value="roleObj" :options="UTILITIES.roles" label="name"
+					          v-model="roleObj" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute && (propertyExists('users') || propertyExists('user'))">
 					<label>Managing Users</label>
 					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="debounced(getUsers)"
-					          :value="usersArr" :options="usersOptions" label="name"
+					          v-model="usersArr" :options="usersOptions" label="name"
 					          placeholder="Filter Users"></v-select>
 				</div>
 
@@ -185,7 +185,7 @@
 
 				<div class="form-group" v-if="!teams && !rooms && propertyExists('shirtSize')">
 					<label>Shirt Size</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value="shirtSizeArr" multiple
+					<v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" v-model="shirtSizeArr" multiple
 					          :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
 				</div>
 

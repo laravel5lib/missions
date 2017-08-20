@@ -67,16 +67,15 @@
 				<div class="collapse" id="AccommodationModal">
 					<div class="panel panel-default" v-if="showAccommodationManageModal">
 
-								<form id="AccommodationForm"
-								      name="AccommodationForm"
-								      @submit.prevent="manageAccommodation">
+								<form id="AccommodationForm" name="AccommodationForm"
+								      @submit.prevent="manageAccommodation" data-vv-scope="accommodation-manage">
 									<div class="panel-heading">
 										<h5 v-text="editMode?'Update an Accommodation':'Create an Accommodation'"></h5>
 									</div>
 									<div class="panel-body" v-if="currentAccommodation">
 										<div class="row">
 											<div class="form-group col-sm-12"
-											     v-error-handler="{ value: currentAccommodation.name, handle: 'name' }">
+											     v-error-handler="{ value: currentAccommodation.name, handle: 'name', scope: 'accommodation-manage' }">
 												<label for="AccoName" class="control-label">Name</label>
 												<input @keydown.enter.prevent="manageAccommodation"
 												       type="text"
@@ -86,7 +85,7 @@
 												       v-model="currentAccommodation.name">
 											</div>
 											<div class="form-group col-sm-12"
-											     v-error-handler="{ value: currentAccommodation.short_desc, handle: 'shortdesc' }">
+											     v-error-handler="{ value: currentAccommodation.short_desc, handle: 'shortdesc', scope: 'accommodation-manage' }">
 												<label for="AccoDescription" class="control-label">Description</label>
 												<textarea class="form-control"
 												          id="AccoDescription"
@@ -95,7 +94,7 @@
                                             </textarea>
 											</div>
 											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.address_one, handle: 'addressone' }">
+											     v-error-handler="{ value: currentAccommodation.address_one, handle: 'addressone', scope: 'accommodation-manage' }">
 												<label for="AccoAddressOne" class="control-label">Address 1</label>
 												<input type="text"
 												       class="form-control"
@@ -105,7 +104,7 @@
 												       v-model="currentAccommodation.address_one">
 											</div>
 											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.address_two, handle: 'addresstwo' }">
+											     v-error-handler="{ value: currentAccommodation.address_two, handle: 'addresstwo', scope: 'accommodation-manage' }">
 												<label for="AccoAddressTwo" class="control-label">Address 2</label>
 												<input type="text"
 												       class="form-control"
@@ -115,7 +114,7 @@
 												       v-model="currentAccommodation.address_two">
 											</div>
 											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.state, handle: 'city' }">
+											     v-error-handler="{ value: currentAccommodation.state, handle: 'city', scope: 'accommodation-manage' }">
 												<label for="AccoCity" class="control-label">City</label>
 												<input type="text"
 												       class="form-control"
@@ -125,7 +124,7 @@
 												       v-model="currentAccommodation.city">
 											</div>
 											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.state, handle: 'state' }">
+											     v-error-handler="{ value: currentAccommodation.state, handle: 'state', scope: 'accommodation-manage' }">
 												<label for="AccoState" class="control-label">State</label>
 												<input type="text"
 												       class="form-control"
@@ -135,7 +134,7 @@
 												       v-model="currentAccommodation.state">
 											</div>
 											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.zip, handle: 'zip' }">
+											     v-error-handler="{ value: currentAccommodation.zip, handle: 'zip', scope: 'accommodation-manage' }">
 												<label for="AccoZip" class="control-label">Zip</label>
 												<input type="text"
 												       class="form-control"
@@ -145,7 +144,7 @@
 												       v-model="currentAccommodation.zip">
 											</div>
 											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.phone, handle: 'phone' }">
+											     v-error-handler="{ value: currentAccommodation.phone, handle: 'phone', scope: 'accommodation-manage' }">
 												<label for="AccoPhone" class="control-label">Phone</label>
 												<input type="text"
 												       class="form-control"
@@ -155,7 +154,7 @@
 												       v-model="currentAccommodation.phone">
 											</div>
 											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.email, handle: 'email' }">
+											     v-error-handler="{ value: currentAccommodation.email, handle: 'email', scope: 'accommodation-manage' }">
 												<label for="AccoEmail" class="control-label">Email</label>
 												<input type="email"
 												       class="form-control"
@@ -165,7 +164,7 @@
 												       v-model="currentAccommodation.email">
 											</div>
 											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.fax, handle: 'fax' }">
+											     v-error-handler="{ value: currentAccommodation.fax, handle: 'fax', scope: 'accommodation-manage' }">
 												<label for="AccoFax" class="control-label">Fax</label>
 												<input type="text"
 												       class="form-control"
@@ -175,7 +174,7 @@
 												       v-model="currentAccommodation.fax">
 											</div>
 											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.url, handle: 'url' }">
+											     v-error-handler="{ value: currentAccommodation.url, handle: 'url', scope: 'accommodation-manage' }">
 												<label for="AccoURL" class="control-label">URL</label>
 												<input type="url"
 												       class="form-control"
@@ -199,7 +198,7 @@
 											          class="form-control"
 											          :debounce="250"
 											          :on-search="getCountries"
-											          :value="currentAccommodation.country"
+											          v-model="currentAccommodation.country"
 											          :options="UTILITIES.countries"
 											          label="name"
 											          placeholder="Select a Country">
@@ -243,7 +242,7 @@
 					<div class="col-xs-12">
 						<template v-if="accommodations.length">
 							<accordion :one-at-atime="true" type="info">
-								<panel type="primary" v-for="accommodation in accommodations">
+								<panel type="primary" v-for="accommodation in accommodations" :key="accommodation.id">
 									<div slot="header" class="row">
 										<div class="col-xs-8">
 											<h5>{{ accommodation.name }}</h5>
@@ -390,8 +389,8 @@
                                 <p>
                                     <span v-if="region.callsign">
                                         <span class="label label-default"
-                                              :style="'color: #FFF !important; background-color: ' + region.callsign"
-                                              v-text="region.callsign|capitalize">
+                                              :style="'color: #FFF !important; background-color: ' + region.callsign">
+	                                        {{region.callsign|capitalize}}
                                         </span>
                                     </span>
                                     <span class="small">{{ region.country.name|capitalize }}</span>
@@ -534,14 +533,14 @@
                 this.showAccommodationDeleteModal = true;
             },
 	        manageAccommodation() {
-                this.resetErrors();
-                if (this.$AccommodationForm.valid) {
-                    return this.editMode ? this.putAccommodation() : this.postAccommodation();
-                } else {
-                    this.$root.$emit('showError', 'Please check the form.');
-                    return false;
-                }
-
+                this.$validator.validateAll('accommodation-manage').then(result => {
+                    if (result) {
+                        return this.editMode ? this.updateAccommodation() : this.saveAccommodation();
+                    } else {
+                        this.$root.$emit('showError', 'Please check the form.');
+                        return false;
+                    }
+                });
 	        },
             saveAccommodation() {
                 let data = _.extend({}, this.currentAccommodation);

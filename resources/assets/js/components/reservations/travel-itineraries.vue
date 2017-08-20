@@ -238,7 +238,7 @@
             },
             saveItinerary(itinerary){
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
                 let isInvalid = false;
                 // iterate through each itinerary item and check validation status of each child form
                 isInvalid = _.some(this.$refs.items, function (item) {
@@ -272,7 +272,7 @@
             },
             updateItinerary(itinerary){
                 // trigger validation styles
-                this.$broadcast('validate-itinerary');
+                this.$emit('validate-itinerary');
                 let isInvalid = false;
                 // iterate through each itinerary item and check validation status of each child form
                 isInvalid = _.some(this.$refs.items, function (item) {

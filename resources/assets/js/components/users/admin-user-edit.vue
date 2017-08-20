@@ -1,21 +1,21 @@
 <template >
-
+    <div>
         <form id="EditUserForm" class="form-horizontal" novalidate style="position:relative;">
             <spinner ref="spinner" size="sm" text="Loading"></spinner>
             <div class="form-group" v-error-handler="{ value: name, handle: 'name' }">
                 <div class="col-sm-12">
                     <label for="name" class="control-label">Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="name"
-                           placeholder="User Name" name="name" v-validate="'required|min:1|max:100'"
+                           placeholder="User Name" v-validate="'required|min:1|max:100'"
                            maxlength="100" minlength="1" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: email, handle: 'email' }">
-                    <label for="name" class="control-label">Email</label>
-                    <input type="email" class="form-control" name="email" id="email" v-model="email"
-                           name="email" v-validate="'required|min:1|max:100'">
+                        <label for="name" class="control-label">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" v-model="email"
+                               v-validate="'required|min:1|max:100'">
                     </div>
                 </div>
                 <div class="col-sm-6" v-error-handler="{ value: alt_email, server: 'alt_email' }">
@@ -259,35 +259,35 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                        <label for="infoCity">City</label>
-                        <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
+                    <label for="infoCity">City</label>
+                    <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
                 </div>
                 <div class="col-sm-6">
-                        <label for="infoState">State/Prov.</label>
-                        <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
+                    <label for="infoState">State/Prov.</label>
+                    <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-4">
-                        <label for="infoZip">ZIP/Postal Code</label>
-                        <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
+                    <label for="infoZip">ZIP/Postal Code</label>
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
                 </div>
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries" label="name"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                         <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
-                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
+                            <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" :value="timezone" :options="timezones"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                         <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
-                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
+                            <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                         </select>
                     </div>
                 </div>
@@ -295,13 +295,13 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                        <label for="infoPhone">Phone 1</label>
-                        <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
+                    <label for="infoPhone">Phone 1</label>
+                    <!--<input type="text" class="form-control" v-model="phone_one | phone" id="infoPhone" placeholder="123-456-7890">-->
                     <phone-input v-model="phone_one" name="phone" id="infoPhone"></phone-input>
                 </div>
                 <div class="col-sm-6">
-                        <label for="infoMobile">Phone 2</label>
-                        <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
+                    <label for="infoMobile">Phone 2</label>
+                    <!--<input type="text" class="form-control" v-model="phone_two | phone" id="infoMobile" placeholder="123-456-7890">-->
                     <phone-input v-model="phone_two" name="phone" id="infoMobile"></phone-input>
                 </div>
             </div>
@@ -328,24 +328,28 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a @click="back()" class="btn btn-default">Cancel</a>
-                    <a @click="submit()" class="btn btn-primary">Update</a>
+                    <a @click="back" class="btn btn-default">Cancel</a>
+                    <a @click="submit" class="btn btn-primary">Update</a>
                 </div>
             </div>
         </form>
         <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
+    </div>
+
 
 </template>
 <script type="text/javascript">
+    import _ from 'underscore'
     import vSelect from "vue-select";
     import errorHandler from'../error-handler.mixin';
+    import utilities from '../utilities.mixin'
     export default{
         name: 'admin-user-edit',
         props: ['userId'],
         components: {vSelect},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         data(){
             return {
                 name: '',
@@ -369,9 +373,7 @@
                 gender: null,
                 admin: false,
 
-                countries: [],
                 countryCodeObj: null,
-                timezones: [],
                 changePassword: false,
                 showPassword: false,
                 timezoneObj: null,
@@ -397,10 +399,6 @@
             }
         },
         methods: {
-            /*checkForError(field){
-                // if user clicked submit button while the field is invalid trigger error styles 
-                return this.$EditUser[field].invalid && this.attemptSubmit;
-            },*/
             onTouched(){
                 this.hasChanged = true;
             },
@@ -415,62 +413,59 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
-                if (this.$EditUser.valid) {
-                    this.resource.put({id: this.userId}, {
-                        name: this.name,
-                        email: this.email,
-                        alt_email: this.alt_email,
-                        password: this.changePassword ? this.password : undefined,
-                        password_confirmation: this.changePassword ? this.password_confirmation : undefined,
-                        bio: this.bio,
-                        type: this.type,
-                        birthday: this.birthday,
-                        country_code: this.country_code,
-                        timezone: this.timezone,
-                        phone_one: this.phone_one,
-                        phone_two: this.phone_two,
-                        address: this.address,
-                        city: this.city,
-                        state: this.state,
-                        zip: this.zip,
-                        status: this.status,
-                        gender: this.gender,
-                        public: this.public,
-                        url: this.public ? this.url : undefined,
-                    }).then((resp) => {
-                        this.$root.$emit('showSuccess', 'User updated.');
-                        this.hasChanged = false;
-                        let that = this;
-                        setTimeout(() =>  {
-                            window.location.href = '/' + that.firstUrlSegment + '/users/' + that.userId;
-                        }, 1000);
-                    }, (error) =>  {
-                        this.$root.$emit('showError', 'There are errors on the form.');
-                        console.log(error);
-                        this.errors = error.data.errors;
-                    });
-                } else {
-                    this.showError = true;
-                }
+                this.$validator.validateAll().then(result => {
+                    if (result) {
+                        this.resource.put({id: this.userId}, {
+                            name: this.name,
+                            email: this.email,
+                            alt_email: this.alt_email,
+                            password: this.changePassword ? this.password : undefined,
+                            password_confirmation: this.changePassword ? this.password_confirmation : undefined,
+                            bio: this.bio,
+                            type: this.type,
+                            birthday: this.birthday,
+                            country_code: this.country_code,
+                            timezone: this.timezone,
+                            phone_one: this.phone_one,
+                            phone_two: this.phone_two,
+                            address: this.address,
+                            city: this.city,
+                            state: this.state,
+                            zip: this.zip,
+                            status: this.status,
+                            gender: this.gender,
+                            public: this.public,
+                            url: this.public ? this.url : undefined,
+                        }).then((resp) => {
+                            this.$root.$emit('showSuccess', 'User updated.');
+                            this.hasChanged = false;
+                            let that = this;
+                            setTimeout(() => {
+                                window.location.href = '/' + that.firstUrlSegment + '/users/' + that.userId;
+                            }, 1000);
+                        }, (error) => {
+                            this.$root.$emit('showError', 'There are errors on the form.');
+                            console.log(error);
+                            this.errors = error.data.errors;
+                        });
+                    } else {
+                        this.showError = true;
+                    }
+                })
             }
         },
         mounted(){
-            let countriesPromise = this.$http.get('utilities/countries').then((response) => {
-                this.countries = response.data.countries;
-            });
+            let promises = [];
+            promises.push(this.getCountries());
+            promises.push(this.getTimezones());
 
-            let timezonesPromise = this.$http.get('utilities/timezones').then((response) => {
-                this.timezones = response.data.timezones;
-            });
-
-            Promise.all([countriesPromise, timezonesPromise]).then((values) => {
+            Promise.all(promises).then((values) => {
                 this.resource.get({id: this.userId}).then((response) => {
                     let user = response.data.data;
                     this.name = user.name;
                     this.bio = user.bio;
                     this.type = user.type;
-                    this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                    this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});
                     this.country_code = user.country_code;
                     this.timezone = user.timezone;
                     this.phone_one = user.phone_one;

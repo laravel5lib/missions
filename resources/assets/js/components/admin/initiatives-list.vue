@@ -54,7 +54,7 @@
                             </li>
                         </ul>
                     </div>
-                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter()">Reset Filters <i class="fa fa-times"></i></button>
+                    <button class="btn btn-default btn-sm" type="button" @click="resetFilter">Reset Filters <i class="fa fa-times"></i></button>
                     <export-utility url="initiatives/export"
                                     :options="exportOptions"
                                     :filters="exportFilters">
@@ -105,7 +105,7 @@
                 <td v-if="isActive('projects')">{{initiative.projects_count}}</td>
                 <td v-if="isActive('created_at')">{{initiative.created_at|moment('ll')}}</td>
                 <td>
-                    <a href="/admin/initiatives/{{initiative.id}}"><i class="fa fa-cog"></i></a>
+                    <a :href="`/admin/initiatives/${initiative.id}`"><i class="fa fa-cog"></i></a>
                 </td>
             </tr>
             </tbody>

@@ -274,7 +274,7 @@
 							<div class="col-xs-10 col-xs-offset-1">
 								<label for="country" class="control-label">Country</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="country"
-								          :value="countryCodeObj"
+								          v-model="countryCodeObj"
 								          :options="countries" label="name"></v-select>
 								<select hidden name="country" id="country" class="hidden" v-model="newUser.country_code"
 								        required >
@@ -286,7 +286,7 @@
 							<div class="col-xs-10 col-xs-offset-1">
 								<label for="timezone" class="control-label">Timezone</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="timezone"
-								          :value="newUser.timezone"
+								          v-model="newUser.timezone"
 								          :options="timezones"></v-select>
 								<select hidden name="timezone" id="timezone" class="hidden" v-model="newUser.timezone"
 								        required>
@@ -380,8 +380,8 @@
         computed: {},
         methods: {
             attempt(e) {
-                this.$validator.validateAll().then(result => {
-                    if (!result) {
+	                this.$validator.validateAll().then(result => {
+	                    if (!result) {
                         this.messages = [{type: 'warning', message: 'Please check the form'}];
                         this.$root.$emit('showError', 'Please check the form.');
                         return false;

@@ -7,7 +7,7 @@
 						<div class="col-sm-12">
 							<div class="form-group" :class="{ 'has-error': errors.has('manager') }">
 								<label for="infoManager">Reservation Manager</label>
-								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" :value="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
+								<v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
 								<select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
 									<option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
 								</select>
@@ -261,7 +261,7 @@
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': errors.has('country') }">
 									<label for="infoCountry">Country</label>
-									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" :value="countryCodeObj" :options="countries" label="name"></v-select>
+									<v-select @keydown.enter.prevent="" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="countries" label="name"></v-select>
 									<select hidden name="country" id="infoCountry" class="hidden" v-model="country" v-validate="'required'">
 										<option :value="country.code" v-for="country in countries">{{country.name}}</option>
 									</select>
@@ -514,7 +514,7 @@
 				});
 			});
 
-			this.$dispatch('basic-info', true);
+			this.$emit('basic-info', true);
 			if (location.pathname.indexOf('admin') === -1)
 				$('html, body').animate({scrollTop: 200}, 300);
 			done();

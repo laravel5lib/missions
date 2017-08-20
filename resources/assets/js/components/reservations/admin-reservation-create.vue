@@ -4,7 +4,7 @@
             <div class="row visible-xs-block">
                 <div class="col-xs-12">
                     <div class="btn-group btn-group-justified btn-group-xs" style="display:block;" role="group" aria-label="...">
-                        <a @click="backStep()" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
+                        <a @click="backStep" class="btn btn-default" :class="{'disabled': currentStep.view === 'step1' }" role="button">
                             <i class="fa fa-chevron-left"></i>
                         </a>
                         <div class="btn-group" role="group">
@@ -37,7 +37,7 @@
                     </ul>
                     <hr class="divider sm">
                 </div>
-                <div class="col-xs-12 {{currentStep.view}}">
+                <div class="col-xs-12" :class="currentStep.view">
                     <spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
                     <spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
                     <component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive :for-admin="true"></component>

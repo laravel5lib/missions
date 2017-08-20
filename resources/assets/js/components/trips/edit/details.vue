@@ -12,7 +12,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('group') }">
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent="" class="form-control" id="group" :value="groupObj" :options="groups" :on-search="getGroups"
+							<v-select @keydown.enter.prevent="" class="form-control" id="group" v-model="groupObj" :options="groups" :on-search="getGroups"
 									  label="name"></v-select>
 							<select hidden v-model="group_id" name="group" v-validate="'required'">
 								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
@@ -31,8 +31,7 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<textarea name="description" id="description" rows="5" v-model="description"
-											  class="form-control"
-											  name="description" v-validate="'required'"></textarea>
+											  class="form-control" v-validate="'required'"></textarea>
 								</div>
 								<div class="col-sm-12 collapse" id="markdownPrev">
 									<br>
@@ -62,7 +61,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('prospects') }">
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent="" multiple class="form-control" id="group" :value="prospectsObj"
+							<v-select @keydown.enter.prevent="" multiple class="form-control" id="group" v-model="prospectsObj"
 									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
 							<select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
 								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
@@ -127,7 +126,7 @@
 					<div class="form-group" :class="{ 'has-error': errors.has('rep') }">
 						<label class="col-sm-2 control-label">Trip Rep.</label>
 						<div class="col-sm-10">
-							<v-select @keydown.enter.prevent="" multiple class="form-control" id="rep" :value="repObj" :options="reps"
+							<v-select @keydown.enter.prevent="" multiple class="form-control" id="rep" v-model="repObj" :options="reps"
 									  label="name"></v-select>
 							<!--name="rep" v-validate="{ required: false}"-->
 							<select hidden v-model="rep_id">
@@ -236,7 +235,7 @@
 			},
 			onValid(){
 				this.populateWizardData(true);
-				this.$dispatch('details', true);
+				this.$emit('details', true);
 			},
 			checkForError(field){
 				// if user clicked continue button while the field is invalid trigger error styles

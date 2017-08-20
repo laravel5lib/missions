@@ -1,48 +1,49 @@
 <template>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Amount</th>
-            <th>Percent</th>
-            <th>Due</th>
-            <th>Grace</th>
-            <th><i class="fa fa-cog"></i></th>
-        </tr>
-        </thead>
-        <tbody>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Percent</th>
+                <th>Due</th>
+                <th>Grace</th>
+                <th><i class="fa fa-cog"></i></th>
+            </tr>
+            </thead>
+            <tbody>
 
-        <tr v-for="payment in orderByProp(payments, 'due_at')">
-            <td>{{ currency(payment.amount_owed) }}</td>
-            <td>{{ payment.percent_owed.tofixed(2) }}%</td>
-            <td v-if="payment.due_at">{{ payment.due_at|moment('lll') }}</td>
-            <td v-else>Upfront</td>
-            <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
-            <td>
-                <a class="btn btn-default btn-xs" @click="editPayment(payment)"><i class="fa fa-pencil"></i></a>
-                <a class="btn btn-danger btn-xs" @click="confirmRemove(payment)"><i class="fa fa-times"></i></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <modal title="New Payment" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800">
-        <div slot="modal-body" class="modal-body">
+            <tr v-for="payment in orderByProp(payments, 'due_at')">
+                <td>{{ currency(payment.amount_owed) }}</td>
+                <td>{{ payment.percent_owed.tofixed(2) }}%</td>
+                <td v-if="payment.due_at">{{ payment.due_at|moment('lll') }}</td>
+                <td v-else>Upfront</td>
+                <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
+                <td>
+                    <a class="btn btn-default btn-xs" @click="editPayment(payment)"><i class="fa fa-pencil"></i></a>
+                    <a class="btn btn-danger btn-xs" @click="confirmRemove(payment)"><i class="fa fa-times"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <modal title="New Payment" :value="showAddModal" @closed="showAddModal=false" effect="fade" width="800">
+            <div slot="modal-body" class="modal-body">
 
-                <form class="form-inline">
+                <form class="form-inline" data-vv-scope="payment-add">
                     <div class="row">
                         <div class="col-sm-12">
                             <label for="amountOwed">Owed</label>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('amount') }">
+                            <div class="input-group input-group-sm" :class="{'has-error': errors.has('amount', 'payment-add') }">
                                 <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                 <input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(newPayment)" number v-model="newPayment.amount_owed"
-                                       name="amount" @change="modifyPercentOwed(newPayment)" v-validate="'required|min:0'">
+                                       name="amount" @change="modifyPercentOwed(newPayment)" v-validate="'required|min_value:0'">
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('percent') }">
-                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed.toFixed(2)"
-                                       name="percent" @change="modifyAmountOwed(newPayment)" v-validate="'required|min:0'">
+                            <div class="input-group input-group-sm" :class="{'has-error': errors.has('percent', 'payment-add') }">
+                                <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(newPayment)" v-model="newPayment.percent_owed"
+                                       name="percent" @change="modifyAmountOwed(newPayment)" v-validate="'required|min_value:0'">
                                 <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                             </div>
                         </div>
@@ -59,15 +60,15 @@
                             <div class="form-group">
                                 <label for="dueAt">Due</label><br />
                                 <date-picker :input-sm="true" :model="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>
+                                <!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>-->
                             </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group" :class="{'has-error': errors.hasPaymentAdd('grace') }">
+                            <div class="form-group" :class="{'has-error': errors.has('grace', 'payment-add') }">
                                 <label for="grace_period">Grace Period</label>
-                                <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentAdd('grace') }">
+                                <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'payment-add') }">
                                     <input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
-                                           name="grace" v-validate="'required|min:0'">
+                                           name="grace" v-validate="'required|min_value:0'">
                                     <span class="input-group-addon">Days</span>
                                 </div>
                             </div>
@@ -75,33 +76,33 @@
                     </div>
                 </form>
 
-        </div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetPayment()'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='addPayment'>Add</button>
-        </div>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showAddModal = false, resetPayment()'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='addPayment'>Add</button>
+            </div>
 
-    </modal>
-    <modal title="Edit Payment" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800">
-        <div slot="modal-body" class="modal-body">
-            <template v-if="selectedPayment">
+        </modal>
+        <modal title="Edit Payment" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800">
+            <div slot="modal-body" class="modal-body">
+                <template v-if="selectedPayment">
 
-                    <form class="form-inline">
+                    <form class="form-inline" data-vv-scope="payment-edit">
                         <div class="row">
                             <div class="col-sm-12">
                                 <label for="amountOwed">Owed</label>
                             </div>
                             <div class="col-sm-6">
-                                <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('amount') }">
+                                <div class="input-group input-group-sm" :class="{'has-error': errors.has('amount', 'payment-edit') }">
                                     <span class="input-group-addon"><i class="fa fa-usd"></i></span>
                                     <input id="amountOwed" class="form-control" type="number" number :max="calculateMaxAmount(selectedPayment)" v-model="selectedPayment.amount_owed"
-                                           name="amount="{required: true, min: 0}" @change" v-validate="modifyPercentOwed(selectedPayment)" >
+                                           name="amount" v-validate="'required|min_value:0'" @change="modifyPercentOwed(selectedPayment)" >
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('percent') }">
+                                <div class="input-group input-group-sm" :class="{'has-error': errors.has('percent', 'payment-edit') }">
                                     <input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(selectedPayment)" v-model="selectedPayment.percent_owed"
-                                           name="percent="{required: true, min: 0}" @change" v-validate="modifyAmountOwed(selectedPayment)">
+                                           name="percent" v-validate="'required|min_value:0'" @change="modifyAmountOwed(selectedPayment)">
                                     <span class="input-group-addon"><i class="fa fa-percent"></i></span>
                                 </div>
                             </div>
@@ -118,15 +119,15 @@
                                 <div class="form-group">
                                     <label for="dueAt">Due</label><br />
                                     <date-picker :input-sm="true" :model="selectedPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-                                    <input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>
+                                    <!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>-->
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="form-group" :class="{'has-error': errors.hasPaymentEdit('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace', 'payment-edit') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': errors.hasPaymentEdit('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'payment-edit') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="selectedPayment.grace_period"
-                                               name="grace" v-validate="'required|min:0'">
+                                               name="grace" v-validate="'required|min_value:0'">
                                         <span class="input-group-addon">Days</span>
                                     </div>
                                 </div>
@@ -134,21 +135,23 @@
                         </div>
                     </form>
 
-            </template>
-        </div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, selectedPayment = null'>Cancel</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='updatePayment'>Update</button>
-        </div>
+                </template>
+            </div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='showEditModal = false, selectedPayment = null'>Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='updatePayment'>Update</button>
+            </div>
 
-    </modal>
-    <modal class="text-center" :value="deletePaymentModal" @closed="deletePaymentModal=false" title="Delete Payment" :small="true">
-        <div slot="modal-body" class="modal-body text-center" v-if="selectedPayment">Delete {{ selectedPayment.name }}?</div>
-        <div slot="modal-footer" class="modal-footer">
-            <button type="button" class="btn btn-default btn-sm" @click='deletePaymentModal = false'>Keep</button>
-            <button type="button" class="btn btn-primary btn-sm" @click='deletePaymentModal = false,remove(selectedPayment)'>Delete</button>
-        </div>
-    </modal>
+        </modal>
+        <modal class="text-center" :value="deletePaymentModal" @closed="deletePaymentModal=false" title="Delete Payment" :small="true">
+            <div slot="modal-body" class="modal-body text-center" v-if="selectedPayment">Delete {{ selectedPayment.name }}?</div>
+            <div slot="modal-footer" class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" @click='deletePaymentModal = false'>Keep</button>
+                <button type="button" class="btn btn-primary btn-sm" @click='deletePaymentModal = false,remove(selectedPayment)'>Delete</button>
+            </div>
+        </modal>
+    </div>
+
 </template>
 <script type="text/javascript">
     export default{
@@ -243,16 +246,12 @@
                 if (val.amount_owed > max)
                     val.amount_owed = this.cost.amount;
                 val.amount_owed = this.cost.amount * (val.percent_owed / 100);
-                if (_.isFunction(this.$validate))
-                    this.$validate('percent', true);
             },
             modifyPercentOwed(val){
                 let max = this.calculateMaxPercent(val);
                 if (val.percent_owed > max)
                     val.percent_owed = max;
                 val.percent_owed = val.amount_owed / this.cost.amount * 100;
-                if (_.isFunction(this.$validate))
-                    this.$validate('amount', true);
             },
             calculateMaxAmount(thePayment){
                 let max = this.cost.amount;
@@ -308,42 +307,46 @@
             },
             addPayment(){
                 this.attemptedAddPayment = true;
-                if (this.$TripPricingCostPaymentAdd.valid) {
-                    this.$root.$emit('SpinnerOn');
-                    this.$http.post(`costs/${this.id}/payments`, this.newPayment).then((response) => {
-                        this.payments.push(this.newPayment);
-                        this.resetPayment();
-                        this.showAddModal = false;
-                        this.attemptedAddPayment = false;
-                        this.$root.$emit('SpinnerOff');
-                    }, (error) =>  {
-                        console.log(error.data.errors);
-                        this.$root.$emit('SpinnerOff');
-                    });
+                this.$validator.validateAll('payment-add').then(result => {
+                    if (result) {
+                        this.$root.$emit('SpinnerOn');
+                        this.$http.post(`costs/${this.id}/payments`, this.newPayment).then((response) => {
+                            this.payments.push(this.newPayment);
+                            this.resetPayment();
+                            this.showAddModal = false;
+                            this.attemptedAddPayment = false;
+                            this.$root.$emit('SpinnerOff');
+                        }, (error) => {
+                            console.log(error.data.errors);
+                            this.$root.$emit('SpinnerOff');
+                        });
 
-                }
+                    }
+                });
                 this.checkCostsErrors();
             },
             updatePayment(){
                 this.attemptedAddPayment = true;
-                if (this.$TripPricingCostPaymentEdit.valid) {
-                    if (this.selectedPayment.due_at === 'Invalid date') {
-                        this.selectedPayment.due_at = null;
-                    }
-                    this.$root.$emit('SpinnerOn');
-                    this.$http.put(`costs/${this.id}/payments/${this.selectedPayment.id}`, this.selectedPayment).then((response) => {
-                        this.resetPayment();
-                        this.showEditModal = false;
-                        this.attemptedAddPayment = false;
-                        this.$root.$emit('SpinnerOff');
-                    }, (error) =>  {
-                        console.log(error.data.errors);
-                        this.$root.$emit('SpinnerOff');
-                    });
+                this.$validator.validateAll('payment-edit').then(result => {
+                    if (result) {
+                        if (this.selectedPayment.due_at === 'Invalid date') {
+                            this.selectedPayment.due_at = null;
+                        }
+                        this.$root.$emit('SpinnerOn');
+                        this.$http.put(`costs/${this.id}/payments/${this.selectedPayment.id}`, this.selectedPayment).then((response) => {
+                            this.resetPayment();
+                            this.showEditModal = false;
+                            this.attemptedAddPayment = false;
+                            this.$root.$emit('SpinnerOff');
+                        }, (error) => {
+                            console.log(error.data.errors);
+                            this.$root.$emit('SpinnerOff');
+                        });
 
-                } else {
-                    console.log('Errors');
-                }
+                    } else {
+                        console.log('Errors');
+                    }
+                });
                 this.checkCostsErrors();
             },
             confirmRemove(payment) {

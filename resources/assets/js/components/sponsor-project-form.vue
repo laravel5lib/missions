@@ -11,7 +11,7 @@
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('country') }">
 						<label for="country">Select a location</label>
-						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" :value="countryCodeObj" :options="countries"
+						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
 						<select name="country" id="country" class="form-control" v-model="country_code"
 								v-validate="'required'">
@@ -25,8 +25,7 @@
 						<label for="initiative">Select a type</label>
 						<select class="form-control" v-model="initiativeIdentifier" v-validate="'required'" name="initiative">
 							<option value="">Select a type</option>
-							<option :value="initiative.id" v-for="initiative in availableInitiatives"
-									v-text="initiative.type|capitalize"></option>
+							<option :value="initiative.id" v-for="initiative in availableInitiatives">{{initiative.type|capitalize}}</option>
 						</select>
 					</div>
 					<div class="col-sm-6" :class="{ 'has-error': errors.has('end') }">
@@ -79,7 +78,7 @@
 
 				<div class="form-group">
 					<div class="col-sm-12 text-center">
-						<a @click="submit()" class="btn btn-primary">Send Request</a>
+						<a @click="submit" class="btn btn-primary">Send Request</a>
 					</div>
 				</div>
 			</form>

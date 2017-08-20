@@ -9,7 +9,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xs-6"><a class="btn btn-sm btn-block btn-default" data-dismiss="modal">{{ cancel }}</a></div>
-                        <div class="col-xs-6"><a @click="destroy()" class="btn btn-sm btn-block btn-primary">{{ action }}</a></div>
+                        <div class="col-xs-6"><a @click="destroy" class="btn btn-sm btn-block btn-primary">{{ action }}</a></div>
                     </div>
                 </div>
 

@@ -45,8 +45,8 @@
         },
         events: {
             'transactionCreated': function() {
-                this.$broadcast('reconcileFund');
-                this.$broadcast('refreshTransactions');
+                this.$emit('reconcileFund');
+                this.$emit('refreshTransactions');
             }
         }
     }

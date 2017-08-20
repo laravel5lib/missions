@@ -239,7 +239,7 @@
                                 <div class="col-sm-8">
                                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                                        <v-select @keydown.enter.prevent="" v-validate="'required'" data-vv-name="country" data-vv-value-path="value" class="form-control" id="country" :value="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
+                                        <v-select @keydown.enter.prevent="" v-validate="'required'" data-vv-name="country" data-vv-value-path="value" class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                                         <!--<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'">
                                             <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
                                         </select>-->
@@ -249,7 +249,7 @@
                             <div class="row form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                                 <div class="col-sm-12">
                                     <label for="timezone" class="control-label">Timezone</label>
-                                    <v-select @keydown.enter.prevent="" class="form-control" id="timezone" v-validate="'required'" data-vv-name="timezone" data-vv-value-path="value" :value="timezone" :options="UTILITIES.timezones"></v-select>
+                                    <v-select @keydown.enter.prevent="" class="form-control" id="timezone" v-validate="'required'" data-vv-name="timezone" data-vv-value-path="value" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                                     <!--<select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                                         <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
                                     </select>-->

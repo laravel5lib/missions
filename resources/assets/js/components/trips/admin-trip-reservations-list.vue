@@ -10,17 +10,17 @@
                 </div> -->
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-                              :value="groupsArr" :options="groupsOptions" label="name"
+                              v-model="groupsArr" :options="groupsOptions" label="name"
                               placeholder="Filter Groups"></v-select>
                 </div>
                 <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
-                              :value="usersArr" :options="usersOptions" label="name"
+                              v-model="usersArr" :options="usersOptions" label="name"
                               placeholder="Filter Users"></v-select>
                 </div>
                 <div class="form-group" v-if="!tripId">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
-                              :value="campaignObj" :options="campaignOptions" label="name"
+                              v-model="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>
                 </div>
                 <div class="form-group">
@@ -46,7 +46,7 @@
                     <label>Applied Cost</label>
                     <select class="form-control input-sm" v-model="filters.dueName" style="width:100%;">
                         <option value="">Any Cost</option>
-                        <option v-for="option in dueOptions" v-bind:value="option">
+                        <option v-for="option in dueOptions" :value="option">
                             {{ option }}
                         </option>
                     </select>
@@ -69,7 +69,7 @@
                     <label>Requirements</label>
                     <select class="form-control input-sm" v-model="filters.requirementName" style="width:100%;">
                         <option value="">Any Requirement</option>
-                        <option v-for="option in requirementOptions" v-bind:value="option">
+                        <option v-for="option in requirementOptions" :value="option">
                             {{ option }}
                         </option>
                     </select>
@@ -90,7 +90,7 @@
                     <label>Todos</label>
                     <select class="form-control input-sm" v-model="filters.todoName" style="width:100%;">
                         <option value="">Any Todo</option>
-                        <option v-for="option in todoOptions" v-bind:value="option">
+                        <option v-for="option in todoOptions" :value="option">
                             {{ option }}
                         </option>
                     </select>
@@ -113,7 +113,7 @@
                     <label>Trip Rep</label>
                     <select class="form-control input-sm" v-model="filters.rep" style="width:100%;">
                         <option value="">Any Rep</option>
-                        <option v-for="(key, option) in repOptions" v-bind:value="key">
+                        <option v-for="(option, key) in repOptions" :value="key">
                             {{ option.name|capitalize }}
                         </option>
                     </select>
@@ -122,7 +122,7 @@
 
                 <div class="form-group">
                     <label>Shirt Size</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" :value="shirtSizeArr" multiple
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="ShirtSizeFilter" v-model="shirtSizeArr" multiple
                               :options="shirtSizeOptions" label="name" placeholder="Shirt Sizes"></v-select>
                 </div>
 
@@ -162,7 +162,7 @@
                 </div>
 
                 <hr class="divider inv sm">
-                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter()"><i class="fa fa-times"></i> Reset Filters</button>
+                <button class="btn btn-default btn-sm btn-block" type="button" @click="resetFilter"><i class="fa fa-times"></i> Reset Filters</button>
             </form>
         </mm-aside>
 
@@ -415,16 +415,16 @@
                     <td v-if="isActive('given_names')" v-text="reservation.given_names"></td>
                     <td v-if="isActive('surname')" v-text="reservation.surname"></td>
                     <td v-if="isActive('desired_role')" v-text="reservation.desired_role.name"></td>
-                    <td v-if="isActive('group')" v-text="reservation.trip.data.group.data.name|capitalize"></td>
-                    <td v-if="isActive('campaign')" v-text="reservation.trip.data.campaign.data.name|capitalize"></td>
-                    <td v-if="isActive('type')" v-text="reservation.trip.data.type|capitalize"></td>
-                    <td v-if="isActive('total_raised')" v-text="reservation.total_raised|currency"></td>
+                    <td v-if="isActive('group')">{{reservation.trip.data.group.data.name|capitalize}}</td>
+                    <td v-if="isActive('campaign')">{{reservation.trip.data.campaign.data.name|capitalize}}</td>
+                    <td v-if="isActive('type')">{{reservation.trip.data.type|capitalize}}</td>
+                    <td v-if="isActive('total_raised')">{{reservation.total_raised|currency}}</td>
                     <td v-if="isActive('percent_raised')">{{reservation.percent_raised.toFixed(2)}}%</td>
-                    <td v-if="isActive('registered')" v-text="reservation.created_at|moment('ll')"></td>
-                    <td v-if="isActive('gender')" v-text="reservation.gender|capitalize"></td>
-                    <td v-if="isActive('status')" v-text="reservation.status|capitalize"></td>
+                    <td v-if="isActive('registered')">{{reservation.created_at|moment('ll')}}</td>
+                    <td v-if="isActive('gender')">{{reservation.gender|capitalize}}</td>
+                    <td v-if="isActive('status')">{{reservation.status|capitalize}}</td>
                     <td v-if="isActive('age')" v-text="age(reservation.birthday)"></td>
-                    <td v-if="isActive('email')" v-text="reservation.user.data.email|capitalize"></td>
+                    <td v-if="isActive('email')">{{reservation.user.data.email|capitalize}}</td>
                     <td v-if="isActive('requirements')">
                         <div style="position:relative;">
                             <popover effect="fade" trigger="hover" placement="top" title="Complete" :content="complete(reservation).join('<br>')">
@@ -441,8 +441,8 @@
                             </popover>
                         </div>
                     </td>
-                    <td v-if="isActive('rep')" v-text="reservation.rep.data.name|capitalize"></td>
-                    <td><a href="/admin/reservations/{{ reservation.id }}"><i class="fa fa-cog"></i></a></td>
+                    <td v-if="isActive('rep')">{{reservation.rep.data.name|capitalize}}</td>
+                    <td><a :href="`/admin/reservations/${ reservation.id }`"><i class="fa fa-cog"></i></a></td>
                 </tr>
                 </tbody>
                 <tbody v-else>

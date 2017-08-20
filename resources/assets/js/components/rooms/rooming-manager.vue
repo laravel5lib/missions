@@ -204,7 +204,7 @@
 
 								<div class="form-group col-xs-8">
 									<div class="input-group input-group-sm col-xs-12">
-										<input type="text" class="form-control" v-model="roomsSearch" debounce="300" placeholder="Search">
+										<input type="text" class="form-control" v-model="roomsSearch" @keyup="debouncedRoomsSearch" placeholder="Search">
 										<span class="input-group-addon"><i class="fa fa-search"></i></span>
 									</div>
 								</div><!-- end col -->
@@ -245,7 +245,7 @@
 					<form class="form-inline row">
 						<div class="form-group col-lg-7 col-md-7 col-sm-6 col-xs-12">
 							<div class="input-group input-group-sm col-xs-12">
-								<input type="text" class="form-control" v-model="reservationsSearch" debounce="300" placeholder="Search">
+								<input type="text" class="form-control" v-model="reservationsSearch" @keyup="debouncedReservationsSearch" placeholder="Search">
 								<span class="input-group-addon"><i class="fa fa-search"></i></span>
 							</div>
 						</div><!-- end col -->
@@ -319,7 +319,7 @@
 													<li class="dropdown-header">Assign To Room</li>
 													<li role="separator" class="divider"></li>
 													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, true, currentRoom)">{{(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}} as leader</a></li>
-													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)" v-text="(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize"></a></li>
+													<li :class="{'disabled': isLocked}" v-if="currentRoom"><a @click="addToRoom(reservation, false, currentRoom)">{[(currentRoom.label ? (currentRoom.label + ' - ' + currentRoom.type.data.name) : currentRoom.type.data.name) | capitalize}}</a></li>
 													<li v-if="!currentRoom"><a @click=""><em>Please select a room first.</em></a></li>
 												</ul>
 											</dropdown>
@@ -402,8 +402,8 @@
 			<modal title="Create a new Plan" small ok-text="Create" :callback="newPlan" :value="showPlanModal" @closed="showPlanModal=false">
 				<div slot="modal-body" class="modal-body">
 
-						<form id="PlanCreateForm">
-							<div class="form-group" :class="{'has-error': $PlanCreate.planname.invalid}">
+						<form id="PlanCreateForm" data-vv-scope="plan-create">
+							<div class="form-group" :class="{'has-error': errors.has('planname', 'plan-create')}">
 								<label for="createPlanCallsign" class="control-label">Plan Name</label>
 								<input @keydown.enter.prevent="newPlan" type="text" class="form-control" id="createPlanCallsign" placeholder="Miami Rooming, etc." name="planname" v-model="selectedPlan.name" v-validate="'required'">
 							</div>
@@ -414,8 +414,8 @@
 			<modal :title="roomModalEditMode? 'Edit Room' : 'Create a new Room'" small :ok-text="roomModalEditMode?'Update':'Create'" :callback="newRoom" :value="showRoomModal" @closed="showRoomModal=false">
 				<div slot="modal-body" class="modal-body" v-if="selectedRoom">
 
-						<form id="RoomCreateForm">
-							<div class="form-group" :class="{'has-error': $RoomCreate.roomtype.invalid}" v-if="!roomModalEditMode">
+						<form id="RoomCreateForm" data-vv-scope="room-create-update">
+							<div class="form-group" :class="{'has-error': errors.has('roomtype', 'room-create-update')}" v-if="!roomModalEditMode">
 								<label for="" class="control-label">Type</label>
 								<select class="form-control" v-model="selectedRoom.type" name="roomtype" v-validate="'required'" @change="selectedRoom.room_type_id = selectedRoom.type.id">
 									<option :value="type" v-for="type in roomTypes">{{ type.name|capitalize }}</option>
@@ -423,8 +423,8 @@
 								<hr class="divider sm">
 								<div v-if="selectedRoom.type" class="">
 									<template  v-for="(value, key) in selectedRoom.type.rules">
-										<label v-text="key | underscoreToSpace ? underscoreToSpace[0].toUpperCase() + underscoreToSpace.slice(1) : ''"></label>
-										<p class="small" v-text="value|capitalize"></p>
+										<label>{{key | underscoreToSpace | capitalize}}</label>
+										<p class="small">{{value|capitalize}}</p>
 									</template>
 								</div>
 							</div>
@@ -567,11 +567,10 @@
             },
             roomsSearch(val) {
                 this.roomsPagination.current_page = 1;
-                this.getRooms();
+
             },
             reservationsSearch(val) {
                 this.reservationsPagination.current_page = 1;
-                this.searchReservations();
             },
             /*reservationFilters: {
                 handler(val, oldVal) {
@@ -583,8 +582,8 @@
                 },
                 deep: true
             },*/
-		    teamMembersSearch(val) {
-                this.getTeams();
+            teamMembersSearch(val) {
+                 this.getTeams();
             },
             membersFilters: {
                 handler() {
@@ -817,6 +816,7 @@
 	                this.$root.$emit('showError', response.data.message)
                 });
             },
+            debouncedSearchReservations: _.debounce(function () { this.searchReservations(); }, 250),
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,user,companions,squads.team,costs:type(optional)',
@@ -904,6 +904,7 @@
                         return response.data.data;
                     });
             },
+            debouncedRoomsSearch: _.debounce(function() {this.getRooms();}, 250),
             getRooms(plan){
                 plan = plan || this.currentPlan;
                 let params = {
@@ -948,6 +949,7 @@
                     this.dueOptions = _.uniq(_.pluck(response.data.data, 'name'));
                 });
             },
+            debouncedTeamMembersSearch: _.debounce(function() {this.getTeams();}, 250),
             getTeams(){
                 let currentSelection = _.extend({}, this.currentTeam);
 
@@ -1017,21 +1019,24 @@
                 };
             },
 	        newPlan() {
-                if (this.$PlanCreate.valid) {
-                    return this.$http.post('rooming/plans', this.selectedPlan).then((response) => {
-                        let plan = response.data.data;
-                        this.plans.push(plan);
-                        this.showPlanModal = false;
-                        this.$root.$emit('select-options:update', plan.id, 'id');
-                        return this.currentPlan = plan;
-                    }, (response) =>  {
-                        console.log(response);
-                        this.$root.$emit('showError', response.data.message);
-                        return response.data.data;
-                    });
-                } else {
-                    this.$root.$emit('showError', 'Please provide a name for the new plan');
-                }
+                this.$validator.validateAll('plan-create').then(result => {
+                    if (result) {
+                        return this.$http.post('rooming/plans', this.selectedPlan).then((response) => {
+                            let plan = response.data.data;
+                            this.plans.push(plan);
+                            this.showPlanModal = false;
+                            this.$root.$emit('select-options:update', plan.id, 'id');
+                            return this.currentPlan = plan;
+                        }, (response) =>  {
+                            console.log(response);
+                            this.$root.$emit('showError', response.data.message);
+                            return response.data.data;
+                        });
+                    } else {
+                        this.$root.$emit('showError', 'Please provide a name for the new plan');
+                    }
+                });
+
             },
             openNewRoomModel(){
                 if (!this.currentPlan) {
@@ -1053,37 +1058,40 @@
                 this.showRoomModal = true;
             },
 	        newRoom() {
-                if (this.$RoomCreate.valid) {
-                    if (this.roomModalEditMode) {
-                        return this.RoomingPlansResource.put({
-	                        plan: this.currentPlan.id,
-	                        path: 'rooms',
-	                        pathId: this.selectedRoom.id,
-	                        include: 'type,occupants'
-                        }, this.selectedRoom).then((response) => {
-                            let room = response.data.data;
-                            this.showRoomModal = false;
-                            this.currentRoom = _.extend(this.currentRoom, room)
-                            this.getRooms();
-                        });
-
-                    } else {
-                        return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type,occupants'}}).then((response) => {
-                            let room = response.data.data;
-                            this.showRoomModal = false;
-                            return this.getRooms().then((rooms) => {
-                                if (room)
-                                    return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
+                this.$validator.validateAll('room-create-update').then(result => {
+                    if (result) {
+                        if (this.roomModalEditMode) {
+                            return this.RoomingPlansResource.put({
+                                plan: this.currentPlan.id,
+                                path: 'rooms',
+                                pathId: this.selectedRoom.id,
+                                include: 'type,occupants'
+                            }, this.selectedRoom).then((response) => {
+                                let room = response.data.data;
+                                this.showRoomModal = false;
+                                this.currentRoom = _.extend(this.currentRoom, room);
+                                this.getRooms();
                             });
-                        }, (response) =>  {
-                            console.log(response);
-                            this.$root.$emit('showError', response.data.message);
-                            return response.data.data;
-                        });
+
+                        } else {
+                            return this.$http.post('rooming/plans/' + this.currentPlan.id + '/rooms', this.selectedRoom, {params: {include: 'type,occupants'}}).then((response) => {
+                                let room = response.data.data;
+                                this.showRoomModal = false;
+                                return this.getRooms().then((rooms) => {
+                                    if (room)
+                                        return this.currentRoom = _.findWhere(this.currentRooms, { id: room.id })
+                                });
+                            }, (response) =>  {
+                                console.log(response);
+                                this.$root.$emit('showError', response.data.message);
+                                return response.data.data;
+                            });
+                        }
+                    } else {
+                        this.$root.$emit('showError', 'Please select a room type');
                     }
-                } else {
-                    this.$root.$emit('showError', 'Please select a room type');
-                }
+                });
+
             },
             openDeleteRoomModal(room) {
                 this.selectedRoom = room;
@@ -1117,7 +1125,7 @@
                 })
             },
             changePlan() {
-                this.$dispatch('rooming-wizard:plan-selection');
+                this.$emit('rooming-wizard:plan-selection');
             }
         },
 	    activate(done){
@@ -1158,7 +1166,7 @@
 
             this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
-                this.$dispatch('rooming-wizard:plan-selection');
+                this.$emit('rooming-wizard:plan-selection');
             });
 
             this.$root.$on('plan-scope', (val) =>  {

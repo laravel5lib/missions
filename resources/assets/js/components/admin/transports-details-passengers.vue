@@ -329,7 +329,7 @@
                 this.PassengersResource.get(params).then((response) => {
                     this.passengers = response.data.data;
                     this.passengersPagination = response.data.meta.pagination;
-                    this.$dispatch('updatePassengersCount', this.passengersPagination.total);
+                    this.$emit('updatePassengersCount', this.passengersPagination.total);
                 }).catch(this.$root.handleApiError);
             },
 	        addPassenger(reservation) {
@@ -401,9 +401,9 @@
 
 	            Promise.all(promises).then((values) => {
 		            this.$root.$emit('showSuccess', 'Companions Added');
-                }.then((error) => {
+                },(error) => {
                     this.$root.$emit('showError', error.message);
-				}));
+				});
 
             }
         },

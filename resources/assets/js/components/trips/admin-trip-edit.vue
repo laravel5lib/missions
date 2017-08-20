@@ -8,7 +8,7 @@
 					</a>
 			</ul>
 		</div>
-		<div class="col-sm-8 col-md-9 {{currentStep.view}}">
+		<div class="col-sm-8 col-md-9" :class="currentStep.view">
 			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
 
 			</component>
@@ -18,26 +18,17 @@
 			</div>
 			<hr>
 			<div class="btn-group btn-group-sm pull-right" role="group" aria-label="...">
-				<a class="btn btn-link" @click="back()">Cancel</a>
-				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep()">Back</a>
-				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep()">Continue</a>
-				<a class="btn btn-success" v-if="wizardComplete" @click="finish()">Save</a>
-				<a class="btn btn-primary" v-if="wizardComplete" @click="back()">Finish</a>
+				<a class="btn btn-link" @click="back">Cancel</a>
+				<a class="btn btn-default" v-if="currentStep.view !== 'step1'" @click="backStep">Back</a>
+				<a class="btn btn-primary" v-if="!wizardComplete" @click="nextStep">Continue</a>
+				<template v-if="wizardComplete">
+					<a class="btn btn-success" @click="finish">Save</a>
+					<a class="btn btn-primary" @click="back">Finish</a>
+				</template>
 			</div>
 		</div>
 	</div>
 </template>
-<style>
-	.fade-transition {
-		transition: opacity .3s ease;
-	}
-
-	.fade-enter, .fade-leave {
-		opacity: 0;
-	}
-
-	.step1 {}
-</style>
 <script type="text/javascript">
 	import details from './edit/details.vue';
 	import settings from './edit/settings.vue';
@@ -164,7 +155,7 @@
 				this.wizardData.campaign_id =  this.trip.campaign_id;
 				this.wizardData.country_code = this.trip.country_code;
 
-				this.$broadcast('trip', this.trip);
+				this.$emit('trip', this.trip);
 			});
 		},
 		events: {
@@ -186,3 +177,4 @@
 		}
 	}
 </script> 
+<style></style>

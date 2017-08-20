@@ -34,7 +34,7 @@
             <h4 :class="{'text-success' : fund.balance > 0, 'text-danger' : fund.balance < 0}">
                 {{ fund.balance | currency }}
             </h4>
-            <div :class="{ 'has-error' : $validation.name.invalid}">
+            <div :class="{ 'has-error' : errors.has('name')}">
                 <label>Fund Name</label>
                 <template v-if="editMode">
                     <input class="form-control" v-model="fund.name"
@@ -42,24 +42,24 @@
                 </template>
                 <p v-else>{{ fund.name }}</p>
             </div>
-            <div :class="{ 'has-error' : $validation.qbclass.invalid}">
+            <div :class="{ 'has-error' : errors.has('qbclass')}">
                 <label>Account Class</label>
                 <template v-if="editMode">
                     <select class="form-control" v-model="fund.class_id"
                             name="qbclass" v-validate="'required'">
-                       <option v-for="class in accountingClasses" v-bind:value="class.id">
-                            {{ class.name }}
+                       <option v-for="c in accountingClasses" :value="c.id">
+                            {{ c.name }}
                        </option>
                     </select>
                 </template>
                 <p v-else><code>{{ fund.class }}</code></p>
             </div>
-            <div :class="{ 'has-error' : $validation.qbitem.invalid}">
+            <div :class="{ 'has-error' : errors.has('qbitem')}">
                 <label>Account Item</label>
                 <template v-if="editMode">
                     <select class="form-control" v-model="fund.item_id"
                             name="qbitem" v-validate="'required'">
-                       <option v-for="item in accountingItems" v-bind:value="item.id">
+                       <option v-for="item in accountingItems" :value="item.id">
                             {{ item.name }}
                        </option>
                     </select>
@@ -120,8 +120,8 @@
             save() {
                 // validate manually
                 let self = this;
-                this.$validate(true, () =>  {
-                    if (self.$validation.invalid) {
+                this.$validator.validateAll().then(result => {
+                    if (!result) {
                         console.log('validation errors');
                     } else {
                         self.$refs.spinner.show();

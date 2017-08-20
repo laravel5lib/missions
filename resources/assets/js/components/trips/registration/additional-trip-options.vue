@@ -40,14 +40,14 @@
 			optionalCosts(){
 			    let arr = this.$parent.tripCosts.optional || [];
 			    if (!arr.length) {
-                    this.$dispatch('ato-complete', true);
+                    this.$emit('ato-complete', true);
 			    }
 				return _.sortBy(arr, 'name');
 			}
 		},
 		watch:{
 			'atoComplete'(val, oldVal) {
-				this.$dispatch('ato-complete', val)
+				this.$emit('ato-complete', val)
 			},
 			'selectedOptions'(val, oldVal) {
 				this.$parent.selectedOptions = val;
@@ -55,7 +55,7 @@
 		},
 		methods: {
             onValid(){
-                this.$dispatch('ato-complete', true);
+                this.$emit('ato-complete', true);
             },
 
         },

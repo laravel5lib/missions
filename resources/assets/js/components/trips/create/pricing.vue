@@ -19,21 +19,21 @@
 								</div>
 								<div class="panel-body">
 
-										<form class="form" novalidate>
+										<form class="form" novalidate data-vv-scope="trip-pricing-cost">
 											<div class="row">
 												<div class="col-sm-12">
-													<div class="form-group" :class="{'has-error': errors.hasCost('costName')}">
+													<div class="form-group" :class="{'has-error': errors.has('costName', 'trip-pricing-cost')}">
 														<label for="cost_name">Name</label>
 														<input type="text" class="form-control input-sm" id="cost_name"
 															   v-model="newCost.name" name="costName" v-validate="'required'"
 															   placeholder="Name" autofocus>
 													</div>
-													<div class="form-group" :class="{'has-error': errors.hasCost('costDescription')}">
+													<div class="form-group" :class="{'has-error': errors.has('costDescription', 'trip-pricing-cost')}">
 														<label for="cost_description">Description</label>
 														<textarea class="form-control input-sm" id="cost_description"
 																  v-model="newCost.description" name="costDescription" v-validate="'required|min:1'"></textarea>
 													</div>
-													<div class="form-group" :class="{'has-error': errors.hasCost('costType')}">
+													<div class="form-group" :class="{'has-error': errors.has('costType', 'trip-pricing-cost')}">
 														<label for="cost_type">Type</label>
 														<select id="cost_type" class="form-control input-sm" v-model="newCost.type" name="costType" v-validate="'required'">
 															<option value="">-- select --</option>
@@ -44,16 +44,16 @@
 													</div>
 													<div class="row">
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': errors.hasCost('costActive')}">
+															<div class="form-group" :class="{'has-error': errors.has('costActive', 'trip-pricing-cost')}">
 																<label for="newCost_active_at">Active</label>
-																<date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-																<input type="datetime" id="newCost_active_at" class="form-control input-sm hidden"
-																	   v-model="newCost.active_at" name="costActive" v-validate="'required'">
+																<date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')" name="costActive" v-validate="'required'"></date-picker>
+																<!--<input type="datetime" id="newCost_active_at" class="form-control input-sm hidden"
+																	   v-model="newCost.active_at">-->
 															</div>
 
 														</div>
 														<div class="col-sm-6">
-															<div class="form-group" :class="{'has-error': errors.hasCost('costAmount')}">
+															<div class="form-group" :class="{'has-error': errors.has('costAmount', 'trip-pricing-cost')}">
 																<label for="newCost_amount">Amount</label>
 																<div class="input-group input-group-sm">
 																	<span class="input-group-addon"><i class="fa fa-usd"></i></span>
@@ -137,22 +137,22 @@
 								<ul class="list-group">
 									<li class="list-group-item" v-if="cost.toggleNewPayment">
 
-											<form class="form-inline">
+											<form class="form-inline" data-vv-scope="trip-pricing-cost-payment">
 												<div class="row">
 													<div class="col-sm-12">
 														<label for="amountOwed">Owed</label>
 													</div>
 													<div class="col-sm-6">
-														<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('amount') }">
+														<div class="input-group input-group-sm" :class="{'has-error': errors.has('amount', 'trip-pricing-cost-payment') }">
 															<span class="input-group-addon"><i class="fa fa-usd"></i></span>
 															<input id="amountOwed" class="form-control" type="number" :max="calculateMaxAmount(cost)" number v-model="newPayment.amount_owed"
-															   name="amount="{required: true, min: 0.01}" debounce" v-validate="100">
+															   name="amount" debounce="100" v-validate="'required|min_value:0.01'">
 														</div>
 													</div>
 													<div class="col-sm-6">
-														<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('percent') }">
+														<div class="input-group input-group-sm" :class="{'has-error': errors.has('percent', 'trip-pricing-cost-payment') }">
 															<input id="percentOwed" class="form-control" type="number" number :max="calculateMaxPercent(cost)" v-model="newPayment.percent_owed.toFixed(2)"
-																   name="percent="{required: true, min: 0.01}" debounce" v-validate="100">
+																   name="percent" debounce="100" v-validate="'required|min_value:0.01'">
 															<span class="input-group-addon"><i class="fa fa-percent"></i></span>
 														</div>
 													</div>
@@ -169,13 +169,13 @@
 														<div class="form-group">
 															<label for="dueAt">Due</label>
 															<date-picker :input-sm="true" :model="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
-															<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>
+															<!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>-->
 														</div>
 													</div>
 													<div class="col-sm-6">
-														<div class="form-group" :class="{'has-error': errors.hasPayment('grace') }">
+														<div class="form-group" :class="{'has-error': errors.has('grace', 'trip-pricing-cost-payment') }">
 															<label for="grace_period">Grace Period</label>
-															<div class="input-group input-group-sm" :class="{'has-error': errors.hasPayment('grace') }">
+															<div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'trip-pricing-cost-payment') }">
 																<input id="grace_period" type="number" class="form-control" number v-model="newPayment.grace_period"
 																	   name="grace" v-validate="'required|min:0'">
 																<span class="input-group-addon">Days</span>
@@ -210,6 +210,8 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
+	import $ from 'jquery';
 	export default{
 		name: 'trip-pricing',
 		data(){
@@ -253,16 +255,12 @@
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
 				this.newPayment.percent_owed = (val / this.selectedCost.amount) * 100;
-				if ( _.isFunction(this.$validate) )
-					this.$validate('percent', true);
 			},
 			'newPayment.percent_owed'(val, oldVal) {
 				var max = this.calculateMaxPercent(this.selectedCost);
 				if (val > max)
 					this.newPayment.percent_owed = max;
 				this.newPayment.amount_owed = (val / 100) * this.selectedCost.amount;
-				if ( _.isFunction(this.$validate) )
-					this.$validate('amount', true);
 			},
 			'costs'(val, oldVal) {
 				this.checkCostsErrors();
@@ -279,17 +277,8 @@
 			},
 			onValid(){
 
-				this.$dispatch('pricing', true);
+				this.$emit('pricing', true);
 				//this.$parent.details = this.details;
-			},
-			checkForError(field){
-				return this.$TripPricing[field.toLowerCase()].invalid && this.attemptedContinue;
-			},
-			checkForErrorCost(field){
-				return this.$TripPricingCost[field.toLowerCase()].invalid && this.attemptedAddCost;
-			},
-			checkForErrorPayment(field){
-				return this.$TripPricingCostPayment[field.toLowerCase()].invalid && this.attemptedAddPayment;
 			},
 			checkCostsErrors(){
 				var errors = [];
@@ -378,42 +367,50 @@
 			},
 			addCost(){
 				this.attemptedAddCost = true;
-				if (this.$TripPricingCost.valid) {
-					this.costs.push(this.newCost);
-					this.resetCost();
-					this.toggleNewCost = false;
-					this.attemptedAddCost = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost').then(result => {
+                    if (result) {
+                        this.costs.push(this.newCost);
+                        this.resetCost();
+                        this.toggleNewCost = false;
+                        this.attemptedAddCost = false;
+                    }
+                });
 				this.checkCostsErrors();
 			},
 			updateCost(){
 				this.attemptedAddCost = true;
-				if (this.$TripPricingCost.valid) {
-					this.resetCost();
-					this.toggleNewCost = false;
-					this.attemptedAddCost = false;
-					this.editCostMode = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost').then(result => {
+                    if (result) {
+                        this.resetCost();
+                        this.toggleNewCost = false;
+                        this.attemptedAddCost = false;
+                        this.editCostMode = false;
+                    }
+                });
 				this.checkCostsErrors();
 			},
 			addPayment(cost){
 				this.attemptedAddPayment = true;
-				if(this.$TripPricingCostPayment.valid) {
-					cost.payments.push(this.newPayment);
-					this.resetPayment();
-					this.selectedCost.toggleNewPayment = false;
-					this.attemptedAddPayment = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost-payment').then(result => {
+                    if (result) {
+                        cost.payments.push(this.newPayment);
+                        this.resetPayment();
+                        this.selectedCost.toggleNewPayment = false;
+                        this.attemptedAddPayment = false;
+                    }
+                });
 				this.checkCostsErrors();
 			},
 			updatePayment(cost){
 				this.attemptedAddPayment = true;
-				if(this.$TripPricingCostPayment.valid) {
-					this.resetPayment();
-					this.selectedCost.toggleNewPayment = false;
-					this.attemptedAddPayment = false;
-					this.editPaymentMode = false;
-				}
+                this.$validator.validateAll('trip-pricing-cost-payment').then(result => {
+                    if (result) {
+                        this.resetPayment();
+                        this.selectedCost.toggleNewPayment = false;
+                        this.attemptedAddPayment = false;
+                        this.editPaymentMode = false;
+                    }
+                });
 				this.checkCostsErrors();
 			},
 			generateUUID() {
@@ -422,7 +419,7 @@
 		},
 		activate(done){
 			$('html, body').animate({scrollTop: 0}, 300);
-			this.$dispatch('pricing', true);
+			this.$emit('pricing', true);
 			done();
 		}
 	}

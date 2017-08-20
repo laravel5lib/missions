@@ -93,7 +93,7 @@
 	    },
 	    events: {
             'validate-itinerary'() {
-                this.resetErrors();
+
             }
 	    },
         methods: {

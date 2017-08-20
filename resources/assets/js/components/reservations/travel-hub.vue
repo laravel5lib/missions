@@ -166,7 +166,7 @@
         },
         events: {
             'validate-itinerary'() {
-                this.resetErrors();
+
             }
         },
         watch: {
@@ -182,7 +182,7 @@
             'countryObj':(val, oldVal) =>  {
                 this.hub.country_code = _.isObject(val) ? val.code : null;
                 this.$nextTick(() =>  {
-                    this.$validate(true);
+
                 });
             },
 	        transportType(val){
@@ -225,7 +225,7 @@
 	        },
 	        'hub.name'(val) {
 	            this.$nextTick(() =>  {
-		            this.$validate(true);
+
                 });
 	        }
         },

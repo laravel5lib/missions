@@ -613,7 +613,7 @@
                 return this.back(true);
             },
             submit(){
-                this.resetErrors();
+
 //                let checkboxTest = _.findWhere(this.content, {id:'certifications'}).certifiedOptions && _.findWhere(this.content, {id:'certifications'}).allOptions;
                 this.$validator.validateAll().then(result => {
                     if (!result) {

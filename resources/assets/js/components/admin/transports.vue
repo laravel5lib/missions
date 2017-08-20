@@ -359,8 +359,8 @@
                 handler(val, oldVal) {
                     if (val && val.name) {
                         this.$nextTick(() =>  {
-                            if (_.isFunction(this.$validate))
-                                this.$validate(true);
+
+
                         });
                     }
 
@@ -498,8 +498,8 @@
 
                     this.showTransportsModal = true;
                     this.$nextTick(() =>  {
-                        if (_.isFunction(this.$validate))
-                            this.$validate(true);
+
+
                     });
                 } else {
                     this.selectedTransport = thisTransport;
@@ -511,7 +511,7 @@
                 this.showTransportDeleteModal = true;
             },
             handleTransport() {
-                this.resetErrors();
+
                 if (this.$TransportsModal.valid && _.isObject(this.selectedTransport)) {
                     let promise;
                     if (this.transportsModalEdit) {

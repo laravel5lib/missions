@@ -212,7 +212,7 @@
 		methods: {
 			populateWizardData(onValid){
 				if (!onValid)
-					this.$validate(true);
+
 				$.extend(this.$parent.wizardData, {
 					group_id: this.group_id,
 					description: this.description,

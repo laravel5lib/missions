@@ -119,7 +119,7 @@
                 return new_arr;
             },
             save() {
-                this.resetErrors();
+
                 this.$validator.validateAll().then(result => {
                     if (!result) {
                         this.$root.$emit('showError', 'Please check the form for errors.')

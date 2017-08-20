@@ -174,8 +174,8 @@
             },
             'transport.name'(val) {
                 this.$nextTick(() =>  {
-                    if (_.isFunction(this.$validate))
-                        this.$validate(true);
+
+
                 });
             },
 	        'transport.type'(val, oldVal) {
@@ -194,7 +194,7 @@
 	    },
         events: {
             'validate-itinerary'() {
-                this.resetErrors();
+
             }
         },
         methods: {

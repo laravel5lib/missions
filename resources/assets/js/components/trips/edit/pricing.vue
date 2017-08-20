@@ -294,16 +294,16 @@
 				if (val > max)
 					this.newPayment.amount_owed = this.selectedCost.amount;
 				this.newPayment.percent_owed = (val / this.selectedCost.amount) * 100;
-				if (_.isFunction(this.$validate))
-					this.$validate('percent', true);
+
+
 			},
 			'newPayment.percent_owed'(val, oldVal) {
 				var max = this.calculateMaxPercent(this.selectedCost);
 				if (val > max)
 					this.newPayment.percent_owed = max;
 				this.newPayment.amount_owed = (val / 100) * this.selectedCost.amount;
-				if (_.isFunction(this.$validate))
-					this.$validate('amount', true);
+
+
 			},
 			'costs'(val, oldVal) {
 				this.checkCostsErrors();

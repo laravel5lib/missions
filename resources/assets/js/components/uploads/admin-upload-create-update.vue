@@ -295,7 +295,7 @@
 				}
 			},
 			tags(val) {
-				// this.$validate('tags', true);
+				//
 			},
 			// Toggle ui states
 			uiSelector(val, oldVal) {
@@ -424,7 +424,7 @@
 				// this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
             submit(){
-				// this.resetErrors();
+				//
                 this.$validator.validateAll().then(result => {
                     if (!result) {
                         this.$root.$emit('showError', 'Please check form.');
@@ -468,7 +468,7 @@
                 })
             },
             update(){
-				this.resetErrors();
+
                 this.$validator.validateAll().then(result => {
                     if (!result) {
                         this.$root.$emit('showError', 'Please check form.');

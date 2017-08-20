@@ -414,7 +414,7 @@
 	            this.editMode = true;
 	            this.$nextTick(() =>  {
                     if ( _.isFunction(this.$validate) )
-                        this.$validate(true);
+
                 });
 	        },
             toggleResetModal(){

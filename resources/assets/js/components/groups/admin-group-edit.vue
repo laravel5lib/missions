@@ -273,7 +273,7 @@
             },
             submit(){
                 this.errors = [];
-                this.resetErrors();
+
                 this.$validator.validateAll().then(result => {
                     if (result) {
                         let formData = this.data;

@@ -67,7 +67,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::group([
-            'middleware' => 'api',
+            'middleware' => ['api'],
             'namespace' => $this->namespace . '\Api',
             'prefix' => 'api',
         ], function ($router) {
@@ -85,7 +85,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapAdminRoutes()
     {
         Route::group([
-            'middleware' => ['web', 'auth', 'can:access-admin', 'impersonate'],
+            'middleware' => ['web', 'auth', 'can:access_backend', 'impersonate'],
             'namespace' => $this->namespace . '\Admin',
             'prefix' => 'admin',
         ], function ($router) {

@@ -22,7 +22,7 @@ class UsersController extends Controller
 
     public function index()
     {
-        $this->authorize('view', $this->user);
+        // $this->authorize('view', $this->user);
 
         return view('admin.users.index');
     }

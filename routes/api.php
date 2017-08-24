@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
-    'middleware' => 'api.throttle', 'limit' => 100, 'expires' => 1,
+    'middleware' => ['api'],
     'namespace' => 'App\Http\Controllers\Api'
 ], function ($api) {
 

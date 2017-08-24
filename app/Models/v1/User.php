@@ -2,14 +2,15 @@
 
 namespace App\Models\v1;
 
-use Illuminate\Notifications\Notifiable;
 use App\UuidForKey;
+use App\Models\v1\Project;
 use EloquentFilter\Filterable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Support\Facades\Session;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -761,5 +762,22 @@ class User extends Authenticatable
     public function isImpersonating()
     {
         return Session::has('impersonate');
+    }
+
+    /**
+     * Determine if the user is the project sponsor.
+     *
+     * @param  Project $project
+     * @return boolean
+     */
+    public function isSponsor(Project $project)
+    {
+        if ($project->sponsor_type === 'group') {
+            $group_ids = $this->managing()->get('id')->toArray();
+
+            return in_array($project->sponsor_id, $group_ids);
+        }
+
+        return $this->id === $project->sponsor_id;
     }
 }

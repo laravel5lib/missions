@@ -19,18 +19,10 @@
 							Suite 308<br>
 							Rochester Hills, MI 48307</p>
 						<hr class="divider lg">
-						<h5>Physical Address</h5>
-						<p>612 W. University Dr.<br>
-							Rochester, MI 48307</p>
-						<a href="https://goo.gl/maps/5wYwywWEwZK2" class="btn btn-primary btn-sm">Get Directions</a>
-						<hr class="divider lg">
 						<h5>Phone</h5>
 						<p>(877) 369-4532</p>
 						<h5>Fax</h5>
 						<p>(248) 247-1295</p>
-						<hr class="divider lg">
-						<h5>Email</h5>
-						<p class="small">Email us at <a href="mailto:go@missions.me" target="_blank">go@missions.me</a> or fill out the form to have a Missions.Me representative contact you! Please allow 1-2 business days for phone or email contact.</p>
 					</div><!-- end panel-body -->
 				</div><!-- end panel -->
 			</div><!-- end col -->

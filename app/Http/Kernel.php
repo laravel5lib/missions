@@ -39,6 +39,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            'auth:api',
+            'api.auth',
             'throttle:60,1',
             'bindings'
         ],
@@ -59,6 +61,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'internal' => \App\Http\Middleware\InjectJwtToken::class,
         'impersonate' => \App\Http\Middleware\Impersonate::class,
-        'lowercase' => \App\Http\Middleware\RedirectToLowercase::class
+        'lowercase' => \App\Http\Middleware\RedirectToLowercase::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class
     ];
 }

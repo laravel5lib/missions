@@ -5,6 +5,7 @@
  */
 $factory->define(App\Models\v1\Reservation::class, function (Faker\Generator $faker) {
     return [
+        'id'                 => $faker->uuid,
         'given_names'        => $faker->firstName . ' ' . $faker->firstName,
         'surname'            => $faker->lastName,
         'gender'             => $faker->randomElement(['male', 'female']),

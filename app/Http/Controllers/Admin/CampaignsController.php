@@ -31,9 +31,7 @@ class CampaignsController extends Controller
     {
         $this->authorize('view', $this->campaign);
 
-        $campaigns = $this->api->get('campaigns');
-
-        return view('admin.campaigns.index')->with('campaigns', $campaigns);
+        return view('admin.campaigns.index');
     }
 
     /**
@@ -44,9 +42,9 @@ class CampaignsController extends Controller
      */
     public function show($id, $tab = 'trips', $tabId = null)
     {
-        $this->authorize('view', $this->campaign);
+        $campaign = $this->campaign->findOrFail($id);
 
-        $campaign = $this->api->get('campaigns/'.$id);
+        $this->authorize('view', $campaign);
 
         if (!is_null($tabId)) {
             return view('admin.campaigns.tabs.'.$tab.'.details', compact('campaign', 'tab', 'tabId'));
@@ -63,7 +61,7 @@ class CampaignsController extends Controller
      */
     public function edit($id)
     {
-        $this->authorize('edit', $this->campaign);
+        $this->authorize('update', $this->campaign);
 
         return view('admin.campaigns.edit')->with('campaignId', $id);
     }

@@ -26,6 +26,8 @@ class TripsController extends Controller
 
         $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
 
+        $this->authorize('view', $trip);
+
         return view('admin.trips.show', compact('trip', 'tab'));
     }
 

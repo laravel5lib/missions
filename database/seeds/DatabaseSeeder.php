@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         config(['mail.driver' => 'log']);
         config(['queue.default' => 'sync']);
 
+        $this->call(DefaultRolesAndPermissionsSeeder::class);
         $this->call(AirlinesTableSeeder::class);
         $this->call(AirportsTableSeeder::class);
         $this->call(TeamTypeTableSeeder::class);

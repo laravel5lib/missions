@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
-use Laravel\Passport\Passport;
 use League\Glide\Server;
 use App\TransactionHandler;
 use App\Models\v1\Reservation;
+use Laravel\Passport\Passport;
 use League\Glide\ServerFactory;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;

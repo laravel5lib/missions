@@ -191,10 +191,9 @@
 				
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			this.$emit('reqs', true);
-			done();
 		}
 	}
 </script>

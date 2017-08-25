@@ -149,9 +149,8 @@
 		        this.review = val;
 		    }
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop : 200},300);
-			done();
 		}
 
 	}

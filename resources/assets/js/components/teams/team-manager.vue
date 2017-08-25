@@ -1427,7 +1427,7 @@
                         let params = {
                             include: 'type,groups',
                         };
-                        this.TeamResource.post(data, params).then((response) => {
+                        this.TeamResource.post(params, data).then((response) => {
                             let team = response.data.data;
 
                             this.teams.push(team);
@@ -1572,7 +1572,7 @@
 	        addAssociation(type, object) {
                 return this.$http.post(type + '/' + object.id + '/teams', { ids: [this.currentTeam.id] }).then((response) => {
                     this.additionalAssociatedGroup = null;
-                    this.putTeamSettings(true).then(() => {
+                    this.updateTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now associated with ' + object.name);
                     });
                 }, (response) =>  {
@@ -1594,7 +1594,7 @@
 		        }
 
 	            return this.$http.delete(this.removeAssociationData.type + '/' + this.removeAssociationData.object.id + '/teams/' + this.currentTeam.id).then((response) => {
-                    this.putTeamSettings(true).then(() => {
+                    this.updateTeamSettings(true).then(() => {
                         this.$root.$emit('showSuccess', this.currentTeam.callsign + ' is now unassociated with ' + this.removeAssociationData.object.name);
                         this.removeAssociationData.type = null;
                         this.removeAssociationData.object = null;

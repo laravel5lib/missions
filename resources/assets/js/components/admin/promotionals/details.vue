@@ -97,7 +97,7 @@
             required: true
           }
         },
-        components: [promocodes],
+        components: {promocodes},
         data() {
             return {
                 promo: {

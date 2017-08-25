@@ -158,10 +158,9 @@
                 });
 			},
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			this.$emit('deadlines', true);
-			done();
 		}
 	}
 </script>

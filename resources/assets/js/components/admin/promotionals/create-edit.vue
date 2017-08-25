@@ -18,22 +18,11 @@
             <form id="ModifyPromotional" novalidate>
             <div class="row">
                 <div class="form-group col-sm-6" 
-                     v-error-handler="{ value: promo.name, client: 'name', server: 'name' }">
+                     v-error-handler="{ value: promo.name, client: 'name', server: 'name', messages: { req: 'Please provide a name at least 3 characters long.', min: 'Please provide a name at least 3 characters long.', max: 'Please provide a name less than 100 characters long.'} }">
 
                     <label>Promotional Name</label>
-                    <input type="text" 
-                           v-model="promo.name" 
-                           class="form-control" 
-                           name="name" v-validate="'required|min:3|max:100'"
-                           required>
-                    <span v-if="attemptSubmit" class="help-block">
-                        <span v-if="$ModifyPromotional.name.required || $ModifyPromotional.name.minlength">
-                            Please provide a name at least 3 characters long.
-                        </span>
-                        <span v-if="$ModifyPromotional.name.maxlength">
-                            Please provide a name less than 100 characters long.
-                        </span>
-                    </span>
+                    <input type="text" v-model="promo.name" class="form-control"
+                           name="name" v-validate="'required|min:3|max:100'">
                 </div>
 
                 <div class="form-group col-sm-6" v-if="!id">
@@ -46,7 +35,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-6" 
-                     v-error-handler="{ value: promo.reward, client: 'reward', server: 'reward' }">
+                     v-error-handler="{ value: promo.reward, client: 'reward', server: 'reward', messages: { req: 'Please provide a credit amount of $1.00 or more.'} }">
                     <label>Credit Amount</label>
                     <div class="input-group">
                         <span class="input-group-addon">$</span>
@@ -58,11 +47,6 @@
                         <span class="input-group-addon">.00</span>
                     </div>
                     <span class="help-block" v-if="id">This will not change credits already applied.</span>
-                    <span v-if="attemptSubmit" class="help-block">
-                        <span v-if="$ModifyPromotional.reward.required || $ModifyPromotional.reward.min">
-                            Please provide a credit amount of $1.00 or more.
-                        </span>
-                    </span>
                 </div>
 
                 <div class="form-group col-sm-6">
@@ -73,9 +57,9 @@
             </form>
         </div>
         <div class="panel-body text-right">
-            <button class="btn btn-default" @click="cancel()">Cancel</button>
-            <button class="btn btn-primary" @click="update()" v-if="id">Update</button>
-            <button class="btn btn-primary" @click="create()" v-else>Create</button>
+            <button class="btn btn-default" @click="cancel">Cancel</button>
+            <button class="btn btn-primary" @click="update" v-if="id">Update</button>
+            <button class="btn btn-primary" @click="create" v-else>Create</button>
         </div>
     </div>
 </template>
@@ -100,14 +84,12 @@
         mixins: [errorHandler],
         data() {
             return {
-                validatorHandle: 'ModifyPromotional',
                 promo: {
                     name: null,
                     reward: 0,
                     expires_at: null,
                     affiliates: null
                 },
-                hasChanged: false
             }
         },
         computed: {
@@ -117,12 +99,11 @@
         },
         events: {},
         methods: {
-            onTouched(){
-                this.hasChanged = true;
-            },
             fetch() {
                 this.$http.get('promotionals/' + this.id).then((response) => {
-                    this.promo = response.data.data;
+                    let promo = response.data.data;
+                    promo.reward = parseInt(promo.reward.replace(/,/, ''));
+                    this.promo = promo;
                 }, (error) =>  {
                     this.$root.$emit('showError', 'Unable to get data from server.');
                 })

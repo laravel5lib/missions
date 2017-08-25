@@ -348,9 +348,8 @@
             }
 
         },
-        activate(done){
+        activated(){
             this.searchTrips();
-            done();
         }
     }
 </script>

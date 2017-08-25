@@ -63,7 +63,9 @@
             </div><!-- end col -->
         </div><!-- end row -->
 		<spinner ref="spinner" size="sm" text="Loading"></spinner>
-		<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" keep-alive></component>
+		<keep-alive>
+			<component :is="currentView" :user-id="userId" :campaign-id="campaignId" :group-id="groupId" transition="fade" transition-mode="out-in" @plan-selected="planSelected" @plan-selection="planSelection"></component>
+		</keep-alive>
 	</div>
 </template>
 <style></style>
@@ -100,13 +102,13 @@
             manager: manager,
             notes: notes
         },
-        events: {
-            'rooming-wizard:plan-selected'(plan) {
+        methods: {
+            planSelected(plan) {
 				this.currentPlan = plan;
 				this.currentView = 'manager';
 				this.$root.$emit('plan-scope', plan);
             },
-            'rooming-wizard:plan-selection'() {
+            planSelection() {
 				this.currentPlan = null;
 				this.currentView = 'plans';
             },

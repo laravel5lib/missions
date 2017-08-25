@@ -417,10 +417,9 @@
 				return ("0000" + (Math.random()*Math.pow(36,4) << 0).toString(36)).slice(-4);
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			this.$emit('pricing', true);
-			done();
 		}
 	}
 </script>

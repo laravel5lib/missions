@@ -9,9 +9,10 @@
 			</ul>
 		</div>
 		<div class="col-sm-8 col-md-9" :class="currentStep.view">
-			<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+			<keep-alive><component :is="currentStep.view" transition="fade" transition-mode="out-in">
 
-			</component>
+		</component></keep-alive>
+
 			<div class="alert alert-danger alert-dismissible" role="alert" v-if="!stepList[0].valid && !!$children[0].attemptedContinue">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<strong>Uh Oh!</strong> The Details form still contains errors. Please correct them before saving.

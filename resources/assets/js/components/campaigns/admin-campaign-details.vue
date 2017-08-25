@@ -81,6 +81,7 @@
 		props: ['campaignId'],
 		data(){
 			return {
+                editMode: false,
 				campaign: {},
                 resource: this.$resource('campaigns{/id}', {'include': 'trips.group'})
 			}

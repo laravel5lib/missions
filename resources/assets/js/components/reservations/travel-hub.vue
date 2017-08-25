@@ -223,7 +223,6 @@
         },
         mounted(){
             let self = this;
-
             let activityType = _.findWhere(this.activityTypes, { id: this.activityType});
             switch (activityType.name) {
                 case 'arrival':
@@ -253,8 +252,9 @@
             }
 
             let promises = [];
-            if (this.transportType === 'flight')
+            if (this.transportType === 'flight' ) {
                 promises.push(this.getAirports(this.hub.name, false));
+            }
             promises.push(this.getCountries(this.hub.country_code, false));
 
             Promise.all(promises).then((values) => {

@@ -144,9 +144,8 @@
 				this.$emit('deadline-agree', val)
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop : 200},300);
-			done();
 		}
 
 	}

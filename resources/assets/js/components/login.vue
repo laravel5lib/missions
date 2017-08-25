@@ -489,12 +489,11 @@
 
             }
         },
-        activate(done) {
+        activated() {
             // Enable child component behavior
             if (this.$parent != this.$root) {
                 this.isChildComponent = true;
             }
-            done();
         },
         mounted() {
             if (_.contains(location.search.substr(1).split('='), 'signup')) {

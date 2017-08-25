@@ -536,12 +536,13 @@
                 },
 	            showRoomModal: false,
 	            roomModalEditMode: false,
-                selectedRoom: {
+                selectedRoom: null,
+                /*selectedRoom: {
                     room_type_id: null,
                     type: null,
 	                label: '',
                     occupants: [],
-                },
+                },*/
                 storageName: 'TravelGroupRooming',
 	            RoomingPlansResource: this.$resource('rooming/plans{/plan}{/path}{/pathId}'),
 	            RoomingRoomsResource: this.$resource('rooming/rooms{/room}{/path}{/pathId}'),
@@ -816,7 +817,7 @@
 	                this.$root.$emit('showError', response.data.message)
                 });
             },
-            debouncedSearchReservations: _.debounce(function () { this.searchReservations(); }, 250),
+            debouncedReservationsSearch: _.debounce(function () { this.searchReservations(); }, 250),
             searchReservations(){
                 let params = {
                     include: 'trip.campaign,trip.group,user,companions,squads.team,costs:type(optional)',
@@ -1125,20 +1126,17 @@
                 })
             },
             changePlan() {
-                this.$emit('rooming-wizard:plan-selection');
+                this.$emit('plan-selection');
             }
         },
-	    activate(done){
+	    activated(){
             this.currentPlan = this.$parent.currentPlan;
-            done();
 	    },
+	    events: {},
         mounted(){
+	        // Get Plan from Parent
+            this.currentPlan = this.$parent.currentPlan;
             let promises = [];
-            if (this.isAdminRoute) {
-                this.searchReservations();
-            } else {
-
-            }
 
             /*promises.push(this.getPlans().then((plans) => {
                 //let pIds = _.pluck(plans, 'id');
@@ -1166,11 +1164,13 @@
 
             this.$root.$on('campaign-scope', (val) =>  {
                 this.campaignId = val ? val.id : '';
-                this.$emit('rooming-wizard:plan-selection');
+                this.$emit('plan-selection');
             });
 
             this.$root.$on('plan-scope', (val) =>  {
                 this.currentPlan = val || null;
+                if (this.isAdminRoute)
+                    this.searchReservations();
             });
 
             this.$root.$on('create-plan', (val) =>  {

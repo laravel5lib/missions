@@ -67,161 +67,161 @@
 				<div class="collapse" id="AccommodationModal">
 					<div class="panel panel-default" v-if="showAccommodationManageModal">
 
-								<form id="AccommodationForm" name="AccommodationForm"
-								      @submit.prevent="manageAccommodation" data-vv-scope="accommodation-manage">
-									<div class="panel-heading">
-										<h5 v-text="editMode?'Update an Accommodation':'Create an Accommodation'"></h5>
+						<form id="AccommodationForm" name="AccommodationForm"
+						      @submit.prevent="manageAccommodation" data-vv-scope="accommodation-manage">
+							<div class="panel-heading">
+								<h5 v-text="editMode?'Update an Accommodation':'Create an Accommodation'"></h5>
+							</div>
+							<div class="panel-body" v-if="currentAccommodation">
+								<div class="row">
+									<div class="form-group col-sm-12"
+									     v-error-handler="{ value: currentAccommodation.name, handle: 'name', scope: 'accommodation-manage' }">
+										<label for="AccoName" class="control-label">Name</label>
+										<input @keydown.enter.prevent="manageAccommodation"
+										       type="text"
+										       class="form-control"
+										       id="AccoName" placeholder=""
+										       name="name" v-validate="'required'"
+										       v-model="currentAccommodation.name">
 									</div>
-									<div class="panel-body" v-if="currentAccommodation">
-										<div class="row">
-											<div class="form-group col-sm-12"
-											     v-error-handler="{ value: currentAccommodation.name, handle: 'name', scope: 'accommodation-manage' }">
-												<label for="AccoName" class="control-label">Name</label>
-												<input @keydown.enter.prevent="manageAccommodation"
-												       type="text"
-												       class="form-control"
-												       id="AccoName" placeholder=""
-												       name="name" v-validate="'required'"
-												       v-model="currentAccommodation.name">
-											</div>
-											<div class="form-group col-sm-12"
-											     v-error-handler="{ value: currentAccommodation.short_desc, handle: 'shortdesc', scope: 'accommodation-manage' }">
-												<label for="AccoDescription" class="control-label">Description</label>
-												<textarea class="form-control"
-												          id="AccoDescription"
-												          name="shortdesc" v-validate=""
-												          v-model="currentAccommodation.short_desc">
-                                            </textarea>
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.address_one, handle: 'addressone', scope: 'accommodation-manage' }">
-												<label for="AccoAddressOne" class="control-label">Address 1</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoAddressOne"
-												       placeholder=""
-												       name="addressone" v-validate=""
-												       v-model="currentAccommodation.address_one">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.address_two, handle: 'addresstwo', scope: 'accommodation-manage' }">
-												<label for="AccoAddressTwo" class="control-label">Address 2</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoAddressTwo"
-												       placeholder=""
-												       name="addresstwo" v-validate=""
-												       v-model="currentAccommodation.address_two">
-											</div>
-											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.state, handle: 'city', scope: 'accommodation-manage' }">
-												<label for="AccoCity" class="control-label">City</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoCity"
-												       placeholder=""
-												       name="city" v-validate=""
-												       v-model="currentAccommodation.city">
-											</div>
-											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.state, handle: 'state', scope: 'accommodation-manage' }">
-												<label for="AccoState" class="control-label">State</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoState"
-												       placeholder=""
-												       name="state" v-validate=""
-												       v-model="currentAccommodation.state">
-											</div>
-											<div class="form-group col-sm-4"
-											     v-error-handler="{ value: currentAccommodation.zip, handle: 'zip', scope: 'accommodation-manage' }">
-												<label for="AccoZip" class="control-label">Zip</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoZip"
-												       placeholder=""
-												       name="zip" v-validate=""
-												       v-model="currentAccommodation.zip">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.phone, handle: 'phone', scope: 'accommodation-manage' }">
-												<label for="AccoPhone" class="control-label">Phone</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoPhone"
-												       placeholder=""
-												       name="phone" v-validate=""
-												       v-model="currentAccommodation.phone">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.email, handle: 'email', scope: 'accommodation-manage' }">
-												<label for="AccoEmail" class="control-label">Email</label>
-												<input type="email"
-												       class="form-control"
-												       id="AccoEmail"
-												       placeholder=""
-												       name="email" v-validate="['email']"
-												       v-model="currentAccommodation.email">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.fax, handle: 'fax', scope: 'accommodation-manage' }">
-												<label for="AccoFax" class="control-label">Fax</label>
-												<input type="text"
-												       class="form-control"
-												       id="AccoFax"
-												       placeholder=""
-												       name="fax" v-validate=""
-												       v-model="currentAccommodation.fax">
-											</div>
-											<div class="form-group col-sm-6"
-											     v-error-handler="{ value: currentAccommodation.url, handle: 'url', scope: 'accommodation-manage' }">
-												<label for="AccoURL" class="control-label">URL</label>
-												<input type="url"
-												       class="form-control"
-												       id="AccoURL"
-												       placeholder=""
-												       name="url" v-validate=""
-												       v-model="currentAccommodation.url">
-											</div>
-										</div>
-										<div class="checkbox">
-											<label>
-												<input type="checkbox" v-model="currentAccommodationDifferentCountry" >
-												Is this Accommodation in another country?
-											</label>
-										</div>
-										<div class="form-group" v-if="currentAccommodationDifferentCountry">
-											<label for="createPlanCallsign" class="control-label">
-												Region Country
-											</label>
-											<v-select @keydown.enter.prevent=""
-											          class="form-control"
-											          :debounce="250"
-											          :on-search="getCountries"
-											          v-model="currentAccommodation.country"
-											          :options="UTILITIES.countries"
-											          label="name"
-											          placeholder="Select a Country">
-											</v-select>
-										</div>
+									<div class="form-group col-sm-12"
+									     v-error-handler="{ value: currentAccommodation.short_desc, handle: 'shortdesc', scope: 'accommodation-manage' }">
+										<label for="AccoDescription" class="control-label">Description</label>
+										<textarea class="form-control"
+										          id="AccoDescription"
+										          name="shortdesc" v-validate="''"
+										          v-model="currentAccommodation.short_desc">
+                                    </textarea>
 									</div>
-									<template v-if="currentAccommodation.room_types_settings">
-										<div class="panel-heading">
-											<h5>Rooms Allowed</h5>
-										</div>
-										<div class="panel-body">
-											<div class="form-group col-sm-6" v-for="type in roomTypes">
-												<label :for="'settingsType-' + type.id" class="" v-text="type.name"></label>
-												<input type="number"
-												       number
-												       class="form-control"
-												       :id="'settingsType-' + type.id"
-												       v-model="currentAccommodation.room_types_settings[type.id]"
-												       min="0">
-											</div>
-										</div>
-									</template>
-								</form>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.address_one, handle: 'addressone', scope: 'accommodation-manage' }">
+										<label for="AccoAddressOne" class="control-label">Address 1</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoAddressOne"
+										       placeholder=""
+										       name="addressone" v-validate="''"
+										       v-model="currentAccommodation.address_one">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.address_two, handle: 'addresstwo', scope: 'accommodation-manage' }">
+										<label for="AccoAddressTwo" class="control-label">Address 2</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoAddressTwo"
+										       placeholder=""
+										       name="addresstwo" v-validate="''"
+										       v-model="currentAccommodation.address_two">
+									</div>
+									<div class="form-group col-sm-4"
+									     v-error-handler="{ value: currentAccommodation.state, handle: 'city', scope: 'accommodation-manage' }">
+										<label for="AccoCity" class="control-label">City</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoCity"
+										       placeholder=""
+										       name="city" v-validate="''"
+										       v-model="currentAccommodation.city">
+									</div>
+									<div class="form-group col-sm-4"
+									     v-error-handler="{ value: currentAccommodation.state, handle: 'state', scope: 'accommodation-manage' }">
+										<label for="AccoState" class="control-label">State</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoState"
+										       placeholder=""
+										       name="state" v-validate="''"
+										       v-model="currentAccommodation.state">
+									</div>
+									<div class="form-group col-sm-4"
+									     v-error-handler="{ value: currentAccommodation.zip, handle: 'zip', scope: 'accommodation-manage' }">
+										<label for="AccoZip" class="control-label">Zip</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoZip"
+										       placeholder=""
+										       name="zip" v-validate="''"
+										       v-model="currentAccommodation.zip">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.phone, handle: 'phone', scope: 'accommodation-manage' }">
+										<label for="AccoPhone" class="control-label">Phone</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoPhone"
+										       placeholder=""
+										       name="phone" v-validate="''"
+										       v-model="currentAccommodation.phone">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.email, handle: 'email', scope: 'accommodation-manage' }">
+										<label for="AccoEmail" class="control-label">Email</label>
+										<input type="email"
+										       class="form-control"
+										       id="AccoEmail"
+										       placeholder=""
+										       name="email" v-validate="'email'"
+										       v-model="currentAccommodation.email">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.fax, handle: 'fax', scope: 'accommodation-manage' }">
+										<label for="AccoFax" class="control-label">Fax</label>
+										<input type="text"
+										       class="form-control"
+										       id="AccoFax"
+										       placeholder=""
+										       name="fax" v-validate="''"
+										       v-model="currentAccommodation.fax">
+									</div>
+									<div class="form-group col-sm-6"
+									     v-error-handler="{ value: currentAccommodation.url, handle: 'url', scope: 'accommodation-manage' }">
+										<label for="AccoURL" class="control-label">URL</label>
+										<input type="url"
+										       class="form-control"
+										       id="AccoURL"
+										       placeholder=""
+										       name="url" v-validate="''"
+										       v-model="currentAccommodation.url">
+									</div>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" v-model="currentAccommodationDifferentCountry" >
+										Is this Accommodation in another country?
+									</label>
+								</div>
+								<div class="form-group" v-if="currentAccommodationDifferentCountry">
+									<label for="createPlanCallsign" class="control-label">
+										Region Country
+									</label>
+									<v-select @keydown.enter.prevent=""
+									          class="form-control"
+									          :debounce="250"
+									          :on-search="getCountries"
+									          v-model="currentAccommodation.country"
+									          :options="UTILITIES.countries"
+									          label="name"
+									          placeholder="Select a Country">
+									</v-select>
+								</div>
+							</div>
+							<template v-if="currentAccommodation.room_types_settings">
+								<div class="panel-heading">
+									<h5>Rooms Allowed</h5>
+								</div>
+								<div class="panel-body">
+									<div class="form-group col-sm-6" v-for="type in roomTypes">
+										<label :for="'settingsType-' + type.id" class="" v-text="type.name"></label>
+										<input type="number"
+										       number
+										       class="form-control"
+										       :id="'settingsType-' + type.id"
+										       v-model="currentAccommodation.room_types_settings[type.id]"
+										       min="0">
+									</div>
+								</div>
+							</template>
+						</form>
 
 					    <div class="panel-footer text-center">
 						    <button type="button"
@@ -413,7 +413,8 @@
                small
                ok-text="Delete"
                :callback="deleteAccommodation"
-               :show="showAccommodationDeleteModal">
+               @closed="showAccommodationDeleteModal=false"
+               :value="showAccommodationDeleteModal">
 			<div slot="modal-body" class="modal-body">
 				<p v-if="currentAccommodation">
 					Are you sure you want to delete accommodation: "{{currentAccommodation.name}}" ?

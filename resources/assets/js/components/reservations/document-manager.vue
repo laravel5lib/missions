@@ -51,12 +51,13 @@
         <div class="col-sm-12" v-if="changeState && list" transition="fade">
             <div class="row">
                 <div class="col-sm-12">
-                    <component :is="list"
-                               :user-id="managingUserId"
-                               @set-decument="setDocument"
-                               @unset-decument="removeDocument"
-                               selector keep-alive>
-                    </component>
+                    <keep-alive><component :is="list"
+                                           :user-id="managingUserId"
+                                           @set-decument="setDocument"
+                                           @unset-decument="removeDocument"
+                                           selector>
+                    </component></keep-alive>
+
                 </div>
             </div>
         </div>

@@ -284,7 +284,7 @@
                 };
             },
             loadManager(plan) {
-                this.$emit('rooming-wizard:plan-selected', plan);
+                this.$emit('plan-selected', plan);
             },
             getRoomTypes(){
                 return this.$http.get('rooming/types', { params: { campaign: this.campaignId, per_page: 100 }})
@@ -375,7 +375,7 @@
                 this.selectedDeletePlan = plan;
             },
 	        handleRoomTypeSettings(plan, settings, promises) {
-                _.each(settings, function (val, property) {
+                _.each(settings, (val, property) => {
                     let promise;
                     if (property.indexOf('_method') === -1 && !_.contains(['short_desc', 'name', 'groups', 'group_ids', 'locked'], property)) {
                         if (settings[property + '_method'] === 'PUT') {

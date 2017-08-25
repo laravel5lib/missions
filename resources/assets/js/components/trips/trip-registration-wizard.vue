@@ -49,9 +49,8 @@
 				<div class="col-sm-7 col-md-8" :class="currentStep.view">
 					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
 					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
-					<component :is="currentStep.view" transition="fade" transition-mode="out-in" keep-alive>
+					<keep-alive><component :is="currentStep.view" transition="fade" transition-mode="out-in"></component></keep-alive>
 
-					</component>
 				</div>
 
 			</div>

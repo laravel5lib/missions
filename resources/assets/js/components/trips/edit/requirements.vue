@@ -189,13 +189,12 @@
 				}
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			$.extend(this, {
 				requirements: this.$parent.trip.requirements,
 			});
 			this.$emit('reqs', true);
-			done();
 		}
 	}
 </script>

@@ -73,14 +73,13 @@
 				return this.$TripSettings[field.toLowerCase()].invalid && this.attemptedContinue
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 			$.extend(this, {
 				spots: this.$parent.trip.spots,
 				closed_at: moment(this.$parent.trip.closed_at).format('Y-MM-DD'),
 				published_at: moment(this.$parent.trip.published_at).format('Y-MM-DD')
 			});
-			done();
 		}
 	}
 </script>

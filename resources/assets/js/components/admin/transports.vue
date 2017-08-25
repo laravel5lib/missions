@@ -18,14 +18,14 @@
                     <form class="form-inline">
                         <div class="form-group col-lg-6 col-sm-12 col-md-4">
                             <div class="input-group input-group-sm col-xs-12">
-                                <input type="text" class="form-control" v-model="options.params.search" debounce="300" placeholder="Search">
+                                <input type="text" class="form-control" v-model="options.params.search" @keyup="debouncedSearch" placeholder="Search">
                                 <span class="input-group-addon"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
                         <div class="form-group col-lg-6 col-sm-12 col-md-8 text-right">
                             <button type="button" class="btn btn-sm btn-default" @click="showFilters = !showFilters">Filters</button>
                             <button type="button" class="btn btn-sm btn-default" @click="expandAll">Expand All</button>
-                            <transport-reports :filters="filters" :search="search"></transport-reports>
+                            <transport-reports :filters="filters" :search="options.params.search"></transport-reports>
                             <button type="button" class="btn btn-primary btn-sm" @click="openTransportModal()">Create a Transport</button>
                         </div>
                         <div class="col-xs-12">
@@ -118,7 +118,7 @@
         <modal :title="transportsModalEdit? 'Edit Transport' : 'Create Transport'" :ok-text="transportsModalEdit? 'Update' : 'Create'" :callback="handleTransport" :value="showTransportsModal" @closed="showTransportsModal=false">
             <div slot="modal-body" class="modal-body" v-if="selectedTransport">
 
-                    <form id="TransportsModalForm">
+                    <form id="TransportsModalForm" data-vv-scope="transport-modal">
                         <div class="form-group">
                             <div class="checkbox">
                             	<label>
@@ -127,7 +127,7 @@
                             	</label>
                             </div>
                         </div>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.type, client: 'type' }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.type, client: 'type', scope: 'transport-modal' }">
                             <label for="transportType" class="control-label">Type</label>
                             <select class="form-control" id="transportType"
                                     name="type" v-model="selectedTransport.type" v-validate="'required'">
@@ -136,14 +136,14 @@
                             </select>
                         </div>
 
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.designation, client: 'designation' }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.designation, client: 'designation', scope: 'transport-modal' }">
                             <label for="transportType" class="control-label">Designation</label>
                             <input type="text" class="form-control" v-model="selectedTransport.designation" placeholder="i.e. outbound, return, etc.">
                             <span>A passenger can only be added one transport with the given designation.</span>
                         </div>
 
                         <template v-if="selectedTransport.type === 'flight'">
-                            <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline' }">
+                            <div class="form-group" v-error-handler="{ value: selectedTransport.name, client: 'airline', scope: 'transport-modal' }">
                                 <label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
                                 <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
                                           v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
@@ -230,7 +230,7 @@
                         <travel-hub :hub="selectedTransport.departure" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="departureType.id" edit-mode transports
                                     :transport-type="selectedTransport.type"></travel-hub>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', scope: 'transport-modal', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>
                             <date-picker v-model="selectedTransport.depart_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" name="depart_at" v-validate="'required'"></date-picker>
                             <!--<input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
@@ -240,7 +240,7 @@
                         <travel-hub :hub="selectedTransport.arrival" :activity-types="UTILITIES.activityTypes"
                                     :activity-type="arrivalType.id" edit-mode transports
                                     :transport-type="selectedTransport.type"></travel-hub>
-                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
+                        <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', scope: 'transport-modal', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
                             <date-picker v-model="selectedTransport.arrive_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" name="arrive_at" v-validate="'required'"></date-picker>
                             <!--<input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
@@ -341,7 +341,7 @@
                 this.fetch();
             },
             'options.params.search'(val){
-                this.fetch();
+//                this.fetch();
             },
             selectedAirlineObj(val, oldVal){
                 if (val && val !== oldVal) {
@@ -418,7 +418,7 @@
                 };
             },
             changeList(tab) {
-                if (tab == 'domestic') {
+                if (tab === 'domestic') {
                     this.options.params.isDomestic = 'yes';
                     this.fetch();
                 } else {
@@ -438,6 +438,7 @@
                     include: 'departureHub,arrivalHub'
                 };
             },
+            debouncedSearch: _.debounce(function() { this.fetch(); }, 300),
             fetch() {
                 let params = _.extend({}, this.options.params);
                 params = _.extend(params, this.filters);
@@ -491,10 +492,6 @@
                     });
 
                     this.showTransportsModal = true;
-                    this.$nextTick(() =>  {
-
-
-                    });
                 } else {
                     this.selectedTransport = thisTransport;
                     this.showTransportsModal = true;
@@ -505,33 +502,34 @@
                 this.showTransportDeleteModal = true;
             },
             handleTransport() {
+                this.$validator.validateAll('transport-modal').then(result => {
+                    if (result && _.isObject(this.selectedTransport)) {
+                        let promise;
+                        if (this.transportsModalEdit) {
+                            promise = this.TransportsResource
+                                .put({ transport: this.selectedTransport.id}, this.selectedTransport)
+                                .then((response) => {
+                                    this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport updated successfully');
+                                });
+                        } else {
+                            promise = this.TransportsResource
+                                .post(this.selectedTransport)
+                                .then((response) => {
+                                    this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport created successfully');
+                                });
+                        }
 
-                if (this.$TransportsModal.valid && _.isObject(this.selectedTransport)) {
-                    let promise;
-                    if (this.transportsModalEdit) {
-                        promise = this.TransportsResource
-                            .put({ transport: this.selectedTransport.id}, this.selectedTransport)
-                            .then((response) => {
-                                this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport updated successfully');
-                            });
+                        promise.then(() => {
+                            this.fetch();
+                            this.showTransportsModal = false;
+                            this.transportsModalEdit = false;
+                            this.selectedTransport = null;
+                        }).catch(this.$root.handleApiError)
                     } else {
-                        promise = this.TransportsResource
-                            .post(this.selectedTransport)
-                            .then((response) => {
-                                this.$root.$emit('showSuccess', (this.selectedTransport.domestic ? 'Domestic' : 'International') + ' transport created successfully');
-                            });
+                        this.$root.$emit('showError', 'Please check the form.');
                     }
+                })
 
-                    promise.then(() => {
-                        this.fetch();
-                        this.showTransportsModal = false;
-                        this.transportsModalEdit = false;
-                        this.selectedTransport = null;
-                    }).catch(this.$root.handleApiError)
-                } else {
-                    console.log(this.$TransportsModal);
-                    this.$root.$emit('showError', 'Please check the form.');
-                }
             },
             deleteTransport(){
                 this.TransportsResource.delete({ transport: this.selectedTransport.id}).then((response) => {

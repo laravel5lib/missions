@@ -73,9 +73,8 @@
 				return this.$TripSettings[field.toLowerCase()].invalid && this.attemptedContinue
 			}
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
-			done();
 		}
 	}
 </script>

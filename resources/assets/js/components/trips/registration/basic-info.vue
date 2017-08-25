@@ -491,7 +491,7 @@
                 this.avatar_upload_id = user.avatar_upload_id;
 			}
 		},
-		activate(done){
+		activated(){
 			if (this.forAdmin) {
 				this.onBehalf = true;
 			}
@@ -511,7 +511,6 @@
 			this.$emit('basic-info', true);
 			if (location.pathname.indexOf('admin') === -1)
 				$('html, body').animate({scrollTop: 200}, 300);
-			done();
 		}
 	}
 </script>

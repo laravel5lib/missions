@@ -32,10 +32,8 @@
 									</a>
 								</div>
 								<div class="col-xs-3 text-right action-buttons">
-									<dropdown type="default">
-										<button slot="button" type="button" class="btn btn-xs btn-primary-hollow dropdown-toggle">
-											<span class="fa fa-ellipsis-h"></span>
-										</button>
+									<dropdown type="default" btn-classes="btn btn-xs btn-primary-hollow">
+										<span slot="button" class="fa fa-ellipsis-h"></span>
 										<ul slot="dropdown-menu" class="dropdown-menu dropdown-menu-right">
 											<li><a @click="editType(roomType)">Edit</a></li>
 											<li><a @click="confirmDelete(roomType)">Delete</a></li>
@@ -70,7 +68,7 @@
 		<div class="col-md-7 col-md-pull-5">
 			<template v-if="currentType">
 
-					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType : createType" id="TypeForm">
+					<form class="form-inlvine" @submit.prevent="editTypeMode ? updateType() : createType()" id="TypeForm">
 						<div class="form-group" v-error-handler="{ value: currentType.name, client: 'name', messages: { req: 'Please name this type'} }">
 							<label class="control-label col-sm-4">Name</label>
 							<input type="text" class="form-control" name="name=" v-model="currentType.name" v-validate="'required'">
@@ -84,7 +82,7 @@
 									</div>
 									<div class="form-group" v-else>
 										<label>{{key | underscoreToSpace | capitalize}}</label>
-										<select class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="">
+										<select class="form-control" v-model="currentType.rules[key]" :name="key" v-validate="''">
 											<option :value="true">Yes</option>
 											<option :value="false">No</option>
 										</select>

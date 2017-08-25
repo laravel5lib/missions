@@ -215,14 +215,13 @@
 				return this.$TripDetails[field.toLowerCase()].invalid && this.attemptedContinue
 			},
 		},
-		activate(done){
+		activated(){
 			$('html, body').animate({scrollTop: 0}, 300);
 
 			// get some groups
 			this.$http.get('groups').then((response) => {
 				this.groups = response.data.data;
 			});
-			done();
 		}
 
 	}

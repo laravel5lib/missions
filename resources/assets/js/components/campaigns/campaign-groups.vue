@@ -127,9 +127,8 @@
 		mounted(){
 			this.searchGroups();
 		},
-		activate(done){
+		activated(){
 			this.id = this.$parent.campaignId;
-			done();
 		}
 	}
 </script>

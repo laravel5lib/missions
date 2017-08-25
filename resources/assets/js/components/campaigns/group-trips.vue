@@ -132,14 +132,13 @@
 				this.getTrips();
 			}
 		},
-		activate(done){
+		activated(){
 			this.id = this.$parent.groupId;
 			this.campaignId = this.$parent.campaignId;
 			this.$http.get('groups/' + this.id).then((response) => {
 				this.group = response.data.data;
 			});
 			this.getTrips();
-			done();
 		}
 	}
 </script>

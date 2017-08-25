@@ -258,18 +258,18 @@
 
 					<form id="RegionCreateForm" data-vv-scope="region-create">
 						<div class="form-group" :class="{'has-error': errors.has('name', 'region-create')}">
-							<label for="createPlanCallsign" class="control-label">Region Name</label>
+							<label for="createRegionName" class="control-label">Region Name</label>
 							<input @keydown.enter.prevent="createRegion" type="text" class="form-control" id="createRegionName" placeholder="" name="name" v-model="selectedRegion.name" v-validate="'required'">
 						</div>
 						<div class="form-group">
-							<label for="createPlanCallsign" class="control-label">Region Country</label>
+							<label for="createRegionCountry" class="control-label">Region Country</label>
 							<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
 							          v-model="selectedRegion.country" :options="UTILITIES.countries" label="name"
 							          placeholder="Select a Country"></v-select>
 						</div>
 						<div class="form-group">
-							<label for="createPlanCallsign" class="control-label">Region CallSign</label>
-							<input  type="text" class="form-control" id="createRegionName" placeholder="" v-model="selectedRegion.callsign">
+							<label for="createRegionCallsign" class="control-label">Region CallSign</label>
+							<input type="text" class="form-control" id="createRegionCallsign" placeholder="" v-model="selectedRegion.callsign">
 						</div>
 					</form>
 
@@ -283,7 +283,7 @@
 			</div>
 		</modal>
 		<modal title="Create a new Room" small ok-text="Create" :callback="newRoom" :value="showRoomModal" @closed="showRoomModal=false">
-			<div slot="modal-body" class="modal-body">
+			<div slot="modal-body" class="modal-body" v-if="selectedRoom">
 
 					<form id="RoomCreateForm" data-vv-scope="room-create">
 						<div class="form-group" :class="{'has-error': errors.has('roomtype', 'room-create')}">
@@ -545,8 +545,9 @@
                     if (!result) {
                         return;
                     }
-                    if (this.editRegionModal)
-	                    return this.putRegion();
+                    if (this.editRegionModal) {
+                        return this.updateRegion();
+                    }
 
 	                this.selectedRegion.country_code = this.selectedRegion.country.code;
 	                delete this.selectedRegion.country;
@@ -572,37 +573,34 @@
                 });
             },
             updateRegion() {
-                this.$validator.validateAll('region-create').then(result => {
-                    if (!result) {
-                        return;
-                    }
-                    this.selectedRegion.country_code = this.selectedRegion.country.code;
-                    delete this.selectedRegion.country;
+                // already validated in previous function
+                this.selectedRegion.country_code = this.selectedRegion.country.code;
+                delete this.selectedRegion.country;
 
-                    if (!this.selectedRegion.callsign)
-                        delete this.selectedRegion.callsign;
+                if (!this.selectedRegion.callsign)
+                    delete this.selectedRegion.callsign;
 
-                    let data = {
-                        name: this.selectedRegion.name,
-                        country_code: this.selectedRegion.country_code,
-                        callsign: this.selectedRegion.callsign,
-                    };
+                let data = {
+                    name: this.selectedRegion.name,
+                    country_code: this.selectedRegion.country_code,
+                    callsign: this.selectedRegion.callsign,
+                };
 
-                    this.RegionsResource.put({
-                        campaign: this.campaignId,
-                        region: this.selectedRegion.id,
-                        include: 'teams.groups, teams.type',
-                    }, data).then((response) => {
-                        let region = response.data.data;
-                        this.showRegionModal = false;
-                        this.editRegionModal = false;
-                        this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
-                        return region;
-                    }, (response) => {
-                        console.log(response);
-                        this.$root.$emit('showError', response.data.message);
-                        return response.data.data;
-                    });
+                this.RegionsResource.put({
+                    campaign: this.campaignId,
+                    region: this.selectedRegion.id,
+                    include: 'teams.groups, teams.type',
+                }, data).then((response) => {
+                    let region = response.data.data;
+                    this.showRegionModal = false;
+                    this.editRegionModal = false;
+                    this.selectedRegion = null;
+                    this.$root.$emit('showSuccess', 'Region: ' + region.name + ', created successfully.');
+	                return region;
+                }, (response) => {
+                    console.log(response);
+                    this.$root.$emit('showError', response.data.message);
+                    return response.data.data;
                 });
             },
             deleteRegion() {

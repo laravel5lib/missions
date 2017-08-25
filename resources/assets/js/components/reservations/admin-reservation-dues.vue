@@ -27,7 +27,7 @@
                         <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>
                     <td>{{ due.cost }}</td>
-                    <td>{{ due.balance | currency }}</td>
+                    <td>{{ currency(due.balance) }}</td>
                     <td v-if="due.type === 'static'">Immedately</td>
                     <td v-else>{{ due.due_at | moment('lll') }}</td>
                     <td>{{ due.grace_period }} days</td>
@@ -74,7 +74,7 @@
                                 <div class="form-group">
                                     <label for="due_date">Due Date</label>
                                     <!--<input id="due_date" type="datetime" class="form-control" v-model="editedDue.due_at">-->
-                                    <date-picker :model="editedDue.due_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="editedDue.due_at"></date-picker>
+                                    <date-picker v-model="editedDue.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']" v-if="editedDue.due_at"></date-picker>
                                 </div>
                             </div>
                         </div>
@@ -273,7 +273,7 @@
             this.getDues();
 
             //Listen to Event Bus
-            this.$root.$on('AdminReservation:CostsUpdated', function (data) {
+            this.$root.$on('AdminReservation:CostsUpdated', (data) => {
                 this.getDues();
             });
         }

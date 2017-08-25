@@ -136,8 +136,29 @@
 
             }
         },
+        computed: {
+            todo() {
+                if (this.filters.todoStatus && this.filters.todoName) {
+                    return this.filters.todoName + '|' + this.filters.todoStatus;
+                } else {
+                    return this.filters.todoName;
+                }
+            },
+            requirement() {
+                if (this.filters.requirementName && this.filters.requirementStatus)
+                    return this.filters.requirementName + '|' + this.filters.requirementStatus;
+
+                return this.filters.requirementName;
+            },
+            due() {
+                if (this.filters.dueName && this.filters.dueStatus)
+                    return this.filters.dueName + '|' + this.filters.dueStatus;
+
+                return this.filters.dueName;
+            }
+        },
 	    watch:{
-            'requirement': () =>  {
+            requirement(){
                 if (this.filters.requirementName) {
                     if (this.filters.requirementName && this.filters.requirementStatus)
                         return this.filters.requirementName + '|' + this.filters.requirementStatus;
@@ -147,10 +168,10 @@
 
                 return ''
             },
-            'due': () =>  {
+            due(){
                 if (this.filters.dueName) {
                     if (this.filters.dueStatus)
-                    return this.filters.dueName + '|' + this.filters.dueStatus;
+                        return this.filters.dueName + '|' + this.filters.dueStatus;
 
                     return this.filters.dueName;
                 }

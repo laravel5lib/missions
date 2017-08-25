@@ -184,7 +184,7 @@
                     <code>{{ fund.class }}</code>
                 </td>
                 <td v-if="isActive('balance')">
-                    <span :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}">{{fund.balance|currency}}</span>
+                    <span :class="{'text-success': fund.balance > 0, 'text-danger': fund.balance < 0}">{{currency(fund.balance)}}</span>
                 </td>
                 <td><a :href="`/admin/funds/${ fund.id }`"><i class="fa fa-cog"></i></a></td>
             </tr>
@@ -238,13 +238,14 @@
                 search: '',
                 activeFields: ['name', 'type', 'balance', 'class'],
                 maxActiveFields: 5,
+                maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars
                 filters: {
                     tags: [],
                     minBalance: null,
                     maxBalance: null,
-                    type: null,
+                    type: '',
                     archived: false
                 },
                 showFilters: false,
@@ -293,7 +294,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                this.putConfig();
+                this.updateConfig();
             },
             'search'(val, oldVal) {
                 this.page = 1;
@@ -379,7 +380,7 @@
                     // this.$refs.spinner.hide();
                     //TODO add error alert
                 }).then(() => {
-                    this.putConfig();
+                    this.updateConfig();
                 });
             }
         },

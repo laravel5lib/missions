@@ -13,10 +13,7 @@
             <div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }">
                 <label for="tags" class="col-sm-2 control-label">Tags</label>
                 <div class="col-sm-10">
-                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
-                    <select hidden id="tags" name="tags" v-model="tags" multiple v-validate="'required'">
-                        <option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
-                    </select>
+                    <v-select @keydown.enter.prevent=""  id="tags" class="form-control" name="tags" v-validate="'required'" multiple v-model="tags" :options="tagOptions"></v-select>
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: type, handle: 'type' }">

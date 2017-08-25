@@ -1,7 +1,7 @@
 <template>
     <div>
         <mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
-            <reservations-filters ref="filters" :filters="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
+            <reservations-filters ref="filters" v-model="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="getReservations" storage="DashboardReservations" :starter="startUp" :facilitator="isFacilitator" :trip-specific="!!tripId"></reservations-filters>
         </mm-aside>
         <div class="row">
             <div class="col-xs-12 tour-step-find">
@@ -111,7 +111,7 @@
                                         <div class="col-sm-3">
                                             <span class="text-success">
                                             {{ reservation.percent_raised }}% &middot;
-                                            </span> <small class="text-muted">{{ reservation.total_raised | currency }} of {{ reservation.total_cost | currency }}</small>
+                                            </span> <small class="text-muted">{{ currency(reservation.total_raised) }} of {{ currency(reservation.total_cost) }}</small>
                                             <br>
                                             <tooltip effect="scale" placement="top" content="Complete">
                                                 <span class="label label-success">{{ complete(reservation) }}</span>
@@ -196,7 +196,6 @@
                     todoStatus: null,
                     requirementName: '',
                     requirementStatus: '',
-                    due: '',
                     dueStatus: '',
                     rep: '',
                     sort: 'created_at',
@@ -262,14 +261,14 @@
         watch: {
             'layout'(val, oldVal) {
                 if (val !== oldVal && !this.startUp)
-                    this.putConfig();
+                    this.updateConfig();
             },
             // watch filters obj
             'filters': {
                 handler(val, oldVal) {
                     if (this.startUp)
                         return;
-                    this.putConfig();
+                    this.updateConfig();
                 },
                 deep: true
             },
@@ -279,7 +278,7 @@
             },
             'includeManaging'(val, oldVal) {
                 if (val !== oldVal && !this.startUp) {
-                    this.putConfig();
+                    this.updateConfig();
                     this.pagination.current_page = 1;
                     this.getReservations();
                 }
@@ -287,7 +286,7 @@
             'per_page'(val, oldVal) {
                 if (this.startUp)
                     return;
-                this.putConfig();
+                this.updateConfig();
                 this.getReservations();
             }
         },

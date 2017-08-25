@@ -245,7 +245,39 @@ Vue.component('tabs', VueStrap.tabset);
 Vue.component('tab', VueStrap.tab);
 Vue.component('tooltip', VueStrap.tooltip);
 Vue.component('vSelect', require('vue-select'));
-// import myDatepicker from 'vue-datepicker/vue-datepicker-1.vue'
+Vue.component('phone-input', {
+    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
+    props: {
+        value: { type: String, default: '' },
+        label: { type: String, default: '' },
+        placeholder: { type: String, default: '(123) 456-7890' },
+
+    },
+    methods: {
+        updateValue(value) {
+            if (value === '') {
+                this.$refs.input.value = value;
+            } else {
+                this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
+            this.$emit('input', this.$refs.input.value);
+        },
+        formatValue() {
+            if (this.value === '') {
+                this.$refs.input.value = this.value;
+            } else {
+                this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            }
+        },
+        selectAll(event) {
+            // Workaround for Safari bug
+            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
+            setTimeout(function () {
+                event.target.select()
+            }, 0)
+        }
+    }
+});
 // import myDatepicker from './components/date-picker.vue'
 import myDatepicker from './components/date-picker.vue'
 Vue.component('date-picker', myDatepicker);
@@ -256,8 +288,6 @@ Vue.component('bootstrap-alert-error', {
 });
 // Vue Cookie
 Vue.use(require('vue-cookie'));
-// Vue Resource
-// Vue.use(require('vue-resource'));
 // Vue Validator
 Vue.use(require('vee-validate'));
 // Vue Textarea Autosize
@@ -269,7 +299,7 @@ import axios from 'axios';
 axios.defaults.baseURL = '/api';
 Vue.prototype.$http = axios;
 // Resource duplicate of vue-resource for axios
-// Inspired from https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
+// Inspired by https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
 let URI = require('urijs');
 let URITemplate = require('urijs/src/URITemplate');
 function Resource (url, params, actions, options) {
@@ -322,7 +352,6 @@ function opts(action, args) {
     let options = Object.assign({}, action), params = {}, body;
     // Use URI Template
     let template = new URITemplate(options.url);
-    options.url = template.expand(args[0]);
     switch (args.length) {
 
         case 2:
@@ -351,10 +380,11 @@ function opts(action, args) {
     }
 
     options.data = body;
-    options.params = Object.assign({}, options.params, params);
+    options.params = Object.assign({}, action.params, options.params, params);
+    options.url = template.expand(options.params);
 
     // clean variables from params if used in url template
-    let usedParams = _.pluck(template.parts[1].variables, 'name');
+    let usedParams = _.isObject(template.parts[1]) ? _.pluck(template.parts[1].variables, 'name') : [];
     _.each(usedParams, function (param) {
         delete options.params[param]
     });
@@ -380,66 +410,6 @@ Vue.filter('phone', (phone) => {
     if (phone === '') return phone;
     return phone.replace(/[^0-9]/g, '')
         .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-});
-Vue.component('phone-input', {
-    template: '<div><label for="infoPhone" v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder" v-validate="validation"></div>',
-    props: {
-        value: { type: String, default: '' },
-        label: { type: String, default: '' },
-        placeholder: { type: String, default: '(123) 456-7890' },
-        validation: { type: String, default: '' },
-
-    },
-    methods: {
-        updateValue(value) {
-            if (value === '') {
-                this.$refs.input.value = value;
-            } else {
-                this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-            }
-        },
-        formatValue() {
-            if (this.value === '') {
-                this.$refs.input.value = this.value;
-            } else {
-                this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-            }
-        },
-        selectAll(event) {
-            // Workaround for Safari bug
-            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
-            setTimeout(function () {
-                event.target.select()
-            }, 0)
-        }
-    }
-});
-Vue.component('datetime-input', {
-    template: '<div><label v-if="label" v-text="label"></label><input ref="input" type="text" id="infoPhone" class="form-control" :value="value" @input="updateValue($event.target.value)" @focus="selectAll" @blur="formatValue" :placeholder="placeholder"></div>',
-    props: {
-        value: { type: String, default: '' },
-        label: { type: String, default: '' },
-        validation: { type: String, default: '' },
-        format: { type: String, default: 'YYYY-MM-DD HH:mm:ss' },
-        placeholder: { type: String, default: '(123) 456-7890' },
-        diff: { type: Boolean, default: false},
-        noLocal: { type: Boolean, default: false},
-    },
-    methods: {
-        updateValue(value) {
-            this.$refs.input.value = value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-        },
-        formatValue() {
-            this.$refs.input.value = this.value.replace(/[^0-9]/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
-        },
-        selectAll(event) {
-            // Workaround for Safari bug
-            // http://stackoverflow.com/questions/1269722/selecting-text-on-focus-using-jquery-not-working-in-safari-and-chrome
-            setTimeout(function () {
-                event.target.select()
-            }, 0)
-        }
-    }
 });
 
 Vue.filter('number', (number, decimals) => {
@@ -536,6 +506,8 @@ Vue.filter('underscoreToSpace', (value) => {
 });
 
 Vue.filter('capitalize', (string) => {
+    if (!string) return string;
+    if (!_.isString(string)) string = string.toString();
     return string.replace(/\w\S*/g, function(txt){
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
@@ -646,8 +618,8 @@ Vue.directive('error-handler', {
             let storedValue = JSON.parse(el.dataset.storage);
             // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
             // the directive we want to watch it using the error-handler mixin
-            vnode.context.handleValidationClass(el, vnode.context, storedValue);
-            vnode.context.handleValidationMessages(el, vnode.context, storedValue, val);
+            vnode.context.handleValidationClass(el, storedValue);
+            vnode.context.handleValidationMessages(el, storedValue);
         }, { deep: true });
 
 
@@ -679,9 +651,9 @@ Vue.mixin({
             let list = _.sortBy(arr, prop);
             return direction === -1 ? _.reverse(list) : list
         },
-        currency(number) {
+        currency(number, symbol = '$') {
             if (!isNaN(number)) {
-                return '$' + (Number(number).toFixed(2));
+                return symbol + (Number(number).toFixed(2));
             }
             return number
         },

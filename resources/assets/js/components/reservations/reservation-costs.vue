@@ -64,11 +64,11 @@
                                 {{ cost.description }}
                                 <hr class="divider">
                             </p>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple name="costs" v-validate="'required'" v-model="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
+                            <!--<select hidden="" v-model="user_id" multiple>
                                 <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                            </select>
+                            </select>-->
                         </div>
                     </form>
 

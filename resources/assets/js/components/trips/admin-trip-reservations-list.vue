@@ -418,7 +418,7 @@
                     <td v-if="isActive('group')">{{reservation.trip.data.group.data.name|capitalize}}</td>
                     <td v-if="isActive('campaign')">{{reservation.trip.data.campaign.data.name|capitalize}}</td>
                     <td v-if="isActive('type')">{{reservation.trip.data.type|capitalize}}</td>
-                    <td v-if="isActive('total_raised')">{{reservation.total_raised|currency}}</td>
+                    <td v-if="isActive('total_raised')">{{currency(reservation.total_raised)}}</td>
                     <td v-if="isActive('percent_raised')">{{reservation.percent_raised.toFixed(2)}}%</td>
                     <td v-if="isActive('registered')">{{reservation.created_at|moment('ll')}}</td>
                     <td v-if="isActive('gender')">{{reservation.gender|capitalize}}</td>
@@ -676,7 +676,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                this.putConfig();
+                this.updateConfig();
             },
             'search'(val, oldVal) {
                 this.page = 1;
@@ -841,7 +841,7 @@
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }).then(() => {
-                    this.putConfig();
+                    this.updateConfig();
                     // this.$refs.spinner.hide();
                 })
             },

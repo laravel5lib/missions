@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-sm-4 text-center">
                         <label>Cost</label>
-                        <p>{{ cost.amount|currency }}</p>
+                        <p>{{ currency(cost.amount) }}</p>
                     </div>
                 </div>
                 <hr class="divider">
@@ -81,7 +81,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <strong>Note!</strong> Please, check payments.
                 </div>
-                <payment-manager :id="cost.id" :cost="cost" :payments="cost.payments.data"></payment-manager>
+                <payment-manager v-if="cost.payments" :id="cost.id" :cost="cost" :payments="cost.payments.data"></payment-manager>
             </div>
             <hr class="divider">
         </template>
@@ -118,7 +118,7 @@
                                             <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-create')}">
                                                 <label for="newCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')" name="costActive" v-validate="'required'"></date-picker>
+                                                <date-picker input-sm v-model="newCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="costActive" v-validate="'required'"></date-picker>
                                                 <!--<input type="datetime" id="newCost_active_at" class="form-control hidden"
                                                        v-model="newCost.active_at" name="costActive" v-validate="'required'">-->
                                             </div>
@@ -179,7 +179,7 @@
                                             <div class="form-group" :class="{'has-error': errors.has('costActive', 'cost-edit')}">
                                                 <label for="selectedCost_active_at">Active</label>
                                                 <br>
-                                                <date-picker :input-sm="true" :model="selectedCost.active_at|moment('YYYY-MM-DD HH:mm:ss')" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
+                                                <date-picker input-sm v-model="selectedCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']" data-vv-value-path="model" name="costActive" v-validate="'required'"></date-picker>
                                                 <!--<input type="datetime" id="selectedCost_active_at" class="form-control hidden"
                                                        v-model="selectedCost.active_at" name="costActive" v-validate="'required'">-->
                                             </div>
@@ -415,13 +415,13 @@
             debouncedSearch: _.debounce(function () { this.searchCosts() }, 250),
             searchCosts(){
                 // this.$refs.spinner.show();
-                this.$http.get(`costs`, {
+                this.$http.get('costs', { params: {
                     include: 'payments',
                     assignment: this.assignment + '|' + this.id,
                     search: this.search,
                     sort: this.sort,
                     type: this.filters.type
-                }).then((response) => {
+                }}).then((response) => {
                     this.costs = response.data.data;
                     // this.$refs.spinner.hide();
                     this.checkPaymentsSync();

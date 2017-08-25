@@ -193,7 +193,7 @@
                     this.selectedTodo = todo;
                 }
 
-                this.putTodo();
+                this.updateTodo();
             },
             changeFilter(status) {
                 this.filterBy = status;

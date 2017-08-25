@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="help-block" v-if="$CreateUser.passwordGroup.invalid && attemptSubmit">Passwords do not match!</div>
+                    <div class="help-block" v-if="password !== password_confirmation && errors.has('password') && errors.has('passwordconfirmation')">Passwords do not match!</div>
                     <div class="help-block">Password must be at least 8 characters long</div>
                 </div>
             </div>
@@ -224,7 +224,7 @@
                             <input type="radio" name="gender" id="gender" value="Male" v-model="gender" v-validate="'required'"> Male
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="gender2" id="gender2" value="Female" v-model="gender" v-validate:gender> Female
+                            <input type="radio" name="gender" id="gender2" value="Female" v-model="gender"> Female
                         </label>
                     </div>
                 </div>
@@ -235,7 +235,7 @@
                             <input type="radio" name="status" id="status" value="Single" v-model="status" v-validate="'required'"> Single
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="status2" id="status2" value="Married" v-model="status" v-validate:status> Married
+                            <input type="radio" name="status" id="status2" value="Married" v-model="status"> Married
                         </label>
                     </div>
                 </div>
@@ -280,19 +280,13 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
-                            <option :value="country.code" v-for="country in countries">{{country.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" name="country" class="form-control" id="country" v-model="countryCodeObj" v-validate="'required'" :options="UTILITIES.countries" label="name"></v-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div  v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="timezones"></v-select>
-                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
-                            <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" name="timezone" v-validate="'required'" class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                     </div>
                 </div>
             </div>
@@ -321,7 +315,7 @@
                         <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
+                        <input type="radio" name="public" id="public2" :value="false" v-model="public"> Private
                     </label>
                 </div>
             </div>
@@ -352,10 +346,11 @@
 <script type="text/javascript">
     import vSelect from "vue-select";
     import errorHandler from'../error-handler.mixin';
+    import utilities from '../utilities.mixin'
     export default{
         name: 'admin-user-create',
         components: {vSelect},
-        mixins: [errorHandler],
+        mixins: [utilities, errorHandler],
         data(){
             return {
                 name: '',
@@ -365,8 +360,6 @@
                 password_confirmation: '',
                 bio: '',
                 status: '',
-                birthday: null,
-                country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -383,9 +376,7 @@
 //                typeOptions: ['church', 'business', 'nonprofit', 'youth', 'other'],
                 attemptSubmit: false,
                 showError: false,
-                countries: [],
                 countryCodeObj: null,
-                timezones: [],
                 showPassword: false,
                 timezoneObj: null,
                 dobMonth: null,
@@ -404,13 +395,21 @@
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             },
-            birthday() {
-                return this.dobYear && this.dobMonth && this.dobDay
+            birthday: {
+                get() {
+                    return this.dobYear && this.dobMonth && this.dobDay
                         ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
                         : null;
+                },
+                set() {
+
+                }
             }
         },
         methods: {
@@ -419,7 +418,7 @@
                     if (result) {
                         let resource = this.$resource('users');
 
-                        resource.post(null, {
+                        resource.post({}, {
                             name: this.name,
                             email: this.email,
                             alt_email: this.alt_email,
@@ -454,13 +453,9 @@
             }
         },
         mounted(){
-            let countriesPromise = this.$http.get('utilities/countries').then((response) => {
-                this.countries = response.data.countries;
-            });
-
-            let timezonesPromise = this.$http.get('utilities/timezones').then((response) => {
-                this.timezones = response.data.timezones;
-            });
+            let promises = [];
+            promises.push(this.getCountries());
+            promises.push(this.getTimezones());
         }
     }
 </script> 

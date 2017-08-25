@@ -43,9 +43,6 @@
 						<label class="control-label">Trips</label>
 						<v-select @keydown.enter.prevent="" class="form-control" multiple v-model="selectedTrips" :options="availableTrips"
 								  label="name"></v-select>
-						<select hidden v-model="selectedTrips" multiple>
-							<option :value="trip" v-for="trip in availableTrips">{{trip.name}}</option>
-						</select>
 					</div>
 				</form>
 

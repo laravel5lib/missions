@@ -62,7 +62,7 @@
                                 </li>
                                 <li>
                                     <label class="small" style="margin-bottom: 0px;">
-                                        <input type="checkbox" v-model="reservations_count" value="trips" :disabled="maxCheck('reservations_count')"> Active Reservations
+                                        <input type="checkbox" v-model="activeFields" value="trips" :disabled="maxCheck('reservations_count')"> Active Reservations
                                     </label>
                                 </li>
                             </template>
@@ -308,7 +308,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                // this.putConfig();
+                // this.updateConfig();
             },'orderByField'(val, oldVal) {
                 this.searchGroups();
             },

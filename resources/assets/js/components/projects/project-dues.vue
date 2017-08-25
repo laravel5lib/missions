@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label>Balance Due</label>
-                        <p>{{ due.balance | currency }}</p>
+                        <p>{{ currency(due.balance) }}</p>
                         <hr class="divider inv hidden-lg">
                     </div>
                     <div class="col-md-6">

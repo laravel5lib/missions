@@ -117,7 +117,7 @@
 				}
 
 				var resource = this.$resource('trips');
-				resource.post(null, this.wizardData).then((resp) => {
+				resource.post({}, this.wizardData).then((resp) => {
 					window.location.href = '/admin' + resp.data.data.links[0].uri;
 				}, (error) =>  {
 					console.log(error);

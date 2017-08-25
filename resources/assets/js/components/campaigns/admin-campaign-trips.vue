@@ -193,7 +193,7 @@
 
                         <td v-if="isActive('rep')" v-text="trip.rep"></td>
                         <td v-if="isActive('spots')" v-text="trip.spots"></td>
-                        <td v-if="isActive('starting_cost')">{{trip.starting_cost | currency}}</td>
+                        <td v-if="isActive('starting_cost')">{{currency(trip.starting_cost)}}</td>
                         <td v-if="isActive('companion_limit')" v-text="trip.companion_limit"></td>
                         <td v-if="isActive('difficulty')">{{trip.difficulty|capitalize}}</td>
                         <td v-if="isActive('created_at')">{{trip.created_at|moment('ll')}}</td>
@@ -289,7 +289,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                // this.putConfig();
+                // this.updateConfig();
             },
             'filters': {
                 handler(val) {

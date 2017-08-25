@@ -14,13 +14,8 @@
 				<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 					<div class="col-sm-12">
 						<label for="country">Country</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries"
-						          label="name"></v-select>
-						<select hidden name="country" id="country" class="hidden" v-model="country_code"
-						        v-validate="'required'">
-							<option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-						</select>
-
+						<v-select @keydown.enter.prevent=""  class="form-control" name="country" id="country" v-model="countryCodeObj" :options="UTILITIES.countries"
+						          label="name" v-validate="'required'"></v-select>
 					</div>
 				</div>
 				<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
@@ -38,17 +33,17 @@
 						<label for="started_at">Dates</label>
 						<div class="row">
 							<div class="col-sm-6">
-								<date-picker addon="Start" :model="started_at|moment('MM-DD-YYYY HH:mm:ss')" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" name="start" v-validate="'required'"></date-picker>
+								<date-picker addon="Start" v-model="started_at" :view-format="['MM-DD-YYYY HH:mm:ss']" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" name="start" v-validate="'required'"></date-picker>
 								<!--<input type="datetime" class="form-control hidden" v-model="started_at|moment('MM-DD-YYYY HH:mm:ss')" id="started_at"
 								       name="start" v-validate="'required'" required>-->
 								<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
 									<span class="input-group-addon">Start</span>
-									<date-picker class="form-control" :model="started_at|moment('MM-DD-YYYY HH:mm:ss')"></date-picker>
+									<date-picker class="form-control" v-model="started_at" :view-format="['MM-DD-YYYY HH:mm:ss']"></date-picker>
 								</div>-->
 								<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 							</div>
 							<div class="col-sm-6">
-								<date-picker :model="ended_at|moment('MM-DD-YYYY HH:mm:ss')" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" name="end" v-validate="'required'"></date-picker>
+								<date-picker v-model="ended_at" :view-format="['MM-DD-YYYY HH:mm:ss']" addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" name="end" v-validate="'required'"></date-picker>
 								<!--<input type="datetime" class="form-control hidden" v-model="ended_at|moment('MM-DD-YYYY HH:mm:ss')" id="ended_at"
 								       :min="started_at"
 								       name="end" v-validate="'required'" required>-->
@@ -64,7 +59,7 @@
 				<div class="form-group">
 					<div class="col-sm-12">
 						<label for="published_at">Published</label>
-						<date-picker :model="published_at|moment('MM-DD-YYYY HH:mm:ss')"></date-picker>
+						<date-picker v-model="published_at" :view-format="['MM-DD-YYYY HH:mm:ss']"></date-picker>
 						<!--<div class="input-group">
 							<span class="input-group-btn">
 								<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
@@ -126,13 +121,13 @@
 						<div class="collapse" id="avatarCollapse">
 							<div class="well">
 								<upload-create-update type="avatar" lock-type is-child
-								                      :tags="['Campaign']"></upload-create-update>
+								                      :tags="['Campaign']" @uploads-complete="uploadsComplete"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 						<div class="collapse" id="bannerCollapse">
 							<div class="well">
 								<upload-create-update type="banner" lock-type is-child
-								                      :tags="['Campaign']"></upload-create-update>
+								                      :tags="['Campaign']" @uploads-complete="uploadsComplete"></upload-create-update>
 							</div>
 						</div><!-- end collapse -->
 					</div><!-- end col -->
@@ -211,7 +206,7 @@
                 this.$validator.validateAll().then(result => {
                     if (result) {
                         // this.$refs.spinner.show();
-                        this.resource.post(null, {
+                        this.resource.post({}, {
                             name: this.name,
                             country_code: this.country_code,
                             short_desc: this.short_desc,
@@ -238,7 +233,7 @@
 			}
 		},
 		events: {
-			'uploads-complete'(data){
+			uploadsComplete(data){
 				switch (data.type) {
 					case 'avatar':
 						this.selectedAvatar = data;

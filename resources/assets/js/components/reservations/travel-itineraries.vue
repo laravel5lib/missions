@@ -100,13 +100,11 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'TravelItineraries',
 
                 editMode: true,
                 itinerary: null,
                 activityTypes: [],
-                returningOnOwn: false,
+//                returningOnOwn: false,
 	            showResetModal: false,
             }
         },
@@ -147,15 +145,18 @@
                 });
 
             },
-            returningOnOwn() {
-                return this.itinerary.items && _.some(this.itinerary.items, (item) => {
-                    if (item.activity.activity_type_id === this.departureType.id) {
-                       return !item.transport && !item.hub;
-                    }
-                    return false;
-                });
+            returningOnOwn: {
+                get() {
+                    return this.itinerary.items && _.some(this.itinerary.items, (item) => {
+                        if (item.activity.activity_type_id === this.departureType.id) {
+                            return !item.transport && !item.hub;
+                        }
+                        return false;
+                    });
+                },
+	            set() {}
             },
-			'isLocked': function() {
+			isLocked() {
 				if (this.isAdminRoute)
 					return false;
 
@@ -239,36 +240,34 @@
             saveItinerary(itinerary){
                 // trigger validation styles
                 this.$emit('validate-itinerary');
-                let isInvalid = false;
+
                 // iterate through each itinerary item and check validation status of each child form
-                isInvalid = _.some(this.$refs.items, function (item) {
-                    return _.some(this.$refs.items[0].$children, function (child) {
-                        let vState = child.$TravelTransport || child.$TravelHub || child.$TravelActivity;
-                        console.log(child.validatorHandle + ' invalid: ' + vState.invalid);
-                        return vState.invalid;
+                let validations = [];
+                _.each(this.$refs.items, item => {
+                    _.each(item.$children, child => {
+                        validations.push(child.$validator.validateAll());
                     });
                 });
 
-                if (isInvalid) {
-                    this.$root.$emit('showError', 'Please check your itinerary form.');
-                    return;
-                }
+                Promise.all(validations).then(results => {
+                    if (_.contains(results, false)) {
+                        this.$root.$emit('showError', 'Please check your itinerary form.');
+                        return;
+                    }
 
-                // if (this.returningOnOwn)
-                //    itinerary.items.pop();
-
-                return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then((response) => {
-                    //this.itinerary = response.data.data;
-                    let it = this.setupItinerary(response.data.data);
-                    this.editMode = false;
-                    this.setItinerary(response.data.data);
-                    this.$emit('showSuccess', 'Itinerary Saved');
-                    return it
-                },
-                    (response) =>  {
-                        console.log(response);
+                    return this.$http.post('itineraries/travel', itinerary, { params: { 'include': 'activities.hubs,activities.transports'}}).then((response) => {
+                            //this.itinerary = response.data.data;
+                            let it = this.setupItinerary(response.data.data);
+                            this.editMode = false;
+                            this.setItinerary(response.data.data);
+                            this.$emit('showSuccess', 'Itinerary Saved');
+                            return it
+                        },
+                        (response) =>  {
+                            console.log(response);
 //                        return response.data.data;
-                    });
+                        });
+                })
             },
             updateItinerary(itinerary){
                 // trigger validation styles
@@ -412,10 +411,6 @@
 	        },
 	        toggleEditMode() {
 	            this.editMode = true;
-	            this.$nextTick(() =>  {
-                    if ( _.isFunction(this.$validate) )
-
-                });
 	        },
             toggleResetModal(){
 	            this.showResetModal = !this.showResetModal;

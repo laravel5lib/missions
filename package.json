@@ -54,7 +54,6 @@
     "vue": "^1.0.28",
     "vue-autosize": "^0.1.3",
     "vue-cookie": "^1.1.3",
-    "vue-datepicker": "^1.3.0",
     "vue-datetime-picker": "^0.2.1",
     "vue-node": "^1.0.0",
     "vue-resource": "^1.3.4",

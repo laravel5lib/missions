@@ -5,8 +5,7 @@
                 <div class="input-group">
                     <input class="form-control input-md" 
                            placeholder="Search reports by name..." 
-                           v-model="search" 
-                           debounce="250">
+                           v-model="search" @keyup="debouncedSearch">
                     <span class="input-group-addon input-md"><i class="fa fa-search"></i></span>
                 </div>
             </div>
@@ -109,6 +108,7 @@
     </div>
 </template>
 <script type="text/javascript">
+    import _ from 'underscore';
     import adminDeleteModal from '../admin-delete-modal.vue';
     export default{
         name: 'reports-list',
@@ -134,7 +134,6 @@
         watch: {
             search(val, oldval) {
                 this.pagination.current_page = 1;
-                this.fetch();
             }
         },
         computed: {
@@ -143,6 +142,7 @@
             }
         },
         methods: {
+            debouncedSearch: _.debounce(function() { this.fetch(); }, 250),
             fetch() {
                 this.$http.get(`users/${this.user}/reports?search=${this.search}`).then((response) => {
                     this.reports = response.data.data;

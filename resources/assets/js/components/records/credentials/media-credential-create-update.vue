@@ -22,10 +22,7 @@
                             <div class="col-sm-6" v-if="forAdmin">
                                 <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                     <label for="infoManager">Record Manager</label>
-                                    <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                                        <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                                    </select>
+                                    <v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                                 </div>
                             </div>
 						</div>
@@ -59,7 +56,7 @@
 						<template v-if="QA.type === 'checkbox'">
 							<template v-if="QA.id === 'role'">
 								<!-- start roles checklist -->
-								<div class="panel panel-default" v-error-handler="{ value: QA.options, handle: 'roles', class: 'panel-danger has-error', messages: { min: 'Please select at least one role.'} }">
+								<div class="panel panel-default" v-error-handler="{ value: QA.options, handle: 'roles', class: 'panel-danger has-error', messages: { req: 'Please select at least one role.'} }">
 									<div class="panel-heading">
 										<h5 v-text="QA.q"></h5>
 									</div>
@@ -69,11 +66,11 @@
 												<template v-for="(choice, choiceIndex) in QA.options">
 													<template v-if="choiceIndex % 2 == 0">
 														<label>
-															<input type="checkbox" v-model="choice.value" :checked="choice.value" name="roles" v-validate="choiceIndex === 0 ? 'required' : void 0">
+															<input type="checkbox" v-model="choice.value" :checked="choice.value" name="roles" v-validate="choiceIndex === 0 ? 'required' : ''">
 															{{ choice.name }}
 														</label>
 														<div v-if="choice.value">
-															<div class="row" v-error-handler="{ value: choice.proficiency, client: 'proficiencyEven' + choiceIndex, messages: { req: 'Please select at proficiency level.'} }">
+															<div class="row" v-error-handler="{ value: choice.proficiency, client: 'proficiencyEven' + choiceIndex, messages: { req: 'Please select a proficiency level.'} }">
 																<div class="col-md-2">
 																	<span class="help-block">Proficiency: </span>
 																</div>
@@ -82,10 +79,10 @@
 																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate="!!choice.value ? 'required' : ''" value="beginner" v-model="choice.proficiency"> Beginner
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate value="intermediate" v-model="choice.proficiency"> Intermediate
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" value="intermediate" v-model="choice.proficiency"> Intermediate
 																	</label>
 																	<label class="radio-inline">
-																		<input type="radio" :name="'proficiencyEven' + choiceIndex" v-validate value="expert" v-model="choice.proficiency"> Expert
+																		<input type="radio" :name="'proficiencyEven' + choiceIndex" value="expert" v-model="choice.proficiency"> Expert
 																	</label>
 																	<div class="errors-block"></div>
 																</div>
@@ -256,7 +253,7 @@
                                                         <a class="badge" @click="confirmUploadNoteRemoval(upload)"><i class="fa fa-close"></i></a>
 												</li>
 											</ul>
-											<upload-create-update v-show="uploads.length < 1" type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"></upload-create-update>
+											<upload-create-update v-show="uploads.length < 1" type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
 										</div>
 									</div>
 								</div>
@@ -271,7 +268,7 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<date-picker :model="QA.a|moment('YYYY-MM-DD')" type="date" v-validate="'required'" :data-vv-name="'date' + indexQA" data-vv-value-path="model"></date-picker>
+									<date-picker v-model="QA.a" :view-format="['YYYY-MM-DD']" type="date" v-validate="'required'" :data-vv-name="'date' + indexQA" data-vv-value-path="value"></date-picker>
 									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + indexQA" v-validate="''">-->
 								</div>
 								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
@@ -322,13 +319,13 @@
 				</div>
 			</form>
 
-			<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Credential" :small="true">
+			<!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Credential" :small="true">
 				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
 				<div slot="modal-footer" class="modal-footer">
 					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
 					<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
 				</div>
-			</modal>
+			</modal>-->
 			<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
@@ -405,7 +402,7 @@
                 uploads: [],
                 upload_ids: [],
                 uploadCounter: 1,
-                attemptUploadDoc: false,
+                showSaveAlert: false,
 
                 // logic vars
                 selectedAvatar: null,
@@ -462,7 +459,7 @@
             disclaimer(val){
                 let contentIndex = _.findIndex(this.content, {id: 'disclaimer'});
                 this.content[contentIndex].a = val;
-            }
+            },
         },
         methods: {
             getUsers(search, loading){
@@ -472,11 +469,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -491,7 +485,7 @@
                         this.showError = true;
                         return;
                     }
-                    this.resource.post(null, {
+                    this.resource.post({}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
                         holder_type: 'users',

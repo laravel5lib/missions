@@ -98,7 +98,7 @@
                         <div class="col-sm-6">
                             <div :class="{ 'has-error': errors.has('phone') }">
                                 <label for="infoPhone">Billing Phone</label>
-                                <phone-input v-model="cardPhone" id="infoPhone" name="phone" validation="'required|oneOrOther'"></phone-input>
+                                <phone-input v-model="cardPhone" id="infoPhone" name="phone" v-validate="'required|oneOrOther'"></phone-input>
                                 <!--<input type="tel" class="form-control input" v-model="cardPhone | phone" name="phone="['oneOrOther']" id" v-validate="infoPhone">-->
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                     </dl>
                     <hr>
                     <p class="list-group-item-text">Recipient: {{recipient}}</p>
-                    <p class="list-group-item-text">Amount to be charged immediately: {{amount|currency}}</p>
+                    <p class="list-group-item-text">Amount to be charged immediately: {{currency(amount)}}</p>
                 </div>
                 <div class="panel-footer">
                     <a @click="goToState('form')" class="btn btn-default">Reset</a>

@@ -34,12 +34,12 @@
                                 <div class="col-sm-12">
                                     <div class="collapse" id="avatarCollapse">
                                         <div class="well">
-                                            <upload-create-update v-if="!startUp" type="avatar" :name="id || 'avatar'" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="avatar" :name="id || 'avatar'" lock-type ui-locked :ui-selector="2" is-child :is-update="!!avatar_upload_id" :upload-id="avatar_upload_id" :tags="['User']"  @uploads-complete="uploadsComplete"></upload-create-update>
                                         </div>
                                     </div>
                                     <div class="collapse" id="bannerCollapse">
                                         <div class="well">
-                                            <upload-create-update v-if="!startUp" type="banner" :name="id || 'banner'" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['User']"></upload-create-update>
+                                            <upload-create-update v-if="!startUp" type="banner" :name="id || 'banner'" lock-type ui-locked :ui-selector="1" :per-page="6" is-child :tags="['User']"  @uploads-complete="uploadsComplete"></upload-create-update>
                                         </div>
                                     </div>
                                     <hr class="divider inv" />
@@ -339,6 +339,7 @@
     }
 </style>-->
 <script type="text/javascript">
+    import $ from 'jquery';
     import vSelect from "vue-select";
     import uploadCreateUpdate from '../uploads/admin-upload-create-update.vue';
     import errorHandler from'../error-handler.mixin';
@@ -434,24 +435,22 @@
                 return days;
             },
         },
-        events:{
-            'uploads-complete'(data){
+        methods: {
+            uploadsComplete(data){
                 switch(data.type){
                     case 'avatar':
                         this.selectedAvatar = data;
                         this.avatar_upload_id = data.id;
-                        jQuery('#avatarCollapse').collapse('hide');
+                        $('#avatarCollapse').collapse('hide');
                         break;
                     case 'banner':
                         this.selectedBanner = data;
                         this.banner_upload_id = data.id;
-                        jQuery('#bannerCollapse').collapse('hide');
+                        $('#bannerCollapse').collapse('hide');
                         break;
                 }
                 this.submit();
-            }
-        },
-        methods: {
+            },
             onTouched(){
                 this.hasChanged = true;
             },

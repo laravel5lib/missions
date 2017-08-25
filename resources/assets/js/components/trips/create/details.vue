@@ -13,10 +13,7 @@
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  class="form-control" id="group" v-model="groupObj" :options="groups" :on-search="getGroups"
-									  label="name"></v-select>
-							<select hidden v-model="group_id" name="group" v-validate="'required'">
-								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
-							</select>
+									  label="name" name="group" v-validate="'required'"></v-select>
 						</div>
 					</div>
 
@@ -38,11 +35,7 @@
 						<label class="col-sm-2 control-label">Perfect For</label>
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" v-model="prospectsObj"
-									  :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-							<select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
-								<option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
-								</option>
-							</select>
+									  :options="prospectsList" label="name" placeholder="Select Prospects" name="prospects" v-validate="'required'"></v-select>
 						</div>
 					</div>
 
@@ -78,7 +71,7 @@
 						<div class="col-sm-10">
 							<div class="row">
 								<div class="col-sm-6">
-									<date-picker addon="Start" :has-error= "errors.has('start')" :model="started_at|moment('YYYY-MM-DD HH:mm:ss')" name="start" v-validate="'required'"></date-picker>
+									<date-picker addon="Start" :has-error= "errors.has('start')" v-model="started_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="start" v-validate="'required'"></date-picker>
 									<!--<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 									       name="start" v-validate="'required'" required>-->
 									<!--<div class="input-group input-group-sm"
@@ -87,7 +80,7 @@
 									</div>-->
 								</div>
 								<div class="col-sm-6">
-									<date-picker addon="End" :has-error= "errors.has('end')" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')" name="end" v-validate="'required'"></date-picker>
+									<date-picker addon="End" :has-error= "errors.has('end')" v-model="ended_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="end" v-validate="'required'"></date-picker>
 									<!--<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 									       name="end" v-validate="'required'" required>-->
 									<!--<div class="input-group input-group-sm"

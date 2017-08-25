@@ -226,7 +226,7 @@
                             <input type="radio" name="gender" id="gender" value="male" v-model="gender" v-validate="'required'"> Male
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="gender2" id="gender2" value="female" v-model="gender" v-validate:gender> Female
+                            <input type="radio" name="gender" id="gender2" value="female" v-model="gender"> Female
                         </label>
                     </div>
                 </div>
@@ -237,7 +237,7 @@
                             <input type="radio" name="status" id="status" value="single" v-model="status" v-validate="'required'"> Single
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="status2" id="status2" value="married" v-model="status" v-validate:status> Married
+                            <input type="radio" name="status" id="status2" value="married" v-model="status"> Married
                         </label>
                     </div>
                 </div>
@@ -276,19 +276,13 @@
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label class="control-label" for="country" style="padding-top:0;margin-bottom: 5px;">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
-                            <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" name="country" v-validate="'required'" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                         <label for="timezone" class="control-label">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
-                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
-                            <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent=""  name="timezone" v-validate="'required'" class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                     </div>
                 </div>
             </div>
@@ -313,7 +307,7 @@
                         <input type="radio" name="public" id="public" :value="true" v-model="public"> Public
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="public2" id="public2" :value="false" v-model="public"> Private
+                        <input type="radio" name="public" id="public2" :value="false" v-model="public"> Private
                     </label>
                 </div>
             </div>
@@ -359,8 +353,8 @@
                 password_confirmation: null,
                 bio: '',
                 status: '',
-                birthday: null,
-                country_code: null,
+//                birthday: null,
+//                country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -389,13 +383,21 @@
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             },
-            birthday() {
-                return this.dobYear && this.dobMonth && this.dobDay
-                        ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
-                        : null;
+            birthday: {
+                get() {
+                    return this.dobYear && this.dobMonth && this.dobDay
+                            ? moment(this.dobMonth + '-' + this.dobDay + '-' + this.dobYear, 'MM-DD-YYYY').format('YYYY-MM-DD')
+                            : null;
+                },
+                set() {
+
+                }
             }
         },
         methods: {

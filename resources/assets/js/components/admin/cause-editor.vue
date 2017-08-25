@@ -26,14 +26,14 @@
         </div>
         <div class="panel-body">
             <label>Name</label>
-            <input class="form-control" v-model="cause.name" v-if="editMode" />
+            <input class="form-control" name="name" v-model="cause.name" v-if="editMode" />
             <p v-else>{{ cause.name }}</p>
             <label>Countries</label>
             <v-select @keydown.enter.prevent=""  class="form-control"
-                      multiple
+                      multiple name="countries"
                       id="country"
                       :value="cause.countries"
-                      :options="countries"
+                      :options="UTILITIES.countries"
                       label="name"
                       v-if="editMode">
             </v-select>
@@ -72,18 +72,15 @@
     </div>
 </template>
 <script>
-    import VueStrap from 'vue-strap/dist/vue-strap.min';
+    import utilities from '../utilities.mixin'
     import vSelect from 'vue-select';
     export default {
         name: 'cause-editor',
-        components: {
-            'alert': VueStrap.alert,
-            'v-select': vSelect
-        },
+        mixins: [utilities],
+        components: {vSelect},
         data() {
             return{
                 cause: {},
-                countries: [],
                 editMode: true,
                 showSuccess: false,
                 showError: false,
@@ -143,9 +140,7 @@
                 this.editMode = false;
             }
 
-            this.$http.get('utilities/countries').then((response) => {
-				this.countries = response.data.countries;
-			});
+            this.getCountries();
         }
     }
 </script>

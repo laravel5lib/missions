@@ -55,7 +55,7 @@
 															<div class="form-group"
 																 :class="{'has-error': errors.hasCost('costActive')}">
 																<label for="newCost_active_at">Active</label>
-																<date-picker :input-sm="true" :model="newCost.active_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+																<date-picker input-sm v-model="newCost.active_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 																<input type="datetime" id="newCost_active_at"
 																	   class="form-control input-sm hidden"
 																	   v-model="newCost.active_at"
@@ -103,7 +103,7 @@
 											<ul class="list-unstyled">
 												<li>{{ cost.type|capitalize }}</li>
 												<li>{{cost.active_at|moment}}</li>
-												<li>{{cost.amount|currency}}</li>
+												<li>{{currency(cost.amount)}}</li>
 											</ul>
 										</div>
 									</div>
@@ -120,7 +120,7 @@
 									</thead>
 									<tbody>
 									<tr v-for="payment in cost.orderByProp(payments, 'due_at')">
-										<td>{{payment.amount_owed|currency}}</td>
+										<td>{{currency(payment.amount_owed)}}</td>
 										<td>{{payment.percent_owed.toFixed(2)}}%</td>
 										<td>
 											<span v-if="payment.upfront">Upfront</span>
@@ -195,7 +195,7 @@
 													<div class="col-sm-6">
 														<div class="form-group">
 															<label for="dueAt">Due</label>
-															<date-picker :input-sm="true" :model="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+															<date-picker input-sm v-model="newPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 															<input id="dueAt" class="form-control input-sm hidden" type="datetime"
 																   v-model="newPayment.due_at" required>
 														</div>

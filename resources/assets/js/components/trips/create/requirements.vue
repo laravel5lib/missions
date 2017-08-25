@@ -58,7 +58,7 @@
 														<div class="col-sm-6">
 															<div class="form-group" :class="{'has-error': errors.has('due')}">
 																<label for="due_at">Due</label>
-																<date-picker :input-sm="true" :model="newReq.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+																<date-picker input-sm v-model="newReq.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="due" v-validate="'required'"></date-picker>
 																<!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
 																	   v-model="newReq.due_at">-->
 															</div>

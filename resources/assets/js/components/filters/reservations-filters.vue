@@ -6,7 +6,7 @@
 				<template v-if="isAdminRoute">
 					<div class="form-group">
 						<label>Travel Groups</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="debounced(getGroups)"
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 						          v-model="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
@@ -14,7 +14,7 @@
 				<template v-else>
 					<div class="form-group">
 						<label>Groups</label>
-						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="debounced(getGroups)"
+						<v-select @keydown.enter.prevent=""  class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
 						          v-model="groupsArr" :options="groupsOptions" label="name"
 						          placeholder="Filter Groups"></v-select>
 					</div>
@@ -23,7 +23,7 @@
 
 			<div class="form-group" v-if="propertyExists('campaign')">
 				<label>Campaign</label>
-				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="debounced(getCampaigns)"
+				<v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
 				          v-model="campaignObj" :options="campaignOptions" label="name"
 				          placeholder="Filter by Campaign"></v-select>
 			</div>
@@ -45,14 +45,14 @@
 
 				<div class="form-group" v-if="propertyExists('role')">
 					<label v-text="teams ? 'Role' : 'Desired Role'"></label>
-					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="debounced(getRolesSearch)"
+					<v-select @keydown.enter.prevent="" class="form-control" id="roleFilter" :debounce="250" :on-search="getRolesSearch"
 					          v-model="roleObj" :options="UTILITIES.roles" label="name"
 					          placeholder="Filter Roles"></v-select>
 				</div>
 
 				<div class="form-group" v-if="isAdminRoute && (propertyExists('users') || propertyExists('user'))">
 					<label>Managing Users</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="debounced(getUsers)"
+					<v-select @keydown.enter.prevent=""  class="form-control" id="userFilter" multiple :debounce="250" :on-search="getUsers"
 					          v-model="usersArr" :options="usersOptions" label="name"
 					          placeholder="Filter Users"></v-select>
 				</div>
@@ -318,7 +318,7 @@
         components: {vSelect},
 	    props: {
             // Main object that contains all filters used by the parent component for API calls
-			filters: {
+			value: {
 			    type: Object,
 				required: true,
 				default: null
@@ -405,7 +405,8 @@
                 repOptions: [],
                 dueOptions: [],
                 hasTransportation: null,
-                traveling: null
+                traveling: null,
+                filters: {},
             }
         },
 	    computed: {
@@ -414,22 +415,33 @@
             }
 	    },
 	    watch: {
-            'filters': {
+            'value': {
                 handler (val, oldVal) {
                     if (this.starter)
                         return;
 
                     if (val.campaign) {
-                        if (this.campaignObj == null) {
+                        if (this.campaignObj === null) {
                             this.campaignObj = _.findWhere(this.campaignOptions, {id: val.campaign});
                         }
                     }
 
-                    this.pagination.current_page = 1;
-                    this.callback();
+                    if (val !== oldVal) {
+                        this.filters = val;
+                        this.pagination.current_page = 1;
+                        this.callback();
+                    }
                 },
                 deep: true
             },
+		    filters:{
+                handler(val, oldVal) {
+                    if (val !== oldVal) {
+                        this.$emit('input', val);
+                    }
+                },
+			    deep: true
+		    },
             'campaignObj' (val) {
 		        this.filters.campaign = val ? val.id : null;
 		        if (val)
@@ -500,13 +512,6 @@
 
 	    },
         methods: {
-            // TODO Use actual debounce
-            debounced(func) {
-                let self = this;
-                setTimeout(function() {
-                    self[func]();
-                }, 250)
-            },
             propertyExists(property) {
                 // Instead of concerning the filters component about where it is
 	            // It is may be best to behave based on the filter object passed in
@@ -596,6 +601,7 @@
 
         },
         mounted(){
+	        this.filters = this.value;
             let self = this;
             this.$root.$on('reservations-filters:reset', () =>  {
                 // the reset callback handles reset of the filters object
@@ -606,7 +612,7 @@
             });
 
             this.$root.$on('reservations-filters:update:filter', function (filters) {
-				self.filters = _.extend(self.filters, val);
+				self.filters = _.extend(self.filters, filters);
             });
 
             this.$root.$on('reservations-filters:update-storage', () =>  {

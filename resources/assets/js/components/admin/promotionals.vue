@@ -5,7 +5,6 @@
                    :promoter-id="promoterId"
                    @load-view="toView"
                    @promotionalStatusChanged=""
-                   :id="id"
                    transition="fade" 
                    transition-mode="out-in">
         </component>
@@ -28,7 +27,7 @@
     import details from './promotionals/details.vue';
     export default {
         name: 'promotionals',
-        components: [list, createEdit, details],
+        components: {list, createEdit, details},
         props: {
           'promoterType': {
             type: String,

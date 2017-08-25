@@ -2,14 +2,14 @@
 	<div>
 		<form name="SponsorProjectForm" class="form-horizontal" novalidate>
 				<div class="form-group">
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('cause') }">
+					<div class="col-sm-6" v-error-handler="{ value: causeIdentifier, handle: 'cause' }">
 						<label for="cause">Choose a cause to support</label>
 						<select class="form-control" v-model="causeIdentifier" v-validate="'required'" name="cause" id="cause">
 							<option value="">Select a Cause</option>
 							<option :value="cause.id" v-for="cause in causes" v-text="cause.name"></option>
 						</select>
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('country') }">
+					<div class="col-sm-6" v-error-handler="{ value: country_code, handle: 'country' }">
 						<label for="country">Select a location</label>
 						<!--<v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="countries"
 								  label="name"></v-select>-->
@@ -21,17 +21,16 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('initiative') }">
+					<div class="col-sm-6" v-error-handler="{ value: initiativeIdentifier, handle: 'initiative' }">
 						<label for="initiative">Select a type</label>
 						<select class="form-control" v-model="initiativeIdentifier" v-validate="'required'" name="initiative">
 							<option value="">Select a type</option>
 							<option :value="initiative.id" v-for="initiative in availableInitiatives">{{initiative.type|capitalize}}</option>
 						</select>
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('end') }">
+					<div class="col-sm-6" v-error-handler="{ value: complete_at, handle: 'end' }">
 						<label for="name">Desired Completion Date</label>
 						<select class="form-control" v-validate="'required'" name="end" v-model="complete_at" required>
-							<option value="June 2017">June 2017</option>
 							<option value="Dec. 2017">December 2017</option>
 							<option value="June 2018">June 2018</option>
 							<option value="Dec. 2018">December 2018</option>
@@ -45,12 +44,12 @@
 					</div>
 					<!-- <div class="col-sm-6 text-center">
 						<label for="name">Cost Starting At</label>
-						<h1 class="text-success" v-text="total|currency"></h1>
+						<h1 class="text-success" v-text="currency(total)"></h1>
 					</div> -->
 				</div>
 
 				<div class="form-group">
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('projectname') }">
+					<div class="col-sm-6" v-error-handler="{ value: project_name, handle: 'projectname' }">
 						<label for="project_name">Project Name</label>
 						<input type="text" class="form-control" id="project_name"
 							   v-model="project_name"
@@ -58,21 +57,21 @@
 							   name="projectname" v-validate="'required|min:1|max:100'"
 							   maxlength="100" minlength="1" required>
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('name') }">
+					<div class="col-sm-6" v-error-handler="{ value: name, handle: 'name' }">
 						<label for="name">Your Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="name"
-							   placeholder="Annie Smith" v-validate="'required|min:1|max:100'"
+							   placeholder="Annie Smith" v-validate="'required|alpha_spaces|min:1|max:100'"
 							   maxlength="100" minlength="1" required>
 					</div>
 				</div>
 
 				<div class="row form-group">
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('email') }">
+					<div class="col-sm-6" v-error-handler="{ value: email, handle: 'email' }" >
 						<label for="name">Your Email</label>
-						<input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'required'">
+						<input type="email" class="form-control" name="email" id="email" v-model="email" v-validate="'required|email'">
 					</div>
-					<div class="col-sm-6" :class="{ 'has-error': errors.has('phone') }">
-						<phone-input v-model="phone_one" label="Your Phone" v-validate="'required'" data-vv-value-path="phone_one" data-vv-name="phone" :has-error="errors.has('phone')"></phone-input>
+					<div class="col-sm-6" v-error-handler="{ value: phone_one, handle: 'phone' }" >
+						<phone-input v-model="phone_one" label="Your Phone" v-validate="'required'" data-vv-value-path="value" name="phone"></phone-input>
 					</div>
 				</div>
 
@@ -86,7 +85,9 @@
 </template>
 <script type="text/javascript">
 	import $ from 'jquery';
+	import _ from 'underscore';
 	import vSelect from "vue-select";
+	import errorHandler from './error-handler.mixin'
 	export default{
 		name: 'sponsor-project-form',
 		props: {
@@ -100,6 +101,7 @@
 			},
 		},
 		components: {vSelect},
+		mixins: [errorHandler],
 		data(){
 			return {
 				project_name: '',

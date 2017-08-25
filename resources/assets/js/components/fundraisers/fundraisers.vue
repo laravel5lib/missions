@@ -11,7 +11,7 @@
             <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12 text-center">
                 <label>Current Fundraisers</label>
                 <div class="form-group form-group-md">
-                    <input type="text" class="form-control" placeholder="Start typing a fundraiser name..." v-model="search" debounce="250">
+                    <input type="text" class="form-control" placeholder="Start typing a fundraiser name..." v-model="search" @keyup="debouncedSearch">
                 </div><!-- /input-group -->
             </div>
         </div>
@@ -61,6 +61,7 @@
 
 </template>
 <script type="text/javascript">
+	import _ from 'underscore';
     export default{
         name: 'fundraisers',
         props: ['id', 'type'],
@@ -80,15 +81,11 @@
 				return this.fundraisersLimit;
 			}
         },
-        watch: {
-            search(val, oldVal) {
-                this.searchFundraisers();
-            },
-        },
         methods:{
             calcPath(fundraiser){
                 return fundraiser.sponsor.data.url + '/' + fundraiser.url;
             },
+            debouncedSearch: _.debounce(function() { this.searchFundraisers(); }, 250),
             searchFundraisers(){
                 this.$http.get('fundraisers', { params: {
                     active: true,

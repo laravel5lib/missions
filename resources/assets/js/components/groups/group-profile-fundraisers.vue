@@ -8,7 +8,7 @@
                     <div class="panel-body">
                         <h5>{{ fundraiser.name }}</h5>
                         <h6 style="text-transform:uppercase;letter-spacing:1px;font-size:10px;">Expires: {{ fundraiser.ended_at | moment('ll')  }}</h6>
-                        <h3><span class="text-success">{{ fundraiser.raised_amount | currency }}</span> <small>Raised</small></h3>
+                        <h3><span class="text-success">{{ currency(fundraiser.raised_amount) }}</span> <small>Raised</small></h3>
                         <p><span>{{ fundraiser.raised_percent.toFixed(2) }}</span>% <small>Funded</small> / <span>{{ fundraiser.donors_count }}</span> <small>Donors</small></p>
                         <div class="progress">
                             <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" :style="{ width: fundraiser.raised_percent + '%'}">

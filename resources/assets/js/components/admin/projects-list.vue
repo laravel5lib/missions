@@ -123,7 +123,7 @@
                 <td v-if="isActive('country')">{{ project.initiative.data.country.name|capitalize }}</td>
                 <td v-if="isActive('sponsor')">{{ project.sponsor.data.name|capitalize }}</td>
                 <td v-if="isActive('goal')">$ {{project.goal}}</td>
-                <td v-if="isActive('funds_raised')">{{project.amount_raised|currency}}</td>
+                <td v-if="isActive('funds_raised')">{{currency(project.amount_raised)}}</td>
                 <td v-if="isActive('percent_raised')">{{project.percent_raised}}%</td>
                 <td v-if="isActive('funded_at')">
                     <span v-if="project.funded">{{project.funded_at|moment('ll')}}</span>

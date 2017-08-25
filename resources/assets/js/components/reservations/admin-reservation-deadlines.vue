@@ -26,7 +26,7 @@
                     {{ deadline.name ? deadline.name : !deadline.cost_name ? deadline.cost_name : deadline.item  + ' Submission' }}
                 </td>
                 <td>{{ deadline.date | moment('lll') }}</td>
-                <td>{{ deadline.grace_period }} {{ pluralize(deadline.grace_period , 'day' )}}</td>
+                <td>{{ pluralize(deadline.grace_period , 'day' )}}</td>
                 <td>
                     <a class="btn btn-default btn-xs" @click="edit(deadline)"><i class="fa fa-pencil"></i></a>
                     <a class="btn btn-danger btn-xs" @click="remove(deadline)"><i class="fa fa-times"></i></a>
@@ -100,7 +100,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group" :class="{'has-error': errors.has('due')}">
                                             <label for="due_at">Due</label>
-                                            <date-picker :input-sm="true" :model="newDeadline.date|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                            <date-picker input-sm v-model="newDeadline.date" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
                                             <input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                    v-model="newDeadline.date" name="due" v-validate="'required'">
                                         </div>

@@ -37,7 +37,7 @@
 					<li><a href="/dashboard/settings"><i class="fa fa-cog" style="margin-left:1px;margin-right:8px;"></i> Settings</a></li>
 					<li><a href="/dashboard/reservations"><i class="fa fa-ticket" style="margin-right:7px;"></i> Reservations</a></li>
 					<li><a href="/dashboard/records"><i class="fa fa-archive" style="margin-right:7px;"></i> Records</a></li>
-					<li v-if="managing"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
+					<li v-if="normalizedManaging"><a href="/dashboard/groups"><i class="fa fa-users" style="margin-right:7px;"></i> Groups</a></li>
 					<li><a href="/dashboard/projects"><i class="fa fa-tint" style="margin-left:3px;margin-right:10px;"></i> Projects</a></li>
 
 				</template>
@@ -93,11 +93,8 @@
 		name: 'top-nav',
 		props: {
 			'managing': {
-				type: Boolean,
-				default: false,
-				coerce(val, oldVal) {
-					return parseInt(val) > 0;
-				}
+				type: String,
+				default: '0',
 			},
 		},
 		data(){
@@ -112,9 +109,9 @@
 			admin() {
 		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'admin') : false;
 			},
-			/*managing() {
-		        return this.auth ? this.$root.user : '';
-			},*/
+			normalizedManaging() {
+                return parseInt(this.managing) > 0;
+            },
 			name() {
 		        return this.auth ? this.$root.user.name : '';
 			},

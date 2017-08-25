@@ -11,11 +11,17 @@ export default {
                 DEFAULT: 'Field invalid.',
                 // Defaults
                 name: 'Please provide your name.',
+                contact: 'Please provide a contact name.',
+                position: 'Please provide a contact\'s position.',
+                email: 'Please provide an email address.',
+                phone: 'Please provide a phone number.',
+                type: 'Please select a type.',
                 given_names: 'Please provide the given names.',
                 givennames: 'Please provide the given names.',
                 surname: 'Please provide the surname.',
                 number: 'Please provide a valid number.',
                 country: 'Please select a country.',
+                timezone: 'Please select a timezone.',
                 password: 'Please enter your password.',
                 passwordconfirmation: 'Please enter your password again.',
                 issued: 'Please provide an issue date',
@@ -32,9 +38,14 @@ export default {
             }
         }
     },
+    computed: {
+        isFormDirty() {
+            return Object.keys(this.fields).some(key => this.fields[key].dirty || this.fields[key].touched);
+        }
+    },
     watch: {
         errors: {
-            handler: function(val){
+            handler(val){
                 this.$emit('errors', val);
             },
             deep: true
@@ -45,7 +56,7 @@ export default {
             //this.errors = {};
             //this.attemptSubmit = true;
         },
-        handleValidationClass(el, context, value) {
+        handleValidationClass(el, value) {
             let classTest = this.errors.has(value.client, value.scope || null) || this.SERVER_ERRORS[value.server];
             if (classTest) {
                 $(el).addClass(value.class || 'has-error');
@@ -54,18 +65,20 @@ export default {
             }
         },
 
-        handleValidationMessages(el, context, value, errors) {
-            //if (context) {
-
-            // Lets first package server errors to simply iterate
+        handleValidationMessages(el, value) {
+            let validationObject, genericMessage;
             let newMessages = [];
-            if (this.SERVER_ERRORS[value.server])
-                _.each(this.SERVER_ERRORS[value.server], function(error, index) {
-                    newMessages.push("<div class='help-block server-validation-error'>" + error + "</div>");
-                });
 
-            let genericMessage = this.ERROR_MESSAGES.DEFAULT;
-            let validationObject = _.findWhere(errors.items, { field: value.client});
+            // Lets first package server errors for iteration
+            if (this.SERVER_ERRORS[value.server]) {
+                _.each(this.SERVER_ERRORS[value.server], function (error, index) {
+                    newMessages.push(`<div class='help-block server-validation-error'>${error}</div>`);
+                    // newMessages.push(error);
+                });
+            }
+
+            genericMessage = this.ERROR_MESSAGES.DEFAULT;
+            validationObject = _.findWhere(this.errors.items, {field: value.client});
             if (_.isObject(validationObject)) {
                 if (validationObject.rule.includes('required')) {
                     // Grab message from storage if it exists or use generic default
@@ -74,11 +87,12 @@ export default {
                     if (value.messages && value.messages.req) {
                         reqMessage = value.messages.req;
                     } else {
-                        genericMessage = this.ERROR_MESSAGES[value.client] || genericMessage;
+                        genericMessage = this.ERROR_MESSAGES[value.client] || 'This field is required';
                         reqMessage = _.isObject(genericMessage) ? genericMessage.req : genericMessage;
                     }
 
-                    newMessages.push("<div class='help-block server-validation-error'>" + reqMessage + "</div>");
+                    // newMessages.push( reqMessage);
+                    newMessages.push(`<div class='help-block server-validation-error'>${reqMessage}</div>`);
                 }
 
                 if (validationObject.rule.includes('min')) {
@@ -90,8 +104,10 @@ export default {
                         genericMessage = this.ERROR_MESSAGES[value.client] || genericMessage;
                         minMessage = _.isObject(genericMessage) ? genericMessage.min : genericMessage;
                     }
-                    if (minMessage !== genericMessage)
-                        newMessages.push("<div class='help-block server-validation-error'>" + minMessage + "</div>");
+                    if (minMessage !== genericMessage) {
+                        // newMessages.push(minMessage);
+                        newMessages.push(`<div class='help-block server-validation-error'>${minMessage}</div>`);
+                    }
                 }
 
                 if (validationObject.rule.includes('max')) {
@@ -103,9 +119,12 @@ export default {
                         genericMessage = this.ERROR_MESSAGES[value.client] || genericMessage;
                         maxMessage = _.isObject(genericMessage) ? genericMessage.max : genericMessage;
                     }
-                    if (maxMessage !== genericMessage)
-                        newMessages.push("<div class='help-block server-validation-error'>" + maxMessage + "</div>");
+                    if (maxMessage !== genericMessage) {
+                        // newMessages.push(maxMessage);
+                        newMessages.push(`<div class='help-block server-validation-error'>${maxMessage}</div>`);
+                    }
                 }
+
                 // custom email validator
                 if (validationObject.rule.includes('email')) {
                     // Grab message from storage if it exists or use generic default
@@ -116,9 +135,12 @@ export default {
                         genericMessage = this.ERROR_MESSAGES[value.client] || genericMessage;
                         emailMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
                     }
-                    if (emailMessage !== genericMessage)
-                        newMessages.push("<div class='help-block server-validation-error'>" + emailMessage + "</div>");
+                    if (emailMessage !== genericMessage) {
+                        // newMessages.push(emailMessage);
+                        newMessages.push(`<div class='help-block server-validation-error'>${emailMessage}</div>`);
+                    }
                 }
+
                 // custom datetime validator
                 if (validationObject.rule.includes('date_format')) {
                     // Grab message from storage if it exists or use generic default
@@ -129,37 +151,39 @@ export default {
                         genericMessage = this.ERROR_MESSAGES[value.client] || genericMessage;
                         datetimeMessage = _.isObject(genericMessage) ? genericMessage.email : genericMessage;
                     }
-                    if (datetimeMessage !== genericMessage)
-                        newMessages.push("<div class='help-block server-validation-error'>" + datetimeMessage + "</div>");
+                    if (datetimeMessage !== genericMessage) {
+                        newMessages.push(datetimeMessage);
+                        newMessages.push(`<div class='help-block server-validation-error'>${datetimeMessage}</div>`);
+                    }
                 }
             }
-
-            // let messages = newMessages;
 
             // We want to keep track of listed errors and specify their location when displayed
             // Search for an '.errors-block' element as child to display messages in
             // If it does not exist we will place the error message after the input element
-
+            let scope = value.scope || null;
             let errorsBlock = el.getElementsByClassName('errors-block')[0] || false;
             if (errorsBlock) {
                 $(errorsBlock).find('.server-validation-error').remove();
-                if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, value.scope || null))
-                    $(errorsBlock).append(newMessages);
+                if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, scope)) {
+                    setTimeout(() => { $(errorsBlock).append(newMessages) }, 0);
+                }
             } else {
                 let inputGroup = $(el).hasClass('input-group') ? el : el.getElementsByClassName('input-group')[0];
                 let inputEl = $(el).find('.form-control:not(.v-select *)');
                 if (inputGroup) {
                     $(el).parent().find('.server-validation-error').remove();
-                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, value.scope || null))
-                        $(inputGroup).after(newMessages);
+                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, scope)) {
+                        setTimeout(() => { $(inputGroup).after(newMessages) }, 0);
+                    }
                 } else {
+                    // debugger;
                     $(el).find('.server-validation-error').remove();
-                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, value.scope || null))
-                        inputEl.after(newMessages);
+                    if (this.SERVER_ERRORS[value.server] || value.client && this.errors.has(value.client, scope)) {
+                        setTimeout(() => { inputEl.after(newMessages) }, 0);
+                    }
                 }
             }
-
-            //}
         },
     },
     mounted(){

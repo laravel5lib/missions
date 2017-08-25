@@ -6,7 +6,7 @@
                     <span aria-hidden="true">{{ config.previousText }}</span>
                 </span>
 
-                <a v-if="pagination.current_page > 1 " :aria-label="config.ariaPrevioius" @click.prevent="changePage(pagination.current_page - 1)">
+                <a v-if="pagination.current_page > 1 " :aria-label="config.ariaPrevious" @click.prevent="changePage(pagination.current_page - 1)">
                     <span aria-hidden="true">{{ config.previousText }}</span>
                 </a>
             </li>

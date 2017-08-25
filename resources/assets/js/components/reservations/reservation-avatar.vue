@@ -16,7 +16,7 @@
         <div>
             <div class="collapse" id="avatarCollapse">
                 <div class="well">
-                    <upload-create-update type="avatar" :name="'reservation-' + id" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['User']"></upload-create-update>
+                    <upload-create-update type="avatar" :name="'reservation-' + id" lock-type ui-locked :ui-selector="2" is-child :tags="['User']"  @uploads-complete="uploadsComplete"></upload-create-update>
                 </div>
             </div>
             <hr class="divider inv sm"/>
@@ -43,8 +43,8 @@
                 resource: this.$resource('reservations{/id}')
             }
         },
-        events:{
-            'uploads-complete'(data){
+        methods: {
+            uploadsComplete(data){
                 switch(data.type){
                     case 'avatar':
                         this.avatar = data;
@@ -53,9 +53,7 @@
                         break;
                 }
                 this.submit();
-            }
-        },
-        methods: {
+            },
             submit(){
                 // this.$refs.spinner.show();
                 this.reservation.avatar_upload_id = this.avatar_upload_id;

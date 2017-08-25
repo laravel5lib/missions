@@ -118,7 +118,7 @@
                     <div class="col-sm-6">
                         <div :class="{ 'has-error': errors.has('phone', 'form-2') }">
                             <label for="infoPhone">Billing Phone</label>
-                            <phone-input v-model="cardPhone" name="phone" id="infoPhone" data-vv-scope="form-2" :validation="cardEmail !== ''?'':'required'"></phone-input>
+                            <phone-input v-model="cardPhone" name="phone" id="infoPhone" data-vv-scope="form-2" v-validate="cardEmail !== ''?'':'required'"></phone-input>
                             <!--<input type="tel" class="form-control input input-sm" v-model="cardPhone | phone" name="phone=" id="infoPhone">-->
                         </div>
                     </div>

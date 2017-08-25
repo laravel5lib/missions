@@ -274,24 +274,16 @@
 							<div class="col-xs-10 col-xs-offset-1">
 								<label for="country" class="control-label">Country</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="country"
-								          v-model="countryCodeObj"
+								          v-model="countryCodeObj" name="country"
 								          :options="countries" label="name"></v-select>
-								<select hidden name="country" id="country" class="hidden" v-model="newUser.country_code"
-								        required >
-									<option :value="country.code" v-for="country in countries">{{country.name}}</option>
-								</select>
 							</div>
 						</div>
 						<div class="form-group" :class="{ 'has-error': registerErrors.timezone }">
 							<div class="col-xs-10 col-xs-offset-1">
 								<label for="timezone" class="control-label">Timezone</label>
 								<v-select @keydown.enter.prevent="" class="form-control" id="timezone"
-								          v-model="newUser.timezone"
+								          v-model="newUser.timezone" name="timezone"
 								          :options="timezones"></v-select>
-								<select hidden name="timezone" id="timezone" class="hidden" v-model="newUser.timezone"
-								        required>
-									<option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
-								</select>
 							</div>
 						</div>
 

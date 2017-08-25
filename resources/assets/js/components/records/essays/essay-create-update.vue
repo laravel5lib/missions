@@ -7,15 +7,12 @@
                 <div class="col-sm-12">
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                         <label for="infoManager">Record Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </template>
 
-            <div class="row" v-error-handler="{ value: author, handle: 'author' }">
+            <div class="row" v-error-handler="{ value: author_name, handle: 'author' }">
                 <div class="col-sm-12">
                     <label for="author" class="control-label">Author Name</label>
                     <input type="text" class="form-control" name="author" id="author" v-model="author_name"
@@ -82,7 +79,7 @@
 
                 // logic vars
                 resource: this.$resource('essays{/id}', {include: 'user'}),
-                hasChanged: false,
+                showSaveAlert: false,
             }
         },
         computed: {
@@ -98,11 +95,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force) {
+                if (this.isFormDirty && !force) {
                     this.showSaveAlert = true;
                     return false;
                 }

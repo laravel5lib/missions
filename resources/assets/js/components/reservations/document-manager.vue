@@ -284,7 +284,7 @@
                 this.changeState = false;
             },
             fetch() {
-                var params = {
+                let params = {
                     user: this.$root.user.id,
                     manager: this.$root.user.id,
                 };

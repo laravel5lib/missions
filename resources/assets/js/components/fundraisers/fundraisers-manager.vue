@@ -103,9 +103,11 @@
 </template>
 <script type="text/javascript">
     import _ from 'underscore'
-    var marked = require('marked');
+    import markdownExampleModal from '../markdown-example-modal.vue';
+    let marked = require('marked');
     export default{
         name: 'fundraisers-manager',
+        components: {'markdown-example-modal': markdownExampleModal},
         props: ['id', 'sponsorId', 'editable'],
         data(){
             return {

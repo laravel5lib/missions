@@ -7,16 +7,13 @@
                 <div class="col-sm-12">
                     <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" class="form-control" name="manager" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </template>
 
             <div class="row">
-                <div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name' }">
+                <div class="col-sm-12" v-error-handler="{ value: applicant_name, handle: 'name' }">
                     <label for="author" class="control-label">Applicant Name</label>
                     <input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
                            placeholder="Name" v-validate="'required|min:1|max:100'"
@@ -39,13 +36,13 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': errors.has('referral_title') }">
+                <div class="col-sm-6" v-error-handler="{ value: referrer.title, client: 'referral_title', server: 'referral_title' }">
                     <label for="author" class="control-label">Referral Title/Position</label>
                     <input type="text" class="form-control" name="referral_title" id="referral_title" v-model="referrer.title"
                            placeholder="Referral title or position" v-validate="'required|min:1|max:100'"
                            maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-6" :class="{ 'has-error': errors.has('referral_name') }">
+                <div class="col-sm-6" v-error-handler="{ value: referrer.name, client: 'referral_name', server: 'referral_name' }">
                     <label for="author" class="control-label">Referral Name</label>
                     <input type="text" class="form-control" name="referral_name" id="referrer.name" v-model="referrer.name"
                            placeholder="Referral Name" v-validate="'required|min:1|max:100'"
@@ -53,18 +50,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6" :class="{ 'has-error': errors.has('referralorg') }">
+                <div class="col-sm-6" v-error-handler="{ value: referrer.organization, client: 'referral_organization', server: 'referral_organization' }">
                     <label for="author" class="control-label">Referral Organization</label>
                     <input type="text" class="form-control" name="referral_organization" id="referral_organization" v-model="referrer.organization"
                            placeholder="Referral Name" v-validate="'required|min:1|max:100'"
                            maxlength="150" minlength="1" required>
                 </div>
-                <div class="col-sm-3" :class="{ 'has-error': errors.has('referralphone') }">
+                <div class="col-sm-6" v-error-handler="{ value: referrer.phone, client: 'referral_phone', server: 'referral_phone' }">
                     <label for="author" class="control-label">Referral Phone</label>
-                    <phone-input v-model="referrer.phone" validation="required|min:1|max:100" name="referral_phone" id="referral_phone"></phone-input>
-                    <!--<input type="text" class="form-control" name="referral_phone" id="referral_phone" v-model="referrer.phone|phone"
-                           placeholder="Referral Phone" v-validate="'required|min:1|max:100'"
-                           maxlength="150" minlength="1" required>-->
+                    <phone-input v-model="referrer.phone" v-validate="'required|min:1|max:100'" name="referral_phone" id="referral_phone"></phone-input>
                 </div>
             </div>
 
@@ -134,7 +128,7 @@
 
                 // logic vars
                 resource: this.$resource('referrals{/id}'),
-                hasChanged: false,
+                showSaveAlert: false,
             }
         },
         computed: {
@@ -150,11 +144,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force) {
+                if (this.isFormDirty && !force) {
                     this.showSaveAlert = true;
                     return false;
                 }

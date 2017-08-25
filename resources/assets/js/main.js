@@ -615,11 +615,13 @@ Vue.directive('error-handler', {
         el.dataset.messages = JSON.stringify([]);
 
         vnode.context.$watch('errors', (val) => {
-            let storedValue = JSON.parse(el.dataset.storage);
+            let storedValue = el.dataset.storage !== undefined ? JSON.parse(el.dataset.storage) : binding.value;
             // The `attemptSubmit` variable delays validation until necessary, because this doesn't directly influence
             // the directive we want to watch it using the error-handler mixin
-            vnode.context.handleValidationClass(el, storedValue);
-            vnode.context.handleValidationMessages(el, storedValue);
+            if (storedValue) {
+                vnode.context.handleValidationClass(el, storedValue);
+                vnode.context.handleValidationMessages(el, storedValue);
+            }
         }, { deep: true });
 
 

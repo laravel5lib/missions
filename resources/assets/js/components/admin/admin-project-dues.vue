@@ -27,7 +27,7 @@
                         <small class="badge" :class="{'badge-success': due.status === 'paid', 'badge-danger': due.status === 'late', 'badge-info': due.status === 'extended', 'badge-warning': due.status === 'pending', }">{{ due.status|capitalize }}</small>
                     </td>
                     <td>{{ due.cost }}</td>
-                    <td>{{ due.balance | currency }}</td>
+                    <td>{{ currency(due.balance) }}</td>
                     <td>{{ due.grace_period }}</td>
                     <td>{{ due.due_at | moment('ll') }}</td>
                     <td>
@@ -45,11 +45,8 @@
                     <form class="for" novalidate>
                         <div class="form-group" :class="{ 'has-error': errors.has('dues') }">
                             <label class="control-label">Available Dues</label>
-                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedDues" :options="availableDues"
+                            <v-select @keydown.enter.prevent=""  class="form-control" id="user" name="dues" v-validate="'required'" multiple v-model="selectedDues" :options="availableDues"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" name="dues" v-validate="'required'" multiple>
-                                <option :value="due.id" v-for="due in dues">{{due.name}}</option>
-                            </select>
                         </div>
                     </form>
 
@@ -252,16 +249,20 @@
                 };
 
                 // get available costs intersect with current
-                this.availableCosts = _.filter(project.initiative.data.costs.data, (cost) => {
-                    return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
-                });
+	            if (project.initiative.data.costs) {
+                    this.availableCosts = _.filter(project.initiative.data.costs.data, (cost) => {
+                        return !_.findWhere(project.costs.data, {cost_id: cost.id, type: 'incremental' || 'optional'})
+                    });
+                }
 
                 // Extend dues data
 
             }
         },
         mounted(){
-            this.$http.get(`projects/${this.id}`, { params: { include: 'dues,costs.payments,initiative' } }).then((response) => {
+            this.$http.get(`projects/${this.id}`, { params: {
+                include: 'dues,costs.payments,initiative.costs.payments'
+            } }).then((response) => {
                 this.setProjectData(response.data.data)
             });
 

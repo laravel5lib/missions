@@ -39,7 +39,7 @@
                         </div>
                         <div class="col-md-3">
                             <label>Amount</label>
-                            <p>{{ cost.amount|currency }}</p>
+                            <p>{{ currency(cost.amount) }}</p>
                             <hr class="divider inv hidden-lg">
                         </div>
                         <div class="col-md-6">
@@ -60,9 +60,6 @@
                             <label class="control-label">Available Costs</label>
                             <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
                                       label="name"></v-select>
-                            <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
-                                <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                            </select>
                         </div>
                     </form>
 

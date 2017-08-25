@@ -33,12 +33,12 @@
 
                 <div class="form-group">
                     <label>From Date</label>
-                    <date-picker :model="filters.minDate|moment"></date-picker>
+                    <date-picker v-model="filters.minDate" type="date"></date-picker>
                 </div>
 
                 <div class="form-group">
                     <label>To Date</label>
-                    <date-picker :model="filters.maxDate|moment"></date-picker>
+                    <date-picker v-model="filters.maxDate" type="date"></date-picker>
                 </div>
 
                 <div class="form-group">
@@ -283,7 +283,7 @@
                     </td>
                     <td v-if="isActive('description')" v-text="transaction.description"></td>
                     <td v-if="isActive('amount')">
-                        <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{transaction.amount|currency}}</span>
+                        <span :class="{'text-success': transaction.amount > 0, 'text-danger': transaction.amount < 0}">{{currency(transaction.amount)}}</span>
                     </td>
                     <td v-if="isActive('donor')" v-text="transaction.donor.data.name"></td>
                     <td v-if="isActive('class')" v-text="transaction.fund.data.class"></td>
@@ -371,7 +371,7 @@
                     type: null,
                     maxDate: null,
                     minDate: null,
-                    payment: null
+                    payment: ''
                 },
                 showFilters: false,
                 exportOptions: {
@@ -427,7 +427,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                this.putConfig();
+                this.updateConfig();
             },
             'search'(val, oldVal) {
                 this.pagination.current_page = 1;
@@ -530,7 +530,7 @@
                     // this.$refs.spinner.hide();
                     // TODO add error alert
                 }).then(() => {
-                    this.putConfig();
+                    this.updateConfig();
                 });
             }
         },
@@ -548,7 +548,7 @@
                 let config = JSON.parse(localStorage[this.storageName]);
                 this.activeFields = config.activeFields;
                 this.maxActiveFields = config.maxActiveFields;
-                this.filters = config.filters;
+                this.filters = _.extend(this.filters, config.filters);
             }
 
             // populate

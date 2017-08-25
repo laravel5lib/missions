@@ -40,7 +40,7 @@
                 <tr v-for="promo in promos" :key="promo.id">
                     <td><span class="label label-default">{{ status(promo) }}</span></td>
                     <td>{{ promo.name|capitalize }}</td>
-                    <td>{{ promo.reward | currency }}</td>
+                    <td>{{ currency(promo.reward) }}</td>
                     <td>{{ promo.expires | moment('ll') }}</td>
                     <td>{{ promo.promocodes_count }}</td>
                     <td>{{ promo.created_at | moment('ll') }}</td>

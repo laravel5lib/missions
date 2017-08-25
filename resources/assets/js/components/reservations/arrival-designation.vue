@@ -50,14 +50,17 @@
             }
         },
         computed: {
-            designation: function() {
-                if(this.document) {
-                    return this.document
-                } else {
-                    return { content: ["eastern"] };
-                }
+            designation: {
+                get() {
+                    if (this.document) {
+                        return this.document
+                    } else {
+                        return {content: ["eastern"]};
+                    }
+                },
+                set() {}
             },
-            'isLocked': function() {
+            isLocked() {
                 if (this.isAdminRoute)
                     return false;
 
@@ -122,7 +125,7 @@
                 this.editMode = false;
             }
 
-            this.putInfo();
+            this.updateInfo();
         }
     }
 </script>

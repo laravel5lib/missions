@@ -27,12 +27,12 @@
                                         <label for="name">Name</label>
                                         <input type="text" class="form-control" name="name" id="name" v-model="name"
                                                placeholder="Group Name" v-validate="'required|min:1|max:100'"
-                                               maxlength="100" minlength="1" required>
+                                               maxlength="100" minlength="1">
                                         <!--<p class="help-block" v-if="errors.name" v-text="errors.name"></p>-->
                                     </div>
                                     <div class="col-sm-6" v-error-handler="{ value: campaign, handle: 'campaign' }">
                                         <label for="campaign">Which Campaign are you interested in?</label>
-                                        <select name="type" id="campaign" class="form-control" v-model="campaign" v-validate="'required'" required>
+                                        <select name="campaign" id="campaign" class="form-control" v-model="campaign" v-validate="'required'">
                                             <option value="">-- please select --</option>
                                             <option :value="campaign.id" v-for="campaign in campaigns">{{campaign.name}}</option>
                                         </select>
@@ -51,20 +51,20 @@
                                 </div>
 
                                 <div class="row form-group col-sm-offset-2">
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" v-error-handler="{ value: city, handle: 'city' }">
                                         <label for="infoCity">City</label>
-                                        <input type="text" class="form-control" v-model="city" id="infoCity" placeholder="City">
-                                        <p class="help-block" v-if="errors.has('city')" v-text="errors.city"></p>
+                                        <input type="text" class="form-control" v-model="city" name="city" id="infoCity" placeholder="City">
+                                        <!--<p class="help-block" v-if="errors.has('city')" v-text="errors.city"></p>-->
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" v-error-handler="{ value: state, handle: 'state' }">
                                         <label for="infoState">State/Prov.</label>
-                                        <input type="text" class="form-control" v-model="state" id="infoState" placeholder="State/Province">
-                                        <p class="help-block" v-if="errors.has('state')" v-text="errors.state"></p>
+                                        <input type="text" class="form-control" v-model="state" name="state" id="infoState" placeholder="State/Province">
+                                        <!--<p class="help-block" v-if="errors.has('state')" v-text="errors.state"></p>-->
                                     </div>
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-4" v-error-handler="{ value: zip, handle: 'zip' }">
                                         <label for="infoZip">ZIP/Postal Code</label>
-                                        <input type="text" class="form-control" v-model="zip" id="infoZip" placeholder="12345">
-                                        <p class="help-block" v-if="errors.has('zip')" v-text="errors.zip"></p>
+                                        <input type="text" class="form-control" v-model="zip" name="zip" id="infoZip" placeholder="12345">
+                                        <!--<p class="help-block" v-if="errors.has('zip')" v-text="errors.zip"></p>-->
                                     </div>
                                 </div>
 
@@ -72,15 +72,12 @@
                                     <div class="col-sm-6">
                                         <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                                             <label for="country">Country</label>
-                                            <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                                            <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
-                                                <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                                            </select>
+                                            <v-select @keydown.enter.prevent="" class="form-control" name="country" id="country" v-validate="'required'" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                                         </div>
                                     </div>
                                     <div class="col-sm-6" v-error-handler="{ value: type, handle: 'type' }">
                                         <label for="type">Type</label>
-                                        <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'" required>
+                                        <select name="type" id="type" class="form-control" v-model="type" v-validate="'required'">
                                             <option value="">-- please select --</option>
                                             <option :value="option" v-for="option in typeOptions">{{ option|capitalize }}</option>
                                         </select>
@@ -90,10 +87,8 @@
                                 <div class="form-group">
                                     <div class="col-sm-4" v-error-handler="{ value: timezone, handle: 'timezone' }">
                                         <label for="timezone">Timezone</label>
-                                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
-                                        <select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
-                                            <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
-                                        </select>
+                                        <v-select @keydown.enter.prevent=""  class="form-control" name="timezone" id="timezone" v-model="timezone" :options="UTILITIES.timezones" v-validate="'required'"></v-select>
+
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: phone_one, client: 'phone', server: 'phone_one' }">
                                         <label for="infoPhone">Phone 1</label>
@@ -113,18 +108,18 @@
                                         <label for="contact">Your Name</label>
                                         <input type="text" class="form-control" name="contact" id="contact" v-model="contact"
                                                placeholder="John Smith" v-validate="'required|min:1|max:100'"
-                                               maxlength="100" minlength="1" required>
-                                        <p class="help-block" v-if="errors.has('contact')" v-text="errors.contact"></p>
+                                               maxlength="100" minlength="1">
+                                        <!--<p class="help-block" v-if="errors.has('contact')" v-text="errors.contact"></p>-->
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: email, handle: 'email' }">
                                         <label for="email">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'email|required'">
-                                        <p class="help-block" v-if="errors.has('email')" v-text="errors.email"></p>
+                                        <input type="text" class="form-control" name="email" id="email" v-model="email" v-validate="'required|email'">
+                                        <!--<p class="help-block" v-if="errors.has('email')" v-text="errors.email"></p>-->
                                     </div>
                                     <div class="col-sm-4" v-error-handler="{ value: position, handle: 'position' }">
                                         <label for="position">Your Position</label>
                                         <input type="text" class="form-control" name="position" id="position" v-model="position" v-validate="'required|min:1'">
-                                        <p class="help-block" v-if="errors.has('position')" v-text="errors.position"></p>
+                                        <!--<p class="help-block" v-if="errors.has('position')" v-text="errors.position"></p>-->
                                     </div>
                                 </div>
 
@@ -132,10 +127,10 @@
                                     <label for="status" class="col-sm-8 control-label">Have you spoken with a Missions.Me representative?</label>
                                     <div class="col-sm-4">
                                         <label class="radio-inline">
-                                            <input type="radio" name="status" id="status" value="yes" v-model="spoke_to_rep" v-validate="'required'"> Yes
+                                            <input type="radio" name="spoken" id="status" value="yes" v-model="spoke_to_rep" v-validate="'required'"> Yes
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="status2" id="status2" value="no" v-model="spoke_to_rep" v-validate=""> No
+                                            <input type="radio" name="spoken" id="status2" value="no" v-model="spoke_to_rep" v-validate="''"> No
                                         </label>
                                         <!--<p class="help-block" v-if="errors.spoke_to_rep" v-text="errors.spoke_to_rep"></p>-->
                                     </div>
@@ -167,7 +162,7 @@
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-4">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search a group name or category..." v-model="search" debounce="250">
+                        <input type="text" class="form-control" placeholder="Search a group name or category..." v-model="search" @keyup="debouncedSearch">
                         <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>
                     </div><!-- /input-group -->
                 </div>
@@ -500,7 +495,7 @@
                 // form vars
                 name: '',
                 type: '',
-                country_code: null,
+//                country_code: null,
                 description: '',
                 timezone: timezone.tz.guess(),
                 phone_one: '',
@@ -523,19 +518,18 @@
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             },
-        },
-        watch: {
-            search(val) {
-                this.searchGroups();
-            }
         },
         methods:{
             /*seeAll(){
 					this.groupsLimit = this.groups.length
 				},*/
+            debouncedSearch: _.debounce(function() { this.searchGroups(); }, 250),
             searchGroups(){
                 // this.$refs.spinner.show();
                 this.resource.query({

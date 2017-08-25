@@ -17,10 +17,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <label for="infoManager">Record Manager</label>
-                                    <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                    <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                                        <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                                    </select>
+                                    <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" name="manager" v-validate="'required'"></v-select>
                                 </div>
                             </div>
                         </template>
@@ -29,18 +26,13 @@
     						<div class="col-sm-6" v-error-handler="{ value: applicant_name, handle: 'name', messages: { req: 'Please provide credential holder\'s name.'} }">
     							<label for="name" class="control-label">Credential Holder's Name</label>
     							<input type="text" class="form-control" name="name" id="name" v-model="applicant_name"
-    							       placeholder="Name" v-validate="'required|min:1'"
+    							       placeholder="Name" v-validate="'required'"
     							       minlength="1" required>
     						</div>
                              <div class="col-sm-6" v-error-handler="{ value: selectedRole, handle: 'role', messages: { req: 'Please select a medical role.'} }">
                                 <label class="control-label">Medical Role</label>
 	                             <v-select @keydown.enter.prevent="" class="form-control" id="group" v-model="selectedRoleObj"
-	                                       :options="rolesOrdered" label="name" placeholder="Select Role"></v-select>
-	                             <select hidden class="form-control hidden" v-model="selectedRole" name="role" v-validate="'required'">
-		                             <option value="">-- Select Role --</option>
-		                             <option v-for="option in rolesOrdered" :value="option.value">{{option.name}}</option>
-	                             </select>
-	                             <div class="errors-block"></div>
+	                                       :options="rolesOrdered" label="name" placeholder="Select Role" name="role" v-validate="'required'"></v-select>
                              </div>
                         </div>
                     </div>
@@ -83,7 +75,7 @@
                             
                             <!-- start certification checklist -->
 							<template v-if="selectedRoleObj && !!isCertified && !isStudent">
-								<div class="panel panel-default" v-error-handler="{ value: QA.certifiedOptions, client: 'certifications', class: 'panel-danger has-error', messages: { min: 'Please select at least one role.'} }">
+								<div class="panel panel-default" v-error-handler="{ value: QA.certifiedOptions, client: 'certifications', class: 'panel-danger has-error', messages: { req: 'Please select at least one role.'} }">
 									<div class="panel-heading">
 										<h5>I am certified in the following:</h5>
 									</div>
@@ -91,7 +83,7 @@
 										<div class="row">
 											<div class="checkbox col-sm-6 col-xs-12" v-for="(choice, choiceIndex) in QA.certifiedOptions">
 												<label>
-													<input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value" name="certifications" v-validate="choiceIndex === 0 ?'min:1' : ''">
+													<input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value" name="certifications" v-validate="choiceIndex === 0 ?'required' : ''">
 													{{ choice.name }}
 												</label>
 											</div>
@@ -106,7 +98,7 @@
                             <!-- end certification checklist -->
                             
                             <!-- start participation checklist -->
-                            <div class="panel panel-default" v-error-handler="{ value: QA.allOptions, client: 'participations', class: 'panel-danger has-error', messages: { min: 'Please select at least one role.'} }">
+                            <div class="panel panel-default" v-error-handler="{ value: QA.allOptions, client: 'participations', class: 'panel-danger has-error', messages: { req: 'Please select at least one role.'} }">
                                 <div class="panel-heading">
                                     <h5>I am willing to participate in the following:</h5>
                                 </div>
@@ -114,7 +106,7 @@
                                     <div class="row">
     									<div class="checkbox col-sm-6 col-xs-12" v-for="(choice, choiceIndex) in QA.allOptions">
     										<label>
-											    <input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value" name="participations" v-validate="choiceIndex === 0 ? 'min:1' : ''">
+											    <input type="checkbox" :checked="choice.value" :value="true" v-model="choice.value" name="participations" v-validate="choiceIndex === 0 ? 'required' : ''">
 											    {{ choice.name }}
                                             </label>
     									</div>
@@ -179,7 +171,7 @@
                                                         <a class="badge" @click="confirmUploadNoteRemoval(upload)"><i class="fa fa-close"></i></a>
             									</li>
             								</ul>
-            								<upload-create-update v-show="uploads.length < 1" type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"></upload-create-update>
+            								<upload-create-update v-show="uploads.length < 1" type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :name="'credentials-professor-note-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +186,7 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<date-picker :model="QA.a|moment('YYYY-MM-DD')" type="date" :data-vv-name="'date' + indexQA"></date-picker>
+									<date-picker v-model="QA.a" :view-format="['YYYY-MM-DD']" type="date" :name="'date' + indexQA"></date-picker>
 									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + $index" v-validate="">-->
 								</div>
 								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
@@ -228,7 +220,7 @@
 							<div class="col-sm-12" v-if="(requiredByRole('license') || optionalByRole('license')) && !uploadSatisfied('license')">
                                 <hr class="divider">
 
-									<form id="UploadLicenseForm">
+									<form id="UploadLicenseForm" data-vv-scope="upload-license-form">
 										<!-- <div class="form-group"> -->
 										<div class="col-xs-12">
 											<div class="col-sm-6">
@@ -241,13 +233,13 @@
 											</div>
 										</div>
 										<div class="col-sm-6">
-											<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-license" :name="'credentials-license-'+ today + '-' + uploadCounter"></upload-create-update>
-											<a @click="uploadDoc('UploadLicenseForm', 'license')" class="btn btn-primary">Attach</a>
+											<upload-create-update type="other" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" hide-submit submit-event="upload-license" :name="'credentials-license-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
+											<a @click="uploadDoc('upload-license-form', 'license')" class="btn btn-primary">Attach</a>
 										</div>
-										<div v-if="show_expire.license" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)}">
+										<div v-if="show_expire.license" class="col-sm-6" :class="{ 'has-error': errors.has('licenseexpires', 'upload-license-form') || dateIsValid(expires.license)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadLicenseForm', 'licenseexpires') || dateIsValid('UploadLicenseForm', expires.license)" :model="expires.license|moment('YYYY-MM-DD')" type="date" ></date-picker>
+												<date-picker :has-error="errors.has('licenseexpires', 'upload-license-form') || dateIsValid(expires.license)" v-model="expires.license" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
 												<!--<input type="datetime" class="form-control hidden" name="licenseexpires="['required']" v-model="expires.license" id" v-validate="licenseexpires" required>-->
 											</div>
 										</div>
@@ -258,7 +250,7 @@
 							<div class="col-sm-12" v-if="(requiredByRole('certification') || optionalByRole('certification')) && !uploadSatisfied('certification')">
                                 <hr class="divider">
 
-								<form id="UploadCertificationForm">
+								<form id="UploadCertificationForm" data-vv-scope="upload-certification-form">
 									<div class="col-xs-12">
 										<div class="col-sm-6"><label>Certification</label></div>
 										<div class="col-sm-6">
@@ -269,13 +261,13 @@
 
 									</div>
 									<div class="col-sm-6">
-										<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-certification" :name="'credentials-certification-'+ today + '-' + uploadCounter"></upload-create-update>
-										<a @click="uploadDoc('UploadCertificationForm', 'certification')" class="btn btn-primary">Attach</a>
+										<upload-create-update type="other" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-certification" :name="'credentials-certification-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
+										<a @click="uploadDoc('upload-certification-form', 'certification')" class="btn btn-primary">Attach</a>
 									</div>
-									<div v-if="show_expire.certification" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)}">
+									<div v-if="show_expire.certification" class="col-sm-6" :class="{ 'has-error': errors.has('certexpires', 'upload-certification-form') || dateIsValid(expires.certification)}">
 										<label class="control-label">Expires</label>
 										<div>
-											<date-picker :has-error="checkForUploadDocError('UploadCertificationForm', 'certexpires') || dateIsValid('UploadCertificationForm', expires.certification)" :model="expires.certification|moment('YYYY-MM-DD')" type="date" ></date-picker>
+											<date-picker :has-error="errors.has('certexpires', 'upload-certification-form') || dateIsValid(expires.certification)" v-model="expires.certification" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
 											<!--<input type="datetime" class="form-control hidden" name="certexpires="['required']" v-model="expires.certification" id" v-validate="certexpires" required>-->
 										</div>
 									</div>
@@ -285,7 +277,7 @@
 							<div class="col-sm-12" v-if="(requiredByRole('diploma') || optionalByRole('diploma')) && !uploadSatisfied('diploma')">
                                 <hr class="divider">
 
-								<form id="UploadDiplomaForm">
+								<form id="UploadDiplomaForm" data-vv-scope="upload-diploma-form">
 									<div class="col-xs-12">
 										<div class="col-sm-6"><label>Diploma</label></div>
 										<div class="col-sm-6">
@@ -295,13 +287,13 @@
 										</div>
 									</div>
 									<div class="col-sm-6">
-										<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-diploma" :name="'credentials-diploma-'+ today + '-' + uploadCounter"></upload-create-update>
-										<a @click="uploadDoc('UploadDiplomaForm', 'diploma')" class="btn btn-primary">Attach</a>
+										<upload-create-update type="other" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-diploma" :name="'credentials-diploma-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
+										<a @click="uploadDoc('upload-diploma-form', 'diploma')" class="btn btn-primary">Attach</a>
 									</div>
-									<div class="col-sm-6" v-if="show_expire.diploma" :class="{ 'has-error': checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)}">
+									<div class="col-sm-6" v-if="show_expire.diploma" :class="{ 'has-error': errors.has('diplomaexpires', 'upload-diploma-form') || dateIsValid(expires.diploma)}">
 										<label class="control-label">Expires</label>
 										<div>
-											<date-picker :has-error="checkForUploadDocError('UploadDiplomaForm', 'diplomaexpires') || dateIsValid('UploadDiplomaForm', expires.diploma)" :model="expires.diploma|moment('YYYY-MM-DD')" type="date" ></date-picker>
+											<date-picker :has-error="errors.has('diplomaexpires', 'upload-diploma-form') || dateIsValid(expires.diploma)" v-model="expires.diploma" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
 											<!--<input type="datetime" class="form-control hidden" name="diplomaexpires="['required']" v-model="expires.diploma" id" v-validate="diplomaexpires" required>-->
 										</div>
 									</div>
@@ -311,7 +303,7 @@
 							<div class="col-sm-12" v-if="(requiredByRole('letter') || optionalByRole('letter')) && !uploadSatisfied('letter')">
                                 <hr class="divider">
 
-									<form id="UploadLetterForm">
+									<form id="UploadLetterForm" data-vv-scope="upload-letter-form">
 										<div class="col-xs-12">
 											<div class="col-sm-6"><label>Note from Professor</label></div>
 											<div class="col-sm-6">
@@ -322,13 +314,13 @@
 
 										</div>
 										<div class="col-sm-6">
-											<upload-create-update type="other" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-letter" :name="'credentials-letter-'+ today + '-' + uploadCounter"></upload-create-update>
-											<a @click="uploadDoc('UploadLetterForm', 'letter')" class="btn btn-primary">Attach</a>
+											<upload-create-update type="other" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-letter" :name="'credentials-letter-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
+											<a @click="uploadDoc('upload-letter-form', 'letter')" class="btn btn-primary">Attach</a>
 										</div>
-										<div v-if="show_expire.letter" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)}">
+										<div v-if="show_expire.letter" class="col-sm-6" :class="{ 'has-error': errors.has('letterexpires', 'upload-letter-form') || dateIsValid(expires.letter)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadLetterForm', 'letterexpires') || dateIsValid('UploadLetterForm', expires.letter)" :model="expires.letter|moment('YYYY-MM-DD')" type="date" ></date-picker>
+												<date-picker :has-error="errors.has('letterexpires', 'upload-letter-form') || dateIsValid(expires.letter)" v-model="expires.letter" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
 												<!--<input type="datetime" class="form-control hidden" name="letterexpires="['required']" v-model="expires.letter" id" v-validate="letterexpires" required>-->
 											</div>
 										</div>
@@ -338,7 +330,7 @@
 							<div class="col-sm-12" v-if="(requiredByRole('resume') || optionalByRole('resume')) && !uploadSatisfied('resume')">
                                 <hr class="divider">
 
-									<form id="UploadResumeForm">
+									<form id="UploadResumeForm" data-vv-scope="upload-resume-form">
 										<div class="col-sm-12">
 											<div class="col-sm-6"><label>Resume</label></div>
 											<div class="col-sm-6">
@@ -348,13 +340,13 @@
 											</div>
 										</div>
 										<div class="col-sm-6">
-											<upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-resume" :name="'credentials-resume-'+ today + '-' + uploadCounter"></upload-create-update>
-											<a @click="uploadDoc('UploadResumeForm', 'resume')" class="btn btn-primary">Attach</a>
+											<upload-create-update type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" :allow-name="false" :hide-submit="true" submit-event="upload-resume" :name="'credentials-resume-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
+											<a @click="uploadDoc('upload-resume-form', 'resume')" class="btn btn-primary">Attach</a>
 										</div>
-										<div v-if="show_expire.resume" class="col-sm-6" :class="{ 'has-error': checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)}">
+										<div v-if="show_expire.resume" class="col-sm-6" :class="{ 'has-error': errors.has('resumeexpires', 'upload-resume-form') || dateIsValid(expires.resume)}">
 											<label class="control-label">Expires</label>
 											<div>
-												<date-picker :has-error="checkForUploadDocError('UploadResumeForm', 'resumeexpires') || dateIsValid('UploadResumeForm', expires.resume)" :model="expires.resume|moment('YYYY-MM-DD')" type="date" ></date-picker>
+												<date-picker :has-error="errors.has('resumeexpires', 'upload-resume-form') || dateIsValid(expires.resume)" v-model="expires.resume" :view-format="['YYYY-MM-DD']" type="date" ></date-picker>
 												<!--<input type="datetime" class="form-control hidden" name="resumeexpires="['required']" v-model="expires.resume" id" v-validate="resumeexpires" required>-->
 											</div>
 										</div>
@@ -379,13 +371,13 @@
 				</div>
 			</form>
 
-			<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
+			<!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
 				<div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
 				<div slot="modal-footer" class="modal-footer">
 					<button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
 					<button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
 				</div>
-			</modal>
+			</modal>-->
 			<modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
 				<div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
 			</modal>
@@ -528,6 +520,7 @@
                 upload_ids: [],
                 uploadCounter: 1,
                 attemptUploadDoc: false,
+                showSaveAlert: false,
 
                 resumeUploads: [],
                 resumeUploadIds: [],
@@ -593,9 +586,6 @@
             uploadSatisfied(type){
                 return !!_.findWhere(this.uploads, {type: type });
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             checkboxMinimum(array){
                 return !_.findWhere(array, {value: true});
             },
@@ -603,7 +593,7 @@
                 // debugger;
             },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -622,7 +612,7 @@
                         return;
                     }
 
-                    this.resource.post(null, {
+                    this.resource.post({}, {
                         applicant_name: this.applicant_name,
                         holder_id: this.user_id,
                         holder_type: 'users',
@@ -697,33 +687,21 @@
 	        toUnderscoreString(string){
                 return string.toLowerCase().replace(/\s/g, '_');
 	        },
-	        uploadDoc(form, type){
+	        uploadDoc(scope, type){
                 this.attemptUploadDoc = true;
-	            if (this['$' + form].valid && moment(this.expires).isValid()) {
-					this.$root.$emit('upload-' + type);
-                    this.attemptUploadDoc = false;
-	            }
+                this.$validator.validateAll(scope).then(result => {
+                    if (result && (this.expires[type] === null || moment(this.expires[type]).isValid())) {
+                        this.$root.$emit('upload-' + type);
+                        this.attemptUploadDoc = false;
+                    }
+                })
+
 	        },
 	        dateIsValid(date){
                 return moment(date).isValid();
 	        },
-            syncCheckboxes() {
-	            let self = this;
-				this.$nextTick(() =>  {
-                    _.each($('input[type=checkbox]'), function (checkbox) {
-//	                    if (checkbox.hasAttribute('checked'))
-	                        checkbox.checked = checkbox.hasAttribute('checked');
-                    });
-//                    self.$validate('certifications', true);
-//                    self.$validate('participations', true);
-//					debugger;
-//                  let certifications = _.findWhere(this.content, { id: 'files'})
-                });
-            }
 
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data){
                 let contentIndex;
                 switch(data.type){
                     case 'other':
@@ -763,24 +741,25 @@
                         this.upload_ids = _.uniq(this.upload_ids);
                         contentIndex = _.findIndex(this.content, {id: 'files'});
 
-	                    if (data.name.indexOf('resume') !== -1) {
+                        if (data.name.indexOf('resume') !== -1) {
                             this.content[contentIndex].a.resume.push({ id: data.id, name: data.name, expires: null});
                             this.uploads.push({ id: data.id, name: data.name, can_expire: false, expires: this.expires.resume, type: 'resume'});
                             break;
-	                    } else {
-	                        // minor failsafe
+                        } else {
+                            // minor failsafe
                             contentIndex = _.findIndex(this.content, { id: 'files'});
                             this.content[contentIndex].a.other = this.content[contentIndex].a.other || [];
                             this.content[contentIndex].a.push({ id: data.id, expires: this.expires, type: 'other'});
                             this.content[contentIndex].a.other = _.uniq(this.content[contentIndex].a);
                             break;
                         }
-	                default:
-	                    this.$root.$emit('showError', 'Wrong file type, please try another file...');
-	                    break;
+                    default:
+                        this.$root.$emit('showError', 'Wrong file type, please try another file...');
+                        break;
                 }
                 this.uploadCounter++;
             }
+
         },
         mounted(){
             // set user data

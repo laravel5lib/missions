@@ -28,12 +28,12 @@
                 <div class="col-sm-12">
                     <div class="collapse" id="avatarCollapse">
                         <div class="well">
-                            <upload-create-update type="avatar" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Group']" @uploads-complete="uploadsComplete"></upload-create-update>
+                            <upload-create-update type="avatar" :name="groupId" lock-type ui-locked :ui-selector="2" is-child :tags="['Group']" @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
                     <div class="collapse" id="bannerCollapse">
                         <div class="well">
-                            <upload-create-update type="banner" :name="groupId" :lock-type="true" :ui-locked="true" :ui-selector="1" :per-page="6" :is-child="true" :tags="['Group']" @uploads-complete="uploadsComplete"></upload-create-update>
+                            <upload-create-update type="banner" :name="groupId" lock-type ui-locked :ui-selector="1" :per-page="6" is-child :tags="['Group']" @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
                     <hr class="divider inv" />
@@ -85,10 +85,7 @@
                 <div class="col-sm-8">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="" v-model="country_code" v-validate="'required'" >
-                            <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" name="country" v-validate="'required'" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                     </div>
                 </div>
             </div>
@@ -104,11 +101,7 @@
                 <div v-error-handler="{ value: timezone, handle: 'timezone' }">
                     <div class="col-sm-6">
                         <label for="country">Timezone</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
-                        <select hidden name="timezone" id="timezone" class="" v-model="timezone" v-validate="'required'">
-                            <option :value="timezone" v-for="timezone in UTILITIES.timezones">{{ timezone }}</option>
-                        </select>
-
+                        <v-select @keydown.enter.prevent=""  class="form-control" name="timezone" v-validate="'required'" id="timezone" v-model="timezone" :options="UTILITIES.timezones"></v-select>
                     </div>
                 </div>
             </div>
@@ -200,7 +193,6 @@
                 name: '',
                 description: '',
                 type: '',
-                country_code: '',
                 timezone: '',
                 phone_one: '',
                 phone_two: '',
@@ -223,7 +215,6 @@
                 showSuccess: false,
                 showError: false,
                 showSaveAlert: false,
-                hasChanged: false,
 
                 selectedAvatar: null,
                 avatar_upload_id: null,
@@ -232,10 +223,11 @@
             }
         },
         computed: {
-            country_code() {
-                if (_.isObject(this.countryCodeObj)) {
-                    return this.countryCodeObj.code;
-                }
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             },
             isAdmin(){
                 return _.contains(_.pluck(this.$root.user.abilities.data, 'slug'), 'edit-groups');
@@ -258,11 +250,8 @@
                 }
                 this.submit();
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -276,7 +265,6 @@
 
                 this.$validator.validateAll().then(result => {
                     if (result) {
-                        let formData = this.data;
                         // this.$refs.spinner.show();
                         this.resource.put({id: this.groupId}, {
                             name: this.name,
@@ -302,7 +290,6 @@
                             this.avatar = group.avatar;
                             this.banner = group.banner;
                             this.$root.$emit('showSuccess', 'Group updated!');
-                            this.hasChanged = false;
                         }, (error) =>  {
                             this.errors = error.data.errors;
                             this.$root.$emit('showError', 'There are errors on the form.');

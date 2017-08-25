@@ -67,7 +67,7 @@
 
                 <div class="form-group col-sm-6">
                     <label>Expires</label>
-                    <date-picker :model="promo.expires_at|moment('YYYY-MM-DD', false, true)"></date-picker>
+                    <date-picker v-model="promo.expires_at" :view-format="['YYYY-MM-DD', false, true]"></date-picker>
                 </div>
             </div>
             </form>

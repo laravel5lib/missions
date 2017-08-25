@@ -7,10 +7,7 @@
                 <div class="col-sm-12">
                     <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                         <label for="infoManager">Passport Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" name="manager" v-validate="'required'"></v-select>
                         <span class="help-block">The user account that manages this passport.</span>
                     </div>
                 </div>
@@ -18,19 +15,17 @@
 
             <div class="row">
                 <div class="col-sm-6">
-                    <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
+                    <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names', messages: { req: 'Please provide the passport holder\'s given names.'} }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" id="given_names" v-model="given_names"
                                placeholder="Given Names" name="givennames" v-validate="'required|min:1|max:100'"
                                maxlength="150" minlength="1" required>
-                        <span v-if="attemptSubmit" class="help-block">
-                            <span v-if="
-                                    $CreateUpdatePassport.givennames.required || 
-                                    $CreateUpdatePassport.givennames.minlength"
-                                   class="help-block">
-                                Please provide the passport holder's given names.
-                            </span>
-                        </span>
+                        <!--<div class="errors-block"></div>-->
+                        <!--<span v-if="errors.has('givennames')" class="help-block">
+                            &lt;!&ndash;<span class="help-block">
+
+                            </span>&ndash;&gt;
+                        </span>-->
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -58,11 +53,11 @@
                     <label class="control-label">Expires On</label>
                     <div class="row">
                         <div class="col-lg-6">
-                            <date-picker :has-error= "errors.has('expires')" :model="expires_at|moment('YYYY-MM-DD', false, true)" :input-sm="false" type="date"></date-picker>
-                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                   name="expires" v-validate="'required'" required>
-                            <span v-if="attemptSubmit" class="help-block">
-                        </span>
+                            <date-picker :has-error= "errors.has('expires')" v-model="expires_at" :view-format="['YYYY-MM-DD', false, true]" type="date" name="expires" v-validate="'required'"></date-picker>
+                            <!--<input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
+                                   name="expires" v-validate="'required'" required>-->
+                            <!--<span v-if="attemptSubmit" class="help-block">
+                        </span>-->
                         </div>
                     </div>
                 </div>
@@ -71,19 +66,19 @@
             <div class="form-group" v-error-handler="{ value: birth_country, client: 'birth', server: 'birth_country', messages: { req: 'Please select country of nationality (where you were born).'} }">
                 <div class="col-sm-12">
                     <label for="birth" class="control-label">Nationality</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" v-model="birthCountryObj" :options="UTILITIES.countries" label="name"></v-select>
-                    <select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate="'required'">
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="birth" v-model="birthCountryObj" :options="UTILITIES.countries" label="name" name="birth" v-validate="'required'"></v-select>
+                    <!--<select hidden name="birth" id="birth" class="hidden" v-model="birth_country" v-validate="'required'">
                         <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                    </select>
+                    </select>-->
                 </div>
             </div>
             <div class="form-group" v-error-handler="{ value: citizenship, handle: 'citizenship', messages: { req: 'Please select country of citizenship.'} }">
                 <div class="col-sm-12">
                     <label for="citizenship" class="control-label">Citizenship</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="citizenshipObj" :options="UTILITIES.countries" label="name"></v-select>
-                    <select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate="'required'">
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="citizenshipObj" :options="UTILITIES.countries" label="name" name="citizenship" v-validate="'required'"></v-select>
+                    <!--<select hidden name="citizenship" id="citizenship" class="hidden" v-model="citizenship" v-validate="'required'">
                         <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                    </select>
+                    </select>-->
                 </div>
             </div>
             <div class="row">
@@ -102,7 +97,7 @@
                                         <h5 class="media-heading">{{selectedAvatar.name}}</h5>
                                     </div>
                                 </div>
-                                <upload-create-update v-if="userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                                <upload-create-update v-if="userObj || !isUpdate" type="passport" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname" @uploads-complete="uploadsComplete"></upload-create-update>
                             </div>
                         </panel>
                     </accordion>
@@ -112,9 +107,9 @@
             <div class="form-group">
                 <div class="col-sm-12 text-center">
                     <a v-if="!isUpdate" :href="'/' + firstUrlSegment + '/records/passports'" class="btn btn-default">Cancel</a>
-                    <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-                    <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                    <a v-if="!isUpdate" @click="submit" class="btn btn-primary">Create</a>
+                    <a v-if="isUpdate" @click="back" class="btn btn-default">Cancel</a>
+                    <a v-if="isUpdate" @click="update" class="btn btn-primary">Update</a>
                 </div>
             </div>
         </form>
@@ -155,8 +150,8 @@
                 surname: '',
                 number: '',
                 expires_at: null,
-                birth_country: null,
-                citizenship: null,
+//                birth_country: null,
+//                citizenship: null,
                 upload_id: null,
                 usersArr: [],
                 userObj: null,
@@ -169,20 +164,30 @@
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
                 showSaveAlert: false,
-                hasChanged: false,
                 passportResource: this.$resource('passports{/id}', {include: 'user'})
             }
         },
         computed: {
-            birth_country(){
-                return _.isObject(this.birthCountryObj) ? this.birthCountryObj.code : null;
+            birth_country: {
+                get() {
+                    return _.isObject(this.birthCountryObj) ? this.birthCountryObj.code : null;
+                },
+                set() {
+
+                }
             },
-            citizenship(){
-                return _.isObject(this.citizenshipObj) ? this.citizenshipObj.code : null;
+            citizenship: {
+                get() {
+                    return _.isObject(this.citizenshipObj) ? this.citizenshipObj.code : null;
+                },
+                set() {
+
+                }
             },
             user_id(){
                 return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
-            }
+            },
+
         },
         methods: {
             getUsers(search, loading){
@@ -192,11 +197,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -211,7 +213,7 @@
                         this.showError = true;
                         return;
                     }
-                    this.passportResource.post(null, {
+                    this.passportResource.post({}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -253,17 +255,13 @@
                         setTimeout(() =>  {
                             window.location.href = '/' + that.firstUrlSegment + '/records/passports/' + that.id;
                         }, 1000);
-                        this.hasChanged = false;
                     }, (error) =>  {
                         this.errors = error.data.errors;
                         this.$root.$emit('showError', 'Unable to save changes.');
                     });
                 });
             },
-
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data) {
                 switch(data.type){
                     case 'other':
                         //save for preview
@@ -272,7 +270,7 @@
                         this.upload_id = data.id;
                         break;
                 }
-            }
+            },
         },
         mounted(){
             this.getCountries().then(() => {

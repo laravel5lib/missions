@@ -165,11 +165,8 @@
 						<div class="form-group" :class="{'has-error': errors.has('teamgroup', 'plan-settings')}" v-if="isAdminRoute">
 							<label>Travel Groups</label>
 							<v-select @keydown.enter.prevent="" class="form-control" id="groupFilter" multiple :debounce="250" :on-search="getGroups"
-							          v-model="selectedPlanSettings.groups" :options="groupsOptions" label="name"
+							          v-model="selectedPlanSettings.groups" :options="groupsOptions" label="name" name="teamgroup" v-validate="'required'"
 							          placeholder="Assign Travel Groups"></v-select>
-							<select class="hidden" v-model="selectedPlanSettings.groups" multiple name="teamgroup" v-validate="'required'">
-								<option :value="group" v-for="group in groupsOptions">{{ group.name|capitalize }}</option>
-							</select>
 						</div>
 
 						<div class="form-group" v-for="type in roomTypes">

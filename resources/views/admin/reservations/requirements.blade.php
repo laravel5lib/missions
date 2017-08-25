@@ -1,9 +1,9 @@
 @extends('admin.reservations.show')
 
 @section('tab')
-    <reservation-requirements id="{{ $reservation->id }}" 
+    <reservation-requirements id="{{ $reservation->id }}"
                               user-id="{{ $reservation->user_id }}" 
                               :age="{{ $reservation->age }}"
-                              :locked="{{ $locked }}">
+                              :locked="{{ $locked ? 1 : 0 }}">
     </reservation-requirements>
 @endsection

@@ -93,7 +93,7 @@
 					</div><!-- end row -->
 					</div>
 					<hr class="divider">
-					<p class="list-group-item-text">Amount to be charged immediately: <span class="text-success">{{upfrontTotal|currency}}</span></p>
+					<p class="list-group-item-text">Amount to be charged immediately: <span class="text-success">{{currency(upfrontTotal)}}</span></p>
 				</div><!-- end panel-body -->
 				<div class="panel-footer text-center">
 	                <a href="https://stripe.com/" target="_blank"><span style="font-size:.6em;color:#bcbcbc;text-transform:uppercase;letter-spacing:1px;">Securely</span> <img style="width:90px; height:20px;opacity:.65;" src="/images/powered-by-stripe@2x.png" alt="Powered by Stripe"></a>

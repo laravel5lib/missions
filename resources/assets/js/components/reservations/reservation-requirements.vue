@@ -72,12 +72,12 @@
         <modal :title="'Edit ' + editedRequirement.name" :value="showEditModal" @closed="showEditModal=false" effect="fade" width="800" :callback="update">
             <div slot="modal-body" class="modal-body">
 
-                    <form class="form" novalidate>
+                    <form class="form" novalidate data-vv-scope="requirement-update">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="form-group" :class="{'has-error': checkForEditRequirementError('grace') }">
+                                <div class="form-group" :class="{'has-error': errors.has('grace', 'requirement-update') }">
                                     <label for="grace_period">Grace Period</label>
-                                    <div class="input-group input-group-sm" :class="{'has-error': checkForEditRequirementError('grace') }">
+                                    <div class="input-group input-group-sm" :class="{'has-error': errors.has('grace', 'requirement-update') }">
                                         <input id="grace_period" type="number" class="form-control" number v-model="editedRequirement.grace_period"
                                                name="grace" v-validate="'required'">
                                         <span class="input-group-addon">Days</span>
@@ -105,6 +105,7 @@
     import _ from 'underscore';
     import documentManager from './document-manager.vue';
     export default{
+        name: 'reservation-requirements',
         components: {
             documentManager,
         },
@@ -135,7 +136,7 @@
 
                 return false;
             },
-            'isLocked': function() {
+            isLocked() {
                 if (this.isAdminRoute)
                     return false;
 
@@ -171,21 +172,14 @@
             debouncedSearch: _.debounce(function () {
                 this.fetch();
             }, 250),
-            checkForEditRequirementError(field) {
-                // if user clicked submit button while the field is invalid trigger error styles
-                return this.$EditRequirement[field].invalid && this.attemptSubmit;
-            },
             statusLabel(status) {
                 switch(status) {
                     case 'complete':
                         return 'label-success';
-                        break;
                     case 'reviewing':
                         return 'label-default';
-                        break;
                     case 'attention':
                         return 'label-info';
-                        break;
                     default:
                         return 'label-danger';
                 }
@@ -194,19 +188,16 @@
                 switch(status) {
                     case 'complete':
                         return 'fa-check';
-                        break;
                     case 'reviewing':
                         return 'fa-user';
-                        break;
                     case 'attention':
                         return 'fa-exclamation-triangle';
-                        break;
                     default:
                         return 'fa-exclamation';
                 }
             },
             fetch() {
-                var params = {
+                let params = {
                     search: this.search,
                     per_page: this.per_page,
                     page: this.pagination.current_page,
@@ -228,28 +219,19 @@
                     status: this.editedRequirement.status,
                     grace_period: this.editedRequirement.grace_period
                 }).then((response) => {
-                    this.$emit('set-status', response.data.data);
+                    this.handleStatus(response.data.data);
                     this.$root.$emit('showSuccess', 'Requirement updated.');
                     this.showEditModal = false;
                 });
             },
             handleStatus(requirement) {
-                var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
+                let index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
                 if (index !== -1) {
                     this.requirements[index].status = requirement.status;
                     this.requirements[index].updated_at = requirement.updated_at;
                 }
             }
         },
-        /*events: {
-            'set-status': function(requirement) {
-                var index = this.requirements.indexOf(_.findWhere(this.requirements, {id: requirement.id}));
-                if (index !== -1) {
-                  this.requirements[index].status = requirement.status;
-                  this.requirements[index].updated_at = requirement.updated_at;
-                }
-            }
-        },*/
         mounted() {
             this.fetch();
         }

@@ -24,7 +24,7 @@
         <div class="panel-body">
             <div class="row">
                 <div class="col-sm-4">
-                    {{ promo.reward | currency }}<br>
+                    {{ currency(promo.reward) }}<br>
                     <label>Credit Amount</label>
                 </div>
                 <div class="col-sm-4">

@@ -9,10 +9,7 @@
                     <div class="col-sm-12">
                         <div class="form-group" v-error-handler="{ value: user_id, client: 'manager', server: 'user_id' }">
                             <label for="infoManager">Record Manager</label>
-                            <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                            <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                                <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                            </select>
+                            <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" name="manager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                         </div>
                     </div>
                 </div>
@@ -22,14 +19,14 @@
                     <label for="author" class="control-label">Author Name</label>
                     <input type="text" class="form-control" name="author" id="author" v-model="author_name"
                            placeholder="Author Name" v-validate="'required|min:1|max:100'"
-                           maxlength="150" minlength="1" required>
+                           maxlength="150">
                 </div>
 
                 <template class="form-group" v-for="(QA, indexQA) in content">
                     <template v-if="QA.type">
                         <div class="form-group" v-if="QA.type === 'radio'" v-error-handler="{ value: QA.a, client: 'radio' + indexQA, messages: { req: 'Please select an option.'} }">
                             <label class="control-labal">{{QA.q}}</label><br>
-                            <label class="radio-inline" v-for="(choiceIndex, choice) in QA.options">
+                            <label class="radio-inline" v-for="(choice, choiceIndex) in QA.options">
                                 <input type="radio" :value="choice.value" v-model="QA.a" :name="'radio' + indexQA" v-validate="choiceIndex === 0 ? 'required' : ''"> {{ choice.name }}
                             </label>
                         </div>
@@ -52,7 +49,7 @@
                                     <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
                                     </li>
                                 </ul>
-                                <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="true" :name="'influencer-questionnaire-'+ today + '-' + uploadCounter"></upload-create-update>
+                                <upload-create-update type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" allow-name :name="'influencer-questionnaire-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
                             </div>
                              </template>
                     </template>
@@ -64,10 +61,14 @@
                 <hr class="divider inv">
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <a v-if="!isUpdate" href="/dashboard/records/influencers" class="btn btn-default">Cancel</a>
-                        <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-                        <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-                        <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                        <template v-if="!isUpdate">
+                            <a href="/dashboard/records/influencers" class="btn btn-default">Cancel</a>
+                            <a @click="submit()" class="btn btn-primary">Create</a>
+                        </template>
+                        <template v-else>
+                            <a @click="back()" class="btn btn-default">Cancel</a>
+                            <a @click="update()" class="btn btn-primary">Update</a>
+                        </template>
                     </div>
                 </div>
             </form>
@@ -125,7 +126,7 @@
                 // logic vars
                 resource: this.$resource('essays{/id}'),
                 today: moment().format('YYYY-MM-DD'),
-                hasChanged: false,
+                showSaveAlert: false,
             }
         },
         computed: {
@@ -141,11 +142,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force) {
+                if (this.isFormDirty && !force) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -211,9 +209,7 @@
                 this.uploads.$remove(upload);
                 this.upload_ids.$remove(upload.id);
             },
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data){
                 switch(data.type){
                     case 'file':
                         this.uploads.push(data);

@@ -67,13 +67,13 @@
                                     <a>{{ donorPagination.total }} {{ activeView|capitalize }}s</a>
                                 </li>
                                 <li :class="{ 'disabled': donorPagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="donorPagination.current_page = donorPagination.current_page-1">
+                                    <a aria-label="Previous" @click="donorPaginateBack">
                                         <span aria-hidden="true">&laquo; Back</span>
                                     </a>
                                 </li>
                                 <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                                <li :class="{ 'disabled': donorPagination.current_page == donorPagination.total_pages }">
-                                    <a aria-label="Next" @click="donorPagination.current_page = donorPagination.current_page+1">
+                                <li :class="{ 'disabled': donorPagination.current_page === donorPagination.total_pages && donorPagination.total_pages > donorPagination.current_page+1 }">
+                                    <a aria-label="Next" @click="donorPaginateNext">
                                         <span aria-hidden="true">Next &raquo;</span>
                                     </a>
                                 </li>
@@ -114,13 +114,13 @@
                                     <a>{{ pagination.total }} {{ pagination.total > 1 ? 'Activities' : 'Activity' }}</a>
                                 </li>
                                 <li :class="{ 'disabled': pagination.current_page == 1 }">
-                                    <a aria-label="Previous" @click="pagination.current_page = pagination.current_page-1">
+                                    <a aria-label="Previous" @click="paginateBack">
                                         <span aria-hidden="true">&laquo; Back</span>
                                     </a>
                                 </li>
                                 <!--<li :class="{ 'active': (n+1) == pagination.current_page}" v-for="n in pagination.total_pages"><a @click="page=(n+1)">{{(n+1)}}</a></li>-->
-                                <li :class="{ 'disabled': pagination.current_page == pagination.total_pages }">
-                                    <a aria-label="Next" @click="pagination.current_page = pagination.current_page+1">
+                                <li :class="{ 'disabled': pagination.current_page === pagination.total_pages && pagination.total_pages > pagination.current_page+1 }">
+                                    <a aria-label="Next" @click="paginateNext">
                                         <span aria-hidden="true">Next &raquo;</span>
                                     </a>
                                 </li>
@@ -205,7 +205,27 @@
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 });
-            }
+            },
+            donorPaginateBack() {
+                if (this.donorPagination.current_page !== 1) {
+                    this.donorPagination.current_page -= 1;
+                }
+            },
+            donorPaginateNext() {
+                if (this.donorPagination.current_page !== this.donorPagination.total_pages && this.donorPagination.total_pages > this.donorPagination.current_page+1) {
+                    this.donorPagination.current_page += 1;
+                }
+            },
+            paginateBack() {
+                if (this.pagination.current_page !== 1) {
+                    this.pagination.current_page -= 1;
+                }
+            },
+            paginateNext() {
+                if (this.pagination.current_page !== this.pagination.total_pages && this.pagination.total_pages > this.pagination.current_page+1) {
+                    this.pagination.current_page += 1;
+                }
+            },
         },
         mounted(){
             this.$http.get('funds/' + this.fundId).then((response) => {

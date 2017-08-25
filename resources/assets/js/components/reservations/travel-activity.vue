@@ -25,10 +25,10 @@
 				</div>
 				<div class="form-group" v-if="transportDomestic" v-error-handler="{ value: thisActivity.occurred_at, client: 'occurred', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
 					<label for="" v-text="LABELS.dateTime"></label>
-					<date-picker :model="thisActivity.occurred_at | moment('YYYY-MM-DD HH:mm:ss', false, true)" v-if="editMode"
-					             v-validate="'required'" data-vv-name="occurred" data-vv-value-path="model"></date-picker>
+					<date-picker v-model="thisActivity.occurred_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" v-if="editMode"
+					             v-validate="'required'" name="occurred" data-vv-value-path="model"></date-picker>
 					<p v-else>{{ thisActivity.occurred_at | moment('LLLL', false, true) }}</p>
-					<!--<datetime-input v-model="thisActivity.occurred_at" no-local validation="required"></datetime-input>-->
+					<!--<datetime-input v-model="thisActivity.occurred_at" no-local v-validate="required"></datetime-input>-->
 					<!--<input type="text" class="form-control hidden" v-model="thisActivity.occurred_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
 					       id="occurred_at" name="occurred" v-validate="'required'">-->
 				</div>

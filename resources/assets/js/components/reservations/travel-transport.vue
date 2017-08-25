@@ -8,7 +8,7 @@
 							<label for="transporttype">Travel Method</label>
 							<template v-if="editMode">
 								<select class="form-control" id="travel_method"
-								        name="transporttype=" v-validate="'required'" v-model="transport.type">
+								        name="transporttype" v-validate="'required'" v-model="transport.type">
 									<option value="">-- Select--</option>
 									<option :value="option" v-for="option in travelTypeOptions">{{ option|capitalize }}</option>
 								</select>
@@ -21,15 +21,9 @@
 							<div class="form-group" v-error-handler="{ value: transport.name, client: 'airline' }">
 								<label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
 								<template v-if="editMode">
-									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
-									          v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
+									<v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" name="airline" id="airlineFilter" :debounce="250" :on-search="getAirlines"
+									          v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name" v-validate="'required'"
 									          placeholder="Select Airline"></v-select>
-									<select v-if="!manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
-									        v-model="transport.name">
-										<option :value="airline.name" v-for="airline in UTILITIES.airlines">
-											{{ airline.extended_name|capitalize }}
-										</option>
-									</select>
 									<label><input type="checkbox" v-model="manualAirlineData"> Airline not listed</label>
 								</template>
 								<p v-else>{{ transport.name.toUpperCase() }}</p>
@@ -142,7 +136,6 @@
         },
         data(){
             return {
-                validatorHandle: 'TravelTransport',
 
                 //logic variables
                 travelTypeOptions: ['flight', 'bus', 'vehicle', 'train'],
@@ -188,13 +181,13 @@
 
         },
 	    computed: {
-            'isUpdate': function() {
+            'isUpdate'() {
                 return this && this.transport.hasOwnProperty('id') && _.isString(this.transport.id);
 		    }
 	    },
         events: {
             'validate-itinerary'() {
-
+                this.$validator.validateAll();
             }
         },
         methods: {
@@ -234,10 +227,6 @@
                     }
 	                //console.log(self.selectedAirlineObj);
                 }
-                self.$nextTick(() =>  {
-                    if (_.isFunction(self.$validate))
-                        self.$validate(true);
-                });
 
             });
 

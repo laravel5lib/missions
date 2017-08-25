@@ -12,7 +12,7 @@
                     </h5>
                     <div class="collapse" id="avatarCollapse">
                         <div class="well">
-                            <upload-create-update type="avatar" :lock-type="true" :is-child="true" :tags="['campaign']" @uploads-complete="uploadsComplete"></upload-create-update>
+                            <!--<upload-create-update type="avatar" lock-type is-child :tags="['campaign']" @uploads-complete="uploadsComplete"></upload-create-update>-->
                         </div>
                     </div>
                 </div><!-- end col -->
@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label>Date of Birth</label>
-                    <date-picker v-if="loaded" :model="birthday|moment('YYYY-MM-DD', false, true)"></date-picker>
+                    <date-picker v-if="loaded" v-model="birthday" :view-format="['YYYY-MM-DD', false, true]"></date-picker>
                 </div>
                 <div class="col-sm-6">
                     <div v-error-handler="{ value: shirt_size, client: 'size', server: 'shirt_size' }">
@@ -69,7 +69,7 @@
                     </div>
                     <div class="radios" v-error-handler="{ value: gender, handle: 'gender' }">
                         <label>
-                            <input type="radio" v-model="gender" name="gender" value="female" v-validate=""> Female
+                            <input type="radio" v-model="gender" name="gender" value="female"> Female
                         </label>
                     </div>
                     <span class="help-block" v-show= "errors.has('gender')">Select a gender</span>
@@ -107,33 +107,30 @@
                 </div>
                 <div class="col-sm-6">
                     <label for="infoAddress">Address 1</label>
-                    <input type="text" class="form-control" v-model="address" id="infoAddress" name="address" placeholder="Street Address 1" v-validate="">
+                    <input type="text" class="form-control" v-model="address" id="infoAddress" name="address" placeholder="Street Address 1" v-validate="''">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-6">
                     <label for="infoCity">City</label>
-                    <input type="text" class="form-control" v-model="city" id="infoCity" name="city" placeholder="City" v-validate="">
+                    <input type="text" class="form-control" v-model="city" id="infoCity" name="city" placeholder="City" v-validate="''">
                 </div>
                 <div class="col-sm-6">
                     <label for="infoState">State/Prov.</label>
-                    <input type="text" class="form-control" v-model="state" id="infoState" name="state" placeholder="State/Province" v-validate="">
+                    <input type="text" class="form-control" v-model="state" id="infoState" name="state" placeholder="State/Province" v-validate="''">
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-sm-4">
                     <label for="infoZip">ZIP/Postal Code</label>
-                    <input type="text" class="form-control" v-model="zip" id="infoZip" name="zip" placeholder="12345" v-validate="">
+                    <input type="text" class="form-control" v-model="zip" id="infoZip" name="zip" placeholder="12345" v-validate="''">
                 </div>
                 <div class="col-sm-8">
                     <div>
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
-                        <select hidden name="country" id="country" class="" v-model="country_code">
-                            <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" name="country" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
                     </div>
                 </div>
             </div>
@@ -143,10 +140,7 @@
                     <div v-error-handler="{ value: user_id, client: 'user', server: 'user_id' }">
                         <label for="manager">Managing User</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" v-model="userObj" :options="users" :debounce="250"
-                                  :on-search="searchUsers" label="name"></v-select>
-                        <select id="manager" hidden class="form-control hidden" v-model="user_id" name="user" v-validate="'required'">
-                            <option v-for="user in users" :value="user.id">{{ user.name }}</option>
-                        </select>
+                                  :on-search="searchUsers" label="name" name="user" v-validate="'required'"></v-select>
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -162,6 +156,7 @@
                     <div class="form-group" :class="{ 'has-error': errors.has('desiredrole') }">
                         <label for="desiredRole">Desired Team Role</label>
                         <select class="form-control input-sm" id="desiredRole" v-model="desired_role" name="desiredrole" v-validate="'required'">
+                            <option value="">-- Select a role --</option>
                             <option v-for="role in UTILITIES.roles" :value="role.value">{{role.name}}</option>
                         </select>
                     </div><!-- end form-group -->
@@ -196,15 +191,11 @@
         mixins: [utilities, errorHandler],
         data(){
             return{
-                // mixin settings
-                validatorHandle: 'UpdateReservation',
-
                 given_names: '',
                 surname: '',
                 gender: '',
                 birthday: '',
                 shirt_size: '',
-//                user_id: null,
                 desired_role: '',
                 status: '',
                 companion_limit: 0,
@@ -213,7 +204,6 @@
                 city: '',
                 state: '',
                 zip: '',
-                country_code : '',
                 phone_one: '',
                 phone_two: '',
                 email: '',
@@ -235,13 +225,17 @@
             }
         },
         computed:{
-            user_id(){
-                return _.isObject(this.userObj) ? this.userObj.id : null;
+            user_id:{
+                get() {
+                    return _.isObject(this.userObj) ? this.userObj.id : null;
+                },
+                set() {}
             },
-            country_code() {
-                if (_.isObject(this.countryCodeObj)) {
-                    return this.countryCodeObj.code;
-                }
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
             }
         },
         methods: {
@@ -313,34 +307,38 @@
             },
         },
         mounted(){
-            this.getCountries();
-            this.getRoles();
+            let promises = [];
+            promises.push(this.getCountries());
+            promises.push(this.getRoles());
 
-            this.resource.get().then((response) => {
-                var reservation = response.data.data;
-                this.given_names = reservation.given_names;
-                this.surname = reservation.surname;
-                this.gender = reservation.gender;
-                this.birthday = reservation.birthday;
-                this.status = reservation.status;
+            Promise.all(promises).then(() => {
+                this.resource.get().then((response) => {
+                    let reservation = response.data.data;
+                    this.given_names = reservation.given_names;
+                    this.surname = reservation.surname;
+                    this.gender = reservation.gender;
+                    this.birthday = reservation.birthday;
+                    this.status = reservation.status;
 //                this.birthday = moment(reservation.birthday).toDate();
-                this.shirt_size = reservation.shirt_size;
-                this.companion_limit = reservation.companion_limit;
-                this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: reservation.country_code.toLowerCase()});
-                this.country_code = reservation.country_code;
-                this.phone_one = reservation.phone_one;
-                this.phone_two = reservation.phone_two;
-                this.address = reservation.address;
-                this.city = reservation.city;
-                this.state = reservation.state;
-                this.zip = reservation.zip;
-                this.email = reservation.email;
-                this.userObj = reservation.user.data;
-                this.selectedAvatar = {source: reservation.avatar};
-                this.desired_role = reservation.desired_role.code;
+                    this.shirt_size = reservation.shirt_size;
+                    this.companion_limit = reservation.companion_limit;
+                    this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: reservation.country_code.toLowerCase()});
+                    this.country_code = reservation.country_code;
+                    this.phone_one = reservation.phone_one;
+                    this.phone_two = reservation.phone_two;
+                    this.address = reservation.address;
+                    this.city = reservation.city;
+                    this.state = reservation.state;
+                    this.zip = reservation.zip;
+                    this.email = reservation.email;
+                    this.userObj = reservation.user.data;
+                    this.selectedAvatar = {source: reservation.avatar};
+                    this.desired_role = reservation.desired_role.code;
 
-                this.loaded = true;
-            })
+                    this.loaded = true;
+                })
+            });
+
         }
     }
 </script>

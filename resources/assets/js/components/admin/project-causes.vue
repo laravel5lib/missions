@@ -94,7 +94,7 @@
 						</span></p>
                         <label>Projects Funded</label>
                         <p>{{ cause.projects_funded }}</p>
-                        <!--<h3 class="text-success">{{ trip.starting_cost | currency }}</h3>-->
+                        <!--<h3 class="text-success">{{ currency(trip.starting_cost) }}</h3>-->
                         <a :href="'/admin/causes/' +  cause.id  + '/current-projects'" class="btn btn-primary-hollow btn-sm"><i class="fa fa-cog"></i> Manage</a>
                     </div>
                 </div>

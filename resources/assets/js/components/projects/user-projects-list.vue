@@ -129,6 +129,13 @@
             }
         },
         methods: {
+            resetFilter() {
+                this.filters = {
+                    groups: '',
+                    cause: '',
+                    type: ''
+                }
+            },
             country(code){
                 return code;
             },

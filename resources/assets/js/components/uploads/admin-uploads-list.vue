@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" v-model="search" debounce="250" placeholder="Search for anything">
+                        <input type="text" class="form-control" v-model="search" @keyup="debouncedSearch" placeholder="Search for anything">
                         <span class="input-group-addon"><i class="fa fa-search"></i></span>
                     </div>
                     <div id="toggleFilters" class="form-toggle-menu dropdown" style="display: inline-block;">
@@ -126,6 +126,7 @@
 </style>
 <script type="text/javascript">
     import $ from 'jquery';
+    import _ from 'underscore';
 	import vSelect from "vue-select";
 	export default{
         name: 'admin-uploads-list',
@@ -163,7 +164,7 @@
 			},
             'search'(val, oldVal) {
                 this.pagination.current_page = 1;
-                this.searchUploads();
+//                this.searchUploads();
             },
             'orderByField'(val, oldVal) {
 				this.searchUploads();
@@ -201,6 +202,7 @@
 					tags: [],
 				}
 			},
+            debouncedSearch: _.debounce(function () { this.searchUploads(); }, 250),
             searchUploads(){
             	let params = {
 					include: '',
@@ -214,7 +216,7 @@
                 return this.$http.get('uploads', { params: params }).then((response) => {
                     this.pagination = response.data.meta.pagination;
                     this.uploads = response.data.data;
-                }, this.$root.handleApiErrors);
+                }, this.$root.handleApiError);
             },
         },
         mounted(){

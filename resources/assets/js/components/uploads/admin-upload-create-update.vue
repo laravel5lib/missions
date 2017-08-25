@@ -41,7 +41,7 @@
 			</div>
 		</div>
 
-			<form id="CreateUploadForm" class="form" novalidate @submit.prevent="isUpdate ? update : submit">
+			<form id="CreateUploadForm" class="form" novalidate @submit.prevent="isUpdate ? update() : submit()">
 				<div class="form-group" v-error-handler="{ value: currentName, handle: 'name' }" v-show="!uiLocked || allowName">
 					<label for="name" class="control-label">Name</label>
 						<input type="text" class="form-control" name="name" id="name" v-model="currentName"
@@ -50,10 +50,8 @@
 				</div>
 				<div class="form-group" v-error-handler="{ value: tags, handle: 'tags' }" v-show="!uiLocked" >
 					<label for="tags" class="control-label">Tags</label>
-						<v-select @keydown.enter.prevent=""  id="tags" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
-						<select hidden id="tags" name="tags" v-model="tags" multiple v-validate="'required'">
-							<option v-for="tag in tagOptions" :value="tag">{{tag}}</option>
-						</select>
+						<v-select @keydown.enter.prevent=""  id="tags" name="tags" v-validate="'required'" class="form-control" multiple v-model="tags" :options="tagOptions"></v-select>
+
 				</div>
 				<div class="form-group" v-error-handler="{ value: type, handle: 'type' }" v-show="!uiLocked" >
 					<label for="type" class="control-label">Type</label>
@@ -87,7 +85,7 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="type && containedIn(['file'], type)" :class="{ 'has-error': isFileSet}">
+				<div class="form-group" v-if="type && containedIn(['file'], type)" :class="{ 'has-error': !isFileSet}">
 					<label for="file" class="control-label">File</label>
 						<input type="file" id="file" :accept="allowedTypes" :value="fileA" @change="handleImage" class="form-control">
 						<span class="help-block"><i class="fa fa-file-pdf-o"></i> PDF format only</span>
@@ -102,7 +100,7 @@
 					</div>
 				</div>
 
-				<div class="form-group" v-if="!isUpdate && type && !containedIn(['video', 'file'], type)" :class="{ 'has-error': isFileSet}">
+				<div class="form-group" v-if="!isUpdate && type && !containedIn(['video', 'file'], type)" :class="{ 'has-error': !isFileSet}">
 					<label for="file" class="control-label">File</label>
 					<div class="slim" data-instant-edit="true" data-did-confirm="slimConfirmed">
 						<input type="file" id="file" :accept="allowedTypes" :value="fileA" @change="handleImage" class="">
@@ -139,7 +137,18 @@
         name: 'upload-create-update',
 		components: {vSelect},
         mixins: [errorHandler],
+	    // TODO: component needs to be redesigned to accept an object of properties matching the current properties.
+	    // TODO: This will eliminate the anti-pattern of changing props inside the component.
         props:{
+            options: {
+                type: Object,
+	            default() {
+                    return {
+                        type: null,
+	                    tags: [],
+                    }
+	            }
+            },
 			uploadId: {
 				type: String,
 				default: null
@@ -321,7 +330,7 @@
 			}
 		},
 		events:{
-			'uploads-complete'(data){
+            'uploads-complete'(data){
 				switch(data.type){
 					case 'avatar':
 						this.selectedAvatar = data;
@@ -424,7 +433,6 @@
 				// this.vueCropApi.setSelect([this.coords.x, this.coords.y, w, h]);
 			},
             submit(){
-				//
                 this.$validator.validateAll().then(result => {
                     if (!result) {
                         this.$root.$emit('showError', 'Please check form.');
@@ -459,7 +467,7 @@
                         params.type = 'other';
                     }
 
-                    return this.$http.post(`uploads`, null, { params: params }).then((resp) => {
+                    return this.$http.post(`uploads`, params).then((resp) => {
                             return this.handleSuccess(resp);
                         }, (error) =>  {
                             this.SERVER_ERRORS = error.data.errors;
@@ -524,7 +532,7 @@
                             if (self.typeObj && _.contains(['banner', 'avatar'], self.typeObj.type)) {
                                 self.adjustSelectByType()
                             } else {
-                                this.slimAPI[0].ratio = 'free';
+                                self.slimAPI[0].ratio = 'free';
                             }
                         }
 					};
@@ -532,7 +540,7 @@
 				};
 				reader.readAsDataURL(e.target.files[0]);
 			},
-			test: function(event, selection, coordinates) {
+			test(event, selection, coordinates) {
 				this.coords = coordinates;
 				if(coordinates) {
 					this.x_axis = coordinates.x;
@@ -606,7 +614,14 @@
 	                            // else use tags from API data
 	                            : upload.tags;
                             break;
-                    }
+						case 'banner':
+                            this.tags = !_.isArray(upload.tags) || !upload.tags.length
+                                // check if component prop `tags` is set, if not default to User, Group, Campaing tags
+                                ? !_.isArray(this.tags) ? ['User', 'Campaign', 'Group']: this.tags
+                                // else use tags from API data
+                                : upload.tags;
+                            break;
+					}
                     this.type = upload.type;
                     this.src = upload.source;
 

@@ -13,7 +13,7 @@
 						<li class="list-group-item" v-for="cost in staticCosts">
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
-								<span class="pull-right">{{cost.amount | currency}}</span>
+								<span class="pull-right">{{currency(cost.amount)}}</span>
 								<hr class="divider sm inv">
 								<p class="small">{{cost.description}}</p>
 							</h5>
@@ -24,7 +24,7 @@
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
-										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
+										<td class="text-right">{{p.upfront ? '-': ''}}{{currency(p.amount_owed)}}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -32,7 +32,7 @@
 						<li class="list-group-item" v-for="cost in incrementalCosts">
 							<h5 class="list-group-item-heading">
 								{{cost.name}}
-								<span class="pull-right">{{cost.amount | currency}}</span>
+								<span class="pull-right">{{currency(cost.amount)}}</span>
 								<hr class="divider sm inv">
 								<p class="small">{{cost.description}}</p>
 							</h5>
@@ -43,7 +43,7 @@
 								<tbody>
 									<tr v-for="p in cost.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
-										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
+										<td class="text-right">{{p.upfront ? '-': ''}}{{currency(p.amount_owed)}}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -51,7 +51,7 @@
 						<li class="list-group-item">
 							<h5 class="list-group-item-heading">
 								{{selectedOptions.name}}
-								<span class="pull-right">{{selectedOptions.amount | currency}}</span>
+								<span class="pull-right">{{currency(selectedOptions.amount)}}</span>
 								<hr class="divider sm inv">
 								<p class="small">{{selectedOptions.description}}</p>
 							</h5>
@@ -62,7 +62,7 @@
 								<tbody>
 									<tr v-for="p in selectedOptions.payments.data" :class="{'text-danger': p.upfront}">
 										<td>{{p.percent_owed}}% is Due {{toDate(p.due_at)}}</td>
-										<td class="text-right">{{p.upfront ? '-': ''}}{{p.amount_owed | currency}}</td>
+										<td class="text-right">{{p.upfront ? '-': ''}}{{currency(p.amount_owed)}}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -73,19 +73,19 @@
 						<tfoot>
 							<tr>
 								<td style="border-top:2px solid #000000;">Fundraising Goal</td>
-								<td style="border-top:2px solid #000000;" class="text-right">{{totalCosts | currency}}</td>
+								<td style="border-top:2px solid #000000;" class="text-right">{{currency(totalCosts)}}</td>
 							</tr>
 							<tr>
 								<td>Up-front Charges</td>
-								<td class="text-danger text-right">{{-upfrontTotal | currency}}</td>
+								<td class="text-danger text-right">{{-currency(upfrontTotal)}}</td>
 							</tr>
 							<tr v-if="promoValid">
 								<td>Promo Credit</td>
-								<td class="text-danger text-right">{{-promoValid | currency}}</td>
+								<td class="text-danger text-right">{{-currency(promoValid)}}</td>
 							</tr>
 							<tr>
 								<td style="border-top:2px solid #000000;"><h5>Total to Raise</h5></td>
-								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ promoValid ? fundraisingGoal - promoValid : fundraisingGoal | currency}}</h5></td>
+								<td style="border-top:2px solid #000000;"><h5 class="text-success text-right">{{ promoValid ? fundraisingGoal - promoValid : currency(fundraisingGoal)}}</h5></td>
 							</tr>
 
 						</tfoot>

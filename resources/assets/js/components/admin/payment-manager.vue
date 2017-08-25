@@ -14,7 +14,7 @@
 
             <tr v-for="payment in orderByProp(payments, 'due_at')">
                 <td>{{ currency(payment.amount_owed) }}</td>
-                <td>{{ payment.percent_owed.tofixed(2) }}%</td>
+                <td>{{ payment.percent_owed.toFixed(2) }}%</td>
                 <td v-if="payment.due_at">{{ payment.due_at|moment('lll') }}</td>
                 <td v-else>Upfront</td>
                 <td>{{ payment.upfront ? 'N/A' : payment.grace_period }} {{ payment.upfront ? '' : (payment.grace_period > 1 ? 'days' : 'day') }}</td>
@@ -59,7 +59,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="dueAt">Due</label><br />
-                                <date-picker :input-sm="true" :model="newPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                <date-picker input-sm v-model="newPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
                                 <!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="newPayment.due_at" required>-->
                             </div>
                         </div>
@@ -118,7 +118,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group">
                                     <label for="dueAt">Due</label><br />
-                                    <date-picker :input-sm="true" :model="selectedPayment.due_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+                                    <date-picker input-sm v-model="selectedPayment.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
                                     <!--<input id="dueAt" class="form-control input-sm hidden" type="datetime" v-model="selectedPayment.due_at" required>-->
                                 </div>
                             </div>

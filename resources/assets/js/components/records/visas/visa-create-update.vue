@@ -7,10 +7,7 @@
                 <div class="col-sm-12">
                     <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                         <label for="infoManager">Record Manager</label>
-                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                        <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                            <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                        </select>
+                        <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" name="manager" v-validate="'required'"></v-select>
                     </div>
                 </div>
             </template>
@@ -20,7 +17,7 @@
                     <div v-error-handler="{ value: given_names, client: 'givennames', server: 'given_names' }">
                         <label for="given_names" class="control-label">Given Names</label>
                         <input type="text" class="form-control" id="given_names" v-model="given_names"
-                               placeholder="Given Names" name="givennames" v-validate="'required|min:1|max:100'"
+                               placeholder="Given Names" name="givennames" v-validate="'required|alpha_spaces|min:1|max:100'"
                                maxlength="150" minlength="1" required>
                     </div>
                 </div>
@@ -28,7 +25,7 @@
                     <div v-error-handler="{ value: surname, handle: 'surname' }">
                         <label for="surname" class="control-label">Surname</label>
                         <input type="text" class="form-control" name="surname" id="surname" v-model="surname"
-                               placeholder="Surname" v-validate="'required|min:1|max:100'"
+                               placeholder="Surname" v-validate="'required|alpha|min:1|max:100'"
                                maxlength="100" minlength="1" required>
                     </div>
                 </div>
@@ -46,16 +43,12 @@
                 <div class="col-sm-12">
                     <label for="issued_at" class="control-label">Dates</label>
                     <div class="row">
-                        <div class="col-lg-6">
-                            <date-picker addon="Issued" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }" :model="issued_at|moment('YYYY-MM-DD')"></date-picker>
-                            <input type="datetime" class="form-control hidden" v-model="issued_at" id="issued_at" :max="today"
-                                   name="issued" v-validate="'required'" required>
+                        <div class="col-lg-6" v-error-handler="{ value: issued_at, client:'issued', server: 'issued_at' }">
+                            <date-picker addon="Issued" v-model="issued_at" :view-format="['YYYY-MM-DD']" type="date" name="issued" v-validate="'required'"></date-picker>
                             <br>
                         </div>
-                        <div class="col-lg-6">
-                            <date-picker addon="Expires" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }" :model="expires_at|moment('YYYY-MM-DD')"></date-picker>
-                            <input type="datetime" class="form-control hidden" v-model="expires_at" id="expires_at" :min="tomorrow"
-                                   name="expires" v-validate="'required'" required>
+                        <div class="col-lg-6" v-error-handler="{ value: expires_at, client:'expires', server: 'expires_at' }">
+                            <date-picker addon="Expires" v-model="expires_at" :view-format="['YYYY-MM-DD', false, true]" type="date" name="expires" v-validate="'required'"></date-picker>
                         </div>
                     </div>
                 </div>
@@ -64,16 +57,12 @@
             <div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                 <div class="col-sm-12">
                     <label for="country" class="control-label">Country</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" v-model="countryObj" :options="UTILITIES.countries" label="name"></v-select>
-                    <select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'">
-                        <option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-                    </select>
-
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="countryObj" v-model="countryObj" :options="UTILITIES.countries" label="name" name="country" v-validate="'required'"></v-select>
                 </div>
             </div>
 
-            <accordion :one-at-atime="true">
-                <panel header="Upload Photocopy" :is-open="true">
+            <accordion one-at-atime>
+                <panel header="Upload Photocopy" is-open>
                     <div class="media" v-if="selectedAvatar">
                         <div class="media-left">
                             <a href="#">
@@ -85,17 +74,23 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <upload-create-update v-if="userObj || !isUpdate" type="passport" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"></upload-create-update>
+                        <upload-create-update v-if="userObj || !isUpdate" type="passport" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" :is-update="isUpdate && !!upload_id" :upload-id="upload_id" :name="'passport-'+given_names+'-'+surname"  @uploads-complete="uploadsComplete"></upload-create-update>
                     </div><!-- end panel-body -->
                 </panel>
             </accordion>
 
             <div class="form-group">
                 <div class="col-sm-12 text-center">
-                    <a v-if="!isUpdate" :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
-                    <a v-if="!isUpdate" @click="submit()" class="btn btn-primary">Create</a>
-                    <a v-if="isUpdate" @click="back()" class="btn btn-default">Cancel</a>
-                    <a v-if="isUpdate" @click="update()" class="btn btn-primary">Update</a>
+                    <template v-if="!isUpdate">
+                        <a :href="'/'+ this.firstUrlSegment +'/records/visas'" class="btn btn-default">Cancel</a>
+                        <a @click="submit" class="btn btn-primary">Create</a>
+                    </template>
+                    <template v-else>
+                        <a @click="back" class="btn btn-default">Cancel</a>
+                        <a @click="update" class="btn btn-primary">Update</a>
+                    </template>
+
+
                 </div>
             </div>
         </form>
@@ -148,7 +143,7 @@
                 number: '',
                 issued_at: null,
                 expires_at: null,
-                country_code: null,
+                showSaveAlert: false,
                 upload_id: null,
                 usersArr: [],
                 userObj: null,
@@ -165,8 +160,11 @@
             }
         },
         computed: {
-            country_code(){
-                return _.isObject(this.countryObj) ? this.countryObj.code : null;
+            country_code:{
+                get() {
+                    return _.isObject(this.countryObj) ? this.countryObj.code : null;
+                },
+                set() {}
             },
             user_id(){
                 return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
@@ -180,11 +178,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -200,7 +195,7 @@
                         return;
                     }
 
-                    this.visasResource.post(null, {
+                    this.visasResource.post({}, {
                         given_names: this.given_names,
                         surname: this.surname,
                         number: this.number,
@@ -247,10 +242,7 @@
                     });
                 });
             },
-
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data){
                 switch(data.type){
                     case 'other':
                         //save for preview
@@ -259,7 +251,8 @@
                         this.upload_id = data.id;
                         break;
                 }
-            }
+            },
+
         },
         mounted(){
             this.getCountries().then(() => {

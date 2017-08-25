@@ -147,13 +147,7 @@
                                 <label v-if="!manualAirlineData" for="travel_methodA">Airline</label>
                                 <v-select v-if="!manualAirlineData" @keydown.enter.prevent=""  class="form-control" id="airlineFilter" :debounce="250" :on-search="getAirlines"
                                           v-model="selectedAirlineObj" :options="UTILITIES.airlines" label="extended_name"
-                                          placeholder="Select Airline"></v-select>
-                                <select  v-if="manualAirlineData" class="form-control hidden" name="airline" id="airline" v-validate="'required'"
-                                        v-model="selectedTransport.name">
-                                    <option :value="airline.name" v-for="airline in UTILITIES.airlines">
-                                        {{ airline.extended_name|capitalize }}
-                                    </option>
-                                </select>
+                                          placeholder="Select Airline" name="airline" v-validate="'required'"></v-select>
 	                            <label><input type="checkbox" v-model="manualAirlineData"> This is a chartered flight</label>
                                 <template v-if="manualAirlineData">
                                     <div class="form-group">
@@ -238,7 +232,7 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.depart_at, client: 'depart_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Departing at Date & Time</label>
-                            <date-picker :model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)" name="depart_at" v-validate="'required'"></date-picker>
+                            <date-picker v-model="selectedTransport.depart_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" name="depart_at" v-validate="'required'"></date-picker>
                             <!--<input type="text" class="form-control hidden" v-model="selectedTransport.depart_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
                                    id="depart_at" name="occurred" v-validate="['required', 'datetime']">-->
                         </div>
@@ -248,7 +242,7 @@
                                     :transport-type="selectedTransport.type"></travel-hub>
                         <div class="form-group" v-error-handler="{ value: selectedTransport.arrive_at, client: 'arrive_at', messages: {req: 'Please set a date and time', datetime: 'Please set a date and time'} }">
                             <label for="">Arriving at Date & Time</label>
-                            <date-picker :model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)" name="arrive_at" v-validate="'required'"></date-picker>
+                            <date-picker v-model="selectedTransport.arrive_at" :view-format="['YYYY-MM-DD HH:mm:ss', false, true]" name="arrive_at" v-validate="'required'"></date-picker>
                             <!--<input type="text" class="form-control hidden" v-model="selectedTransport.arrive_at | moment('YYYY-MM-DD HH:mm:ss', false, true)"
                                    id="arrive_at" name="occurred" v-validate="['required', 'datetime']">-->
                         </div>

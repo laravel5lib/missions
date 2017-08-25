@@ -23,7 +23,7 @@
 				<hr class="divider">
 			</div>
 			<div class="col-xs-6 text-right">
-				<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
+				<a v-if="campaigns.length > campaignsLimit" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
 			</div>
 		</div>
 		<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
@@ -40,8 +40,7 @@
 							<h5 style="text-transform:capitalize;" class="text-primary">{{campaign.name}}</h5>
 						</a>
 						<h6 style="font-size:12px;">
-							{{campaign.started_at | moment('ll')}} -
-							{{campaign.ended_at | moment('ll')}}
+							{{campaign.started_at | moment('ll')}} - {{campaign.ended_at | moment('ll')}}
 						</h6>
 						<hr class="divider lg"/>
 						<p style="font-size:12px;" class="small">{{campaign.description}}</p>
@@ -452,7 +451,7 @@
 			return {
 				campaigns: [],
 				campaignsLimit: 3,
-				resource: this.$resource('campaigns?published=true&current=true')
+				resource: this.$resource('campaigns', { published: true, current: true})
 			}
 		},
 		methods: {
@@ -462,22 +461,21 @@
 		},
 		mounted(){
 			// this.$refs.spinner.show();
-			this.resource.query().then((campaigns) => {
+			this.resource.get().then((campaigns) => {
 				this.campaigns = campaigns.data.data;
 				// this.$refs.spinner.hide();
-			}, (error) =>  {
-				// this.$refs.spinner.hide();
-				//TODO error alert message
-			}).then(() => {
+			}, this.$root.handleApiError);
 
-			});
+			// click event for video modal
 			$('.launch-modal').on('click', function(e){
 			    e.preventDefault();
 			    $( '#' + $(this).data('video-modal') ).modal();
 			});
+
+			//set src for video playher in modal
 			$('.video-modal').on('hide.bs.modal', function(e) {    
-			    var $if = $(e.delegateTarget).find('iframe');
-			    var src = $if.attr("src");
+			    let $if = $(e.delegateTarget).find('iframe');
+			    let src = $if.attr("src");
 			    $if.attr("src", '/empty.html');
 			    $if.attr("src", src);
 			});

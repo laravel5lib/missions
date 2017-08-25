@@ -33,7 +33,7 @@
                     </td>
                     <td>{{ cost.name || cost.cost }}</td>
                     <td>{{ cost.type|capitalize }}</td>
-                    <td>{{ cost.amount| currency }}</td>
+                    <td>{{ currency(cost.amount) }}</td>
                     <td>
                         <a class="btn btn-danger btn-xs" @click="confirmRemove(cost)"><i class="fa fa-times"></i></a>
                     </td>
@@ -48,10 +48,7 @@
                     <div class="form-group" :class="{ 'has-error': errors.has('costs') }">
                         <label class="control-label">Available Costs</label>
                         <v-select @keydown.enter.prevent=""  class="form-control" id="user" multiple v-model="selectedCosts" :options="availableCosts"
-                                  label="name"></v-select>
-                        <select hidden="" v-model="user_id" name="costs" v-validate="'required'" multiple>
-                            <option :value="cost.id" v-for="cost in costs">{{cost.name}}</option>
-                        </select>
+                                  label="name" name="costs" v-validate="'required'"></v-select>
                     </div>
                 </form>
             </div>
@@ -287,7 +284,9 @@
         },
         mounted(){
             // this.$refs.spinner.show();
-            this.$http.get(`projects/${this.id}?include=dues,costs.payments,initiative.costs.payments`).then((response) => {
+            this.$http.get(`projects/${this.id}`, { params: {
+                include: 'dues,costs.payments,initiative.costs.payments'
+            }}).then((response) => {
                 this.setProjectData(response.data.data);
                 // this.$refs.spinner.hide();
             });

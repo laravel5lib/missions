@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12">
-                            <date-picker addon="Start" :input-sm="true" :model="filters.starts|moment('MM-DD-YYYY HH:mm:ss')" v-if="filters"></date-picker>
+                            <date-picker addon="Start" input-sm v-model="filters.starts" :view-format="['MM-DD-YYYY HH:mm:ss']" v-if="filters"></date-picker>
                             <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">Start</span>
                                 &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.starts"/>&ndash;&gt;
@@ -66,7 +66,7 @@
                             <br>
                         </div>
                         <div class="col-xs-12">
-                            <date-picker addon="End" :input-sm="true" :model="filters.ends|moment('MM-DD-YYYY HH:mm:ss')" v-if="filters"></date-picker>
+                            <date-picker addon="End" input-sm v-model="filters.ends" :view-format="['MM-DD-YYYY HH:mm:ss']" v-if="filters"></date-picker>
                             <!--<div class="input-group input-group-sm">
                                 <span class="input-group-addon">End</span>
                                 &lt;!&ndash;<input type="datetime-local" class="form-control" v-model="filters.ends"/>&ndash;&gt;
@@ -229,9 +229,9 @@
                 <td v-if="isActive('name')" v-text="donor.name"></td>
                 <td v-if="isActive('company')" v-text="donor.company"></td>
                 <td v-if="isActive('email')" v-text="donor.email"></td>
-                <td v-if="isActive('phone')" v-text="donor.phone|phone"></td>
+                <td v-if="isActive('phone')">{{donor.phone|phone}}</td>
                 <td v-if="isActive('zip')" v-text="donor.zip"></td>
-                <td v-if="isActive('total_donated')" v-text="donor.total_donated|currency"></td>
+                <td v-if="isActive('total_donated')" v-text="currency(donor.total_donated)"></td>
                 <td><a :href="`/admin/donors/${ donor.id }`"><i class="fa fa-cog"></i></a></td>
             </tr>
             </tbody>
@@ -283,6 +283,7 @@
                 search: '',
                 activeFields: ['name', 'company', 'email', 'phone', 'zip', 'total_donated'],
                 maxActiveFields: 8,
+                maxActiveFieldsOptions: [3, 4, 5, 6, 7, 8],
 
                 // filter vars
                 groupsOptions: [],
@@ -388,7 +389,7 @@
                     // default to first visible field
                     this.orderByField = val[0];
                 }
-                this.putConfig();
+                this.updateConfig();
             },
             'search'(val, oldVal) {
                 this.page = 1;
@@ -547,7 +548,7 @@
                     this.pagination = response.data.meta.pagination;
                     // this.$refs.spinner.hide();
                 }).then(() => {
-                    this.putConfig();
+                    this.updateConfig();
                 });
             }
         },

@@ -65,10 +65,10 @@
                             </modal>
                         </div>
                         <div class="tab-pane fade" id="tab2">
-                            <upload-create-update type="other" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']" :width="1920" :height="1080"></upload-create-update>
+                            <upload-create-update type="other" :name="randName" lock-type ui-locked :ui-selector="2" is-child :tags="['Fundraiser']" :width="1920" :height="1080"  @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                         <div class="tab-pane fade" id="tab3">
-                            <upload-create-update type="video" :name="randName" :lock-type="true" :ui-locked="true" :ui-selector="2" :is-child="true" :tags="['Fundraiser']"></upload-create-update>
+                            <upload-create-update type="video" :name="randName" lock-type ui-locked :ui-selector="2" is-child :tags="['Fundraiser']"  @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
 
@@ -156,21 +156,6 @@
                 selectedUploadPlayer: null
             }
         },
-        events:{
-            'uploads-complete'(data){
-                switch(data.type){
-                    case 'video':
-                    case 'other':
-                        var arr = _.pluck(this.fundraiser.uploads.data, 'id');
-                        arr.push(data.id);
-                        arr = _.uniq(arr);
-                        this.fundraiser.upload_ids = arr;
-                        jQuery('#mediaCollapse').collapse('hide');
-                        break;
-                }
-                this.submit();
-            }
-        },
         computed:{
             randName(){
                 return (this.fundraiser.url || this.id) + '_' + moment().unix().toString();
@@ -182,6 +167,19 @@
             },
         },
         methods:{
+            uploadsComplete(data){
+                switch(data.type){
+                    case 'video':
+                    case 'other':
+                        var arr = _.pluck(this.fundraiser.uploads.data, 'id');
+                        arr.push(data.id);
+                        arr = _.uniq(arr);
+                        this.fundraiser.upload_ids = arr;
+                        jQuery('#mediaCollapse').collapse('hide');
+                        break;
+                }
+                this.submit();
+            },
             viewUpload(upload){
                 let vjsOptions;
 
@@ -216,7 +214,6 @@
                                 // Player (this) is initialized and ready.
                             });
                         } else {
-                            debugger;
                             switch (this.selectedUpload.meta.format) {
                                 case 'youtube':
                                     //vjsOptions.techOrder = ['youtube'];

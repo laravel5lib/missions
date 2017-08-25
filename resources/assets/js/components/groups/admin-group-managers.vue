@@ -39,10 +39,8 @@
 										class="col-sm-2 control-label">User</label>
 									<div class="col-sm-10">
 										<v-select @keydown.enter.prevent=""  class="form-control" id="user" v-model="userObj" :options="users"
-												  :on-search="getUsers" label="name"></v-select>
-										<select hidden="" v-model="user_id" name="user" v-validate="'required'">
-											<option :value="user.id" v-for="user in users">{{user.name}}</option>
-										</select></div>
+												  :on-search="getUsers" label="name" name="user" v-validate="'required'"></v-select>
+									</div>
 								</div>
 							</form>
 
@@ -66,7 +64,7 @@
         props: ['groupId'],
 		data() {
 			return {
-				user_id: null,
+//				user_id: null,
 				managers: [],
 				users: [],
 				group: null,
@@ -75,8 +73,11 @@
 			}
 		},
 		computed: {
-			user_id() {
-				return _.isObject(this.userObj) ? this.userObj.id : null;
+			user_id: {
+			    get() {
+                    return _.isObject(this.userObj) ? this.userObj.id : null;
+                },
+				set() {}
 			}
 		},
 		methods: {

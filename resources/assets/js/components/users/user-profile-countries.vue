@@ -43,9 +43,6 @@
 						<label class="control-label">Countries</label>
 						<v-select @keydown.enter.prevent="" class="form-control" multiple v-model="selectedCountries" :options="availableCountries"
 								  label="name"></v-select>
-						<select hidden v-model="selectedCodes" multiple>
-							<option :value="country.code" v-for="country in availableCountries">{{country.name}}</option>
-						</select>
 					</div>
 				</form>
 

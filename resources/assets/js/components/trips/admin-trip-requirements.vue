@@ -63,7 +63,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': errors.has('due', 'requirement-add')}">
                                         <label for="due_at">Due</label>
-                                        <date-picker :input-sm="true" :model="newRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+                                        <date-picker input-sm v-model="newRequirement.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="due" v-validate="'required'"></date-picker>
                                         <!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                v-model="newRequirement.due_at">-->
                                     </div>
@@ -128,7 +128,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group" :class="{'has-error': errors.has('due', 'requirement-edit')}">
                                         <label for="due_at">Due</label>
-                                        <date-picker :input-sm="true" :model="selectedRequirement.due_at|moment('YYYY-MM-DD HH:mm:ss')" name="due" v-validate="'required'"></date-picker>
+                                        <date-picker input-sm v-model="selectedRequirement.due_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="due" v-validate="'required'"></date-picker>
                                         <!--<input type="datetime" id="due_at" class="form-control input-sm hidden"
                                                v-model="selectedRequirement.due_at">-->
                                     </div>

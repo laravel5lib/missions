@@ -190,13 +190,13 @@
                 let user = response.data.data;
                 let managing = [];
 
-                if (user.facilitating.data.length) {
+                if (user.facilitating && user.facilitating.data.length) {
                     this.isFacilitator = true;
                     let facilitating = _.pluck(user.facilitating.data, 'id');
                     this.trips = _.union(this.trips, facilitating);
                 }
 
-                if (user.managing.data.length) {
+                if (user.managing && user.managing.data.length) {
                     _.each(user.managing.data, (group) => {
                         managing = _.union(managing, _.pluck(group.trips.data, 'id'));
                     });

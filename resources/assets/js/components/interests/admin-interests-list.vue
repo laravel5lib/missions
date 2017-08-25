@@ -25,7 +25,7 @@
                         <option value="short">Short</option>
                     </select>
                 </div>
-                <div class="form-group" v-if="!tripId">
+                <div class="form-group">
                     <v-select @keydown.enter.prevent=""  class="form-control" id="campaignFilter" :debounce="250" :on-search="getCampaigns"
                               v-model="campaignObj" :options="campaignOptions" label="name"
                               placeholder="Filter by Campaign"></v-select>

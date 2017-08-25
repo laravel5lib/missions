@@ -32,7 +32,7 @@
 
             <label>Balance</label>
             <h4 :class="{'text-success' : fund.balance > 0, 'text-danger' : fund.balance < 0}">
-                {{ fund.balance | currency }}
+                {{ currency(fund.balance) }}
             </h4>
             <div :class="{ 'has-error' : errors.has('name')}">
                 <label>Fund Name</label>

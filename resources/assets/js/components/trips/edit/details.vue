@@ -13,10 +13,7 @@
 						<label class="col-sm-2 control-label">Group</label>
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent="" class="form-control" id="group" v-model="groupObj" :options="groups" :on-search="getGroups"
-									  label="name"></v-select>
-							<select hidden v-model="group_id" name="group" v-validate="'required'">
-								<option :value="group.id" v-for="group in groups">{{group.name}}</option>
-							</select>
+									  label="name" name="group" v-validate="'required'"></v-select>
 						</div>
 					</div>
 
@@ -105,7 +102,7 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': errors.has('start') }">
 										<span class="input-group-addon">Start</span>
-										<date-picker class="form-control input-sms" :model="started_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+										<date-picker class="form-control input-sms" v-model="started_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 											   name="start" v-validate="'required'" required>
 									</div>
@@ -114,7 +111,7 @@
 									<div class="input-group input-group-sm"
 										 :class="{ 'has-error': errors.has('end') }">
 										<span class="input-group-addon">End</span>
-										<date-picker class="form-control input-sms" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+										<date-picker class="form-control input-sms" v-model="ended_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 										<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 											   name="end" v-validate="'required'" required>
 									</div>
@@ -128,10 +125,6 @@
 						<div class="col-sm-10">
 							<v-select @keydown.enter.prevent="" multiple class="form-control" id="rep" v-model="repObj" :options="reps"
 									  label="name"></v-select>
-							<!--name="rep" v-validate="{ required: false}"-->
-							<select hidden v-model="rep_id">
-								<option v-for="rep in reps" :value="rep">{{rep}}</option>
-							</select>
 						</div>
 					</div>
 

@@ -47,7 +47,7 @@
                 <div class="col-sm-8">
                     <div v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
                         <label for="country">Country</label>
-                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="countries" label="name" name="country" v-validate="'required'"></v-select>
+                        <v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries" label="name" name="country" v-validate="'required'"></v-select>
                         <!--<select hidden name="country" id="country" class="hidden" v-model="country_code" v-validate="'required'" >
                             <option :value="country.code" v-for="country in countries">{{country.name}}</option>
                         </select>-->
@@ -68,7 +68,7 @@
             <div class="form-group" v-error-handler="{ value: timezone, handle: 'timezone' }">
                 <div class="col-sm-12">
                     <label for="timezone">Timezone</label>
-                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="timezones" name="timezone" v-validate="'required'"></v-select>
+                    <v-select @keydown.enter.prevent=""  class="form-control" id="timezone" v-model="timezone" :options="UTILITIES.timezones" name="timezone" v-validate="'required'"></v-select>
                     <!--<select hidden name="timezone" id="timezone" class="hidden" v-model="timezone" v-validate="'required'">
                         <option :value="timezone" v-for="timezone in timezones">{{ timezone }}</option>
                     </select>-->
@@ -143,7 +143,6 @@
                 name: '',
                 description: '',
                 type: '',
-                country_code: null,
                 timezone: null,
                 phone_one: '',
                 phone_two: '',
@@ -173,9 +172,12 @@
             }
         },
         computed: {
-            country_code() {
-                return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
-            }
+            country_code: {
+                get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+                set() {}
+            },
         },
         methods: {
             submit(){
@@ -185,7 +187,7 @@
 
                         let formData = this.data
                         // this.$refs.spinner.show();
-                        resource.post(null, {
+                        resource.post({}, {
                             name: this.name,
                             description: this.description,
                             type: this.type,

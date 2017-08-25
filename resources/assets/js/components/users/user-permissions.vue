@@ -21,7 +21,7 @@
 
             <div class="row">
                 <div class="col-xs-12 text-center text-muted small">
-                    <a @click="customize()"><i class="fa fa-cog"></i> Customize User Abilities</a>
+                    <a @click="customize"><i class="fa fa-cog"></i> Customize User Abilities</a>
                 </div>
             </div>
         </div>
@@ -30,8 +30,8 @@
         </div>
         <div class="panel-body" v-if="showAbilities">
             <div class="row">
-                <div class="col-xs-12" v-for="ability in abilitiesList">
-                    <h5>{{ $key ? $key[0].toUpperCase() + $key.slice(1) : '' }}</h5>
+                <div class="col-xs-12" v-for="(ability, key) in abilitiesList">
+                    <h5>{{ key|capitalize }}</h5>
                     <p v-for="item in ability">
                         {{ item.name|capitalize }}
                         <button class="btn btn-xs btn-default-hollow pull-right"

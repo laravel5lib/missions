@@ -17,10 +17,10 @@
                     <div class="panel-heading" role="tab" :id="'heading-' + donor.id">
                         <h5 class="text-capitalize">
                             <a role="button" :href="'/'+donor.account_url" v-if="donor.account_url">
-                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                                {{ donor.name }} <span class="small">{{currency(donor.total_donated)}}</span>
                             </a>
                             <span v-else>
-                                {{ donor.name }} <span class="small">{{donor.total_donated|currency}}</span>
+                                {{ donor.name }} <span class="small">{{currency(donor.total_donated)}}</span>
                             </span>
                         </h5>
                     </div>
@@ -31,7 +31,7 @@
                 <div class="panel panel-default" v-for="donation in donations">
                     <div class="panel-heading" role="tab" :id="'heading-' + donation.id">
                         <h5>
-                            <span class="text-success">{{ donation.amount|currency }}</span> was donated<br>
+                            <span class="text-success">{{ currency(donation.amount) }}</span> was donated<br>
                             <small class="small">by 
                                 <a class="text-capitalize" 
                                    :href="'/'+donation.donor.data.account_url" 

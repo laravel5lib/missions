@@ -2,7 +2,7 @@
 	<div>
 		<div class="row" style="position:relative;">
 			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" :filters="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
+				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetReservationFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" rooms></reservations-filters>
 			</mm-aside>
 
 			<template v-if="currentPlan">
@@ -549,7 +549,7 @@
         },
 	    watch: {
             currentPlan(val) {
-                this.putConfig();
+                this.updateConfig();
                 this.currentRoom = null;
                 this.getRooms(val);
                 this.searchReservations();
@@ -561,7 +561,7 @@
                         this.getOccupants();
                     this.searchReservations();
                     this.getTeams();
-                    this.putConfig();
+                    this.updateConfig();
                 },
 	            deep: true
             },

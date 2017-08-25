@@ -18,8 +18,8 @@
 				<span class="input-group-addon"><i class="fa fa-search"></i></span>
 			</div>
 			<button class="btn btn-default btn-sm" @click="showActivityFilters = true;">Filters</button>
-			<date-picker :has-error="" :model="activityFilters.starts|moment('YYYY-MM-DD', false, true)" type="date" placeholder="Start DateTime" input-sm></date-picker>
-			<date-picker :has-error="" :model="activityFilters.ends|moment('YYYY-MM-DD', false, true)" type="date" placeholder="End DateTime" input-sm></date-picker>
+			<date-picker :has-error="" v-model="activityFilters.starts" :view-format="['YYYY-MM-DD', false, true]" type="date" placeholder="Start DateTime" input-sm></date-picker>
+			<date-picker :has-error="" v-model="activityFilters.ends" :view-format="['YYYY-MM-DD', false, true]" type="date" placeholder="End DateTime" input-sm></date-picker>
 
 			<button type="button" class="btn btn-primary btn-sm" @click="newActivity();">Add Activity</button>
 		</form>

@@ -20,12 +20,8 @@
 			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
 				<div class="col-sm-12">
 					<label for="country">Country</label>
-					<v-select @keydown.enter.prevent=""  class="form-control" id="country" v-model="countryCodeObj" :options="UTILITIES.countries"
+					<v-select @keydown.enter.prevent=""  class="form-control" name="country" v-validate="'required'" id="country" v-model="countryCodeObj" :options="UTILITIES.countries"
 							  label="name"></v-select>
-					<select hidden name="country" id="country" class="hidden" v-model="country_code"
-					        v-validate="'required'">
-						<option :value="country.code" v-for="country in UTILITIES.countries">{{country.name}}</option>
-					</select>
 				</div>
 			</div>
 			<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
@@ -42,7 +38,7 @@
 					<label for="started_at">Dates</label>
 					<div class="row">
 						<div class="col-sm-6">
-							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" :model="started_at|moment('YYYY-MM-DD HH:mm:ss')" name="start" v-validate="'required'"></date-picker>
+							<date-picker addon="Start" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }" v-model="started_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="start" v-validate="'required'"></date-picker>
 							<!--<input type="datetime" class="form-control hidden" v-model="started_at" id="started_at"
 							       name="start" v-validate="'required'" required>-->
 							<!--<div class="input-group" v-error-handler="{ value: started_at, client: 'start', server: 'started_at' }">
@@ -51,12 +47,12 @@
 							<div v-if="errors.started_at" class="help-block">{{errors.started_at.toString()}}</div>
 						</div>
 						<div class="col-sm-6">
-							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')" name="end" v-validate="'required'"></date-picker>
+							<date-picker addon="End" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" v-model="ended_at" :view-format="['YYYY-MM-DD HH:mm:ss']" name="end" v-validate="'required'"></date-picker>
 							<!--<input type="datetime" class="form-control hidden" v-model="ended_at" id="ended_at"
 							       name="end" v-validate="'required'" required>-->
 							<!--<div class="input-group" v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }">
 								<span class="input-group-addon">End</span>
-								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+								<date-picker v-error-handler="{ value: ended_at, client: 'end', server: 'ended_at' }" v-model="ended_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 							</div>-->
 							<div v-if="errors.ended_at" class="help-block">{{errors.ended_at.toString()}}</div>
 						</div>
@@ -67,7 +63,7 @@
 			<div class="form-group">
 				<div class="col-sm-12">
 					<label for="published_at">Published Date</label>
-					<date-picker :model="published_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>
+					<date-picker v-model="published_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>
 					<!--<div class="input-group">
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-default" @click="published_at = ''"><i class="fa fa-close"></i></button>
@@ -117,7 +113,7 @@
 					<div class="collapse" id="avatarCollapse">
 						<div class="well">
 							<upload-create-update type="avatar" lock-type is-child
-												  :tags="['campaign']"></upload-create-update>
+												  :tags="['campaign']"  @uploads-complete="uploadsComplete"></upload-create-update>
 						</div>
 					</div>
 				</div><!-- end col -->
@@ -134,7 +130,7 @@
 					<div class="collapse" id="bannerCollapse">
 						<div class="well">
 							<upload-create-update type="banner" lock-type is-child
-												  :tags="['campaign']"></upload-create-update>
+												  :tags="['campaign']"  @uploads-complete="uploadsComplete"></upload-create-update>
 						</div>
 					</div>
 				</div><!-- end col -->
@@ -300,24 +296,22 @@
                     console.log(response);
                     return response
                 });
-			}
-		},
-		events:{
-			'uploads-complete'(data){
-				switch(data.type){
-					case 'avatar':
-						this.selectedAvatar = data;
-						this.avatar_upload_id = data.id;
-						jQuery('#avatarCollapse').collapse('hide');
-						break;
-					case 'banner':
-						this.selectedBanner = data;
-						this.banner_upload_id = data.id;
-						jQuery('#bannerCollapse').collapse('hide');
-						break;
-				}
-			}
-		},
+			},
+            uploadsComplete(data){
+                switch(data.type){
+                    case 'avatar':
+                        this.selectedAvatar = data;
+                        this.avatar_upload_id = data.id;
+                        jQuery('#avatarCollapse').collapse('hide');
+                        break;
+                    case 'banner':
+                        this.selectedBanner = data;
+                        this.banner_upload_id = data.id;
+                        jQuery('#bannerCollapse').collapse('hide');
+                        break;
+                }
+            }
+        },
 		created(){
 			// this.$refs.spinner.show();
 			this.getCountries();

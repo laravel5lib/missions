@@ -50,7 +50,7 @@
 				</form>
 			</mm-aside>
 			<mm-aside :show="showReservationsFilters" @open="showReservationsFilters=true" @close="showReservationsFilters=false" placement="left" header="Reservation Filters" :width="375">
-				<reservations-filters ref="filters" :filters="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
+				<reservations-filters ref="filters" v-model="reservationFilters" :reset-callback="resetFilter" :pagination="reservationsPagination" :callback="searchReservations" storage="" :starter="startUp" teams></reservations-filters>
 			</mm-aside>
 			<mm-aside :show="showMembersFilters" @open="showMembersFilters=true" @close="showMembersFilters=false" placement="left" header="Members Filters" :width="375">
 				<hr class="divider inv sm">

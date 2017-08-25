@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<mm-aside :show="showFilters" @open="showFilters=true" @close="showFilters=false" placement="left" header="Filters" :width="375">
-			<reservations-filters ref="filters" :filters="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
+			<reservations-filters ref="filters" v-model="filters" :reset-callback="resetFilter" :pagination="pagination" :callback="searchReservations" :storage="storageName" :trip-specific="!!tripId"></reservations-filters>
 		</mm-aside>
 
 		<div class="row">
@@ -253,7 +253,7 @@
 					</td>
 					<td v-if="isActive('fund')"><a :href="'/admin/funds/'+reservation.fund.data.id" target="_blank">{{ reservation.fund.data.name|capitalize }}</a></td>
 					<td v-if="isActive('type')">{{reservation.trip.data.type|capitalize}}</td>
-					<td v-if="isActive('total_raised')">{{reservation.total_raised|currency}}</td>
+					<td v-if="isActive('total_raised')">{{currency(reservation.total_raised)}}</td>
 					<td v-if="isActive('percent_raised')">{{reservation.percent_raised}}%</td>
 					<td v-if="isActive('registered')">{{reservation.created_at|moment('ll')}}</td>
 					<td v-if="isActive('dropped')">{{reservation.deleted_at|moment('ll')}}</td>
@@ -432,20 +432,20 @@
 			}
 		},
 		computed: {
-			'todo': () =>  {
+			todo()  {
 				if (this.filters.todoStatus) {
 					return this.filters.todoName + '|' + this.filters.todoStatus;
 				} else {
 					return this.filters.todoName;
 				}
 			},
-			'requirement': () =>  {
+			requirement() {
 				if (this.filters.requirementName && this.filters.requirementStatus)
 					return this.filters.requirementName + '|' + this.filters.requirementStatus;
 
 				return this.filters.requirementName;
 			},
-			'due': () =>  {
+			due()  {
 				if (this.filters.dueStatus)
 					return this.filters.dueName + '|' + this.filters.dueStatus;
 
@@ -475,7 +475,7 @@
 					// default to first visible field
 					this.orderByField = val[0];
 				}
-				this.putConfig();
+				this.updateConfig();
 			},
 			'search'(val, oldVal) {
 //                this.page = 1;
@@ -483,7 +483,7 @@
                 this.searchReservations();
 			},
 			'per_page'(val, oldVal) {
-                this.putConfig();
+                this.updateConfig();
                 this.searchReservations();
 			}
         },
@@ -654,7 +654,7 @@
 					this.reservations = response.data.data;
 					this.pagination = response.data.meta.pagination;
 				}).then(() => {
-					this.putConfig();
+					this.updateConfig();
 				});
 			},
 

@@ -51,21 +51,14 @@
                         <div :class="{ 'has-error': errors.has('prospects') }">
                             <label class="control-label">Perfect For</label>
                             <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" v-model="prospectsObj"
-                                      :options="prospectsList" label="name" placeholder="Select Prospects"></v-select>
-                            <select hidden multiple v-model="prospects" name="prospects" v-validate="'required'">
-                                <option :value="prospect.value" v-for="prospect in prospectsList">{{prospect.name}}
-                                </option>
-                            </select>
+                                      :options="prospectsList" label="name" placeholder="Select Prospects" name="prospects" v-validate="'required'"></v-select>
                         </div>
                     </div><!-- end col -->
                     <div class="col-sm-6">
                         <div :class="{ 'has-error': errors.has('teamroles') }">
                             <label class="control-label">Available Roles</label>
                             <v-select @keydown.enter.prevent=""  multiple class="form-control" id="group" v-model="rolesObj"
-                                      :options="teamRolesList" label="name" placeholder="Select Team Roles"></v-select>
-                            <select hidden multiple v-model="team_roles" name="teamroles" v-validate="'required'">
-                                <option :value="role.value" v-for="role in teamRolesList">{{role.name}}</option>
-                            </select>
+                                      :options="teamRolesList" label="name" placeholder="Select Team Roles" name="teamroles" v-validate="'required'"></v-select>
                         </div>
                     </div><!-- end col -->
                 </div><!-- end row -->
@@ -101,7 +94,7 @@
                         <label for="started_at" class="control-label">Dates</label>
                         <div class="row">
                             <div class="col-sm-6">
-                                <date-picker :has-error= "errors.has('start')" :model="started_at|moment('YYYY-MM-DD', false, true)" type="date" addon="Start" ></date-picker>
+                                <date-picker :has-error= "errors.has('start')" v-model="started_at" :view-format="['YYYY-MM-DD', false, true]" type="date" addon="Start" ></date-picker>
                                 <!--<input type="datetime" class="form-control hidden" v-model="started_at | moment('LLLL')" id="started_at"
                                        name="start" v-validate="'required'" required>-->
                                 <!--<div class="input-group" :class="{ 'has-error': errors.has('start') }">
@@ -111,13 +104,13 @@
 								</div>-->
                             </div>
                             <div class="col-sm-6">
-                                <date-picker :has-error= "errors.has('end')" :model="ended_at|moment('YYYY-MM-DD', false, true)" type="date" addon="End" ></date-picker>
+                                <date-picker :has-error= "errors.has('end')" v-model="ended_at" :view-format="['YYYY-MM-DD', false, true]" type="date" addon="End" ></date-picker>
                                 <!--<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
                                        name="end" v-validate="'required'" required>-->
                                 <!--<div class="input-group"
                                      :class="{ 'has-error': errors.has('end') }">
                                     <span class="input-group-addon">End</span>
-									<date-picker class="form-control" :model="ended_at|moment('YYYY-MM-DD HH:mm:ss')" type="date"></date-picker>
+									<date-picker class="form-control" v-model="ended_at" :view-format="['YYYY-MM-DD HH:mm:ss']" type="date"></date-picker>
 									<input type="datetime" class="form-control hidden" v-model="ended_at | moment('LLLL')" id="ended_at"
                                            name="end" v-validate="'required'" required>
                                 </div>-->
@@ -154,8 +147,8 @@
 					<div class="col-sm-6">
 						<div :class="{ 'has-error': errors.has('closed') }">
 							<label for="closed_at" class="control-label">Registration Closes</label>
-							<date-picker :has-error= "errors.has('closed')" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')" ></date-picker>
-							<!--<date-picker class="form-control" :model="closed_at|moment('YYYY-MM-DD HH:mm:ss')"></date-picker>-->
+							<date-picker :has-error= "errors.has('closed')" v-model="closed_at" :view-format="['YYYY-MM-DD HH:mm:ss']" ></date-picker>
+							<!--<date-picker class="form-control" v-model="closed_at" :view-format="['YYYY-MM-DD HH:mm:ss']"></date-picker>-->
 							<!--<input type="datetime" class="form-control hidden" v-model="closed_at | moment('LLLL')" name="closed="'required'" id" v-validate="closed_at">-->
 						</div>
 					</div><!-- end col -->
@@ -166,8 +159,8 @@
 							Publish
 						</label>
 						<label class="control-label pull-right"><input type="checkbox" v-model="toggleDraft"> Save as Draft</label>
-						<date-picker :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>
-						<!--<date-picker class="form-control" :model="published_at|moment('YYYY-MM-DD HH:mm:ss')" v-if="!toggleDraft"></date-picker>-->
+						<date-picker v-model="published_at" :view-format="['YYYY-MM-DD HH:mm:ss']" v-if="!toggleDraft"></date-picker>
+						<!--<date-picker class="form-control" v-model="published_at" :view-format="['YYYY-MM-DD HH:mm:ss']" v-if="!toggleDraft"></date-picker>-->
 						<!--<input type="datetime" class="form-control" :class="{ 'hidden': !toggleDraft}" v-model="published_at | moment('LLLL')" id="published_at" :disabled="toggleDraft">-->
 					</div>
 				</div>
@@ -364,7 +357,7 @@
                                 console.log(error);
                             });
                         } else {
-                            resource.post(null, this.wizardData).then((resp) => {
+                            resource.post({}, this.wizardData).then((resp) => {
                                 window.location.href = '/admin' + resp.data.data.links[0].uri;
                             }, (error) => {
                                 console.log(error);

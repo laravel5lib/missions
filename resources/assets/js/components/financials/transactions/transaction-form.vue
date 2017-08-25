@@ -219,7 +219,7 @@
                             <div class="col-xs-12">
                                 <label>Balance</label>
                                 <h4 :class="{'text-success' : selectedFund.balance > 0, 'text-danger' : selectedFund.balance < 0}">
-                                    {{ selectedFund.balance | currency }}
+                                    {{ currency(selectedFund.balance) }}
                                 </h4>
                             </div>
                             <div class="col-xs-12">

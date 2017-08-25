@@ -16,10 +16,7 @@
                         <div class="col-sm-12">
                             <div class="form-group" :class="{ 'has-error': errors.has('manager') }">
                                 <label for="infoManager">Record Manager</label>
-                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name"></v-select>
-                                <select hidden name="manager" id="infoManager" class="hidden" v-model="user_id" v-validate="'required'">
-                                    <option :value="user.id" v-for="user in usersArr">{{user.name}}</option>
-                                </select>
+                                <v-select @keydown.enter.prevent="" class="form-control" id="infoManager" name="manager" v-model="userObj" :options="usersArr" :on-search="getUsers" label="name" v-validate="'required'"></v-select>
                             </div>
                         </div>
                     </template>
@@ -38,16 +35,16 @@
                         <div class="col-sm-6">
                             <div v-error-handler="{ value: ins_provider, client: 'provider', server: 'ins_provider', messages: { req: 'Please enter the insurance provider\'s name.'} }">
                                 <label for="ins_provider" class="control-label">Insurance Provider</label>
-                                <input type="text" class="form-control" name="ins_provider" id="ins_provider" v-model="ins_provider"
-                                       placeholder="Insurance Provider" v-validate="'required|min:1|max:100'"
+                                <input type="text" class="form-control" name="provider" id="ins_provider" v-model="ins_provider"
+                                       placeholder="Insurance Provider" v-validate="noInsurance?'':'required|min:1|max:100'"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div v-error-handler="{ value: ins_policy_no, client: 'policy', server: 'ins_policy_no', messages: { req: 'Please enter the policy number.'} }">
                                 <label for="ins_policy_no" class="control-label">Insurance Policy Number</label>
-                                <input type="text" class="form-control" name="ins_policy_no" id="ins_policy_no" v-model="ins_policy_no"
-                                       placeholder="Insurance Policy Number" v-validate="'required|min:1'"
+                                <input type="text" class="form-control" name="policy" id="ins_policy_no" v-model="ins_policy_no"
+                                       placeholder="Insurance Policy Number" v-validate="noInsurance?'':'required|min:1'"
                                        maxlength="100" minlength="1" required>
                             </div>
                         </div>
@@ -253,7 +250,7 @@
                                     <a class="badge" @click="confirmUploadRemoval(upload)"><i class="fa fa-close"></i></a>
                                 </li>
                             </ul>
-                            <upload-create-update type="file" :lock-type="true" :ui-selector="2" :ui-locked="true" :is-child="true" :tags="['User']" button-text="Attach" :allow-name="true" :name="'medical-release-'+ today + '-' + uploadCounter"></upload-create-update>
+                            <upload-create-update type="file" lock-type :ui-selector="2" ui-locked is-child :tags="['User']" button-text="Attach" allow-name :name="'medical-release-'+ today + '-' + uploadCounter"  @uploads-complete="uploadsComplete"></upload-create-update>
                         </div>
                     </div>
                 </div>
@@ -268,23 +265,15 @@
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.name, handle: 'emergencyname' }">
                                     <label>Name</label>
-                                    <input type="text"
-                                           class="form-control"
-                                           v-model="emergency_contact.name"
-                                           name="emergencyname" v-validate="'required|min:1'"
-                                           minlength="1"
-                                           required>
+                                    <input type="text" class="form-control" v-model="emergency_contact.name"
+                                           name="emergencyname" v-validate="'required|min:1'" minlength="1" required>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.email, handle: 'emergencyemail', messages: { email: 'Please enter a valid email address.'} }">
                                     <label>Email</label>
-                                    <input type="email"
-                                           class="form-control"
-                                           v-model="emergency_contact.email"
-                                           name="emergencyemail" v-validate="'required|email'"
-                                           minlength="1"
-                                           required>
+                                    <input type="email" class="form-control" v-model="emergency_contact.email"
+                                           name="emergencyemail" v-validate="'required|email'" minlength="1" required>
                                 </div>
                             </div>
                         </div>
@@ -292,24 +281,14 @@
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.phone, handle: 'emergencyphone' }">
                                     <label>Phone</label>
-                                    <phone-input v-model="emergency_contact.phone" name="emergencyphone" validation="'required'"></phone-input>
-                                    <!--<input type="tel"
-                                           class="form-control"
-                                           v-model="emergency_contact.phone|phone"
-                                           name="emergencyphone" v-validate="'required|min:1'"
-                                           minlength="1"
-                                           required>-->
-
+                                    <phone-input v-model="emergency_contact.phone" name="emergencyphone" v-validate="'required'"></phone-input>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div v-error-handler="{ value: emergency_contact.relationship, handle: 'emergencyrelationship' }">
                                     <label>Relationship</label>
-                                    <select
-                                            class="form-control"
-                                            v-model="emergency_contact.relationship"
-                                            name="emergencyrelationship" v-validate="'required'"
-                                            required>
+                                    <select class="form-control" v-model="emergency_contact.relationship"
+                                            name="emergencyrelationship" v-validate="'required'" required>
                                         <option value="friend">Friend</option>
                                         <option value="spouse">Spouse</option>
                                         <option value="family">Family</option>
@@ -333,13 +312,13 @@
             </div>
         </form>
 
-        <modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
+        <!--<modal class="text-center" :value="deleteModal" @closed="deleteModal=false" title="Delete Cost" :small="true">
             <div slot="modal-body" class="modal-body text-center" v-if="selectedItem">Delete {{ selectedItem.name }}?</div>
             <div slot="modal-footer" class="modal-footer">
                 <button type="button" class="btn btn-default btn-sm" @click='deleteModal = false'>Keep</button>
                 <button type="button" class="btn btn-primary btn-sm" @click='deleteModal = false,remove(selectedCost)'>Delete</button>
             </div>
-        </modal>
+        </modal>-->
         <modal title="Save Changes" :value="showSaveAlert" @closed="showSaveAlert=false" ok-text="Continue" cancel-text="Cancel" :callback="forceBack">
             <div slot="modal-body" class="modal-body">You have unsaved changes, continue anyway?</div>
         </modal>
@@ -371,8 +350,6 @@
         },
         data(){
             return{
-                // mixin settings
-                validatorHandle: 'CreateUpdateMedicalRelease',
                 noInsurance: false,
                 usersArr: [],
                 userObj: null,
@@ -415,6 +392,8 @@
                 showSuccess: false,
                 showError: false,
                 selectedAvatar: null,
+                deleteModal: false,
+                showSaveAlert: false,
                 today: moment().format('YYYY-MM-DD'),
                 yesterday: moment().subtract(1, 'days').format('YYYY-MM-DD'),
                 tomorrow:moment().add(1, 'days').format('YYYY-MM-DD'),
@@ -431,8 +410,11 @@
             country_code(){
                 return _.isObject(this.countryObj) ? this.countryObj.code : null;
             },
-            user_id(){
-                return  _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+            user_id: {
+                get() {
+                    return _.isObject(this.userObj) ? this.userObj.id : this.$root.user.id;
+                },
+                set() {}
             },
             hasConditionsOrAllergies(){
                 return _.contains(_.pluck(this.conditionsList, 'selected'), true) || _.contains(_.pluck(this.allergiesList, 'diagnosed'), true) || _.contains(_.pluck(this.allergiesList, 'medication'), true) || _.contains(_.pluck(this.additionalConditionsList, 'selected'), true) || _.contains(_.pluck(this.additionalAllergiesList, 'medication'), true) || _.contains(_.pluck(this.additionalAllergiesList, 'diagnosed'), true)
@@ -446,11 +428,8 @@
                     loading ? loading(false) : void 0;
                 })
             },
-            onTouched(){
-                this.hasChanged = true;
-            },
             back(force){
-                if (this.hasChanged && !force ) {
+                if (this.isFormDirty && !force ) {
                     this.showSaveAlert = true;
                     return false;
                 }
@@ -501,7 +480,7 @@
                     }
 
                     this.prepArrays();
-                    this.resource.post(null, {
+                    this.resource.post({}, {
                         name: this.name,
                         ins_provider: this.ins_provider,
                         ins_policy_no: this.ins_policy_no,
@@ -556,10 +535,7 @@
                 this.uploads.$remove(upload);
                 this.upload_ids.$remove(upload.id);
             },
-
-        },
-        events:{
-            'uploads-complete'(data){
+            uploadsComplete(data){
                 switch(data.type){
                     case 'file':
                         this.uploads.push(data);
@@ -569,7 +545,8 @@
                         this.uploadCounter++;
                         break;
                 }
-            }
+            },
+
         },
         mounted(){
             if (this.isUpdate) {

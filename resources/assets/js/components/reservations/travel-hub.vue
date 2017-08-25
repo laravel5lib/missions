@@ -7,16 +7,9 @@
 						<div class="form-group" v-error-handler="{ value: hub.name, client: 'hubname' }">
 							<label for="travel_methodA">{{ LABELS[(transportType||'flight')] }}</label>
 							<template v-if="editMode">
-								<v-select @keydown.enter.prevent=""  class="form-control" id="airportFilter" :debounce="250" :on-search="getAirports"
-								          v-model="selectedAirportObj" :options="UTILITIES.airports" label="extended_name"
+								<v-select @keydown.enter.prevent=""  class="form-control" data-vv-name="hubname" id="airportFilter" :debounce="250" :on-search="getAirports"
+								          v-model="selectedAirportObj" :options="UTILITIES.airports" data-vv-value-path="value" label="extended_name" v-validate="'required'"
 								          placeholder="Select Airport"></v-select>
-								<select class="form-control hidden" name="airport" id="airport" v-validate="'required'"
-								        v-model="hub.name">
-									<option :value="airport.name" v-for="airport in UTILITIES.airports">
-										{{ airport.extended_name|capitalize }}
-									</option>
-									<option value="other">Other</option>
-								</select>
 								<div class="errors-block"></div>
 							</template>
 
@@ -73,14 +66,8 @@
 							<label for="">Country</label>
 							<template v-if="editMode">
 								<v-select @keydown.enter.prevent="" class="form-control" :debounce="250" :on-search="getCountries"
-								          v-model="countryObj" :options="UTILITIES.countries" label="name"
+								          v-model="countryObj" v-validate="'required'" :options="UTILITIES.countries" label="name" name="country"
 								          placeholder="Select Country"></v-select>
-								<select class="form-control hidden" name="country" id="country" v-validate="'required'"
-								        v-model="hub.country_code">
-									<option :value="country.code" v-for="country in UTILITIES.countries">
-										{{ country.name|capitalize }}
-									</option>
-								</select>
 								<div class="errors-block"></div>
 							</template>
 							<p v-else>{{ hub.country_code.toUpperCase() }}</p>
@@ -111,7 +98,7 @@
 	    props: {
             hub: {
                 type: Object,
-	            default: () =>  {
+	            default()  {
                     return {
                         name: '',
                         address: '',
@@ -147,8 +134,6 @@
         },
         data(){
             return {
-                // mixin settings
-                validatorHandle: 'TravelHub',
                 selectedAirportObj: null,
                 countryObj: null,
                 LABELS: {
@@ -160,9 +145,9 @@
             }
         },
         computed: {
-            'isUpdate': function() {
+            /*'isUpdate': function() {
                 return this && this.hub.hasOwnProperty('id') && _.isString(this.hub.id);
-            }
+            }*/
         },
         events: {
             'validate-itinerary'() {
@@ -170,7 +155,7 @@
             }
         },
         watch: {
-            selectedAirportObj(val, oldVal){
+            selectedAirportObj(val, oldVal) {
                 if (val && val !== oldVal) {
                     this.hub.name = val.name;
                     this.hub.city = val.city;
@@ -179,7 +164,7 @@
                     this.hub.call_sign = val.iata;
                 }
             },
-            'countryObj':(val, oldVal) =>  {
+            countryObj(val, oldVal) {
                 this.hub.country_code = _.isObject(val) ? val.code : null;
                 this.$nextTick(() =>  {
 

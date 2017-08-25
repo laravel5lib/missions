@@ -243,13 +243,13 @@
 		        if (!val) return val;
 
 		        if (noLocal) {
-		            return moment(val).format(format); // do not convert to local
+		            return moment(val).startOf('minute').format(format); // do not convert to local
 		        }
 
 		        if (diff) {
-		            date = moment.utc(val).local().fromNow();
+		            date = moment.utc(val).startOf('minute').local().fromNow();
 		        } else {
-                    date = moment.utc(val, format).local().format(format);
+                    date = moment.utc(val, format).startOf('minute').local().format(format);
                 }
 
 		        return date;

@@ -360,7 +360,7 @@ Vue.filter('moment', {
         }
 
         // console.log('before: ', val);
-        let date = moment.utc(val).local().format(format || 'LL');
+        let date = moment.utc(val, 'YYYY-MM-DD HH:mm:ss').local().format(format || 'LL');
 
         if (diff) {
             date = moment.utc(val).local().fromNow();
@@ -383,7 +383,7 @@ Vue.filter('moment', {
             return moment(val).format(format || 'LL'); // do not convert to local
         }
 
-        return moment(val).local().utc().format(format);
+        return moment(val, 'YYYY-MM-DD HH:mm:ss').local().utc().format(format);
     }
 });
 
@@ -994,6 +994,13 @@ new Vue({
             console.error(response.body.message ? response.body.message : response.body);
             this.$root.$emit('showError', response.body.message)
         },
+        convertSearchToObject() {
+            let search = location.search.substring(1);
+            return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+                function (key, value) {
+                    return key === "" ? value : decodeURIComponent(value)
+                }) : {};
+        }
 
     },
     events: {

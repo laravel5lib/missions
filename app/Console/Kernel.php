@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
         Commands\Requirements\Add::class,
         Commands\Requirements\Remove::class,
         Commands\Utilities\UpdateRoomingPlansToMultiGroups::class,
-        Commands\Utilities\ExportReservationProfilePics::class
+        Commands\Utilities\ExportReservationProfilePics::class,
+        \Bugsnag\BugsnagLaravel\Commands\DeployCommand::class
     ];
 
     /**

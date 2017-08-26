@@ -16,6 +16,7 @@
 		</div>
 	</div><!-- end carousel -->
 	<hr class="divider inv xlg">
+
 	<div class="container">
 		<div class="col-sm-8 col-sm-offset-2 text-center">
 			<h3>Looking for 2018 trips?</h3>
@@ -25,16 +26,8 @@
 			<a href="http://eepurl.com/cZnArz" target="_blank" class="btn btn-primary">Notify Me!</a>
 		</div><!-- end col -->
 	</div><!-- end container -->
-	<!-- <div class="container">
-		<div class="col-xs-12">
-			<h4>Current Campaigns</h4>
-			<hr class="divider">
-		</div>
-		<div class="col-xs-6 text-right">
-			<a v-if="campaigns.length > 3" @click="seeAll" class="btn btn-primary btn-sm">See All</a>
-		</div>
-	</div> -->
-	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;">
+
+	<div class="container" style="display:flex; flex-wrap: wrap; flex-direction: row;" v-if="campaigns.length > 0">
 		<spinner v-ref:spinner size="sm" text="Loading"></spinner>
 		<div class="col-xs-12 col-sm-6 col-md-4" v-for="campaign in campaigns|limitBy campaignsLimit" style="display:flex">
 			<div class="panel panel-default">
@@ -481,7 +474,7 @@
 			    e.preventDefault();
 			    $( '#' + $(this).data('video-modal') ).modal();
 			});
-			$('.video-modal').on('hide.bs.modal', function(e) {    
+			$('.video-modal').on('hide.bs.modal', function(e) {
 			    var $if = $(e.delegateTarget).find('iframe');
 			    var src = $if.attr("src");
 			    $if.attr("src", '/empty.html');

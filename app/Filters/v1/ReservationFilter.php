@@ -517,7 +517,7 @@ class ReservationFilter extends Filter
         })->when(($searchTerms->count() < 2), function ($query) use ($searchTerms, $first) {
             return $query->where('given_names', 'LIKE', "%$first%")
                 ->orWhere('surname', 'LIKE', "%$first%");
-        });
+        })->current();
     }
 
     public function givenNames($value)
@@ -556,5 +556,19 @@ class ReservationFilter extends Filter
         $code = TeamRole::get_code($value);
 
         return $this->where('desired_role', $code);
+    }
+
+    public function checkedIn()
+    {
+        $this->whereHas('todos', function($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
+    }
+
+    public function checkedOut()
+    {
+        $this->whereDoesntHave('todos', function($query) {
+            $query->where('task', 'hq check in')->whereNotNull('completed_at');
+        });
     }
 }

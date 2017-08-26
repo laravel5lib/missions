@@ -171,7 +171,7 @@
 
                             <div class="form-group">
                                 <label for="">Flight No.</label>
-                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -188,7 +188,7 @@
 
                             <div class="form-group">
                                 <label for="">Schedule/Route No.</label>
-                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 
@@ -208,7 +208,7 @@
 
                             <div class="form-group">
                                 <label for="">Train No.</label>
-                                <input type="number" class="form-control" v-model="selectedTransport.vessel_no">
+                                <input type="text" class="form-control" v-model="selectedTransport.vessel_no">
                             </div>
                         </template>
 

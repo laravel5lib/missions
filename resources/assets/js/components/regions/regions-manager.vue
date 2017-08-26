@@ -72,7 +72,7 @@
 										<div class="list-group-item" v-for="team in currentRegion.teams.data">
 											<div class="row list-group-item-heading">
 												<div class="col-xs-6">
-													{{ team.callsign | capitalize }}
+													<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
 													<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
 													<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 												</div>
@@ -224,7 +224,7 @@
 							<div class="list-group-item" v-for="team in squads">
 								<div class="row list-group-item-heading">
 									<div class="col-xs-6">
-										{{ team.callsign | capitalize }}
+										<a :href="'/admin/campaigns/' + campaignId + '/squads?squad=' + team.id" target="_blank">{{ team.callsign | capitalize }}</a>
 										<span class="badge text-uppercase" style="padding:3px 10px;font-size:10px;line-height:1.4;" v-text="team.type.data.name | capitalize"></span>
 										<span v-if="team.locked" style="padding:3px 10px;font-size:10px;line-height:1.4;" class="badge text-uppercase"><i class="fa fa-lock"></i> Locked</span>
 									</div>

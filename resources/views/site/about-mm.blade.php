@@ -31,7 +31,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/nations-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">1Nation1Day</h6> 
+                    <h6 class="text-uppercase text-center">1Nation1Day</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -73,7 +73,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/trafficking-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Trafficking Rescue</h6> 
+                    <h6 class="text-uppercase text-center">Trafficking Rescue</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -91,7 +91,7 @@
                 <div class="panel">
                   <img class="img-responsive" src="images/about-mm/leadership-thumb.jpg" alt="">
                   <div class="panel-body">
-                    <h6 class="text-uppercase text-center">Leadership Centers</h6> 
+                    <h6 class="text-uppercase text-center">Leadership Centers</h6>
                   </div>
                 </div>
               </div><!-- end col -->
@@ -133,11 +133,11 @@
               <li class="text-primary-darker">'09 Managua, Nicaragua</li>
               <li class="text-primary-darker">'09 Petionville, Haiti</li>
               <li class="text-primary-darker">'10 Kurnool, India</li>
+              <li class="text-primary-darker">'10 San Cristobal, Dominican Rep.</li>
             </ul>
           </div><!-- end col -->
           <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
               <ul class="list-unstyled">
-                <li class="text-primary-darker">'10 San Cristobal, Dominican Rep.</li>
                 <li class="text-primary-darker">'10 Lima, Peru</li>
                 <li class="text-primary-darker">'10 Warangal, India</li>
                 <li class="text-primary-darker">'11 Meteti, Panama</li>
@@ -154,12 +154,12 @@
                 <li class="text-primary-darker">'12 Lima, Peru</li>
                 <li class="text-primary-darker">'12 Hyderabad, India</li>
                 <li class="text-primary-darker">'13 Patna, India</li>
+                <li class="text-primary-darker">'13 1Nation1Day Honduras</li>
+                <li class="text-primary-darker">'13 Hyderabad, India</li>
               </ul>
           </div><!-- end col -->
           <div class="col-md-4 col-sm-6 col-sm-offset-0 col-xs-10 col-xs-offset-1">
               <ul class="list-unstyled">
-                <li class="text-primary-darker">'13 1Nation1Day Honduras</li>
-                <li class="text-primary-darker">'13 Hyderabad, India</li>
                 <li class="text-primary-darker">'14 Yoro, Honduras</li>
                 <li class="text-primary-darker">'14 Roatan, Honduras</li>
                 <li class="text-primary-darker">'14 Kumasi, Ghana</li>
@@ -174,6 +174,8 @@
                 <li class="text-primary-darker">‘16 Honduras 1N1D Follow up</li>
                 <li class="text-primary-darker">‘16 Nepal</li>
                 <li class="text-primary-darker">‘16 Christmas in India</li>
+                <li class="text-primary-darker">‘17 India</li>
+                <li class="text-primary-darker">‘17 1Nation1Day Nicaragua</li>
               </ul>
           </div><!-- end col -->
         </div><!-- end row -->

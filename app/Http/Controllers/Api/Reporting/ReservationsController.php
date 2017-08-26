@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Reporting;
 
 use App\Jobs\Reports\Reservations\ItineraryReport;
+use App\Jobs\Reports\Reservations\MedicalInfo;
 use App\Jobs\Reports\Reservations\RoomingReport;
 use App\Models\v1\User;
 use Illuminate\Http\Request;
@@ -42,7 +43,8 @@ class ReservationsController extends Controller
             'requirements' => RequirementsReport::class,
             'travel' => TravelReport::class,
             'rooming' => RoomingReport::class,
-            'itinerary' => ItineraryReport::class
+            'itinerary' => ItineraryReport::class,
+            'medical' => MedicalInfo::class
         ];
 
         return $reports[$type];

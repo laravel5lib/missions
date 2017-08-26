@@ -448,6 +448,7 @@
                     data.type = this.transaction.type;
                     data.amount = this.transaction.amount;
                     data.comment = this.transaction.comment;
+                    data.anonymous = this.transaction.anonymous;
                     data.fund_id = this.fundId;
                     if (this.selectedDonor && this.selectedDonor.id) {
                         data.donor_id = this.selectedDonor.id;

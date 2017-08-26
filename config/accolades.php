@@ -51,6 +51,8 @@ return [
         '2016 Nicaragua',
         '2016 Honduras 1N1D Follow up',
         '2016 Nepal',
-        '2016 Christmas in India'
+        '2016 Christmas in India',
+        '2017 India',
+        '2017 1Nation1Day Nicaragua '
     ]
 ];

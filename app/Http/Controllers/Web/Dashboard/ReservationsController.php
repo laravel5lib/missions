@@ -45,6 +45,8 @@ class ReservationsController extends Controller
             case 'deadlines':
                 return 'trip.campaign,deadlines,requirements,costs.payments';
                 break;
+            case 'squad':
+                return 'trip.group,squads.team.squads.reservations';
             default:
                 return 'trip.campaign';
                 break;

@@ -326,6 +326,7 @@
                 return this.PlansResource.get(params).then(function (response) {
 	                this.pagination = response.body.meta.pagination;
 	                this.plans = response.body.data;
+	                return this.plans;
                 })
 	        },
             getGroups(search, loading){
@@ -504,7 +505,19 @@
             if (this.isAdminRoute) {
                 this.getGroups();
             }
-			this.getRoomingPlans();
+			this.getRoomingPlans().then(function (plans) {
+				if (this.isAdminRoute && location.search.length > 1) {
+                    let plan;
+                    let searchObj = this.$root.convertSearchToObject();
+                    // https://stackoverflow.com/questions/8648892/convert-url-parameters-to-a-javascript-object
+                    if (searchObj.hasOwnProperty('plan')) {
+                        plan = _.findWhere(plans, {id: searchObj.plan});
+                        if (plan)
+                            this.loadManager(plan);
+                    }
+                }
+
+            });
 			this.getRoomTypes();
 
             this.$root.$on('campaign-scope', function (val) {

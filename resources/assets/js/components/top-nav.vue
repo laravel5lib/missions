@@ -63,9 +63,9 @@
 
 				<!-- 1N1D-->
 				<li class="navlabel">1Nation1Day</li>
-				<li><a target="_blank" href="http://1nation1day.com/">2017 Nicaragua</a></li>
-				<li><a target="_blank" href="http://1nation1day.com/dominican">2015 Dominican</a></li>
-				<li><a target="_blank" href="http://1nation1day.com/honduras">2013 Honduras</a></li>
+				<li><a href="http://1nation1day.com/">2017 Nicaragua</a></li>
+				<li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>
+				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
@@ -107,7 +107,7 @@
 		        return !!this.$root.user
 			},
 			admin() {
-		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'admin') : false;
+		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'super_admin') : false;
 			},
 			normalizedManaging() {
                 return parseInt(this.managing) > 0;

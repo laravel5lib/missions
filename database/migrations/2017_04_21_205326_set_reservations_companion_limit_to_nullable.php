@@ -12,7 +12,7 @@ class SetReservationsCompanionLimitToNullable extends Migration
      */
     public function up()
     {
-        Schema::table('reservations', function(Blueprint $table) {
+        Schema::table('reservations', function (Blueprint $table) {
             $table->integer('companion_limit')->nullable()->change();
         });
     }
@@ -24,7 +24,7 @@ class SetReservationsCompanionLimitToNullable extends Migration
      */
     public function down()
     {
-        Schema::table('reservations', function(Blueprint $table) {
+        Schema::table('reservations', function (Blueprint $table) {
             $table->integer('companion_limit')->change();
         });
     }

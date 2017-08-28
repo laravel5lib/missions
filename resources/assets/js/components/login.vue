@@ -380,7 +380,14 @@
                     }
 
 //                    let loginHttp = this.$http.create({ baseURL: '', headers: {} });
-                    this.$http.post('/login', this.user, { baseURL: '' }).then((response) => {
+                    this.$http.post('/oauth/token', {
+                        grant_type: 'password',
+                        client_id: 2,
+                        client_secret: 'NvqY1KwxVL7PfkS5lxZ6Ha2fss9TpglGAH0oOquR',
+                        username: this.user.email,
+                        password: this.user.password,
+                        scope: '*',
+                    }, { baseURL: '' }).then((response) => {
                         // set cookie - name, token
                         this.$cookie.set('api_token', response.data.token);
                         // reload to set cookie
@@ -388,7 +395,7 @@
 						 window.location.reload();
 						 }*/
                         if (response.data.redirect_to)
-                            this.getUserData(response.data.redirect_to, response.data.ignore_redirect || false);
+                            this.getUserData('/dashboard', response.data.ignore_redirect || false);
                     })
                     .catch((response) => {
                         this.messages = [];
@@ -422,7 +429,7 @@
             },
 
             getUserData(redirectTo, ignoreRedirect) {
-                return this.$http.get('users/me?include=roles,abilities')
+                return this.$http.get('users/me?include=roles,permissions')
                     .then((response) => {
                             this.$root.$emit('userHasLoggedIn', response.data.data);
 

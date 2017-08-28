@@ -138,7 +138,7 @@ class CampaignTransportsController extends Controller
 
     private function formatVesselNo($number, $callSign = null)
     {
-        $number = addLeadingZeros( removeNonNumericCharacters($number) );
+        $number = addLeadingZeros(removeNonNumericCharacters($number));
 
         return strtoupper($callSign) . $number;
     }

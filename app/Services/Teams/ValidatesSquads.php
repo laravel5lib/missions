@@ -22,7 +22,9 @@ class ValidatesSquads
 
     public function assertWithinSquadLimit()
     {
-        if ( ! $this->rules->has('max_groups')) return $this;
+        if (! $this->rules->has('max_groups')) {
+            return $this;
+        }
 
         $count = $this->team->squads()->count() + 1;
 
@@ -35,7 +37,9 @@ class ValidatesSquads
 
     public function assertMeetsMinimumSquads()
     {
-        if ( ! $this->rules->has('min_groups')) return $this;
+        if (! $this->rules->has('min_groups')) {
+            return $this;
+        }
 
         $count = $this->team->squads()->count() - 1;
 

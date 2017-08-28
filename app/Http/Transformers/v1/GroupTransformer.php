@@ -79,7 +79,7 @@ class GroupTransformer extends TransformerAbstract
      */
     public function includeTrips(Group $group, ParamBag $params = null)
     {
-        if ( ! is_null($params)) {
+        if (! is_null($params)) {
             $this->validateParams($params);
 
             $trips = [];
@@ -95,7 +95,6 @@ class GroupTransformer extends TransformerAbstract
             if ($params->get('status')) {
                 $trips = $group->trips()->filter(['status' => $params->get('status')[0]])->get();
             }
-
         } else {
             $trips = $group->trips;
         }

@@ -7,7 +7,8 @@ use App\Models\v1\Room as RoomModel;
 use App\Repositories\EloquentRepository;
 use App\Repositories\Rooming\Interfaces\Room;
 
-class EloquentRoom extends EloquentRepository implements Room {
+class EloquentRoom extends EloquentRepository implements Room
+{
 
     protected $model;
 
@@ -33,17 +34,16 @@ class EloquentRoom extends EloquentRepository implements Room {
         return $this->model->withTrashed()->withCount('occupants')->findOrFail($id);
     }
 
-    public function paginate($perPage = 15, $columns = array('*'))
+    public function paginate($perPage = 15, $columns = ['*'])
     {
         return $this->model->withCount('occupants')->paginate($perPage, $columns);
     }
 
     public function delete($id)
     {
-        DB::transaction(function () use ($id) 
-        {
+        DB::transaction(function () use ($id) {
             $this->getById($id)->occupants()->detach();
-            $this->model->delete($id);
+            $this->model->destroy($id);
         });
     }
 }

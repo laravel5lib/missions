@@ -20,11 +20,13 @@ class TripsController extends Controller
 
     public function show($id, $tab = 'details')
     {
-        if($tab === 'edit') {
+        if ($tab === 'edit') {
             return $this->edit($id);
         }
 
         $trip = $this->api->get('trips/'.$id, ['include' => 'campaign,costs.payments,requirements,notes,deadlines']);
+
+        $this->authorize('view', $trip);
 
         return view('admin.trips.show', compact('trip', 'tab'));
     }

@@ -1,6 +1,6 @@
 <?php
 
-class MedicalCredentialsEndpointTest extends TestCase
+class MedicalCredentialsEndpointTest extends BrowserKitTestCase
 {
 
     /**
@@ -19,7 +19,7 @@ class MedicalCredentialsEndpointTest extends TestCase
                         'content', 'expired_at', 'created_at', 'updated_at', 'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

@@ -3,7 +3,7 @@
 use App\Models\v1\User;
 use App\Models\v1\Essay;
 
-class EssaysEndpointTest extends TestCase
+class EssaysEndpointTest extends BrowserKitTestCase
 {
 
     /**
@@ -36,7 +36,7 @@ class EssaysEndpointTest extends TestCase
     {
         $essay = factory(Essay::class)->make([
             'author_name' => 'joe',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ])->toArray();
@@ -55,7 +55,7 @@ class EssaysEndpointTest extends TestCase
     {
         $essay = factory(Essay::class)->create([
             'author_name' => 'joe',
-            'user_id' => function() {
+            'user_id' => function () {
                 return factory(User::class)->create()->id;
             }
         ]);

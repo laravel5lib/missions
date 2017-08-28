@@ -5,7 +5,8 @@ namespace App\Http\Transformers\v1;
 use App\Models\v1\Region;
 use League\Fractal\TransformerAbstract;
 
-class RegionTransformer extends TransformerAbstract {
+class RegionTransformer extends TransformerAbstract
+{
 
     /**
      * List of resources available to include

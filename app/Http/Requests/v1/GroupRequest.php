@@ -7,7 +7,8 @@ use App\Utilities\v1\Country;
 use Dingo\Api\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 
-class GroupRequest extends FormRequest {
+class GroupRequest extends FormRequest
+{
 
     /**
      * Determine if the user is authorized to make this request.
@@ -34,11 +35,10 @@ class GroupRequest extends FormRequest {
             'country_code' => 'required|in:' . Country::codes(),
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $required = [
                 'name'         => 'sometimes|required|max:100',
-                'url'          => 'sometimes|required_if:public,true|unique:slugs,url,'.$this->route('groups').',slugable_id',
+                'url'          => 'sometimes|required_if:public,true|unique:slugs,url,'.$this->route('group').',slugable_id',
                 'type'         => 'sometimes|required|in:church,business,nonprofit,youth,other',
                 'timezone'     => 'sometimes|required|timezone',
                 'country_code' => 'sometimes|required|in:' . Country::codes(),

@@ -55,19 +55,19 @@ class AddTodoToTrips extends Command
 
         $query = $this->trip;
 
-        if($tripType) {
+        if ($tripType) {
             $query = $query->where('type', $tripType);
         }
 
-        if($campaignId) {
+        if ($campaignId) {
             $query = $query->where('campaign_id', $campaignId);
         }
 
-        if($groupId) {
+        if ($groupId) {
             $query = $query->where('group_id', $groupId);
         }
 
-        if($repId) {
+        if ($repId) {
             $query = $query->where('rep_id', $repId);
         }
 
@@ -78,7 +78,7 @@ class AddTodoToTrips extends Command
             return;
         }
 
-        collect($trips)->each(function ($trip) use($task) {
+        collect($trips)->each(function ($trip) use ($task) {
             $trip->todos = array_values(collect($trip->todos)->push($task)->unique()->toArray());
             $trip->save();
             dispatch(new UpdateReservationTodos($trip));

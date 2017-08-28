@@ -35,7 +35,7 @@ class AddReferral extends Job implements ShouldQueue
      */
     public function handle(Promocodes $promocodes)
     {
-        $this->promos->each(function ($promoId) use($promocodes) {
+        $this->promos->each(function ($promoId) use ($promocodes) {
             $this->reservation->promocodes()->create([
                 'promotional_id' => $promoId,
                 'code' => $promocodes->output()[0]

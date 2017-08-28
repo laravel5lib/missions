@@ -2,20 +2,21 @@
 
 namespace App\Services\Importers;
 
-class VisaListImportHandler extends ImportHandler {
+class VisaListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Visa';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
      * ['db_col' => 'doc_col']
-     * 
+     *
      * @var array
      */
     public $duplicates = ['number' => 'number'];
@@ -36,5 +37,4 @@ class VisaListImportHandler extends ImportHandler {
             'updated_at' => $visa->updated_at
         ];
     }
-
 }

@@ -2,11 +2,12 @@
 
 namespace App;
 
-class TeamTypeRules Extends Rules {
+class TeamTypeRules extends Rules
+{
     
     /**
      * Rules
-     * 
+     *
      * @var array
      */
     protected $rules = [];
@@ -19,5 +20,4 @@ class TeamTypeRules Extends Rules {
     {
         $this->rules = $rules;
     }
-
 }

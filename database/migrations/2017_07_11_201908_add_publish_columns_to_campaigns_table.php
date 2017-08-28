@@ -28,10 +28,10 @@ class AddPublishColumnsToCampaignsTable extends Migration
     public function down()
     {
         Schema::table('campaigns', function ($table) {
-           $table->dropColumn('publish_regions');
-           $table->dropColumn('publish_squads');
-           $table->dropColumn('publish_rooms');
-           $table->dropColumn('publish_transports');
+            $table->dropColumn('publish_regions');
+            $table->dropColumn('publish_squads');
+            $table->dropColumn('publish_rooms');
+            $table->dropColumn('publish_transports');
         });
     }
 }

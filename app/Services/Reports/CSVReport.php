@@ -24,10 +24,8 @@ class CSVReport
     {
         $this->filename = $filename;
 
-        $this->content = Excel::create($filename, function($excel)
-        {
-            $excel->sheet('Report', function($sheet)
-            {
+        $this->content = Excel::create($filename, function ($excel) {
+            $excel->sheet('Report', function ($sheet) {
                 $sheet->fromArray($this->data);
                 $sheet->freezeFirstRow();
             });

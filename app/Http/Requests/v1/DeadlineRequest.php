@@ -32,8 +32,7 @@ class DeadlineRequest extends FormRequest
             'enforced' => 'boolean'
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $rules['deadline_assignable_type'] = 'sometimes|required|in:trips,reservations,projects';
             $rules['deadline_assignable_id'] = 'sometimes|required|string';
         }

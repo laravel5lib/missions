@@ -142,10 +142,10 @@ class ReferralsController extends Controller
 
     /**
      * Import Referrals.
-     * 
-     * @param  ImportRequest      $request 
-     * @param  ReferralListImport $import  
-     * @return response                      
+     *
+     * @param  ImportRequest      $request
+     * @param  ReferralListImport $import
+     * @return response
      */
     public function import(ImportRequest $request, ReferralListImport $import)
     {
@@ -153,5 +153,4 @@ class ReferralsController extends Controller
 
         return $this->response()->created(null, $response);
     }
-
 }

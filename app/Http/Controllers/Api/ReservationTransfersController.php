@@ -18,7 +18,7 @@ class ReservationTransfersController extends Controller
     }
     /**
      * Create a new transfer
-     * 
+     *
      * @return Response
      */
     public function store($id, Request $request)

@@ -3,8 +3,7 @@
 /**
  * Generic Link (user default)
  */
-$factory->define(App\Models\v1\Link::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Link::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
         'url' => $faker->url,
@@ -18,8 +17,7 @@ $factory->define(App\Models\v1\Link::class, function(Faker\Generator $faker)
 /**
  * Group Link
  */
-$factory->defineAs(App\Models\v1\Link::class, 'group', function(Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Link::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $link = $factory->raw(App\Models\v1\Link::class);
 
     return array_merge($link, [
@@ -29,4 +27,3 @@ $factory->defineAs(App\Models\v1\Link::class, 'group', function(Faker\Generator 
         }
     ]);
 });
-

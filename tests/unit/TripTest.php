@@ -8,23 +8,23 @@ use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TripTest extends TestCase
+class TripTest extends BrowserKitTestCase
 {
-    /** 
+    /**
      * @test
      */
     function trip_can_get_a_starting_cost()
     {
         $trip = factory(App\Models\v1\Trip::class)->create();
 
-        $trip->each(function($t) {
+        $trip->each(function ($t) {
             $t->costs()->saveMany([
                 factory(App\Models\v1\Cost::class, 'deposit')->make([
-                    'amount' => 100, 
+                    'amount' => 100,
                     'active_at' => Carbon::yesterday()
                 ]),
                 factory(App\Models\v1\Cost::class, 'general')->make([
-                    'amount' => 2000, 
+                    'amount' => 2000,
                     'active_at' => Carbon::yesterday()
                 ])
             ]);
@@ -33,21 +33,21 @@ class TripTest extends TestCase
         $this->assertSame(210000, $trip->starting_cost);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_can_get_starting_cost_in_dollars()
     {
         $trip = factory(App\Models\v1\Trip::class)->create();
 
-        $trip->each(function($t) {
+        $trip->each(function ($t) {
             $t->costs()->saveMany([
                 factory(App\Models\v1\Cost::class, 'deposit')->make([
-                    'amount' => 100, 
+                    'amount' => 100,
                     'active_at' => Carbon::yesterday()
                 ]),
                 factory(App\Models\v1\Cost::class, 'general')->make([
-                    'amount' => 2000, 
+                    'amount' => 2000,
                     'active_at' => Carbon::yesterday()
                 ])
             ]);
@@ -56,7 +56,7 @@ class TripTest extends TestCase
         $this->assertSame('2100.00', $trip->startingCostInDollars());
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_no_spots_is_closed()
@@ -69,7 +69,7 @@ class TripTest extends TestCase
         $this->assertEquals('closed', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_past_closed_at_date_is_closed()
@@ -82,7 +82,7 @@ class TripTest extends TestCase
         $this->assertEquals('closed', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_no_published_at_date_is_draft()
@@ -96,7 +96,7 @@ class TripTest extends TestCase
         $this->assertEquals('draft', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_future_published_at_date_is_scheduled()
@@ -110,7 +110,7 @@ class TripTest extends TestCase
         $this->assertEquals('scheduled', $trip->status);
     }
 
-    /** 
+    /**
      * @test
      */
     function trip_with_past_published_at_date_is_active()
@@ -123,55 +123,4 @@ class TripTest extends TestCase
 
         $this->assertEquals('active', $trip->status);
     }
-
-    /** @test */
-    function apply_campaign_promocode()
-    {
-        $campaign = factory(Campaign::class, '1n1d2017')->create();
-
-        $campaign->promote('Campaign Promotional', 1, 100);
-
-        $trip = factory(App\Models\v1\Trip::class)->create([
-            'campaign_id' => $campaign->id
-        ]);
-
-        $code = $campaign->promotionals()->first()->promocodes()->first()->code;
-
-        $reward = $trip->applyCode($code);
-
-        $this->assertEquals(10000, $reward);
-    }
-
-    /** @test */
-    function apply_group_promocode()
-    {
-        $group = factory(Group::class)->create();
-
-        $group->promote('Group Promotional', 1, 100);
-
-        $trip = factory(App\Models\v1\Trip::class)->create([
-            'group_id' => $group->id
-        ]);
-
-        $code = $group->promotionals()->first()->promocodes()->first()->code;
-
-        $reward = $trip->applyCode($code);
-
-        $this->assertEquals(10000, $reward);
-    }
-
-    /** @test */
-    function apply_trip_promocode()
-    {
-        $trip = factory(App\Models\v1\Trip::class)->create();
-
-        $trip->promote('Trip Promotional', 1, 100);
-
-        $code = $trip->promotionals()->first()->promocodes()->first()->code;
-
-        $reward = $trip->applyCode($code);
-
-        $this->assertEquals(10000, $reward);
-    }
-
 }

@@ -1,6 +1,6 @@
 <?php
 
-class TeamsEndpointTest extends TestCase
+class TeamsEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function fetches_all_teams()
@@ -20,7 +20,7 @@ class TeamsEndpointTest extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */
@@ -37,7 +37,7 @@ class TeamsEndpointTest extends TestCase
                 'created_at' => $team->created_at->toDateTimeString(),
                 'updated_at' => $team->updated_at->toDateTimeString(),
                 'deleted_at' => null
-            ]);
+             ]);
     }
 
     /** @test */
@@ -50,7 +50,7 @@ class TeamsEndpointTest extends TestCase
              ->seeInDatabase('teams', ['callsign' => 'Team #1'])
              ->seeJson([
                 'callsign' => 'Team #1',
-            ]);
+             ]);
     }
 
     /** @test */
@@ -65,7 +65,7 @@ class TeamsEndpointTest extends TestCase
              ->seeJson([
                 'id' => $team->id,
                 'callsign' => 'Team #2'
-            ]);
+             ]);
     }
 
     /** @test */

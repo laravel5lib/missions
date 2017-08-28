@@ -43,9 +43,10 @@ class ReservationsController extends Controller
      */
     public function show($id, $tab = "details")
     {
-        $this->authorize('view', $this->reservation);
 
         $reservation = $this->api->get('reservations/'.$id, ['include' => 'trip.campaign,fundraisers,costs.payments,squads.team,rooms.type, rooms.accommodations']);
+
+        $this->authorize('view', $reservation);
 
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
@@ -73,4 +74,5 @@ class ReservationsController extends Controller
     public function create()
     {
         $this->authorize('create', $this->reservation);
-    }}
+    }
+}

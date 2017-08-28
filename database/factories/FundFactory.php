@@ -3,8 +3,7 @@
 /**
  * Generic Reservation Fund
  */
-$factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Fund::class, function (Faker\Generator $faker) {
     $name = $faker->sentence(4);
 
     return [
@@ -21,8 +20,7 @@ $factory->define(App\Models\v1\Fund::class, function(Faker\Generator $faker)
 /**
  * Trip Fund
  */
-$factory->defineAs(App\Models\v1\Fund::class, 'trip', function(Faker\Generator $faker) use ($factory)
-{   
+$factory->defineAs(App\Models\v1\Fund::class, 'trip', function (Faker\Generator $faker) use ($factory) {
     $fund = $factory->raw(App\Models\v1\Fund::class);
     
     return array_merge($fund, [
@@ -36,8 +34,7 @@ $factory->defineAs(App\Models\v1\Fund::class, 'trip', function(Faker\Generator $
 /**
  * Campaign Fund
  */
-$factory->defineAs(App\Models\v1\Fund::class, 'campaign', function(Faker\Generator $faker) use ($factory)
-{   
+$factory->defineAs(App\Models\v1\Fund::class, 'campaign', function (Faker\Generator $faker) use ($factory) {
     $fund = $factory->raw(App\Models\v1\Fund::class);
 
     return array_merge($fund, [
@@ -51,8 +48,7 @@ $factory->defineAs(App\Models\v1\Fund::class, 'campaign', function(Faker\Generat
 /**
  * Project Fund
  */
-$factory->defineAs(App\Models\v1\Fund::class, 'project', function(Faker\Generator $faker) use ($factory)
-{   
+$factory->defineAs(App\Models\v1\Fund::class, 'project', function (Faker\Generator $faker) use ($factory) {
     $fund = $factory->raw(App\Models\v1\Fund::class);
 
     return array_merge($fund, [
@@ -66,8 +62,7 @@ $factory->defineAs(App\Models\v1\Fund::class, 'project', function(Faker\Generato
 /**
  * Cause Fund
  */
-$factory->defineAs(App\Models\v1\Fund::class, 'cause', function(Faker\Generator $faker) use ($factory)
-{   
+$factory->defineAs(App\Models\v1\Fund::class, 'cause', function (Faker\Generator $faker) use ($factory) {
     $fund = $factory->raw(App\Models\v1\Fund::class);
 
     return array_merge($fund, [
@@ -77,4 +72,3 @@ $factory->defineAs(App\Models\v1\Fund::class, 'cause', function(Faker\Generator 
         'item' => 'General Donation'
     ]);
 });
-

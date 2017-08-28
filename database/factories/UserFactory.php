@@ -3,8 +3,7 @@
 /**
  * Generic User
  */
-$factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\User::class, function (Faker\Generator $faker) {
     $password = bcrypt('secret');
 
     return [
@@ -28,10 +27,10 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
         'bio'              => $faker->optional(0.5)->realText(120),
         'public'           => $faker->boolean(50),
         'remember_token'   => str_random(10),
-        'avatar_upload_id' => function() {
+        'avatar_upload_id' => function () {
             return factory(App\Models\v1\Upload::class, 'avatar')->create()->id;
         },
-        'banner_upload_id' => function() {
+        'banner_upload_id' => function () {
             return factory(App\Models\v1\Upload::class, 'banner')->create()->id;
         },
         'created_at' => \Carbon\Carbon::now(),
@@ -42,8 +41,7 @@ $factory->define(App\Models\v1\User::class, function (Faker\Generator $faker)
 /**
  * Admin User
  */
-$factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\User::class, 'admin', function (Faker\Generator $faker) use ($factory) {
     $user = $factory->raw(App\Models\v1\User::class);
 
     return array_merge($user, [

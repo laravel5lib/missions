@@ -4,7 +4,7 @@ use App\Models\v1\Region;
 use App\Models\v1\Campaign;
 use App\Models\v1\Accommodation;
 
-class AccommodationsEndpointTest extends TestCase
+class AccommodationsEndpointTest extends BrowserKitTestCase
 {
     /** @test */
     public function gets_accommodations()
@@ -39,7 +39,7 @@ class AccommodationsEndpointTest extends TestCase
                         'deleted_at'
                     ]
                 ]
-            ]);
+             ]);
     }
 
     /** @test */

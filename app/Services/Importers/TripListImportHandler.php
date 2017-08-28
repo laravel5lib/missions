@@ -7,26 +7,27 @@ use App\Models\v1\Group;
 use App\Utilities\v1\TeamRole;
 use Illuminate\Support\Facades\Request;
 
-class TripListImportHandler extends ImportHandler {
+class TripListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Trip';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
-     * 
+     *
      * @var array
      */
     public $duplicates = ['group.name' => 'group_name', 'type' => 'type'];
 
     public function match_columns_to_properties($trip)
     {
-        $trip = $trip->transform(function($item) {
+        $trip = $trip->transform(function ($item) {
             return trim($item);
         });
 
@@ -58,7 +59,7 @@ class TripListImportHandler extends ImportHandler {
     }
 
     private function get_facilitators_by_email($emails)
-    {   
+    {
         $emails = is_array($emails) ? $emails : explode(',', $emails);
 
         $userIds = User::whereIn('email', $emails)->pluck('id')->all();
@@ -70,11 +71,10 @@ class TripListImportHandler extends ImportHandler {
     {
         $roles = is_array($roles) ? $roles: explode(',', $roles);
 
-        $roleCodes = collect($roles)->map(function($role) {
+        $roleCodes = collect($roles)->map(function ($role) {
             return TeamRole::get_code($role);
         })->all();
 
         return $roleCodes;
     }
-
 }

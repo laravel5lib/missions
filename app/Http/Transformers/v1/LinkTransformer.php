@@ -23,5 +23,4 @@ class LinkTransformer extends TransformerAbstract
             'updated_at' => $link->updated_at->toDateTimeString(),
         ];
     }
-
 }

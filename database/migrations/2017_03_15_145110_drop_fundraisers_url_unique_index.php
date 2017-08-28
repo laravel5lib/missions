@@ -12,8 +12,7 @@ class DropFundraisersUrlUniqueIndex extends Migration
      */
     public function up()
     {
-        Schema::table('fundraisers', function(Blueprint $table)
-        {
+        Schema::table('fundraisers', function (Blueprint $table) {
             $table->dropUnique('fundraisers_url_unique');
         });
     }
@@ -25,8 +24,7 @@ class DropFundraisersUrlUniqueIndex extends Migration
      */
     public function down()
     {
-        Schema::table('fundraisers', function(Blueprint $table)
-        {
+        Schema::table('fundraisers', function (Blueprint $table) {
             $table->unique('url');
         });
     }

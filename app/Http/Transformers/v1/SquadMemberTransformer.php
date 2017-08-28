@@ -35,12 +35,12 @@ class SquadMemberTransformer extends TransformerAbstract
             'status'              => $reservation->status,
             'age'                 => $reservation->age,
             'avatar'              => $reservation->avatar ? image($reservation->avatar->source) : url('/images/placeholders/user-placeholder.png'),
-            'desired_role'        => [ 
-                                        'code' => $reservation->desired_role, 
-                                        'name' => teamRole($reservation->desired_role) 
+            'desired_role'        => [
+                                        'code' => $reservation->desired_role,
+                                        'name' => teamRole($reservation->desired_role)
                                      ],
             'travel_group'        => $reservation->trip->group->name,
-            'arrival_designation' => $reservation->designation ? 
+            'arrival_designation' => $reservation->designation ?
                 implode('', array_flatten($reservation->designation->content)) : 'none',
             'leader'              => $reservation->pivot ? (boolean) $reservation->pivot->leader : null,
             'created_at'          => $reservation->pivot->created_at->toDateTimeString(),
@@ -105,5 +105,4 @@ class SquadMemberTransformer extends TransformerAbstract
 
         return $this->collection($companions, new ReservationTransformer);
     }
-
 }

@@ -33,7 +33,9 @@ class FundraisersController extends Controller
             'url' => $fundraiser_slug
         ])->first();
 
-        if (! $fundraiser) abort(404);
+        if (! $fundraiser) {
+            abort(404);
+        }
 
         $loggedInUserId = auth()->check() ? auth()->user()->id : null;
 
@@ -41,7 +43,9 @@ class FundraisersController extends Controller
             abort(404);
         }
 
-        if (! $fundraiser) abort(404);
+        if (! $fundraiser) {
+            abort(404);
+        }
 
         return view('site.fundraisers.show', compact('fundraiser'));
     }

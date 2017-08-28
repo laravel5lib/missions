@@ -12,7 +12,7 @@ class CreateRequirementsTable extends Migration
      */
     public function up()
     {
-        Schema::create('requirements', function(Blueprint $table) {
+        Schema::create('requirements', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('short_desc')->nullable();

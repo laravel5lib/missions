@@ -11,9 +11,9 @@
 		    <img class="img-xs" style="margin-right:-20px;opacity:.4;margin-top:4px;margin-bottom:4px;" src="/images/mm-icon-lightgray.png" alt="Missions.Me">
 		</div>
 			<ul class="nav navmenu-nav">
-				<li class="donate-nav"><a class="navDonate" href="/fundraisers"><i class="fa fa-heart"></i> Donate To A Cause</a>
-				<!--</li>-->
-				<!--</li>-->
+				<li class="donate-nav"><a class="navDonate" href="/fundraisers">
+					<i class="fa fa-heart"></i> Donate To A Cause</a>
+				</li>
 				<li class="navlabel">Account</li>
 				<li v-if="auth" id="userMenu" slot="button" class="dropdown-toggle text-center" data-toggle="dropdown">
 					<a href="#">
@@ -25,7 +25,7 @@
 						<li class=""><a :href="url" id="menu-profile-link">My Profile</a></li>
 						<li class=""><a href="/dashboard">Dashboard</a></li>
 						<li v-if="admin" class=""><a href="/admin">Admin</a></li>
-						<li class=""><a href="/logout">Sign Out</a></li>
+						<li class=""><a :href="logout()">Sign Out</a></li>
 					</template>
 				</ul>
 				<li style="display:inline;" v-if="!auth"><a style="display:inline-block;padding:10px 40px;" href="/login">Login</a></li>
@@ -63,9 +63,9 @@
 
 				<!-- 1N1D-->
 				<li class="navlabel">1Nation1Day</li>
-				<li><a target="_blank" href="http://1nation1day.com/">2017 Nicaragua</a></li>
-				<li><a target="_blank" href="http://1nation1day.com/dominican">2015 Dominican</a></li>
-				<li><a target="_blank" href="http://1nation1day.com/honduras">2013 Honduras</a></li>
+				<li><a href="http://1nation1day.com/">2017 Nicaragua</a></li>
+				<li><a href="http://1nation1day.com/dominican">2015 Dominican</a></li>
+				<li><a href="http://1nation1day.com/honduras">2013 Honduras</a></li>
 
 				<!-- Causes -->
 				<li class="navlabel">Causes</li>
@@ -107,7 +107,7 @@
 		        return !!this.$root.user
 			},
 			admin() {
-		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'admin') : false;
+		        return this.auth ? _.contains(_.pluck(this.$root.user.roles.data, 'name'), 'super_admin') : false;
 			},
 			normalizedManaging() {
                 return parseInt(this.managing) > 0;
@@ -129,6 +129,9 @@
 			isAdmin(){
 				return this.admin && window.location.pathname.split('/')[1] === 'admin';
 			},
+			logout(){
+			    this.$http.post('/logout');
+			}
 		},
 		mounted(){
 

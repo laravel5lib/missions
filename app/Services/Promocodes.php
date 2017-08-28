@@ -138,11 +138,11 @@ class Promocodes
      */
     public function create(
         $name,
-        $amount = 1, 
-        $reward = null, 
+        $amount = 1,
+        $reward = null,
         $expires = null
-    )
-    {
+    ) {
+    
         $records = [];
 
         // loop though each promocodes required

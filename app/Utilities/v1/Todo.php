@@ -2,7 +2,8 @@
 
 namespace App\Utilities\v1;
 
-class Todo {
+class Todo
+{
 
     /**
      * Available todos

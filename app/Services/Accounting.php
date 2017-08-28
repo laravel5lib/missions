@@ -9,7 +9,8 @@ use App\Models\v1\ProjectCause;
 use App\Models\v1\AccountingItem;
 use App\Models\v1\AccountingClass;
 
-class Accounting {
+class Accounting
+{
     
     protected $accountingClass;
     protected $accountingItem;
@@ -24,25 +25,15 @@ class Accounting {
     {
         if ($instance instanceof Reservation) {
             return $this->getOrMakeReservationAccountingClass($instance);
-        }
-
-        else if ($instance instanceof Trip) {
-           return $this->getOrMakeTripAccountingClass($instance);
-        }
-
-        else if ($instance instanceof Campaign) {
+        } else if ($instance instanceof Trip) {
+            return $this->getOrMakeTripAccountingClass($instance);
+        } else if ($instance instanceof Campaign) {
             return $this->getOrMakeCampaignAccountingClass($instance);
-        }
-
-        else if ($instance instanceof Project) {
+        } else if ($instance instanceof Project) {
             return $this->getOrMakeProjectAccountingClass($instance);
-        }
-
-        else if ($instance instanceof ProjectCause) {
+        } else if ($instance instanceof ProjectCause) {
             return $this->getOrMakeCauseAccountingClass($instance);
-        }
-
-        else {
+        } else {
             throw new \Exception('Does not recognize instance type.');
         }
     }
@@ -51,25 +42,15 @@ class Accounting {
     {
         if ($instance instanceof Reservation) {
             return $this->getOrMakeReservationAccountingItem($instance);
-        }
-
-        else if ($instance instanceof Trip) {
-           return $this->getOrMakeTripAccountingItem($instance);
-        }
-
-        else if ($instance instanceof Campaign) {
+        } else if ($instance instanceof Trip) {
+            return $this->getOrMakeTripAccountingItem($instance);
+        } else if ($instance instanceof Campaign) {
             return $this->getOrMakeCampaignAccountingItem($instance);
-        }
-
-        else if ($instance instanceof Project) {
+        } else if ($instance instanceof Project) {
             return $this->getOrMakeProjectAccountingItem($instance);
-        }
-
-        else if ($instance instanceof ProjectCause) {
+        } else if ($instance instanceof ProjectCause) {
             return $this->getOrMakeCauseAccountingItem($instance);
-        }
-
-        else {
+        } else {
             throw new \Exception('Does not recognize instance type.');
         }
     }
@@ -143,5 +124,4 @@ class Accounting {
             'name' => 'General Donation'
         ]);
     }
-
 }

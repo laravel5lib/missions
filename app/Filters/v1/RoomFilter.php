@@ -63,9 +63,11 @@ class RoomFilter extends Filter
 
     public function notInUse($regionId = null)
     {
-        if (! $regionId) return $this->has('accommodations', '<', 1);
+        if (! $regionId) {
+            return $this->has('accommodations', '<', 1);
+        }
 
-        return $this->whereDoesntHave('accommodations', function($query) use ($regionId) {
+        return $this->whereDoesntHave('accommodations', function ($query) use ($regionId) {
             return $query->where('region_id', $regionId);
         });
     }

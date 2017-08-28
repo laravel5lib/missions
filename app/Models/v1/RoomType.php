@@ -14,21 +14,21 @@ class RoomType extends Model
 
     /**
      * Attributes that should not be mass assigned.
-     * 
+     *
      * @var array
      */
     protected $guarded = [];
 
     /**
      * Arrtributes that should be cast as date time objects.
-     * 
+     *
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * Attributes that should be cast to native types.
-     * 
+     *
      * @var array
      */
     protected $casts = ['rules' => 'array'];
@@ -40,7 +40,7 @@ class RoomType extends Model
 
     /**
      * Get the rules for the room type.
-     * 
+     *
      * @return App\RoomTypeRules
      */
     public function rules()
@@ -81,5 +81,4 @@ class RoomType extends Model
     {
         return ucwords(str_replace('_', ' ', $value));
     }
-
 }

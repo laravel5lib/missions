@@ -2,19 +2,20 @@
 
 namespace App\Services\Importers;
 
-class CampaignListImportHandler extends ImportHandler {
+class CampaignListImportHandler extends ImportHandler
+{
 
     /**
      * The model class to use
-     * 
+     *
      * @var string
      */
     public $model = 'App\Models\v1\Campaign';
 
     /**
-     * The database columns and document 
+     * The database columns and document
      * columns to find matches on.
-     * 
+     *
      * @var array
      */
     public $duplicates = ['name' => 'name', 'country_code' => 'country_code'];
@@ -22,13 +23,13 @@ class CampaignListImportHandler extends ImportHandler {
 
     /**
      * Match Database Columns to Collection Properties.
-     * 
+     *
      * @param  Collection $campaign
      * @return Array
      */
     public function match_columns_to_properties($campaign)
     {
-        $campaign = $campaign->transform(function($item) {
+        $campaign = $campaign->transform(function ($item) {
             return trim($item);
         });
 
@@ -46,5 +47,4 @@ class CampaignListImportHandler extends ImportHandler {
             ]
         ];
     }
-
 }

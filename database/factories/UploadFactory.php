@@ -3,8 +3,7 @@
 /**
  * Avatar Upload
  */
-$factory->defineAs(App\Models\v1\Upload::class, 'avatar', function (Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Upload::class, 'avatar', function (Faker\Generator $faker) {
     return [
         'name' => $faker->word,
         'source' => $faker->randomElement([
@@ -19,8 +18,7 @@ $factory->defineAs(App\Models\v1\Upload::class, 'avatar', function (Faker\Genera
 /**
  * Banner Upload
  */
-$factory->defineAs(App\Models\v1\Upload::class, 'banner', function (Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Upload::class, 'banner', function (Faker\Generator $faker) {
     return [
         'id' => $faker->unique()->uuid,
         'name' => $faker->word,
@@ -39,8 +37,7 @@ $factory->defineAs(App\Models\v1\Upload::class, 'banner', function (Faker\Genera
 /**
  * Passport Upload
  */
-$factory->defineAs(App\Models\v1\Upload::class, 'passport', function (Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Upload::class, 'passport', function (Faker\Generator $faker) {
     return [
         'id' => $faker->unique()->uuid,
         'name' => 'passport_' . $faker->word,
@@ -52,8 +49,7 @@ $factory->defineAs(App\Models\v1\Upload::class, 'passport', function (Faker\Gene
 /**
  * Visa Upload
  */
-$factory->defineAs(App\Models\v1\Upload::class, 'visa', function (Faker\Generator $faker)
-{
+$factory->defineAs(App\Models\v1\Upload::class, 'visa', function (Faker\Generator $faker) {
     return [
         'id' => $faker->unique()->uuid,
         'name' => 'visa_' . $faker->word,
@@ -61,5 +57,3 @@ $factory->defineAs(App\Models\v1\Upload::class, 'visa', function (Faker\Generato
         'type' => 'other'
     ];
 });
-
-

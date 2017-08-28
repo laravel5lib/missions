@@ -28,8 +28,7 @@ class PassengerRequest extends FormRequest
             'transport_id'   => 'sometimes|required|exists:transports,id',
         ];
 
-        if ($this->isMethod('put'))
-        {
+        if ($this->isMethod('put')) {
             $required = [
                 'reservation_id' => 'sometimes|required|string|exists:reservations,id',
                 'transport_id'   => 'sometimes|required|exists:transports,id',

@@ -10,7 +10,8 @@ use App\Http\Requests\v1\ActivityRequest;
 use App\Http\Transformers\v1\ActivityTransformer;
 
 class HubActivitiesController extends Controller
-{   
+{
+
     private $hub;
 
     function __construct(Hub $hub)

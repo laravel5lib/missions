@@ -23,14 +23,14 @@ trait DatabaseSetup
     protected function setupInMemoryDatabase()
     {
         $this->artisan('migrate');
-        // $this->app[Kernel::class]->setArtisan(null);
+        $this->app[Kernel::class]->setArtisan(null);
     }
 
     protected function setupTestDatabase()
     {
         if (! static::$migrated) {
             $this->artisan('migrate:refresh');
-            // $this->app[Kernel::class]->setArtisan(null);
+            $this->app[Kernel::class]->setArtisan(null);
             static::$migrated = true;
         }
         $this->beginDatabaseTransaction();

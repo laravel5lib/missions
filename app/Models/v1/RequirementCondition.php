@@ -17,7 +17,7 @@ class RequirementCondition extends Model
 
     public function setAppliesToAttribute($value)
     {
-        $applicable = collect($value)->transform(function($item) {
+        $applicable = collect($value)->transform(function ($item) {
             return trim(strtoupper($item));
         });
         
@@ -27,5 +27,5 @@ class RequirementCondition extends Model
     public function requirement()
     {
         return $this->belongsTo(Requirement::class);
-    }    
+    }
 }

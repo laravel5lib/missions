@@ -5,7 +5,9 @@ namespace App\Providers;
 use League\Glide\Server;
 use App\TransactionHandler;
 use App\Models\v1\Reservation;
+use Laravel\Passport\Passport;
 use League\Glide\ServerFactory;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -62,31 +64,34 @@ class AppServiceProvider extends ServiceProvider
             'campaign_transports' => \App\CampaignTransport::class
         ]);
 
-        Validator::extend('is_csv',function($attribute, $value, $params, $validator) {
+        Validator::extend('country', function ($attribute, $value, $params, $validator) {
+            return in_array($value, array_values(\App\Utilities\v1\Country::all()));
+        }, 'Please provide a valid country code.');
+
+        Validator::extend('is_csv', function ($attribute, $value, $params, $validator) {
             $file = base64_decode($value);
             $f = finfo_open();
             $result = finfo_buffer($f, $file, FILEINFO_MIME_TYPE);
             return $result == 'text/csv';
         });
 
-        Validator::extend('is_compatable',function($attribute, $value, $params, $validator) {
+        Validator::extend('is_compatible', function ($attribute, $value, $params, $validator) {
 
             if (isset($params[0])) {
                 $reservation = Reservation::find($params[0]);
 
-                return $reservation ? Reservation::whereHas('trip', function($trip) use($reservation) {
+                return $reservation ? Reservation::whereHas('trip', function ($trip) use ($reservation) {
                             return $trip->where('campaign_id', $reservation->trip->campaign_id)
                                         ->where('group_id', $reservation->trip->group_id);
-                        })->where('id', $value)->first() : false;
+                })->where('id', $value)->first() : false;
             }
-            
+
             return false;
         });
 
-        Validator::extend('within_companion_limit',function($attribute, $value, $params, $validator) {
-            
+        Validator::extend('within_companion_limit', function ($attribute, $value, $params, $validator) {
+
             if (isset($params[0])) {
-                
                 $companion = Reservation::with('companionReservations')->find($value);
                 $reservation = Reservation::with('companionReservations')->find($params[0]);
 
@@ -107,7 +112,7 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 $limit = collect([
-                    ($companion_limit - $companion_count), 
+                    ($companion_limit - $companion_count),
                     ($reservation_limit - $reservation_count)
                 ])->min();
 
@@ -125,6 +130,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        Passport::ignoreMigrations(); // using modified migrations
+
         // Bugsnag
         $this->app->alias('bugsnag.logger', \Illuminate\Contracts\Logging\Log::class);
         $this->app->alias('bugsnag.logger', \Psr\Log\LoggerInterface::class);

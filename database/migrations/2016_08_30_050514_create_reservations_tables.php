@@ -40,8 +40,7 @@ class CreateReservationsTables extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('reservations', function($table)
-        {
+        Schema::table('reservations', function ($table) {
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('cascade');
@@ -59,7 +58,7 @@ class CreateReservationsTables extends Migration
                 ->onDelete('set null');
         });
 
-        Schema::create('reservation_requirements', function(Blueprint $table) {
+        Schema::create('reservation_requirements', function (Blueprint $table) {
             $table->uuid('id')->index();
             $table->uuid('requirement_id')->index();
             $table->uuid('reservation_id')->index();
@@ -71,8 +70,7 @@ class CreateReservationsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('reservation_requirements', function($table)
-        {
+        Schema::table('reservation_requirements', function ($table) {
             $table->foreign('requirement_id')
                 ->references('id')->on('requirements')
                 ->onDelete('cascade');
@@ -82,15 +80,14 @@ class CreateReservationsTables extends Migration
                 ->onDelete('cascade');
         });
 
-        Schema::create('reservation_costs', function(Blueprint $table) {
+        Schema::create('reservation_costs', function (Blueprint $table) {
             $table->uuid('cost_id')->index();
             $table->uuid('reservation_id')->index();
             $table->boolean('locked')->default(false);
             $table->timestamps();
         });
 
-        Schema::table('reservation_costs', function($table)
-        {
+        Schema::table('reservation_costs', function ($table) {
             $table->foreign('cost_id')
                 ->references('id')->on('costs')
                 ->onDelete('cascade');
@@ -107,8 +104,7 @@ class CreateReservationsTables extends Migration
             $table->timestamps();
         });
 
-        Schema::table('reservation_deadlines', function($table)
-        {
+        Schema::table('reservation_deadlines', function ($table) {
             $table->foreign('deadline_id')
                 ->references('id')->on('deadlines')
                 ->onDelete('cascade');

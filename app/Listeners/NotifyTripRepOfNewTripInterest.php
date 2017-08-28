@@ -33,7 +33,9 @@ class NotifyTripRepOfNewTripInterest implements ShouldQueue
      */
     public function handle(TripInterestWasCreated $event)
     {
-        if ( ! $event->interest->trip->rep) return;
+        if (! $event->interest->trip->rep) {
+            return;
+        }
 
         $this->mailer->send(
             'emails.interests.notification',
@@ -41,8 +43,10 @@ class NotifyTripRepOfNewTripInterest implements ShouldQueue
             function ($m) use ($event) {
                 $m->to(
                     $event->interest->trip->rep->email,
-                    $event->interest->trip->rep->name)
+                    $event->interest->trip->rep->name
+                )
                   ->subject('New Trip Interest!');
-        });
+            }
+        );
     }
 }

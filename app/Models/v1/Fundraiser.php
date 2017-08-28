@@ -123,7 +123,7 @@ class Fundraiser extends Model
 
     /**
      * Get the fundraiser's total amount raised in dollars.
-     * 
+     *
      * @return string
      */
     public function raisedAsDollars()
@@ -133,7 +133,7 @@ class Fundraiser extends Model
 
     /**
      * Set the fundraiser's goal amount in cents.
-     * 
+     *
      * @param integet $value
      */
     public function setGoalAmountAttribute($value)
@@ -143,7 +143,7 @@ class Fundraiser extends Model
 
     /**
      * Get the fundraiser's goal amount in dollars.
-     * 
+     *
      * @return string
      */
     public function goalAmountAsDollars()
@@ -153,22 +153,23 @@ class Fundraiser extends Model
 
     /**
      * Get the fundraiser's percentage raised.
-     * 
+     *
      * @return integer
      */
     public function getPercentRaised()
     {
         // check for 0 values first,
         // because division by zero is not possible
-        if( $this->raised() === 0 or $this->goal_amount === 0 )
+        if ($this->raised() === 0 or $this->goal_amount === 0) {
             return 0;
+        }
 
         return (int) round(($this->raised()/$this->goal_amount) * 100);
     }
 
     /**
      * Get the Fundraiser's Status.
-     * 
+     *
      * @return string
      */
     public function getStatus()
@@ -188,26 +189,28 @@ class Fundraiser extends Model
 
     /**
      * Check if fundraiser is closed.
-     * 
+     *
      * @return boolean
      */
     public function isClosed()
     {
-        if ($this->getStatus() == 'closed')
+        if ($this->getStatus() == 'closed') {
             return true;
+        }
 
         return false;
     }
 
     /**
      * Check if fundraiser is closed.
-     * 
+     *
      * @return boolean
      */
     public function isOpen()
     {
-        if ($this->getStatus() == 'open')
+        if ($this->getStatus() == 'open') {
             return true;
+        }
 
         return false;
     }
@@ -224,7 +227,7 @@ class Fundraiser extends Model
 
     /**
      * Get public fundraisers
-     * 
+     *
      * @param  Builder $query
      * @return Builder
      */
@@ -248,5 +251,4 @@ class Fundraiser extends Model
     {
         $this->restore();
     }
-
 }

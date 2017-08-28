@@ -3,8 +3,7 @@
 /**
  * Generic Medical Release
  */
-$factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator $faker) {
     return [
         'user_id'       => $faker->uuid,
         'name'          => $faker->firstName . ' ' . $faker->lastName,
@@ -23,8 +22,7 @@ $factory->define(App\Models\v1\MedicalRelease::class, function (Faker\Generator 
 /**
  * Medical Condition
  */
-$factory->define(App\Models\v1\MedicalCondition::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\MedicalCondition::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->randomElement(App\Models\v1\MedicalCondition::available()),
         'medication' => $faker->boolean(),
@@ -35,8 +33,7 @@ $factory->define(App\Models\v1\MedicalCondition::class, function (Faker\Generato
 /**
  * Medical Allergy
  */
-$factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\MedicalAllergy::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->randomElement(App\Models\v1\MedicalAllergy::available()),
         'medication' => $faker->boolean(),

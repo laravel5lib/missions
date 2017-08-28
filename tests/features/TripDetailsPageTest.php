@@ -5,8 +5,9 @@ use App\Models\v1\Trip;
 use App\Models\v1\Campaign;
 use Illuminate\Support\Facades\Session;
 
-class TripDetailsPageTest extends TestCase
-{   
+class TripDetailsPageTest extends BrowserKitTestCase
+{
+
     /**
      * @test
      */
@@ -16,7 +17,7 @@ class TripDetailsPageTest extends TestCase
         $campaign->slug()->create(['url' => 'fake-campaign']);
 
         $trip = factory(Trip::class)->create([
-            'public' => true, 
+            'public' => true,
             'campaign_id' => $campaign->id
         ]);
 
@@ -34,7 +35,7 @@ class TripDetailsPageTest extends TestCase
         $campaign->slug()->create(['url' => 'fake-campaign']);
 
         $trip = factory(Trip::class)->create([
-            'public' => false, 
+            'public' => false,
             'campaign_id' => $campaign->id
         ]);
 
@@ -51,7 +52,7 @@ class TripDetailsPageTest extends TestCase
         $campaign->slug()->create(['url' => 'fake-campaign']);
 
         $trip = factory(App\Models\v1\Trip::class)->create([
-          'public' => true, 
+          'public' => true,
           'spots' => 100,
           'campaign_id' => $campaign->id,
           'published_at' => Carbon::yesterday()

@@ -3,12 +3,11 @@
 /**
  * Generic Note (reservation default)
  */
-$factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker)
-{
+$factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker) {
     return [
         'id'            => $faker->unique()->uuid,
         'subject'       => $faker->catchPhrase,
-        'content'       => $faker->realText(120),
+        'content'       => $faker->text(120),
         'user_id'       => function () {
             return factory(App\Models\v1\User::class)->create()->id;
         },
@@ -24,8 +23,7 @@ $factory->define(App\Models\v1\Note::class, function (Faker\Generator $faker)
 /**
  * Group Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'group', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'group', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
 
     return array_merge($note, [
@@ -39,8 +37,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'group', function (Faker\Generator
 /**
  * Trip Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'trip', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'trip', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [
@@ -54,8 +51,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'trip', function (Faker\Generator 
 /**
  * Project Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'project', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'project', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [
@@ -69,8 +65,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'project', function (Faker\Generat
 /**
  * Fundraiser Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'fundraiser', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'fundraiser', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [
@@ -84,8 +79,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'fundraiser', function (Faker\Gene
 /**
  * Transaction Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'transaction', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'transaction', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [
@@ -99,8 +93,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'transaction', function (Faker\Gen
 /**
  * Fund Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'fund', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'fund', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [
@@ -114,8 +107,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'fund', function (Faker\Generator 
 /**
  * User Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'user', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'user', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [
@@ -129,8 +121,7 @@ $factory->defineAs(App\Models\v1\Note::class, 'user', function (Faker\Generator 
 /**
  * Trip interest Note
  */
-$factory->defineAs(App\Models\v1\Note::class, 'trip_interest', function (Faker\Generator $faker) use ($factory)
-{
+$factory->defineAs(App\Models\v1\Note::class, 'trip_interest', function (Faker\Generator $faker) use ($factory) {
     $note = $factory->raw(App\Models\v1\Note::class);
     
     return array_merge($note, [

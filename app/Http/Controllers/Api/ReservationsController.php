@@ -69,12 +69,13 @@ class ReservationsController extends Controller
      * @return \Dingo\Api\Http\Response
      */
     public function store(ReservationRequest $request)
-    {   
+    {
         $weight = $request->get('weight'); // kilograms
         $height = (int) $request->get('height_a').$request->get('height_b'); // centimeters
 
-        if ($request->get('country_code') == 'us')
+        if ($request->get('country_code') == 'us') {
             $weight = convert_to_kg($request->get('weight'));
+        }
             $height = convert_to_cm($request->get('height_a'), $request->get('height_b'));
 
         $reservation = $this->reservation->create([
@@ -147,8 +148,9 @@ class ReservationsController extends Controller
         $reservation->syncRequirements($request->get('requirements'));
         $reservation->syncDeadlines($request->get('deadlines'));
 
-        if ($request->has('tags'))
+        if ($request->has('tags')) {
             $reservation->retag($request->get('tags'));
+        }
 
         return $this->response->item($reservation, new ReservationTransformer);
     }
@@ -211,10 +213,12 @@ class ReservationsController extends Controller
 
         $reservation->requirements()->updateExistingPivot($requirement_id, $attributes);
 
-        return $this->response->item($reservation->requirements()
+        return $this->response->item(
+            $reservation->requirements()
             ->where('requirement_id', $requirement_id)
             ->first(),
-            new RequirementTransformer);
+            new RequirementTransformer
+        );
     }
 
     /**

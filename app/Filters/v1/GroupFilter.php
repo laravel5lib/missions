@@ -37,7 +37,9 @@ class GroupFilter extends Filter
      */
     public function setup()
     {
-        if ( ! $this->input('pending')) $this->approved();
+        if (! $this->input('pending')) {
+            $this->approved();
+        }
     }
 
 
@@ -125,5 +127,4 @@ class GroupFilter extends Filter
     {
         return $this->orWhere('status', 'pending');
     }
-
 }

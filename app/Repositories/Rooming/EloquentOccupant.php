@@ -6,7 +6,8 @@ use App\Models\v1\Room;
 use App\Repositories\Rooming\Interfaces\Occupant;
 
 class EloquentOccupant implements Occupant
-{   
+{
+
     protected $model;
     
     function __construct(Room $model)

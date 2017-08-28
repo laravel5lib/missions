@@ -18,6 +18,6 @@ class MetricsServiceProvider extends ServiceProvider
     {
          $this->app->singleton('teams', function ($app) {
             return new Teams(new Team, new TeamType);
-        });
+         });
     }
 }

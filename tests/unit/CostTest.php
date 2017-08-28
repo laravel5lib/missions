@@ -2,9 +2,9 @@
 
 use App\Models\v1\Cost;
 
-class CostTest extends TestCase
+class CostTest extends BrowserKitTestCase
 {
-    /** 
+    /**
      * @test
      */
     function cost_can_set_amount()
@@ -14,7 +14,7 @@ class CostTest extends TestCase
         $this->assertSame(10050, $cost->amount);
     }
 
-    /** 
+    /**
      * @test
      */
     function cost_can_get_amount_in_dollars()
@@ -23,5 +23,4 @@ class CostTest extends TestCase
 
         $this->assertSame('100.50', $cost->amountInDollars());
     }
-
 }

@@ -24,7 +24,7 @@ class MedicalRelease extends Model
      */
     protected $fillable = [
         'user_id', 'ins_provider', 'ins_policy_no',
-        'is_risk', 'name', 'emergency_contact', 
+        'is_risk', 'name', 'emergency_contact',
         'created_at', 'updated_at'
     ];
 
@@ -134,20 +134,23 @@ class MedicalRelease extends Model
      */
     public function syncConditions($conditions)
     {
-        if ( ! $conditions) return $this->conditions()->delete();
+        if (! $conditions) {
+            return $this->conditions()->delete();
+        }
 
-        $names = $this->conditions()->lists('name', 'name');
+        $names = $this->conditions()->pluck('name', 'name');
 
-        foreach($conditions as $condition)
-        {
+        foreach ($conditions as $condition) {
             array_forget($names, $condition['name']);
 
             $this->conditions()->updateOrCreate(['name' => $condition['name']], $condition);
         }
 
-        if( ! $names->isEmpty()) $this->conditions()
+        if (! $names->isEmpty()) {
+            $this->conditions()
                                     ->whereIn('name', $names)
                                     ->delete();
+        }
     }
 
     /**
@@ -157,20 +160,23 @@ class MedicalRelease extends Model
      */
     public function syncAllergies($allergies)
     {
-        if ( ! $allergies) return $this->allergies()->delete();
+        if (! $allergies) {
+            return $this->allergies()->delete();
+        }
 
-        $names = $this->allergies()->lists('name', 'name');
+        $names = $this->allergies()->pluck('name', 'name');
 
-        foreach($allergies as $allergy)
-        {
+        foreach ($allergies as $allergy) {
             array_forget($names, $allergy['name']);
 
             $this->allergies()->updateOrCreate(['name' => $allergy['name']], $allergy);
         }
 
-        if( ! $names->isEmpty()) $this->allergies()
+        if (! $names->isEmpty()) {
+            $this->allergies()
             ->whereIn('name', $names)
             ->delete();
+        }
     }
 
     /**
@@ -182,6 +188,4 @@ class MedicalRelease extends Model
     {
         return $this->morphToMany(Upload::class, 'uploadable');
     }
-
-
 }

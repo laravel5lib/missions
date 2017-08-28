@@ -10,7 +10,8 @@ use App\Http\Requests\v1\HubRequest;
 use App\Http\Transformers\v1\HubTransformer;
 
 class HubsController extends Controller
-{   
+{
+
     private $hub;
 
     function __construct(Hub $hub)

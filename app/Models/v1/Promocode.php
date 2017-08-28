@@ -9,26 +9,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promocode extends Model
-{   
+{
+
     use UuidForKey, SoftDeletes, Filterable;
 
     /**
      * The attributes that should not be mass assigned.
-     * 
+     *
      * @var array
      */
     protected $guarded = [];
 
     /**
      * The attributes that should be mutated to dates.
-     * 
+     *
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'expires_at', 'deleted_at'];
 
     /**
      * Get the promoter of the promocode.
-     * 
+     *
      * @return Illuminate\Database\Eloquent\BelongsTo
      */
     public function rewardable()
@@ -38,7 +39,7 @@ class Promocode extends Model
 
     /**
      * Get the rewardable reservations
-     * 
+     *
      * @return Illuminate\Database\Eloquent\BelongsTo
      */
     public function reservations()
@@ -48,7 +49,7 @@ class Promocode extends Model
 
     /**
      * Get the parent promtional
-     * 
+     *
      * @return Illuminate\Database\Eloquent\BelongsTo
      */
     public function promotional()
@@ -76,11 +77,13 @@ class Promocode extends Model
      */
     public function scopeFresh($query)
     {
-        return $query->whereHas('promotional', function($promotional) {
+        return $query->whereHas('promotional', function ($promotional) {
             return $promotional->whereNull('expires_at')
                      ->orWhereDate(
-                        'expires_at', '>=', Carbon::now()
-                    );
+                         'expires_at',
+                         '>=',
+                         Carbon::now()
+                     );
         });
     }
 }

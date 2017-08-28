@@ -73,8 +73,7 @@ class TeamMembersController extends Controller
     {
         $member = $this->member->where('team_id', $team_id)->findOrFail($id);
 
-        if ( ! $member->team->isPublished() and  ! $this->auth->user()->isAdmin())
-        {
+        if (! $member->team->isPublished() and  ! $this->auth->user()->isAdmin()) {
             abort(403);
         }
 
@@ -113,5 +112,4 @@ class TeamMembersController extends Controller
 
         return $this->response->noContent();
     }
-
 }

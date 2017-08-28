@@ -14,10 +14,10 @@ class ProjectTablesSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\v1\ProjectCause::class, 'orphans')->create()->each(function($orphan) {
+        factory(App\Models\v1\ProjectCause::class, 'orphans')->create()->each(function ($orphan) {
             $orphan->initiatives()->saveMany([
                 factory(App\Models\v1\ProjectInitiative::class)->make([
-                    'type' => '12 Child Home', 'country_code' => 'in', 
+                    'type' => '12 Child Home', 'country_code' => 'in',
                     'project_cause_id' => $orphan->id
                 ]),
                 factory(App\Models\v1\ProjectInitiative::class)->make([
@@ -35,7 +35,7 @@ class ProjectTablesSeeder extends Seeder
             ]);
         });
 
-        factory(App\Models\v1\ProjectCause::class, 'water')->create()->each(function($water) {
+        factory(App\Models\v1\ProjectCause::class, 'water')->create()->each(function ($water) {
             $water->initiatives()->saveMany([
                 factory(App\Models\v1\ProjectInitiative::class)->make([
                     'type' => 'Fresh Water Well', 'country_code' => 'do',
@@ -54,16 +54,16 @@ class ProjectTablesSeeder extends Seeder
 
         $causes = App\Models\v1\ProjectCause::all();
 
-        $causes->each(function($cause) {
+        $causes->each(function ($cause) {
 
-            $cause->initiatives->each(function($initiative) {
+            $cause->initiatives->each(function ($initiative) {
                 factory(App\Models\v1\Project::class, 5)
                     ->create([
                         'project_initiative_id' => $initiative->id,
                         'sponsor_id' => function () {
                             return factory(User::class)->create()->id;
                         }
-                    ])->each(function($project) {
+                    ])->each(function ($project) {
                         $project->sponsor->slug()->create(['url' => generate_slug($project->sponsor->name)]);
                         
                         $cost = factory(Cost::class, 'project')->create([
@@ -86,7 +86,6 @@ class ProjectTablesSeeder extends Seeder
                         ]);
                     });
             });
-
         });
     }
 }

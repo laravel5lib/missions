@@ -16,12 +16,12 @@ class ReservationDuesController extends Controller
 
     function __construct(Reservation $reservation)
     {
-        $this->reservation = $reservation;    
+        $this->reservation = $reservation;
     }
 
     /**
      * Get all a reservation's dues.
-     * 
+     *
      * @param  string  $reservation_id
      * @param  Request $request
      * @return \Dingo\Api\Http\Response
@@ -40,7 +40,7 @@ class ReservationDuesController extends Controller
 
     /**
      * Get a specific reservation due.
-     * 
+     *
      * @param  string $reservation_id
      * @param  string $due_id
      * @return \Dingo\Api\Http\Response

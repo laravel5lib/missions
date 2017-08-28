@@ -39,7 +39,7 @@ class CampaignFilter extends Filter
 
     /**
      * Show Only Published Campaigns
-     * 
+     *
      * @return mixed
      */
     public function published()

@@ -173,7 +173,7 @@
                 if(story) {
                     story.author_id = this.$root.user.id;
                     story.author_type = 'users';
-                    story.publications = [{ type: 'users', id: this.id }];
+                    story.publications = [{ type: 'groups', id: this.id }];
 
                     // this.$refs.spinner.show();
                     this.$http.put('stories/' + story.id, story).then((response) => {
@@ -189,6 +189,7 @@
                 if(story) {
                     story.author_id = this.$root.user.id;
                     story.author_type = 'users';
+                    story.publications = [{ type: 'groups', id: this.id }];
 
                     // this.$refs.spinner.show();
                     this.$http.post('stories', story).then((response) => {

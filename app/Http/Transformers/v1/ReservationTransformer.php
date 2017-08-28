@@ -54,12 +54,12 @@ class ReservationTransformer extends TransformerAbstract
             'country_code'        => $reservation->country_code,
             'country_name'        => country($reservation->country_code),
             'companion_limit'     => (int) $reservation->companion_limit,
-            'arrival_designation' => $reservation->designation ? 
+            'arrival_designation' => $reservation->designation ?
                 implode('', array_flatten($reservation->designation->content)) : 'none',
             'avatar'              => $reservation->avatar ? image($reservation->avatar->source) : url('/images/placeholders/user-placeholder.png'),
-            'desired_role'        => [ 
-                                        'code' => $reservation->desired_role, 
-                                        'name' => teamRole($reservation->desired_role) 
+            'desired_role'        => [
+                                        'code' => $reservation->desired_role,
+                                        'name' => teamRole($reservation->desired_role)
                                      ],
             'total_cost'          => $reservation->totalCostInDollars(),
             'total_raised'        => $reservation->totalRaisedInDollars(),
@@ -77,7 +77,7 @@ class ReservationTransformer extends TransformerAbstract
             ],
         ];
 
-        if($reservation->pivot) {
+        if ($reservation->pivot) {
             $data['relationship'] = $reservation->pivot->relationship;
         }
 
@@ -94,13 +94,12 @@ class ReservationTransformer extends TransformerAbstract
     public function includeDues(Reservation $reservation, ParamBag $params = null)
     {
         // Optional params validation
-        if ( ! is_null($params)) {
+        if (! is_null($params)) {
             $this->validateParams($params);
 
             $dues = $reservation->dues->filter(function ($value) use ($params) {
-                return in_array($value->getStatus(),  $params->get('status'));
+                return in_array($value->getStatus(), $params->get('status'));
             });
-
         } else {
             $dues = $reservation->dues;
         }
@@ -157,11 +156,13 @@ class ReservationTransformer extends TransformerAbstract
     {
         $rep = $reservation->rep ? $reservation->rep : $reservation->trip->rep;
 
-        if ( ! $rep) $rep = new User([
+        if (! $rep) {
+            $rep = new User([
             'name' => 'none',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
-        ]);
+            ]);
+        }
 
         return $this->item($rep, new UserTransformer);
     }
@@ -176,27 +177,24 @@ class ReservationTransformer extends TransformerAbstract
     public function includeCosts(Reservation $reservation, ParamBag $params = null)
     {
         // Optional params validation
-        if ( ! is_null($params)) {
+        if (! is_null($params)) {
             $this->validateParams($params);
 
             $costs = [];
 
-            if ($params->get('status') && in_array('active', $params->get('status')))
-            {
+            if ($params->get('status') && in_array('active', $params->get('status'))) {
                 $active = $reservation->activeCosts;
 
-                $maxDate = $active->where('type', 'incremental')->max('active_at');
+                $maxDate = $active->whereStrict('type', 'incremental')->max('active_at');
 
-                $costs = $active->reject(function ($value, $key) use($maxDate) {
+                $costs = $active->reject(function ($value, $key) use ($maxDate) {
                     return $value->type == 'incremental' && $value->active_at < $maxDate;
                 });
             }
 
-            if ($params->get('type'))
-            {
+            if ($params->get('type')) {
                 $costs = $reservation->costs()->where('type', $params->get('type'))->get();
             }
-
         } else {
             $costs = $reservation->costs;
         }
@@ -313,5 +311,4 @@ class ReservationTransformer extends TransformerAbstract
             ));
         }
     }
-
 }

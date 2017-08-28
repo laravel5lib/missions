@@ -874,7 +874,7 @@ new Vue({
     },
     http: {
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': Laravel.csrfToken
         }
     },
     created() {
@@ -1009,7 +1009,7 @@ new Vue({
             if (localStorage.hasOwnProperty('user')) {
                 return JSON.parse(localStorage.getItem('user'))
             } else {
-                this.$http.get('users/me?include=roles,abilities')
+                this.$http.get('users/me?include=roles,permissions')
                     .then((response) => {
                             this.$emit('userHasLoggedIn', response.data.data);
                             return response.data.data;
@@ -1025,7 +1025,7 @@ new Vue({
                 console.log('impersonating: ', this.impersonatedUser.name);
                 return this.impersonatedUser
             } else {
-                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,abilities')
+                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,permissions')
                     .then((response) => {
                         console.log('impersonating: ', response.data.data.name);
                         localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
@@ -1034,8 +1034,8 @@ new Vue({
             }
         },
         hasAbility(ability) {
-            let abilities = _.pluck(this.user.abilities.data, 'name');
-            return this.user ? _.contains(abilities, ability) : false;
+            let permissions = _.pluck(this.user.permissions.data, 'name');
+            return this.user ? _.contains(permissions, ability) : false;
         },
 
         startTour() {

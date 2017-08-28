@@ -33,9 +33,8 @@ class TeamMemberFilter extends Filter
      */
     public function published()
     {
-        return $this->whereHas('team', function ($team)
-        {
-           return $team->whereNotNull('published_at')
+        return $this->whereHas('team', function ($team) {
+            return $team->whereNotNull('published_at')
                        ->where('published_at', '<=', Carbon::now());
         });
     }

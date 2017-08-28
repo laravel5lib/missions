@@ -113,7 +113,7 @@ class RegionsController extends Controller
              ->whereCampaignId($campaignId)
              ->findOrFail($id);
 
-        DB::transaction(function() use($region) {
+        DB::transaction(function () use ($region) {
             $region->teams()->detach();
             $region->delete();
         });

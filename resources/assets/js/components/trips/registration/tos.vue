@@ -49,7 +49,8 @@
 		},
 		watch:{
 			'tosAgree'(val, oldVal) {
-				this.$emit('tos-agree', val)
+//				this.$emit('tos-agree', val)
+				this.$emit('step-completion', val)
 			}
 		},
 		activated(){

@@ -127,7 +127,7 @@
     import exportUtility from '../export-utility.vue';
     import importUtility from '../import-utility.vue';
     export default{
-        name: 'admin-trips',
+        name: 'admin-trips-list',
         components: {exportUtility, importUtility},
         data(){
             return{
@@ -170,8 +170,7 @@
                 importRequiredFields: [
                   'type', 'country_code', 'started_at', 'ended_at'
                 ],
-                importOptionalFields: [
-                ]
+                importOptionalFields: []
             }
         },
         watch: {

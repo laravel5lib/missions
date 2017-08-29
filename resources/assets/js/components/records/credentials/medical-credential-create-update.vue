@@ -144,7 +144,7 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="">
+									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="''">
 										<option value="">-- Select Role --</option>
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>
@@ -187,7 +187,7 @@
 								</div>
 								<div class="panel-body">
 									<date-picker v-model="QA.a" :view-format="['YYYY-MM-DD']" type="date" :name="'date' + indexQA"></date-picker>
-									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + $index" v-validate="">-->
+									<!--<input type="datetime" class="form-control hidden" v-model="QA.a | moment('LLLL')" id="started_at" required :name="'date' + $index" v-validate="''">-->
 								</div>
 								<div class="panel-footer" v-show= "errors.has('date' + indexQA)">
 									<div class="errors-block"></div>

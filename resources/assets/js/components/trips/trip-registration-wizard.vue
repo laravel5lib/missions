@@ -49,7 +49,9 @@
 				<div class="col-sm-7 col-md-8" :class="currentStep.view">
 					<spinner ref="validationSpinner" size="xl" :fixed="false" text="Validating"></spinner>
 					<spinner ref="reservationspinner" size="xl" :fixed="true" text="Creating Reservation"></spinner>
-					<keep-alive><component :is="currentStep.view" transition="fade" transition-mode="out-in"></component></keep-alive>
+					<keep-alive>
+						<component :is="currentStep.view" transition="fade" transition-mode="out-in" @step-completion="stepCompleted"></component>
+					</keep-alive>
 
 				</div>
 
@@ -161,7 +163,7 @@
 				}, this);
 			},
 			nextStep(){
-				var thisChild;
+				let thisChild;
 				switch (this.currentStep.view) {
 					case 'step4':
 
@@ -172,10 +174,13 @@
 						});
 
 						// if form is invalid do not continue
-						if (thisChild.$BasicInfo.invalid) {
-							thisChild.attemptedContinue = true;
-							return false;
-						}
+                        thisChild.$validator.validateAll().then(result => {
+                            if (!result) {
+                                thisChild.attemptedContinue = true;
+                                return false;
+                            }
+                        });
+
 						this.nextStepCallback();
 						break;
 					case 'step6':
@@ -187,8 +192,8 @@
                             });
                             // promise needed to wait for async response from stripe
                             $.when(thisChild.createToken())
-	                                .done(function (success) {
-	                                    this.$refs.validationspinner.hide();
+	                                .done(success => {
+	                                    this.$refs.validationSpinner.hide();
 	                                    this.nextStepCallback();
 	                                });
                         } else {
@@ -210,7 +215,7 @@
 			finish(){
 				this.$refs.reservationspinner.show();
 
-				var data = {
+				let data = {
 					// reservation data
 					height_a: this.userInfo.heightA,
 					height_b: this.userInfo.heightB,
@@ -297,7 +302,7 @@
 			},
 			detectCardType(number) {
 				// http://stackoverflow.com/questions/72768/how-do-you-detect-credit-card-type-based-on-number
-				var re = {
+				let re = {
 					electron: /^(4026|417500|4405|4508|4844|4913|4917)\d+$/,
 					maestro: /^(5018|5020|5038|5612|5893|6304|6759|6761|6762|6763|0604|6390)\d+$/,
 					dankort: /^(5019)\d+$/,
@@ -311,12 +316,17 @@
 					jcb: /^(?:2131|1800|35\d{3})\d{11}$/
 				};
 
-				for(var key in re) {
+				for(let key in re) {
 					if(re[key].test(number)) {
 						return key
 					}
 				}
-			}
+			},
+			stepCompleted(val) {
+                this.currentStep.complete = val;
+                if (this.currentStep.view === 'step8')
+                    this.wizardComplete = val;
+			},
 		},
 		components: {
 			'step1': login,
@@ -333,8 +343,9 @@
 			this.currentStep = this.stepList[0];
 		},
 		mounted(){
-			//get trip costs
-			var resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
+            let self = this;
+            //get trip costs
+			let resource = this.$resource('trips{/id}', { include: 'costs:status(active),costs.payments,deadlines,requirements' });
 			resource.query({id: this.tripId}).then((trip) => {
 				this.trip = trip.data.data;
 				// deadlines, requirements, and companion_limit
@@ -343,7 +354,7 @@
 				this.companion_limit = trip.data.data.companion_limit;
 
 				// filter costs by type
-				var optionalArr = [], staticArr = [], incrementalArr = [];
+				let optionalArr = [], staticArr = [], incrementalArr = [];
 				trip.data.data.costs.data.forEach(function (cost) {
 					switch (cost.type) {
 						case 'static':
@@ -364,7 +375,6 @@
 				}
 			});
 
-			let self = this;
 			this.$root.$on('userHasLoggedIn', (val) =>  {
 				// expecting userData object
 				self.userData = val;

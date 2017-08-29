@@ -40,22 +40,25 @@
 			optionalCosts(){
 			    let arr = this.$parent.tripCosts.optional || [];
 			    if (!arr.length) {
-                    this.$emit('ato-complete', true);
-			    }
+//                    this.$emit('ato-complete', true);
+                    this.$emit('step-completion', true);
+                }
 				return _.sortBy(arr, 'name');
 			}
 		},
 		watch:{
 			'atoComplete'(val, oldVal) {
-				this.$emit('ato-complete', val)
-			},
+//				this.$emit('ato-complete', val)
+                this.$emit('step-completion', val);
+            },
 			'selectedOptions'(val, oldVal) {
 				this.$parent.selectedOptions = val;
 			}
 		},
 		methods: {
             onValid(){
-                this.$emit('ato-complete', true);
+//                this.$emit('ato-complete', true);
+                this.$emit('step-completion', true);
             },
 
         },

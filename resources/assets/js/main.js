@@ -297,6 +297,9 @@ Vue.use(require('vue-truncate'));
 
 import axios from 'axios';
 axios.defaults.baseURL = '/api';
+axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest',
+};
 Vue.prototype.$http = axios;
 // Resource duplicate of vue-resource for axios
 // Inspired by https://github.com/pagekit/vue-resource/blob/develop/src/resource.js
@@ -872,22 +875,24 @@ new Vue({
 
         reservationsFilters,
     },
-    http: {
+    /*http: {
         headers: {
             'X-CSRF-TOKEN': Laravel.csrfToken
         }
-    },
+    },*/
     created() {
         // Add a request interceptor
         this.$http.interceptors.request.use((config) => {
             // modify request
             let token;
 
+            config.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
+
             token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
             if (token !== null && token !== 'undefined') {
                 // this.$http.defaults.headers.common['Authorization'] = token;
-                config.headers.common['Authorization'] = token
+                config.headers.common['Authorization'] = token;
                 //headers.set('Authorization', token);
             }
 

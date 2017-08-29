@@ -26,7 +26,7 @@
 						<div class="form-group" :class="{ 'has-error': errors.has('role') }">
 							<label for="desiredRole">Desired Team Role</label>
 								<select class="form-control input-sm" id="desiredRole" v-model="desired_role" name="role" v-validate="'required'">
-									<option v-for="role in roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
+									<option v-for="role in UTILITIES.roles" :value="{value: role.value, name: role.name}">{{role.name}}</option>
 								</select>
 						</div><!-- end form-group -->
 						<label>Given Names</label>
@@ -258,7 +258,7 @@
 							<div class="col-sm-12">
 								<div class="form-group" :class="{ 'has-error': errors.has('country') }">
 									<label for="infoCountry">Country</label>
-									<v-select @keydown.enter.prevent="" name="country" v-validate="'required'" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="countries" label="name"></v-select>
+									<v-select @keydown.enter.prevent="" name="country" v-validate="'required'" class="form-control" id="infoCountry" v-model="countryCodeObj" :options="UTILITIES.countries" label="name"></v-select>
 								</div>
 							</div>
 						</div>
@@ -284,8 +284,10 @@
 </template>
 <script type="text/javascript">
 	import vSelect from "vue-select";
+	import utilities from '../../utilities.mixin';
 	export default{
 		name: 'basic-info',
+		mixins: [utilities],
 		props: {
 			forAdmin: {
 				type: Boolean,
@@ -299,12 +301,10 @@
 				currentYear: new Date().getFullYear(),
 				dobYearCalc: '',
 				attemptedContinue: false,
-				roles: [],
-				countries: [],
 				usersArr: [],
 				countryCodeObj: null,
 				userObj: null,
-				user_id: null,
+//				user_id: null,
 				onBehalf: false,
 
 				// basic info data
@@ -320,16 +320,16 @@
 				email: null,
 				dobDay: '',
 				dobMonth: '',
-				dobYear: null,
+//				dobYear: null,
 				gender: null,
 				relationshipStatus: 'single',
 				size: null,
-				height: null,
+//				height: null,
 				heightA: null,
 				heightB: null,
 				weight: null,
 				avatar_upload_id: null,
-				userInfo: {}
+//				userInfo: {}
 			}
 		},
 		computed: {
@@ -359,8 +359,10 @@
 
 				return 'kg';
 			},
-			country(){
-				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+			country: {
+		        get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                }, set() {}
 			},
 			user_id(){
 				if (this.$parent.hasOwnProperty('userData') && _.isObject(this.userObj)) {
@@ -369,9 +371,11 @@
                 }
 				return  _.isObject(this.userObj) ? this.userObj.id : null;
 			},
-			dobYear(){
-				return (this.currentYear - 100 + parseInt(this.dobYearCalc));
-			},
+			dobYear: {
+                get() {
+                    return (this.currentYear - 100 + parseInt(this.dobYearCalc));
+                }, set() {}
+            },
 			height(){
 				return this.heightA + ' ft. ' + this.heightB + ' in.';
 			},
@@ -410,12 +414,7 @@
 		watch: {
 		    // fail safe for poor loading
 		    '$parent.trip'(val){
-                this.$http.get('utilities/team-roles').then((response) => {
-                    _.each(response.data.roles, function (name, key) {
-                        if (_.contains(val.team_roles, key))
-                            this.roles.push({ value: key, name: name});
-                    });
-                });
+		        this.getRoles(val.team_roles);
 		    },
 			'userObj'(val){
 		        if (this.forAdmin) {
@@ -459,7 +458,7 @@
                     this.address = null;
                     this.state = null;
                     this.zipCode = null;
-                    this.countryCodeObj = _.findWhere(this.countries, {code: "us"});
+                    this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: "us"});
                     this.avatar_upload_id = null;
                 } else {
 				    this.setLocalUserData();
@@ -487,7 +486,7 @@
                 this.state = user.state;
                 this.zipCode = user.zip;
                 this.size = user.shirt_size;
-                this.countryCodeObj = _.findWhere(this.countries, {code: user.country_code});
+                this.countryCodeObj = _.findWhere(this.UTILITIES.countries, {code: user.country_code});
                 this.avatar_upload_id = user.avatar_upload_id;
 			}
 		},
@@ -496,20 +495,13 @@
 				this.onBehalf = true;
 			}
 
-			this.$http.get('utilities/countries').then((response) => {
-				this.countries = response.data.countries;
-				this.toggleUserData();
-			});
+			this.getCountries();
 
-			this.$http.get('utilities/team-roles').then((response) => {
-				_.each(response.data.roles, function (name, key) {
-				    if (_.contains(this.$parent.trip.team_roles, key))
-						this.roles.push({ value: key, name: name});
-				});
-			});
+			this.getRoles(this.$parent.trip.team_roles);
 
-			this.$emit('basic-info', true);
-			if (location.pathname.indexOf('admin') === -1)
+//			this.$emit('basic-info', true);
+            this.$emit('step-completion', true);
+			if (this.isAdminRoute)
 				$('html, body').animate({scrollTop: 200}, 300);
 		}
 	}

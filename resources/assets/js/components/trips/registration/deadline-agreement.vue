@@ -141,8 +141,9 @@
 		},
 		watch:{
 			'deadlineAgree'(val, oldVal) {
-				this.$emit('deadline-agree', val)
-			}
+//				this.$emit('deadline-agree', val)
+                this.$emit('step-completion', val);
+            }
 		},
 		activated(){
 			$('html, body').animate({scrollTop : 200},300);

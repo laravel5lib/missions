@@ -192,7 +192,7 @@
 								</div>
 								<div class="panel-body">
 									<span class="help-block">Please Explain:</span>
-									<textarea class="form-control" v-model="QA.a" :name="'textarea' + indexQA" v-validate=""></textarea>
+									<textarea class="form-control" v-model="QA.a" :name="'textarea' + indexQA" v-validate="''"></textarea>
 								</div>
 								<div class="panel-footer" v-show= "errors.has('textarea' + indexQA)">
 									<div class="errors-block"></div>
@@ -226,7 +226,7 @@
 									<h5 v-text="QA.q"></h5>
 								</div>
 								<div class="panel-body">
-									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="">
+									<select class="form-control" v-model="QA.a" :name="'select' + indexQA" v-validate="''">
 										<option value="">-- Select Role --</option>
 										<option v-for="option in QA.options" :value="option.value">{{option.name}}</option>
 									</select>

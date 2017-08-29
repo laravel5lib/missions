@@ -14,7 +14,7 @@
 					<label for="name">Name</label>
 					<input type="text" class="form-control" name="name" id="name" v-model="name"
 						   placeholder="Campaign Name" v-validate="'required|min:1|max:100'"
-						   maxlength="100" minlength="1" required>
+						   maxlength="100" minlength="1">
 				</div>
 			</div>
 			<div class="form-group" v-error-handler="{ value: country_code, client: 'country', server: 'country_code' }">
@@ -24,7 +24,7 @@
 							  label="name"></v-select>
 				</div>
 			</div>
-			<div class="form-group" v-error-handler="{ value: description, handle: 'description' }">
+			<div class="form-group" v-error-handler="{ value: short_desc, handle: 'description' }">
 				<div class="col-sm-12">
 					<label for="description">Description</label>
 					<textarea id="description" rows="2" v-model="short_desc" class="form-control"
@@ -77,11 +77,11 @@
 			<template v-if="published_at">
 				<div class="form-group" v-error-handler="{ value: page_url, client: 'url', server: 'page_url' }">
 					<div class="col-sm-12">
-						<label for="description">Page Url</label>
+						<label for="url">Page Url</label>
 						<div class="input-group">
 							<span class="input-group-addon">www.missions.me/campaigns/</span>
 							<input type="text" id="page_url" v-model="page_url" class="form-control"
-								   name="url" v-validate=""/>
+								   name="url" v-validate="''"/>
 						</div>
 						<!--<div v-if="errors.page_url" class="help-block">{{errors.page_url.toString()}}</div>-->
 					</div>
@@ -89,11 +89,11 @@
 
 				<div class="form-group" v-error-handler="{ value: page_src, client: 'src', server: 'page_src' }">
 					<div class="col-sm-12">
-						<label for="description">Page Source</label>
+						<label for="src">Page Source</label>
 						<div class="input-group">
 							<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 							<input type="text" id="page_src" v-model="page_src" class="form-control"
-								   name="src" v-validate=""/>
+								   name="src" v-validate="''"/>
 							<span class="input-group-addon">.blade.php</span>
 						</div>
 					</div>
@@ -203,7 +203,6 @@
 			return {
 				countryCodeObj: null,
 				name: null,
-				country_code: null,
 				short_desc: null,
 				started_at: null,
 				ended_at: null,
@@ -224,8 +223,11 @@
             }
 		},
 		computed:{
-			country_code(){
-				return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+			country_code:{
+			    get() {
+                    return _.isObject(this.countryCodeObj) ? this.countryCodeObj.code : null;
+                },
+				set() {}
 			}
 		},
 		watch:{
@@ -239,11 +241,8 @@
 			convertToSlug(text){
 				return text.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			},
-			onTouched(){
-				this.hasChanged = true;
-			},
 			back(force){
-				if (this.hasChanged && !force ) {
+				if (this.isFormDirty && !force ) {
 					this.showSaveAlert = true;
 					return false;
 				}
@@ -255,7 +254,6 @@
 			update(){
                 this.$validator.validateAll().then(result => {
                     if (result) {
-                        // this.$refs.spinner.show();
                         this.resource.put({id: this.campaignId}, {
                             name: this.name,
                             country_code: this.country_code,

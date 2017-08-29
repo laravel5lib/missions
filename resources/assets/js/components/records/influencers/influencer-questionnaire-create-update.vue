@@ -33,7 +33,7 @@
                         <div class="form-group" v-if="QA.type === 'checkbox'" v-error-handler="{ value: QA.a, client: 'chex' + indexQA }">
                             <label class="control-labal">{{QA.q}}</label><br>
                             <label class="radio-inline" v-for="choice in QA.options">
-                                <input type="checkbox" :value="choice.value" v-model="QA.a" :name="'chex' + indexQA" v-validate=""> {{ choice.name }}
+                                <input type="checkbox" :value="choice.value" v-model="QA.a" :name="'chex' + indexQA" v-validate="''"> {{ choice.name }}
                             </label>
                         </div>
                         <div class="form-group" v-if="QA.type === 'textarea'" v-error-handler="{ value: QA.a, client: 'textarea' + indexQA, messages: { req: 'Please provide an answer.'} }">

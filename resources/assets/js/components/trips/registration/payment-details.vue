@@ -258,12 +258,14 @@
 		},
 		watch: {
 			'paymentComplete'(val, oldVal) {
-				this.$emit('payment-complete', val)
-			},
+//				this.$emit('payment-complete', val)
+                this.$emit('step-completion', val);
+            },
 			'$parent.detailsConfirmed'(val, oldVal) {
 			    if (val !== oldVal && this.$parent.paymentErrors.length > 0) {
-                    this.$emit('payment-complete', val);
-			    }
+//                    this.$emit('payment-complete', val);
+                    this.$emit('step-completion', val);
+                }
 			},
 			'promo' (val, oldVal) {
                 this.promoError = '';
@@ -290,8 +292,9 @@
             }
 		},
 		mounted() {
-			this.$emit('payment-complete', true);
-			if (this.devMode) {
+//			this.$emit('payment-complete', true);
+            this.$emit('step-completion', true);
+            if (this.devMode) {
 				this.cardNumber = '';
 				this.cardCVC = '';
 				this.cardYear = '2019';
@@ -467,13 +470,13 @@
                     } else {
 //					Stripe.setPublishableKey(this.stripeKey);
 //					Stripe.card.createToken(this.cardParams, this.createTokenCallback);
-                        this.$parent.$refs.validationspinner.show();
+                        this.$parent.$refs.validationSpinner.show();
 
                         this.$http.post('donations/authorize', this.cardParams)
                             .then(this.createTokenCallback,
                                 (error) =>  {
                                     this.$root.$emit('showError', error.data.message);
-                                    this.$parent.$refs.validationspinner.hide();
+                                    this.$parent.$refs.validationSpinner.hide();
                                 });
                     }
 				})

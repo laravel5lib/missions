@@ -49,7 +49,8 @@
 		},
 		watch:{
 			'$parent.rocaAgree'(val, oldVal) {
-				this.$emit('roca-agree', val)
+//				this.$emit('roca-agree', val)
+                this.$emit('step-completion', val)
 			}
 		},
 		activated(){

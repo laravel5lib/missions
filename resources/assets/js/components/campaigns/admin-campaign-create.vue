@@ -76,7 +76,7 @@
 							<div class="input-group">
 								<span class="input-group-addon">www.missions.me/campaigns/</span>
 								<input type="text" id="page_url" v-model="page_url" class="form-control"
-								       name="url" v-validate=""/>
+								       name="url" v-validate="''"/>
 							</div>
 							<!--<div v-show="errors.page_url" class="help-block">{{errors.page_url}}</div>-->
 						</div>
@@ -88,7 +88,7 @@
 							<div class="input-group">
 								<span class="input-group-addon">/resources/views/sites/campaigns/partials/</span>
 								<input type="text" id="page_src" v-model="page_src" class="form-control"
-								       name="src" v-validate=""/>
+								       name="src" v-validate="''"/>
 								<span class="input-group-addon">.blade.php</span>
 							</div>
 						</div>

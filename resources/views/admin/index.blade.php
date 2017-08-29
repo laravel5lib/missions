@@ -57,7 +57,7 @@
                   <br /><small class="text-muted">{{ $interest->trip->group->name }}</small>
                 </td>
                 <td style="padding:5px 15px;vertical-align:middle;line-height:12px;">
-                  <small class="text-muted" style="font-size:10px;">{{ $interest->created_at->diffForHumans() }}</small>
+                  <small class="text-muted" style="font-size:10px;">{{ carbon($interest->created_at)->diffForHumans() }}</small>
                 </td>
               </tr>
               @endforeach
@@ -83,7 +83,7 @@
                   <br /><small class="text-muted">{{ $reservation->trip->group->name }}</small>
                 </td>
                 <td style="padding:5px 15px;vertical-align:middle;line-height:12px;">
-                  <small class="text-muted" style="font-size:10px;">{{ $reservation->created_at->diffForHumans() }}</small>
+                  <small class="text-muted" style="font-size:10px;">{{ carbon($reservation->created_at)->diffForHumans() }}</small>
                 </td>
               </tr>
             @endforeach

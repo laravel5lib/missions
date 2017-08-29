@@ -444,52 +444,9 @@ Vue.filter('moment', (val, format, diff = false, noLocal = false) => {
 
     return date;
 });
-/*
-Vue.filter('moment', {
-    read: function (val, format, diff = false, noLocal = false) {
 
-        if (!val) return val;
-
-        if (noLocal) {
-            return moment(val).format(format || 'LL'); // do not convert to local
-        }
-
-        // console.log('before: ', val);
-        let date = moment.utc(val, 'YYYY-MM-DD HH:mm:ss').local().format(format || 'LL');
-
-        if (diff) {
-            date = moment.utc(val).local().fromNow();
-        }
-        // console.log('after: ', date);
-
-        return date;
-    },
-    write: function (val, oldVal, format = 'YYYY-MM-DD HH:mm:ss', diff = false, noLocal = false) {
-        // let format = 'YYYY-MM-DD HH:mm:ss';
-        // let format = val.length > 10 ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-        if (!val) return val;
-
-        if (noLocal) {
-            // interpret as still UTC
-            // format does not need to change (obviously...)
-            // console.log('Date: ', val);
-            //return val;
-            // console.log(moment.utc(val).format(format));
-            return moment(val).format(format || 'LL'); // do not convert to local
-        }
-
-        return moment(val, 'YYYY-MM-DD HH:mm:ss').local().utc().format(format);
-    }
-});
-*/
-
-Vue.filter('mDateToDatetime', {
-    read: (value) => {
-        return moment.utc(value).local().format(format || 'LL');
-    },
-    write: (value, oldVal) => {
-        return moment(value).utc();
-    }
+Vue.filter('mDateToDatetime', (value, format) => {
+    return moment.utc(value).local().format(format || 'LL');
 });
 
 Vue.filter('mUTC', (value) => {
@@ -696,36 +653,6 @@ Vue.mixin({
 
 new Vue({
     el: '#app',
-    data: {
-        datePickerSettings: {
-            type: 'min',
-            week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-            month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            format: 'YYYY-MM-DD HH:mm:ss',
-            inputStyle: {width: '100%', border: 'none'},
-            color: {header: '#F74451'}
-        },
-        showSuccess: false,
-        showInfo: false,
-        showError: false,
-        message: '',
-    },
-    computed: {
-        impersonatedUser() {
-            return JSON.parse(localStorage.getItem('impersonatedUser'));
-        },
-        impersonatedToken() {
-            return this.$cookie.get('impersonate');
-        },
-        user: {
-            get () {
-                return this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
-            },
-            set (newValue) {
-
-            }
-        },
-    },
     components: {
         login,
         topNav,
@@ -875,18 +802,108 @@ new Vue({
 
         reservationsFilters,
     },
-    /*http: {
-        headers: {
-            'X-CSRF-TOKEN': Laravel.csrfToken
+    data: {
+        datePickerSettings: {
+            type: 'min',
+            week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+            month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            format: 'YYYY-MM-DD HH:mm:ss',
+            inputStyle: {width: '100%', border: 'none'},
+            color: {header: '#F74451'}
+        },
+        showSuccess: false,
+        showInfo: false,
+        showError: false,
+        message: '',
+        authenticated: false,
+        user: null,
+    },
+    computed: {
+        impersonatedUser() {
+            return JSON.parse(localStorage.getItem('impersonatedUser'));
+        },
+        impersonatedToken() {
+            return this.$cookie.get('impersonate');
+        },
+        /*user: {
+            get () {
+                debugger
+                return this.fetchUser();
+            },
+            set (newValue) {
+
+            }
+        },*/
+    },
+    methods: {
+        setUser(user) {
+            // Save user info
+            this.user = user;
+            this.authenticated = true;
+        },
+        fetchUser() {
+            if (localStorage.hasOwnProperty('user')) {
+                return JSON.parse(localStorage.getItem('user'))
+            } else {
+                this.$http.get('users/me?include=roles,permissions')
+                    .then((response) => {
+                            this.$emit('userHasLoggedIn', response.data.data);
+                            return response.data.data;
+                        },
+                        (response) => {
+                            if (this.isAdminRoute || this.isDashboardRoute)
+                                window.location = '/logout';
+                        });
+            }
+        },
+        getImpersonatedUser() {
+            if (this.impersonatedUser !== null) {
+                console.log('impersonating: ', this.impersonatedUser.name);
+                return this.impersonatedUser
+            } else {
+                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,permissions')
+                    .then((response) => {
+                        console.log('impersonating: ', response.data.data.name);
+                        localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
+                        return this.impersonatedUser = response.data.data;
+                    });
+            }
+        },
+        hasAbility(ability) {
+            let permissions = _.pluck(this.user.permissions.data, 'name');
+            return this.user ? _.contains(permissions, ability) : false;
+        },
+
+        startTour() {
+            window.tour.start();
+        },
+
+        // Simple error handlers for API calls
+        handleApiSoftError(error) {
+            console.error(error.response.data.message ? error.response.data.message : error.response.data);
+        },
+        handleApiError(error) {
+            console.log(error);
+            console.error(error.response.data.message ? error.response.data.message : error.response.data);
+            this.$emit('showError', error.response.data.message)
+        },
+        convertSearchToObject() {
+            let search = location.search.substring(1);
+            return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
+                (key, value) => {
+                    return key === "" ? value : decodeURIComponent(value)
+                }) : {};
         }
-    },*/
+
+    },
     created() {
         // Add a request interceptor
         this.$http.interceptors.request.use((config) => {
             // modify request
-            let token;
+            let token, csrfToken;
 
-            config.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
+            csrfToken = document.head.querySelector('meta[name="csrf-token"]').content;
+            config.headers.common['X-CSRF-TOKEN'] = csrfToken;
 
             token = $.cookie('api_token') ? $.cookie('api_token').indexOf('Bearer') !== -1 ? $.cookie('api_token') : 'Bearer ' + $.cookie('api_token') : null;
 
@@ -954,9 +971,10 @@ new Vue({
             return Promise.reject(error);
         });
 
+        this.user = this.$cookie.get('impersonate') !== null ? this.getImpersonatedUser() : this.fetchUser();
 
         // if api_token cookie doesn't exist user data will be cleared if they do exist
-        if (this.$cookie.get('api_token') === null) {
+        /*if (this.$cookie.get('api_token') === null) {
             if (localStorage.hasOwnProperty('user'))
                 localStorage.removeItem('user');
             if (localStorage.hasOwnProperty('impersonatedUser'))
@@ -964,7 +982,7 @@ new Vue({
         } else {
             // because user is computed, this must be called to initiate impersonation or normal user before anything else
             this.user;
-        }
+        }*/
     },
     mounted() {
         // Track window resizing
@@ -1004,65 +1022,4 @@ new Vue({
             localStorage.removeItem('impersonatedUser');
 
     },
-    methods: {
-        setUser(user) {
-            // Save user info
-            this.user = user;
-            this.authenticated = true;
-        },
-        fetchUser() {
-            if (localStorage.hasOwnProperty('user')) {
-                return JSON.parse(localStorage.getItem('user'))
-            } else {
-                this.$http.get('users/me?include=roles,permissions')
-                    .then((response) => {
-                            this.$emit('userHasLoggedIn', response.data.data);
-                            return response.data.data;
-                        },
-                        (response) => {
-                            if (this.isAdminRoute || this.isDashboardRoute)
-                                window.location = '/logout';
-                        });
-            }
-        },
-        getImpersonatedUser() {
-            if (this.impersonatedUser !== null) {
-                console.log('impersonating: ', this.impersonatedUser.name);
-                return this.impersonatedUser
-            } else {
-                return this.$http.get('users/' + this.impersonatedToken + '?include=roles,permissions')
-                    .then((response) => {
-                        console.log('impersonating: ', response.data.data.name);
-                        localStorage.setItem('impersonatedUser', JSON.stringify(response.data.data));
-                        return this.impersonatedUser = response.data.data;
-                    });
-            }
-        },
-        hasAbility(ability) {
-            let permissions = _.pluck(this.user.permissions.data, 'name');
-            return this.user ? _.contains(permissions, ability) : false;
-        },
-
-        startTour() {
-            window.tour.start();
-        },
-
-        // Simple error handlers for API calls
-        handleApiSoftError(error) {
-            console.error(error.response.data.message ? error.response.data.message : error.response.data);
-        },
-        handleApiError(error) {
-            console.log(error);
-            console.error(error.response.data.message ? error.response.data.message : error.response.data);
-            this.$emit('showError', error.response.data.message)
-        },
-        convertSearchToObject() {
-            let search = location.search.substring(1);
-            return search ? JSON.parse('{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}',
-                (key, value) => {
-                    return key === "" ? value : decodeURIComponent(value)
-                }) : {};
-        }
-
-    }
 });
